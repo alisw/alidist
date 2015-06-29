@@ -5,6 +5,7 @@ tag: v5-34-30
 requires: 
   - zlib
   - cmake
+  - alien
 ---
 #!/bin/sh -e
 
