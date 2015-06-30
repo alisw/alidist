@@ -1,7 +1,7 @@
 package: aliroot
 version: v5-06-28
 requires:
-  - root
+  - geant3
 source: http://git.cern.ch/pub/AliRoot
 tag: master
 ---
