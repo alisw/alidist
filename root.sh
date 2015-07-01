@@ -4,9 +4,12 @@ source: http://github.com/root-mirror/root
 tag: v5-34-30
 requires: 
   - zlib
+  - cmake
+  - alien
 ---
 #!/bin/sh -e
 
+which cmake
 mkdir -p obj
 cd obj
 cmake $BUILDROOT/$PKGNAME -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
