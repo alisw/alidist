@@ -2,6 +2,8 @@ package: aliroot
 version: v5-06-28
 requires:
   - geant3
+env:
+  - ALICE_ROOT $INSTALLROOT
 source: http://git.cern.ch/pub/AliRoot
 tag: master
 ---
