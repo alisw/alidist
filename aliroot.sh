@@ -14,3 +14,4 @@ cmake . -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
         -DCMAKE_SKIP_RPATH=TRUE
 make ${JOBS+-j $JOBS}
 make install
+cp -r test $INSTALLROOT/test
