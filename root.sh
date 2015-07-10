@@ -9,19 +9,16 @@ requires:
 ---
 #!/bin/sh -e
 
-which cmake
-mkdir -p obj
-cd obj
-cmake $BUILDROOT/$PKGNAME -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-                          -Dc++11=ON \
-                          -DCMAKE_Fortran_COMPILER=gfortran \
-                          -Dpythia6_nolink=ON \
-                          -Droofit=ON \
-                          -Dminuit2=ON \
-                          -Dalien=OFF \
-                          -Dxrootd=ON \
-                          -Dgsl_shared=ON \
-                          -Dglobus=OFF
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+                 -Dc++11=ON \
+                 -DCMAKE_Fortran_COMPILER=gfortran \
+                 -Dpythia6_nolink=ON \
+                 -Droofit=ON \
+                 -Dminuit2=ON \
+                 -Dalien=OFF \
+                 -Dxrootd=ON \
+                 -Dgsl_shared=ON \
+                 -Dglobus=OFF
 
 make ${JOBS+-j $JOBS}
 make install

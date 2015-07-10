@@ -25,7 +25,7 @@ cat > build-flags.cmake <<- EOF
   SET(CMAKE_USE_SYSTEM_LIBRARY_EXPAT TRUE CACHE BOOL "" FORCE)
 EOF
 
-./configure --prefix=$INSTALLROOT --init=build-flags.cmake ${JOBS+--parallel=JOBS}
+$SOURCEDIR/configure --prefix=$INSTALLROOT --init=build-flags.cmake ${JOBS+--parallel=JOBS}
 
 make ${JOBS+-j $JOBS}
 make install/strip
