@@ -1,7 +1,14 @@
 package: aliroot-test
 version: v1
+force_rebuild: 1
 requires:
   - aliroot
+  - geant3
 ---
 #!/bin/sh
-aliroot -b BUILD/slc7-x86_64/aliroot/v5-06-28-1/aliroot/test/gun/sim.C
+export ALICE_ROOT=$ALIROOT_ROOT
+cp -r $ALIROOT_ROOT/test/gun .
+cd gun
+./runtest.sh 2>&1 | tee run.log
+mkdir -p  $WORKSPACE/gun
+cp -r *.root $WORKSPACE/gun
