@@ -44,3 +44,32 @@ autoreconf -ivf
   --enable-unitchecks
 make -j$JOBS C_INCLUDE_PATH="${GSL_ROOT}/include" CPATH="${GSL_ROOT}/include"
 make install -j$JOBS
+
+# Modulefile
+ModuleDir="${INSTALLROOT}/etc/Modules/modulefiles/${PKGNAME}"
+mkdir -p "$ModuleDir"
+cat > "${ModuleDir}/${PKGVERSION}-${PKGREVISION}" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "Module for loading $PKGNAME $PKGVERSION-$PKGREVISION for the ALICE environment"
+}
+set version $PKGVERSION-$PKGREVISION
+module-whatis "Module for loading $PKGNAME $PKGVERSION-$PKGREVISION for the ALICE environment"
+# Dependencies
+module load BASE/1.0 lhapdf/v5.9.1 pythia/v8186 HepMC/v2.06.09 FastJet/$FASTJET_VERSION-$FASTJET_REVISION GSL/$GSL_VERSION-$GSL_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION
+# Our environment
+if { [info exists ::env(OVERRIDE_BASE)] && \$::env(OVERRIDE_BASE) == 1 } then {
+  puts stderr "Note: overriding base package $PKGNAME \$version"
+  set prefix \$ModulesCurrentModulefile
+  for {set i 0} {\$i < 5} {incr i} {
+    set prefix [file dirname \$prefix]
+  }
+  setenv THEPEG_ROOT \$prefix
+} else {
+  setenv THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+}
+prepend-path LD_LIBRARY_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
+prepend-path PATH \$::env(THEPEG_ROOT)/bin
+setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
+EoF
