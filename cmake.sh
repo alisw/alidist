@@ -1,9 +1,9 @@
 package: cmake
-version: v2.8.11
+version: v2.8.12
 source: https://github.com/Kitware/CMake
 requires:
   - zlib
-tag: v2.8.11
+tag: v2.8.12
 ---
 #!/bin/sh
 cat > build-flags.cmake <<- EOF 
