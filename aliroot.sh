@@ -1,11 +1,11 @@
 package: aliroot
-version: v5-06-28
+version: v5-05-Rev-20
 requires:
   - root
 env:
   ALICE_ROOT: \$INSTALLROOT
 source: http://git.cern.ch/pub/AliRoot
-tag: master
+tag: v5-05-Rev-20
 ---
 #!/bin/sh
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \

@@ -1,24 +1,35 @@
 package: root
-version: v5-34-30
-source: http://github.com/root-mirror/root
-tag: v5-34-30
-requires: 
-  - zlib
-  - cmake
+version: v5-34-08-alice7
+source: http://github.com/alisw/root
+tag: v5-34-08-alice7
+requires:
   - alien
 ---
 #!/bin/sh -e
+"$SOURCEDIR/configure" \
+  --with-pythia6-uscore=SINGLE \
+  --with-alien-incdir=$ALIEN_ROOT/alien/api/include \
+  --with-alien-libdir=$ALIEN_ROOT/alien/api/lib \
+  --with-monalisa-incdir="$ALIEN_ROOT/alien/api/include" \
+  --with-monalisa-libdir="$ALIEN_ROOT/alien/api/lib" \
+  --with-xrootd=$ALIEN_ROOT/alien/api \
+  --enable-minuit2 \
+  --enable-roofit \
+  --enable-soversion \
+  --disable-bonjour \
+  --enable-builtin-freetype \
+  --with-f77=gfortran \
+  --with-cc=gcc \
+  --with-cxx=g++ \
+  --with-ld=g++ \
+  --prefix="$INSTALLROOT" \
+  --incdir="$INSTALLROOT/include" \
+  --libdir="$INSTALLROOT/lib" \
+  --datadir="$INSTALLROOT" \
+  --etcdir="$INSTALLROOT/etc"
 
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-                 -Dc++11=ON \
-                 -DCMAKE_Fortran_COMPILER=gfortran \
-                 -Dpythia6_nolink=ON \
-                 -Droofit=ON \
-                 -Dminuit2=ON \
-                 -Dalien=OFF \
-                 -Dxrootd=ON \
-                 -Dgsl_shared=ON \
-                 -Dglobus=OFF
+./bin/root-config --features | grep -q alien
+./bin/root-config --features | grep -q opengl
 
 make ${JOBS+-j $JOBS}
 make install
