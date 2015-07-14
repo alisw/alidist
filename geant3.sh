@@ -10,9 +10,7 @@ prepend_path:
 ---
 #!/bin/sh
 
-mkdir obj
-cd obj
-cmake $BUILDDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
         -DROOTSYS=$ROOT_ROOT \
         -DCMAKE_SKIP_RPATH=TRUE
 make ${JOBS+-j $JOBS}
