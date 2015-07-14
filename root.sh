@@ -1,7 +1,7 @@
 package: root
-version: v5-34-08-alice7
+version: v5-34-08-alice9
 source: http://github.com/alisw/root
-tag: v5-34-08-alice7
+tag: 1f141fd8d5d21efd2a3af3569ff34f4f121b2656
 requires:
   - alien
 ---

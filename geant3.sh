@@ -14,5 +14,5 @@ cd $SOURCEDIR
 make ${JOBS+-j $JOBS}
 mkdir -p $INSTALLROOT/include/TGeant3
 mkdir -p $INSTALLROOT/lib
-cp TGeant3 $INSTALLROOT/include/TGeant3
+rsync -av --exclude "*.o" TGeant3/ $INSTALLROOT/include/TGeant3/
 rsync -av --exclude "*.o" lib/ $INSTALLROOT/lib/
