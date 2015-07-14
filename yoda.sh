@@ -1,5 +1,5 @@
 package: YODA
-version: "1.3.1"
+version: "1.4.0"
 ---
 #!/bin/bash -e
 Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION}.tar.bz2"
