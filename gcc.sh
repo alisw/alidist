@@ -5,8 +5,6 @@ tag: alice/4.9.3
 ---
 #!/bin/bash -e
 
-# http://stackoverflow.com/questions/9450394/how-to-install-gcc-from-scratch-with-gmp-mpfr-mpc-elf-without-shared-librari
-
 case $ARCHITECTURE in
   osx*) AdditionalLanguages=',objc,obj-c++' ;;
 esac
@@ -34,3 +32,6 @@ done
 
 make ${JOBS+-j $JOBS}
 make ${JOBS+-j $JOBS} install
+
+# GCC creates c++, but not cc
+ln -nfs gcc "$INSTALLROOT"/bin/cc
