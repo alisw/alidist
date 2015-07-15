@@ -1,9 +1,9 @@
-package: root
+package: ROOT
 version: v5-34-08-alice9
 source: http://github.com/alisw/root
 tag: 1f141fd8d5d21efd2a3af3569ff34f4f121b2656
 requires:
-  - alien
+  - AliEn
 ---
 #!/bin/sh -e
 "$SOURCEDIR/configure" \
