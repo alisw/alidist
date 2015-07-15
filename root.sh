@@ -7,6 +7,22 @@ requires:
   - alien
 ---
 #!/bin/sh -e
+
+COMPILER_CC=cc
+COMPILER_CXX=c++
+COMPILER_LD=c++
+
+case $ARCHITECTURE in 
+  osx*)
+    ENABLE_COCOA=true
+    DISABLE_FINK=true
+    WITH_CLANG=true
+    COMPILER_CC=clang
+    COMPILER_CXX=clang++
+    COMPILER_LD=clang
+  ;;
+esac
+
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
   --with-alien-incdir=$ALIEN_ROOT/alien/api/include \
@@ -17,12 +33,15 @@ requires:
   --enable-minuit2 \
   --enable-roofit \
   --enable-soversion \
-  --disable-bonjour \
   --enable-builtin-freetype \
+  ${ENABLE_COCOA+--enable-cocoa} \
+  --disable-bonjour \
+  ${DISABLE_FINK+--disable-fink} \
   --with-f77=gfortran \
-  --with-cc=gcc \
-  --with-cxx=g++ \
-  --with-ld=g++ \
+  --with-cc=$COMPILER_CC \
+  --with-cxx=$COMPILER_CXX \
+  --with-ld=$COMPILER_LD \
+  ${WITH_CLANG+--with-clang} \
   --prefix="$INSTALLROOT" \
   --incdir="$INSTALLROOT/include" \
   --libdir="$INSTALLROOT/lib" \
