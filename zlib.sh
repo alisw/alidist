@@ -1,7 +1,7 @@
 package: zlib
 version: v1.2.8
 source: https://github.com/star-externals/zlib
-tag: v1.2.8
+tag: master
 ---
 #!/bin/sh
 cd $SOURCEDIR
