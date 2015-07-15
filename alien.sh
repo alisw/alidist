@@ -4,6 +4,9 @@ prepend_path:
   - "LD_LIBRARY_PATH": "$ALIEN_ROOT/alien/api/lib"
   - "DYLD_LIBRARY_PATH": "$ALIEN_ROOT/alien/api/lib"
   - "PATH": "$ALIEN_ROOT/alien/api/bin"
+requires:
+  - GCC
+  - Binutils
 ---
 #!/bin/sh
 curl -O -fSsL --insecure http://alien.cern.ch/alien-installer
