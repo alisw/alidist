@@ -8,4 +8,4 @@ tag: binutils-2_25
 "$SOURCEDIR"/configure --prefix="$INSTALLROOT"
 
 make ${JOBS+-j $JOBS}
-make ${JOBS+-j $JOBS} install
+make install

@@ -34,7 +34,7 @@ done
   --enable-languages="c,c++,fortran${AdditionalLanguages}"
 
 make ${JOBS+-j $JOBS}
-make ${JOBS+-j $JOBS} install
+make install
 
 # GCC creates c++, but not cc
 ln -nfs gcc "$INSTALLROOT"/bin/cc
