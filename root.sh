@@ -46,6 +46,7 @@ esac
   --incdir="$INSTALLROOT/include" \
   --libdir="$INSTALLROOT/lib" \
   --datadir="$INSTALLROOT" \
+  --disable-shadowpw \
   --etcdir="$INSTALLROOT/etc"
 
 ./bin/root-config --features | grep -q alien
