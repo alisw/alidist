@@ -20,4 +20,4 @@ else
   make ${JOBS+-j $JOBS}
   make install
 fi
-cp -r test $INSTALLROOT/test
+cp -r $SOURCEDIR/test $INSTALLROOT/test
