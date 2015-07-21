@@ -14,8 +14,10 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_SKIP_RPATH=TRUE
 
 if [[ $GIT_TAG == master ]]; then
-  CONTINUE_ON_ERROR=true
+  make -k ${JOBS+-j $JOBS} || true
+  make -k install || true
+else
+  make ${JOBS+-j $JOBS}
+  make install
 fi
-make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS}
-make install
-cp -r test $INSTALLROOT/test
+cp -r $SOURCEDIR/test $INSTALLROOT/test
