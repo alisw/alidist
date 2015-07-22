@@ -20,6 +20,7 @@ cd $BUILDDIR
 b2 -q \
    -d2 \
    ${JOBS+-j $JOBS} \
+   --prefix=$INSTALLROOT \
    --build-dir=build-boost \
    --disable-icu \
    --without-atomic \
@@ -40,4 +41,4 @@ b2 -q \
    link=shared \
    threading=multi \
    variant=release \
-   stage
+   install
