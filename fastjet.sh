@@ -1,4 +1,4 @@
-package: FastJet
+package: fastjet
 version: "3.1.3_1.017"
 ---
 #!/bin/bash -e

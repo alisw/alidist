@@ -5,7 +5,7 @@ tag: "alice/v2015-03-18"
 requires:
   - Rivet
   - GSL
-  - FastJet
+  - fastjet
 ---
 #!/bin/bash -e
 
@@ -57,7 +57,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-$PKGREVISION
 module-whatis "Module for loading $PKGNAME $PKGVERSION-$PKGREVISION for the ALICE environment"
 # Dependencies
-module load BASE/1.0 lhapdf/v5.9.1 pythia/v8186 HepMC/v2.06.09 FastJet/$FASTJET_VERSION-$FASTJET_REVISION GSL/$GSL_VERSION-$GSL_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION
+module load BASE/1.0 lhapdf/v5.9.1 pythia/v8186 HepMC/v2.06.09 fastjet/$FASTJET_VERSION-$FASTJET_REVISION GSL/$GSL_VERSION-$GSL_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION
 # Our environment
 if { [info exists ::env(OVERRIDE_BASE)] && \$::env(OVERRIDE_BASE) == 1 } then {
   puts stderr "Note: overriding base package $PKGNAME \$version"

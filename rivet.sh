@@ -3,7 +3,7 @@ version: "2.2.1"
 requires:
   - GSL
   - YODA
-  - FastJet
+  - fastjet
 ---
 #!/bin/bash -e
 Url="http://www.hepforge.org/archive/rivet/Rivet-${PKGVERSION}.tar.bz2"
@@ -41,7 +41,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-$PKGREVISION
 module-whatis "Module for loading $PKGNAME $PKGVERSION-$PKGREVISION for the ALICE environment"
 # Dependencies
-module load BASE/1.0 YODA/$YODA_VERSION-$YODA_REVISION FastJet/$FASTJET_VERSION-$FASTJET_REVISION GSL/$GSL_VERSION-$GSL_REVISION HepMC/v2.06.09
+module load BASE/1.0 YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION GSL/$GSL_VERSION-$GSL_REVISION HepMC/v2.06.09
 # Our environment
 if { [info exists ::env(OVERRIDE_BASE)] && \$::env(OVERRIDE_BASE) == 1 } then {
   puts stderr "Note: overriding base package $PKGNAME \$version"
