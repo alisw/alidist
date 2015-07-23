@@ -1,16 +1,15 @@
 package: YODA
-version: "v1.4.0"
+version: "1.4.0"
 ---
 #!/bin/bash -e
-VerWithoutV=${PKGVERSION:1}
-Url="http://www.hepforge.org/archive/yoda/YODA-${VerWithoutV}.tar.bz2"
+Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION}.tar.bz2"
 
 # TODO: deps from CVMFS must disappear
 Boost="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/boost/v1_53_0"
 
 curl -Lo yoda.tar.bz2 "$Url"
 tar xjf yoda.tar.bz2
-cd YODA-$VerWithoutV
+cd YODA-$PKGVERSION
 ./configure --prefix="$INSTALLROOT" --with-boost="$Boost"
 make -j$JOBS
 make install -j$JOBS
