@@ -11,7 +11,7 @@ echo "`date +%s`:aliroot-test: gun STARTED"
 cp -r $ALIROOT_ROOT/test/gun .
 cd gun
 set -o pipefail 
-if [ ./runtest.sh 2>&1 | tee run.log ]; then
+if ./runtest.sh ; then
   STATUS=SUCCESS
 else
   STATUS=FAILED
