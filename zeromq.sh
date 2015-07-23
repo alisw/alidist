@@ -1,4 +1,4 @@
-package: zeromq
+package: ZeroMQ
 version: master
 source: https://github.com/ktf/libzmq
 tag: master

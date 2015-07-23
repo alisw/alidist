@@ -1,4 +1,4 @@
-package: dds
+package: DDS
 version: master
 source: https://github.com/FairRootGroup/DDS
 requires:

@@ -1,7 +1,7 @@
-package: aliroot
+package: AliRoot
 version: v5-06-28
 requires:
-  - root
+  - ROOT
 env:
   ALICE_ROOT: \$INSTALLROOT
 source: http://git.cern.ch/pub/AliRoot

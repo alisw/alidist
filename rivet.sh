@@ -1,13 +1,12 @@
 package: Rivet
-version: "v2.2.1"
+version: "2.2.1"
 requires:
   - GSL
   - YODA
   - fastjet
 ---
 #!/bin/bash -e
-VerWithoutV=${PKGVERSION:1}
-Url="http://www.hepforge.org/archive/rivet/Rivet-${VerWithoutV}.tar.bz2"
+Url="http://www.hepforge.org/archive/rivet/Rivet-${PKGVERSION}.tar.bz2"
 
 # External dependencies. TODO: build them instead.
 Boost="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/boost/v1_53_0"
@@ -16,7 +15,7 @@ Cgal="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/cgal/v4.4"
 
 curl -Lo rivet.tar.bz2 "$Url"
 tar xjf rivet.tar.bz2
-cd Rivet-$VerWithoutV
+cd Rivet-$PKGVERSION
 export LDFLAGS="-L$Cgal/lib -L$Boost/lib ${LDFLAGS}"
 export LD_LIBRARY_PATH="${Cgal}/lib:${Boost}/lib:${LD_LIBRARY_PATH}"
 ./configure \

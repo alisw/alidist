@@ -1,7 +1,7 @@
-package: o2
+package: O2
 version: master
 requires:
-  - fairroot
+  - FairRoot
 source: https://github.com/AliceO2Group/AliceO2
 tag: master
 ---

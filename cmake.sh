@@ -1,4 +1,4 @@
-package: cmake
+package: CMake
 version: v2.8.12
 source: https://github.com/Kitware/CMake
 requires:

@@ -1,4 +1,4 @@
-package: alien
+package: AliEn
 version: v1
 prepend_path:
   - "LD_LIBRARY_PATH": "$ALIEN_ROOT/alien/api/lib"

@@ -1,4 +1,4 @@
-package: pcre
+package: PCRE
 version: master
 source: https://github.com/ktf/pcre
 tag: master
