@@ -1,6 +1,6 @@
 package: GEANT4
 version: v4.10.01.p02
-source: http://github.com/alisw/geant4
+source: https://github.com/alisw/geant4
 requires:
   - CLHEP
 tag: v4.10.01.p02
