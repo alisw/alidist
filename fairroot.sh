@@ -1,12 +1,12 @@
-package: fairroot
+package: FairRoot
 version: master
 source: https://github.com/FairRootGroup/FairRoot
 tag: master
 requires:
   - pythia6
-  - geant3
-  - geant4
-  - zeromq
+  - GEANT3
+  - GEANT4
+  - ZeroMQ
   - boost
 ---
 #!/bin/sh

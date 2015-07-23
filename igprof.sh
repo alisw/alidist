@@ -1,4 +1,4 @@
-package: igprof
+package: IgProf
 version: master
 source: https://github.com/igprof/igprof
 tag: master

@@ -1,10 +1,10 @@
-package: root
+package: ROOT
 version: v5-34-30
 source: http://github.com/root-mirror/root
 tag: v5-34-30
 requires: 
-  - cmake
-  - alien
+  - CMake
+  - AliEn
 ---
 #!/bin/sh -e
 
