@@ -1,10 +1,11 @@
 package: fastjet
-version: "3.1.3_1.017"
+version: "v3.1.3_1.017"
 ---
 #!/bin/bash -e
 
-VerFJContrib="${PKGVERSION#*_}"
-VerFJ="${PKGVERSION%%_*}"
+VerWithoutV=${PKGVERSION:1}
+VerFJContrib="${VerWithoutV#*_}"
+VerFJ="${VerWithoutV%%_*}"
 
 UrlFJ="http://fastjet.fr/repo/fastjet-${VerFJ}.tar.gz"
 UrlFJContrib="http://fastjet.hepforge.org/contrib/downloads/fjcontrib-${VerFJContrib}.tar.gz"

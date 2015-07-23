@@ -1,11 +1,12 @@
 package: GSL
-version: "1.16"
+version: "v1.16"
 ---
 #!/bin/bash -e
-Url="ftp://ftp.gnu.org/gnu/gsl/gsl-${PKGVERSION}.tar.gz"
+VerWithoutV=${PKGVERSION:1}
+Url="ftp://ftp.gnu.org/gnu/gsl/gsl-${VerWithoutV}.tar.gz"
 curl -o gsl.tar.gz "$Url"
 tar xzf gsl.tar.gz
-cd gsl-$PKGVERSION
+cd gsl-$VerWithoutV
 ./configure --prefix="$INSTALLROOT"
 make -j$JOBS
 make install -j$JOBS
