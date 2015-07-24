@@ -5,30 +5,20 @@ branch: star/v1.0.0
 tag: HEAD
 ---
 #!/bin/sh
-SOURCE0=https://github.com/star-externals/autotools
-BUILDDIR=$BUILDROOT/$PKGNAME
-GIT_REFERENCE=$SOURCEDIR/$PKGNAME
-
-
-git clone ${GIT_REFERENCE+--reference $GIT_REFERENCE} $SOURCE0 $BUILDDIR
-
-cd $BUILDDIR
-git checkout star/$PKGVERSION
-
 export PATH=$INSTALLROOT/bin:$PATH
-pushd $BUILDDIR/m4
+pushd $SOURCEDIR/m4
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $BUILDDIR/autoconf
+pushd $SOURCEDIR/autoconf
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $BUILDDIR/automake
+pushd $SOURCEDIR/automake
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $BUILDDIR/libtool
+pushd $SOURCEDIR/libtool
   # Update for AArch64 support
   rm -f ./libltdl/config/config.{sub,guess}
   curl -L -k -s -o ./libltdl/config/config.sub 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
@@ -37,7 +27,7 @@ pushd $BUILDDIR/libtool
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT --enable-ltdl-install
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $BUILDDIR/gettext
+pushd $SOURCEDIR/gettext
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \

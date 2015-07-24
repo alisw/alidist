@@ -2,6 +2,8 @@ package: sodium
 version: master
 source: https://github.com/jedisct1/libsodium
 tag: master
+requires:
+  - autotools
 ---
 #!/bin/sh
 cd $SOURCEDIR
