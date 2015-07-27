@@ -1,9 +1,9 @@
 package: GEANT4
-version: v4.10.01.p02
+version: v4.10.01.p02-alice1
 source: https://github.com/alisw/geant4
-tag: v4.10.01.p02
+tag: c61ed5a54780a8da922ccf199ca69592189c7e66
 ---
-#!/bin/sh
+#!/bin/bash -e
 
 cmake $SOURCEDIR \
   -DCMAKE_CXX_COMPILER="c++" \
