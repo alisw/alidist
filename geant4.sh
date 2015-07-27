@@ -1,8 +1,6 @@
 package: GEANT4
 version: v4.10.01.p02
 source: https://github.com/alisw/geant4
-requires:
-  - CLHEP
 tag: v4.10.01.p02
 ---
 #!/bin/sh
@@ -17,7 +15,6 @@ cmake $SOURCEDIR \
   -DGEANT4_ENABLE_TESTING=OFF \
   -DBUILD_SHARED_LIBS=ON \
   -DGEANT4_INSTALL_EXAMPLES=OFF \
-  -DGEANT4_USE_SYSTEM_CLHEP=ON \
   -DCLHEP_ROOT_DIR:PATH="$CLHEP_ROOT" \
   -DGEANT4_BUILD_MULTITHREADED=ON \
   -DCMAKE_STATIC_LIBRARY_CXX_FLAGS="-fPIC" \
