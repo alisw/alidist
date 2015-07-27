@@ -1,5 +1,5 @@
 package: AliRoot
-version: v5-06-28
+version: v5-05-Rev-22c-p1
 requires:
   - ROOT
 env:
@@ -8,7 +8,8 @@ source: http://git.cern.ch/pub/AliRoot
 tag: master
 ---
 #!/bin/sh
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+cmake $SOURCEDIR \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
       -DROOTSYS=$ROOT_ROOT \
       -DALIEN=$ALIEN_ROOT/alien
 
