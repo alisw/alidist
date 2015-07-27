@@ -1,7 +1,6 @@
 package: ROOT
-version: v5-34-30
-source: https://github.com/root-mirror/root
-tag: v5-34-30
+version: v5-34-30-alice2
+source: https://github.com/alisw/root
 requires: 
   - CMake
   - AliEn
