@@ -5,6 +5,7 @@ requires:
 env:
   ALICE_ROOT: \$INSTALLROOT
 source: http://git.cern.ch/pub/AliRoot
+write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
 ---
 #!/bin/sh
