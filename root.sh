@@ -4,8 +4,10 @@ source: https://github.com/alisw/root
 requires: 
   - CMake
   - AliEn
+env:
+  - ROOTSYS: \$INSTALLROOT
 ---
-#!/bin/sh -e
+#!/bin/bash -e
 
 COMPILER_CC=cc
 COMPILER_CXX=c++

@@ -1,5 +1,5 @@
 package: AliRoot
-version: v5-06-28
+version: v5-06-35
 requires:
   - ROOT
 env:
