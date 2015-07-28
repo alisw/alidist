@@ -2,7 +2,7 @@ package: AliRoot-test
 version: v1
 force_rebuild: 1
 requires:
-  - AliRoot
+  - AliPhysics
   - GEANT3
 ---
 #!/bin/sh
