@@ -6,6 +6,7 @@ source: https://github.com/AliceO2Group/AliceO2
 tag: master
 ---
 #!/bin/sh
+export FAIRROOTPATH=$FAIRROOT_ROOT
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DFAIRROOTPATH=$FAIRROOT_ROOT \
       -DCMAKE_SKIP_RPATH=TRUE
