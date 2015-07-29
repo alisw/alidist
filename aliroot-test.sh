@@ -10,7 +10,10 @@ export ALICE_ROOT=$ALIROOT_ROOT
 echo "`date +%s`:aliroot-test: $x STARTED"
 # Despite the fact we shouldn't rely on external variables, here we do to
 # control from the outside (i.e. jenkins) which tests to run.
-for x in ${ALI_CI_TESTS:-ppbench gun}; do
+#
+# By default we only run gun. We do this so that before running longer tests we
+# make sure that at least the simple ones are ok.
+for x in ${ALI_CI_TESTS:-gun}; do
   cp -r $ALIROOT_ROOT/test/$x .
   cd $x
   set -o pipefail
