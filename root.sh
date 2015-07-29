@@ -5,7 +5,7 @@ requires:
   - CMake
   - AliEn
 env:
-  - ROOTSYS: \$INSTALLROOT
+  ROOTSYS: \$INSTALLROOT
 ---
 #!/bin/bash -e
 
