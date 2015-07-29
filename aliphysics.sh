@@ -4,6 +4,8 @@ requires:
   - AliRoot
 source: http://git.cern.ch/pub/AliPhysics
 tag: master
+env:
+  ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
 ---
 #!/bin/bash -e
 # TODO: build with -DFASTJET
