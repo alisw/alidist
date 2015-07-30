@@ -1,11 +1,11 @@
 package: ROOT
-version: v5-34-30-alice2
+version: v6-04-02
 source: https://github.com/alisw/root
 requires: 
   - CMake
   - AliEn
 env:
-  ROOTSYS: \$INSTALLROOT
+  ROOTSYS: "$INSTALLROOT"
 ---
 #!/bin/bash -e
 
