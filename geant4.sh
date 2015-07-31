@@ -1,7 +1,7 @@
 package: GEANT4
-version: v4.10.01.p02-alice1
+version: v10.01.p02-alice1
 source: https://github.com/alisw/geant4
-tag: c61ed5a54780a8da922ccf199ca69592189c7e66
+tag: v4.10.01.p02-alice1
 ---
 #!/bin/bash -e
 
