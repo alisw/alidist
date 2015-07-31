@@ -36,6 +36,7 @@ export ROOTSYS=$BUILDDIR
   --enable-roofit \
   --enable-soversion \
   --enable-builtin-freetype \
+  --enable-builtin-pcre \
   ${ENABLE_COCOA+--enable-cocoa} \
   --disable-bonjour \
   ${DISABLE_FINK+--disable-fink} \
