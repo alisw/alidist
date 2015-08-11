@@ -1,5 +1,5 @@
 package: AliRoot
-version: v5-06-35
+version: "%(commit_hash)s"
 requires:
   - ROOT
 env:
