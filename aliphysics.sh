@@ -1,5 +1,5 @@
 package: AliPhysics
-version: v5-06-35-01
+version: "%(commit_hash)s"
 requires:
   - AliRoot
 source: http://git.cern.ch/pub/AliPhysics
