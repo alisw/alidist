@@ -35,6 +35,7 @@ b2 -q \
    --without-log \
    --without-math \
    --without-mpi \
+   --without-python \
    --without-random \
    --without-wave \
    toolset=${TOOLSET} \
