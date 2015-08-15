@@ -8,7 +8,10 @@ tag: master
 ---
 #!/bin/sh
 export FAIRROOTPATH=$FAIRROOT_ROOT
+export ROOTSYS=$ROOT_ROOT
+
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules" \
       -DALICEO2_MODULAR_BUILD=ON \
       -DROOTSYS=$ROOTSYS \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib \
