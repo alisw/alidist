@@ -1,8 +1,7 @@
 package: autotools
 version: v1.0.0
 source: https://github.com/star-externals/autotools
-branch: star/v1.0.0
-tag: HEAD
+tag: star/v1.0.0
 ---
 #!/bin/sh
 export PATH=$INSTALLROOT/bin:$PATH
@@ -41,6 +40,13 @@ pushd $SOURCEDIR/gettext
               --disable-java \
               --disable-dependency-tracking \
               --disable-silent-rules
+  make ${JOBS+-j $JOBS} && make install
+popd
+pushd $SOURCEDIR/pkg-config
+    ./configure --disable-debug \
+                --prefix=$INSTALLROOT \
+                --disable-host-tool \
+                --with-internal-glib
   make ${JOBS+-j $JOBS} && make install
 popd
 
