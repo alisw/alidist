@@ -3,6 +3,7 @@ version: master
 requires:
   - FairRoot
   - AliRoot
+  - pythia8
 source: https://github.com/AliceO2Group/AliceO2
 tag: master
 ---
@@ -21,7 +22,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DBOOST_ROOT=$BOOST_ROOT \
       -DBOOST_INCLUDE_DIR=$BOOST_INCLUDE_DIR \
       -DZMQ_DIR=$ZEROMQ_ROOT \
-      -DALIROOT=$ALIROOT_ROOT
+      -DALIROOT=$ALIROOT_ROOT \
+      -DPYTHIA8_INCLUDE_DIR=$PYTHIA8_ROOT/include
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
