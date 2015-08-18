@@ -3,7 +3,7 @@ version: "%(short_hash)s"
 requires:
   - ROOT
 env:
-  ALICE_ROOT: \$INSTALLROOT
+  ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
