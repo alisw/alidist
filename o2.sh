@@ -4,6 +4,7 @@ requires:
   - FairRoot
   - AliRoot
   - pythia8
+  - pythia6
 source: https://github.com/AliceO2Group/AliceO2
 tag: master
 ---
@@ -20,8 +21,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DGeant4_DIR=$GEANT4_ROOT \
       -DFAIRROOTPATH=$FAIRROOT_ROOT \
       -DBOOST_ROOT=$BOOST_ROOT \
-      -DBOOST_INCLUDE_DIR=$BOOST_INCLUDE_DIR \
       -DZMQ_DIR=$ZEROMQ_ROOT \
+      -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include \
       -DALIROOT=$ALIROOT_ROOT \
       -DPYTHIA8_INCLUDE_DIR=$PYTHIA8_ROOT/include
 
