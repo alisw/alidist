@@ -4,6 +4,7 @@ source: https://github.com/alisw/root
 requires: 
   - CMake
   - AliEn
+  - GSL
 env:
   ROOTSYS: "$ROOT_ROOT"
 ---
@@ -37,6 +38,7 @@ export ROOTSYS=$BUILDDIR
   --enable-soversion \
   --enable-builtin-freetype \
   --enable-builtin-pcre \
+  --enable-mathmore \
   ${ENABLE_COCOA+--enable-cocoa} \
   --disable-bonjour \
   ${DISABLE_FINK+--disable-fink} \
