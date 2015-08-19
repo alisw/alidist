@@ -35,10 +35,11 @@ b2 -q \
    --without-log \
    --without-math \
    --without-mpi \
-   --without-random \
+   --without-python \
    --without-wave \
    toolset=${TOOLSET} \
    link=shared \
    threading=multi \
    variant=release \
+   cxxflags="-std=c++11" \
    install

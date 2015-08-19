@@ -4,6 +4,7 @@ source: https://github.com/alisw/root
 requires: 
   - CMake
   - AliEn
+  - GSL
 env:
   ROOTSYS: "$INSTALLROOT"
 ---
@@ -24,6 +25,7 @@ case $ARCHITECTURE in
   ;;
 esac
 
+export ROOTSYS=$BUILDDIR
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
   --with-alien-incdir=$ALIEN_ROOT/alien/api/include \
@@ -35,6 +37,8 @@ esac
   --enable-roofit \
   --enable-soversion \
   --enable-builtin-freetype \
+  --enable-builtin-pcre \
+  --enable-mathmore \
   ${ENABLE_COCOA+--enable-cocoa} \
   --disable-bonjour \
   ${DISABLE_FINK+--disable-fink} \
@@ -43,15 +47,11 @@ esac
   --with-cxx=$COMPILER_CXX \
   --with-ld=$COMPILER_LD \
   ${WITH_CLANG+--with-clang} \
-  --prefix="$INSTALLROOT" \
-  --incdir="$INSTALLROOT/include" \
-  --libdir="$INSTALLROOT/lib" \
-  --datadir="$INSTALLROOT" \
-  --disable-shadowpw \
-  --etcdir="$INSTALLROOT/etc"
+  --disable-shadowpw
 
 ./bin/root-config --features | grep -q alien
 ./bin/root-config --features | grep -q opengl
 
 make ${JOBS+-j $JOBS}
+export ROOTSYS=$INSTALLROOT
 make install
