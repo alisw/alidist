@@ -5,7 +5,7 @@ requires:
   - AliRoot
   - pythia8
   - pythia6
-source: https://github.com/AliceO2Group/AliceO2
+source: https://github.com/ktf/AliceO2
 tag: master
 ---
 #!/bin/sh

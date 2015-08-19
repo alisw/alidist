@@ -1,6 +1,6 @@
 package: FairRoot
 version: master
-source: https://github.com/FairRootGroup/FairRoot
+source: https://github.com/ktf/FairRoot
 tag: master
 requires:
   - pythia6
