@@ -28,7 +28,6 @@ b2 -q \
    --without-container \
    --without-context \
    --without-coroutine \
-   --without-exception \
    --without-graph \
    --without-graph_parallel \
    --without-locale \
