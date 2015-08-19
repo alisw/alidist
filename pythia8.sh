@@ -1,9 +1,10 @@
 package: pythia8
-version: "v210"
+version: "v8210"
 source: https://github.com/alisw/pythia8
 requires:
   - LHAPDF
   - HepMC
+tag: alice/v8210
 ---
 #!/bin/sh
 cd $SOURCEDIR
