@@ -4,6 +4,7 @@ force_rebuild: 1
 requires:
   - AliPhysics
   - GEANT3
+  - OCDB-test
 ---
 #!/bin/sh
 export ALICE_ROOT=$ALIROOT_ROOT
@@ -17,6 +18,7 @@ for x in ${ALI_CI_TESTS:-gun}; do
   cp -r $ALIROOT_ROOT/test/$x .
   cd $x
   set -o pipefail
+  perl -p -i -e 's|ALICE_ROOT/OCDB|OCDB_TEST_ROOT|' *.C
   if ./runtest.sh ; then
     STATUS=SUCCESS
   else
