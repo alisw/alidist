@@ -2,6 +2,9 @@ package: boost
 version: v1.57.0
 source: https://github.com/alisw/boost.git
 tag: v1.57.0
+requires:
+  - Binutils:slc6.*
+  - GCC:slc6.*
 ---
 #!/bin/sh
 
