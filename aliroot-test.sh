@@ -5,7 +5,7 @@ requires:
   - AliPhysics
   - GEANT3
   - OCDB-test
-  - "IgProf:(?!osx).*"
+  - "IgProf:slc7.*"
 ---
 #!/bin/sh
 export ALICE_ROOT=$ALIROOT_ROOT
