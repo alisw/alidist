@@ -1,13 +1,15 @@
 package: libatomic_ops
-version: v1.0
-source: https://github.com/igprof/libatomic_ops
+version: libatomic_ops-7_4_2
+source: https://github.com/ivmai/libatomic_ops/
 tag: master
 requires:
-  - autotools:slc5.*
+  - autotools:(slc[56].*|ubt.*)
 ---
 #!/bin/sh
-
-$SOURCEDIR/configure --prefix=$INSTALLROOT
+rsync -a $SOURCEDIR/ ./
+libtoolize
+autoreconf -ivf
+./configure --prefix=$INSTALLROOT
 
 make ${JOBS+-j $JOBS}
 make install

@@ -5,19 +5,20 @@ tag: star/v1.0.0
 ---
 #!/bin/sh
 export PATH=$INSTALLROOT/bin:$PATH
-pushd $SOURCEDIR/m4
+rsync -a $SOURCEDIR/ $BUILDDIR/
+pushd m4
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $SOURCEDIR/autoconf
+pushd autoconf
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $SOURCEDIR/automake
+pushd automake
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $SOURCEDIR/libtool
+pushd libtool
   # Update for AArch64 support
   rm -f ./libltdl/config/config.{sub,guess}
   curl -L -k -s -o ./libltdl/config/config.sub 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
@@ -26,7 +27,7 @@ pushd $SOURCEDIR/libtool
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT --enable-ltdl-install
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $SOURCEDIR/gettext
+pushd gettext
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
@@ -42,7 +43,7 @@ pushd $SOURCEDIR/gettext
               --disable-silent-rules
   make ${JOBS+-j $JOBS} && make install
 popd
-pushd $SOURCEDIR/pkg-config
+pushd pkg-config
     ./configure --disable-debug \
                 --prefix=$INSTALLROOT \
                 --disable-host-tool \
