@@ -1,9 +1,9 @@
 package: ROOT
-version: v5-34-30-alice2
+version: v5-34-30-alice3
 source: https://github.com/alisw/root
 requires: 
   - CMake
-  - AliEn
+  - AliEn-Runtime
   - GSL
 env:
   ROOTSYS: "$ROOT_ROOT"
@@ -28,11 +28,11 @@ esac
 export ROOTSYS=$BUILDDIR
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
-  --with-alien-incdir=$ALIEN_ROOT/alien/api/include \
-  --with-alien-libdir=$ALIEN_ROOT/alien/api/lib \
-  --with-monalisa-incdir="$ALIEN_ROOT/alien/api/include" \
-  --with-monalisa-libdir="$ALIEN_ROOT/alien/api/lib" \
-  --with-xrootd=$ALIEN_ROOT/alien/api \
+  --with-alien-incdir=$ALIEN_RUNTIME_ROOT/api/include \
+  --with-alien-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
+  --with-monalisa-incdir=$ALIEN_RUNTIME_ROOT/api/include \
+  --with-monalisa-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
+  --with-xrootd=$ALIEN_RUNTIME_ROOT/api \
   --enable-minuit2 \
   --enable-roofit \
   --enable-soversion \
@@ -47,7 +47,15 @@ export ROOTSYS=$BUILDDIR
   --with-cxx=$COMPILER_CXX \
   --with-ld=$COMPILER_LD \
   ${WITH_CLANG+--with-clang} \
-  --disable-shadowpw
+  --disable-shadowpw \
+  --disable-astiff \
+  --with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 \
+  --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib \
+  --disable-globus \
+  --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib \
+  --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
+  --with-ssl-shared=yes \
+  --enable-mysql
 
 ./bin/root-config --features | grep -q alien
 ./bin/root-config --features | grep -q opengl

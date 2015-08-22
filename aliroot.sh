@@ -8,10 +8,10 @@ source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
 ---
-#!/bin/sh
+#!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DROOTSYS=$ROOT_ROOT \
-      -DALIEN=$ALIEN_ROOT/alien \
+      -DALIEN=$ALIEN_RUNTIME_ROOT \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then

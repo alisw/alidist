@@ -11,7 +11,7 @@ env:
 # TODO: build with -DFASTJET
 cmake "$SOURCEDIR" \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DALIEN="$ALIEN_ROOT"/alien \
+      -DALIEN="$ALIEN_RUNTIME_ROOT" \
       -DROOTSYS="$ROOT_ROOT" \
       -DALIROOT="$ALIROOT_ROOT"
 make ${JOBS+-j $JOBS}
