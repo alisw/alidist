@@ -1,9 +1,5 @@
 package: pythia6
 version: "426"
-prepend_path:
-  "LD_LIBRARY_PATH": "$ALIEN_ROOT/alien/api/lib"
-  "DYLD_LIBRARY_PATH": "$ALIEN_ROOT/alien/api/lib"
-  "PATH": "$ALIEN_ROOT/alien/api/bin"
 ---
 #!/bin/sh
 curl -O -fSsL --insecure http://cern.ch/service-spi/external/MCGenerators/distribution/pythia6/pythia6-426-src.tgz
