@@ -63,3 +63,25 @@ export ROOTSYS=$BUILDDIR
 make ${JOBS+-j $JOBS}
 export ROOTSYS=$INSTALLROOT
 make install
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/Modules/modulefiles/$PKGNAME"
+MODULEFILE="$MODULEDIR/$PKGVERSION-$PKGREVISION"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-$PKGREVISION"
+}
+set version $PKGVERSION-$PKGREVISION
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-$PKGREVISION"
+# Dependencies
+module load BASE/1.0 AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION
+# Our environment
+setenv ROOT_RELEASE \$version
+setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
+setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
+prepend-path PATH \$::env(ROOTSYS)/bin
+prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
+EoF
