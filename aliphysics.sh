@@ -6,6 +6,7 @@ source: http://git.cern.ch/pub/AliPhysics
 tag: master
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
+incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 ---
 #!/bin/bash -e
 # TODO: build with -DFASTJET
