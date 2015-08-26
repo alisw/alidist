@@ -7,6 +7,7 @@ env:
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
+incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \

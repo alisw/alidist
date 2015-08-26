@@ -7,6 +7,11 @@ requires:
   - GSL
 env:
   ROOTSYS: "$ROOT_ROOT"
+incremental_recipe: |
+  export ROOTSYS=$BUILDDIR
+  make ${JOBS:+-j$JOBS}
+  export ROOTSYS=$INSTALLROOT
+  make install
 ---
 #!/bin/bash -e
 
@@ -60,7 +65,7 @@ export ROOTSYS=$BUILDDIR
 ./bin/root-config --features | grep -q alien
 ./bin/root-config --features | grep -q opengl
 
-make ${JOBS+-j $JOBS}
+make ${JOBS+-j$JOBS}
 export ROOTSYS=$INSTALLROOT
 make install
 
