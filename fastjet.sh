@@ -1,5 +1,10 @@
 package: fastjet
 version: "v3.1.3_1.017"
+requires:
+ - CGAL
+ - boost
+ - HepMC
+ - LHAPDF
 ---
 #!/bin/bash -e
 
@@ -10,29 +15,25 @@ VerFJ="${VerWithoutV%%_*}"
 UrlFJ="http://fastjet.fr/repo/fastjet-${VerFJ}.tar.gz"
 UrlFJContrib="http://fastjet.hepforge.org/contrib/downloads/fjcontrib-${VerFJContrib}.tar.gz"
 
-# TODO: deps from CVMFS must disappear
-Boost='/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/boost/v1_53_0'
-Cgal='/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/cgal/v4.4'
-
 curl -Lo fastjet.tar.gz "$UrlFJ"
 curl -Lo fjcontrib.tar.gz "$UrlFJContrib"
 
 tar xzf fastjet.tar.gz
 tar xzf fjcontrib.tar.gz
 
-export LD_LIBRARY_PATH="${Boost}/lib:${LD_LIBRARY_PATH}"
-export LIBRARY_PATH="${Boost}/lib:${LIBRARY_PATH}"
+export LD_LIBRARY_PATH="${BOOST_ROOT}/lib:${LD_LIBRARY_PATH}"
+export LIBRARY_PATH="${BOOST_ROOT}/lib:${LIBRARY_PATH}"
 
 # Build FastJet
 cd $BUILDDIR/fastjet-$VerFJ
-export CXXFLAGS="-Wl,--no-as-needed -lgmp -L${Boost}/lib -lboost_thread -lboost_system -L${Cgal}/lib -I${Boost}/include -I${Cgal}/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+export CXXFLAGS="-Wl,--no-as-needed -lgmp -L${BOOST_ROOT}/lib -lboost_thread -lboost_system -L${CGAL_ROOT}/lib -I${BOOST_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
 export CFLAGS="${CXXFLAGS}"
-export CPATH="${Boost}/include:${Cgal}/include"
-export C_INCLUDE_PATH="${Boost}/include:${Cgal}/include"
+export CPATH="${BOOST_ROOT}/include:${CGAL_ROOT}/include"
+export C_INCLUDE_PATH="${BOOST_ROOT}/include:${CGAL_ROOT}/include"
 ./configure \
   --enable-shared \
   --enable-cgal \
-  --with-cgal="${Cgal}" \
+  --with-cgal="${CGAL_ROOT}" \
   --prefix="$INSTALLROOT" \
   --enable-allcxxplugins
 make -j$JOBS

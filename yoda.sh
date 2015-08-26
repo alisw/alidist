@@ -1,11 +1,10 @@
 package: YODA
 version: "1.4.0"
+requires:
+  - boost
 ---
 #!/bin/bash -e
 Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION}.tar.bz2"
-
-# TODO: deps from CVMFS must disappear
-Boost="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/boost/v1_53_0"
 
 curl -Lo yoda.tar.bz2 "$Url"
 tar xjf yoda.tar.bz2

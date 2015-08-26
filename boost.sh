@@ -13,6 +13,10 @@ case $ARCHITECTURE in
   *) TOOLSET=gcc ;;
 esac
 
+if [[ ! $ARCHITECTURE =~ "slc5.*" ]]; then
+    EXTRA_CXXFLAGS='cxxflags="-std=c++11"'
+fi
+
 rsync -a $SOURCEDIR/ $BUILDDIR/
 cd $BUILDDIR/tools/build
   sh bootstrap.sh ${TOOLSET}
@@ -43,5 +47,5 @@ b2 -q \
    link=shared \
    threading=multi \
    variant=release \
-   cxxflags="-std=c++11" \
+   ${EXTRA_CXXFLAGS} \
    install
