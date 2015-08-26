@@ -60,7 +60,7 @@ export ROOTSYS=$BUILDDIR
 ./bin/root-config --features | grep -q alien
 ./bin/root-config --features | grep -q opengl
 
-make ${JOBS+-j $JOBS}
+make ${JOBS+-j$JOBS}
 export ROOTSYS=$INSTALLROOT
 make install
 
