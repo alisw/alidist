@@ -8,7 +8,7 @@ requires:
 tag: alice/v8210
 ---
 #!/bin/sh
-cd $SOURCEDIR
+rsync -a $SOURCEDIR/ ./
 
 ./configure --prefix=$INSTALLROOT \
             --enable-shared \
