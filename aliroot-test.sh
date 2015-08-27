@@ -20,12 +20,30 @@ for x in ${ALI_CI_TESTS:-gun}; do
   cd $x
   set -o pipefail
   perl -p -i -e 's|ALICE_ROOT/OCDB|OCDB_TEST_ROOT|' *.C
-  if ./runtest.sh ; then
+  IGPROF_CMD=${IGPROF_ROOT:+igprof -d -pp -t aliroot }
+  if $IGPROF_CMD ./runtest.sh ; then
     STATUS=SUCCESS
   else
     STATUS=FAILED
   fi
+  # Process any igprof profile dump.
+  for y in $(find . -name "igprof*.gz"); do
+    IGPROF_OUT=$(echo $y | sed -e's/.gz/.sql/')
+    igprof-analyse -d -g $y --sqlite | sqlite3 $IGPROF_OUT
+  done
+  # In case we were successful, do the memory profiling as well.
+  if [[ $STATUS == SUCCESS ]] && [[ -n $IGPROF_ROOT  ]]; then
+    find . -name "igprof*.gz" -delete
+    IGPROF_CMD="igprof -d -mp -t aliroot "
+    $IGPROF_CMD ./runtest.sh
+    for y in $(find . -name "igprof*.gz"); do
+      IGPROF_OUT=$(echo $y | sed -e's/.gz/_MEM_TOTAL.sql/')
+      igprof-analyse -d -g $y --sqlite | sqlite3 $IGPROF_OUT
+    done
+  fi
   mkdir -p  $WORKSPACE/$x
   find . -name "*.root" -exec cp {} $WORKSPACE/$x \;
+  find . -name "*.log" -exec cp {} $WORKSPACE/$x \;
+  find . -name "*.sql" -exec cp {} $WORKSPACE/$x \;
   echo "`date +%s`:aliroot-test: $x $STATUS"
 done
