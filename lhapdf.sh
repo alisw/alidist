@@ -10,7 +10,7 @@ requires:
 #!/bin/sh
 # Does not work out of source.
 
-cd $SOURCEDIR
+rsync -a $SOURCEDIR/ ./
 
 # autoreconf if using our own build of autotools
 [[ -n ${AUTOTOOLS_ROOT} ]] && autoreconf -ivf
