@@ -1,5 +1,5 @@
 package: AliEn-Runtime
-version: v2-19-xrd1
+version: v2-19-xrd2
 source: https://gitlab.cern.ch/dberzano/AliEn-antidot.git
 prepend_path:
   LD_LIBRARY_PATH: "$ALIEN_RUNTIME_ROOT/api/lib"
