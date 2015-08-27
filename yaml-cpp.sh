@@ -6,6 +6,10 @@ requires:
   - boost
 ---
 #!/bin/sh
+if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
+    sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt
+fi
+
 cmake $SOURCEDIR \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DBUILD_SHARED_LIBS=YES \
