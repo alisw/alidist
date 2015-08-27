@@ -4,28 +4,28 @@ requires:
   - GSL
   - YODA
   - fastjet
+  - HepMC
+  - boost
+  - CGAL
 ---
 #!/bin/bash -e
 Url="http://www.hepforge.org/archive/rivet/Rivet-${PKGVERSION}.tar.bz2"
 
-# External dependencies. TODO: build them instead.
-Boost="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/boost/v1_53_0"
-HepMC="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/HepMC/v2.06.09"
-Cgal="/cvmfs/alice.cern.ch/x86_64-2.6-gnu-4.1.2/Packages/cgal/v4.4"
-
 curl -Lo rivet.tar.bz2 "$Url"
 tar xjf rivet.tar.bz2
 cd Rivet-$PKGVERSION
-export LDFLAGS="-L$Cgal/lib -L$Boost/lib ${LDFLAGS}"
-export LD_LIBRARY_PATH="${Cgal}/lib:${Boost}/lib:${LD_LIBRARY_PATH}"
+export LDFLAGS="-L${CGAL_ROOT}/lib -L${BOOST_ROOT}/lib ${LDFLAGS}"
+export LD_LIBRARY_PATH="${CGAL_ROOT}/lib:${BOOST_ROOT}/lib:${LD_LIBRARY_PATH}"
+export LIBRARY_PATH="${LD_LIBRARY_PATH}"
+export CXXFLAGS="-Wl,--no-as-needed -lgmp -L${BOOST_ROOT}/lib -lboost_thread -lboost_system -L${CGAL_ROOT}/lib -lCGAL -I${BOOST_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
 ./configure \
   --prefix="$INSTALLROOT" \
   --disable-doxygen \
   --with-yoda="$YODA_ROOT" \
   --with-gsl="$GSL_ROOT" \
-  --with-hepmc="$HepMC" \
+  --with-hepmc="$HEPMC_ROOT" \
   --with-fastjet="$FASTJET_ROOT" \
-  --with-boost="$Boost"
+  --with-boost="$BOOST_ROOT"
 make -j$JOBS
 make install -j$JOBS
 
