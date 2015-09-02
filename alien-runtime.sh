@@ -15,6 +15,15 @@ cd $BUILDDIR
 ./bootstrap
 ./configure --prefix=$INSTALLROOT
 
+pushd apps/perl/perl
+for ((I=0; I<5; I++)); do
+  ERR=0
+  make install || ERR=1
+  [[ $ERR == 0 ]] && break
+done
+[[ $ERR == 0 ]]
+popd
+
 pushd meta/user
 make install
 popd
