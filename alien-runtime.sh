@@ -8,6 +8,8 @@ prepend_path:
 env:
   GSHELL_ROOT: "$ALIEN_RUNTIME_ROOT/api"
   GSHELL_NO_GCC: "1"
+requires:
+  - CMake
 ---
 #!/bin/bash -e
 rsync -a --cvs-exclude $SOURCEDIR/ $BUILDDIR/
