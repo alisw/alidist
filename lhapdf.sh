@@ -5,7 +5,7 @@ tag: v6.1.5
 requires:
  - yaml-cpp
  - boost
- - "autotools:(slc5).*"
+ - autotools
 ---
 #!/bin/sh
 # Does not work out of source.

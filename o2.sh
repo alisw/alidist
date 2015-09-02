@@ -30,4 +30,4 @@ if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
 fi
 make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS}
-make install
+make ${CONTINUE_ON_ERROR+-k} install
