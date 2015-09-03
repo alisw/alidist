@@ -2,7 +2,6 @@ package: ROOT
 version: v5-34-30-alice3
 source: https://github.com/alisw/root
 requires: 
-  - CMake
   - AliEn-Runtime
   - GSL
 env:
