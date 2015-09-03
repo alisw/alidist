@@ -2,7 +2,6 @@ package: ROOT
 version: v6-04-02
 source: https://github.com/alisw/root
 requires: 
-  - CMake
   - AliEn-Runtime
   - GSL
 env:
