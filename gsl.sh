@@ -1,5 +1,5 @@
 package: GSL
-version: "1.16"
+version: "v1.16"
 ---
 #!/bin/bash -e
 Url="ftp://ftp.gnu.org/gnu/gsl/gsl-${PKGVERSION}.tar.gz"
@@ -23,7 +23,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
+module load BASE/1.0
 # Our environment
 setenv GSL_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GSL_BASEDIR)/lib
