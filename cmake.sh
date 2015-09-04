@@ -1,9 +1,9 @@
 package: CMake
 version: v2.8.12
+tag: v2.8.12
 source: https://github.com/Kitware/CMake
 requires:
   - zlib
-tag: v2.8.12
 ---
 #!/bin/sh
 cat > build-flags.cmake <<- EOF 
@@ -29,3 +29,21 @@ $SOURCEDIR/configure --prefix=$INSTALLROOT --init=build-flags.cmake ${JOBS+--par
 
 make ${JOBS+-j $JOBS}
 make install/strip
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION
+# Our environment
+prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
+EoF
