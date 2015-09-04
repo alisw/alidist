@@ -1,11 +1,11 @@
 package: GSL
-version: "1.16"
+version: "v1.16"
 ---
 #!/bin/bash -e
-Url="ftp://ftp.gnu.org/gnu/gsl/gsl-${PKGVERSION}.tar.gz"
+Url="http://mirror2.mirror.garr.it/mirrors/gnuftp/gnu/gsl/gsl-${PKGVERSION:1}.tar.gz"
 curl -o gsl.tar.gz "$Url"
 tar xzf gsl.tar.gz
-cd gsl-$PKGVERSION
+cd gsl-${PKGVERSION:1}
 ./configure --prefix="$INSTALLROOT"
 make -j$JOBS
 make install -j$JOBS
@@ -23,7 +23,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
+module load BASE/1.0
 # Our environment
 setenv GSL_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GSL_BASEDIR)/lib

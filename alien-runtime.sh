@@ -50,7 +50,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
 # Our environment
 setenv ALIEN_RUNTIME_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_BASEDIR)/lib
