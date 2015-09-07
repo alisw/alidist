@@ -4,7 +4,7 @@ requires:
  - cgal
  - boost
  - HepMC
- - LHAPDF
+ - lhapdf
 ---
 #!/bin/bash -e
 
