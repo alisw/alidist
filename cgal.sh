@@ -1,22 +1,20 @@
-package: CGAL
-version: "4.4"
+package: cgal
+version: "v4.4"
 requires:
   - boost
+  - CMake
 ---
 #!/bin/bash -e
 PKGID=33524
-Url="https://gforge.inria.fr/frs/download.php/${PKGID}/Cgal-${PKGVERSION}.tar.bz2"
+Url="https://gforge.inria.fr/frs/download.php/${PKGID}/Cgal-${PKGVERSION:1}.tar.bz2"
 
 curl -Lo cgal.tar.bz2 "$Url"
 tar xjf cgal.tar.bz2
-cd CGAL-$PKGVERSION
-export LDFLAGS="-L$BOOST_ROOT/lib ${LDFLAGS}"
-export LD_LIBRARY_PATH="${BOOST_ROOT}/lib:${LD_LIBRARY_PATH}"
+cd CGAL-${PKGVERSION:1}
 
-#export MPFR_LIB_DIR="${MPFR_STATIC_ROOT}/lib"
-#export MPFR_INC_DIR="${MPFR_STATIC_ROOT}/include"
-#export GMP_LIB_DIR="${GMP_STATIC_ROOT}/lib"
-#export GMP_INC_DIR="${GMP_STATIC_ROOT}/include"
+export LDFLAGS="-L$BOOST_ROOT/lib"
+export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
 
 cmake . \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
@@ -52,35 +50,25 @@ cmake . \
       -DBoost_NO_SYSTEM_PATHS:BOOL=TRUE \
       -DBOOST_ROOT:PATH="${BOOST_ROOT}"
 
-
-make VERBOSE=1
-
+make VERBOSE=1 ${JOBS:+-j$JOBS}
 make install VERBOSE=1
 
 # Modulefile
-ModuleDir="${INSTALLROOT}/etc/Modules/modulefiles/${PKGNAME}"
-mkdir -p "$ModuleDir"
-cat > "${ModuleDir}/${PKGVERSION}-${PKGREVISION}" <<EoF
-#%Module1.0#####################################################################
-##
-## ALICE - CGAL modulefile
-##
-
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
 proc ModulesHelp { } {
-        global version
-        puts stderr "This module is a module of the ALICE for CGAL."
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 }
-
-set     version         ${PKGVERSION}
-
-module-whatis   "CGAL versions module for the ALICE"
-
-####################################################
-
-module load BASE/1.0 boost/v1_53_0
-
-## -- CGAL --
-setenv          CGAL            \$::env(BASEDIR)/cgal/\$version
-
-append-path     LD_LIBRARY_PATH \$::env(CGAL)/lib
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+# Our environment
+setenv CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(CGAL_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(CGAL_ROOT)/lib
 EoF

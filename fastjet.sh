@@ -1,7 +1,7 @@
 package: fastjet
 version: "v3.1.3_1.017"
 requires:
- - CGAL
+ - cgal
  - boost
  - HepMC
  - LHAPDF
