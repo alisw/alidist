@@ -9,11 +9,11 @@ env:
 incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 ---
 #!/bin/bash -e
-# TODO: build with -DFASTJET
 cmake "$SOURCEDIR" \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
       -DALIEN="$ALIEN_RUNTIME_ROOT" \
       -DROOTSYS="$ROOT_ROOT" \
+      -DFASTJET="$FASTJET" \
       -DALIROOT="$ALIROOT_ROOT"
 make ${JOBS+-j $JOBS}
 make install
