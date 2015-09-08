@@ -37,5 +37,5 @@ setenv ALIPHYSICS_VERSION \$version
 setenv ALIPHYSICS_RELEASE \$::env(ALIPHYSICS_VERSION)
 setenv ALICE_PHYSICS \$::env(BASEDIR)/$PKGNAME/\$::env(ALIPHYSICS_RELEASE)
 prepend-path PATH \$::env(ALICE_PHYSICS)/bin
-prepend-path  LD_LIBRARY_PATH \$::env(ALICE_PHYSICS)/lib
+prepend-path LD_LIBRARY_PATH \$::env(ALICE_PHYSICS)/lib
 EoF
