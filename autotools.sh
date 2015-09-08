@@ -62,3 +62,23 @@ grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;^#!.*per
 find $INSTALLROOT -name '*deleteme' -delete
 grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+# Our environment
+setenv AUTOTOOLS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH $::env(AUTOTOOLS_ROOT)/bin
+prepend-path LD_LIBRARY_PATH $::env(AUTOTOOLS_ROOT)/lib
+EoF

@@ -2,6 +2,8 @@ package: AliRoot
 version: "%(short_hash)s"
 requires:
   - ROOT
+  - CMake
+  - fastjet
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
@@ -13,6 +15,7 @@ incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DROOTSYS=$ROOT_ROOT \
       -DALIEN=$ALIEN_RUNTIME_ROOT \
+      -DFASTJET=$FASTJET_ROOT \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then
@@ -37,12 +40,12 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
 # Our environment
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
 setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
 setenv ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
-prepend-path PATH \$::env(ALICE_ROOT)/bin:\$::env(ALICE_ROOT)/bin/tgt_\$::env(ALICE_TARGET_EXT)
-prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib:\$::env(ALICE_ROOT)/lib/tgt_\$::env(ALICE_TARGET_EXT)
+prepend-path PATH \$::env(ALICE_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib
 EoF
