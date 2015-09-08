@@ -2,27 +2,20 @@ package: boost
 version: v1.57.0
 source: https://github.com/alisw/boost.git
 tag: v1.57.0
-requires:
-  - Binutils:slc6.*
-  - GCC:slc6.*
 ---
-#!/bin/sh
-
+#!/bin/bash -e
+TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in 
   osx*) TOOLSET=darwin ;;
   *) TOOLSET=gcc ;;
 esac
 
-if [[ ! $ARCHITECTURE =~ "slc5.*" ]]; then
-    EXTRA_CXXFLAGS='cxxflags="-std=c++11"'
-fi
-
 rsync -a $SOURCEDIR/ $BUILDDIR/
 cd $BUILDDIR/tools/build
-  sh bootstrap.sh ${TOOLSET}
-  mkdir $BUILDDIR/tmp-boost-build
-  ./b2 install --prefix=$BUILDDIR/tmp-boost-build
-  export PATH=${BUILDDIR}/tmp-boost-build/bin:${PATH}
+bash bootstrap.sh $TOOLSET
+mkdir -p $TMPB2
+./b2 install --prefix=$TMPB2
+export PATH=$TMPB2/bin:$PATH
 cd $BUILDDIR
 b2 -q \
    -d2 \
@@ -43,9 +36,28 @@ b2 -q \
    --without-mpi \
    --without-python \
    --without-wave \
-   toolset=${TOOLSET} \
+   toolset=$TOOLSET \
    link=shared \
    threading=multi \
    variant=release \
-   ${EXTRA_CXXFLAGS} \
+   $EXTRA_CXXFLAGS \
    install
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+# Our environment
+setenv BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(BOOST_ROOT)/lib
+EoF

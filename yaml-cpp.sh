@@ -1,9 +1,10 @@
 package: yaml-cpp
-version: release-0.5.2
+version: "v0.5.2"
 source: https://github.com/jbeder/yaml-cpp
 tag: release-0.5.2
 requires:
   - boost
+  - CMake
 ---
 #!/bin/sh
 if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
@@ -19,3 +20,22 @@ cmake $SOURCEDIR \
 
 make ${JOBS+-j $JOBS}
 make install
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+# Our environment
+setenv YAMLCPP \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(YAMLCPP)/lib
+EoF

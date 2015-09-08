@@ -1,7 +1,8 @@
 package: HepMC
-version: "%(short_hash)s"
+version: "v2.06.09"
 source: https://github.com/alisw/hepmc
-tag: master
+requires:
+  - CMake
 ---
 #!/bin/bash -e
 
@@ -15,25 +16,21 @@ make ${JOBS+-j $JOBS}
 make install
 
 # Modulefile
-ModuleDir="${INSTALLROOT}/etc/Modules/modulefiles/${PKGNAME}"
-mkdir -p "$ModuleDir"
-cat > "${ModuleDir}/${PKGVERSION}-${PKGREVISION}" <<EoF
-#%Module1.0#####################################################################
-##
-## ALICE - HepMC modulefile
-##
-
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
 proc ModulesHelp { } {
-        global version
-        puts stderr "This module is a module for HepMC."
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 }
-
-set version $PKGVERSION-$PKGREVISION
-
-module-whatis   "ALICE HepMC versions module"
-
-## -- VERSION --
-setenv          HEPMC_RELEASE  \$version
-setenv          HEPMC_BASEDIR  \$::env(BASEDIR)/HepMC/\$::env(HEPMC_RELEASE)
-prepend-path    LD_LIBRARY_PATH \$::env(HEPMC_BASEDIR)/lib
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
+# Our environment
+setenv HEPMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(HEPMC_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib
 EoF
