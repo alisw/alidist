@@ -1,5 +1,5 @@
 package: fastjet
-version: "v3.1.3_1.017"
+version: "v3.0.6_1.012"
 requires:
   - cgal
 ---
