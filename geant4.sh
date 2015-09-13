@@ -1,7 +1,9 @@
 package: GEANT4
-version: v10.01.p02-alice1
+version: v10.01.p02-alice2
 source: https://github.com/alisw/geant4
-tag: v4.10.01.p02-alice1
+tag: v4.10.01.p02-alice2
+requires:
+  - CMake
 ---
 #!/bin/bash -e
 

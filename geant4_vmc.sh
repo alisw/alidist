@@ -1,7 +1,8 @@
 package: GEANT4_VMC
-version: "v3-1-p2"
+version: "v3-2"
 source: https://github.com/alisw/geant4_vmc
 requires:
+  - CMake
   - ROOT
   - GEANT4
 ---
