@@ -1,21 +1,30 @@
 package: AliRoot
-version: "%(short_hash)s"
+version: "%(commit_hash)s"
 requires:
   - ROOT
   - CMake
-  - fastjet
+prepend_path:
+  LD_LIBRARY_PATH: "$ALIROOT_ROOT/lib/tgt_$ALICE_TARGET"
+  DYLD_LIBRARY_PATH: "$ALIROOT_ROOT/lib/tgt_$ALICE_TARGET"
+  PATH: "$ALIROOT_ROOT/bin/tgt_$ALICE_TARGET"
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
+  ALICE_TARGET: "$(root-config --arch)"
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
-tag: master
+tag: v5-05-Rev-22-patches
 incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 ---
 #!/bin/bash -e
+
+export ALICE=$INSTALLROOT
+export ALICE_ROOT=$SOURCEDIR
+export ALICE_TARGET=$(root-config --arch)
+
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DROOTSYS=$ROOT_ROOT \
       -DALIEN=$ALIEN_RUNTIME_ROOT \
-      -DFASTJET=$FASTJET_ROOT \
+      ${FASTJET_ROOT:+-DFASTJET=$FASTJET_ROOT} \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then
@@ -47,5 +56,7 @@ setenv ALICE \$::env(BASEDIR)/$PKGNAME
 setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
 setenv ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
 prepend-path PATH \$::env(ALICE_ROOT)/bin
+prepend-path PATH \$::env(ALICE_ROOT)/bin/tgt_$ALICE_TARGET
 prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib
+prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib/tgt_$ALICE_TARGET
 EoF
