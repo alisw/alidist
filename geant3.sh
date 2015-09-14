@@ -1,5 +1,6 @@
 package: GEANT3
-version: v2-0
+version: "%(commit_hash)s"
+tag: v2-0
 requires:
   - ROOT
   - CMake
