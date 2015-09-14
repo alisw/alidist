@@ -1,5 +1,6 @@
 package: ROOT
-version: v5-34-30-alice3
+version: "%(commit_hash)s"
+tag: v5-34-30-alice3
 source: https://github.com/alisw/root
 requires: 
   - AliEn-Runtime
