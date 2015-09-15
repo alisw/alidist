@@ -6,7 +6,7 @@ requires:
   - fastjet
   - HepMC
   - boost
-  - CGAL
+  - cgal
 ---
 #!/bin/bash -e
 Url="http://www.hepforge.org/archive/rivet/Rivet-${PKGVERSION}.tar.bz2"

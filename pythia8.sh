@@ -2,7 +2,7 @@ package: pythia8
 version: "v8210"
 source: https://github.com/alisw/pythia8
 requires:
-  - LHAPDF
+  - lhapdf
   - HepMC
   - boost
 tag: alice/v8210
