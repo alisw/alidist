@@ -1,5 +1,5 @@
 package: GEANT3
-version: "%(commit_hash)s"
+version: "%(commit_hash)s-0"
 tag: v1-15a
 requires:
   - ROOT
