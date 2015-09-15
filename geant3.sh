@@ -1,21 +1,22 @@
 package: GEANT3
 version: "%(commit_hash)s"
-tag: v2-0
+tag: v1-15a
 requires:
   - ROOT
   - CMake
 source: http://root.cern.ch/git/geant3.git
-tag: v2-0
 prepend_path:
   "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-                 -DROOTSYS=$ROOT_ROOT \
-                 -DCMAKE_SKIP_RPATH=TRUE
+ROOTARCH=$(root-config --arch)
+rsync -a --cvs-exclude --delete $SOURCEDIR/ $BUILDDIR/
 make ${JOBS+-j$JOBS}
-make install
+# GEANT3 < 2.0 does not have "make install"
+mkdir $INSTALLROOT/{TGeant3,lib}
+cp -v $BUILDDIR/TGeant3/*.h $INSTALLROOT/TGeant3/
+rsync -av $BUILDDIR/lib/tgt_$ROOTARCH/ $INSTALLROOT/lib/tgt_$ROOTARCH/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -34,6 +35,5 @@ module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION CMake/$CMAKE_VERSION-$CMA
 # Our environment
 setenv GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT3DIR \$::env(GEANT3_ROOT)
-prepend-path PATH \$::env(GEANT3_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64
+prepend-path LD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib/tgt_$ROOTARCH
 EoF
