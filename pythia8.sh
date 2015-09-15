@@ -2,7 +2,7 @@ package: pythia8
 version: "v8210"
 source: https://github.com/alisw/pythia8
 requires:
-  - lhapdf
+  - lhapdf5
   - HepMC
   - boost
 tag: alice/v8210
@@ -24,3 +24,24 @@ fi
 
 make ${JOBS+-j $JOBS}
 make install
+chmod a+x $INSTALLROOT/bin/pythia8-config
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION boost/$BOOST_VERSION-$BOOST_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
+# Our environment
+setenv PYTHIA8_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(PYTHIA8_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(PYTHIA8_ROOT)/lib
+EoF

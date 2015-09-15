@@ -1,8 +1,9 @@
 package: libpng
 version: v1.6.18
 requires:
- - CMake
  - zlib
+build_requires:
+ - CMake
 ---
 #!/bin/bash -ex
 URL="http://downloads.sourceforge.net/libpng/libpng-${PKGVERSION:1}.tar.gz"
@@ -33,7 +34,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION
 # Our environment
 setenv LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(LIBPNG_ROOT)/bin

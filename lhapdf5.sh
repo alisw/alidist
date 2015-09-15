@@ -34,9 +34,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION boost/$BOOST_VERSION-$BOOST_REVISION autotools/$AUTOTOOLS_VERSION-$AUTOTOOLS_REVISION
+module load BASE/1.0
 # Our environment
-setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(LHAPDF_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib
+setenv LHAPDF5_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH $::env(LHAPDF5_ROOT)/bin
+prepend-path LD_LIBRARY_PATH $::env(LHAPDF5_ROOT)/lib
 EoF
