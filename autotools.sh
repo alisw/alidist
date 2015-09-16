@@ -1,7 +1,7 @@
 package: autotools
-version: v1.0.0
+version: v1.1.0
 source: https://github.com/star-externals/autotools
-tag: star/v1.0.0
+tag: star/v1.1.0
 ---
 #!/bin/sh
 export PATH=$INSTALLROOT/bin:$PATH
