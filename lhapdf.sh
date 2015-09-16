@@ -14,6 +14,15 @@ case $PKGVERSION in
   v6.0*) WITH_YAML_CPP="--with-yaml-cpp=${YAML_CPP_ROOT}"
 esac
 
+# Bug in LHAPDF: still uses $(builddir) which was deprecated and it has been
+# dropped in recent versions of automake. By default it is set to ".", the
+# current directory, so we force-substitute it as such.
+find . -name Makefile.in -or -name Makefile.am \
+       -exec grep -Hl '$(builddir)' '{}' \; | \
+       while read FILE; do
+         sed -i.bak -e 's|$(builddir)|.|g' $FILE
+       done
+
 autoreconf -ivf
 ./configure --prefix=$INSTALLROOT \
             --with-boost=$BOOST_ROOT \
