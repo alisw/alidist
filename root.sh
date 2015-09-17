@@ -4,6 +4,7 @@ source: https://github.com/alisw/root
 requires: 
   - AliEn-Runtime
   - GSL
+  - libxml2:osx.*
 env:
   ROOTSYS: "$ROOT_ROOT"
 incremental_recipe: |
@@ -53,8 +54,8 @@ export ROOTSYS=$BUILDDIR
   ${WITH_CLANG+--with-clang} \
   --disable-shadowpw \
   --disable-astiff \
-  --with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 \
-  --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib \
+  --with-xml-incdir=${LIBXML2_ROOT:-$ALIEN_RUNTIME_ROOT}/include/libxml2 \
+  --with-xml-libdir=${LIBXML2_ROOT:-$ALIEN_RUNTIME_ROOT}/lib \
   --disable-globus \
   --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib \
   --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
