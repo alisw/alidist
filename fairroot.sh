@@ -13,8 +13,13 @@ requires:
 
 export ROOTSYS=$ROOT_ROOT
 
+case $ARCHITECTURE in
+  slc6*) CXXFLAGS="-std=c++0x" ;;
+  *) CXXFLAGS="-std=c++11" ;;
+esac
+
 cmake $SOURCEDIR \
-      -DCMAKE_CXX_FLAGS='-std=c++11' \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
       -DCMAKE_RELEASE_TYPE=RelWithDebInfo \
       -DROOTSYS=$ROOTSYS \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib \
