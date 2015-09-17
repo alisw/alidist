@@ -16,8 +16,14 @@ cmake "$SOURCEDIR" \
       -DFASTJET="$FASTJET_ROOT" \
       -DCGAL="$CGAL_ROOT" \
       -DALIROOT="$ALIROOT_ROOT"
-make ${JOBS+-j $JOBS}
-make install
+
+if [[ $GIT_TAG == master ]]; then
+  make -k ${JOBS+-j $JOBS} || true
+  make -k install || true
+else
+  make ${JOBS+-j $JOBS}
+  make install
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
