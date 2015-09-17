@@ -52,15 +52,21 @@ pushd pkg-config
 popd
 
 # Fix perl location, required on /usr/bin/perl
-grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
+
+# We need to detect OSX becase xargs behaves differently there.
+case $ARCHITECTURE in
+  osx*) XARGS_DO_NOT_FAIL="" ;;
+  *) XARGS_DO_NOT_FAIL="-r" ;;
+esac
+grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
 find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
+grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
 
 # Fix perl location, required on /usr/bin/perl
-grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
+grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
 find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
+grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
 
 # Modulefile

@@ -5,8 +5,8 @@ requires:
   - AliRoot
   - pythia8
   - pythia6
-source: https://github.com/ktf/AliceO2
-tag: master
+source: https://github.com/AliceO2Group/AliceO2
+tag: dev
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
