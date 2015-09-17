@@ -12,6 +12,19 @@ requires:
   - CMake
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in 
+  osx*)
+    # The new build recipe does not work on mac. Working it around using the
+    # old installer.
+    curl -O -fSsL --insecure http://alien.cern.ch/alien-installer
+    chmod +x alien-installer
+    ./alien-installer -install-dir "$INSTALLROOT/alien" -batch -notorrent -type compile -no-certificate-check
+    rsync -av $INSTALLROOT/alien/ $INSTALLROOT/
+    exit 0
+  ;;
+esac
+
+
 rsync -a --cvs-exclude $SOURCEDIR/ $BUILDDIR/
 cd $BUILDDIR
 ./bootstrap
