@@ -2,6 +2,7 @@ package: GEANT3
 version: v2-0
 requires:
   - ROOT
+build_requires:
   - CMake
 source: http://root.cern.ch/git/geant3.git
 tag: v2-0

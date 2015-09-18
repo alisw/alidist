@@ -2,8 +2,9 @@ package: AliRoot
 version: "%(short_hash)s"
 requires:
   - ROOT
-  - CMake
   - fastjet
+build_requires:
+  - CMake
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
