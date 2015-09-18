@@ -1,44 +1,39 @@
 package: YODA
-version: "1.4.0"
+version: "v1.4.0"
 requires:
   - boost
+  - Python
+prepend_path:
+  PYTHONPATH: "$(yoda-config --pythonpath)"
 ---
 #!/bin/bash -e
-Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION}.tar.bz2"
+Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION:1}.tar.bz2"
 
 curl -Lo yoda.tar.bz2 "$Url"
 tar xjf yoda.tar.bz2
-cd YODA-$PKGVERSION
+cd YODA-${PKGVERSION:1}
 ./configure --prefix="$INSTALLROOT" --with-boost="$Boost"
 make -j$JOBS
 make install -j$JOBS
 
 # Modulefile
-ModuleDir="${INSTALLROOT}/etc/Modules/modulefiles/${PKGNAME}"
-mkdir -p "$ModuleDir"
-cat > "${ModuleDir}/${PKGVERSION}-${PKGREVISION}" <<EoF
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
-  puts stderr "Module for loading $PKGNAME $PKGVERSION-$PKGREVISION for the ALICE environment"
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 }
-set version $PKGVERSION-$PKGREVISION
-module-whatis "Module for loading $PKGNAME $PKGVERSION-$PKGREVISION for the ALICE environment"
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 boost/v1_53_0
+module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION Python/$PYTHON_VERSION-$PYTHON_REVISION
 # Our environment
-if { [info exists ::env(OVERRIDE_BASE)] && \$::env(OVERRIDE_BASE) == 1 } then {
-  puts stderr "Note: overriding base package $PKGNAME \$version"
-  set prefix \$ModulesCurrentModulefile
-  for {set i 0} {\$i < 5} {incr i} {
-    set prefix [file dirname \$prefix]
-  }
-  setenv YODA_BASEDIR \$prefix
-} else {
-  setenv YODA_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
-}
-prepend-path LD_LIBRARY_PATH \$::env(YODA_BASEDIR)/lib
-prepend-path PATH \$::env(YODA_BASEDIR)/bin
+setenv YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(YODA_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib
 set pythonpath [exec yoda-config --pythonpath]
 prepend-path PYTHONPATH \$pythonpath
 EoF
