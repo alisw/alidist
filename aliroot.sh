@@ -29,12 +29,41 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
 
 if [[ $GIT_TAG == master ]]; then
   make -k ${JOBS+-j $JOBS} || true
-  make -k install || true
 else
   make ${JOBS+-j $JOBS}
-  make install
 fi
-cp -r $SOURCEDIR/test $INSTALLROOT/test
+
+# "make install" does not work well: copy by hand
+# Imported from the legacy maketarball.sh
+for D in $BUILDDIR $SOURCEDIR; do
+  rsync -av --cvs-exclude \
+        --exclude='tgt_*' \
+        --exclude='CMakeFiles' \
+        --exclude='**/OCDB/*' \
+        --exclude='**/data/maps/*' \
+        --exclude='**/data/field*.dat' \
+        --exclude='**/data/cp*.dat' \
+        --exclude='**/EMCAL/ShuttleInput' \
+        --exclude='*/Ref' \
+        --exclude='*.cxx' \
+        --exclude='*.F' \
+        --exclude='*.f' \
+        --exclude='G__*' \
+        --exclude='**/TPC/Cov*.root' \
+        --exclude='**/doc' \
+        --exclude='**/picts' \
+        --exclude='**/ITS/oldmacros' \
+        --exclude='**/ITS/ITSlegov5.map' \
+        --exclude='**/LHAPDF/PDFsets/*' \
+        $D/ $INSTALLROOT/
+done
+rsync -av $BUILDDIR/bin/ $INSTALLROOT/bin/
+rsync -av $BUILDDIR/lib/ $INSTALLROOT/lib/
+cp -pv $SOURCEDIR/data/maps/mfchebKGI_sym.root \
+       $INSTALLROOT/data/maps/
+cp -pv $SOURCEDIR/LHAPDF/PDFsets/{EPS09LOR_197,EPS09LOR_208,EPS09NLOR_197,EPS09NLOR_208,cteq4l,cteq4m,cteq5l,cteq5m,GRV98lo}.LHgrid \
+       $SOURCEDIR/LHAPDF/PDFsets/{cteq6,cteq61,cteq6m,cteq6l,cteq6ll}.LHpdf \
+       $INSTALLROOT/LHAPDF/PDFsets/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
