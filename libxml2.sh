@@ -4,6 +4,7 @@ source: git://git.gnome.org/libxml2
 tag: v2.9.2
 requires:
   - zlib
+build_requires:
   - autotools
 ---
 #!/bin/sh

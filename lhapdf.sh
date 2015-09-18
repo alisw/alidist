@@ -4,6 +4,7 @@ source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
  - boost
+build_requires:
  - autotools
 ---
 #!/bin/bash -ex
