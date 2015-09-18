@@ -1,4 +1,4 @@
-package: pythia8
+package: pythia
 version: "v8210"
 source: https://github.com/alisw/pythia8
 requires:
@@ -41,7 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION boost/$BOOST_VERSION-$BOOST_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
-setenv PYTHIA8_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(PYTHIA8_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(PYTHIA8_ROOT)/lib
+setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(PYTHIA_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib
 EoF

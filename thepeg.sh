@@ -4,7 +4,7 @@ source: https://github.com/alisw/thepeg
 tag: "alice/v2015-03-18"
 requires:
   - Rivet
-  - pythia8
+  - pythia
   - HepMC
 build_requires:
   - autotools
@@ -36,7 +36,7 @@ export LDFLAGS="-L$LHAPDF5_ROOT/lib"
   --without-javagui \
   --prefix="$INSTALLROOT" \
   --with-gsl="$GSL_ROOT" \
-  --with-pythia8="$PYTHIA8_ROOT" \
+  --with-pythia8="$PYTHIA_ROOT" \
   --with-hepmc="$HEPMC_ROOT" \
   --with-rivet="$RIVET_ROOT" \
   --with-lhapdf="$LHAPDF5_ROOT" \
@@ -59,7 +59,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 pythia8/$PYTHIA8_VERSION-$PYTHIA8_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION
+module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION
 # Our environment
 setenv THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
