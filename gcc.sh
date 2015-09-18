@@ -5,7 +5,7 @@ tag: alice/4.9.3
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GCC_ROOT/lib64"
-requires:
+build_requires:
   - autotools
 ---
 #!/bin/bash -e

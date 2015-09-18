@@ -1,9 +1,10 @@
 package: CRMC
 version: v1.5.4
 requires:
-  - CMake
   - boost
   - HepMC
+build_requires:
+  - CMake
 ---
 #!/bin/bash -ex
 
