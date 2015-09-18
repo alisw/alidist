@@ -1,7 +1,7 @@
 package: HepMC
 version: "v2.06.09"
 source: https://github.com/alisw/hepmc
-requires:
+build_requires:
   - CMake
 ---
 #!/bin/bash -e
@@ -28,7 +28,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0
 # Our environment
 setenv HEPMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(HEPMC_ROOT)/bin

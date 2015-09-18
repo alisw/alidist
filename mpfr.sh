@@ -4,6 +4,7 @@ source: https://github.com/alisw/MPFR.git
 tag: v3.1.3
 requires:
   - GMP
+build_requires:
   - autotools
 ---
 #!/bin/sh
