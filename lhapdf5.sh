@@ -12,6 +12,7 @@ tar xz --strip-components 1 -f ${ARCHIVE}
 
 cd $BUILDDIR
 rsync -a $SOURCEDIR/ $BUILDDIR/
+sed -i 's/PyErr_Format(PyExc_RuntimeError, mesg)/PyErr_Format(PyExc_RuntimeError,"%s" ,mesg)/g' $BUILDDIR/pyext/lhapdf_wrap.cc
 
 ./configure --prefix=$INSTALLROOT
 
