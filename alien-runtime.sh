@@ -8,10 +8,23 @@ prepend_path:
 env:
   GSHELL_ROOT: "$ALIEN_RUNTIME_ROOT/api"
   GSHELL_NO_GCC: "1"
-requires:
+build_requires:
   - CMake
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in 
+  osx*)
+    # The new build recipe does not work on mac. Working it around using the
+    # old installer.
+    curl -O -fSsL --insecure http://alien.cern.ch/alien-installer
+    chmod +x alien-installer
+    ./alien-installer -install-dir "$INSTALLROOT/alien" -batch -notorrent -type compile -no-certificate-check
+    rsync -av $INSTALLROOT/alien/ $INSTALLROOT/
+    exit 0
+  ;;
+esac
+
+
 rsync -a --cvs-exclude $SOURCEDIR/ $BUILDDIR/
 cd $BUILDDIR
 ./bootstrap
@@ -50,7 +63,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0
 # Our environment
 setenv ALIEN_RUNTIME_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_BASEDIR)/lib

@@ -4,6 +4,7 @@ source: https://github.com/jbeder/yaml-cpp
 tag: release-0.5.2
 requires:
   - boost
+build_requires:
   - CMake
 ---
 #!/bin/sh

@@ -2,6 +2,9 @@ package: cgal
 version: "v4.4"
 requires:
   - boost
+  - GMP
+  - MPFR
+build_requires:
   - CMake
 ---
 #!/bin/bash -e
@@ -15,6 +18,11 @@ cd CGAL-${PKGVERSION:1}
 export LDFLAGS="-L$BOOST_ROOT/lib"
 export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
 export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
+
+export MPFR_LIB_DIR="${MPFR_ROOT}/lib"
+export MPFR_INC_DIR="${MPFR_ROOT}/include"
+export GMP_LIB_DIR="${GMP_ROOT}/lib"
+export GMP_INC_DIR="${GMP_ROOT}/include"
 
 cmake . \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
@@ -66,7 +74,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION GMP/$GMP_VERSION-$GMP_REVISION MPFR/$MPFR_VERSION-$MPFR_REVISION
 # Our environment
 setenv CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CGAL_ROOT)/bin

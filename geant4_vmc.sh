@@ -2,9 +2,10 @@ package: GEANT4_VMC
 version: "v3-2"
 source: https://github.com/alisw/geant4_vmc
 requires:
-  - CMake
   - ROOT
   - GEANT4
+build_requires:
+  - CMake
 env:
   G4VMCINSTALL: "$GEANT4_VMC_ROOT"
 prepend_path:

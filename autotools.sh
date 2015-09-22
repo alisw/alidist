@@ -1,22 +1,26 @@
 package: autotools
-version: v1.0.0
-source: https://github.com/star-externals/autotools
-tag: star/v1.0.0
+version: v1.1.0
+source: https://github.com/alisw/autotools
+tag: star/v1.1.0
 ---
-#!/bin/sh
-export PATH=$INSTALLROOT/bin:$PATH
-rsync -a $SOURCEDIR/ $BUILDDIR/
+#!/bin/bash
+export PATH=$INSTALLROOT/bin:$BUILDDIR/fooutils:$PATH
+rsync -a --delete $SOURCEDIR/ $BUILDDIR/
 pushd m4
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS} && make install
+  make ${JOBS+-j $JOBS}
+  make install
 popd
 pushd autoconf
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS} && make install
+  make ${JOBS+-j $JOBS}
+  make install
 popd
 pushd automake
+  ./bootstrap.sh
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS} && make install
+  make ${JOBS+-j $JOBS}
+  make install
 popd
 pushd libtool
   # Update for AArch64 support
@@ -25,9 +29,11 @@ pushd libtool
   curl -L -k -s -o ./libltdl/config/config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
   chmod +x ./libltdl/config/config.{sub,guess}
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT --enable-ltdl-install
-  make ${JOBS+-j $JOBS} && make install
+  make ${JOBS+-j $JOBS}
+  make install
 popd
 pushd gettext
+  ./autogen.sh
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
@@ -41,26 +47,34 @@ pushd gettext
               --disable-java \
               --disable-dependency-tracking \
               --disable-silent-rules
-  make ${JOBS+-j $JOBS} && make install
+  make ${JOBS+-j $JOBS}
+  make install
 popd
 pushd pkg-config
-    ./configure --disable-debug \
-                --prefix=$INSTALLROOT \
-                --disable-host-tool \
-                --with-internal-glib
-  make ${JOBS+-j $JOBS} && make install
+  ./configure --disable-debug \
+              --prefix=$INSTALLROOT \
+              --disable-host-tool \
+              --with-internal-glib
+  make ${JOBS+-j $JOBS}
+  make install
 popd
 
 # Fix perl location, required on /usr/bin/perl
-grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
+
+# We need to detect OSX becase xargs behaves differently there.
+case $ARCHITECTURE in
+  osx*) XARGS_DO_NOT_FAIL="" ;;
+  *) XARGS_DO_NOT_FAIL="-r" ;;
+esac
+grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
 find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
+grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
 
 # Fix perl location, required on /usr/bin/perl
-grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
+grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
 find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
+grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
 
 # Modulefile

@@ -1,16 +1,18 @@
-package: HepMC
-version: "v2.06.09"
-source: https://github.com/alisw/hepmc
+package: MPFR
+version: v3.1.3
+source: https://github.com/alisw/MPFR.git
+tag: v3.1.3
+requires:
+  - GMP
 build_requires:
-  - CMake
+  - autotools
 ---
-#!/bin/bash -e
-
-cmake  $SOURCEDIR \
-       -Dmomentum=GEV \
-       -Dlength=MM \
-       -Dbuild_docs:BOOL=OFF \
-       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+#!/bin/sh
+rsync -a $SOURCEDIR/ ./
+autoreconf -ivf
+./configure --disable-static \
+            --prefix=$INSTALLROOT \
+            --with-gmp=$GMP_ROOT
 
 make ${JOBS+-j $JOBS}
 make install
@@ -30,7 +32,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv HEPMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(HEPMC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib
+setenv MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(MPFR_ROOT)/lib
 EoF

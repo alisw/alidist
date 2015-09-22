@@ -3,10 +3,10 @@ version: master
 requires:
   - FairRoot
   - AliRoot
-  - pythia8
+  - pythia
   - pythia6
-source: https://github.com/ktf/AliceO2
-tag: master
+source: https://github.com/AliceO2Group/AliceO2
+tag: dev
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
@@ -24,7 +24,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DZMQ_DIR=$ZEROMQ_ROOT \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include \
       -DALIROOT=$ALIROOT_ROOT \
-      -DPYTHIA8_INCLUDE_DIR=$PYTHIA8_ROOT/include
+      -DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true

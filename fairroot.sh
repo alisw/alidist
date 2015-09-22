@@ -8,13 +8,14 @@ requires:
   - GEANT4
   - ZeroMQ
   - boost
+  - GCC:slc6.*
 ---
 #!/bin/sh
 
 export ROOTSYS=$ROOT_ROOT
 
 cmake $SOURCEDIR \
-      -DCMAKE_CXX_FLAGS='-std=c++11' \
+      -DCMAKE_CXX_FLAGS="-std=c++11" \
       -DCMAKE_RELEASE_TYPE=RelWithDebInfo \
       -DROOTSYS=$ROOTSYS \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib \

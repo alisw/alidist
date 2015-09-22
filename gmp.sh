@@ -1,16 +1,11 @@
-package: HepMC
-version: "v2.06.09"
-source: https://github.com/alisw/hepmc
-build_requires:
-  - CMake
+package: GMP
+version: v6.0.0
+source: https://github.com/alisw/GMP.git
+tag: v6.0.0
 ---
-#!/bin/bash -e
-
-cmake  $SOURCEDIR \
-       -Dmomentum=GEV \
-       -Dlength=MM \
-       -Dbuild_docs:BOOL=OFF \
-       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+#!/bin/sh
+$SOURCEDIR/configure --disable-static --prefix=$INSTALLROOT \
+            --enable-shared --enable-cxx
 
 make ${JOBS+-j $JOBS}
 make install
@@ -30,7 +25,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv HEPMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(HEPMC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib
+setenv GMP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(GMP_ROOT)/lib
 EoF

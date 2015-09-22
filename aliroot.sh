@@ -2,14 +2,15 @@ package: AliRoot
 version: "%(commit_hash)s"
 requires:
   - ROOT
-  - CMake
   - fastjet
+build_requires:
+  - CMake
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
-incremental_recipe: make ${JOBS:+-j$JOBS} && make install
+incremental_recipe: make ${JOBS:+-j$JOBS} && make install && cp -r $SOURCEDIR/test $INSTALLROOT/test
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
@@ -25,6 +26,7 @@ else
   make ${JOBS+-j $JOBS}
   make install
 fi
+
 cp -r $SOURCEDIR/test $INSTALLROOT/test
 
 # Modulefile
