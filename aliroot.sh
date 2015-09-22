@@ -1,5 +1,5 @@
 package: AliRoot
-version: "%(short_hash)s"
+version: "%(commit_hash)s"
 requires:
   - ROOT
   - fastjet
