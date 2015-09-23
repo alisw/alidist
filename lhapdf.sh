@@ -1,28 +1,22 @@
 package: lhapdf
-version: v6.1.5
+version: "%(tag_basename)s"
+tag: alice/v6.1.5
 source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
  - boost
 build_requires:
  - autotools
+env:
+  LHAPATH: "$LHAPDF_ROOT/share/LHAPDF"
 ---
 #!/bin/bash -ex
 
-rsync -a $SOURCEDIR/ $BUILDDIR/
+rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
 case $PKGVERSION in
   v6.0*) WITH_YAML_CPP="--with-yaml-cpp=${YAML_CPP_ROOT}"
 esac
-
-# Bug in LHAPDF: still uses $(builddir) which was deprecated and it has been
-# dropped in recent versions of automake. By default it is set to ".", the
-# current directory, so we force-substitute it as such.
-find . -name Makefile.in -or -name Makefile.am \
-       -exec grep -Hl '$(builddir)' '{}' \; | \
-       while read FILE; do
-         sed -i.bak -e 's|$(builddir)|.|g' $FILE
-       done
 
 autoreconf -ivf
 ./configure --prefix=$INSTALLROOT \
@@ -31,6 +25,13 @@ autoreconf -ivf
 
 make ${JOBS+-j $JOBS} all
 make install
+
+PDFSETS="cteq6l1"
+$INSTALLROOT/bin/lhapdf install $PDFSETS
+# Check if PDF sets were really installed
+for P in $PDFSETS; do
+  ls $INSTALLROOT/share/LHAPDF/$P
+done
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -48,6 +49,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION boost/$BOOST_VERSION-$BOOST_REVISION autotools/$AUTOTOOLS_VERSION-$AUTOTOOLS_REVISION
 # Our environment
 setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LHAPATH \$::env(LHAPDF_ROOT)/share/LHAPDF
 prepend-path PATH $::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib
 EoF
