@@ -5,6 +5,7 @@ source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
  - boost
+ - Python
 build_requires:
  - autotools
 env:
