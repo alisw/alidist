@@ -1,6 +1,6 @@
 package: libunwind
 version: master
-source: git://git.sv.gnu.org/libunwind.git
+source: https://github.com/igprof/libunwind
 tag: master
 requires:
   - libatomic_ops
