@@ -4,8 +4,8 @@ source: https://github.com/alisw/GMP.git
 tag: v6.0.0
 ---
 #!/bin/sh
-$SOURCEDIR/configure --disable-static --prefix=$INSTALLROOT \
-            --enable-shared --enable-cxx
+$SOURCEDIR/configure --enable-static --prefix=$INSTALLROOT \
+            --disable-shared --enable-cxx --with-pic
 
 make ${JOBS+-j $JOBS}
 make install
