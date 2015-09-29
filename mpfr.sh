@@ -10,9 +10,11 @@ build_requires:
 #!/bin/sh
 rsync -a $SOURCEDIR/ ./
 autoreconf -ivf
-./configure --disable-static \
+./configure --enable-static \
+            --disable-shared \
             --prefix=$INSTALLROOT \
-            --with-gmp=$GMP_ROOT
+            --with-gmp=$GMP_ROOT \
+            --with-pic
 
 make ${JOBS+-j $JOBS}
 make install
