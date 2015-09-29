@@ -1,11 +1,11 @@
 package: autotools
-version: v1.1.0
+version: "%(tag_basename)s"
 source: https://github.com/alisw/autotools
-tag: star/v1.1.0
+tag: star/v1.2.0
 ---
 #!/bin/bash
 export PATH=$INSTALLROOT/bin:$BUILDDIR/fooutils:$PATH
-rsync -a --delete $SOURCEDIR/ $BUILDDIR/
+rsync -a --delete --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 pushd m4
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS}
@@ -33,6 +33,7 @@ pushd libtool
   make install
 popd
 pushd gettext
+  export GNULIB_SRCDIR=$BUILDDIR/gnulib
   ./autogen.sh
   ./configure --prefix $INSTALLROOT \
               --without-xz \
