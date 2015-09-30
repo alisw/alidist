@@ -1,5 +1,5 @@
 package: IgProf
-version: master
+version: 5.9.16-%(commit_hash)s
 source: https://github.com/igprof/igprof
 tag: master
 requires:
