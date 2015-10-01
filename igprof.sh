@@ -4,6 +4,7 @@ source: https://github.com/igprof/igprof
 tag: master
 requires:
   - libunwind
+  - CMake
 ---
 #!/bin/sh
 
