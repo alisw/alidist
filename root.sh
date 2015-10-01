@@ -1,6 +1,7 @@
 package: ROOT
-version: v6-04-02
+version: "%(tag_basename)s"
 source: https://github.com/alisw/root
+tag: alice/v6-05-02
 requires: 
   - AliEn-Runtime
   - GSL
