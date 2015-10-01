@@ -1,5 +1,5 @@
 package: libunwind
-version: master
+version: 1.1-%(commit_hash)s
 source: https://github.com/igprof/libunwind
 tag: master
 requires:
