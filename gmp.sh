@@ -4,7 +4,12 @@ source: https://github.com/alisw/GMP.git
 tag: v6.0.0
 ---
 #!/bin/sh
+case $ARCHITECTURE in
+  *x86-64) BUILD=core2 ;;
+  *) BUILD=generic ;;
+esac
 $SOURCEDIR/configure --enable-static --prefix=$INSTALLROOT \
+            --build=$BUILD \
             --disable-shared --enable-cxx --with-pic
 
 make ${JOBS+-j $JOBS}
