@@ -13,7 +13,7 @@ build_requires:
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in 
-  osx*)
+  osx*|slc[67]*|ubuntu*)
     # The new build recipe does not work on mac. Working it around using the
     # old installer.
     curl -O -fSsL --insecure http://alien.cern.ch/alien-installer
