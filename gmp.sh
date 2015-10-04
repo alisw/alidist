@@ -5,12 +5,17 @@ tag: v6.0.0
 ---
 #!/bin/sh
 case $ARCHITECTURE in
-  *x86-64) BUILD=core2 ;;
-  *) BUILD=generic ;;
+  osx*) CONFIG_OPTS="" ;;
+  *x86-64) CONFIG_OPTS="--build=core2" ;;
+  *) CONFIG_OPTS= ;;
 esac
-$SOURCEDIR/configure --enable-static --prefix=$INSTALLROOT \
-            --build=$BUILD \
-            --disable-shared --enable-cxx --with-pic
+
+$SOURCEDIR/configure --prefix=$INSTALLROOT \
+            --enable-cxx \
+            --enable-static \
+            --disable-shared \
+            --with-pic \
+            $CONFIG_OPTS
 
 make ${JOBS+-j $JOBS}
 make install
