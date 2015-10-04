@@ -27,7 +27,7 @@ else
   make install
 fi
 
-cp -r $SOURCEDIR/test $INSTALLROOT/test
+rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

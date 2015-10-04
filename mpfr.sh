@@ -8,13 +8,19 @@ build_requires:
   - autotools
 ---
 #!/bin/sh
-rsync -a $SOURCEDIR/ ./
+rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
 autoreconf -ivf
-./configure --enable-static \
+case $ARCHITECTURE in
+  osx*) CONFIG_OPTS="" ;;
+  *x86-64) CONFIG_OPTS="--build=core2" ;;
+  *) CONFIG_OPTS= ;;
+esac
+
+./configure --prefix=$INSTALLROOT \
             --disable-shared \
-            --prefix=$INSTALLROOT \
+            --enable-static \
             --with-gmp=$GMP_ROOT \
-            --with-pic
+            $CONFIG_OPTS
 
 make ${JOBS+-j $JOBS}
 make install
