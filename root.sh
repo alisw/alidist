@@ -4,7 +4,7 @@ source: https://github.com/alisw/root
 requires: 
   - AliEn-Runtime
   - GSL
-  - libxml2:osx.*
+  - libxml2:(osx.*|slc[6-7].*)
 env:
   ROOTSYS: "$ROOT_ROOT"
 incremental_recipe: |
