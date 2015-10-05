@@ -15,6 +15,8 @@ cmake "$SOURCEDIR" \
       -DROOTSYS="$ROOT_ROOT" \
       -DFASTJET="$FASTJET_ROOT" \
       -DCGAL="$CGAL_ROOT" \
+      -DMPFR="$MPFR_ROOT" \
+      -DGMP="$GMP_ROOT" \
       -DALIROOT="$ALIROOT_ROOT"
 
 if [[ $GIT_TAG == master ]]; then
