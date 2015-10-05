@@ -11,16 +11,16 @@ build_requires:
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
 autoreconf -ivf
 case $ARCHITECTURE in
-  osx*) CONFIG_OPTS="" ;;
-  *x86-64) CONFIG_OPTS="--build=core2" ;;
-  *) CONFIG_OPTS= ;;
+  osx*) BUILD="" ;;
+  *x86-64) BUILD="core2" ;;
+  *) BUILD= ;;
 esac
 
-./configure --prefix=$INSTALLROOT \
-            --disable-shared \
-            --enable-static \
-            --with-gmp=$GMP_ROOT \
-            $CONFIG_OPTS
+./configure --prefix=$INSTALLROOT    \
+            --disable-shared         \
+            --enable-static          \
+            ${BUILD:+--build=$BUILD} \
+            --with-gmp=$GMP_ROOT
 
 make ${JOBS+-j $JOBS}
 make install
