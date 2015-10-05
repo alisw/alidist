@@ -1,5 +1,5 @@
 package: cgal
-version: "v4.4"
+version: "v4.6.3"
 requires:
   - boost
 build_requires:
@@ -8,10 +8,10 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
-PKGID=33524
-Url="https://gforge.inria.fr/frs/download.php/${PKGID}/Cgal-${PKGVERSION:1}.tar.bz2"
+PKGID=35136
+URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/CGAL-${PKGVERSION:1}.tar.bz2"
 
-curl -Lo cgal.tar.bz2 "$Url"
+curl -Lo cgal.tar.bz2 "$URL"
 tar xjf cgal.tar.bz2
 cd CGAL-${PKGVERSION:1}
 
