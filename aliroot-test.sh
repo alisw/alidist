@@ -21,7 +21,7 @@ cp -r $ALIROOT_ROOT/test .
 for x in ${ALI_CI_TESTS:-gun}; do
   set -o pipefail
   find test -name "*.C" -exec perl -p -i -e 's|ALICE_ROOT/OCDB|OCDB_TEST_ROOT|' {} \;
-  VARIANTS=default${IGPROF_ROOT:+,igprof_memory,igprof_perf}
+  VARIANTS=default${IGPROF_ROOT:+,igprof_memory,igprof_performance}
   if test/runTests -d --variants $VARIANTS $x; then
     STATUS=SUCCESS
   else
