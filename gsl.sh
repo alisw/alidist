@@ -2,7 +2,7 @@ package: GSL
 version: "v1.16"
 source: https://github.com/alisw/gsl
 tag: "release-1-16"
-requires:
+build_requires:
   - autotools
 ---
 #!/bin/bash -e
