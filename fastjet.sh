@@ -4,6 +4,8 @@ tag: "alice/v3.1.3_1.017"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
+env:
+  FASTJET: "$FASTJET_ROOT"
 ---
 #!/bin/bash -e
 export LIBRARY_PATH="$BOOST_ROOT/lib:$LIBRARY_PATH"
