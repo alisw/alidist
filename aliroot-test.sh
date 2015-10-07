@@ -27,10 +27,16 @@ for x in ${ALI_CI_TESTS:-gun}; do
   else
     STATUS=FAILED
   fi
-  # Process any igprof profile dump.
-  for y in $(find . -name "igprof*.gz"); do
+  # Process any igprof profile dump (performance).
+  for y in $(find . -name "igprof*PERFORMANCE.gz"); do
     IGPROF_OUT=$(echo $y | sed -e's/.gz/.sql/')
     igprof-analyse -d -g $y --sqlite | sqlite3 $IGPROF_OUT
+  done
+  # Process any igprof profile dump (memory).
+  for y in $(find . -name "igprof*MEMORY.gz"); do
+    igprof-analyse -d -r MEM_TOTAL -g $y --sqlite | sqlite3  $(echo $y | sed -e's/MEMORY.gz/MEM_TOTAL.sql/')
+    igprof-analyse -d -r MEM_LIVE -g $y --sqlite | sqlite3 $(echo $y | sed -e's/MEMORY.gz/MEM_LIVE.sql/')
+    igprof-analyse -d -r MEM_MAX -g $y --sqlite | sqlite3 $(echo $y | sed -e's/MEMORY.gz/MEM_MAX.sql/')
   done
   mkdir -p  ${WORKSPACE}/$x
   find . -name "*.root" -exec cp {} $WORKSPACE/$x \;
