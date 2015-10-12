@@ -1,12 +1,13 @@
 package: fastjet
 version: "%(tag_basename)s"
-tag: alice/v3.0.6_1.012
+tag: "v3.1.3_1.020"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
+env:
+  FASTJET: "$FASTJET_ROOT"
 ---
 #!/bin/bash -e
-export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
 export LIBRARY_PATH="$BOOST_ROOT/lib:$LIBRARY_PATH"
 
 rsync -a --delete --cvs-exclude $SOURCEDIR/ ./

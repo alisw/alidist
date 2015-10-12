@@ -4,8 +4,18 @@ source: https://github.com/alisw/GMP.git
 tag: v6.0.0
 ---
 #!/bin/sh
-$SOURCEDIR/configure --enable-static --prefix=$INSTALLROOT \
-            --disable-shared --enable-cxx --with-pic
+case $ARCHITECTURE in
+  osx*) BUILD="" ;;
+  *x86-64) BUILD="core2" ;;
+  *) BUILD= ;;
+esac
+
+$SOURCEDIR/configure --prefix=$INSTALLROOT \
+            --enable-cxx                   \
+            --enable-static                \
+            --disable-shared               \
+            ${BUILD:+--build=$BUILD}       \
+            --with-pic
 
 make ${JOBS+-j $JOBS}
 make install
