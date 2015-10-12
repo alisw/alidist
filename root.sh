@@ -5,7 +5,7 @@ tag: alice/v6-05-02
 requires: 
   - AliEn-Runtime
   - GSL
-  - libxml2:osx.*
+  - libxml2:(osx.*|slc[6-7].*|ubuntu.*)
 env:
   ROOTSYS: "$INSTALLROOT"
 ---

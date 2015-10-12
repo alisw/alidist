@@ -1,7 +1,7 @@
 package: boost
-version: v1.57.0
+version: "%(tag_basename)s"
 source: https://github.com/alisw/boost.git
-tag: v1.57.0
+tag: v1.59.0
 ---
 #!/bin/bash -e
 TMPB2=$BUILDDIR/tmp-boost-build

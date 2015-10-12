@@ -2,18 +2,18 @@ package: MPFR
 version: v3.1.3
 source: https://github.com/alisw/MPFR.git
 tag: v3.1.3
-requires:
-  - GMP
 build_requires:
   - autotools
+  - GMP
 ---
 #!/bin/sh
-rsync -a $SOURCEDIR/ ./
+rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
 autoreconf -ivf
-./configure --enable-static \
-            --disable-shared \
-            --prefix=$INSTALLROOT \
-            --with-gmp=$GMP_ROOT \
+
+./configure --prefix=$INSTALLROOT    \
+            --disable-shared         \
+            --enable-static          \
+            --with-gmp=$GMP_ROOT     \
             --with-pic
 
 make ${JOBS+-j $JOBS}

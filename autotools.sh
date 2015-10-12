@@ -1,7 +1,7 @@
 package: autotools
 version: "%(tag_basename)s"
 source: https://github.com/alisw/autotools
-tag: star/v1.2.0
+tag: alice/v1.3.0
 ---
 #!/bin/bash
 export PATH=$INSTALLROOT/bin:$BUILDDIR/fooutils:$PATH
@@ -33,8 +33,6 @@ pushd libtool
   make install
 popd
 pushd gettext
-  export GNULIB_SRCDIR=$BUILDDIR/gnulib
-  ./autogen.sh
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
