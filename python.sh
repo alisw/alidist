@@ -1,38 +1,35 @@
 package: Python
-version: v2.7.10
+version: "%(tag_basename)s"
+tag: alice/v2.7.10
+source: https://github.com/alisw/cpython.git
 requires:
  - AliEn-Runtime
  - zlib
  - FreeType
  - libpng
+env:
+  SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
 ---
 #!/bin/bash -ex
-# Note: depends on AliEn-Runtime for OpenSSL.
 
-URL="https://www.python.org/ftp/python/${PKGVERSION:1}/Python-${PKGVERSION:1}.tgz"
-curl -L -o python.tgz $URL
-tar xzf python.tgz
-rm -f python.tgz
-
-cd Python-${PKGVERSION:1}
+rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
 # The only way to pass externals to Python
 LDFLAGS=
 CPPFLAGS=
-for ext in $ALIEN_RUNTIME_ROOT $ALIEN_RUNTIME_ROOT/api $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT; do
-  [[ -e $ext/include && $ext/lib ]]
-  LDFLAGS="-L $ext/lib $LDFLAGS"
-  CPPFLAGS="-I $ext/include $CPPFLAGS"
+for ext in $ALIEN_RUNTIME_ROOT $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT; do
+  LDFLAGS="$(find $ext -type d -name lib -exec echo -L\{\} \;) $LDFLAGS"
+  CPPFLAGS="$(find $ext -type d -name include -exec echo -I\{\} \;) $CPPFLAGS"
 done
-export LDFLAGS
-export CPPFLAGS
+export LDFLAGS=$(echo $LDFLAGS)
+export CPPFLAGS=$(echo $CPPFLAGS)
 
 ./configure --prefix=$INSTALLROOT \
             --enable-shared \
             --with-system-expat \
             --with-system-ffi \
             --enable-unicode=ucs4
-make -j ${JOBS:+-j$JOBS}
+make ${JOBS:+-j$JOBS}
 make install
 
 # Install pip
@@ -45,6 +42,7 @@ python get-pip.py
 
 # Install extra packages with pip
 pip install "numpy==1.9.2"
+pip install "certifi==2015.9.6.2"
 
 # Install matplotlib (very tricky)
 MATPLOTLIB_VER="1.4.3"
@@ -105,4 +103,5 @@ module load BASE/1.0 AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISIO
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(PYTHON_ROOT)/lib
+setenv SSL_CERT_FILE [exec python -c "import certifi; print certifi.where()"]
 EoF
