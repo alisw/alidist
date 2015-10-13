@@ -1,13 +1,13 @@
 package: pythia
-version: "v8210"
+version: "%(tag_basename)s"
 source: https://github.com/alisw/pythia8
 requires:
-  - lhapdf5
+  - lhapdf
   - HepMC
   - boost
-tag: alice/v8210
+tag: alice/v8211pre
 ---
-#!/bin/sh
+#!/bin/bash -e
 rsync -a $SOURCEDIR/ ./
 
 ./configure --prefix=$INSTALLROOT \
@@ -39,7 +39,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION boost/$BOOST_VERSION-$BOOST_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
+module load BASE/1.0 lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION boost/$BOOST_VERSION-$BOOST_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(PYTHIA_ROOT)/bin

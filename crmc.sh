@@ -1,5 +1,6 @@
 package: CRMC
-version: v1.5.4
+version: "%(tag_basename)s"
+tag: alice/v1.5.4
 requires:
   - boost
   - HepMC
@@ -8,15 +9,8 @@ build_requires:
 ---
 #!/bin/bash -ex
 
-ARCHIVE="crmc-${PKGVERSION:1}-src.tgz"
-URL="http://service-spi.web.cern.ch/service-spi/external/MCGenerators/distribution/crmc/$ARCHIVE"
-
-cd $SOURCEDIR
-curl -O $URL
-tar xz --strip-components 2 -f $ARCHIVE
-
-cd $BUILDDIR
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+cmake $SOURCEDIR \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS+-j $JOBS} all
 make install
 
