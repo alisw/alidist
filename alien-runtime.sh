@@ -13,42 +13,56 @@ build_requires:
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in 
+
   osx*|slc[67]*|ubuntu*)
     # The new build recipe does not work on mac. Working it around using the
     # old installer.
-    curl -O -fSsL --insecure http://alien.cern.ch/alien-installer
-    chmod +x alien-installer
-    ./alien-installer -install-dir "$INSTALLROOT/alien" -batch -notorrent -type compile -no-certificate-check
-    rsync -av $INSTALLROOT/alien/ $INSTALLROOT/
-    exit 0
+    mkdir build
+    pushd build
+      curl -O -fSsL --insecure http://alien.cern.ch/alien-installer
+      chmod +x alien-installer
+      ./alien-installer -install-dir "$BUILDDIR/alien" \
+                        -batch \
+                        -notorrent \
+                        -type compile \
+                        -no-certificate-check
+    popd
+    rsync -av --delete --exclude '**/*.log' \
+          $BUILDDIR/alien/ $INSTALLROOT/
+    grep -m 1 -E -A 999999 "^#!/" \
+         $BUILDDIR/alien/api/bin/alien-token-init > \
+         $INSTALLROOT/api/bin/alien-token-init
+    chmod u=rwx,g=rx,o=rx $INSTALLROOT/api/bin/alien-token-init
   ;;
+
+  *)
+    rsync -a --cvs-exclude $SOURCEDIR/ $BUILDDIR/
+    cd $BUILDDIR
+    ./bootstrap
+    ./configure --prefix=$INSTALLROOT
+
+    pushd apps/perl/perl
+      for ((I=0; I<5; I++)); do
+        ERR=0
+        make install || ERR=1
+        [[ $ERR == 0 ]] && break
+      done
+      [[ $ERR == 0 ]]
+    popd
+
+    pushd meta/user
+      make install
+    popd
+
+    chmod u+w -R $INSTALLROOT/
+
+    # Remove docs: unneeded, save lots of space
+    pushd $INSTALLROOT
+      rm -rf docs man api/share/man share/man share/doc
+    popd
+  ;;
+
 esac
-
-
-rsync -a --cvs-exclude $SOURCEDIR/ $BUILDDIR/
-cd $BUILDDIR
-./bootstrap
-./configure --prefix=$INSTALLROOT
-
-pushd apps/perl/perl
-for ((I=0; I<5; I++)); do
-  ERR=0
-  make install || ERR=1
-  [[ $ERR == 0 ]] && break
-done
-[[ $ERR == 0 ]]
-popd
-
-pushd meta/user
-make install
-popd
-
-chmod u+w -R $INSTALLROOT/
-
-# Remove docs: unneeded, save lots of space
-pushd $INSTALLROOT
-rm -rf docs man api/share/man share/man share/doc
-popd
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
