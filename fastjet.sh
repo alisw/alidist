@@ -44,6 +44,8 @@ pushd fjcontrib
   make fragile-shared-install
 popd
 
+rm -f $INSTALLROOT/lib/*.la
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

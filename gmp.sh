@@ -20,6 +20,8 @@ $SOURCEDIR/configure --prefix=$INSTALLROOT \
 make ${JOBS+-j $JOBS}
 make install
 
+rm -f $INSTALLROOT/lib/*.la
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
