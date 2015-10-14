@@ -29,7 +29,7 @@ set LHCEventHandler:EventFiller:SoftRemove NoValence
 set LHCGenerator:EventHandler:LuminosityFunction:Energy 7000
 create ThePEG::HepMCFile HepMCFile HepMCAnalysis.so
 set LHCGenerator:AnalysisHandlers 0 HepMCFile
-set HepMCFile:Filename /tmp/DIPSYpp.hepmc
+set HepMCFile:Filename DIPSYpp.hepmc
 set HepMCFile:PrintEvent 10000000000
 set HepMCFile:Format GenEvent
 set HepMCFile:Units GeV_mm
