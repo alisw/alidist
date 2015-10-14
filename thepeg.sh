@@ -1,7 +1,7 @@
 package: ThePEG
-version: v20150318
+version: "%(tag_basename)s"
 source: https://github.com/alisw/thepeg
-tag: "alice/v2015-03-18"
+tag: "alice/v2015-08-11"
 requires:
   - Rivet
   - pythia
@@ -16,19 +16,17 @@ env:
 ---
 #!/bin/bash -e
 
-export LD_LIBRARY_PATH="${LHAPDF5_ROOT}/lib:${CGAL_ROOT}/lib:${BOOST_ROOT}/lib:${LD_LIBRARY_PATH}"
-export LIBRARY_PATH="${LHAPDF5_ROOT}/lib:${CGAL_ROOT}/lib:${BOOST_ROOT}/lib:${LIBRARY_PATH}"
-export LHAPATH="${LHAPDF5_ROOT}/share/lhapdf"
+export LIBRARY_PATH="${LHAPDF_ROOT}/lib:${CGAL_ROOT}/lib:${BOOST_ROOT}/lib:${LIBRARY_PATH}"
 export PERLLIB=/usr/share/perl5
 
-rsync -a --delete $SOURCEDIR/ ./
+rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
 sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
 sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
 
 autoreconf -ivf
-export LDFLAGS="-L$LHAPDF5_ROOT/lib"
+export LDFLAGS="-L$LHAPDF_ROOT/lib"
 ./configure \
   --disable-silent-rules \
   --enable-shared \
@@ -39,7 +37,7 @@ export LDFLAGS="-L$LHAPDF5_ROOT/lib"
   --with-pythia8="$PYTHIA_ROOT" \
   --with-hepmc="$HEPMC_ROOT" \
   --with-rivet="$RIVET_ROOT" \
-  --with-lhapdf="$LHAPDF5_ROOT" \
+  --with-lhapdf="$LHAPDF_ROOT" \
   --with-fastjet="$FASTJET_ROOT" \
   --enable-unitchecks 2>&1 | tee -a thepeg_configure.log
 grep -q 'Cannot build TheP8I without a working Pythia8 installation.' thepeg_configure.log && false

@@ -1,25 +1,27 @@
 package: lhapdf5
-version: v5.9.1
+tag: alice/v5.9.1
+version: "%(tag_basename)s"
+source: https://github.com/alisw/LHAPDF
+env:
+  LHAPATH: "$LHAPDF5_ROOT/share/lhapdf"
 ---
 #!/bin/bash -ex
 
-ARCHIVE="lhapdf-5.9.1.tar.gz"
-URL="https://www.hepforge.org/archive/lhapdf/${ARCHIVE}"
-
-cd $SOURCEDIR
-curl -O "${URL}"
-tar xz --strip-components 1 -f ${ARCHIVE}
-
-cd $BUILDDIR
-rsync -a $SOURCEDIR/ $BUILDDIR/
+rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
 ./configure --prefix=$INSTALLROOT
 
 make ${JOBS+-j $JOBS} all
 make install
 
-cd $INSTALLROOT/share/lhapdf
-$INSTALLROOT/bin/lhapdf-getdata cteq6l
+PDFSETS="cteq6l cteq6ll EPS09LOR_208"
+pushd $INSTALLROOT/share/lhapdf
+  $INSTALLROOT/bin/lhapdf-getdata $PDFSETS
+  # Check if PDF sets were really installed
+  for P in $PDFSETS; do
+    ls ${P}.*
+  done
+popd
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -37,6 +39,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv LHAPDF5_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LHAPATH \$::env(LHAPDF5_ROOT)/share/lhapdf
 prepend-path PATH $::env(LHAPDF5_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(LHAPDF5_ROOT)/lib
 EoF
