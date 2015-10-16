@@ -16,10 +16,16 @@ env:
 ---
 #!/bin/bash -e
 
-export LIBRARY_PATH="${LHAPDF_ROOT}/lib:${CGAL_ROOT}/lib:${BOOST_ROOT}/lib:${LIBRARY_PATH}"
-export PERLLIB=/usr/share/perl5
+export LDFLAGS="-Wl,--no-as-needed -L${BOOST_ROOT}/lib -lboost_thread -lboost_system -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+export LIBRARY_PATH="$LD_LIBRARY_PATH"
+export CXXFLAGS="-I${BOOST_ROOT}/include -I${CGAL_ROOT}/include"
 
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+# Override perl from AliEn-Runtime
+mkdir -p fakeperl/bin
+ln -nfs /usr/bin/perl fakeperl/bin/perl
+export PATH="$PWD/fakeperl/bin:$PATH"
 
 sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
 sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
@@ -41,7 +47,7 @@ export LDFLAGS="-L$LHAPDF_ROOT/lib"
   --with-fastjet="$FASTJET_ROOT" \
   --enable-unitchecks 2>&1 | tee -a thepeg_configure.log
 grep -q 'Cannot build TheP8I without a working Pythia8 installation.' thepeg_configure.log && false
-make ${JOBS:+-j$JOBS} C_INCLUDE_PATH="${GSL_ROOT}/include" CPATH="${GSL_ROOT}/include"
+make C_INCLUDE_PATH="${GSL_ROOT}/include" CPATH="${GSL_ROOT}/include"
 make install
 
 # Modulefile
