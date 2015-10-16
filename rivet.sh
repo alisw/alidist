@@ -13,10 +13,14 @@ Url="http://www.hepforge.org/archive/rivet/Rivet-${PKGVERSION}.tar.bz2"
 curl -Lo rivet.tar.bz2 "$Url"
 tar xjf rivet.tar.bz2
 cd Rivet-$PKGVERSION
-export LDFLAGS="-L${CGAL_ROOT}/lib -L${BOOST_ROOT}/lib ${LDFLAGS}"
-export LD_LIBRARY_PATH="${CGAL_ROOT}/lib:${BOOST_ROOT}/lib:${LD_LIBRARY_PATH}"
-export LIBRARY_PATH="${LD_LIBRARY_PATH}"
-export CXXFLAGS="-Wl,--no-as-needed -lgmp -L${BOOST_ROOT}/lib -lboost_thread -lboost_system -L${CGAL_ROOT}/lib -lCGAL -I${BOOST_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+
+# MPFR and GMP are compiled statically, however in some cases there might be
+# some "-lgmp" left somewhere and we have to deal with it with the correct path.
+# Boost flags are also necessary
+export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib -lCGAL -L${BOOST_ROOT}/lib -lboost_thread -lboost_system"
+export LIBRARY_PATH="$LD_LIBRARY_PATH"
+export CXXFLAGS="-I${MPFR_ROOT}/include -I${GMP_ROOT}/include -I${CGAL_ROOT}/include -I${BOOST_ROOT}/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+
 ./configure \
   --prefix="$INSTALLROOT" \
   --disable-doxygen \

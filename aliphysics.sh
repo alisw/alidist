@@ -21,10 +21,10 @@ cmake "$SOURCEDIR" \
 
 if [[ $GIT_TAG == master ]]; then
   make -k ${JOBS+-j $JOBS} || true
-  make -k install || true
+  make -k ${JOBS+-j $JOBS} install || true
 else
   make ${JOBS+-j $JOBS}
-  make install
+  make ${JOBS+-j $JOBS} install
 fi
 
 # Modulefile

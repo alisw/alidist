@@ -5,20 +5,22 @@ tag: v6.0.0
 ---
 #!/bin/sh
 case $ARCHITECTURE in
-  osx*) BUILD="" ;;
-  *x86-64) BUILD="core2" ;;
-  *) BUILD= ;;
+  osx*) MARCH="" ;;
+  *x86-64) MARCH="core2" ;;
+  *) MARCH= ;;
 esac
 
 $SOURCEDIR/configure --prefix=$INSTALLROOT \
-            --enable-cxx                   \
-            --enable-static                \
-            --disable-shared               \
-            ${BUILD:+--build=$BUILD}       \
-            --with-pic
+                     --enable-cxx \
+                     --enable-static \
+                     --disable-shared \
+                     ${MARCH:+--build=$MARCH --host=$MARCH} \
+                     --with-pic
 
 make ${JOBS+-j $JOBS}
 make install
+
+rm -f $INSTALLROOT/lib/*.la
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
