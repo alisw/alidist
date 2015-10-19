@@ -11,7 +11,11 @@ Recipes to build ALICE SW
 ```
 rsync -a $SOURCEDIR ./
 ```
-- Whenever you need to build a new external, you should consider the following:
+
+# Guidelines for handling externals sources
+
+Whenever you need to build a new external, you should consider the following:
+
   - If a Git / GitHub mirror exists, and no patches are required, use it for the
     package source.
   - If a Git / GitHub repository exists and you need to patch it, fork it, decide a
