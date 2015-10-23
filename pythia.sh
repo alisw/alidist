@@ -42,6 +42,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION boost/$BOOST_VERSION-$BOOST_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PYTHIA8DATA \$::env(BASEDIR)/$PKGNAME/\$version/share/Pythia8/xmldoc
 prepend-path PATH \$::env(PYTHIA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib
 EoF
