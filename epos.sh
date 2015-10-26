@@ -10,15 +10,7 @@ requires:
 
 export EPOVSN=${PKGVERSION/./}
 export EPO=$PWD/
-export FASTSYS=$FASTJET
-export WORK=${EPO}Unu/
-export OBJ=${WORK}Lib/
-export CHK=${WORK}
-export OPT=${WORK}
-export HTO=${WORK}
-export DTA=${WORK}
-export EOS=${WORK}
-export SPO=${WORK}
+export OBJ=${EPO}Unu/Lib/
 export LIBRARY_PATH=$LIBRARY_PATH:$LD_LIBRARY_PATH
 
 # need to build in-source
@@ -37,6 +29,24 @@ rsync -a \
       --exclude=*.c \
       --exclude=*.cpp \
       ./ $INSTALLROOT/
+
+# wrapper script to set all recommended environment
+cat > ${INSTALLROOT}/run_epos.sh <<EOF
+#!/bin/bash
+
+export FASTSYS=\${FASTSYS:-\$FASTJET}
+export WORK=\${WORK:-\${EPO}Unu/}
+export OBJ=\${OBJ:-\${WORK}Lib/}
+export CHK=\${CHK:-\${WORK}}
+export OPT=\${OPT:-\${WORK}}
+export HTO=\${HTO:-\${WORK}}
+export DTA=\${DTA:-\${WORK}}
+export EOS=\${EOS:-\${WORK}}
+export SPO=\${SPO:-\${WORK}}
+
+\${EPOS_ROOT}/\$*
+EOF
+chmod a+x ${INSTALLROOT}/run_epos.sh
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -58,13 +68,4 @@ prepend-path PATH $::env(${PKGNAME}_ROOT)/
 
 setenv EPOVSN ${PKGVERSION/./}
 setenv EPO   $::env(${PKGNAME}_ROOT)/
-setenv FASTSYS  $::env(FASTJET_ROOT)
-setenv WORK $::env(EPO)Unu/
-setenv OBJ   $::env(WORK)Lib/
-setenv CHK   $::env(WORK)
-setenv OPT   $::env(WORK)
-setenv HTO   $::env(WORK)
-setenv DTA   $::env(WORK)
-setenv EOS   $::env(WORK)
-setenv SPO   $::env(WORK)
 EoF
