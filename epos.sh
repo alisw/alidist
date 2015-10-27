@@ -1,7 +1,7 @@
 package: EPOS
 version: "%(tag_basename)s"
 tag: alice/v3.111
-source: ssh://git@gitlab.cern.ch:7999/ALICEPrivateExternals/epos.git
+source: https://gitlab.cern.ch/ALICEPrivateExternals/epos.git
 requires:
   - ROOT
   - fastjet
@@ -9,26 +9,22 @@ requires:
 #!/bin/bash -ex
 
 export EPOVSN=${PKGVERSION/./}
+
+# Please note that EPOS *requires* the EPO variable to have a trailing slash!
+# It will not compile otherwise!
 export EPO=$PWD/
-export FASTSYS=$FASTJET
-export WORK=${EPO}Unu/
-export OBJ=${WORK}Lib/
-export CHK=${WORK}
-export OPT=${WORK}
-export HTO=${WORK}
-export DTA=${WORK}
-export EOS=${WORK}
-export SPO=${WORK}
-export LIBRARY_PATH=$LIBRARY_PATH:$LD_LIBRARY_PATH
+export OBJ=$EPO/Unu/Lib
 
-# need to build in-source
-rsync -a --delete ${SOURCEDIR}/ .
-
-# prepare and compile
+rsync -a --exclude='**/.git' --delete ${SOURCEDIR}/ .
 mkdir $OBJ
-make
 
-# stupid installation
+export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+export LIBRARY_PATH="$LD_LIBRARY_PATH"
+make ${JOBS:+-j$JOBS} LFLAGS="$LDFLAGS"
+
+# "Install"
+mkdir -p $INSTALLROOT/share/epos \
+         $INSTALLROOT/bin
 rsync -a \
       --exclude=.git \
       --exclude=*.f \
@@ -36,7 +32,13 @@ rsync -a \
       --exclude=*.h \
       --exclude=*.c \
       --exclude=*.cpp \
-      ./ $INSTALLROOT/
+      --exclude=Makefile \
+      --exclude=*.md \
+      --exclude=epos-wrap \
+      ./ $INSTALLROOT/share/epos/
+cp epos-wrap $INSTALLROOT/bin
+chmod a=rx $INSTALLROOT/bin/epos-wrap
+find $INSTALLROOT -type d -empty -exec rmdir '{}' \; || true
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -53,18 +55,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
 # Our environment
-setenv ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(${PKGNAME}_ROOT)/
-
-setenv EPOVSN ${PKGVERSION/./}
-setenv EPO   $::env(${PKGNAME}_ROOT)/
-setenv FASTSYS  $::env(FASTJET_ROOT)
-setenv WORK $::env(EPO)Unu/
-setenv OBJ   $::env(WORK)Lib/
-setenv CHK   $::env(WORK)
-setenv OPT   $::env(WORK)
-setenv HTO   $::env(WORK)
-setenv DTA   $::env(WORK)
-setenv EOS   $::env(WORK)
-setenv SPO   $::env(WORK)
+setenv EPOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH $::env(EPOS_ROOT)/bin
+setenv EPOVSN ${EPOVSN}
+# Final slash is required by EPOS, please leave it there
+setenv EPO $::env(EPOS_ROOT)/share/epos/
 EoF
