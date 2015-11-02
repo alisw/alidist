@@ -1,7 +1,7 @@
 package: IgProf
-version: 5.9.16-%(commit_hash)s
+version: 5.9.16
 source: https://github.com/igprof/igprof
-tag: master
+tag: v5.9.16
 requires:
   - libunwind
   - CMake
