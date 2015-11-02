@@ -26,6 +26,7 @@ case $ARCHITECTURE in
   ;;
   *) 
     RPM_LIBATOMIC_OPS_VERSION=`echo $LIBATOMIC_OPS_VERSION | tr - _`
+    RPM_LIBUNWIND_VERSION=`echo $LIBUNWIND_VERSION | tr - _`
     RPM_LIBATOMIC_OPS_NAME=libatomic_ops
     PACKAGE_FORMAT=rpm 
     ARCH_SEP=.
@@ -42,7 +43,7 @@ EOF
 
 fpm -s dir -t $PACKAGE_FORMAT \
     --after-install post-install \
-    -d libunwind \
+    -d "libunwind = `echo $RPM_LIBUNWIND_VERSION | tr - _`" \
     --iteration $IGPROF_REVISION \
     -a $RPM_ARCH \
     -v $IGPROF_VERSION \
@@ -50,7 +51,7 @@ fpm -s dir -t $PACKAGE_FORMAT \
     -C igprof \
     usr/bin usr/lib usr/include
 
-fpm -s dir -t $PACKAGE_FORMAT --iteration $LIBUNWIND_REVISION -a $RPM_ARCH -v $LIBUNWIND_VERSION -n libunwind -C libunwind usr/lib usr/include
+fpm -s dir -t $PACKAGE_FORMAT --iteration $LIBUNWIND_REVISION -a $RPM_ARCH -v $RPM_LIBUNWIND_VERSION -n libunwind -C libunwind usr/lib usr/include
 fpm -s dir -t $PACKAGE_FORMAT --iteration $LIBATOMIC_OPS_REVISION -a $RPM_ARCH -v $LIBATOMIC_OPS_VERSION -n libatomic_ops -C libatomic_ops usr/lib usr/include
 
 cat << EOF > packaging.yaml
@@ -74,7 +75,7 @@ packages:
       - development
   - name: libunwind
     version: $LIBUNWIND_VERSION
-    file: libunwind$VERSION_SEP$LIBUNWIND_VERSION-$LIBUNWIND_REVISION$ARCH_SEP$RPM_ARCH.$PACKAGE_FORMAT
+    file: libunwind$VERSION_SEP$RPM_LIBUNWIND_VERSION-$LIBUNWIND_REVISION$ARCH_SEP$RPM_ARCH.$PACKAGE_FORMAT
     licenses: 
       - GPL-2.0
     vcs_url: "https://github.com/igprof/libunwind"
