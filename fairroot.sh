@@ -1,6 +1,6 @@
 package: FairRoot
 version: master
-source: https://github.com/ktf/FairRoot
+source: https://github.com/FairRootGroup/FairRoot
 tag: master
 requires:
   - pythia6
@@ -28,5 +28,5 @@ cmake $SOURCEDIR \
       -DBOOST_LIBRARYDIR=$BOOST_ROOT/lib \
       -DBoost_NO_SYSTEM_PATHS=ON \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
-make ${JOBS+-j $JOBS}
+make ${JOBS:+-j $JOBS}
 make install
