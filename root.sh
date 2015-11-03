@@ -39,6 +39,7 @@ export ROOTSYS=$BUILDDIR
   --with-monalisa-incdir=$ALIEN_RUNTIME_ROOT/api/include \
   --with-monalisa-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
   --with-xrootd=$ALIEN_RUNTIME_ROOT/api \
+  --enable-http \
   --enable-minuit2 \
   --enable-roofit \
   --enable-soversion \
