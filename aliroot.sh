@@ -1,5 +1,5 @@
 package: AliRoot
-version: "%(commit_hash)s"
+version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - ROOT
   - fastjet
@@ -14,6 +14,8 @@ incremental_recipe: make ${JOBS:+-j$JOBS} && make install && cp -r $SOURCEDIR/te
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       -DROOTSYS=$ROOT_ROOT \
       -DALIEN=$ALIEN_RUNTIME_ROOT \
       -DFASTJET=$FASTJET_ROOT \
