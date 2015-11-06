@@ -13,12 +13,13 @@ tag: master
 incremental_recipe: make ${JOBS:+-j$JOBS} && make install && cp -r $SOURCEDIR/test $INSTALLROOT/test
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+cmake $SOURCEDIR                                                  \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                               \
+      -DROOTSYS=$ROOT_ROOT                                        \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
-      -DROOTSYS=$ROOT_ROOT \
-      -DALIEN=$ALIEN_RUNTIME_ROOT \
-      -DFASTJET=$FASTJET_ROOT \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN=$ALIEN_RUNTIME_ROOT}          \
+      ${FASTJET_ROOT:+-DFASTJET=$FASTJET_ROOT}                    \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then
