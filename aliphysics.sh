@@ -1,5 +1,5 @@
 package: AliPhysics
-version: "%(commit_hash)s"
+version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
 source: http://git.cern.ch/pub/AliPhysics
@@ -11,6 +11,7 @@ incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       -DALIEN="$ALIEN_RUNTIME_ROOT" \
       -DROOTSYS="$ROOT_ROOT" \
       -DFASTJET="$FASTJET_ROOT" \
