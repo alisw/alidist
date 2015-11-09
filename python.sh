@@ -4,7 +4,6 @@ tag: alice/v2.7.10
 source: https://github.com/alisw/cpython.git
 requires:
  - AliEn-Runtime
- - zlib
  - FreeType
  - libpng
 env:
