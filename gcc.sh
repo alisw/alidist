@@ -1,7 +1,7 @@
 package: GCC
-version: 4.9.3
-source: https://github.com/dberzano/gcc 
-tag: alice/4.9.3
+version: "%(tag_basename)s"
+source: https://github.com/alisw/gcc
+tag: alice/v4.9.3
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GCC_ROOT/lib64"
@@ -11,32 +11,44 @@ build_requires:
 #!/bin/bash -e
 
 case $ARCHITECTURE in
-  osx*) AdditionalLanguages=',objc,obj-c++' ;;
+  osx*) EXTRA_LANGS=',objc,obj-c++' ;;
 esac
 
-cd "$SOURCEDIR"
+rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 
-# TODO: maybe, have them in aliBuild?
-git reset --hard HEAD
-git clean -f -d
-git clean -fX
-
-# Use system's autotools
-for External in mpfr mpc gmp isl cloog ; do
-  pushd $External
-  autoreconf -fi
+for EXT in mpfr gmp mpc isl cloog; do
+  pushd $EXT
+    autoreconf -ivf
   popd
 done
 
-# Not necessary: externals imported in repo
-#./contrib/download_prerequisites
-
-"$SOURCEDIR"/configure \
-  --prefix="$INSTALLROOT" \
-  --enable-languages="c,c++,fortran${AdditionalLanguages}"
-
-make ${JOBS+-j $JOBS}
+./configure --prefix="$INSTALLROOT" \
+            --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
+            --disable-multilib
+make ${JOBS+-j $JOBS} bootstrap-lean
 make install
 
 # GCC creates c++, but not cc
-ln -nfs gcc "$INSTALLROOT"/bin/cc
+ln -nfs gcc "$INSTALLROOT/bin/cc"
+rm -rf "$INSTALLROOT/lib/pkg-config"
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+# Our environment
+setenv GCC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(GCC_ROOT)/lib
+prepend-path LD_LIBRARY_PATH \$::env(GCC_ROOT)/lib64
+prepend-path PATH \$::env(GCC_ROOT)/bin
+EoF
