@@ -4,6 +4,7 @@ tag: alice/v2.0.2
 source: https://github.com/alisw/jewel.git
 requires:
   - lhapdf5
+  - GCC
 ---
 #!/bin/bash -ex
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
@@ -29,7 +30,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION
+module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION GCC/$GCC_VERSION-$GCC_REVISION
 # Our environment
 setenv JEWEL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(JEWEL_ROOT)/bin
