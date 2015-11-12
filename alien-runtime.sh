@@ -10,6 +10,8 @@ build_requires:
  - ApMon-CPP
  - XRootD
  - xalienfs
+requires:
+ - GCC
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
   X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"

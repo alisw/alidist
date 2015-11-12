@@ -5,6 +5,7 @@ source: https://github.com/alisw/xalienfs.git
 build_requires:
  - autotools
  - XRootD
+ - GCC
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude='**/.git' --delete-excluded \

@@ -2,6 +2,7 @@ package: OpenSSL
 version: v0.9.8zf
 build_requires:
  - zlib
+ - GCC
 ---
 #!/bin/bash -e
 

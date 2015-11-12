@@ -5,6 +5,7 @@ source: https://github.com/alisw/gsoap.git
 build_requires:
  - autotools
  - OpenSSL
+ - GCC
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \

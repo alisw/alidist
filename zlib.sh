@@ -1,7 +1,9 @@
 package: zlib
-version: v1.2.8
+version: "%(tag_basename)s"
 source: https://github.com/star-externals/zlib
-tag: master
+tag: v1.2.8
+build_requires:
+ - GCC
 ---
 #!/bin/sh
 cd $SOURCEDIR
@@ -34,7 +36,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 GCC/$GCC_VERSION-$GCC_REVISION
 # Our environment
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF
