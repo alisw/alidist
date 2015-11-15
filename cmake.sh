@@ -2,8 +2,9 @@ package: CMake
 version: v2.8.12
 tag: v2.8.12
 source: https://github.com/Kitware/CMake
-requires:
+build_requires:
   - zlib
+  - GCC
 ---
 #!/bin/sh
 cat > build-flags.cmake <<- EOF 
@@ -43,7 +44,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION
+module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION GCC/$GCC_VERSION-$GCC_REVISION
 # Our environment
 prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 EoF

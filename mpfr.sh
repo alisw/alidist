@@ -5,6 +5,8 @@ tag: v3.1.3
 build_requires:
   - autotools
   - GMP
+requires:
+ - GCC
 ---
 #!/bin/sh
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
@@ -34,7 +36,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 GCC/$GCC_VERSION-$GCC_REVISION
 # Our environment
 setenv MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(MPFR_ROOT)/lib
