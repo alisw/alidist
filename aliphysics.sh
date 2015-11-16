@@ -1,5 +1,5 @@
 package: AliPhysics
-version: "%(commit_hash)s"
+version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
 source: http://git.cern.ch/pub/AliPhysics
@@ -11,19 +11,18 @@ incremental_recipe: make ${JOBS:+-j$JOBS} && make install
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DALIEN="$ALIEN_RUNTIME_ROOT" \
       -DROOTSYS="$ROOT_ROOT" \
-      -DFASTJET="$FASTJET_ROOT" \
-      -DCGAL="$CGAL_ROOT" \
-      -DMPFR="$MPFR_ROOT" \
-      -DGMP="$GMP_ROOT" \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"} \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"} \
+      ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"} \
+      ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"} \
+      ${GMP_ROOT:+-DGMP="$GMP_ROOT"} \
       -DALIROOT="$ALIROOT_ROOT"
 
 if [[ $GIT_TAG == master ]]; then
-  make -k ${JOBS+-j $JOBS} || true
   make -k ${JOBS+-j $JOBS} install || true
 else
-  make ${JOBS+-j $JOBS}
   make ${JOBS+-j $JOBS} install
 fi
 

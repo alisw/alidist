@@ -5,7 +5,6 @@ source: https://github.com/alisw/root
 requires: 
   - AliEn-Runtime
   - GSL
-  - libxml2:(osx.*|slc[6-7].*|ubuntu.*)
 env:
   ROOTSYS: "$ROOT_ROOT"
 incremental_recipe: |
@@ -34,11 +33,12 @@ esac
 export ROOTSYS=$BUILDDIR
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
-  --with-alien-incdir=$ALIEN_RUNTIME_ROOT/api/include \
-  --with-alien-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
-  --with-monalisa-incdir=$ALIEN_RUNTIME_ROOT/api/include \
-  --with-monalisa-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
-  --with-xrootd=$ALIEN_RUNTIME_ROOT/api \
+  --with-alien-incdir=$GSHELL_ROOT/include \
+  --with-alien-libdir=$GSHELL_ROOT/lib \
+  --with-monalisa-incdir=$GSHELL_ROOT/include \
+  --with-monalisa-libdir=$GSHELL_ROOT/lib \
+  --with-xrootd=$GSHELL_ROOT \
+  --enable-http \
   --enable-minuit2 \
   --enable-roofit \
   --enable-soversion \
@@ -55,8 +55,8 @@ export ROOTSYS=$BUILDDIR
   ${WITH_CLANG+--with-clang} \
   --disable-shadowpw \
   --disable-astiff \
-  --with-xml-incdir=${LIBXML2_ROOT:-$ALIEN_RUNTIME_ROOT}/include/libxml2 \
-  --with-xml-libdir=${LIBXML2_ROOT:-$ALIEN_RUNTIME_ROOT}/lib \
+  --with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 \
+  --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib \
   --disable-globus \
   --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib \
   --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
