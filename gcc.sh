@@ -7,6 +7,7 @@ prepend_path:
   "DYLD_LIBRARY_PATH": "$GCC_ROOT/lib64"
 build_requires:
   - autotools
+  - Binutils
 ---
 #!/bin/bash -e
 
@@ -25,8 +26,7 @@ done
 ./configure --prefix="$INSTALLROOT" \
             --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
             --disable-multilib
-# bootstrap-lean saves some space when compiling
-make ${JOBS+-j $JOBS} bootstrap-lean
+make ${JOBS+-j $JOBS}
 make install
 
 # GCC creates c++, but not cc
