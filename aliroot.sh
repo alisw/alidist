@@ -1,5 +1,5 @@
 package: AliRoot
-version: "%(commit_hash)s"
+version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - ROOT
   - fastjet
@@ -13,17 +13,18 @@ tag: master
 incremental_recipe: make ${JOBS:+-j$JOBS} && make install && cp -r $SOURCEDIR/test $INSTALLROOT/test
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-      -DROOTSYS=$ROOT_ROOT \
-      -DALIEN=$ALIEN_RUNTIME_ROOT \
-      -DFASTJET=$FASTJET_ROOT \
+cmake $SOURCEDIR                                                  \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                               \
+      -DROOTSYS=$ROOT_ROOT                                        \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN=$ALIEN_RUNTIME_ROOT}          \
+      ${FASTJET_ROOT:+-DFASTJET=$FASTJET_ROOT}                    \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then
-  make -k ${JOBS+-j $JOBS} || true
   make -k ${JOBS+-j $JOBS} install || true
 else
-  make ${JOBS+-j $JOBS}
   make ${JOBS+-j $JOBS} install
 fi
 

@@ -38,6 +38,17 @@ for x in ${ALI_CI_TESTS:-gun}; do
     igprof-analyse -d -r MEM_LIVE -g $y --sqlite | sqlite3 $(echo $y | sed -e's/MEMORY.gz/MEM_LIVE.sql/') || true
     igprof-analyse -d -r MEM_MAX -g $y --sqlite | sqlite3 $(echo $y | sed -e's/MEMORY.gz/MEM_MAX.sql/') || true
   done
+  for y in $(find . -name "*.sql"); do
+    cat << EOF | sqlite3 $y
+      CREATE TABLE metadata (key STRING, value STRING);
+      INSERT INTO metadata(key, value) VALUES ('status', '$STATUS');
+      INSERT INTO metadata(key, value) VALUES ('test_name', '$x');
+      INSERT INTO metadata(key, value) VALUES ('architecture', '$ARCHITECTURE');
+      INSERT INTO metadata(key, value) VALUES ('aliroot_version', '$ALIROOT_VERSION');
+      INSERT INTO metadata(key, value) VALUES ('aliphysics_version', '$ALIPHYSICS_VERSION');
+      INSERT INTO metadata(key, value) VALUES ('hostname', '$HOSTNAME');
+EOF
+  done
   mkdir -p  ${WORKSPACE}/$x
   find . -name "*.root" -exec cp {} $WORKSPACE/$x \;
   find . -name "*.log" -exec cp {} $WORKSPACE/$x \;
