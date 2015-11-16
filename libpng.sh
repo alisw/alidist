@@ -1,24 +1,20 @@
 package: libpng
 version: v1.6.18
 requires:
- - zlib
+ - AliEn-Runtime
 build_requires:
  - CMake
+source: git://git.code.sf.net/p/libpng/code
 ---
 #!/bin/bash -ex
-URL="http://downloads.sourceforge.net/libpng/libpng-${PKGVERSION:1}.tar.gz"
-curl -L -o libpng.tgz $URL
-tar xzf libpng.tgz
-rm -f libpng.tgz
-mv libpng-${PKGVERSION:1} src
-mkdir build
-cd build
-cmake ../src -DCMAKE_INSTALL_PREFIX:PATH=$INSTALLROOT \
-             -DBUILD_SHARED_LIBS=YES \
-             -DZLIB_ROOT:PATH=$ZLIB_ROOT \
-             -DCMAKE_SKIP_RPATH=YES \
-             -DSKIP_INSTALL_FILES=1
-make ${JOBS:+-j$JOBS}
+rsync -a $SOURCEDIR/ .
+cmake . \
+    -DCMAKE_INSTALL_PREFIX:PATH=$INSTALLROOT \
+    -DBUILD_SHARED_LIBS=YES \
+    -DZLIB_ROOT:PATH=$ZLIB_ROOT \
+    -DCMAKE_SKIP_RPATH=YES \
+    -DSKIP_INSTALL_FILES=1
+make ${JOBS:+-j $JOBS}
 make install
 
 # Modulefile
