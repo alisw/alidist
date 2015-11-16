@@ -3,8 +3,6 @@ version: master
 requires:
   - FairRoot
   - AliRoot
-  - pythia
-  - pythia6
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
 ---
@@ -16,15 +14,15 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DFairRoot_DIR=$FAIRROOT_ROOT \
       -DALICEO2_MODULAR_BUILD=ON \
       -DROOTSYS=$ROOTSYS \
-      -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib \
-      -DGeant3_DIR=$GEANT3_ROOT \
-      -DGeant4_DIR=$GEANT4_ROOT \
+      ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib} \
+      ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT} \
+      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT} \
       -DFAIRROOTPATH=$FAIRROOT_ROOT \
       -DBOOST_ROOT=$BOOST_ROOT \
       -DZMQ_DIR=$ZEROMQ_ROOT \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include \
       -DALIROOT=$ALIROOT_ROOT \
-      -DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include
+      ${PYTHIA8_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
