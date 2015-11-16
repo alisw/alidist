@@ -3,9 +3,9 @@ version: master
 source: https://github.com/FairRootGroup/FairRoot
 tag: master
 requires:
-  - pythia6
-  - GEANT3
-  - GEANT4
+  - generators
+  - simulation
+  - ROOT
   - ZeroMQ
   - boost
   - GCC:slc6.*
