@@ -10,6 +10,7 @@ build_requires:
  - ApMon-CPP
  - XRootD
  - xalienfs
+ - UUID
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
