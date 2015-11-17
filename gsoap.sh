@@ -4,7 +4,7 @@ tag: v2.7.13
 source: https://github.com/alisw/gsoap.git
 build_requires:
  - autotools
- - OpenSSL
+ - OpenSSL:(?!osx.*)
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \
