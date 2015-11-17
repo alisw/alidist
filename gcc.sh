@@ -1,6 +1,6 @@
 package: GCC
 version: 4.9.3
-source: https://github.com/dberzano/gcc 
+source: https://github.com/alisw/gcc 
 tag: alice/4.9.3
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_ROOT/lib64"
