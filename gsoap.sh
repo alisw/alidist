@@ -4,7 +4,7 @@ tag: v2.7.13
 source: https://github.com/alisw/gsoap.git
 build_requires:
  - autotools
- - OpenSSL
+ - "OpenSSL:(?!osx)"
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \
@@ -15,7 +15,7 @@ export CPPFLAGS="$CFLAGS"
 autoreconf -ivf
 ./configure --prefix=$INSTALLROOT \
             --enable-ssl \
-            --with-openssl=$OPENSSL_ROOT
+            ${OPENSSL_ROOT:+--with-openssl=$OPENSSL_ROOT}
 # Does not build in multicore!
 make
 make install

@@ -3,7 +3,7 @@ version: "v2-19-le"
 build_requires:
  - zlib
  - libxml2
- - OpenSSL
+ - "OpenSSL:(?!osx)"
  - AliEn-CAs
  - gSOAP
  - MonALISA-gSOAP-client
@@ -12,10 +12,10 @@ build_requires:
  - xalienfs
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
-  X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"
 env:
   GSHELL_ROOT: "$ALIEN_RUNTIME_ROOT"
   GSHELL_NO_GCC: "1"
+  X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"
 ---
 #!/bin/bash -e
 for RPKG in $BUILD_REQUIRES; do
