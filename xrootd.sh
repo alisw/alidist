@@ -4,7 +4,7 @@ tag: v3.3.6
 source: https://github.com/xrootd/xrootd.git
 build_requires:
  - CMake
- - OpenSSL
+ - "OpenSSL:(?!osx)"
  - ApMon-CPP
  - libxml2
  - MonALISA-gSOAP-client
@@ -17,7 +17,7 @@ cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
                    -DENABLE_KRB5=FALSE \
                    -DENABLE_READLINE=FALSE \
                    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-                   -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT \
+                   ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
                    -DZLIB_ROOT=$INSTALLROOT
 make ${JOBS:+-j$JOBS}
 make install
