@@ -1,4 +1,5 @@
-name: generators
+package: generators
+version: v1.0
 requires:
   - pythia
   - pythia6

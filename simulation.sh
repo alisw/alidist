@@ -1,6 +1,7 @@
-name: generators
+package: simulation
+version: v1.0
 requires:
-  - pythia
-  - pythia6
+  - GEANT4
+  - GEANT3
 ---
 # A catch all recipe for all the generators.
