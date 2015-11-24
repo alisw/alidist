@@ -11,6 +11,8 @@ build_requires:
  - XRootD
  - xalienfs
  - UUID
+requires:
+ - "GCC-Toolchain:(?!osx)"
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
@@ -41,7 +43,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv ALIEN_RUNTIME_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_ROOT)/lib

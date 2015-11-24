@@ -8,6 +8,7 @@ build_requires:
  - ApMon-CPP
  - libxml2
  - MonALISA-gSOAP-client
+ - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
