@@ -4,6 +4,8 @@ source: https://github.com/alisw/gsl
 tag: "release-1-16"
 build_requires:
   - autotools
+requires:
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
@@ -26,7 +28,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv GSL_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GSL_BASEDIR)/lib
