@@ -5,6 +5,7 @@ tag: v2.9.2
 build_requires:
   - autotools
   - zlib
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 rsync -a $SOURCEDIR/ ./

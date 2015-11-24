@@ -4,6 +4,7 @@ tag: v2.8.12
 source: https://github.com/Kitware/CMake
 build_requires:
   - zlib
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 cat > build-flags.cmake <<- EOF 
