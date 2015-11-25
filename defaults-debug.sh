@@ -1,4 +1,4 @@
-package: defaults-release
+package: defaults-debug
 version: v1
 env:
   CXXFLAGS: "-fPIC -g -O0"
