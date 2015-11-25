@@ -1,7 +1,7 @@
 package: zlib
-version: v1.2.8
+version: "%(tag_basename)s"
 source: https://github.com/star-externals/zlib
-tag: master
+tag: v1.2.8
 build_requires:
  - "GCC-Toolchain:(?!osx)"
 ---
