@@ -1,41 +1,31 @@
 package: AliEn-Runtime
-version: v2-19-xrd2
-source: https://gitlab.cern.ch/dberzano/AliEn-antidot.git
+version: "v2-19-le"
+build_requires:
+ - zlib
+ - libxml2
+ - "OpenSSL:(?!osx)"
+ - AliEn-CAs
+ - gSOAP
+ - MonALISA-gSOAP-client
+ - ApMon-CPP
+ - XRootD
+ - xalienfs
 prepend_path:
-  LD_LIBRARY_PATH: "$ALIEN_RUNTIME_ROOT/api/lib"
-  DYLD_LIBRARY_PATH: "$ALIEN_RUNTIME_ROOT/api/lib"
-  PATH: "$ALIEN_RUNTIME_ROOT/api/bin"
+  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
-  GSHELL_ROOT: "$ALIEN_RUNTIME_ROOT/api"
+  GSHELL_ROOT: "$ALIEN_RUNTIME_ROOT"
   GSHELL_NO_GCC: "1"
-requires:
-  - CMake
+  X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"
 ---
 #!/bin/bash -e
-rsync -a --cvs-exclude $SOURCEDIR/ $BUILDDIR/
-cd $BUILDDIR
-./bootstrap
-./configure --prefix=$INSTALLROOT
-
-pushd apps/perl/perl
-for ((I=0; I<5; I++)); do
-  ERR=0
-  make install || ERR=1
-  [[ $ERR == 0 ]] && break
+for RPKG in $BUILD_REQUIRES; do
+  RPKG_UP=$(echo $RPKG|tr '[:lower:]' '[:upper:]'|tr '-' '_')
+  RPKG_ROOT=$(eval echo "\$${RPKG_UP}_ROOT")
+  rsync -a $RPKG_ROOT/ $INSTALLROOT/
+  pushd $INSTALLROOT/../../..
+    env WORK_DIR=$PWD sh -e $INSTALLROOT/relocate-me.sh
+  popd
 done
-[[ $ERR == 0 ]]
-popd
-
-pushd meta/user
-make install
-popd
-
-chmod u+w -R $INSTALLROOT/
-
-# Remove docs: unneeded, save lots of space
-pushd $INSTALLROOT
-rm -rf docs man api/share/man share/man share/doc
-popd
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -50,13 +40,13 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0
 # Our environment
-setenv ALIEN_RUNTIME_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_BASEDIR)/lib
-prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_BASEDIR)/api/lib
-prepend-path PATH \$::env(ALIEN_RUNTIME_BASEDIR)/bin
-prepend-path PATH \$::env(ALIEN_RUNTIME_BASEDIR)/api/bin
-setenv GSHELL_ROOT \$::env(ALIEN_RUNTIME_BASEDIR)/api
+setenv ALIEN_RUNTIME_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_ROOT)/lib
+prepend-path PATH \$::env(ALIEN_RUNTIME_ROOT)/bin
+prepend-path PERLLIB \$::env(ALIEN_RUNTIME_ROOT)/lib/perl
+setenv GSHELL_ROOT \$::env(ALIEN_RUNTIME_ROOT)
+setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
 setenv GSHELL_NO_GCC 1
 EoF
