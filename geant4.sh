@@ -1,8 +1,8 @@
 package: GEANT4
-version: v10.01.p02-alice2
+version: "%(tag_basename)s"
 source: https://github.com/alisw/geant4
-tag: v4.10.01.p02-alice2
-requires:
+tag: alice/v4.10.01.p02
+build_requires:
   - CMake
 env:
   G4INSTALL: "$GEANT4_ROOT"
@@ -25,8 +25,7 @@ cmake $SOURCEDIR \
   -DGEANT4_ENABLE_TESTING=OFF \
   -DBUILD_SHARED_LIBS=ON \
   -DGEANT4_INSTALL_EXAMPLES=OFF \
-  -DCLHEP_ROOT_DIR:PATH="$CLHEP_ROOT" \
-  -DGEANT4_BUILD_MULTITHREADED=ON \
+  -DGEANT4_BUILD_MULTITHREADED=OFF \
   -DCMAKE_STATIC_LIBRARY_CXX_FLAGS="-fPIC" \
   -DCMAKE_STATIC_LIBRARY_C_FLAGS="-fPIC" \
   -DGEANT4_USE_G3TOG4=ON \
