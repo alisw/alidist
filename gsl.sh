@@ -1,14 +1,17 @@
 package: GSL
 version: "v1.16"
+source: https://github.com/alisw/gsl
+tag: "release-1-16"
+build_requires:
+  - autotools
 ---
 #!/bin/bash -e
-Url="http://mirror2.mirror.garr.it/mirrors/gnuftp/gnu/gsl/gsl-${PKGVERSION:1}.tar.gz"
-curl -o gsl.tar.gz "$Url"
-tar xzf gsl.tar.gz
-cd gsl-${PKGVERSION:1}
-./configure --prefix="$INSTALLROOT"
-make -j$JOBS
-make install -j$JOBS
+rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+autoreconf -f -v -i
+./configure --prefix="$INSTALLROOT" \
+            --enable-maintainer-mode
+make ${JOBS:+-j$JOBS}
+make ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

@@ -1,6 +1,6 @@
 package: ROOT
-version: "%(commit_hash)s"
-tag: v5-34-30-alice3
+version: "%(tag_basename)s-alice"
+tag: alice/v5-34-30
 source: https://github.com/alisw/root
 requires: 
   - AliEn-Runtime
@@ -33,11 +33,12 @@ esac
 export ROOTSYS=$BUILDDIR
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
-  --with-alien-incdir=$ALIEN_RUNTIME_ROOT/api/include \
-  --with-alien-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
-  --with-monalisa-incdir=$ALIEN_RUNTIME_ROOT/api/include \
-  --with-monalisa-libdir=$ALIEN_RUNTIME_ROOT/api/lib \
-  --with-xrootd=$ALIEN_RUNTIME_ROOT/api \
+  --with-alien-incdir=$GSHELL_ROOT/include \
+  --with-alien-libdir=$GSHELL_ROOT/lib \
+  --with-monalisa-incdir=$GSHELL_ROOT/include \
+  --with-monalisa-libdir=$GSHELL_ROOT/lib \
+  --with-xrootd=$GSHELL_ROOT \
+  --enable-http \
   --enable-minuit2 \
   --enable-roofit \
   --enable-soversion \
