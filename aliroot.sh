@@ -2,6 +2,7 @@ package: AliRoot
 version: "%(commit_hash)s"
 requires:
   - ROOT
+build_requires:
   - CMake
 prepend_path:
   LD_LIBRARY_PATH: "$ALIROOT_ROOT/lib/tgt_$ALICE_TARGET"
@@ -21,8 +22,10 @@ export ALICE=$INSTALLROOT
 export ALICE_ROOT=$SOURCEDIR
 export ALICE_TARGET=$(root-config --arch)
 
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+cmake $SOURCEDIR \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DROOTSYS=$ROOT_ROOT \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       -DALIEN=$ALIEN_RUNTIME_ROOT \
       ${FASTJET_ROOT:+-DFASTJET=$FASTJET_ROOT} \
       -DOCDB_INSTALL=PLACEHOLDER
@@ -49,7 +52,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${FASTJET_ROOT:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}
 # Our environment
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
