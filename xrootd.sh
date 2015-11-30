@@ -19,6 +19,6 @@ cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
                    -DENABLE_READLINE=FALSE \
                    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
                    ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
-                   -DZLIB_ROOT=$INSTALLROOT
+                   -DZLIB_ROOT=$ZLIB_ROOT
 make ${JOBS:+-j$JOBS}
 make install
