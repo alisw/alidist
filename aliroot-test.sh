@@ -17,7 +17,7 @@ WORKSPACE=${WORKSPACE:-$BUILDDIR}
 #
 # By default we only run gun. We do this so that before running longer tests we
 # make sure that at least the simple ones are ok.
-cp -r $ALIROOT_ROOT/test .
+rsync -a $ALIROOT_ROOT/test/ test
 for x in ${ALI_CI_TESTS:-gun}; do
   set -o pipefail
   find test -name "*.C" -exec perl -p -i -e 's|ALICE_ROOT/OCDB|OCDB_TEST_ROOT|' {} \;
