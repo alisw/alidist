@@ -10,7 +10,7 @@ env:
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
-incremental_recipe: make ${JOBS:+-j$JOBS} && make install && cp -r $SOURCEDIR/test $INSTALLROOT/test
+incremental_recipe: make ${JOBS:+-j$JOBS} && make install && rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR                                                  \
