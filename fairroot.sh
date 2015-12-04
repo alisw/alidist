@@ -8,7 +8,7 @@ requires:
   - ROOT
   - ZeroMQ
   - boost
-  - GCC-Toolchain:slc6.*
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 
