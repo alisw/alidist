@@ -17,10 +17,6 @@ case $ARCHITECTURE in
   ;;
 esac
 
-export PATH="$INSTALLROOT/bin:$PATH"
-export LD_LIBRARY_PATH="$INSTALLROOT/lib64:$INSTALLROOT/lib:$LD_LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="$INSTALLROOT/lib64:$INSTALLROOT/lib:$DYLD_LIBRARY_PATH"
-
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 
 # Binutils
@@ -38,17 +34,12 @@ pushd build-binutils
   hash -r
 popd
 
-# Test our linker with system's GCC
+# Test program
 cat > test.c <<EOF
 #include <string.h>
 #include <stdio.h>
-int main(void) { printf("It works!\n"); }
+int main(void) { printf("The answer is 42.\n"); }
 EOF
-which ld
-which g++
-g++ test.c
-./a.out
-rm -f a.out
 
 # GCC and deps
 pushd gcc
@@ -86,7 +77,13 @@ pushd build-gcc
         $INSTALLROOT/lib64/*.la
 popd
 
-# Test our linker with our GCC
+# From now on, use own linker and GCC
+export PATH="$INSTALLROOT/bin:$PATH"
+export LD_LIBRARY_PATH="$INSTALLROOT/lib64:$INSTALLROOT/lib:$LD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="$INSTALLROOT/lib64:$INSTALLROOT/lib:$DYLD_LIBRARY_PATH"
+hash -r
+
+# Test own linker and own GCC
 which ld
 which g++
 g++ test.c
