@@ -4,6 +4,7 @@ source: https://github.com/swig/swig
 tag: rel-3.0.7
 build_requires:
   - autotools
+  - "GCC-Toolchain:(?!osx)"
 env:
   SWIG_INC: "$SWIG_ROOT/share/swig/$SWIG_VERSION/"
 ---

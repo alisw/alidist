@@ -8,6 +8,7 @@ build_requires:
  - ApMon-CPP
  - libxml2
  - MonALISA-gSOAP-client
+ - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
@@ -18,6 +19,6 @@ cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
                    -DENABLE_READLINE=FALSE \
                    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
                    ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
-                   -DZLIB_ROOT=$INSTALLROOT
+                   -DZLIB_ROOT=$ZLIB_ROOT
 make ${JOBS:+-j$JOBS}
 make install

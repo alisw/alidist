@@ -5,6 +5,7 @@ source: https://github.com/alisw/monalisa-gsoap-client.git
 build_requires:
  - autotools
  - gSOAP
+ - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \
