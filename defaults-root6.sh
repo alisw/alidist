@@ -1,4 +1,4 @@
-package: defaults-cxx11
+package: defaults-root6
 version: v1
 env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
