@@ -2,7 +2,8 @@ package: protobuf
 version: v2.5.0
 source: https://github.com/google/protobuf
 build_requires:
-- autotools
+ - autotools
+ - "GCC-Toolchain:(?!osx)"
 --- 
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
