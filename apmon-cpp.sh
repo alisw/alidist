@@ -9,6 +9,7 @@ build_requires:
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \
       $SOURCEDIR/ ./
+autoreconf -ivf
 ./configure --prefix=$INSTALLROOT
 make ${JOBS:+-j$JOBS}
 make install
