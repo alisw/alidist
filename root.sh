@@ -1,5 +1,5 @@
 package: ROOT
-version: "%(tag_basename)s-alice"
+version: "%(tag_basename)s-alice%(defaults_upper)s"
 tag: alice/v5-34-30
 source: https://github.com/alisw/root
 requires: 
@@ -52,6 +52,7 @@ export ROOTSYS=$BUILDDIR
   --with-cc=$COMPILER_CC \
   --with-cxx=$COMPILER_CXX \
   --with-ld=$COMPILER_LD \
+  ${CXXFLAGS:+--cxxflags="$CXXFLAGS"} \
   ${WITH_CLANG+--with-clang} \
   --disable-shadowpw \
   --disable-astiff \
