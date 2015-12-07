@@ -1,5 +1,5 @@
 package: GEANT3
-version: v2-0
+version: "%(tag_basename)s%(defaults_upper)s"
 requires:
   - ROOT
 build_requires:

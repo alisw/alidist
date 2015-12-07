@@ -1,5 +1,5 @@
 package: cgal
-version: "v4.6.3"
+version: "v4.6.3%(defaults_upper)s"
 requires:
   - boost
 build_requires:

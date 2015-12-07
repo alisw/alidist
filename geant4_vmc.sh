@@ -1,5 +1,6 @@
 package: GEANT4_VMC
-version: "v3-2"
+version: "%(tag_basename)s%(defaults_upper)s"
+tag: "v3-2"
 source: https://github.com/alisw/geant4_vmc
 requires:
   - ROOT

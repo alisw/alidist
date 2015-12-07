@@ -1,5 +1,5 @@
 package: AliEn-Runtime
-version: "v2-19-le"
+version: "v2-19-le%(defaults_upper)s"
 build_requires:
  - zlib
  - libxml2
