@@ -1,5 +1,5 @@
 package: AliPhysics
-version: "%(year)s%(month)s%(day)s-%(short_hash)s%(defaults_upper)s"
+version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
 source: http://git.cern.ch/pub/AliPhysics
