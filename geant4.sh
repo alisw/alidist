@@ -1,5 +1,5 @@
 package: GEANT4
-version: v10.01.p02-alice2
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/geant4
 tag: v4.10.01.p02-alice2
 build_requires:
