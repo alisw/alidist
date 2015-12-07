@@ -1,5 +1,5 @@
 package: GCC-Toolchain
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/gcc-toolchain
 tag: alice/v4.9.3
 prepend_path:
