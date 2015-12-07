@@ -1,5 +1,5 @@
 package: JEWEL
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 tag: alice/v2.0.2
 source: https://github.com/alisw/jewel.git
 requires:

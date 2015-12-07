@@ -1,5 +1,5 @@
 package: GSL
-version: "v1.16"
+version: "v1.16%(defaults_upper)s"
 source: https://github.com/alisw/gsl
 tag: "release-1-16"
 build_requires:
