@@ -9,11 +9,11 @@ build_requires:
 ---
 #!/bin/bash -e
 PKGID=35136
-URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/CGAL-${PKGVERSION:1}.tar.bz2"
+URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/"
 
 curl -Lo cgal.tar.bz2 "$URL"
 tar xjf cgal.tar.bz2
-cd CGAL-${PKGVERSION:1}
+cd CGAL-*
 
 export LDFLAGS="-L$BOOST_ROOT/lib"
 export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
