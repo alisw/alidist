@@ -1,5 +1,5 @@
 package: AliRoot-test
-version: v1
+version: "%(year)s%(month)s%(day)s%(defaults_upper)s"
 force_rebuild: 1
 requires:
   - AliPhysics
