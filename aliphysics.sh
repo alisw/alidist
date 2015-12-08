@@ -6,7 +6,7 @@ source: http://git.cern.ch/pub/AliPhysics
 tag: master
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
-incremental_recipe: make ${JOBS:+-j$JOBS} && make install
+incremental_recipe: make ${JOBS:+-j$JOBS} install
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
@@ -22,8 +22,13 @@ cmake "$SOURCEDIR" \
 
 if [[ $GIT_TAG == master ]]; then
   make -k ${JOBS+-j $JOBS} install || true
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS} || true
 else
   make ${JOBS+-j $JOBS} install
+  if [[ $(ctest -N -R load_library | grep -i "total tests:" | cut -d: -f2) -gt 0 ]]; then
+    # Run library loading test if we have them
+    ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+  fi
 fi
 
 # Modulefile
