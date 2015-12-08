@@ -6,7 +6,7 @@ source: http://git.cern.ch/pub/AliPhysics
 tag: master
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
-incremental_recipe: make ${JOBS:+-j$JOBS} && make install
+incremental_recipe: make ${JOBS:+-j$JOBS} install
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
@@ -20,10 +20,12 @@ cmake "$SOURCEDIR" \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"} \
       -DALIROOT="$ALIROOT_ROOT"
 
+# note: ctest returns 0 in case no test is found
 if [[ $GIT_TAG == master ]]; then
-  make -k ${JOBS+-j $JOBS} install || true
+  make -k ${JOBS+-j $JOBS} install && ctest --output-on-failure || true
 else
   make ${JOBS+-j $JOBS} install
+  ctest --output-on-failure
 fi
 
 # Modulefile

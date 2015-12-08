@@ -14,11 +14,8 @@ rsync -a --delete --cvs-exclude $SOURCEDIR/ ./
 
 # FastJet
 pushd fastjet
-  case $ARCHITECTURE in
-    slc*) LINUX_CXXFLAGS="-Wl,--no-as-needed" ;;
-  esac
-  
-  export CXXFLAGS="$LINUX_CXXFLAGS -L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr -L$BOOST_ROOT/lib -lboost_thread -lboost_system -L$CGAL_ROOT/lib -I$BOOST_ROOT/include -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+  [[ "${ARCHITECTURE:0:3}" != osx ]] && EXTRA_CXXFLAGS='-Wl,--no-as-needed'
+  export CXXFLAGS="$EXTRA_CXXFLAGS -L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr -L$BOOST_ROOT/lib -lboost_thread -lboost_system -L$CGAL_ROOT/lib -lCGAL -I$BOOST_ROOT/include -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
   export CFLAGS="$CXXFLAGS"
   export CPATH="$BOOST_ROOT/include:$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
   export C_INCLUDE_PATH="$BOOST_ROOT/include:$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
