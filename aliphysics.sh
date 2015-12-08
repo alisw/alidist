@@ -20,12 +20,15 @@ cmake "$SOURCEDIR" \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"} \
       -DALIROOT="$ALIROOT_ROOT"
 
-# note: ctest returns 0 in case no test is found
 if [[ $GIT_TAG == master ]]; then
-  make -k ${JOBS+-j $JOBS} install && ctest --output-on-failure || true
+  make -k ${JOBS+-j $JOBS} install || true
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS} || true
 else
   make ${JOBS+-j $JOBS} install
-  ctest --output-on-failure
+  if [[ $(ctest -N -R load_library | grep -i "total tests:" | cut -d: -f2) -gt 0 ]]; then
+    # Run library loading test if we have them
+    ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+  fi
 fi
 
 # Modulefile
