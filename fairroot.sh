@@ -14,6 +14,8 @@ requires:
 
 export ROOTSYS=$ROOT_ROOT
 
+sed -i 's/add_subdirectory(Tutorial7)//' fairroot/example/CMakeLists.txt
+
 cmake $SOURCEDIR \
       -DCMAKE_CXX_FLAGS="-std=c++11" \
       -DCMAKE_RELEASE_TYPE=RelWithDebInfo \
