@@ -1,38 +1,43 @@
 package: autotools
 version: "%(tag_basename)s"
 source: https://github.com/alisw/autotools
-tag: alice/v1.3.0
+tag: v1.4.0
 ---
-#!/bin/bash
-export PATH=$INSTALLROOT/bin:$BUILDDIR/fooutils:$PATH
-rsync -a --delete --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
-pushd m4
+#!/bin/bash -e
+
+rsync -a --delete --exclude '**/.git' $SOURCEDIR/ .
+
+# Use our auto* tools while we build them
+export PATH=$INSTALLROOT/bin:$PATH
+export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
+
+# m4 -- requires: nothing special
+pushd m4*
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS}
   make install
+  hash -r
 popd
-pushd autoconf
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS}
-  make install
-popd
-pushd automake
-  ./bootstrap.sh
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS}
-  make install
-popd
-pushd libtool
-  # Update for AArch64 support
-  rm -f ./libltdl/config/config.{sub,guess}
-  curl -L -k -s -o ./libltdl/config/config.sub 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
-  curl -L -k -s -o ./libltdl/config/config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
-  chmod +x ./libltdl/config/config.{sub,guess}
+
+# libtool -- requires: m4
+pushd libtool*
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT --enable-ltdl-install
   make ${JOBS+-j $JOBS}
   make install
+  hash -r
 popd
-pushd gettext
+
+# autoconf -- requires: m4
+pushd autoconf*
+  ./configure --prefix $INSTALLROOT
+  make ${JOBS+-j $JOBS}
+  make install
+  hash -r
+popd
+
+# gettext -- requires: nothing special
+pushd gettext*
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
@@ -48,50 +53,39 @@ pushd gettext
               --disable-silent-rules
   make ${JOBS+-j $JOBS}
   make install
+  hash -r
 popd
-pushd pkg-config
+
+# automake -- requires: m4, autoconf, gettext
+pushd automake*
+  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
+  make ${JOBS+-j $JOBS}
+  make install
+  hash -r
+popd
+
+# pkgconfig -- requires: nothing special
+pushd pkg-config*
+  OLD_LDFLAGS="$LDFLAGS"
+  [[ ${ARCHITECTURE:0:3} == osx ]] && export LDFLAGS="$LDFLAGS -framework CoreFoundation -framework Carbon"
   ./configure --disable-debug \
               --prefix=$INSTALLROOT \
               --disable-host-tool \
               --with-internal-glib
+  export LDFLAGS="$OLD_LDFLAGS"
   make ${JOBS+-j $JOBS}
   make install
+  hash -r
 popd
 
-# Fix perl location, required on /usr/bin/perl
-
-# We need to detect OSX becase xargs behaves differently there.
-case $ARCHITECTURE in
-  osx*) XARGS_DO_NOT_FAIL="" ;;
-  *) XARGS_DO_NOT_FAIL="-r" ;;
-esac
-grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
-find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
-find $INSTALLROOT -name '*deleteme' -delete
+# We need to detect OSX becase xargs behaves differently there
+XARGS_DO_NOT_FAIL='-r'
+[[ ${ARCHITECTURE:0:3} == osx ]] && XARGS_DO_NOT_FAIL=
 
 # Fix perl location, required on /usr/bin/perl
-grep -l -R -e '^#!.*perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
+grep -l -R -e '^#!.*perl' $INSTALLROOT | \
+  xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
 find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
+grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | \
+  xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
-
-# Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-setenv AUTOTOOLS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(AUTOTOOLS_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(AUTOTOOLS_ROOT)/lib
-EoF
