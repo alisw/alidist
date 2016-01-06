@@ -27,6 +27,7 @@ case $ARCHITECTURE in
   ;;
 esac
 
+autoreconf -ivf
 # Unfortunately we need the two cases because LDFLAGS= does not work on linux
 # and I couldn't get the space between use_dylibs and -Wl, preseved if
 # I tried to have the whole "LDFLAGS=foo" in a variable.

@@ -12,6 +12,8 @@ env:
 #!/bin/bash -e
 rsync -a $SOURCEDIR/ ./
 
+autoreconf -ivf
+
 ./configure --prefix=$INSTALLROOT \
             --enable-shared \
             --with-hepmc2=${HEPMC_ROOT} \

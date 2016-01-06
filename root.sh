@@ -3,7 +3,7 @@ version: "%(tag_basename)s-alice%(defaults_upper)s"
 tag: alice/v5-34-30
 source: https://github.com/alisw/root
 requires: 
-  - AliEn-Runtime
+  - AliEn-Runtime:(?!.*ppc64)
   - GSL
 env:
   ROOTSYS: "$ROOT_ROOT"
@@ -31,6 +31,11 @@ case $ARCHITECTURE in
 esac
 
 export ROOTSYS=$BUILDDIR
+case $ARCHITECTURE in
+  *ppc64)
+    cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+  ;;
+  *)
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
   --with-alien-incdir=$GSHELL_ROOT/include \
@@ -63,8 +68,10 @@ export ROOTSYS=$BUILDDIR
   --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
   --with-ssl-shared=yes \
   --enable-mysql
+  ;;
+esac
 
-./bin/root-config --features | grep -q alien
+${ALIEN_RUNTIME_ROOT:+./bin/root-config --features | grep -q alien}
 ./bin/root-config --features | grep -q opengl
 
 make ${JOBS+-j$JOBS}
