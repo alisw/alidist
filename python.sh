@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: alice/v2.7.10
 source: https://github.com/alisw/cpython.git
 requires:
- - AliEn-Runtime
+ - AliEn-Runtime:(?!.*ppc64)
  - FreeType
  - libpng
 env:
@@ -97,7 +97,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION zlib/$ZLIB_VERSION-$ZLIB_REVISION
+module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} zlib/$ZLIB_VERSION-$ZLIB_REVISION
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_ROOT)/bin

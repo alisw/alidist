@@ -1,7 +1,7 @@
 package: libpng
 version: v1.6.18
 requires:
- - AliEn-Runtime
+ - AliEn-Runtime:(?!.*ppc64)
 build_requires:
  - CMake
 source: git://git.code.sf.net/p/libpng/code
