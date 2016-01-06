@@ -2,7 +2,7 @@ package: AliRoot
 version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - ROOT
-  - fastjet
+  - fastjet:(?!.*ppc64)
 build_requires:
   - CMake
 env:
@@ -43,7 +43,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}
 # Our environment
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
