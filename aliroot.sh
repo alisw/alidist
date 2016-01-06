@@ -13,9 +13,13 @@ tag: master
 incremental_recipe: make ${JOBS:+-j$JOBS} && make install && rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
 ---
 #!/bin/bash -e
+if [ X`root-config --has-cxx11` = Xyes ]; then
+  HAS_CPP11=true
+fi
+
 cmake $SOURCEDIR                                                  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                               \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS ${HAS_CPP11:+-std=c++11}"      \
       -DROOTSYS=$ROOT_ROOT                                        \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN=$ALIEN_RUNTIME_ROOT}          \
