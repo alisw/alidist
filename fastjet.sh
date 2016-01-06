@@ -14,6 +14,7 @@ rsync -a --delete --cvs-exclude $SOURCEDIR/ ./
 
 # FastJet
 pushd fastjet
+  autoreconf -i -v -f
   [[ "${ARCHITECTURE:0:3}" != osx ]] && EXTRA_CXXFLAGS='-Wl,--no-as-needed'
   export CXXFLAGS="$EXTRA_CXXFLAGS -L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr -L$BOOST_ROOT/lib -lboost_thread -lboost_system -L$CGAL_ROOT/lib -lCGAL -I$BOOST_ROOT/include -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
   export CFLAGS="$CXXFLAGS"
@@ -30,6 +31,7 @@ popd
 
 # FastJet Contrib
 pushd fjcontrib
+  autoreconf -i -v -f
   ./configure --fastjet-config=$INSTALLROOT/bin/fastjet-config \
               CXXFLAGS="$CXXFLAGS" \
               CFLAGS="$CFLAGS" \
