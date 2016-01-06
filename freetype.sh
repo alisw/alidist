@@ -1,7 +1,7 @@
 package: FreeType
 version: v2.6
 requires:
- - AliEn-Runtime
+ - AliEn-Runtime:(?!.*ppc64)
 ---
 #!/bin/bash -ex
 URL="http://download.savannah.gnu.org/releases/freetype/freetype-${PKGVERSION:1}.tar.gz"
