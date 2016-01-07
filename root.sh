@@ -64,7 +64,9 @@ export ROOTSYS=$BUILDDIR
   --with-ssl-shared=yes \
   --enable-mysql
 
-${ALIEN_RUNTIME_ROOT:+./bin/root-config --features | grep -q alien}
+if [ ! "X$ALIEN_RUNTIME_ROOT" = X ]; then
+  ./bin/root-config --has-alien | grep -q yes
+fi
 ./bin/root-config --features | grep -q opengl
 
 make ${JOBS+-j$JOBS}
