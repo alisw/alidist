@@ -71,7 +71,9 @@ case $ARCHITECTURE in
   ;;
 esac
 
-${ALIEN_RUNTIME_ROOT:+./bin/root-config --features | grep -q alien}
+if [[ "$ALIEN_RUNTIME_ROOT" != '' ]]; then
+  ./bin/root-config --has-alien | grep -q yes
+fi
 ./bin/root-config --features | grep -q opengl
 
 make ${JOBS+-j$JOBS}
