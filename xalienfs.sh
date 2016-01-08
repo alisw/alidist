@@ -13,22 +13,20 @@ rsync -a --delete --exclude='**/.git' --delete-excluded \
       $SOURCEDIR/ ./
 ./bootstrap.sh
 autoreconf -ivf
-export CFLAGS="-I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/private"
+CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/private \
+          ${UUID_ROOT:+-I$UUID_ROOT/include -L$UUID_ROOT/lib} "
 case $ARCHITECTURE in
   osx*)
-    CFLAGS="$CFLAGS -I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
+    CXXFLAGS="$CXXFLAGS -I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
   ;;
 esac
-export CPPFLAGS="$CFLAGS"
-export CXXFLAGS="$CFLAGS"
-export LDFLAGS="-L$XROOTD_ROOT/lib -L$UUID_ROOT/lib"
+export CXXFLAGS
 ./configure --prefix=$INSTALLROOT                    \
             --with-xrootd-location=$XROOTD_ROOT      \
             --enable-perl-module                     \
             --with-perl=perl                         \
             ${SWIG_INC:+--with-swig-inc="$SWIG_INC"} \
-            --enable-build-server                    \
-            --disable-readline
+            --enable-build-server
 # May not work in multicore
 make
 make install INSTALLSITEARCH=$INSTALLROOT/lib/perl \
