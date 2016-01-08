@@ -31,7 +31,6 @@ popd
 
 # FastJet Contrib
 pushd fjcontrib
-  autoreconf -i -v -f
   ./configure --fastjet-config=$INSTALLROOT/bin/fastjet-config \
               CXXFLAGS="$CXXFLAGS" \
               CFLAGS="$CFLAGS" \
