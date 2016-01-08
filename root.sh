@@ -31,6 +31,11 @@ case $ARCHITECTURE in
 esac
 
 export ROOTSYS=$BUILDDIR
+case $ARCHITECTURE in
+  *ppc64)
+    cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+  ;;
+  *)
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
   --with-alien-incdir=$GSHELL_ROOT/include \
@@ -63,6 +68,8 @@ export ROOTSYS=$BUILDDIR
   --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
   --with-ssl-shared=yes \
   --enable-mysql
+  ;;
+esac
 
 if [[ "$ALIEN_RUNTIME_ROOT" != '' ]]; then
   ./bin/root-config --has-alien | grep -q yes
