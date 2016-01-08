@@ -38,6 +38,13 @@ for x in ${ALI_CI_TESTS:-gun}; do
     igprof-analyse -d -r MEM_LIVE -g $y --sqlite | sqlite3 $(echo $y | sed -e's/MEMORY.gz/MEM_LIVE.sql/') || true
     igprof-analyse -d -r MEM_MAX -g $y --sqlite | sqlite3 $(echo $y | sed -e's/MEMORY.gz/MEM_MAX.sql/') || true
   done
+  # Simple normalization of results. /etc/sysbench-results is created by
+  # puppet on build infrastructure machines.
+  if [ -f /etc/sysbench-results ]; then
+    NORMALIZATION=`cat /etc/sysbench-results | grep 'total time:' | sed -e 's/[^0-9]*//;s/s//'`
+  else
+    NORMALIZATION=1
+  fi
   for y in $(find . -name "*.sql"); do
     cat << EOF | sqlite3 $y
       CREATE TABLE metadata (key STRING, value STRING);
@@ -47,6 +54,7 @@ for x in ${ALI_CI_TESTS:-gun}; do
       INSERT INTO metadata(key, value) VALUES ('aliroot_version', '$ALIROOT_VERSION');
       INSERT INTO metadata(key, value) VALUES ('aliphysics_version', '$ALIPHYSICS_VERSION');
       INSERT INTO metadata(key, value) VALUES ('hostname', '$HOSTNAME');
+      INSERT INTO metadata(key, value) VALUES ('normalization', '$NORMALIZATION');
 EOF
   done
   mkdir -p  ${WORKSPACE}/$x
