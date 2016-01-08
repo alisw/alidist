@@ -1,15 +1,22 @@
 package: gSOAP
 version: "%(tag_basename)s"
-tag: v2.7.13
+tag: alice/v2.7.13
 source: https://github.com/alisw/gsoap.git
 build_requires:
  - autotools
- - "OpenSSL:(?!osx)"
+ - OpenSSL
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \
       $SOURCEDIR/ ./
+
+# On mac we use openssl coming from homebrew.
+case $ARCHITECTURE in 
+  osx*)
+    [ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
+  ;;
+esac
 export CFLAGS="-fPIC -I$OPENSSL_ROOT/include -I$ZLIB_ROOT/include -L$OPENSSL_ROOT/lib -L$ZLIB_ROOT/lib"
 export CXXFLAGS="$CFLAGS"
 export CPPFLAGS="$CFLAGS"
