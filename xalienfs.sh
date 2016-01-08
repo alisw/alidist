@@ -25,7 +25,7 @@ export CXXFLAGS
             --with-xrootd-location=$XROOTD_ROOT      \
             --enable-perl-module                     \
             --with-perl=perl                         \
-            ${SWIG_INC:+--with-swig-inc="$SWIG_INC"} \
+            ${SWIG_LIB:+--with-swig-inc="$SWIG_LIB"} \
             --enable-build-server
 # May not work in multicore
 make
