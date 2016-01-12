@@ -19,13 +19,15 @@ case $PKGVERSION in
   v6.0*) WITH_YAML_CPP="--with-yaml-cpp=${YAML_CPP_ROOT}"
 esac
 
-export LDFLAGS="-Wl,--no-as-needed -L${BOOST_ROOT}/lib"
+if [[ "$BOOST_ROOT" != '' ]]; then
+  export LDFLAGS="-Wl,--no-as-needed -L${BOOST_ROOT}/lib"
+  export CXXFLAGS="-I${BOOST_ROOT}/include"
+fi
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-export CXXFLAGS="-I${BOOST_ROOT}/include"
 
 autoreconf -ivf
 ./configure --prefix=$INSTALLROOT \
-            --with-boost=$BOOST_ROOT \
+            ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"} \
             $WITH_YAML_CPP
 
 make ${JOBS+-j $JOBS} all
@@ -51,7 +53,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION boost/$BOOST_VERSION-$BOOST_REVISION autotools/$AUTOTOOLS_VERSION-$AUTOTOOLS_REVISION
+module load BASE/1.0 yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv LHAPATH \$::env(LHAPDF_ROOT)/share/LHAPDF

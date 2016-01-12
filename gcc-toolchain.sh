@@ -7,8 +7,13 @@ prepend_path:
   "DYLD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
 build_requires:
  - autotools
+prefer_system: .*
+prefer_system_check: |
+  echo -e "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800))\n#error \"Cannot use system's GCC.\"\n#endif" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
+
+echo "Building ALICE GCC. You can skip this step by installing at least GCC 4.8 on your system."
 
 USE_GOLD=
 case $ARCHITECTURE in

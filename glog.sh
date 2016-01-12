@@ -3,7 +3,7 @@ version: v0.3.4
 source: https://github.com/google/glog
 build_requires:
  - autotools
- - "GCC-Toolchain:(?!osx)"
+ - "GCC-Toolchain:(?!osx|slc5)"
 --- 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 autoreconf -ivf

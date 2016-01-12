@@ -15,9 +15,11 @@ curl -Lo cgal.tar.bz2 "$URL"
 tar xjf cgal.tar.bz2
 cd CGAL-*
 
-export LDFLAGS="-L$BOOST_ROOT/lib"
-export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
+if [[ "$BOOST_ROOT" != '' ]]; then
+  export LDFLAGS="-L$BOOST_ROOT/lib"
+  export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
+  export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
+fi
 
 export MPFR_LIB_DIR="${MPFR_ROOT}/lib"
 export MPFR_INC_DIR="${MPFR_ROOT}/include"
@@ -55,8 +57,7 @@ cmake . \
       -DCGAL_ENABLE_PRECONFIG:BOOL=NO \
       -DCGAL_IGNORE_PRECONFIGURED_GMP:BOOL=YES \
       -DCGAL_IGNORE_PRECONFIGURED_MPFR:BOOL=YES \
-      -DBoost_NO_SYSTEM_PATHS:BOOL=TRUE \
-      -DBOOST_ROOT:PATH="${BOOST_ROOT}"
+      ${BOOST_ROOT:+-DBoost_NO_SYSTEM_PATHS:BOOL=TRUE -DBOOST_ROOT:PATH="$BOOST_ROOT"}
 
 make VERBOSE=1 ${JOBS:+-j$JOBS}
 make install VERBOSE=1
@@ -74,7 +75,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION
+module load BASE/1.0 ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CGAL_ROOT)/bin

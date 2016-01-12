@@ -61,8 +61,7 @@ case $ARCHITECTURE in
   ${WITH_CLANG+--with-clang} \
   --disable-shadowpw \
   --disable-astiff \
-  --with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 \
-  --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib \
+  ${LIBXML2_ROOT:+--with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib} \
   --disable-globus \
   --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib \
   --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
@@ -71,10 +70,9 @@ case $ARCHITECTURE in
   ;;
 esac
 
-if [[ "$ALIEN_RUNTIME_ROOT" != '' ]]; then
-  ./bin/root-config --has-alien | grep -q yes
-fi
-./bin/root-config --features | grep -q opengl
+[[ "$ALIEN_RUNTIME_ROOT" == '' ]] || ./bin/root-config --has-alien | grep -q yes
+./bin/root-config --has-opengl | grep -q yes
+./bin/root-config --has-xml | grep -q yes
 
 make ${JOBS+-j$JOBS}
 export ROOTSYS=$INSTALLROOT

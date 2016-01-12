@@ -3,9 +3,15 @@ version: "%(tag_basename)s"
 source: https://github.com/star-externals/zlib
 tag: v1.2.8
 build_requires:
- - "GCC-Toolchain:(?!osx)"
+ - "GCC-Toolchain:(?!osx|slc5)"
+prefer_system: "(?!slc5)"
+prefer_system_check: |
+  echo -e "#include \"<zlib.h>\"" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
+
+echo "Building ALICE zlib. To avoid this install zlib development package."
+
 cd $SOURCEDIR
 case $ARCHITECTURE in
    *_amd64_gcc4[56789]*)

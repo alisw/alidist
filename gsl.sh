@@ -5,7 +5,7 @@ tag: "release-1-16"
 build_requires:
   - autotools
 requires:
-  - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx|slc5)"
 ---
 #!/bin/bash -e
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR

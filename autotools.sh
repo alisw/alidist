@@ -2,8 +2,12 @@ package: autotools
 version: "%(tag_basename)s"
 source: https://github.com/alisw/autotools
 tag: v1.4.0
+prefer_system: "(?!slc5|slc6)"
+prefer_system_check: which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint
 ---
 #!/bin/bash -e
+
+echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
 # Restore original timestamps to avoid reconf (Git does not preserve them)
 pushd $SOURCEDIR

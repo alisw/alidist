@@ -5,7 +5,7 @@ source: https://github.com/alisw/LHAPDF
 env:
   LHAPATH: "$LHAPDF5_ROOT/share/lhapdf"
 requires:
- - "GCC-Toolchain:(?!osx)"
+ - "GCC-Toolchain:(?!osx|slc5)"
 ---
 #!/bin/bash -ex
 

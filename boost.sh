@@ -3,9 +3,15 @@ version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/boost.git
 tag: v1.59.0
 requires:
- - "GCC-Toolchain:(?!osx)"
+ - "GCC-Toolchain:(?!osx|slc5)"
+prefer_system: (?!slc5)
+prefer_system_check: |
+  echo -e "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105400)\n#error \"Cannot use system's boost.\"\n#endif" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
+
+echo "Building ALICE boost. You can avoid that by installing at least boost 1.54."
+
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in 
   osx*) TOOLSET=darwin ;;

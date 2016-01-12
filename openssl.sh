@@ -5,7 +5,7 @@ prefer_system_check: |
   echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null
 build_requires:
  - zlib
- - "GCC-Toolchain:(?!osx)"
+ - "GCC-Toolchain:(?!osx|slc5)"
 ---
 #!/bin/bash -e
 
