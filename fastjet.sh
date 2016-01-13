@@ -8,7 +8,19 @@ env:
   FASTJET: "$FASTJET_ROOT"
 ---
 #!/bin/bash -e
-export LIBRARY_PATH="$BOOST_ROOT/lib:$LIBRARY_PATH"
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+  ;;
+esac
+
+export LIBRARY_PATH="${BOOST_ROOT:+$BOOST_ROOT/lib:}$LIBRARY_PATH"
+BOOST_INC=${BOOST_ROOT:+$BOOST_ROOT/include:}
+printf "void main() {}" | c++ -xc ${BOOST_ROOT:+-L$BOOST_ROOT/lib} -lboost_thread - -o /dev/null 2>/dev/null  \
+  && BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread"                                              \
+  || BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread-mt"
+BOOST_LIBS="$BOOST_LIBS -lboost_system"
 
 rsync -a --delete --cvs-exclude $SOURCEDIR/ ./
 
@@ -16,10 +28,10 @@ rsync -a --delete --cvs-exclude $SOURCEDIR/ ./
 pushd fastjet
   autoreconf -i -v -f
   [[ "${ARCHITECTURE:0:3}" != osx ]] && EXTRA_CXXFLAGS='-Wl,--no-as-needed'
-  export CXXFLAGS="$EXTRA_CXXFLAGS -L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr -L$BOOST_ROOT/lib -lboost_thread -lboost_system -L$CGAL_ROOT/lib -lCGAL -I$BOOST_ROOT/include -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
-  export CFLAGS="$CXXFLAGS"
-  export CPATH="$BOOST_ROOT/include:$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
-  export C_INCLUDE_PATH="$BOOST_ROOT/include:$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
+  export CXXFLAGS="$CXXFLAGS $EXTRA_CXXFLAGS -L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+  export CFLAGS="$CFLAGS $CXXFLAGS"
+  export CPATH="${BOOST_INC}$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
+  export C_INCLUDE_PATH="${BOOST_INC}$GMP_ROOT/include:$MPFR_ROOT/include"
   ./configure --enable-shared \
               --enable-cgal \
               --with-cgal=$CGAL_ROOT \
