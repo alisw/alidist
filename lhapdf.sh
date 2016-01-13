@@ -12,6 +12,17 @@ env:
   LHAPATH: "$LHAPDF_ROOT/share/LHAPDF"
 ---
 #!/bin/bash -ex
+case $ARCHITECTURE in 
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $YAML_CPP_ROOT ]] && YAML_CPP_ROOT=`brew --prefix yaml-cpp`
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+    [[ ! $AUTOTOOLS_ROOT ]] && PATH=$PATH:`brew --prefix gettext`/bin
+  ;;
+  *)
+    EXTRA_LD_FLAGS="-Wl,--no-as-needed"
+  ;;
+esac
 
 rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
@@ -20,7 +31,7 @@ case $PKGVERSION in
 esac
 
 if [[ "$BOOST_ROOT" != '' ]]; then
-  export LDFLAGS="-Wl,--no-as-needed -L${BOOST_ROOT}/lib"
+  export LDFLAGS="$EXTRA_LD_FLAGS -L${BOOST_ROOT}/lib"
   export CXXFLAGS="-I${BOOST_ROOT}/include"
 fi
 export LIBRARY_PATH="$LD_LIBRARY_PATH"

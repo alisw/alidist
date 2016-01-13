@@ -8,6 +8,12 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+  ;;
+esac
 PKGID=35136
 URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/"
 

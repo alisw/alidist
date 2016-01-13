@@ -8,6 +8,10 @@ build_requires:
 ---
 #!/bin/sh
 rsync -av --delete --exclude "**/.git" $SOURCEDIR/ .
+if [[ $AUTOTOOLS_ROOT == "" ]]  && which brew >/dev/null; then
+  PATH=$PATH:`brew --prefix gettext`/bin
+fi
+
 autoreconf -ivf
 ./configure $([[ ${ARCHITECTURE:0:3} == osx ]] && echo --disable-shared) \
             --libdir=$INSTALLROOT/lib \

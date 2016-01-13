@@ -7,6 +7,8 @@ build_requires:
   - "GCC-Toolchain:(?!osx|slc5)"
 env:
   SWIG_LIB: "$SWIG_ROOT/share/swig/$SWIG_VERSION"
+prefer_system: (?!slc5)
+prefer_system_check: which swig
 ---
 #!/bin/sh
 rsync -av --delete --exclude '**/.git' $SOURCEDIR/ .

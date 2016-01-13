@@ -8,8 +8,19 @@ requires:
  - libpng
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
+prefer_system: (?!slc5)
+prefer_system_check:
+  python -c 'import matplotlib; import numpy; import certifi ; import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'
 ---
 #!/bin/bash -ex
+
+case $ARCHITECTURE in 
+  slc5*) ;;
+  *)
+    echo "Building our own python. If you want to avoid this, please install python >= 2.7"
+    echo "and make sure you have matplotlib and certifi module installed."
+  ;;
+esac
 
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 

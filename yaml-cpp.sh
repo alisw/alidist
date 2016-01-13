@@ -6,11 +6,16 @@ requires:
   - boost
 build_requires:
   - CMake
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include \"yaml-cpp/yaml.h\"\n" | gcc -I`brew --prefix yaml-cpp`/include -I`brew --prefix boost`/include -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
-if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
-    sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt
-fi
+case $ARCHITECTURE in
+  slc5*) sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt ;;
+  osx*) [[ $BOOST_ROOT ]] || BOOST_ROOT=`brew --prefix boost` ;;
+  *) ;;
+esac
 
 cmake $SOURCEDIR \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \

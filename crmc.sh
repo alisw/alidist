@@ -9,8 +9,15 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -ex
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+  ;;
+esac
 
-cmake $SOURCEDIR \
+cmake $SOURCEDIR                               \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS+-j $JOBS} all
 make install

@@ -3,7 +3,8 @@ version: "%(tag_basename)s"
 source: https://github.com/alisw/autotools
 tag: v1.4.0
 prefer_system: "(?!slc5|slc6)"
-prefer_system_check: which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint
+prefer_system_check: |
+  PATH=$PATH:$(brew --prefix gettext)/bin && which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint && which libtool
 ---
 #!/bin/bash -e
 
