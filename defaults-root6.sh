@@ -1,8 +1,8 @@
-package: defaults-release
+package: defaults-cxx11
 version: v1
 env:
-  CXXFLAGS: "-fPIC -g -O2"
-  CFLAGS: "-fPIC -g -O2"
+  CXXFLAGS: "-fPIC -g -O2 -std=c++11"
+  CFLAGS: "-fPIC -g -O2 -std=c++11"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 ---
 # This file is included in any build recipe and it's only used to set

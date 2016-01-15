@@ -11,12 +11,18 @@ env:
 ---
 #!/bin/bash -e
 rsync -a $SOURCEDIR/ ./
+case $ARCHITECTURE in 
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+  ;;
+esac
 
 ./configure --prefix=$INSTALLROOT \
             --enable-shared \
             --with-hepmc2=${HEPMC_ROOT} \
             --with-lhapdf6=${LHAPDF_ROOT} \
-            --with-boost=${BOOST_ROOT}
+            ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"}
 
 if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
     ln -s LHAPDF5.h include/Pythia8Plugins/LHAPDF5.cc
@@ -41,7 +47,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION boost/$BOOST_VERSION-$BOOST_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
+module load BASE/1.0 lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc

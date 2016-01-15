@@ -1,5 +1,5 @@
 package: GEANT4
-version: v10.01.p02-alice2
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/geant4
 tag: v4.10.01.p02-alice2
 build_requires:
@@ -49,7 +49,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0
 # Our environment
 set osname [uname sysname]
 setenv GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

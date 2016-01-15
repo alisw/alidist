@@ -1,9 +1,28 @@
 package: OpenSSL
 version: v0.9.8zf
+prefer_system: osx
+prefer_system_check: |
+  echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null
 build_requires:
  - zlib
+ - "GCC-Toolchain:(?!osx|slc5)"
 ---
 #!/bin/bash -e
+
+case $ARCHITECTURE in 
+  osx*)
+  cat << \EOF
+MacOSX builds require system installation of OpenSSL.
+
+Please install it using homebrew:
+
+    brew install openssl
+
+or a similar system.
+EOF
+exit 1
+  ;;
+esac
 
 # OpenSSL FIPS
 FIPS_SHA1SUM='a79825c0c6743830ead3b6c3fd4c4e7fb09448a5'

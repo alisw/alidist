@@ -2,7 +2,9 @@ package: AliRoot
 version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - ROOT
-  - fastjet
+  - fastjet:(?!.*ppc64)
+  - GEANT3
+  - GEANT4_VMC
 build_requires:
   - CMake
 env:
@@ -10,7 +12,7 @@ env:
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
-incremental_recipe: make ${JOBS:+-j$JOBS} && make install && cp -r $SOURCEDIR/test $INSTALLROOT/test
+incremental_recipe: make ${JOBS:+-j$JOBS} && make install && rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR                                                  \
@@ -43,7 +45,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}
 # Our environment
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME

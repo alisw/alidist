@@ -1,9 +1,17 @@
 package: zlib
-version: v1.2.8
+version: "%(tag_basename)s"
 source: https://github.com/star-externals/zlib
-tag: master
+tag: v1.2.8
+build_requires:
+ - "GCC-Toolchain:(?!osx|slc5)"
+prefer_system: "(?!slc5)"
+prefer_system_check: |
+  printf "#include <zlib.h>\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
+
+echo "Building ALICE zlib. To avoid this install zlib development package."
+
 cd $SOURCEDIR
 case $ARCHITECTURE in
    *_amd64_gcc4[56789]*)
@@ -34,7 +42,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF

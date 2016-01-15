@@ -1,5 +1,6 @@
 package: GEANT4_VMC
-version: "v3-2"
+version: "%(tag_basename)s%(defaults_upper)s"
+tag: "v3-2"
 source: https://github.com/alisw/geant4_vmc
 requires:
   - ROOT
@@ -30,7 +31,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 GEANT4/$GEANT4_VERSION-$GEANT4_REVISION ROOT/$ROOT_VERSION-$ROOT_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0 GEANT4/$GEANT4_VERSION-$GEANT4_REVISION ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
 setenv GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv G4VMCINSTALL \$::env(GEANT4_VMC_ROOT)

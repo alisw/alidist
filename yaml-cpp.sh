@@ -6,16 +6,21 @@ requires:
   - boost
 build_requires:
   - CMake
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include \"yaml-cpp/yaml.h\"\n" | gcc -I`brew --prefix yaml-cpp`/include -I`brew --prefix boost`/include -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
-if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
-    sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt
-fi
+case $ARCHITECTURE in
+  slc5*) sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt ;;
+  osx*) [[ $BOOST_ROOT ]] || BOOST_ROOT=`brew --prefix boost` ;;
+  *) ;;
+esac
 
 cmake $SOURCEDIR \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DBUILD_SHARED_LIBS=YES \
-  -DBOOST_ROOT:PATH=${BOOST_ROOT} \
+  ${BOOST_ROOT:+-DBOOST_ROOT:PATH="$BOOST_ROOT"} \
   -DCMAKE_SKIP_RPATH=YES \
   -DSKIP_INSTALL_FILES=1
 
@@ -35,7 +40,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0 ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv YAMLCPP \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(YAMLCPP)/lib

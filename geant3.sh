@@ -1,5 +1,5 @@
 package: GEANT3
-version: v2-0
+version: "%(tag_basename)s%(defaults_upper)s"
 requires:
   - ROOT
 build_requires:
@@ -30,7 +30,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
 setenv GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT3DIR \$::env(GEANT3_ROOT)
