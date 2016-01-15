@@ -4,7 +4,7 @@ tag: alice/v2.7.13
 source: https://github.com/alisw/gsoap.git
 build_requires:
  - autotools
- - OpenSSL
+ - "OpenSSL:(?!osx)"
  - "GCC-Toolchain:(?!osx|slc5)"
 ---
 #!/bin/bash -e
