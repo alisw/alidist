@@ -10,7 +10,7 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 
-echo "Building ALICE boost. You can avoid that by installing at least boost 1.54."
+echo "Building ALICE boost. You can avoid that by installing at least boost 1.59."
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in 
