@@ -18,3 +18,23 @@ cmake "$SOURCEDIR"                         \
       -DGLOG_ROOT=${GLOG_ROOT}
 make ${JOBS:+-j $JOBS}
 make install
+
+#ModuleFile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+# Our environment
+setenv MESOS_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(MESOS_WORKQUEUE_ROOT)/lib
+prepend-path PATH \$::env(MESOS_WORKQUEUE_ROOT)/bin
+EoF
