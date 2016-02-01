@@ -10,11 +10,16 @@ requires:
 build_requires:
 - CMake
 --- 
-cmake "$SOURCEDIR"                         \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
-      -DPROTOBUF_ROOT=${PROTOBUF_ROOT}     \
-      -DMESOS_ROOT=${MESOS_ROOT}           \
-      -DBOOST_ROOT=${BOOST_ROOT}           \
+case $ARCHITECTURE in 
+  osx*)
+    [[ -z "$BOOST_ROOT" ]] && BOOST_ROOT=$(brew --prefix boost)
+  ;;
+esac
+cmake "$SOURCEDIR"                               \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
+      -DPROTOBUF_ROOT=${PROTOBUF_ROOT}           \
+      -DMESOS_ROOT=${MESOS_ROOT}                 \
+      ${BOOST_ROOT:+-DBOOST_ROOT=${BOOST_ROOT}}  \
       -DGLOG_ROOT=${GLOG_ROOT}
 make ${JOBS:+-j $JOBS}
 make install
