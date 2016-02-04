@@ -7,6 +7,7 @@ requires:
   - simulation
   - ROOT
   - ZeroMQ
+  - nanomsg
   - boost
   - "GCC-Toolchain:(?!osx|slc5)"
 ---
@@ -25,6 +26,7 @@ cmake $SOURCEDIR                                             \
       -DCMAKE_CXX_FLAGS="-std=c++11"                         \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                      \
       -DROOTSYS=$ROOTSYS                                     \
+      -DNANOMSG_INCLUDE_DIR=$NANOMSG_ROOT/include            \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                \
       -DGeant3_DIR=$GEANT3_ROOT                              \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}              \
