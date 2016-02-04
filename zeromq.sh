@@ -4,6 +4,9 @@ source: https://github.com/ktf/libzmq
 tag: master
 requires:
   - sodium
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include \"zmq.h\"\n" | gcc -I$(brew --prefix zeromq)/include -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
 cd $SOURCEDIR
