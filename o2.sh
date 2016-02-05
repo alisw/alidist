@@ -13,6 +13,7 @@ case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+    [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
   ;;
 esac
 
@@ -34,5 +35,4 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
 fi
-make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS}
-make ${CONTINUE_ON_ERROR+-k} install
+make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install

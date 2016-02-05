@@ -19,11 +19,13 @@ case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
-    [[ ! $ZMQ_ROOT ]] && ZMQ_ROOT=`brew --prefix zeromq`
+    [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
   ;;
 esac
+echo $ZEROMQ_ROOT
 
 cmake $SOURCEDIR                                             \
+      -DMACOSX_RPATH=OFF                                     \
       -DCMAKE_CXX_FLAGS="-std=c++11"                         \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                      \
       -DROOTSYS=$ROOTSYS                                     \
@@ -37,5 +39,4 @@ cmake $SOURCEDIR                                             \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}  \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
-make ${JOBS:+-j $JOBS}
-make install
+make ${JOBS:+-j $JOBS} install
