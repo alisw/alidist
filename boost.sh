@@ -6,7 +6,7 @@ requires:
  - "GCC-Toolchain:(?!osx|slc5)"
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost.\"\n#endif" | gcc -I$(brew --prefix boost)/include -xc++ - -c -o /dev/null
+  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost.\"\n#endif\nint main(){}" | gcc -lboost_thread -L$(brew --prefix boost)/lib -I$(brew --prefix boost)/include -xc++ - -o /dev/null
 ---
 #!/bin/bash -e
 
