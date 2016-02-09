@@ -13,8 +13,6 @@ requires:
 ---
 #!/bin/sh
 
-export ROOTSYS=$ROOT_ROOT
-
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
@@ -22,13 +20,13 @@ case $ARCHITECTURE in
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
   ;;
 esac
-echo $ZEROMQ_ROOT
 
 cmake $SOURCEDIR                                             \
       -DMACOSX_RPATH=OFF                                     \
       -DCMAKE_CXX_FLAGS="-std=c++11"                         \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                      \
       -DROOTSYS=$ROOTSYS                                     \
+      -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                \
       -DNANOMSG_INCLUDE_DIR=$NANOMSG_ROOT/include            \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                \
       -DGeant3_DIR=$GEANT3_ROOT                              \
