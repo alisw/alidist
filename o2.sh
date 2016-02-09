@@ -3,6 +3,7 @@ version: master
 requires:
   - FairRoot
   - AliRoot
+  - DDS
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
 ---
