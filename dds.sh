@@ -3,6 +3,7 @@ version: master
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
+  - CMake
 tag: master
 ---
 #!/bin/sh
