@@ -13,6 +13,12 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 
+# Avoid using any CXXFLAGS / CFLAGS other then the ones specified in 
+# this spec This is to avoid having defaults-* files that screw up gcc
+# compilation.
+unset CXXFLAGS
+unset CFLAGS
+
 echo "Building ALICE GCC. You can skip this step by installing at least GCC 4.8 on your system."
 
 USE_GOLD=
