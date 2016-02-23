@@ -1,9 +1,17 @@
 package: boost
-version: v1.57.0
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/boost.git
-tag: v1.57.0
+tag: v1.59.0
+requires:
+ - "GCC-Toolchain:(?!osx|slc5)"
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost.\"\n#endif" | gcc -I$(brew --prefix boost)/include -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
+
+echo "Building ALICE boost. You can avoid that by installing at least boost 1.54."
+
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in 
   osx*) TOOLSET=darwin ;;
@@ -31,7 +39,6 @@ b2 -q \
    --without-graph \
    --without-graph_parallel \
    --without-locale \
-   --without-log \
    --without-math \
    --without-mpi \
    --without-python \
@@ -56,7 +63,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(BOOST_ROOT)/lib

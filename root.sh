@@ -1,9 +1,9 @@
 package: ROOT
-version: "%(tag_basename)s-alice"
+version: "%(tag_basename)s-alice%(defaults_upper)s"
 tag: alice/v5-34-30
 source: https://github.com/alisw/root
 requires: 
-  - AliEn-Runtime
+  - AliEn-Runtime:(?!.*ppc64)
   - GSL
 env:
   ROOTSYS: "$ROOT_ROOT"
@@ -31,6 +31,11 @@ case $ARCHITECTURE in
 esac
 
 export ROOTSYS=$BUILDDIR
+case $ARCHITECTURE in
+  *ppc64)
+    cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+  ;;
+  *)
 "$SOURCEDIR/configure" \
   --with-pythia6-uscore=SINGLE \
   --with-alien-incdir=$GSHELL_ROOT/include \
@@ -52,19 +57,22 @@ export ROOTSYS=$BUILDDIR
   --with-cc=$COMPILER_CC \
   --with-cxx=$COMPILER_CXX \
   --with-ld=$COMPILER_LD \
+  ${CXXFLAGS:+--cxxflags="$CXXFLAGS"} \
   ${WITH_CLANG+--with-clang} \
   --disable-shadowpw \
   --disable-astiff \
-  --with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 \
-  --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib \
+  ${LIBXML2_ROOT:+--with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib} \
   --disable-globus \
   --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib \
   --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
   --with-ssl-shared=yes \
   --enable-mysql
+  ;;
+esac
 
-./bin/root-config --features | grep -q alien
-./bin/root-config --features | grep -q opengl
+[[ "$ALIEN_RUNTIME_ROOT" == '' ]] || ./bin/root-config --has-alien | grep -q yes
+./bin/root-config --has-opengl | grep -q yes
+./bin/root-config --has-xml | grep -q yes
 
 make ${JOBS+-j$JOBS}
 export ROOTSYS=$INSTALLROOT
