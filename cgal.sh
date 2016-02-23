@@ -1,20 +1,36 @@
 package: cgal
-version: "v4.4"
+version: "v4.6.3%(defaults_upper)s"
 requires:
   - boost
+build_requires:
+  - GMP
+  - MPFR
   - CMake
 ---
 #!/bin/bash -e
-PKGID=33524
-Url="https://gforge.inria.fr/frs/download.php/${PKGID}/Cgal-${PKGVERSION:1}.tar.bz2"
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+  ;;
+esac
+PKGID=35136
+URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/"
 
-curl -Lo cgal.tar.bz2 "$Url"
+curl -Lo cgal.tar.bz2 "$URL"
 tar xjf cgal.tar.bz2
-cd CGAL-${PKGVERSION:1}
+cd CGAL-*
 
-export LDFLAGS="-L$BOOST_ROOT/lib"
-export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
+if [[ "$BOOST_ROOT" != '' ]]; then
+  export LDFLAGS="-L$BOOST_ROOT/lib"
+  export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
+  export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
+fi
+
+export MPFR_LIB_DIR="${MPFR_ROOT}/lib"
+export MPFR_INC_DIR="${MPFR_ROOT}/include"
+export GMP_LIB_DIR="${GMP_ROOT}/lib"
+export GMP_INC_DIR="${GMP_ROOT}/include"
 
 cmake . \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
@@ -47,8 +63,7 @@ cmake . \
       -DCGAL_ENABLE_PRECONFIG:BOOL=NO \
       -DCGAL_IGNORE_PRECONFIGURED_GMP:BOOL=YES \
       -DCGAL_IGNORE_PRECONFIGURED_MPFR:BOOL=YES \
-      -DBoost_NO_SYSTEM_PATHS:BOOL=TRUE \
-      -DBOOST_ROOT:PATH="${BOOST_ROOT}"
+      ${BOOST_ROOT:+-DBoost_NO_SYSTEM_PATHS:BOOL=TRUE -DBOOST_ROOT:PATH="$BOOST_ROOT"}
 
 make VERBOSE=1 ${JOBS:+-j$JOBS}
 make install VERBOSE=1
@@ -66,7 +81,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0 ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CGAL_ROOT)/bin

@@ -1,7 +1,7 @@
 package: GEANT4
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/geant4
-tag: alice/v4.10.01.p02
+tag: v4.10.01.p03
 build_requires:
   - CMake
 env:
@@ -25,6 +25,7 @@ cmake $SOURCEDIR \
   -DGEANT4_ENABLE_TESTING=OFF \
   -DBUILD_SHARED_LIBS=ON \
   -DGEANT4_INSTALL_EXAMPLES=OFF \
+  -DCLHEP_ROOT_DIR:PATH="$CLHEP_ROOT" \
   -DGEANT4_BUILD_MULTITHREADED=OFF \
   -DCMAKE_STATIC_LIBRARY_CXX_FLAGS="-fPIC" \
   -DCMAKE_STATIC_LIBRARY_C_FLAGS="-fPIC" \
@@ -48,7 +49,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 CMake/$CMAKE_VERSION-$CMAKE_REVISION
+module load BASE/1.0
 # Our environment
 set osname [uname sysname]
 setenv GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
