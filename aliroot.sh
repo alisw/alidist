@@ -35,12 +35,52 @@ cmake $SOURCEDIR \
 
 if [[ $GIT_TAG == master ]]; then
   make -k ${JOBS+-j $JOBS} || true
-  make -k install || true
 else
   make ${JOBS+-j $JOBS}
-  make install
 fi
-cp -r $SOURCEDIR/test $INSTALLROOT/test
+
+# We cannot use make install on these old AliRoot releases, it is broken. Files
+# ought to be copied manually both from the source and the build directory.
+rsync -av \
+      --exclude '**/.git'               \
+      --exclude '**/data/maps'          \
+      --exclude '**/data/field*.dat'    \
+      --exclude '**/data/cp*.dat'       \
+      --exclude '**/EMCAL/ShuttleInput' \
+      --exclude '**/*/Ref'              \
+      --exclude '*.cxx'                 \
+      --exclude '*.F'                   \
+      --exclude '*.f'                   \
+      --exclude '**/TPC/Cov*.root'      \
+      --exclude '**/doc'                \
+      --exclude '**/picts'              \
+      --exclude '**/*.rpm'              \
+      --exclude '**/ITS/oldmacros'      \
+      --exclude '**/ITS/ITSlegov5.map'  \
+      --exclude '**/LHAPDF/PDFsets'     \
+      --exclude 'G__*'                  \
+      --exclude '*.o'                   \
+      --exclude 'CMakeFiles'            \
+      --exclude '**/OCDB'               \
+      $SOURCEDIR/ $INSTALLROOT/
+mkdir -p $INSTALLROOT/OCDB
+for SRCDIR in bin lib include; do
+  rsync -av $BUILDDIR/$SRCDIR $INSTALLROOT
+done
+for SRCFILE in data/maps/mfchebKGI_sym.root  \
+               LHAPDF/PDFsets/cteq4l.LHgrid  \
+               LHAPDF/PDFsets/cteq4m.LHgrid  \
+               LHAPDF/PDFsets/cteq5l.LHgrid  \
+               LHAPDF/PDFsets/cteq5m.LHgrid  \
+               LHAPDF/PDFsets/GRV98lo.LHgrid \
+               LHAPDF/PDFsets/cteq6.LHpdf    \
+               LHAPDF/PDFsets/cteq61.LHpdf   \
+               LHAPDF/PDFsets/cteq6m.LHpdf   \
+               LHAPDF/PDFsets/cteq6l.LHpdf   \
+               LHAPDF/PDFsets/cteq6ll.LHpdf  ; do
+  mkdir -p $INSTALLROOT/`dirname $SRCFILE`
+  cp -v $SOURCEDIR/$SRCFILE $INSTALLROOT/$SRCFILE
+done
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
