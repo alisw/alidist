@@ -15,6 +15,12 @@ env:
   ThePEG_INSTALL_PATH: "$THEPEG_ROOT/lib/ThePEG"
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
+  ;;
+esac
 
 export LDFLAGS="-Wl,--no-as-needed -L${BOOST_ROOT}/lib -lboost_thread -lboost_system -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
@@ -33,18 +39,18 @@ sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/sr
 
 autoreconf -ivf
 export LDFLAGS="-L$LHAPDF_ROOT/lib"
-./configure \
-  --disable-silent-rules \
-  --enable-shared \
-  --disable-static \
-  --without-javagui \
-  --prefix="$INSTALLROOT" \
-  --with-gsl="$GSL_ROOT" \
-  --with-pythia8="$PYTHIA_ROOT" \
-  --with-hepmc="$HEPMC_ROOT" \
-  --with-rivet="$RIVET_ROOT" \
-  --with-lhapdf="$LHAPDF_ROOT" \
-  --with-fastjet="$FASTJET_ROOT" \
+./configure                            \
+  --disable-silent-rules               \
+  --enable-shared                      \
+  --disable-static                     \
+  --without-javagui                    \
+  --prefix="$INSTALLROOT"              \
+  ${GSL_ROOT:+--with-gsl="$GSL_ROOT"}  \
+  --with-pythia8="$PYTHIA_ROOT"        \
+  --with-hepmc="$HEPMC_ROOT"           \
+  --with-rivet="$RIVET_ROOT"           \
+  --with-lhapdf="$LHAPDF_ROOT"         \
+  --with-fastjet="$FASTJET_ROOT"       \
   --enable-unitchecks 2>&1 | tee -a thepeg_configure.log
 grep -q 'Cannot build TheP8I without a working Pythia8 installation.' thepeg_configure.log && false
 make C_INCLUDE_PATH="${GSL_ROOT}/include" CPATH="${GSL_ROOT}/include"
@@ -63,7 +69,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION
+module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}
 # Our environment
 setenv THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
