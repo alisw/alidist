@@ -27,6 +27,7 @@ case $ARCHITECTURE in
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
+    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
   ;;
 esac
 
@@ -36,36 +37,36 @@ case $ARCHITECTURE in
     cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
   ;;
   *)
-"$SOURCEDIR/configure" \
-  --with-pythia6-uscore=SINGLE \
-  --with-alien-incdir=$GSHELL_ROOT/include \
-  --with-alien-libdir=$GSHELL_ROOT/lib \
-  --with-monalisa-incdir=$GSHELL_ROOT/include \
-  --with-monalisa-libdir=$GSHELL_ROOT/lib \
-  --with-xrootd=$GSHELL_ROOT \
-  --enable-http \
-  --enable-minuit2 \
-  --enable-roofit \
-  --enable-soversion \
-  --enable-builtin-freetype \
-  --enable-builtin-pcre \
-  --enable-mathmore \
-  ${ENABLE_COCOA+--enable-cocoa} \
-  --disable-bonjour \
-  ${DISABLE_FINK+--disable-fink} \
-  --with-f77=gfortran \
-  --with-cc=$COMPILER_CC \
-  --with-cxx=$COMPILER_CXX \
-  --with-ld=$COMPILER_LD \
-  ${CXXFLAGS:+--cxxflags="$CXXFLAGS"} \
-  ${WITH_CLANG+--with-clang} \
-  --disable-shadowpw \
-  --disable-astiff \
-  ${LIBXML2_ROOT:+--with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib} \
-  --disable-globus \
-  --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib \
-  --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include \
-  --with-ssl-shared=yes \
+"$SOURCEDIR/configure"                         \
+  --with-pythia6-uscore=SINGLE                 \
+  --with-alien-incdir=$GSHELL_ROOT/include     \
+  --with-alien-libdir=$GSHELL_ROOT/lib         \
+  --with-monalisa-incdir=$GSHELL_ROOT/include  \
+  --with-monalisa-libdir=$GSHELL_ROOT/lib      \
+  --with-xrootd=$GSHELL_ROOT                   \
+  --enable-http                                \
+  --enable-minuit2                             \
+  --enable-roofit                              \
+  --enable-soversion                           \
+  --enable-builtin-freetype                    \
+  --enable-builtin-pcre                        \
+  --enable-mathmore                            \
+  ${ENABLE_COCOA+--enable-cocoa}               \
+  --disable-bonjour                            \
+  ${DISABLE_FINK+--disable-fink}               \
+  --with-f77=gfortran                          \
+  --with-cc=$COMPILER_CC                       \
+  --with-cxx=$COMPILER_CXX                     \
+  --with-ld=$COMPILER_LD                       \
+  ${CXXFLAGS:+--cxxflags="$CXXFLAGS"}          \
+  ${WITH_CLANG+--with-clang}                   \
+  --disable-shadowpw                           \
+  --disable-astiff                             \
+  ${LIBXML2_ROOT:+--with-xml-incdir=$ALIEN_RUNTIME_ROOT/include/libxml2 --with-xml-libdir=$ALIEN_RUNTIME_ROOT/lib}  \
+  --disable-globus                               \
+  --with-ssl-libdir=$ALIEN_RUNTIME_ROOT/lib      \
+  --with-ssl-incdir=$ALIEN_RUNTIME_ROOT/include  \
+  --with-ssl-shared=yes                          \
   --enable-mysql
   ;;
 esac
@@ -91,7 +92,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION GSL/$GSL_VERSION-$GSL_REVISION
+module load BASE/1.0 AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
