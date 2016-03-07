@@ -9,7 +9,7 @@ requires:
   - ZeroMQ
   - nanomsg
   - boost
-  - "GCC-Toolchain:(?!osx|slc5)"
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 

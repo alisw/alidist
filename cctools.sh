@@ -3,7 +3,7 @@ version: v5.3.1
 source: https://github.com/cooperative-computing-lab/cctools
 tag: 18a15be6bbe1a60c9f89f8ff58530366c4bf6663
 requires:
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
 build_requires:
  - zlib
  - SWIG

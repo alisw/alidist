@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: v2.8.12.2
 source: https://github.com/Kitware/CMake
 build_requires:
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
 prefer_system: .*
 prefer_system_check: |
   which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-1]*|2.[0-7].*|2.8.[0-9]|2.8.1[0-1]) exit 1 ;; esac

@@ -12,7 +12,7 @@ build_requires:
  - xalienfs
  - UUID
 requires:
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:

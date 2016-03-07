@@ -4,7 +4,7 @@ tag: alice/v2.0.2
 source: https://github.com/alisw/jewel.git
 requires:
   - lhapdf5
-  - "GCC-Toolchain:(?!osx|slc5)"
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -ex
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./

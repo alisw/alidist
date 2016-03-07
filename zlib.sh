@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 source: https://github.com/star-externals/zlib
 tag: v1.2.8
 build_requires:
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <zlib.h>\n" | gcc -xc++ - -c -M 2>&1

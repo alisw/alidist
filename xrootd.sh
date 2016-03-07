@@ -8,7 +8,7 @@ build_requires:
  - ApMon-CPP
  - libxml2
  - MonALISA-gSOAP-client
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in 
