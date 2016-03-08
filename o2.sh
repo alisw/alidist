@@ -5,6 +5,7 @@ requires:
   - AliRoot
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
+incremental_recipe: make ${JOBS:+-j$JOBS} install
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
