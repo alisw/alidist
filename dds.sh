@@ -16,4 +16,4 @@ cmake $SOURCEDIR                               \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}
 
 make ${JOBS+-j $JOBS}
-make install
+make wn_bin; make install
