@@ -127,8 +127,21 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
+# Load Toolchain module for the current platform. Fallback on this one
+regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
+if { "\$mod_name" == "GCC-Toolchain" } {
+  module load Toolchain/GCC-$PKGVERSION
+  if { [is-loaded Toolchain] } { break }
+  set base_path \$::env(BASEDIR)
+} else {
+  # Loading Toolchain: autodetect prefix
+  set base_path [string map "/etc/toolchain/modulefiles/ /" \$ModulesCurrentModulefile]
+  set base_path [string map "/Modules/modulefiles/ /" \$base_path]
+  regexp -- "^(.*)/.*/.*\$" \$base_path dummy base_path
+  set base_path \$base_path/Packages
+}
 # Our environment
-setenv GCC_TOOLCHAIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64
 prepend-path PATH \$::env(GCC_TOOLCHAIN_ROOT)/bin
