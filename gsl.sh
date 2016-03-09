@@ -12,6 +12,9 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+# Do not build documentation
+perl -p -i -e "s/doc//" Makefile.am
+perl -p -i -e "s|doc/Makefile||" configure.ac
 autoreconf -f -v -i
 ./configure --prefix="$INSTALLROOT" \
             --enable-maintainer-mode
