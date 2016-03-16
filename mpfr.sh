@@ -8,6 +8,7 @@ build_requires:
 ---
 #!/bin/sh
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
+perl -p -i -e 's/ doc / /' Makefile.am
 autoreconf -ivf
 
 ./configure --prefix=$INSTALLROOT    \
