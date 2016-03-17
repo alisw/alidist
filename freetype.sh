@@ -10,7 +10,8 @@ tar xzf freetype.tgz
 rm -f freetype.tgz
 cd freetype-${PKGVERSION:1}
 ./configure --prefix=$INSTALLROOT \
-            --with-zlib=$ZLIB_ROOT
+            ${ZLIB_ROOT:+--with-zlib=$ZLIB_ROOT}
+
 make ${JOBS:+-j$JOBS}
 make install
 

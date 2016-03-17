@@ -8,11 +8,11 @@ source: git://git.code.sf.net/p/libpng/code
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ .
-cmake . \
-    -DCMAKE_INSTALL_PREFIX:PATH=$INSTALLROOT \
-    -DBUILD_SHARED_LIBS=YES \
-    -DZLIB_ROOT:PATH=$ZLIB_ROOT \
-    -DCMAKE_SKIP_RPATH=YES \
+cmake .                                        \
+    -DCMAKE_INSTALL_PREFIX:PATH=$INSTALLROOT   \
+    -DBUILD_SHARED_LIBS=YES                    \
+    ${ZLIB_ROOT:+-DZLIB_ROOT:PATH=$ZLIB_ROOT}  \
+    -DCMAKE_SKIP_RPATH=YES                     \
     -DSKIP_INSTALL_FILES=1
 make ${JOBS:+-j $JOBS}
 make install
