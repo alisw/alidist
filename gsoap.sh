@@ -17,12 +17,12 @@ case $ARCHITECTURE in
     [ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
   ;;
 esac
-export CFLAGS="-fPIC -I$OPENSSL_ROOT/include -I$ZLIB_ROOT/include -L$OPENSSL_ROOT/lib -L$ZLIB_ROOT/lib"
+export CFLAGS="-fPIC ${OPENSSL_ROOT:+-I$OPENSSL_ROOT/include -L$OPENSSL_ROOT/lib} ${ZLIB_ROOT:+-I$ZLIB_ROOT/include -L$ZLIB_ROOT/lib}"
 export CXXFLAGS="$CFLAGS"
 export CPPFLAGS="$CFLAGS"
 autoreconf -ivf
-./configure --prefix=$INSTALLROOT \
-            --enable-ssl \
+./configure --prefix=$INSTALLROOT                          \
+            --enable-ssl                                   \
             ${OPENSSL_ROOT:+--with-openssl=$OPENSSL_ROOT}
 # Does not build in multicore!
 make
