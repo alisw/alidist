@@ -3,12 +3,19 @@ version: master
 requires:
   - FairRoot
   - AliRoot
+  - DDS
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
 incremental_recipe: make ${JOBS:+-j$JOBS} install
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
+
+# Making sure people do not have SIMPATH set when they build fairroot.
+# Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
+# fairroot, so this really should be cleaned up in FairRoot itself for
+# maximum safety.
+unset SIMPATH
 
 case $ARCHITECTURE in
   osx*)

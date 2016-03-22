@@ -1,7 +1,7 @@
 package: nanomsg
-version: master
+version: v0.8
 source: https://github.com/nanomsg/nanomsg
-tag: master
+tag: 0.8-beta
 build_requires:
   - autotools
 ---

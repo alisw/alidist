@@ -13,7 +13,11 @@ requires:
 ---
 #!/bin/sh
 
-export ROOTSYS=$ROOT_ROOT
+# Making sure people do not have SIMPATH set when they build fairroot.
+# Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
+# fairroot, so this really should be cleaned up in FairRoot itself for
+# maximum safety.
+unset SIMPATH
 
 case $ARCHITECTURE in
   osx*)
@@ -22,13 +26,13 @@ case $ARCHITECTURE in
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
   ;;
 esac
-echo $ZEROMQ_ROOT
 
 cmake $SOURCEDIR                                             \
       -DMACOSX_RPATH=OFF                                     \
       -DCMAKE_CXX_FLAGS="-std=c++11"                         \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                      \
       -DROOTSYS=$ROOTSYS                                     \
+      -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                \
       -DNANOMSG_INCLUDE_DIR=$NANOMSG_ROOT/include            \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                \
       -DGeant3_DIR=$GEANT3_ROOT                              \
