@@ -5,6 +5,9 @@ requires:
 build_requires:
  - CMake
 source: git://git.code.sf.net/p/libpng/code
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include <png.h>\n" | gcc -xc++ - `libpng-config --cflags` -c -M 2>&1
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ .
@@ -30,7 +33,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION
+module load BASE/1.0 ${ZLIB_ROOT:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 setenv LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(LIBPNG_ROOT)/bin
