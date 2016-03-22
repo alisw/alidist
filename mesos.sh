@@ -6,6 +6,8 @@ build_requires:
 - autotools
 - protobuf
 - glog
+prepend_path:
+  PATH: "$MESOS_ROOT/sbin"
 --- 
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
