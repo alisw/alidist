@@ -17,7 +17,6 @@ incremental_recipe: make ${JOBS:+-j$JOBS} && make install && rsync -a $SOURCEDIR
 #!/bin/bash -e
 cmake $SOURCEDIR                                                  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                               \
       -DROOTSYS=$ROOT_ROOT                                        \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN=$ALIEN_RUNTIME_ROOT}          \
