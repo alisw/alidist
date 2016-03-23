@@ -2,6 +2,11 @@ package: FreeType
 version: v2.6
 requires:
  - AliEn-Runtime:(?!.*ppc64)
+build_requires:
+  - autotools
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include <ft2build.h>\n" | gcc -xc++ - `freetype-config --cflags` -c -M 2>&1
 ---
 #!/bin/bash -ex
 URL="http://download.savannah.gnu.org/releases/freetype/freetype-${PKGVERSION:1}.tar.gz"
@@ -28,7 +33,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 zlib/$ZLIB_VERSION-$ZLIB_REVISION
+module load BASE/1.0 ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 setenv FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(FREETYPE_ROOT)/bin

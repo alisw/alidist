@@ -9,7 +9,7 @@ build_requires:
  - autotools
 prefer_system: .*
 prefer_system_check: |
-  printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800))\n#error \"Cannot use system's GCC.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
+  printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800)) || ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) >= (0x050000))\n#error \"Cannot use system's, GCC building our own.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
 

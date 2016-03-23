@@ -6,7 +6,7 @@ build_requires:
  - "GCC-Toolchain:(?!osx|slc5)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include <zlib.h>\n" | gcc -xc++ - -c -o /dev/null
+  printf "#include <zlib.h>\n" | gcc -xc++ - -c -M 2>&1
 ---
 #!/bin/sh
 
