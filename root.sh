@@ -7,19 +7,20 @@ requires:
   - GSL
 env:
   ROOTSYS: "$ROOT_ROOT"
-incremental_recipe: make ${JOBS:+-j$JOBS} install
+incremental_recipe: |
+  make ${JOBS:+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
 
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
-echo $CXXFLAGS | grep -q -- '-std=c++11' && CXX11=ON || true
+[[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
 
 case $ARCHITECTURE in 
   osx*)
     ENABLE_COCOA=1
-    WITH_CLANG=1
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
@@ -61,10 +62,8 @@ done
 make ${JOBS+-j$JOBS} install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+mkdir -p etc/modulefiles
+cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -81,3 +80,4 @@ setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
 prepend-path PATH \$::env(ROOTSYS)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
