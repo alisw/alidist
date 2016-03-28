@@ -1,5 +1,5 @@
 package: GCC-Toolchain
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 source: https://github.com/alisw/gcc-toolchain
 tag: alice/v4.9.3
 prepend_path:
@@ -12,6 +12,9 @@ prefer_system_check: |
   printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800)) || ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) >= (0x050000))\n#error \"Cannot use system's, GCC building our own.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
+
+unset CXXFLAGS
+unset CFLAGS
 
 echo "Building ALICE GCC. You can skip this step by installing at least GCC 4.8 on your system."
 
