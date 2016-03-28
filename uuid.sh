@@ -3,7 +3,7 @@ version: v2.27.1
 source: https://github.com/alisw/uuid
 tag: alice/v2.27.1
 build_requires:
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
  - autotools
 ---
 #!/bin/sh

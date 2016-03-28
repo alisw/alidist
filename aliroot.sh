@@ -12,7 +12,10 @@ env:
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot 
 tag: master
-incremental_recipe: make ${JOBS:+-j$JOBS} && make install && rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
+incremental_recipe: |
+  make ${JOBS:+-j$JOBS} install
+  rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR                                                  \
@@ -32,10 +35,8 @@ fi
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+mkdir -p etc/modulefiles
+cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -53,3 +54,4 @@ setenv ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
 prepend-path PATH \$::env(ALICE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -10,6 +10,9 @@ prepend_path:
 ---
 #!/bin/bash -e
 
+unset CXXFLAGS
+unset CFLAGS
+
 echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
 # Restore original timestamps to avoid reconf (Git does not preserve them)

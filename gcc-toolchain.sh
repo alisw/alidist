@@ -1,5 +1,5 @@
 package: GCC-Toolchain
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 source: https://github.com/alisw/gcc-toolchain
 tag: alice/v4.9.3
 prepend_path:
@@ -12,6 +12,9 @@ prefer_system_check: |
   printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800)) || ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) >= (0x050000))\n#error \"Cannot use system's, GCC building our own.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
+
+unset CXXFLAGS
+unset CFLAGS
 
 echo "Building ALICE GCC. You can skip this step by installing at least GCC 4.8 on your system."
 
@@ -124,8 +127,21 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
+# Load Toolchain module for the current platform. Fallback on this one
+regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
+if { "\$mod_name" == "GCC-Toolchain" } {
+  module load Toolchain/GCC-$PKGVERSION
+  if { [is-loaded Toolchain] } { break }
+  set base_path \$::env(BASEDIR)
+} else {
+  # Loading Toolchain: autodetect prefix
+  set base_path [string map "/etc/toolchain/modulefiles/ /" \$ModulesCurrentModulefile]
+  set base_path [string map "/Modules/modulefiles/ /" \$base_path]
+  regexp -- "^(.*)/.*/.*\$" \$base_path dummy base_path
+  set base_path \$base_path/Packages
+}
 # Our environment
-setenv GCC_TOOLCHAIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64
 prepend-path PATH \$::env(GCC_TOOLCHAIN_ROOT)/bin
