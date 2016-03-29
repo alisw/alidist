@@ -27,15 +27,16 @@ rsync -a --delete --cvs-exclude $SOURCEDIR/ ./
 # FastJet
 pushd fastjet
   autoreconf -i -v -f
-  [[ "${ARCHITECTURE:0:3}" != osx ]] && EXTRA_CXXFLAGS='-Wl,--no-as-needed'
-  export CXXFLAGS="$CXXFLAGS $EXTRA_CXXFLAGS -L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
-  export CFLAGS="$CFLAGS $CXXFLAGS"
+  [[ "${ARCHITECTURE:0:3}" != osx ]] && ARCH_FLAGS='-Wl,--no-as-needed'
+  ADDITIONAL_FLAGS="-L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+  export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
+  export CFLAGS="$CFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
   export CPATH="${BOOST_INC}$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
   export C_INCLUDE_PATH="${BOOST_INC}$GMP_ROOT/include:$MPFR_ROOT/include"
-  ./configure --enable-shared \
-              --enable-cgal \
-              --with-cgal=$CGAL_ROOT \
-              --prefix=$INSTALLROOT \
+  ./configure --enable-shared         \
+              --enable-cgal           \
+              --with-cgal=$CGAL_ROOT  \
+              --prefix=$INSTALLROOT   \
               --enable-allcxxplugins
   make ${JOBS:+-j$JOBS}
   make install
