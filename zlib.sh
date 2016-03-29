@@ -11,8 +11,8 @@ prefer_system_check: |
 #!/bin/sh
 
 echo "Building ALICE zlib. To avoid this install zlib development package."
+rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
-cd $SOURCEDIR
 case $ARCHITECTURE in
    *_amd64_gcc4[56789]*)
      CFLAGS="-fPIC -O3 -DUSE_MMAP -DUNALIGNED_OK -D_LARGEFILE64_SOURCE=1 -msse3" \
