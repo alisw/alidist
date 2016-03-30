@@ -24,8 +24,9 @@ case $ARCHITECTURE in
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
-    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
-    [[ ! $SYSTEM_OPENSSL_ROOT ]] && OPENSSL_ROOT=`brew --prefix openssl`
+    [[ -z "$GSL_ROOT" ]] && GSL_ROOT=`brew --prefix gsl`
+    [[ -z "$OPENSSL_ROOT" ]] && OPENSSL_ROOT=`brew --prefix openssl` \
+                             || OPENSSL_ROOT=$ALIEN_RUNTIME_ROOT
   ;;
 esac
 
@@ -44,7 +45,7 @@ cmake $SOURCEDIR                                          \
       -DCMAKE_C_COMPILER=$COMPILER_CC                     \
       -DCMAKE_LINKER=$COMPILER_LD                         \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT} \
-      ${SYSTEM_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYSTEM_OPENSSL_ROOT} \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}       \
       ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT} \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                    \
       -Dminuit2=ON                                        \
