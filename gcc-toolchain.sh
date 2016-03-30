@@ -16,12 +16,19 @@ prefer_system_check: |
 unset CXXFLAGS
 unset CFLAGS
 
-echo "Building ALICE GCC. You can skip this step by installing at least GCC 4.8 on your system."
+echo "Building ALICE GCC. You can skip this step by installing GCC 4.8 or 4.9 on your system. GCC 5 is currently not supported."
 
 USE_GOLD=
 case $ARCHITECTURE in
   osx*)
     EXTRA_LANGS=',objc,obj-c++'
+    MARCH=
+  ;;
+  *x86-64)
+    MARCH='x86_64-unknown-linux-gnu'
+  ;;
+  *)
+    MARCH=
   ;;
 esac
 
@@ -30,12 +37,13 @@ rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 # Binutils
 mkdir build-binutils
 pushd build-binutils
-  ../binutils/configure --prefix="$INSTALLROOT" \
-                        ${USE_GOLD:+--enable-gold=yes} \
-                        --enable-ld=default \
-                        --enable-lto \
-                        --enable-plugins \
-                        --enable-threads \
+  ../binutils/configure --prefix="$INSTALLROOT"                \
+                        ${MARCH:+--build=$MARCH --host=$MARCH} \
+                        ${USE_GOLD:+--enable-gold=yes}         \
+                        --enable-ld=default                    \
+                        --enable-lto                           \
+                        --enable-plugins                       \
+                        --enable-threads                       \
                         --disable-nls
   make ${JOBS:+-j$JOBS}
   make install
@@ -60,13 +68,14 @@ popd
 
 mkdir build-gcc
 pushd build-gcc
-  ../gcc/configure --prefix="$INSTALLROOT" \
-               --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
-               --disable-multilib \
-               ${USE_GOLD:+--enable-gold=yes} \
-               --enable-ld=default \
-               --enable-lto \
-               --disable-nls
+  ../gcc/configure --prefix="$INSTALLROOT"                          \
+                   ${MARCH:+--build=$MARCH --host=$MARCH}           \
+                   --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
+                   --disable-multilib                               \
+                   ${USE_GOLD:+--enable-gold=yes}                   \
+                   --enable-ld=default                              \
+                   --enable-lto                                     \
+                   --disable-nls
   make ${JOBS+-j $JOBS} bootstrap-lean
   make install
   hash -r
@@ -101,7 +110,8 @@ rm -f a.out
 # GDB
 mkdir build-gdb
 pushd build-gdb
-  ../gdb/configure --prefix="$INSTALLROOT" \
+  ../gdb/configure --prefix="$INSTALLROOT"                \
+                   ${MARCH:+--build=$MARCH --host=$MARCH} \
                    --disable-multilib
   make ${JOBS:+-j$JOBS}
   make install
