@@ -27,32 +27,32 @@ case $ARCHITECTURE in
     COMPILER_CXX=clang++
     COMPILER_LD=clang
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
-    [[ ! $SYSTEM_OPENSSL_ROOT ]] && OPENSSL_ROOT=`brew --prefix openssl`
+    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=`brew --prefix openssl`
   ;;
 esac
 
-cmake $SOURCEDIR                                          \
-      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                 \
-      -DALIEN_DIR=$ALIEN_RUNTIME_ROOT                     \
-      -DMONALISA_DIR=$ALIEN_RUNTIME_ROOT                  \
-      -DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT               \
-      -Dhttp=ON                                           \
-      ${CXX11:+-Dcxx11=ON}                                \
-      -Dbuiltin_freetype=ON                               \
-      -Dbuiltin_pcre=ON                                   \
-      ${ENABLE_COCOA:+-Dcocoa=ON}                         \
-      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                  \
-      -DCMAKE_C_COMPILER=$COMPILER_CC                     \
-      -DCMAKE_LINKER=$COMPILER_LD                         \
-      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT} \
-      ${SYSTEM_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYSTEM_OPENSSL_ROOT} \
-      ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT} \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                    \
-      -Dminuit2=ON                                        \
-      -Dpythia6_nolink=ON                                 \
-      -Droofit=ON                                         \
-      -Dsoversion=ON                                      \
+cmake $SOURCEDIR                                             \
+      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                   \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                    \
+      -DALIEN_DIR=$ALIEN_RUNTIME_ROOT                        \
+      -DMONALISA_DIR=$ALIEN_RUNTIME_ROOT                     \
+      -DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT                  \
+      -Dhttp=ON                                              \
+      ${CXX11:+-Dcxx11=ON}                                   \
+      -Dbuiltin_freetype=ON                                  \
+      -Dbuiltin_pcre=ON                                      \
+      ${ENABLE_COCOA:+-Dcocoa=ON}                            \
+      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                     \
+      -DCMAKE_C_COMPILER=$COMPILER_CC                        \
+      -DCMAKE_LINKER=$COMPILER_LD                            \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}    \
+      ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}  \
+      ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}    \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                       \
+      -Dminuit2=ON                                           \
+      -Dpythia6_nolink=ON                                    \
+      -Droofit=ON                                            \
+      -Dsoversion=ON                                         \
       -Dvdt=ON
 
 # Check if essential features are enabled
