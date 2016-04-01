@@ -5,7 +5,7 @@ tag: v2.9.2
 build_requires:
   - autotools
   - zlib
-  - "GCC-Toolchain:(?!osx|slc5)"
+  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: which xml2-config
 ---

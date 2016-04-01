@@ -6,7 +6,9 @@ source: http://git.cern.ch/pub/AliPhysics
 tag: master
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
-incremental_recipe: make ${JOBS:+-j$JOBS} install
+incremental_recipe: |
+  make ${JOBS:+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
@@ -32,10 +34,8 @@ else
 fi
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+mkdir -p etc/modulefiles
+cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -52,3 +52,4 @@ setenv ALICE_PHYSICS \$::env(BASEDIR)/$PKGNAME/\$::env(ALIPHYSICS_RELEASE)
 prepend-path PATH \$::env(ALICE_PHYSICS)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALICE_PHYSICS)/lib
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

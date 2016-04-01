@@ -5,7 +5,7 @@ tag: "release-1-16"
 build_requires:
   - autotools
 requires:
-  - "GCC-Toolchain:(?!osx|slc5)"
+  - "GCC-Toolchain:(?!osx)"
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include \"gsl/gsl_version.h\"\n# if (GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION < 116)\n#error \"Cannot use system's gsl.\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null

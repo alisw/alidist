@@ -3,16 +3,16 @@ version: "%(tag_basename)s"
 source: https://github.com/star-externals/zlib
 tag: v1.2.8
 build_requires:
- - "GCC-Toolchain:(?!osx|slc5)"
+ - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include <zlib.h>\n" | gcc -xc++ - -c -o /dev/null
+  printf "#include <zlib.h>\n" | gcc -xc++ - -c -M 2>&1
 ---
 #!/bin/sh
 
 echo "Building ALICE zlib. To avoid this install zlib development package."
+rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
-cd $SOURCEDIR
 case $ARCHITECTURE in
    *_amd64_gcc4[56789]*)
      CFLAGS="-fPIC -O3 -DUSE_MMAP -DUNALIGNED_OK -D_LARGEFILE64_SOURCE=1 -msse3" \
