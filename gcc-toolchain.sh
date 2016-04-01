@@ -1,5 +1,5 @@
 package: GCC-Toolchain
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 source: https://github.com/alisw/gcc-toolchain
 tag: alice/v4.9.3
 prepend_path:
@@ -9,7 +9,7 @@ build_requires:
  - autotools
 prefer_system: .*
 prefer_system_check: |
-  printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800))\n#error \"Cannot use system's GCC.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
+  printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800)) || ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) >= (0x050000))\n#error \"Cannot use system's, GCC building our own.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
 
@@ -25,6 +25,13 @@ USE_GOLD=
 case $ARCHITECTURE in
   osx*)
     EXTRA_LANGS=',objc,obj-c++'
+    MARCH=
+  ;;
+  *x86-64)
+    MARCH='x86_64-unknown-linux-gnu'
+  ;;
+  *)
+    MARCH=
   ;;
 esac
 
@@ -33,12 +40,13 @@ rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 # Binutils
 mkdir build-binutils
 pushd build-binutils
-  ../binutils/configure --prefix="$INSTALLROOT" \
-                        ${USE_GOLD:+--enable-gold=yes} \
-                        --enable-ld=default \
-                        --enable-lto \
-                        --enable-plugins \
-                        --enable-threads \
+  ../binutils/configure --prefix="$INSTALLROOT"                \
+                        ${MARCH:+--build=$MARCH --host=$MARCH} \
+                        ${USE_GOLD:+--enable-gold=yes}         \
+                        --enable-ld=default                    \
+                        --enable-lto                           \
+                        --enable-plugins                       \
+                        --enable-threads                       \
                         --disable-nls
   make ${JOBS:+-j$JOBS}
   make install
@@ -63,13 +71,14 @@ popd
 
 mkdir build-gcc
 pushd build-gcc
-  ../gcc/configure --prefix="$INSTALLROOT" \
-               --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
-               --disable-multilib \
-               ${USE_GOLD:+--enable-gold=yes} \
-               --enable-ld=default \
-               --enable-lto \
-               --disable-nls
+  ../gcc/configure --prefix="$INSTALLROOT"                          \
+                   ${MARCH:+--build=$MARCH --host=$MARCH}           \
+                   --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
+                   --disable-multilib                               \
+                   ${USE_GOLD:+--enable-gold=yes}                   \
+                   --enable-ld=default                              \
+                   --enable-lto                                     \
+                   --disable-nls
   make ${JOBS+-j $JOBS} bootstrap-lean
   make install
   hash -r
@@ -104,7 +113,8 @@ rm -f a.out
 # GDB
 mkdir build-gdb
 pushd build-gdb
-  ../gdb/configure --prefix="$INSTALLROOT" \
+  ../gdb/configure --prefix="$INSTALLROOT"                \
+                   ${MARCH:+--build=$MARCH --host=$MARCH} \
                    --disable-multilib
   make ${JOBS:+-j$JOBS}
   make install
@@ -130,8 +140,21 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
+# Load Toolchain module for the current platform. Fallback on this one
+regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
+if { "\$mod_name" == "GCC-Toolchain" } {
+  module load Toolchain/GCC-$PKGVERSION
+  if { [is-loaded Toolchain] } { break }
+  set base_path \$::env(BASEDIR)
+} else {
+  # Loading Toolchain: autodetect prefix
+  set base_path [string map "/etc/toolchain/modulefiles/ /" \$ModulesCurrentModulefile]
+  set base_path [string map "/Modules/modulefiles/ /" \$base_path]
+  regexp -- "^(.*)/.*/.*\$" \$base_path dummy base_path
+  set base_path \$base_path/Packages
+}
 # Our environment
-setenv GCC_TOOLCHAIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64
 prepend-path PATH \$::env(GCC_TOOLCHAIN_ROOT)/bin

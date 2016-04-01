@@ -1,17 +1,20 @@
-package: glog
-version: v0.3.4
-source: https://github.com/google/glog
-build_requires:
- - autotools
+package: MyGenerator
+version: "v1.0.0"
+source: https://github.com/alisw/MyGenerator
+requires:
  - "GCC-Toolchain:(?!osx)"
---- 
-rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
-autoreconf -ivf
-./configure --prefix="$INSTALLROOT"
-make ${JOBS:+-j $JOBS}
+build_requires:
+  - CMake
+---
+#!/bin/bash -e
+
+cmake  $SOURCEDIR                           \
+       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+
+make ${JOBS+-j $JOBS}
 make install
 
-#ModuleFile
+# Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
@@ -26,7 +29,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv PROTOBUF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(PROTOBUF_ROOT)/lib
-prepend-path PATH \$::env(PROTOBUF_ROOT)/bin
+setenv MYGENERATOR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(MYGENERATOR_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(MYGENERATOR_ROOT)/lib
 EoF

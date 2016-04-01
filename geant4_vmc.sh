@@ -15,8 +15,9 @@ prepend_path:
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
-make ${JOBS+-j $JOBS}
-make install
+make ${JOBS+-j $JOBS} install
+G4VMC_SHARE=$(cd "$INSTALLROOT/share"; echo Geant4VMC-* | cut -d' ' -f1)
+ln -nfs "$G4VMC_SHARE/examples" "$INSTALLROOT/share/examples"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

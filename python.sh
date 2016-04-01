@@ -62,7 +62,7 @@ tar xzf matplotlib.tgz
 cd matplotlib-$MATPLOTLIB_VER
 cat > setup.cfg <<EOF
 [directories]
-basedirlist  = $PWD/fake_freetype_root,$FREETYPE_ROOT,$LIBPNG_ROOT,$ZLIB_ROOT,/usr/X11R6
+basedirlist  = ${FREETYPE_ROOT:+$PWD/fake_freetype_root,$FREETYPE_ROOT,}${LIBPNG_ROOT:+$LIBPNG_ROOT,}${ZLIB_ROOT:+$ZLIB_ROOT,}/usr/X11R6${FREETYPE_ROOT:,$(freetype-config --prefix)},${LIBPNG_ROOT:,$(libpng-config --prefix)}
 
 [gui_support]
 gtk = False
@@ -72,18 +72,12 @@ wxagg = False
 macosx = False
 EOF
 
-# Disable pkg-config: it messes with FreeType detection
-cat > pkg-config <<EOF
-#!/bin/bash
-exit 1
-EOF
-chmod +x pkg-config
-export PATH=$PWD:$PATH
-
 # matplotlib wants include files in <PackageRoot>/include, but this is not the
 # case for FreeType: let's fix it
-mkdir fake_freetype_root
-ln -nfs $FREETYPE_ROOT/include/freetype2 fake_freetype_root/include
+if [[ $FREETYPE_ROOT ]]; then
+  mkdir fake_freetype_root
+  ln -nfs $FREETYPE_ROOT/include/freetype2 fake_freetype_root/include
+fi
 
 python setup.py build
 python setup.py install
@@ -108,7 +102,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} zlib/$ZLIB_VERSION-$ZLIB_REVISION
+module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_ROOT)/bin
