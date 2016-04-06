@@ -31,35 +31,37 @@ case $ARCHITECTURE in
   ;;
 esac
 
-cmake $SOURCEDIR                                             \
-      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                   \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                    \
-      -DALIEN_DIR=$ALIEN_RUNTIME_ROOT                        \
-      -DMONALISA_DIR=$ALIEN_RUNTIME_ROOT                     \
-      -DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT                  \
-      -Dhttp=ON                                              \
-      ${CXX11:+-Dcxx11=ON}                                   \
-      -Dbuiltin_freetype=ON                                  \
-      -Dbuiltin_pcre=ON                                      \
-      ${ENABLE_COCOA:+-Dcocoa=ON}                            \
-      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                     \
-      -DCMAKE_C_COMPILER=$COMPILER_CC                        \
-      -DCMAKE_LINKER=$COMPILER_LD                            \
-      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}    \
-      ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}  \
-      ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}    \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                       \
-      -Dminuit2=ON                                           \
-      -Dpythia6_nolink=ON                                    \
-      -Droofit=ON                                            \
-      -Dsoversion=ON                                         \
+cmake $SOURCEDIR                                                \
+      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}    \
+      ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
+      ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
+      -Dhttp=ON                                                 \
+      ${CXX11:+-Dcxx11=ON}                                      \
+      -Dbuiltin_freetype=ON                                     \
+      -Dbuiltin_pcre=ON                                         \
+      ${ENABLE_COCOA:+-Dcocoa=ON}                               \
+      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
+      -DCMAKE_C_COMPILER=$COMPILER_CC                           \
+      -DCMAKE_LINKER=$COMPILER_LD                               \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
+      ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
+      ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
+      -Dminuit2=ON                                              \
+      -Dpythia6_nolink=ON                                       \
+      -Droofit=ON                                               \
+      -Dsoversion=ON                                            \
       -Dvdt=ON
 
 # Check if essential features are enabled
 bin/root-config --features
-for FEATURE in alien monalisa xrootd http builtin_freetype          \
-               builtin_pcre mathmore xml ssl opengl ${CXX11:+cxx11} \
-               minuit2 pythia6 roofit soversion vdt; do
+for FEATURE in http builtin_freetype builtin_pcre mathmore xml \
+               ssl opengl minuit2 pythia6 roofit soversion vdt \
+               ${CXX11:+cxx11} ${XROOTD_ROOT:+xrootd}          \
+               ${ALIEN_RUNTIME_ROOT:+alien monalisa}
+do
   bin/root-config --has-$FEATURE | grep -q yes
 done
 
@@ -80,7 +82,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}
+module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
