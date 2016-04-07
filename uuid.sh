@@ -6,21 +6,22 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
  - autotools
 ---
-#!/bin/sh
 rsync -av --delete --exclude "**/.git" $SOURCEDIR/ .
 if [[ $AUTOTOOLS_ROOT == "" ]]  && which brew >/dev/null; then
   PATH=$PATH:`brew --prefix gettext`/bin
 fi
 
+perl -p -i -e 's/AM_GNU_GETTEXT_VERSION\(\[0\.18\.3\]\)/AM_GNU_GETTEXT_VERSION([0.18.2])/' configure.ac
+
 autoreconf -ivf
-./configure $([[ ${ARCHITECTURE:0:3} == osx ]] && echo --disable-shared) \
-            --libdir=$INSTALLROOT/lib \
-            --prefix=$INSTALLROOT \
-            --disable-all-programs \
-            --disable-silent-rules \
-            --disable-tls \
-            --disable-rpath \
-            --without-ncurses \
+./configure $([[ ${ARCHITECTURE:0:3} == osx ]] && echo --disable-shared)  \
+            --libdir=$INSTALLROOT/lib                                     \
+            --prefix=$INSTALLROOT                                         \
+            --disable-all-programs                                        \
+            --disable-silent-rules                                        \
+            --disable-tls                                                 \
+            --disable-rpath                                               \
+            --without-ncurses                                             \
             --enable-libuuid
 make ${JOBS:+-j$JOBS} libuuid.la
 mkdir -p $INSTALLROOT/lib
