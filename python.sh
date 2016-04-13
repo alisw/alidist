@@ -62,7 +62,7 @@ tar xzf matplotlib.tgz
 cd matplotlib-$MATPLOTLIB_VER
 cat > setup.cfg <<EOF
 [directories]
-basedirlist  = ${FREETYPE_ROOT:+$PWD/fake_freetype_root,$FREETYPE_ROOT,}${LIBPNG_ROOT:+$LIBPNG_ROOT,}${ZLIB_ROOT:+$ZLIB_ROOT,}/usr/X11R6${FREETYPE_ROOT:,$(freetype-config --prefix)},${LIBPNG_ROOT:,$(libpng-config --prefix)}
+basedirlist  = ${FREETYPE_ROOT:+$PWD/fake_freetype_root,$FREETYPE_ROOT,}${LIBPNG_ROOT:+$LIBPNG_ROOT,}${ZLIB_ROOT:+$ZLIB_ROOT,}/usr/X11R6${FREETYPE_ROOT:+,$(freetype-config --prefix)},${LIBPNG_ROOT:+,$(libpng-config --prefix)}
 
 [gui_support]
 gtk = False
