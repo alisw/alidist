@@ -6,7 +6,7 @@ build_requires:
   - CMake
 env:
   G4INSTALL: "$GEANT4_ROOT"
-  G4INSTALL_DATA: "$GEANT4_ROOT/share/Geant4-10.1.2"
+  G4INSTALL_DATA: "$GEANT4_ROOT/share/Geant4-10.1.3"
   G4SYSTEM: "$(uname)-g++"
   G4LEVELGAMMADATA: "$G4INSTALL_DATA/data/PhotonEvaporation3.1"
   G4RADIOACTIVEDATA: "$G4INSTALL_DATA/data/RadioactiveDecay4.2"
@@ -55,7 +55,7 @@ module load BASE/1.0
 set osname [uname sysname]
 setenv GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv G4INSTALL \$::env(GEANT4_ROOT)
-setenv G4INSTALL_DATA \$::env(GEANT4_ROOT)/share/Geant4-10.1.2
+setenv G4INSTALL_DATA \$::env(GEANT4_ROOT)/share/Geant4-10.1.3
 setenv G4SYSTEM \$osname-g++
 setenv G4LEVELGAMMADATA \$::env(G4INSTALL_DATA)/data/PhotonEvaporation3.1
 setenv G4RADIOACTIVEDATA  \$::env(G4INSTALL_DATA)/data/RadioactiveDecay4.2
