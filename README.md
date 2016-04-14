@@ -1,6 +1,25 @@
 # alidist
 Recipes to build ALICE SW
 
+# Guidelines for commit messages
+
+- Keep the first line of the commit below 50 chars
+- Leave the second line empty
+- Try to keep the lines after the third below 72 chars
+- Use some imperative verb as first word of the first line
+- Do not end the first line with a full-stop (i. e. `.`)
+
+Example:
+
+```
+Fix issue in Geant4
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+commodo consequat.
+```
+
 # Guidelines for contributing recipes
 
 - Keep things simple (but concise).
