@@ -12,6 +12,7 @@ prepend_path:
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
                  -DROOTSYS=$ROOT_ROOT \
                  -DCMAKE_SKIP_RPATH=TRUE
 make ${JOBS+-j$JOBS}
