@@ -7,6 +7,7 @@ build_requires:
  - XRootD
  - SWIG
  - UUID
+ - libperl
 ---
 #!/bin/bash -e
 [[ ! $SWIG_ROOT ]] && SWIG_LIB=`swig -swiglib`
