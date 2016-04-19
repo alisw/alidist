@@ -37,7 +37,9 @@ node {
                         -d build AliRoot || BUILDERR=$?
 
       rm -f $WORKAREA/$WORKAREA_INDEX/current_slave
-      [[ "$BUILDERR" != '' ]] && exit $BUILDERR
+      if [ ! "X$BUILDERR" = X ]; then
+        exit $BUILDERR
+      fi
     '''
 
   currentBuild.displayName = "Testing ${env.BRANCH_NAME}"
