@@ -2,7 +2,7 @@ package: YODA
 version: "v1.4.0"
 requires:
   - boost
-  - Python
+  - Python-modules
 prepend_path:
   PYTHONPATH: $YODA_ROOT/lib/python2.7/site-packages
 ---
@@ -29,7 +29,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION Python/$PYTHON_VERSION-$PYTHON_REVISION
+module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 # Our environment
 setenv YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(YODA_ROOT)/bin
