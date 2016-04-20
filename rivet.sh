@@ -7,7 +7,7 @@ requires:
   - HepMC
   - boost
 prepend_path:
-  PYTHONPATH: $RIVET_ROOT/lib/python2.7/site-packages:$PYTHONPATH
+  PYTHONPATH: $RIVET_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in

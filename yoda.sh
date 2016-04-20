@@ -4,7 +4,7 @@ requires:
   - boost
   - Python
 prepend_path:
-  PYTHONPATH: "$(yoda-config --pythonpath)"
+  PYTHONPATH: $YODA_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -e
 Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION:1}.tar.bz2"
