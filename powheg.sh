@@ -1,7 +1,7 @@
 package: POWHEG
 version: "%(tag_basename)s"
-source: https://github.com/qgp/POWHEG-BOX-V2
-tag: "master"
+source: https://github.com/alisw/POWHEG
+tag: "alice/r3178"
 requires:
   - fastjet
   - "GCC-Toolchain:(?!osx|slc5)"
