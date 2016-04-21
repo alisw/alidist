@@ -13,6 +13,7 @@ prefer_system_check:
 #!/bin/bash -ex
 
 # Install extra packages with pip
+pip install --install-option="--prefix=$INSTALLROOT" "mock==1.0.0"
 pip install --install-option="--prefix=$INSTALLROOT" "numpy==1.9.2"
 pip install --install-option="--prefix=$INSTALLROOT" "certifi==2015.9.6.2"
 
@@ -43,7 +44,8 @@ fi
 perl -p -i -e "s|'darwin': \['/usr/local/'|'darwin': ['$INSTALLROOT'|g" setupext.py
 
 python setup.py build
-python setup.py install
+PYTHONPATH=$INSTALLROOT/lib64/python2.7/site-packages:$INSTALLROOT/lib/python2.7/site-packages:$PYTHONPATH \
+  python setup.py install --prefix $INSTALLROOT
 
 # Remove useless stuff
 rm -rvf $INSTALLROOT/share \
