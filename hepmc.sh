@@ -3,7 +3,7 @@ version: "v2.06.09"
 source: https://github.com/alisw/hepmc
 build_requires:
   - CMake
-  - GCC-Toolchain
+  - GCC-Toolchain:(?!osx.*)
 ---
 #!/bin/bash -e
 
