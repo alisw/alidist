@@ -1,18 +1,19 @@
-# a pythia6 recipe based on the one from FairROOT
-package: pythia6
+package: vgm
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "alice/416"
-source: https://github.com/alisw/pythia6.git
+tag: "4.3"
+source: https://github.com/alisw/vgm.git
+requires:
+  - ROOT
+  - GEANT4
+build_requires:
+  - CMake
 ---
-#!/bin/sh
+#!/bin/bash -e
+cmake "$SOURCEDIR" \
+  -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+  -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
 
-cmake ${SOURCEDIR}                           \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
-
-make ${JOBS+-j$JOBS}
-make install
-tar -c lib include | tar -x -C $INSTALLROOT 
+make ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -27,9 +28,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 GEANT4/$GEANT4_VERSION-$GEANT4_REVISION ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
-setenv PYTHIA6_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib
+setenv VGM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(VGM_ROOT)/lib64
 EoF
-
