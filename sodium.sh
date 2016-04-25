@@ -4,6 +4,7 @@ source: https://github.com/jedisct1/libsodium
 tag: 1.0.8
 build_requires:
   - autotools
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
