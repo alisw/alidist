@@ -4,7 +4,9 @@ node {
   stage "Verify author"
   def power_users = ["ktf", "dberzano"]
   echo "Changeset from " + env.CHANGE_AUTHOR
-  if (power_users.contains(env.CHANGE_AUTHOR)) {
+  if (env.CHANGE_AUTHOR == null && env.BRANCH_NAME.matches("IB/[^/]+/[^/]+")) {
+    echo "Branch ${env.BRANCH_NAME} updated."
+  } else if (power_users.contains(env.CHANGE_AUTHOR)) {
     currentBuild.displayName = "Testing ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
     echo "PR comes from power user. Testing"
   } else {
@@ -13,15 +15,12 @@ node {
   }
   currentBuild.displayName = "Testing ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
 
-  stage "Build AliRoot"
-  def test_script = '''
-      (cd alidist && git show)
-      rm -fr alibuild
-      git clone https://github.com/alisw/alibuild
-      x=`date +"%s"`
-      WORKAREA=/build/workarea/pr/`echo $(( $x / 3600 / 24 / 7))`
-
+  stage "Build software"
+  def build_script = '''
       # Make sure we have only one builder per directory
+      x=`date +"%s"`
+      WORKAREA=/build/workarea/$WORKAREA_PREFIX/`echo $(( $x / 3600 / 24 / 7))`
+
       CURRENT_SLAVE=unknown
       while [[ "$CURRENT_SLAVE" != '' ]]; do
         WORKAREA_INDEX=$((WORKAREA_INDEX+1))
@@ -32,9 +31,22 @@ node {
       mkdir -p $WORKAREA/$WORKAREA_INDEX
       echo $NODE_NAME > $WORKAREA/$WORKAREA_INDEX/current_slave
 
+      (cd alidist && git show)
+      rm -fr alibuild
+      git clone https://github.com/alisw/alibuild
+
       # Whenever we change a spec file, we rebuild it and then we
       # rebuild AliRoot just to make sure we did not break anything.
-      for p in `cd alidist ; git diff --name-only origin/$CHANGE_TARGET | grep .sh | sed -e's|[.]sh$||'`; do
+      case $CHANGE_TARGET in
+        null)
+          PKGS=AliPhysics
+        ;;
+        *)
+          PKGS=`cd alidist ; git diff --name-only origin/$CHANGE_TARGET | grep .sh | sed -e's|[.]sh$||'`
+        ;;
+      esac
+
+      for p in $PKGS; do
         # Euristics to decide which kind of test we should run.
         case $p in
           # Packages which only touch rivet
@@ -71,7 +83,7 @@ node {
                           --reference-sources /build/mirror                  \
                           --debug                                            \
                           --jobs 16                                          \
-                          --remote-store rsync://repo.marathon.mesos/store/  \
+                          --remote-store rsync://repo.marathon.mesos/store/${DO_UPLOAD:+::rw}  \
                           -d build $p || BUILDERR=$?
       done
 
@@ -82,46 +94,74 @@ node {
     '''
 
   currentBuild.displayName = "Testing ${env.BRANCH_NAME}"
-  parallel(
-    "slc7": {
-      node ("slc7_x86-64-large") {
-        dir ("alidist") {
-          checkout scm
+  if (env.BRANCH_NAME && env.BRANCH_NAME.matches("IB/.*/next") && env.CHANGE_AUTHOR == null) {
+    // This is a change to the next branch. Let's build and upload results for slc7, slc6 and ubuntu
+    withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
+              "DO_UPLOAD=true",
+              "WORKAREA_PREFIX=sw"]) {
+      parallel(
+        "slc7": {
+          node ("slc7_x86-64-large") {
+            dir ("alidist") { checkout scm }
+            sh build_script
+          }
+        },
+        "slc6": {
+          node ("slc6_x86-64-large") {
+            dir ("alidist") { checkout scm }
+            withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}"]) {
+              sh build_script
+            }
+          }
         }
-        withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}"]) {
-          sh test_script
-        }
-      }
-    },
-    "ubuntu1510": {
-      node ("ubt1510_x86-64-large") {
-        dir ("alidist") {
-          checkout scm
-        }
-        withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}"]) {
-          sh test_script
-        }
-      }
-    },
-    "slc5": {
-      node ("slc5_x86-64-large") {
-        dir ("alidist") {
-          checkout scm
-        }
-        withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}"]) {
-          sh test_script
-        }
-      }
-    },
-    "slc6": {
-      node ("slc6_x86-64-large") {
-        dir ("alidist") {
-          checkout scm
-        }
-        withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}"]) {
-          sh test_script
-        }
+      )
+    }
+  }
+  else if (env.BRANCH_NAME && env.BRANCH_NAME.matches("IB/.*/prod") && env.CHANGE_AUTHOR == null) {
+    // This is a change to the prod branch. Let's build and upload results for slc5.
+    node ("slc5_x86-64-large") {
+      withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
+                "DO_UPLOAD=true",
+                "WORKAREA_PREFIX=sw"]) {
+        dir ("alidist") { checkout scm }
+        sh build_script
       }
     }
-  )
+  }
+  else if (env.CHANGE_TARGET && env.CHANGE_TARGET.matches("IB/.*/next") && env.CHANGE_AUTHOR)
+  {
+    // This is a PR on the next branch. We check it on slc6, slc7, ubuntu
+    withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
+              "WORKAREA_PREFIX=pr"]) {
+      parallel(
+        "slc7": {
+          node ("slc7_x86-64-large") {
+            dir ("alidist") { checkout scm }
+            sh build_script
+          }
+        },
+        "slc6": {
+          node ("slc6_x86-64-large") {
+            dir ("alidist") { checkout scm }
+            sh build_script
+          }
+        }
+      )
+    }
+  }
+  else if (env.CHANGE_TARGET && env.CHANGE_TARGET.matches("IB/.*/prod") && env.CHANGE_AUTHOR) {
+    // This is a PR on the next branch. We check it on slc5 only
+    withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
+              "WORKAREA_PREFIX=pr"]) {
+      node ("slc5_x86-64-large") {
+        dir ("alidist") { checkout scm }
+        sh build_script
+      }
+    }
+  }
+  else  {
+    // This is either an old branch or one which we should not build automatically
+    // skipping
+  }
+
 }
