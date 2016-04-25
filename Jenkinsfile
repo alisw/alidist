@@ -1,21 +1,6 @@
 #!groovy
 
-node {
-  stage "Verify author"
-  def power_users = ["ktf", "dberzano"]
-  echo "Changeset from " + env.CHANGE_AUTHOR
-  if (env.CHANGE_AUTHOR == null && env.BRANCH_NAME.matches("IB/[^/]+/[^/]+")) {
-    echo "Branch ${env.BRANCH_NAME} updated."
-  } else if (power_users.contains(env.CHANGE_AUTHOR)) {
-    currentBuild.displayName = "Testing ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
-    echo "PR comes from power user. Testing"
-  } else {
-    currentBuild.displayName = "Feedback needed for ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
-    input "Do you want to test this change?"
-  }
-  currentBuild.displayName = "Testing ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
-
-  stage "Build software"
+def buildAny(architecture) {
   def build_script = '''
       # Make sure we have only one builder per directory
       x=`date +"%s"`
@@ -93,7 +78,29 @@ node {
         exit $BUILDERR
       fi
     '''
+  return { -> node("${architecture}-large") {
+                dir ("alidist") { checkout scm }
+                sh build_script
+              }
+  }
+}
 
+node {
+  stage "Verify author"
+  def power_users = ["ktf", "dberzano"]
+  echo "Changeset from " + env.CHANGE_AUTHOR
+  if (env.CHANGE_AUTHOR == null && env.BRANCH_NAME.matches("IB/[^/]+/[^/]+")) {
+    echo "Branch ${env.BRANCH_NAME} updated."
+  } else if (power_users.contains(env.CHANGE_AUTHOR)) {
+    currentBuild.displayName = "Testing ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
+    echo "PR comes from power user. Testing"
+  } else {
+    currentBuild.displayName = "Feedback needed for ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
+    input "Do you want to test this change?"
+  }
+  currentBuild.displayName = "Testing ${env.BRANCH_NAME} from ${env.CHANGE_AUTHOR}"
+
+  stage "Build software"
   currentBuild.displayName = "Testing ${env.BRANCH_NAME}"
   if (env.BRANCH_NAME && env.BRANCH_NAME.matches("IB/.*/next") && env.CHANGE_AUTHOR == null) {
     // This is a change to the next branch. Let's build and upload results for slc7, slc6 and ubuntu
@@ -101,32 +108,17 @@ node {
               "DO_UPLOAD=true",
               "WORKAREA_PREFIX=sw"]) {
       parallel(
-        "slc7": {
-          node ("slc7_x86-64-large") {
-            dir ("alidist") { checkout scm }
-            sh build_script
-          }
-        },
-        "slc6": {
-          node ("slc6_x86-64-large") {
-            dir ("alidist") { checkout scm }
-            withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}"]) {
-              sh build_script
-            }
-          }
-        }
+        "slc7": buildAny("slc7_x86-64"),
+        "slc6": buildAny("slc6_x86-64")
       )
     }
   }
   else if (env.BRANCH_NAME && env.BRANCH_NAME.matches("IB/.*/prod") && env.CHANGE_AUTHOR == null) {
     // This is a change to the prod branch. Let's build and upload results for slc5.
-    node ("slc5_x86-64-large") {
-      withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
-                "DO_UPLOAD=true",
-                "WORKAREA_PREFIX=sw"]) {
-        dir ("alidist") { checkout scm }
-        sh build_script
-      }
+    withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
+              "DO_UPLOAD=true",
+              "WORKAREA_PREFIX=sw"]) {
+      buildAny("slc5_x86-64")
     }
   }
   else if (env.CHANGE_TARGET && env.CHANGE_TARGET.matches("IB/.*/next") && env.CHANGE_AUTHOR)
@@ -135,18 +127,8 @@ node {
     withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
               "WORKAREA_PREFIX=pr"]) {
       parallel(
-        "slc7": {
-          node ("slc7_x86-64-large") {
-            dir ("alidist") { checkout scm }
-            sh build_script
-          }
-        },
-        "slc6": {
-          node ("slc6_x86-64-large") {
-            dir ("alidist") { checkout scm }
-            sh build_script
-          }
-        }
+        "slc7": buildAny("slc7_x86-64"),
+        "slc6": buildAny("slc6_x86-64")
       )
     }
   }
@@ -154,15 +136,11 @@ node {
     // This is a PR on the next branch. We check it on slc5 only
     withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
               "WORKAREA_PREFIX=pr"]) {
-      node ("slc5_x86-64-large") {
-        dir ("alidist") { checkout scm }
-        sh build_script
-      }
+      buildAny("slc5_x86-64")
     }
   }
   else  {
     // This is either an old branch or one which we should not build automatically
     // skipping
   }
-
 }
