@@ -79,10 +79,11 @@ node {
       done
 
       for p in `echo $BUILD_TEST | sort -u`; do
-        alibuild/aliBuild --work-dir $WORKAREA/$WORKAREA_INDEX               \
-                          --reference-sources /build/mirror                  \
-                          --debug                                            \
-                          --jobs 16                                          \
+        alibuild/aliBuild --work-dir $WORKAREA/$WORKAREA_INDEX                                 \
+                          --reference-sources /build/mirror                                    \
+                          --debug                                                              \
+                          --jobs 16                                                            \
+                          --disable DDS                                                        \
                           --remote-store rsync://repo.marathon.mesos/store/${DO_UPLOAD:+::rw}  \
                           -d build $p || BUILDERR=$?
       done
