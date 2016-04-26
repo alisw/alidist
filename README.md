@@ -64,3 +64,7 @@ Whenever you need to build a new external, you should consider the following:
 
     and add your patches on such a branch.
   - Do not create extra branches unless you do need to patch the original sources.
+
+Moreover try to keep the package name (as specified inside the recipe
+in the `package` field of the header) and the repository name the same,
+including capitalization.
