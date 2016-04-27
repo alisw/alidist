@@ -5,17 +5,20 @@ requires:
 build_requires:
   - CMake
 source: http://root.cern.ch/git/geant3.git
-tag: v2-0
+tag: v2-1
 prepend_path:
   "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-                 -DROOTSYS=$ROOT_ROOT \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
+                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
+                 -DROOTSYS=$ROOT_ROOT                  \
                  -DCMAKE_SKIP_RPATH=TRUE
 make ${JOBS+-j$JOBS}
 make install
+
+[[ ! -d $INSTALLROOT/lib64 ]] && ln -sf lib $INSTALLROOT/lib64
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

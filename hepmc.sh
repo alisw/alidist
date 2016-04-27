@@ -1,9 +1,10 @@
 package: HepMC
-version: "v2.06.09"
+version: "%(tag_basename)s"
 source: https://github.com/alisw/hepmc
+tag: alice/v2.06.09
 build_requires:
   - CMake
-  - GCC-Toolchain
+  - GCC-Toolchain:(?!osx.*)
 ---
 #!/bin/bash -e
 

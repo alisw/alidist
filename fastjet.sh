@@ -4,6 +4,8 @@ tag: "v3.1.3_1.020"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
+build_requires:
+  - sip-check:(osx.*)
 env:
   FASTJET: "$FASTJET_ROOT"
 ---

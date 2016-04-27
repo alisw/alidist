@@ -44,3 +44,23 @@ if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
 fi
 make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_ROOT:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+# Our environment
+setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(O2_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+EoF
