@@ -12,15 +12,15 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-cmake "$SOURCEDIR" \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DROOTSYS="$ROOT_ROOT" \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"} \
-      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"} \
-      ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"} \
-      ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"} \
-      ${GMP_ROOT:+-DGMP="$GMP_ROOT"} \
+cmake "$SOURCEDIR"                                                 \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
+      ${ROOT_ROOT:+-DROOTSYS="$ROOT_ROOT"}                         \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
+      ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"}                            \
+      ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"}                            \
+      ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
       -DALIROOT="$ALIROOT_ROOT"
 
 if [[ $GIT_TAG == master ]]; then
