@@ -14,13 +14,14 @@ incremental_recipe: |
   env PATH=$INSTALLROOT/bin:$PATH LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH make ${JOBS+-j$JOBS}
 ---
 #!/bin/bash -e
+unset ROOTSYS
 
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 [[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
 
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
     COMPILER_CC=clang
