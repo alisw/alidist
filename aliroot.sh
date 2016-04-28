@@ -20,7 +20,7 @@ incremental_recipe: |
 #!/bin/bash -e
 cmake $SOURCEDIR                                                  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
-      -DROOTSYS=$ROOT_ROOT                                        \
+      ${ROOT_ROOT:+-DROOTSYS=$ROOT_ROOT}                          \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN=$ALIEN_RUNTIME_ROOT}          \
       ${FASTJET_ROOT:+-DFASTJET=$FASTJET_ROOT}                    \
