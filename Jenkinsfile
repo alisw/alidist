@@ -36,11 +36,11 @@ def buildAny(architecture) {
         case $p in
           # Packages which only touch rivet
           yoda|rivet)
-            BUILD_TEST="Rivet-test" ;;
+            BUILD_TEST="$BUILD_TEST Rivet-test" ;;
 
           # Packages which only touch O2
           o2|fairroot|dds|zeromq|nanomsg|sodium|pythia|pythia6|lhapdf)
-            BUILD_TEST="O2" ;;
+            BUILD_TEST="$BUILD_TEST O2 " ;;
 
           # Packages which are only for AliRoot
           aliphysics|aliroot-test)
@@ -59,7 +59,7 @@ def buildAny(architecture) {
             BUILD_TEST="$BUILD_TEST AliRoot-test Rivet-test" ;;
 
           # Packages which are standalone
-          *) BUILD_TEST=$p ;;
+          *) BUILD_TEST="$BUILD_TEST $p" ;;
         esac
       done
 
