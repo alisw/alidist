@@ -68,4 +68,5 @@ setenv RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib/python2.7/site-packages
 prepend-path PATH \$::env(RIVET_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(RIVET_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(RIVET_ROOT)/lib")
 EoF

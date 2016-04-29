@@ -65,4 +65,5 @@ setenv G4NEUTRONXSDATA \$::env(G4INSTALL_DATA)/data/G4NEUTRONXS1.4
 setenv G4SAIDXSDATA \$::env(G4INSTALL_DATA)/data/G4SAIDDATA1.1
 prepend-path PATH \$::env(GEANT4_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib")
 EoF

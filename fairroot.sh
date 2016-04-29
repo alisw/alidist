@@ -62,4 +62,5 @@ module load BASE/1.0 ${BOOST_ROOT:+Boost/$BOOST_VERSION-$BOOST_REVISION} ROOT/$R
 # Our environment
 setenv FAIRROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(FAIRROOT_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FAIRROOT_ROOT)/lib")
 EoF

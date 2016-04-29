@@ -41,4 +41,5 @@ setenv POWHEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv Powheg_INSTALL_PATH \$::env(POWHEG_ROOT)/lib/Powheg
 prepend-path PATH \$::env(POWHEG_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(POWHEG_ROOT)/lib/Powheg
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(POWHEG_ROOT)/lib/Powheg")
 EoF
