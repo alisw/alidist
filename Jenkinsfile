@@ -3,8 +3,8 @@
 def buildAny(architecture) {
   def build_script = '''
       # Make sure we have only one builder per directory
-      x=`date +"%s"`
-      WORKAREA=/build/workarea/$WORKAREA_PREFIX/`echo $(( $x / 3600 / 24 / 7))`
+      BUILD_DATE=$(echo 2015$(echo "$(date -u +%s) / (86400 * 3)" | bc))
+      WORKAREA=/build/workarea/$WORKAREA_PREFIX/$BUILD_DATE
 
       CURRENT_SLAVE=unknown
       while [[ "$CURRENT_SLAVE" != '' ]]; do
