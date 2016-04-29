@@ -40,4 +40,5 @@ module load BASE/1.0 ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} HepMC/$
 setenv CRMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(CRMC_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(CRMC_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(CRMC_ROOT)/lib")
 EoF

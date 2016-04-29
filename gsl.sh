@@ -38,5 +38,6 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 # Our environment
 setenv GSL_BASEDIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GSL_BASEDIR)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GSL_BASEDIR)/lib")
 prepend-path PATH \$::env(GSL_BASEDIR)/bin
 EoF
