@@ -12,9 +12,14 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
+# Picking up ROOT from the system when our is disabled
+if [ "X$ROOT_ROOT" = X ]; then
+  ROOT_ROOT="$(root-config --prefix)"
+fi
+
 cmake "$SOURCEDIR"                                                 \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
-      ${ROOT_ROOT:+-DROOTSYS="$ROOT_ROOT"}                         \
+      -DROOTSYS="$ROOT_ROOT"                                       \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
