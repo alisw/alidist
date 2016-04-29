@@ -70,4 +70,5 @@ setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv LHAPATH \$::env(LHAPDF_ROOT)/share/LHAPDF
 prepend-path PATH $::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib")
 EoF

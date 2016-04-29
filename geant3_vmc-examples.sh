@@ -18,14 +18,17 @@ case $ARCHITECTURE in
   ;;
 esac
 
+Geant4VMC_DIR=`echo $GEANT4_VMC_ROOT/lib/Geant4VMC-*`
+Geant3_DIR=`echo ${GEANT3_ROOT}/lib64/Geant3-*`
 
-#!/bin/bash -e
-cmake -DVMC_WITH_Geant3=ON \
-      -DVMC_WITH_Geant4=OFF \
-      -DGeant3_DIR=${GEANT3_ROOT}/lib64/Geant3-2.0.0 \
-      -DPythia6_LIBRARY=${PYTHIA6_ROOT}/lib/libPythia6.${LDSUFFIX} \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
+cmake -DVMC_WITH_Geant3=ON                                          \
+      -DVMC_WITH_Geant4=OFF                                         \
+      -DGeant3_DIR=$Geant3_DIR                                      \
+      -DPythia6_LIBRARY=${PYTHIA6_ROOT}/lib/libPythia6.${LDSUFFIX}  \
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}                        \
+      -DCMAKE_MODULE_PATH=${GEANT4_VMC_ROOT}/                       \
+      -DGeant4VMC_DIR=${Geant4VMC_DIR}                              \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
       ${GEANT4_VMC_ROOT}/share/examples
 
 # make them

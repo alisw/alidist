@@ -78,4 +78,5 @@ setenv FASTJET \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(FASTJET_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FASTJET_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FASTJET_ROOT)/lib")
 EoF
