@@ -3,8 +3,8 @@
 def buildAny(architecture) {
   def build_script = '''
       # Make sure we have only one builder per directory
-      x=`date +"%s"`
-      WORKAREA=/build/workarea/$WORKAREA_PREFIX/`echo $(( $x / 3600 / 24 / 7))`
+      BUILD_DATE=$(echo 2015$(echo "$(date -u +%s) / (86400 * 3)" | bc))
+      WORKAREA=/build/workarea/$WORKAREA_PREFIX/$BUILD_DATE
 
       CURRENT_SLAVE=unknown
       while [[ "$CURRENT_SLAVE" != '' ]]; do
@@ -106,7 +106,7 @@ node {
     // This is a change to the next branch. Let's build and upload results for slc7, slc6 and ubuntu
     withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
               "DO_UPLOAD=true",
-              "WORKAREA_PREFIX=sw"]) {
+              "WORKAREA_PREFIX=ci"]) {
       parallel(
         "slc7": buildAny("slc7_x86-64"),
         "slc6": buildAny("slc6_x86-64")
@@ -117,7 +117,7 @@ node {
     // This is a change to the prod branch. Let's build and upload results for slc5.
     withEnv (["CHANGE_TARGET=${env.CHANGE_TARGET}",
               "DO_UPLOAD=true",
-              "WORKAREA_PREFIX=sw"]) {
+              "WORKAREA_PREFIX=ci"]) {
       buildAny("slc5_x86-64")
     }
   }
