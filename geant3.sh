@@ -39,4 +39,5 @@ setenv GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT3DIR \$::env(GEANT3_ROOT)
 prepend-path PATH \$::env(GEANT3_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64")
 EoF

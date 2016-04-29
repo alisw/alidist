@@ -38,4 +38,5 @@ module load BASE/1.0 ${BOOST_ROOT:+Boost/$BOOST_VERSION-$BOOST_REVISION}  ${GCC_
 setenv DDS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(DDS_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(DDS_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(DDS_ROOT)/lib")
 EoF

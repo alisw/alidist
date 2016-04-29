@@ -59,5 +59,6 @@ setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
 setenv ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
 prepend-path PATH \$::env(ALICE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

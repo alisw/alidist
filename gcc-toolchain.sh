@@ -153,6 +153,8 @@ if { "\$mod_name" == "GCC-Toolchain" } {
 # Our environment
 setenv GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib")
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64")
 prepend-path PATH \$::env(GCC_TOOLCHAIN_ROOT)/bin
 EoF
