@@ -5,7 +5,7 @@ source: https://github.com/alisw/geant4_vmc
 requires:
   - ROOT
   - GEANT4
-  - VGM
+  - vgm
 build_requires:
   - CMake
 env:
