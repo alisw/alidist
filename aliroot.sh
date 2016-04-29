@@ -10,7 +10,7 @@ build_requires:
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
-write_repo: https://git.cern.ch/reps/AliRoot 
+write_repo: https://git.cern.ch/reps/AliRoot
 tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -28,8 +28,8 @@ cmake $SOURCEDIR                                                   \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
       -DROOTSYS="$ROOT_ROOT"                                       \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN=$ALIEN_RUNTIME_ROOT}           \
-      ${FASTJET_ROOT:+-DFASTJET=$FASTJET_ROOT}                     \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then
