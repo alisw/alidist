@@ -1,7 +1,7 @@
 package: defaults-debug
 version: v1
 env:
-  CXXFLAGS: "-fPIC -g -O0"
+  CXXFLAGS: "-fPIC -g -O0 -std=c++11"
   CFLAGS: "-fPIC -g -O0"
   CMAKE_BUILD_TYPE: "DEBUG"
 ---
