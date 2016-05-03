@@ -3,6 +3,8 @@ package: pythia6
 version: "%(tag_basename)s%(defaults_upper)s"
 tag: "alice/416"
 source: https://github.com/alisw/pythia6.git
+build_requires:
+  - CMake
 ---
 #!/bin/sh
 
