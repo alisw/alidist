@@ -6,13 +6,14 @@ build_requires:
   - CMake
 env:
   G4INSTALL: "$GEANT4_ROOT"
-  G4INSTALL_DATA: "$GEANT4_ROOT/share/Geant4-10.1.2"
+  G4INSTALL_DATA: "$GEANT4_ROOT/share/Geant4-10.1.3"
   G4SYSTEM: "$(uname)-g++"
   G4LEVELGAMMADATA: "$G4INSTALL_DATA/data/PhotonEvaporation3.1"
   G4RADIOACTIVEDATA: "$G4INSTALL_DATA/data/RadioactiveDecay4.2"
   G4LEDATA: "$G4INSTALL_DATA/data/G4EMLOW6.41"
   G4NEUTRONHPDATA: "$G4INSTALL_DATA/data/G4NDL4.5"
-  G4NEUTRONXS: "$G4INSTALL_DATA/data/G4NEUTRONXS1.4"
+  G4NEUTRONXSDATA: "$G4INSTALL_DATA/data/G4NEUTRONXS1.4"
+  G4SAIDXSDATA: "$G4INSTALL_DATA/data/G4SAIDDATA1.1"
 ---
 #!/bin/bash -e
 
@@ -54,13 +55,15 @@ module load BASE/1.0
 set osname [uname sysname]
 setenv GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv G4INSTALL \$::env(GEANT4_ROOT)
-setenv G4INSTALL_DATA \$::env(GEANT4_ROOT)/share/Geant4-10.1.2
+setenv G4INSTALL_DATA \$::env(GEANT4_ROOT)/share/Geant4-10.1.3
 setenv G4SYSTEM \$osname-g++
 setenv G4LEVELGAMMADATA \$::env(G4INSTALL_DATA)/data/PhotonEvaporation3.1
 setenv G4RADIOACTIVEDATA  \$::env(G4INSTALL_DATA)/data/RadioactiveDecay4.2
 setenv G4LEDATA \$::env(G4INSTALL_DATA)/data/G4EMLOW6.41
 setenv G4NEUTRONHPDATA \$::env(G4INSTALL_DATA)/data/G4NDL4.5
-setenv G4NEUTRONXS \$::env(G4INSTALL_DATA)/data/G4NEUTRONXS1.4
+setenv G4NEUTRONXSDATA \$::env(G4INSTALL_DATA)/data/G4NEUTRONXS1.4
+setenv G4SAIDXSDATA \$::env(G4INSTALL_DATA)/data/G4SAIDDATA1.1
 prepend-path PATH \$::env(GEANT4_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib")
 EoF

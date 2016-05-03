@@ -38,4 +38,5 @@ module load BASE/1.0 ${ZLIB_ROOT:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 setenv LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(LIBPNG_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(LIBPNG_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(LIBPNG_ROOT)/lib")
 EoF

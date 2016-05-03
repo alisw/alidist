@@ -1,59 +1,38 @@
+# a pythia6 recipe based on the one from FairROOT
 package: pythia6
-version: "426"
+version: "%(tag_basename)s%(defaults_upper)s"
+tag: "alice/416"
+source: https://github.com/alisw/pythia6.git
+build_requires:
+  - CMake
 ---
 #!/bin/sh
-curl -O -fSsL --insecure http://cern.ch/service-spi/external/MCGenerators/distribution/pythia6/pythia6-426-src.tgz
-tar xzvf pythia6-426-src.tgz
-cd  pythia6/426
 
-case $ARCHITECTURE in
-  slc5*) 
-    PLATF_CONF_OPTS="--enable-shared"
-    PLATF_LDFLAGS=""
-    PLATF_LD=""
-    F77="`which gfortran`"
-  ;;
-  osx*) 
-    PLATF_CONF_OPTS="--disable-shared --enable-static"
-    PLATF_LDFLAGS=""
-    PLATF_LD="LD='`which gcc`'" 
-    F77="`which gfortran` -fPIC"
-  ;;
-  *) 
-    PLATF_CONF_OPTS="--disable-shared --enable-static"
-    PLATF_LDFLAGS=""
-    PLATF_LD=""
-    F77="`which gfortran` -fPIC"
-  ;;
-esac
+cmake ${SOURCEDIR}                           \
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
 
-autoreconf -ivf
-# Unfortunately we need the two cases because LDFLAGS= does not work on linux
-# and I couldn't get the space between use_dylibs and -Wl, preseved if
-# I tried to have the whole "LDFLAGS=foo" in a variable.
-case $ARCHITECTURE in
-  osx*)
-    ./configure $PLATF_CONF_OPTS --with-hepevt=4000 F77="$F77" \
-    LD='`which gcc`' LDFLAGS='-Wl,-commons,use_dylibs -Wl,-flat_namespace' 
-  ;;
-  *)
-    ./configure $PLATF_CONF_OPTS --with-hepevt=4000 F77="$F77" 
-  ;;
-esac
-
-# NOTE: force usage of gcc to link shared libraries in place of gfortran since
-# the latter causes a:
-#
-# ld: codegen problem, can't use rel32 to external symbol __gfortrani_compile_options in __gfortrani_init_compile_options
-#
-# error when building.
-# I couldn't find any better way to replace "CC" in the F77 section of libtool.
-case $ARCHITECTURE in
-  slc5*) ;;
-  *) perl -p -i -e 's|^CC=.*$|CC="gcc -fPIC"|' libtool ;;
-esac
-
-make
+make ${JOBS+-j$JOBS}
 make install
 tar -c lib include | tar -x -C $INSTALLROOT 
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+# Our environment
+setenv PYTHIA6_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib")
+EoF
 

@@ -1,9 +1,10 @@
 package: HepMC
-version: "v2.06.09"
+version: "%(tag_basename)s"
 source: https://github.com/alisw/hepmc
+tag: alice/v2.06.09
 build_requires:
   - CMake
-  - GCC-Toolchain
+  - GCC-Toolchain:(?!osx.*)
 ---
 #!/bin/bash -e
 
@@ -34,4 +35,5 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 setenv HEPMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(HEPMC_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib")
 EoF

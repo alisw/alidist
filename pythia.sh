@@ -53,4 +53,5 @@ setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc
 prepend-path PATH \$::env(PYTHIA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib")
 EoF
