@@ -12,15 +12,20 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-cmake "$SOURCEDIR" \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DROOTSYS="$ROOT_ROOT" \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"} \
-      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"} \
-      ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"} \
-      ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"} \
-      ${GMP_ROOT:+-DGMP="$GMP_ROOT"} \
+# Picking up ROOT from the system when our is disabled
+if [ "X$ROOT_ROOT" = X ]; then
+  ROOT_ROOT="$(root-config --prefix)"
+fi
+
+cmake "$SOURCEDIR"                                                 \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
+      -DROOTSYS="$ROOT_ROOT"                                       \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
+      ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"}                            \
+      ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"}                            \
+      ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
       -DALIROOT="$ALIROOT_ROOT"
 
 if [[ $GIT_TAG == master ]]; then
@@ -52,5 +57,6 @@ setenv ALIPHYSICS_RELEASE \$::env(ALIPHYSICS_VERSION)
 setenv ALICE_PHYSICS \$::env(BASEDIR)/$PKGNAME/\$::env(ALIPHYSICS_RELEASE)
 prepend-path PATH \$::env(ALICE_PHYSICS)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALICE_PHYSICS)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALICE_PHYSICS)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

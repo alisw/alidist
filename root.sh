@@ -14,13 +14,14 @@ incremental_recipe: |
   env PATH=$INSTALLROOT/bin:$PATH LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH make ${JOBS+-j$JOBS}
 ---
 #!/bin/bash -e
+unset ROOTSYS
 
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 [[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
 
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
     COMPILER_CC=clang
@@ -53,6 +54,7 @@ cmake $SOURCEDIR                                                \
       -Dpythia6_nolink=ON                                       \
       -Droofit=ON                                               \
       -Dsoversion=ON                                            \
+      -Dshadowpw=OFF                                            \
       -Dvdt=ON
 
 # Check if essential features are enabled
@@ -89,5 +91,6 @@ setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
 prepend-path PATH \$::env(ROOTSYS)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ROOTSYS)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

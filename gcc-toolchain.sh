@@ -45,8 +45,8 @@ pushd build-binutils
                         --enable-plugins                       \
                         --enable-threads                       \
                         --disable-nls
-  make ${JOBS:+-j$JOBS}
-  make install
+  make ${JOBS:+-j$JOBS} MAKEINFO=":"
+  make install MAKEINFO=":"
   hash -r
 popd
 
@@ -76,8 +76,8 @@ pushd build-gcc
                    --enable-ld=default                              \
                    --enable-lto                                     \
                    --disable-nls
-  make ${JOBS+-j $JOBS} bootstrap-lean
-  make install
+  make ${JOBS+-j $JOBS} bootstrap-lean MAKEINFO=":"
+  make install MAKEINFO=":"
   hash -r
 
   # GCC creates c++, but not cc
@@ -113,8 +113,8 @@ pushd build-gdb
   ../gdb/configure --prefix="$INSTALLROOT"                \
                    ${MARCH:+--build=$MARCH --host=$MARCH} \
                    --disable-multilib
-  make ${JOBS:+-j$JOBS}
-  make install
+  make ${JOBS:+-j$JOBS} MAKEINFO=":"
+  make install MAKEINFO=":"
   hash -r
   rm -f $INSTALLROOT/lib/*.la
 popd
@@ -153,6 +153,8 @@ if { "\$mod_name" == "GCC-Toolchain" } {
 # Our environment
 setenv GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib")
 prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64")
 prepend-path PATH \$::env(GCC_TOOLCHAIN_ROOT)/bin
 EoF

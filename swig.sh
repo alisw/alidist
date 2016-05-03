@@ -5,6 +5,7 @@ tag: rel-3.0.7
 build_requires:
   - autotools
   - "GCC-Toolchain:(?!osx)"
+  - yacc-like
 env:
   SWIG_LIB: "$SWIG_ROOT/share/swig/$SWIG_VERSION"
 prefer_system: (?!slc5)
