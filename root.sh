@@ -53,6 +53,7 @@ cmake $SOURCEDIR                                                \
       -Dpythia6_nolink=ON                                       \
       -Droofit=ON                                               \
       -Dsoversion=ON                                            \
+      -Dshadowpw=OFF                                            \
       -Dvdt=ON
 
 # Check if essential features are enabled
