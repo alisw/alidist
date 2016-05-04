@@ -9,6 +9,7 @@ env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
