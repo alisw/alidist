@@ -43,7 +43,9 @@ cmake $SOURCEDIR                                             \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}  \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
-make ${JOBS:+-j $JOBS} install
+# Limit the number of build processes to avoid exahusting memory when building
+# on smaller machines.
+make ${JOBS:+-j 2} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
