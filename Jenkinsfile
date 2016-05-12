@@ -109,7 +109,8 @@ node {
               "WORKAREA_PREFIX=ci"]) {
       parallel(
         "slc7": buildAny("slc7_x86-64"),
-        "slc6": buildAny("slc6_x86-64")
+        "slc6": buildAny("slc6_x86-64"),
+        "slc7-daq": buildAny("slc7_x86-64-daq")
       )
     }
   }
@@ -128,7 +129,8 @@ node {
               "WORKAREA_PREFIX=pr"]) {
       parallel(
         "slc7": buildAny("slc7_x86-64"),
-        "slc6": buildAny("slc6_x86-64")
+        "slc6": buildAny("slc6_x86-64"),
+        "slc7-daq": buildAny("slc7_x86-64-daq")
       )
     }
   }
