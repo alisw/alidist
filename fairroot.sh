@@ -1,5 +1,5 @@
 package: FairRoot
-version: master
+version: dev
 source: https://github.com/FairRootGroup/FairRoot
 tag: master
 requires:
