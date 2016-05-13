@@ -19,7 +19,7 @@ cmake $SOURCEDIR                                              \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}
 
-make ${JOBS+-j $JOBS} wn_bin; make ${JOBS+-j $JOBS} install
+make ${JOBS+-j 1} wn_bin; make ${JOBS+-j 1} install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
