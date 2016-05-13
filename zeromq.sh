@@ -5,7 +5,7 @@ tag: master
 requires:
   - sodium
   - "GCC-Toolchain:(?!osx)"
-prefer_system: osx.*
+prefer_system: (?!slc5.*)
 prefer_system_check: |
   printf "#include \"zmq.h\"\n" | gcc -I$(brew --prefix zeromq)/include -xc++ - -c -M 2>&1
 ---
