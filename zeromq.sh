@@ -5,13 +5,13 @@ tag: master
 requires:
   - sodium
   - "GCC-Toolchain:(?!osx)"
-prefer_system: (?!slc5)
+prefer_system: osx.*
 prefer_system_check: |
   printf "#include \"zmq.h\"\n" | gcc -I$(brew --prefix zeromq)/include -xc++ - -c -M 2>&1
 ---
 #!/bin/sh
 cd $SOURCEDIR
-./autogen.sh 
+./autogen.sh
 cd $BUILDDIR
 $SOURCEDIR/configure --prefix=$INSTALLROOT \
                      --disable-dependency-tracking \
