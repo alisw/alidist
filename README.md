@@ -8,6 +8,7 @@ Recipes to build ALICE SW
 - Try to keep the lines after the third below 72 chars
 - Use some imperative verb as first word of the first line
 - Do not end the first line with a full-stop (i. e. `.`)
+- Make sure you squash / cleanup your commits when it makes sense (e.g. if they are really one the fix of the other). Keep history clean.
 
 Example:
 
