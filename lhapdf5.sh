@@ -16,7 +16,7 @@ rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 make ${JOBS+-j $JOBS} all
 make install
 
-PDFSETS="cteq6l cteq6ll CT10 CT10nlo MSTW2008nnlo EPS09LOR_208"
+PDFSETS="cteq6l cteq6ll CT10 CT10nlo MSTW2008nnlo EPS09LOR_208 EPS09NLOR_208"
 pushd $INSTALLROOT/share/lhapdf
   $INSTALLROOT/bin/lhapdf-getdata $PDFSETS
   # Check if PDF sets were really installed
