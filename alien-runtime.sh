@@ -4,6 +4,7 @@ build_requires:
  - zlib
  - libxml2
  - "OpenSSL:(?!osx)"
+ - "osx-system-openssl:(osx.*)"
  - AliEn-CAs
  - gSOAP
  - MonALISA-gSOAP-client
