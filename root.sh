@@ -1,7 +1,7 @@
 package: ROOT
-version: "%(tag_basename)s-alice%(defaults_upper)s"
-tag: alice/v5-34-30
-source: https://github.com/alisw/root
+version: "%(tag_basename)s-%(short_hash)s"
+source: https://github.com/root-mirror/root
+tag: v6-06-00-patches
 requires: 
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
