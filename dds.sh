@@ -1,11 +1,11 @@
 package: DDS
-version: master
+version: "master-%(short_hash)s"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
 build_requires:
   - CMake
-tag: 99672a0a7770c9230d9fd088d18e04e052dccd10
+tag: 3019ff87ad86a
 ---
 #!/bin/sh
 
