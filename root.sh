@@ -5,6 +5,7 @@ source: https://github.com/alisw/root
 requires: 
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
+  - opengl:(?!osx)
 env:
   ROOTSYS: "$ROOT_ROOT"
 incremental_recipe: |
