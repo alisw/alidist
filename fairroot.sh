@@ -1,7 +1,7 @@
 package: FairRoot
 version: dev
 source: https://github.com/FairRootGroup/FairRoot
-tag: master
+tag: dev
 requires:
   - generators
   - simulation
