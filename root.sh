@@ -5,6 +5,7 @@ tag: v6-06-00-patches
 requires: 
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
+  - opengl:(?!osx)
 env:
   ROOTSYS: "$ROOT_ROOT"
 incremental_recipe: |
