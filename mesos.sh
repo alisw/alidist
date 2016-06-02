@@ -1,14 +1,14 @@
 package: mesos
-version: v0.25.0
+version: v0.27.2
 source: https://git-wip-us.apache.org/repos/asf/mesos.git
-tag: 0.25.0
+tag: 0.27.2
 build_requires:
 - autotools
 - protobuf
 - glog
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
---- 
+---
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 ./bootstrap
