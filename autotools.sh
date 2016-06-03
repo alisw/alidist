@@ -7,11 +7,14 @@ prefer_system_check: |
   PATH=$PATH:$(brew --prefix gettext || true)/bin && which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint && which libtool
 prepend_path:
   PKG_CONFIG_PATH: $(pkg-config --debug 2>&1 | grep 'Scanning directory' | sed -e "s/.*'\(.*\)'/\1/" | xargs echo | sed -e 's/ /:/g')
+build_requires:
+ - termcap
 ---
 #!/bin/bash -e
 
 unset CXXFLAGS
 unset CFLAGS
+export EMACS=no
 
 echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
