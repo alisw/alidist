@@ -16,6 +16,7 @@ incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
 ---
 #!/bin/bash -e
 
@@ -24,12 +25,22 @@ if [ "X$ROOT_ROOT" = X ]; then
   ROOT_ROOT="$(root-config --prefix)"
 fi
 
-cmake $SOURCEDIR                                                   \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
-      -DROOTSYS="$ROOT_ROOT"                                       \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
-      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
+# Generates an environment file to be loaded in case we need code coverage
+if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
+mkdir -p $INSTALLROOT/etc
+cat << EOF > $INSTALLROOT/etc/gcov-setup.sh
+export GCOV_PREFIX=${GCOV_PREFIX:-"$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION"}
+export GCOV_PREFIX_STRIP=$(echo $INSTALLROOT | sed -e 's|/$||;s|^/||;s|//*|/|g;s|[^/]||g' | wc -c | sed -e 's/[^0-9]*//')
+EOF
+source $INSTALLROOT/etc/gcov-setup.sh
+fi
+
+cmake $SOURCEDIR                                                  \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                       \
+      -DROOTSYS="$ROOT_ROOT"                                      \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}        \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                  \
       -DOCDB_INSTALL=PLACEHOLDER
 
 if [[ $GIT_TAG == master ]]; then
@@ -39,6 +50,10 @@ else
 fi
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
+
+[[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
+  && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"  \
+  && rsync -acv --filter='+ */' --filter='+ *.c' --filter='+ *.cxx' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.hpp' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
 
 # Modulefile
 mkdir -p etc/modulefiles
