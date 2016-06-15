@@ -8,10 +8,11 @@ requires:
 tag: alice/v8211pre
 env:
   PYTHIA8DATA: "$PYTHIA_ROOT/share/Pythia8/xmldoc"
+  PYTHIA8: "$PYTHIA_ROOT"
 ---
 #!/bin/bash -e
 rsync -a $SOURCEDIR/ ./
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
@@ -51,6 +52,7 @@ module load BASE/1.0 lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION ${BOOST_ROOT:+boost
 # Our environment
 setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc
+setenv PYTHIA8 \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(PYTHIA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib")
