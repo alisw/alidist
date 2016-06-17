@@ -1,8 +1,8 @@
 package: ROOT
-version: "%(tag_basename)s-%(short_hash)s"
+version: "%(tag_basename)s"
 source: https://github.com/root-mirror/root
-tag: v6-06-00-patches
-requires: 
+tag: v6-06-04
+requires:
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
 env:
