@@ -7,6 +7,7 @@ requires:
   - GEANT4_VMC
 build_requires:
   - CMake
+  - DAQ:slc6.*
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
@@ -20,10 +21,11 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 
-# Picking up ROOT from the system when our is disabled
-if [ "X$ROOT_ROOT" = X ]; then
-  ROOT_ROOT="$(root-config --prefix)"
-fi
+# Picking up ROOT from the system when ours is disabled
+[[ -z "$ROOT_ROOT" ]] && ROOT_ROOT="$(root-config --prefix)"
+
+# If building DAQ utilities verify environment integrity
+[[ $ALICE_DAQ ]] && ( source /date/setup.sh )
 
 # Generates an environment file to be loaded in case we need code coverage
 if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
@@ -41,9 +43,14 @@ cmake $SOURCEDIR                                                  \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}        \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                  \
+      ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}         \
+      ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                  \
+      ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                    \
+      ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                          \
+      ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                \
       -DOCDB_INSTALL=PLACEHOLDER
 
-if [[ $GIT_TAG == master ]]; then
+if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
   make -k ${JOBS+-j $JOBS} install || true
 else
   make ${JOBS+-j $JOBS} install
