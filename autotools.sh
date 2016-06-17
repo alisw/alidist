@@ -4,7 +4,15 @@ source: https://github.com/alisw/autotools
 tag: v1.4.0
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
-  PATH=$PATH:$(brew --prefix gettext || true)/bin && which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint && which libtool
+  export PATH=$PATH:$(brew --prefix gettext || true)/bin
+  which autoconf || { echo "autoconf missing" && exit 1; }
+  which m4 || { echo "m4 missing" && exit 1; }
+  which automake || { echo "automake missing" && exit 1; }
+  which makeinfo || { echo "makeinfo missing" && exit 1; }
+  which aclocal || { echo "aclocal missing" && exit 1; }
+  which pkg-config || { echo "pkg-config missing" && exit 1; }
+  which autopoint || { echo "autopoint / automake  missing" && exit 1; }
+  which libtool || { echo "libtool missing" && exit 1; }
 prepend_path:
   PKG_CONFIG_PATH: $(pkg-config --debug 2>&1 | grep 'Scanning directory' | sed -e "s/.*'\(.*\)'/\1/" | xargs echo | sed -e 's/ /:/g')
 build_requires:
