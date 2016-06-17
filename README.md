@@ -69,3 +69,27 @@ Whenever you need to build a new external, you should consider the following:
 Moreover try to keep the package name (as specified inside the recipe
 in the `package` field of the header) and the repository name the same,
 including capitalization.
+
+# PWGMM owned packages
+
+The following packages have been agreed to be under PWGMM ownership and will require its signoff to be deployed in production.
+
+- aligenerators
+- crmc
+- epos
+- epos-test
+- hepmc
+- jewel
+- lhapdf
+- lhapdf5
+- powheg
+- pythia
+- pythia6
+- rivet
+- rivet-test
+- sherpa
+- thepeg
+- thepeg-test
+- yoda
+
+Plus any of their dependencies.
