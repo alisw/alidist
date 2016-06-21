@@ -82,6 +82,7 @@ else
         -DCMAKE_LINKER=$COMPILER_LD                               \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
+        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT}/include  \
         ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
         -Dminuit2=ON                                              \
