@@ -12,6 +12,11 @@ export ALICE_ROOT=$ALIROOT_ROOT
 echo "`date +%s`:aliroot-test: $x STARTED"
 WORKSPACE=${WORKSPACE:-$BUILDDIR}
 
+# Uses the same setup as AliRoot
+if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
+  source $ALIROOT_ROOT/etc/gcov-setup.sh
+fi
+
 # Despite the fact we shouldn't rely on external variables, here we do to
 # control from the outside (i.e. jenkins) which tests to run.
 #

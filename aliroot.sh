@@ -7,6 +7,7 @@ requires:
   - GEANT4_VMC
 build_requires:
   - CMake
+  - DAQ:slc6.*
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
@@ -15,30 +16,51 @@ tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
+  [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
 
-# Picking up ROOT from the system when our is disabled
-if [ "X$ROOT_ROOT" = X ]; then
-  ROOT_ROOT="$(root-config --prefix)"
+# Picking up ROOT from the system when ours is disabled
+[[ -z "$ROOT_ROOT" ]] && ROOT_ROOT="$(root-config --prefix)"
+
+# If building DAQ utilities verify environment integrity
+[[ $ALICE_DAQ ]] && ( source /date/setup.sh )
+
+# Generates an environment file to be loaded in case we need code coverage
+if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
+mkdir -p $INSTALLROOT/etc
+cat << EOF > $INSTALLROOT/etc/gcov-setup.sh
+export GCOV_PREFIX=${GCOV_PREFIX:-"$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION"}
+export GCOV_PREFIX_STRIP=$(echo $INSTALLROOT | sed -e 's|/$||;s|^/||;s|//*|/|g;s|[^/]||g' | wc -c | sed -e 's/[^0-9]*//')
+EOF
+source $INSTALLROOT/etc/gcov-setup.sh
 fi
 
-cmake $SOURCEDIR                                                   \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
-      -DROOTSYS="$ROOT_ROOT"                                       \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
-      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
+cmake $SOURCEDIR                                                  \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                       \
+      -DROOTSYS="$ROOT_ROOT"                                      \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}        \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                  \
+      ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}         \
+      ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                  \
+      ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                    \
+      ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                          \
+      ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                \
       -DOCDB_INSTALL=PLACEHOLDER
 
-if [[ $GIT_TAG == master ]]; then
+if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
   make -k ${JOBS+-j $JOBS} install || true
 else
   make ${JOBS+-j $JOBS} install
 fi
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
+
+[[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
+  && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"  \
+  && rsync -acv --filter='+ */' --filter='+ *.c' --filter='+ *.cxx' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.hpp' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
 
 # Modulefile
 mkdir -p etc/modulefiles

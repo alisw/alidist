@@ -11,6 +11,7 @@ build_requires:
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
   -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+  -DCMAKE_INSTALL_LIBDIR="lib"                 \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
 
 make ${JOBS+-j $JOBS} install
@@ -31,6 +32,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 GEANT4/$GEANT4_VERSION-$GEANT4_REVISION ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
 setenv VGM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(VGM_ROOT)/lib64
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(VGM_ROOT)/lib64")
+prepend-path LD_LIBRARY_PATH \$::env(VGM_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(VGM_ROOT)/lib")
 EoF

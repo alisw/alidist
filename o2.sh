@@ -6,7 +6,9 @@ requires:
   - DDS
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
-incremental_recipe: make ${JOBS:+-j$JOBS} install
+incremental_recipe: |
+  make ${JOBS:+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
@@ -46,10 +48,8 @@ fi
 make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+mkdir -p etc/modulefiles
+cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -65,3 +65,4 @@ prepend-path PATH \$::env(O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
