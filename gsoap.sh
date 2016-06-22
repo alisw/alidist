@@ -5,6 +5,7 @@ source: https://github.com/alisw/gsoap.git
 build_requires:
  - autotools
  - "OpenSSL:(?!osx)"
+ - "osx-system-openssl:(osx.*)"
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e

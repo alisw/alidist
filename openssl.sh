@@ -11,21 +11,6 @@ build_requires:
 ---
 #!/bin/bash -e
 
-case $ARCHITECTURE in 
-  osx*)
-  cat << \EOF
-MacOSX builds require system installation of OpenSSL.
-
-Please install it using homebrew:
-
-    brew install openssl
-
-or a similar system.
-EOF
-exit 1
-  ;;
-esac
-
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 
 pushd openssl-fips
