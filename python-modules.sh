@@ -2,6 +2,8 @@ package: Python-modules
 version: "1.0"
 requires:
   - Python
+  - FreeType
+  - libpng
 env:
   SSL_CERT_FILE: "$(export PYTHONPATH=$PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH; export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
 prepend_path:
