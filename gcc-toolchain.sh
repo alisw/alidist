@@ -1,7 +1,7 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
 source: https://github.com/alisw/gcc-toolchain
-tag: alice/v4.9.3
+tag: v4.9.3-alice2
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
