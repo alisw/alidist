@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s-alice%(defaults_upper)s"
-tag: alice/v5-34-30
+tag: v5-34-30-alice5
 source: https://github.com/alisw/root
 requires:
   - AliEn-Runtime:(?!.*ppc64)
