@@ -88,6 +88,7 @@ else
         -Dminuit2=ON                                              \
         -Dpythia6_nolink=ON                                       \
         -Droofit=ON                                               \
+        -Dhttp=ON                                                 \
         -Dsoversion=ON                                            \
         -Dshadowpw=OFF                                            \
         -Dvdt=ON
