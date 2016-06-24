@@ -2,6 +2,7 @@ package: AliGenerators
 version: "v%(year)s%(month)s%(day)s"
 requires:
   - CRMC
+  - EPOS
   - JEWEL
   - POWHEG
   - pythia
@@ -9,6 +10,7 @@ requires:
   - SHERPA
   - ThePEG
 build_requires:
+  - EPOS-test
   - ThePEG-test
 ---
 #!/bin/bash -ex

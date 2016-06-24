@@ -1,28 +1,24 @@
-package: mesos
-version: v0.27.2
-source: https://git-wip-us.apache.org/repos/asf/mesos.git
-tag: 0.27.2
+package: parquet-cpp
+version: release-0.1-rc0
+source: https://github.com/apache/parquet-cpp
 build_requires:
-- autotools
 - protobuf
-- glog
-- Python
-prepend_path:
-  PATH: "$MESOS_ROOT/sbin"
-  PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
+- snappy
+- zlib
+- thrift
+build_requires:
+- CMake
+- googletest
 ---
 
-rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
-./bootstrap
-mkdir build
-cd build
-../configure --prefix="$INSTALLROOT"         \
-             --enable-python                 \
-             --disable-java                  \
-             --with-glog=${GLOG_ROOT}        \
-             --with-protobuf=$PROTOBUF_ROOT
-# We build with fewer jobs to avoid OOM errors in GCC
-make -j 4
+export THRIFT_HOME=$(brew --prefix thrift)
+cmake $SOURCEDIR                                              \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
+      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
+      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}
+
+make ${JOBS+-j $JOBS}
 make install
 
 #ModuleFile

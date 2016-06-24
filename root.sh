@@ -5,9 +5,20 @@ tag: v6-06-04
 requires:
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
+  - opengl:(?!osx)
+build_requires:
+  - CMake
 env:
   ROOTSYS: "$ROOT_ROOT"
 incremental_recipe: |
+  if [[ $ALICE_DAQ ]]; then
+    export ROOTSYS=$BUILDDIR && make ${JOBS+-j$JOBS} && make static
+    for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
+      mkdir -p $INSTALLROOT/$S/src
+      cp -v $S/src/*.o $INSTALLROOT/$S/src/
+    done
+    export ROOTSYS=$INSTALLROOT
+  fi
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cd $INSTALLROOT/test
@@ -32,46 +43,77 @@ case $ARCHITECTURE in
   ;;
 esac
 
-cmake $SOURCEDIR                                                \
-      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}    \
-      ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
-      ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
-      -Dhttp=ON                                                 \
-      ${CXX11:+-Dcxx11=ON}                                      \
-      -Dbuiltin_freetype=ON                                     \
-      -Dbuiltin_pcre=ON                                         \
-      ${ENABLE_COCOA:+-Dcocoa=ON}                               \
-      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
-      -DCMAKE_C_COMPILER=$COMPILER_CC                           \
-      -DCMAKE_LINKER=$COMPILER_LD                               \
-      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
-      ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
-      ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
-      -Dminuit2=ON                                              \
-      -Dpythia6_nolink=ON                                       \
-      -Droofit=ON                                               \
-      -Dsoversion=ON                                            \
-      -Dshadowpw=OFF                                            \
-      -Dvdt=ON
+if [[ $ALICE_DAQ ]]; then
+  # DAQ requires static ROOT, only supported by ./configure (not CMake).
+  export ROOTSYS=$BUILDDIR
+  $SOURCEDIR/configure                  \
+    --with-pythia6-uscore=SINGLE        \
+    --enable-minuit2                    \
+    --enable-roofit                     \
+    --enable-soversion                  \
+    --enable-builtin-freetype           \
+    --enable-builtin-pcre               \
+    --enable-mathmore                   \
+    --with-f77=gfortran                 \
+    --with-cc=$COMPILER_CC              \
+    --with-cxx=$COMPILER_CXX            \
+    --with-ld=$COMPILER_LD              \
+    ${CXXFLAGS:+--cxxflags="$CXXFLAGS"} \
+    --disable-shadowpw                  \
+    --disable-astiff                    \
+    --disable-globus                    \
+    --enable-mysql
+  FEATURES="builtin_freetype builtin_pcre mathmore minuit2 pythia6 roofit
+            soversion ${CXX11:+cxx11} mysql xml"
+else
+  # Normal ROOT build.
+  cmake $SOURCEDIR                                                \
+        -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
+        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
+        ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}    \
+        ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
+        ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
+        ${CXX11:+-Dcxx11=ON}                                      \
+        -Dbuiltin_freetype=ON                                     \
+        -Dbuiltin_pcre=ON                                         \
+        ${ENABLE_COCOA:+-Dcocoa=ON}                               \
+        -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
+        -DCMAKE_C_COMPILER=$COMPILER_CC                           \
+        -DCMAKE_LINKER=$COMPILER_LD                               \
+        ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
+        ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
+        ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
+        ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
+        -Dminuit2=ON                                              \
+        -Dpythia6_nolink=ON                                       \
+        -Droofit=ON                                               \
+        -Dsoversion=ON                                            \
+        -Dshadowpw=OFF                                            \
+        -Dvdt=ON
+  FEATURES="builtin_freetype builtin_pcre mathmore xml ssl opengl minuit2
+            pythia6 roofit soversion vdt ${CXX11:+cxx11} ${XROOTD_ROOT:+xrootd}
+            ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
+fi
 
-# Check if essential features are enabled
+# Check if all required features are enabled
 bin/root-config --features
-for FEATURE in http builtin_freetype builtin_pcre mathmore xml \
-               ssl opengl minuit2 pythia6 roofit soversion vdt \
-               ${CXX11:+cxx11} ${XROOTD_ROOT:+xrootd}          \
-               ${ALIEN_RUNTIME_ROOT:+alien monalisa}
-do
+for FEATURE in $FEATURES; do
   bin/root-config --has-$FEATURE | grep -q yes
 done
 
+if [[ $ALICE_DAQ ]]; then
+  make ${JOBS+-j$JOBS}
+  make static
+  # *.o files from these modules need to be copied to the install directory
+  # because AliRoot static build uses them directly
+  for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
+    mkdir -p $INSTALLROOT/$S/src
+    cp -v $S/src/*.o $INSTALLROOT/$S/src/
+  done
+  export ROOTSYS=$INSTALLROOT
+fi
 make ${JOBS+-j$JOBS} install
-pushd $INSTALLROOT/test
-  # Compile ROOT tests
-  env PATH=$INSTALLROOT/bin:$PATH LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH make ${JOBS+-j$JOBS}
-popd
+[[ -d $INSTALLROOT/test ]] && ( cd $INSTALLROOT/test && env PATH=$INSTALLROOT/bin:$PATH LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH make ${JOBS+-j$JOBS} )
 
 # Modulefile
 mkdir -p etc/modulefiles

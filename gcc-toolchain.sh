@@ -1,7 +1,7 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
 source: https://github.com/alisw/gcc-toolchain
-tag: alice/v4.9.3
+tag: v4.9.3-alice2
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
@@ -9,14 +9,17 @@ build_requires:
  - autotools
 prefer_system: .*
 prefer_system_check: |
-  printf "#if ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) < (0x040800)) || ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__) >= (0x050000))\n#error \"Cannot use system's, GCC building our own.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
+  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x040800) || ((GCCVER >= 0x050000) && (GCCVER < 0x050300)) || (GCCVER >= 0x060000)\n#error \"System's GCC cannot be used: we need 4.8, 4.9 or 5.X (with the exception of 5.0 to 5.2). We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null && which gfortran
 ---
 #!/bin/bash -e
 
+# Avoid using any CXXFLAGS / CFLAGS other then the ones specified in 
+# this spec This is to avoid having defaults-* files that screw up gcc
+# compilation.
 unset CXXFLAGS
 unset CFLAGS
 
-echo "Building ALICE GCC. You can skip this step by installing GCC 4.8 or 4.9 on your system. GCC 5 is currently not supported."
+echo "Building ALICE GCC. You can skip this step by installing at least GCC 4.8 on your system."
 
 USE_GOLD=
 case $ARCHITECTURE in
