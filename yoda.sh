@@ -1,20 +1,21 @@
 package: YODA
-version: "v1.4.0"
+version: "v1.6.1"
+source: https://github.com/alisw/yoda
 requires:
   - boost
   - Python-modules
+build_requires:
+  - autotools
 prepend_path:
   PYTHONPATH: $YODA_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -e
-Url="http://www.hepforge.org/archive/yoda/YODA-${PKGVERSION:1}.tar.bz2"
+rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
-curl -Lo yoda.tar.bz2 "$Url"
-tar xjf yoda.tar.bz2
-cd YODA-${PKGVERSION:1}
+autoreconf -ivf
 ./configure --prefix="$INSTALLROOT" --with-boost="$Boost"
 make -j$JOBS
-make install -j$JOBS
+make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
