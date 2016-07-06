@@ -42,6 +42,9 @@ setupThePEG -r $THEPEG_ROOT/lib/ThePEG/ThePEGDefaults.rpo \
             DIPSYpp_HepMC.in
 runThePEG DIPSYpp.run -N100 --tics
 
-rivet -a ALICE_2010_S8625980 DIPSYpp.hepmc
+rivet-mkanalysis ALICE_Test
+rivet-buildplugin RivetALICE_Test.so ALICE_Test.cc
+
+rivet --pwd -a ALICE_2010_S8625980 -a ALICE_Test DIPSYpp.hepmc
 
 rivet-cmphistos Rivet.yoda
