@@ -1,11 +1,12 @@
 package: Rivet
-version: "2.2.1"
+version: "%(tag_basename)s"
+tag: 2.4.3-alice1
+source: https://github.com/alisw/rivet
 requires:
   - GSL
   - YODA
   - fastjet
   - HepMC
-  - boost
 prepend_path:
   PYTHONPATH: $RIVET_ROOT/lib/python2.7/site-packages
 ---
@@ -19,25 +20,25 @@ case $ARCHITECTURE in
     ARCH_LDFLAGS="-Wl,--no-as-needed"
   ;;
 esac
-Url="http://www.hepforge.org/archive/rivet/Rivet-${PKGVERSION}.tar.bz2"
 
-curl -Lo rivet.tar.bz2 "$Url"
-tar xjf rivet.tar.bz2
-cd Rivet-$PKGVERSION
+rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
 # MPFR and GMP are compiled statically, however in some cases there might be
 # some "-lgmp" left somewhere and we have to deal with it with the correct path.
 # Boost flags are also necessary
 export LDFLAGS="$ARCH_LDFLAGS -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib -lCGAL"
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-export CXXFLAGS="-I${MPFR_ROOT}/include -I${GMP_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+export CXXFLAGS="$CXXFLAGS -I${MPFR_ROOT}/include -I${GMP_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF"
 
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="$LDFLAGS -L$BOOST_ROOT/lib"
-  export CXXFLAGS="-I$BOOST_ROOT/include"
+  export CXXFLAGS="$CXXFLAGS -I$BOOST_ROOT/include"
 fi
 export LDFLAGS="$LDFLAGS -lboost_thread -lboost_system"
 
+[[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
+
+autoreconf -ivf
 ./configure                                 \
   --prefix="$INSTALLROOT"                   \
   --disable-doxygen                         \
@@ -45,9 +46,10 @@ export LDFLAGS="$LDFLAGS -lboost_thread -lboost_system"
   ${GSL_ROOT:+--with-gsl="$GSL_ROOT"}       \
   --with-hepmc="$HEPMC_ROOT"                \
   --with-fastjet="$FASTJET_ROOT"            \
-  ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"}
+  ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"} \
+  ${CXX11:+--enable-stdcxx11}
 make -j$JOBS
-make install -j$JOBS
+make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -62,7 +64,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 setenv RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib/python2.7/site-packages
