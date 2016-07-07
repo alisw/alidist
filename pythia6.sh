@@ -1,7 +1,7 @@
 # a pythia6 recipe based on the one from FairROOT
 package: pythia6
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "alice/416"
+tag: "alice/428"
 source: https://github.com/alisw/pythia6.git
 build_requires:
   - CMake
@@ -33,6 +33,7 @@ module load BASE/1.0
 # Our environment
 setenv PYTHIA6_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib
+prepend-path AGILE_GEN_PATH \$::env(PYTHIA6_ROOT)
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib")
 EoF
 
