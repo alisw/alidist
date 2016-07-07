@@ -9,7 +9,9 @@ build_requires:
  - autotools
 prefer_system: .*
 prefer_system_check: |
-  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x040800) || ((GCCVER >= 0x050000) && (GCCVER < 0x050300)) || (GCCVER >= 0x060000)\n#error \"System's GCC cannot be used: we need 4.8, 4.9 or 5.X (with the exception of 5.0 to 5.2). We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null && which gfortran
+  set -e
+  which gfortran || { echo "gfortran missing"; exit 1; }
+  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x040800) || ((GCCVER >= 0x050000) && (GCCVER < 0x050300)) || (GCCVER >= 0x060000)\n#error \"System's GCC cannot be used: we need 4.8, 4.9 or 5.X (with the exception of 5.0 to 5.2). We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null 
 ---
 #!/bin/bash -e
 
