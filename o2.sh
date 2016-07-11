@@ -40,7 +40,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DZMQ_DIR=$ZEROMQ_ROOT                                                                      \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                                                      \
       -DALIROOT=$ALIROOT_ROOT                                                                     \
-      ${PYTHIA8_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
+      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
