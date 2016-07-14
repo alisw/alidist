@@ -5,6 +5,8 @@ tag: "alice/v2.1.1"
 build_requires:
   - autotools
   - GCC-Toolchain
+  - HepMC
+  - lhapdf5
 ---
 #!/bin/bash -e
 
@@ -12,7 +14,9 @@ rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 autoreconf -ivf
 ./configure --prefix=$INSTALLROOT \
-            --with-sqlite3=install
+            --with-sqlite3=install \
+            --enable-hepmc2=$HEPMC_ROOT \
+            --enable-lhapdf=$LHAPDF_ROOT
 
 make ${JOBS+-j $JOBS}
 make install
