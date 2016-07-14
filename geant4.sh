@@ -2,6 +2,8 @@ package: GEANT4
 version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/geant4
 tag: v4.10.01.p03
+requires:
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
 env:
