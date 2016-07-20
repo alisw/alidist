@@ -54,6 +54,7 @@ if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
   make -k ${JOBS+-j $JOBS} install || true
 else
   make ${JOBS+-j $JOBS} install
+  [[ $ALICE_DAQ ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
 fi
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
