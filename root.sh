@@ -62,6 +62,8 @@ if [[ $ALICE_DAQ ]]; then
     --disable-shadowpw                  \
     --disable-astiff                    \
     --disable-globus                    \
+    --disable-krb5                      \
+    --disable-ssl                       \
     --enable-mysql
   FEATURES="builtin_freetype builtin_pcre mathmore minuit2 pythia6 roofit
             soversion ${CXX11:+cxx11} mysql xml"
