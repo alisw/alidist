@@ -45,6 +45,7 @@ if [[ $FREETYPE_ROOT ]]; then
 fi
 perl -p -i -e "s|'darwin': \['/usr/local/'|'darwin': ['$INSTALLROOT'|g" setupext.py
 
+mkdir -p $INSTALLROOT/lib64/python2.7/site-packages $INSTALLROOT/lib/python2.7/site-packages
 python setup.py build
 PYTHONPATH=$INSTALLROOT/lib64/python2.7/site-packages:$INSTALLROOT/lib/python2.7/site-packages:$PYTHONPATH \
   python setup.py install --prefix $INSTALLROOT
