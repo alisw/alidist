@@ -74,9 +74,8 @@ def buildAny(architecture) {
       done
 
       rm -f $WORKAREA/$WORKAREA_INDEX/current_slave
-      if [ ! "X$BUILDERR" = X ]; then
-        exit $BUILDERR
-      fi
+      [[ "$BUILDERR" != '' ]] && exit $BUILDERR
+      exit 0
     '''
   return { -> node("${architecture}-large") {
                 dir ("alidist") { checkout scm }

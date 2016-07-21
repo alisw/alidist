@@ -1,5 +1,5 @@
 package: ROOT
-version: "%(tag_basename)s-alice%(defaults_upper)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 tag: v5-34-30-alice5
 source: https://github.com/alisw/root
 requires:
@@ -62,6 +62,8 @@ if [[ $ALICE_DAQ ]]; then
     --disable-shadowpw                  \
     --disable-astiff                    \
     --disable-globus                    \
+    --disable-krb5                      \
+    --disable-ssl                       \
     --enable-mysql
   FEATURES="builtin_freetype builtin_pcre mathmore minuit2 pythia6 roofit
             soversion ${CXX11:+cxx11} mysql xml"
@@ -82,11 +84,13 @@ else
         -DCMAKE_LINKER=$COMPILER_LD                               \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
+        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}  \
         ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
         -Dminuit2=ON                                              \
         -Dpythia6_nolink=ON                                       \
         -Droofit=ON                                               \
+        -Dhttp=ON                                                 \
         -Dsoversion=ON                                            \
         -Dshadowpw=OFF                                            \
         -Dvdt=ON

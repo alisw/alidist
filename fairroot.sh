@@ -26,6 +26,7 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
+    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     SONAME=dylib
   ;;
   *) SONAME=so ;;
@@ -46,6 +47,7 @@ cmake $SOURCEDIR                                                 \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                           \
       -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include              \
       -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc     \
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME  \
