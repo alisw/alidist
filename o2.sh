@@ -24,6 +24,7 @@ case $ARCHITECTURE in
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
+    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
   ;;
 esac
 
@@ -40,6 +41,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DZMQ_DIR=$ZEROMQ_ROOT                                                                      \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                                                      \
       -DALIROOT=$ALIROOT_ROOT                                                                     \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
 
 if [[ $GIT_TAG == master ]]; then
