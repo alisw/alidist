@@ -10,6 +10,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS:+-j$JOBS} install
 make test
 
+rsync -av $SOURCEDIR/include/ $INSTALLROOT/include/
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
