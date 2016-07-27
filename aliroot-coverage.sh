@@ -5,10 +5,6 @@ requires:
   - AliRoot-test
 ---
 #!/bin/sh
-export ALICE_ROOT=$ALIROOT_ROOT
-echo "`date +%s`:aliroot-test: $x STARTED"
-WORKSPACE=${WORKSPACE:-$BUILDDIR}
-
 # Uses the same setup as AliRoot
 if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   source $ALIROOT_ROOT/etc/gcov-setup.sh
