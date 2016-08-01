@@ -1,7 +1,6 @@
 package: ZeroMQ
-version: master
-source: https://github.com/ktf/libzmq
-tag: master
+version: v4.1.5
+source: https://github.com/alisw/zeromq
 requires:
   - sodium
   - "GCC-Toolchain:(?!osx)"
@@ -13,9 +12,10 @@ prefer_system_check: |
 cd $SOURCEDIR
 ./autogen.sh
 cd $BUILDDIR
-$SOURCEDIR/configure --prefix=$INSTALLROOT \
-                     --disable-dependency-tracking \
-                     sodium_CFLAGS="-I$SODIUM_ROOT/include" \
+$SOURCEDIR/configure --prefix=$INSTALLROOT                      \
+                     --disable-dependency-tracking              \
+                     --with-libsodium                           \
+                     sodium_CFLAGS="-I$SODIUM_ROOT/include"     \
                      sodium_LIBS="-L$SODIUM_ROOT/lib -lsodium"
 
 make ${JOBS+-j $JOBS}
