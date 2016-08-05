@@ -5,6 +5,7 @@ requires:
   - fastjet:(?!.*ppc64)
   - GEANT3
   - GEANT4_VMC
+  - ZeroMQ
 build_requires:
   - CMake
   - DAQ:slc6.*
@@ -23,6 +24,9 @@ incremental_recipe: |
 
 # Picking up ROOT from the system when ours is disabled
 [[ -z "$ROOT_ROOT" ]] && ROOT_ROOT="$(root-config --prefix)"
+
+# Pickup ZeroMQ from brew, when available
+[[ -z "$ZEROMQ_ROOT" ]] && ZEROMQ_ROOT="$(brew --prefix zeromq)"
 
 # If building DAQ utilities verify environment integrity
 [[ $ALICE_DAQ ]] && ( source /date/setup.sh )
@@ -43,6 +47,7 @@ cmake $SOURCEDIR                                                  \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}        \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                  \
+      ${ZEROMQ_ROOT:+-DZEROMQ=$ZEROMQ_ROOT}                       \
       ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}         \
       ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                  \
       ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                    \
