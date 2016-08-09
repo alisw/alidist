@@ -87,6 +87,7 @@ else
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}  \
         ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
+        -Dpgsql=OFF                                               \
         -Dminuit2=ON                                              \
         -Dpythia6_nolink=ON                                       \
         -Droofit=ON                                               \
