@@ -16,6 +16,10 @@ env:
   G4NEUTRONHPDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/G4NDL4.5"
   G4NEUTRONXSDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/G4NEUTRONXS1.4"
   G4SAIDXSDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/G4SAIDDATA1.1"
+  G4NeutronHPCrossSections: "$GEANT4_ROOT/share/Geant4/data/G4NDL"
+  G4PIIDATA: "$GEANT4_ROOT/share/Geant4/data/G4PII"
+  G4REALSURFACEDATA: "$GEANT4_ROOT/share/Geant4/data/RealSurface"
+  G4ENSDFSTATEDATA": $GEANT4_ROOT/share/Geant4/data/G4ENSDFSTATE"
 ---
 #!/bin/bash -e
 
