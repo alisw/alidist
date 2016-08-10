@@ -10,6 +10,7 @@ env:
   G4INSTALL: "$GEANT4_ROOT"
   G4INSTALL_DATA: "$GEANT4_ROOT/share/Geant4-10.1.3"
   G4SYSTEM: "$(uname)-g++"
+  q
   G4LEVELGAMMADATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/PhotonEvaporation3.1"
   G4RADIOACTIVEDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/RadioactiveDecay4.2"
   G4LEDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/G4EMLOW6.41"
@@ -17,9 +18,9 @@ env:
   G4NEUTRONXSDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/G4NEUTRONXS1.4"
   G4SAIDXSDATA: "$GEANT4_ROOT/share/Geant4-10.1.3/data/G4SAIDDATA1.1"
   G4NeutronHPCrossSections: "$GEANT4_ROOT/share/Geant4/data/G4NDL"
-  G4PIIDATA: "$GEANT4_ROOT/share/Geant4/data/G4PII"
-  G4REALSURFACEDATA: "$GEANT4_ROOT/share/Geant4/data/RealSurface"
-  G4ENSDFSTATEDATA": $GEANT4_ROOT/share/Geant4/data/G4ENSDFSTATE"
+  G4PIIDATA: "$GEANT4_ROOT/share/Geant4/data/G4PII1.3"
+  G4REALSURFACEDATA: "$GEANT4_ROOT/share/Geant4/data/RealSurface1.0"
+  G4ENSDFSTATEDATA": $GEANT4_ROOT/share/Geant4/data/G4ENSDFSTATE1.0"
 ---
 #!/bin/bash -e
 
