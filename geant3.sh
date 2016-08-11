@@ -37,6 +37,7 @@ module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
 setenv GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT3DIR \$::env(GEANT3_ROOT)
+setenv G3SYS \$::env(GEANT3_ROOT)
 prepend-path PATH \$::env(GEANT3_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64")
