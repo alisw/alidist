@@ -29,7 +29,7 @@ case $ARCHITECTURE in
 esac
 
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
-      -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules"  \
+      -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DFairRoot_DIR=$FAIRROOT_ROOT                                                               \
       -DALICEO2_MODULAR_BUILD=ON                                                                  \
       -DROOTSYS=$ROOTSYS                                                                          \
