@@ -20,6 +20,7 @@ overrides:
     tag: "v6-06-04"
   AliRoot:
     requires:
+      - ZeroMQ
       - ROOT
     build_requires:
       - CMake
