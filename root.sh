@@ -6,6 +6,7 @@ requires:
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
   - opengl:(?!osx)
+  - Xdevel:(?!osx)
   - FreeType:(?!osx)
 build_requires:
   - CMake
