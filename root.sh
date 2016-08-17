@@ -6,6 +6,8 @@ requires:
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
   - opengl:(?!osx)
+  - Xdevel:(?!osx)
+  - FreeType:(?!osx)
 build_requires:
   - CMake
 env:
@@ -76,7 +78,9 @@ else
         ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
         ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
         ${CXX11:+-Dcxx11=ON}                                      \
-        -Dbuiltin_freetype=ON                                     \
+        -Dfreetype=ON                                             \
+        -Dbuiltin_freetype=OFF                                    \
+        -Dpcre=OFF                                                \
         -Dbuiltin_pcre=ON                                         \
         ${ENABLE_COCOA:+-Dcocoa=ON}                               \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
@@ -94,16 +98,22 @@ else
         -Dhttp=ON                                                 \
         -Dsoversion=ON                                            \
         -Dshadowpw=OFF                                            \
-        -Dvdt=ON
-  FEATURES="builtin_freetype builtin_pcre mathmore xml ssl opengl minuit2
+        -Dvdt=ON                                                  \
+        -DCMAKE_PREFIX_PATH="${FREETYPE_ROOT}"
+  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${XROOTD_ROOT:+xrootd}
-            ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
+            ${ALIEN_RUNTIME_ROOT:+alien monalisa}
+            ${ENABLE_COCOA:+builtin_freetype}"
+  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype}"
 fi
 
 # Check if all required features are enabled
 bin/root-config --features
 for FEATURE in $FEATURES; do
   bin/root-config --has-$FEATURE | grep -q yes
+done
+for FEATURE in $NO_FEATURES; do
+  bin/root-config --has-$FEATURE | grep -q no
 done
 
 if [[ $ALICE_DAQ ]]; then
@@ -131,7 +141,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}
+module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
