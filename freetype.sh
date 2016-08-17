@@ -4,6 +4,7 @@ requires:
  - AliEn-Runtime:(?!.*ppc64)
 build_requires:
   - autotools
+  - curl
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <ft2build.h>\n" | gcc -xc++ - `freetype-config --cflags` -c -M 2>&1
