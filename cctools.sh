@@ -1,7 +1,7 @@
 package: cctools
-version: v5.3.1
+version: v5.4.17
 source: https://github.com/cooperative-computing-lab/cctools
-tag: 18a15be6bbe1a60c9f89f8ff58530366c4bf6663
+tag: c3ba2fa1d062bbeb2b76694bf57024a21ca64c21
 requires:
  - "GCC-Toolchain:(?!osx)"
 build_requires:
@@ -11,7 +11,7 @@ build_requires:
 #!/bin/bash
 rsync -a --delete --exclude "**/.git" $SOURCEDIR/ .
 [[ "$ZLIB_ROOT" == '' ]] || cp -v $ZLIB_ROOT/lib/libz.a .
-./configure --prefix=$INSTALLROOT \
+./configure --prefix=$INSTALLROOT                     \
             ${SWIG_ROOT:+--with-swig-path=$SWIG_ROOT} \
             ${ZLIB_ROOT:+--with-zlib-path=$PWD}
 make ${JOBS+-j$JOBS}
