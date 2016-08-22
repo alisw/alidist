@@ -5,6 +5,7 @@ requires:
   - fastjet:(?!.*ppc64)
   - GEANT3
   - GEANT4_VMC
+  - DPMJET
 build_requires:
   - CMake
   - DAQ:slc6.*
@@ -14,6 +15,7 @@ source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot
 tag: master
 incremental_recipe: |
+  export LIBRARY_PATH="$LD_LIBRARY_PATH"
   make ${JOBS:+-j$JOBS} install
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
@@ -50,6 +52,7 @@ cmake $SOURCEDIR                                                  \
       ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                \
       -DOCDB_INSTALL=PLACEHOLDER
 
+export LIBRARY_PATH="$LD_LIBRARY_PATH"
 if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
   make -k ${JOBS+-j $JOBS} install || true
 else
@@ -74,7 +77,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}
+module load BASE/1.0 ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION} ${DPMJET_VERSION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION}
 # Our environment
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
