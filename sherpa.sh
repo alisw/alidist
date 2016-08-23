@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 source: https://github.com/alisw/SHERPA
 tag: "alice/v2.1.1"
 build_requires:
+  - curl
   - autotools
   - GCC-Toolchain
   - HepMC
@@ -13,10 +14,15 @@ build_requires:
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 autoreconf -ivf
-./configure --prefix=$INSTALLROOT \
-            --with-sqlite3=install \
-            --enable-hepmc2=$HEPMC_ROOT \
-            --enable-lhapdf=$LHAPDF_ROOT
+
+# SHERPA's configure uses wget which might not be there
+mkdir -p fakewget && [[ -d fakewget ]]
+printf '#!/bin/bash\nexec curl -fO $1' > fakewget/wget && chmod +x fakewget/wget
+
+PATH=$PATH:fakewget ./configure --prefix=$INSTALLROOT        \
+                                --with-sqlite3=install       \
+                                --enable-hepmc2=$HEPMC_ROOT  \
+                                --enable-lhapdf=$LHAPDF5_ROOT
 
 make ${JOBS+-j $JOBS}
 make install
