@@ -1,6 +1,6 @@
 package: xalienfs
 version: "%(tag_basename)s"
-tag: alice/v1.0.14r1
+tag: v1.0.14r1-alice1
 source: https://github.com/alisw/xalienfs.git
 build_requires:
  - autotools
