@@ -15,7 +15,6 @@ source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot
 tag: master
 incremental_recipe: |
-  export LIBRARY_PATH="$LD_LIBRARY_PATH"
   make ${JOBS:+-j$JOBS} install
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
@@ -50,9 +49,9 @@ cmake $SOURCEDIR                                                  \
       ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                    \
       ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                          \
       ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                \
+      ${DPMJET_ROOT:+-DDPMJET=$DPMJET_ROOT}                       \
       -DOCDB_INSTALL=PLACEHOLDER
 
-export LIBRARY_PATH="$LD_LIBRARY_PATH"
 if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
   make -k ${JOBS+-j $JOBS} install || true
 else
