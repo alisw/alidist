@@ -1,5 +1,5 @@
 package: YODA
-version: "v1.6.1"
+version: "v1.6.3"
 source: https://github.com/alisw/yoda
 requires:
   - boost
