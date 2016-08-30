@@ -27,29 +27,27 @@ mkdir -p $TMPB2
 ./b2 install --prefix=$TMPB2
 export PATH=$TMPB2/bin:$PATH
 cd $BUILDDIR
-b2 -q \
-   -d2 \
-   ${JOBS+-j $JOBS} \
-   --prefix=$INSTALLROOT \
-   --build-dir=build-boost \
-   --disable-icu \
-   --without-atomic \
-   --without-chrono \
-   --without-container \
-   --without-context \
-   --without-coroutine \
-   --without-graph \
-   --without-graph_parallel \
-   --without-locale \
-   --without-math \
-   --without-mpi \
-   --without-python \
-   --without-wave \
-   toolset=$TOOLSET \
-   link=shared \
-   threading=multi \
-   variant=release \
-   $EXTRA_CXXFLAGS \
+b2 -q                        \
+   -d2                       \
+   ${JOBS+-j $JOBS}          \
+   --prefix=$INSTALLROOT     \
+   --build-dir=build-boost   \
+   --disable-icu             \
+   --without-container       \
+   --without-context         \
+   --without-coroutine       \
+   --without-graph           \
+   --without-graph_parallel  \
+   --without-locale          \
+   --without-math            \
+   --without-mpi             \
+   --without-python          \
+   --without-wave            \
+   toolset=$TOOLSET          \
+   link=shared               \
+   threading=multi           \
+   variant=release           \
+   $EXTRA_CXXFLAGS           \
    install
 
 # Modulefile

@@ -9,6 +9,8 @@ requires:
   - pythia6
   - SHERPA
   - ThePEG
+  - AGILe
+  - Sacrifice
 build_requires:
   - EPOS-test
   - ThePEG-test

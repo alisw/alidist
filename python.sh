@@ -6,6 +6,8 @@ requires:
  - AliEn-Runtime:(?!.*ppc64)
  - FreeType
  - libpng
+build_requires:
+ - curl
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
 prefer_system: (?!slc5)
