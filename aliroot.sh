@@ -36,7 +36,7 @@ if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
 mkdir -p $INSTALLROOT/etc
 cat << EOF > $INSTALLROOT/etc/gcov-setup.sh
 export GCOV_PREFIX=${GCOV_PREFIX:-"$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION"}
-export GCOV_PREFIX_STRIP=$(($(echo $INSTALLROOT | sed -e 's|/$||;s|^/||;s|//*|/|g;s|[^/]||g' | wc -c | sed -e 's/[^0-9]*//') - 1))
+export GCOV_PREFIX_STRIP=$(echo $INSTALLROOT | sed -e 's|/$||;s|^/||;s|//*|/|g;s|[^/]||g' | wc -c | sed -e 's/[^0-9]*//')
 EOF
 source $INSTALLROOT/etc/gcov-setup.sh
 fi
