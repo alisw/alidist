@@ -1,5 +1,5 @@
 package: AliEn-WorkQueue
-version: v1.0
+version: v1.1
 source: https://github.com/alisw/alien-workqueue
 requires:
  - "GCC-Toolchain:(?!osx)"
