@@ -26,7 +26,11 @@ incremental_recipe: |
 [[ -z "$ROOT_ROOT" ]] && ROOT_ROOT="$(root-config --prefix)"
 
 # Pickup ZeroMQ from brew, when available
-[[ -z "$ZEROMQ_ROOT" ]] && ZEROMQ_ROOT="$(brew --prefix zeromq)"
+case $ARCHITECTURE in
+  osx*)
+    [[ -z "$ZEROMQ_ROOT" ]] && ZEROMQ_ROOT="$(brew --prefix zeromq)"
+  ;;
+esac
 
 # If building DAQ utilities verify environment integrity
 [[ $ALICE_DAQ ]] && ( source /date/setup.sh )
