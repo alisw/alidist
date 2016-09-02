@@ -1,7 +1,6 @@
 package: cctools
-version: v5.4.17
-source: https://github.com/cooperative-computing-lab/cctools
-tag: c3ba2fa1d062bbeb2b76694bf57024a21ca64c21
+version: v5.4.17-alice1
+source: https://github.com/alisw/cctools
 requires:
  - "GCC-Toolchain:(?!osx)"
 build_requires:
