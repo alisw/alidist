@@ -1,11 +1,11 @@
 package: AliEn-WorkQueue
-version: v1.2
+version: v1.3
 source: https://github.com/alisw/alien-workqueue
 requires:
  - "GCC-Toolchain:(?!osx)"
+ - cctools
 build_requires:
  - CMake
- - cctools
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR                          \
