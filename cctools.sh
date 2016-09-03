@@ -1,5 +1,5 @@
 package: cctools
-version: v5.4.17-alice1
+version: v5.4.17-alice2
 source: https://github.com/alisw/cctools
 requires:
  - "GCC-Toolchain:(?!osx)"
