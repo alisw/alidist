@@ -10,6 +10,7 @@ requires:
   - nanomsg
   - boost
   - protobuf
+  - DDS
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
