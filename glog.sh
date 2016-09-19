@@ -4,7 +4,7 @@ source: https://github.com/google/glog
 build_requires:
  - autotools
  - "GCC-Toolchain:(?!osx)"
---- 
+---
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 autoreconf -ivf
 ./configure --prefix="$INSTALLROOT"
