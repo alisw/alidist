@@ -25,23 +25,29 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
+    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
+    SONAME=dylib
   ;;
+  *) SONAME=so ;;
 esac
 
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
-      -DFairRoot_DIR=$FAIRROOT_ROOT                                                               \
-      -DALICEO2_MODULAR_BUILD=ON                                                                  \
-      -DROOTSYS=$ROOTSYS                                                                          \
-      ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}                                    \
-      ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                                                   \
-      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                                   \
-      -DFAIRROOTPATH=$FAIRROOT_ROOT                                                               \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                                     \
-      -DZMQ_DIR=$ZEROMQ_ROOT                                                                      \
-      -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                                                      \
-      -DALIROOT=$ALIROOT_ROOT                                                                     \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                            \
+      -DFairRoot_DIR=$FAIRROOT_ROOT                               \
+      -DALICEO2_MODULAR_BUILD=ON                                  \
+      -DROOTSYS=$ROOTSYS                                          \
+      ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}    \
+      ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                   \
+      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                   \
+      -DFAIRROOTPATH=$FAIRROOT_ROOT                               \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                     \
+      -DZMQ_DIR=$ZEROMQ_ROOT                                      \
+      -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                      \
+      -DALIROOT=$ALIROOT_ROOT                                     \
+      -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include               \
+      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc      \
+      -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
 
 if [[ $GIT_TAG == master ]]; then
