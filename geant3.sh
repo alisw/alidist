@@ -4,8 +4,8 @@ requires:
   - ROOT
 build_requires:
   - CMake
-source: http://root.cern.ch/git/geant3.git
-tag: v2-1
+source: https://github.com/alisw/geant3.git
+tag: alice/v2-1
 prepend_path:
   "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
