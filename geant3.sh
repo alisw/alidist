@@ -5,7 +5,7 @@ requires:
 build_requires:
   - CMake
 source: http://root.cern.ch/git/geant3.git
-tag: v2-1
+tag: v2-2
 prepend_path:
   "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
