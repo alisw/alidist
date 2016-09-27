@@ -15,6 +15,7 @@ write_repo: https://git.cern.ch/reps/AliRoot
 tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -32,7 +33,7 @@ if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
 mkdir -p $INSTALLROOT/etc
 cat << EOF > $INSTALLROOT/etc/gcov-setup.sh
 export GCOV_PREFIX=${GCOV_PREFIX:-"$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION"}
-export GCOV_PREFIX_STRIP=$(($(echo $INSTALLROOT | sed -e 's|/$||;s|^/||;s|//*|/|g;s|[^/]||g' | wc -c | sed -e 's/[^0-9]*//') - 1))
+export GCOV_PREFIX_STRIP=$(echo $INSTALLROOT | sed -e 's|/$||;s|^/||;s|//*|/|g;s|[^/]||g' | wc -c | sed -e 's/[^0-9]*//')
 EOF
 source $INSTALLROOT/etc/gcov-setup.sh
 fi
@@ -52,8 +53,11 @@ cmake $SOURCEDIR                                                  \
 
 if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
   make -k ${JOBS+-j $JOBS} install || true
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS} || true
 else
   make ${JOBS+-j $JOBS} install
+  # ctest will succeed if no load_library tests were found
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   [[ $ALICE_DAQ ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
 fi
 
