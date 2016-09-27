@@ -40,10 +40,8 @@ if [[ $GIT_TAG == master ]]; then
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS} || true
 else
   make ${JOBS+-j $JOBS} install
-  if [[ $(ctest -N -R load_library | grep -i "total tests:" | cut -d: -f2) -gt 0 ]]; then
-    # Run library loading test if we have them
-    ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
-  fi
+  # ctest will succeed if no load_library tests were found
+  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 fi
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
