@@ -1,12 +1,13 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
 source: https://github.com/alisw/gcc-toolchain
-tag: v4.9.3-alice2
+tag: v4.9.3-alice3
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
 build_requires:
  - autotools
+ - yacc-like
 prefer_system: .*
 prefer_system_check: |
   set -e
@@ -142,7 +143,7 @@ module load BASE/1.0
 # Load Toolchain module for the current platform. Fallback on this one
 regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
 if { "\$mod_name" == "GCC-Toolchain" } {
-  module load Toolchain/GCC-$PKGVERSION
+  module load Toolchain/GCC-${PKGVERSION//-*}
   if { [is-loaded Toolchain] } { break }
   set base_path \$::env(BASEDIR)
 } else {
