@@ -2,7 +2,7 @@ package: Xdevel
 version: "1.0"
 system_requirement_missing: |
   Please install X development packages on your system.
-  They might be called libx11-dev, libpm-dev, libxext-dev and libxft-dev.
+  They might be called libx11-dev, libxpm-dev, libxext-dev and libxft-dev.
   On some systems they are called libX11-devel, libXpm-devel, libXext-devel and libXft-devel.
 system_requirement: ".*"
 system_requirement_check: |
