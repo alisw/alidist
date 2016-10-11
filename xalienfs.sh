@@ -20,8 +20,11 @@ CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/private
           ${UUID_ROOT:+-I$UUID_ROOT/include -L$UUID_ROOT/lib} "
 case $ARCHITECTURE in
   osx*)
-    CXXFLAGS="$CXXFLAGS -I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
-  ;;
+      CXXFLAGS="$CXXFLAGS -I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
+      # add openssl keg
+      OPENSSLDIR=`brew --prefix openssl`
+      CXXFLAGS="-I${OPENSSLDIR}/include -L${OPENSSLDIR}/lib $CXXFLAGS"
+      ;;
 esac
 export CXXFLAGS
 ./configure --prefix=$INSTALLROOT                \
