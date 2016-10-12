@@ -16,14 +16,16 @@ rsync -a --delete --exclude='**/.git' --delete-excluded \
       $SOURCEDIR/ ./
 ./bootstrap.sh
 autoreconf -ivf
-CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/private \
-          ${UUID_ROOT:+-I$UUID_ROOT/include -L$UUID_ROOT/lib} "
 case $ARCHITECTURE in
   osx*)
-    CXXFLAGS="$CXXFLAGS -I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
+    [[ "$OPENSSL_ROOT" != "" ]] || OPENSSL_ROOT=`brew --prefix openssl`
+    EXTRA_PERL_CXXFLAGS="-I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
   ;;
 esac
-export CXXFLAGS
+export CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/private \
+                 ${UUID_ROOT:+-I$UUID_ROOT/include -L$UUID_ROOT/lib}                    \
+                 ${OPENSSL_ROOT:+-I$OPENSSL_ROOT/include -L$OPENSSL_ROOT/lib}           \
+                 $EXTRA_PERL_CXXFLAGS"
 ./configure --prefix=$INSTALLROOT                \
             --with-xrootd-location=$XROOTD_ROOT  \
             --enable-perl-module                 \
