@@ -1,12 +1,14 @@
 package: aurora
-version: master
+version: alice1
 source: https://github.com/alisw/aurora
+tag: alice/cookie-auth
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ ./
 ./pants binary src/main/python/apache/aurora/client:aurora
 mkdir -p $INSTALLROOT/bin
 cp dist/aurora.pex $INSTALLROOT/bin/aurora
+cp dist/aurora_admin.pex $INSTALLROOT/bin/aurora_admin
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
