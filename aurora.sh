@@ -1,7 +1,7 @@
 package: aurora
 version: alice1
 source: https://github.com/alisw/aurora
-tag: alice/cookie-auth
+tag: alice/0.15.0
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ ./
