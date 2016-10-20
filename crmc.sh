@@ -16,9 +16,22 @@ case $ARCHITECTURE in
   ;;
 esac
 
+# In case root is available determine std
+std=
+if [ "x$(which root-config)" != "x" ]; then
+  if [ $(root-config --has-cxx11) == "yes" ] ; then
+    std="c++11"
+  fi
+  if [ $(root-config --has-cxx14) == "yes" ] ; then
+    std="c++14"
+  fi
+fi
+
 cmake $SOURCEDIR                               \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}  \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      ${std:+-DCMAKE_CXX_FLAGS="$(printf "\-std=%s" "$std")"} \
+      ${FASTJET_ROOT:+-DFastjet_DIR=$FASTJET_ROOT}
 make ${JOBS+-j $JOBS} all
 make install
 
