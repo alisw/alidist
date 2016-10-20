@@ -16,11 +16,10 @@ prefer_system_check:
 ---
 #!/bin/bash -ex
 
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   slc5*) ;;
   *)
-    echo "Building our own python. If you want to avoid this, please install python >= 2.7"
-    echo "and make sure you have matplotlib and certifi module installed."
+    echo "Building our own Python. If you want to avoid this, please install Python >= 2.7."
   ;;
 esac
 
@@ -37,9 +36,9 @@ export LDFLAGS=$(echo $LDFLAGS)
 export CPPFLAGS=$(echo $CPPFLAGS)
 
 ./configure --prefix=$INSTALLROOT \
-            --enable-shared \
-            --with-system-expat \
-            --with-system-ffi \
+            --enable-shared       \
+            --with-system-expat   \
+            --with-system-ffi     \
             --enable-unicode=ucs4
 make ${JOBS:+-j$JOBS}
 make install
@@ -72,7 +71,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
+module load BASE/1.0 $([[ $ALIEN_RUNTIME_VERSION ]] && echo "AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION" || echo "${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}") \\
+                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION} \\
+                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_ROOT)/bin
