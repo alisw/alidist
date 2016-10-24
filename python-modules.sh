@@ -12,21 +12,24 @@ prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import matplotlib,numpy,certifi,IPython,ipykernel,yaml'
+  python -c 'import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml'
 ---
 #!/bin/bash -ex
 
 if [[ ! $PYTHON_VERSION ]]; then
   cat <<EoF
 Building our own Python modules.
-If you want to avoid this please install the following modules:
+If you want to avoid this please install the following modules (pip recommended):
 
   - matplotlib
   - numpy
   - certifi
-  - IPython
+  - ipython
+  - ipywidgets
   - ipykernel
-  - yaml
+  - notebook
+  - metakernel
+  - pyyaml
 
 EoF
 fi
@@ -44,8 +47,11 @@ for X in "mock==1.0.0"         \
          "numpy==1.9.2"        \
          "certifi==2015.9.6.2" \
          "ipython==5.1.0"      \
+         "ipywidgets==5.2.2"   \
          "ipykernel==4.5.0"    \
-         "pyyaml";
+         "notebook==4.2.3"     \
+         "metakernel==0.14.0"  \
+         "pyyaml"
 do
   pip install --user $X
 done
@@ -91,6 +97,11 @@ find $INSTALLROOT/lib/python*                                              \
 # Fix shebangs to point to the correct Python from the runtime environment
 grep -IlRE '#!.*python' $INSTALLROOT/bin | \
   xargs -n1 perl -p -i -e 's|^#!.*/python|#!/usr/bin/env python|'
+
+# Test whether we can load Python modules (this is not obvious as some of them
+# do not indicate some of their dependencies and break at runtime).
+PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
+  python -c "import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
