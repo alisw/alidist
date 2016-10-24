@@ -89,7 +89,7 @@ find $INSTALLROOT/lib/python*                                              \
      -exec rm -rvf '{}' \;
 
 # Fix shebangs to point to the correct Python from the runtime environment
-grep -IlE '#!.*python' $INSTALLROOT/bin | \
+grep -IlRE '#!.*python' $INSTALLROOT/bin | \
   xargs -n1 perl -p -i -e 's|^#!.*/python|#!/usr/bin/env python|'
 
 # Modulefile
