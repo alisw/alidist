@@ -76,6 +76,7 @@ else
   cmake $SOURCEDIR                                                \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
+        ${ALIEN_RUNTIME_ROOT:+-Dalien=ON}                         \
         ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}    \
         ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
         ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
@@ -143,10 +144,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} \\
-                     ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} \\
-                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION} \\
-                     ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} \\
+module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}        \\
+                     ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
+                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
+                     ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
                      ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version

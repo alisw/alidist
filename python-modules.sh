@@ -12,9 +12,24 @@ prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import matplotlib; import numpy; import certifi; import IPython; import ipykernel; import yaml'
+  python -c 'import matplotlib,numpy,certifi,IPython,ipykernel,yaml'
 ---
 #!/bin/bash -ex
+
+if [[ ! $PYTHON_VERSION ]]; then
+  cat <<EoF
+Building our own Python modules.
+If you want to avoid this please install the following modules:
+
+  - matplotlib
+  - numpy
+  - certifi
+  - IPython
+  - ipykernel
+  - yaml
+
+EoF
+fi
 
 # Force pip installation of packages found in current PYTHONPATH
 unset PYTHONPATH
@@ -22,7 +37,8 @@ unset PYTHONPATH
 # The X.Y in pythonX.Y
 export PYVER=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')
 
-# Install as much as possible with pip
+# Install as much as possible with pip. Packages are installed one by one as we
+# are not sure that pip exits with nonzero in case one of the packages failed.
 export PYTHONUSERBASE=$INSTALLROOT
 for X in "mock==1.0.0"         \
          "numpy==1.9.2"        \
@@ -60,8 +76,7 @@ if [[ $FREETYPE_ROOT ]]; then
 fi
 perl -p -i -e "s|'darwin': \['/usr/local/'|'darwin': ['$INSTALLROOT'|g" setupext.py
 
-mkdir -p $INSTALLROOT/lib/python$PYVER/site-packages \
-         $INSTALLROOT/lib64/python$PYVER/site-packages
+mkdir -p $INSTALLROOT/{lib,lib64}/python$PYVER/site-packages
 python setup.py build
 PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
   python setup.py install --prefix $INSTALLROOT
@@ -72,6 +87,10 @@ rm -rvf $INSTALLROOT/share            \
 find $INSTALLROOT/lib/python*                                              \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
+
+# Fix shebangs to point to the correct Python from the runtime environment
+grep -IlE '#!.*python' $INSTALLROOT/bin | \
+  xargs -n1 perl -p -i -e 's|^#!.*/python|#!/usr/bin/env python|'
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
