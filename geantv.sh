@@ -17,9 +17,10 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALL_ROOT  \
       -DUSE_VECGEOM_NAVIGATOR=ON                       \
       -DVecGeom_DIR=$VECGEOM_ROOT/lib/CMake/VecGeom    \
       -DCMAKE_CXX_FLAGS="-O2 -std=c++11"               \
+      -DCMAKE_C_FLAGS="-O2"                            \
       -DUSE_ROOT=ON                                    \
       -DHepMC_DIR=$HEPMC3_ROOT/cmake/                  \
-      -DPYTHIA8_ROOT_DIR=$PYTHIA_ROOT                 \
+      -DPYTHIA8_ROOT_DIR=$PYTHIA_ROOT                  \
       -DCMAKE_PREFIX_PATH=$VC_ROOT/lib/cmake/Vc
 
 make ${JOBS+-j $JOBS}
