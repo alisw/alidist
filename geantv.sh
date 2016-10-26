@@ -13,11 +13,9 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALL_ROOT  \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
       -DUSE_VECGEOM_NAVIGATOR=ON                       \
       -DVecGeom_DIR=$VECGEOM_ROOT/lib/CMake/VecGeom    \
-      -DCMAKE_CXX_FLAGS="-O2 -std=c++11"               \
-      -DCMAKE_C_FLAGS="-O2"                            \
       -DUSE_ROOT=ON                                    \
       -DHepMC_DIR=$HEPMC3_ROOT/cmake/                  \
       -DPYTHIA8_ROOT_DIR=$PYTHIA_ROOT                  \
@@ -39,7 +37,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 Pythia/$PYTHIA_VERSION-$PYTHIA_REVISION Vc/$VC_VERSION-$VC_REVISION VecGeom/$VECGEOM_VERSION-$VECGEOM_REVISION
+module load BASE/1.0 Pythia/$PYTHIA_VERSION-$PYTHIA_REVISION Vc/$VC_VERSION-$VC_REVISION VecGeom/$VECGEOM_VERSION-$VECGEOM_REVISION GEANT4/$GEANT4_VERSION-$GEANT4_REVISION
 # Our environment
 set osname [uname sysname]
 setenv GEANTV_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
