@@ -27,7 +27,7 @@ def buildAny(architecture) {
           PKGS=AliPhysics
         ;;
         *)
-          PKGS=`cd alidist ; git diff --name-only origin/$CHANGE_TARGET | grep .sh | sed -e's|[.]sh$||'`
+          PKGS=`cd alidist ; git diff --name-status origin/$CHANGE_TARGET | grep -v -e '^D' | awk '{print $2}' | grep .sh | sed -e's|[.]sh$||'`
         ;;
       esac
 
