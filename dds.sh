@@ -5,7 +5,7 @@ requires:
   - boost
 build_requires:
   - CMake
-tag: 1.4
+tag: "1.4"
 ---
 #!/bin/sh
 
