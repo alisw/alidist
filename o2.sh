@@ -1,5 +1,5 @@
 package: O2
-version: master
+version: dev
 requires:
   - FairRoot
   - AliRoot
