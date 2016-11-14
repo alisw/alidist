@@ -7,7 +7,7 @@ requires:
 build_requires:
   - autotools
 prepend_path:
-  PYTHONPATH: $YODA_ROOT/lib/python2.7/site-packages
+  PYTHONPATH: $YODA_ROOT/lib64/python2.7/site-packages:$YODA_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
@@ -35,6 +35,7 @@ module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION ${PYTHON_VERSION:+Pyth
 setenv YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(YODA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib
+prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib64
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(YODA_ROOT)/lib")
 set pythonpath [exec yoda-config --pythonpath]
 prepend-path PYTHONPATH \$pythonpath
