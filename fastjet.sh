@@ -1,6 +1,6 @@
 package: fastjet
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "v3.1.3_1.020"
+tag: "v3.2.1_1.024"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
