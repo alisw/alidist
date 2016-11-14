@@ -7,14 +7,16 @@ requires:
   - YODA
   - fastjet
   - HepMC
+  - boost
 prepend_path:
-  PYTHONPATH: $RIVET_ROOT/lib/python2.7/site-packages
+  PYTHONPATH: $RIVET_ROOT/lib64/python2.7/site-packages:$RIVET_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
   *)
     ARCH_LDFLAGS="-Wl,--no-as-needed"
@@ -34,7 +36,11 @@ if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="$LDFLAGS -L$BOOST_ROOT/lib"
   export CXXFLAGS="$CXXFLAGS -I$BOOST_ROOT/include"
 fi
-export LDFLAGS="$LDFLAGS -lboost_thread -lboost_system"
+if printf "int main(){}" | c++ $LDFLAGS -lboost_thread -lboost_system -xc++ - -o /dev/null; then
+  export LDFLAGS="$LDFLAGS -lboost_thread -lboost_system"
+else
+  export LDFLAGS="$LDFLAGS -lboost_thread-mt -lboost_system-mt"
+fi
 
 [[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
 
@@ -68,6 +74,7 @@ module load BASE/1.0 ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_V
 # Our environment
 setenv RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib/python2.7/site-packages
+prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib64/python2.7/site-packages
 prepend-path PATH \$::env(RIVET_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(RIVET_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(RIVET_ROOT)/lib")

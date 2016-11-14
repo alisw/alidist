@@ -6,6 +6,7 @@ requires:
   - Rivet
   - pythia
   - HepMC
+  - boost
 build_requires:
   - autotools
 prepend_path:
@@ -19,12 +20,23 @@ case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
 
-export LDFLAGS="-Wl,--no-as-needed -L${BOOST_ROOT}/lib -lboost_thread -lboost_system -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+export CXXFLAGS="-I${CGAL_ROOT}/include"
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-export CXXFLAGS="-I${BOOST_ROOT}/include -I${CGAL_ROOT}/include"
+
+if [[ "$BOOST_ROOT" != '' ]]; then
+  export LDFLAGS="$LDFLAGS -L$BOOST_ROOT/lib"
+  export CXXFLAGS="$CXXFLAGS -I$BOOST_ROOT/include"
+fi
+if printf "int main(){}" | c++ $LDFLAGS -lboost_thread -lboost_system -xc++ - -o /dev/null; then
+  export LDFLAGS="$LDFLAGS -lboost_thread -lboost_system"
+else
+  export LDFLAGS="$LDFLAGS -lboost_thread-mt -lboost_system-mt"
+fi
 
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
