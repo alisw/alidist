@@ -6,8 +6,8 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   ROOT@969984f5f25c5c5326d6b4d4f20e72b0ffad164b:
-    version: "v6-09-01-alice1"
-    tag: "2196305bbc693a9085551df6a8d4a0fada96b696"
+    version: "%(tag_basename)s"
+    tag: "v6-08-00"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
@@ -20,7 +20,9 @@ overrides:
     prefer_system_check: |
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   CMake:
-    tag: v3.6.2
+    tag: "v3.5.2"
+    prefer_system_check: |
+      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-4].*|3.5.[0-1]) exit 1 ;; esac
   libpng@969984f5f25c5c5326d6b4d4f20e72b0ffad164b:
   Python-modules@969984f5f25c5c5326d6b4d4f20e72b0ffad164b:
   Python@969984f5f25c5c5326d6b4d4f20e72b0ffad164b:
