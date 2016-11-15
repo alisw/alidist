@@ -9,8 +9,8 @@ requires:
 - glog
 build_requires:
 - CMake
---- 
-case $ARCHITECTURE in 
+---
+case $ARCHITECTURE in
   osx*)
     [[ -z "$BOOST_ROOT" ]] && BOOST_ROOT=$(brew --prefix boost)
   ;;
@@ -37,7 +37,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 mesos/$MESOS_VERSION-$MESOS_REVISION protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION glog/$GLOG_VERSION-$GLOG_REVISION ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv MESOS_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(MESOS_WORKQUEUE_ROOT)/lib
