@@ -6,21 +6,21 @@ requires:
  - AliEn-Runtime:(?!.*ppc64)
  - FreeType
  - libpng
+ - sqlite
 build_requires:
  - curl
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)' && which pip
+  python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0); import sqlite3' && which pip
 ---
 #!/bin/bash -ex
 
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   slc5*) ;;
   *)
-    echo "Building our own python. If you want to avoid this, please install python >= 2.7"
-    echo "and make sure you have matplotlib and certifi module installed."
+    echo "Building our own Python. If you want to avoid this please install Python >= 2.7."
   ;;
 esac
 
@@ -29,7 +29,7 @@ rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 # The only way to pass externals to Python
 LDFLAGS=
 CPPFLAGS=
-for ext in $ALIEN_RUNTIME_ROOT $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT; do
+for ext in $ALIEN_RUNTIME_ROOT $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT $SQLITE_ROOT; do
   LDFLAGS="$(find $ext -type d -name lib -exec echo -L\{\} \;) $LDFLAGS"
   CPPFLAGS="$(find $ext -type d -name include -exec echo -I\{\} \;) $CPPFLAGS"
 done
@@ -37,9 +37,9 @@ export LDFLAGS=$(echo $LDFLAGS)
 export CPPFLAGS=$(echo $CPPFLAGS)
 
 ./configure --prefix=$INSTALLROOT \
-            --enable-shared \
-            --with-system-expat \
-            --with-system-ffi \
+            --enable-shared       \
+            --with-system-expat   \
+            --with-system-ffi     \
             --enable-unicode=ucs4
 make ${JOBS:+-j$JOBS}
 make install
@@ -72,7 +72,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
+module load BASE/1.0 $([[ $ALIEN_RUNTIME_VERSION ]] && echo "AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION" || echo "${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}") \\
+                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION} \\
+                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_ROOT)/bin
