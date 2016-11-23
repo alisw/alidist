@@ -18,6 +18,9 @@ overrides:
   ROOT:
     version: "%(tag_basename)s"
     tag: "v6-06-04"
+  protobuf:
+    version: "%(tag_basename)s"
+    tag: "v3.0.2"
   AliRoot:
     requires:
       - ZeroMQ

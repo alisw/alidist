@@ -1,6 +1,5 @@
 package: Configuration
 version: master
-# todo check which dependencies are only for build
 requires:
 #  - RapidJSON # etcd v2
   - curl
