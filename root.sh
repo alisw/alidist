@@ -123,8 +123,8 @@ done
 if [[ $ALICE_DAQ ]]; then
   make ${JOBS+-j$JOBS}
   make static
-  # *.o files from these modules need to be copied to the install directory
-  # because AliRoot static build uses them directly
+  # *.o files from these modules need to be copied to the install 
+  # directory because AliRoot static build uses them directly
   for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
     mkdir -p $INSTALLROOT/$S/src
     cp -v $S/src/*.o $INSTALLROOT/$S/src/
