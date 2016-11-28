@@ -15,6 +15,8 @@ esac
 
 cmake "$SOURCEDIR/Release"                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
+      -DBUILD_TESTS=OFF                         \
+      -DBUILD_SAMPLES=OFF                       \
       -DCMAKE_BUILD_TYPE=Debug
 
 make ${JOBS:+-j $JOBS}
