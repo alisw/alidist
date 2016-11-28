@@ -1,7 +1,7 @@
 package: mesos
-version: v0.27.2
+version: v0.28.2
 source: https://git-wip-us.apache.org/repos/asf/mesos.git
-tag: 0.27.2
+tag: 0.28.2
 build_requires:
 - autotools
 - protobuf
