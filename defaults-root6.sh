@@ -7,7 +7,7 @@ env:
 overrides:
   ROOT@969984f5f25c5c5326d6b4d4f20e72b0ffad164b:
     version: "%(tag_basename)s"
-    tag: "v6-08-00"
+    tag: "v6-07-07-aliceml"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
