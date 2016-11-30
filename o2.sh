@@ -41,6 +41,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                   \
       -DFAIRROOTPATH=$FAIRROOT_ROOT                               \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                     \
+      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                           \
       -DZMQ_DIR=$ZEROMQ_ROOT                                      \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                      \
       -DALIROOT=$ALIROOT_ROOT                                     \
