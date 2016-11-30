@@ -6,12 +6,14 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include <zlib.h>\n" | gcc -xc++ - -c -M 2>&1
+  printf "#include <zlib.h>\n" | gcc -xc++ - -c -M 2>&1 djksnckjas
 ---
 #!/bin/sh
 
 echo "Building ALICE zlib. To avoid this install zlib development package."
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+echo Error
+exit 1
 
 case $ARCHITECTURE in
    *_amd64_gcc4[56789]*)
