@@ -12,6 +12,7 @@ prefer_system_check: |
 
 echo "Building ALICE zlib. To avoid this install zlib development package."
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+exit 1
 
 case $ARCHITECTURE in
    *_amd64_gcc4[56789]*)
