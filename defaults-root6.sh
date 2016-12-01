@@ -6,8 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   ROOT@969984f5f25c5c5326d6b4d4f20e72b0ffad164b:
-    version: "v6-09-01-alice1"
-    tag: "2196305bbc693a9085551df6a8d4a0fada96b696"
+    version: "v6-08-00"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
