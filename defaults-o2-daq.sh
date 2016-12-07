@@ -6,6 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 disable:
   - AliEn-Runtime
+  - AliRoot
   - simulation
   - generators
   - GEANT4
@@ -21,12 +22,6 @@ overrides:
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.0.2"
-  AliRoot:
-    requires:
-      - ZeroMQ
-      - ROOT
-    build_requires:
-      - CMake
   CMake:
     tag: "v3.5.2"
     prefer_system_check: |
