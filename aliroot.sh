@@ -5,6 +5,7 @@ requires:
   - fastjet:(?!.*ppc64)
   - GEANT3
   - GEANT4_VMC
+  - Vc
 build_requires:
   - CMake
   - DAQ:slc6.*
