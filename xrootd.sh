@@ -28,3 +28,4 @@ cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
                    -DZLIB_ROOT=$ZLIB_ROOT
 make ${JOBS:+-j$JOBS}
 make install
+ln -sf lib $INSTALLROOT/lib64
