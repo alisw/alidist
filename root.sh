@@ -44,6 +44,7 @@ case $ARCHITECTURE in
     COMPILER_LD=clang
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=`brew --prefix openssl`
+    [[ ! $LIBXML2_ROOT ]] && LIBXML2_ROOT=`brew --prefix libxml2`
   ;;
 esac
 
@@ -122,8 +123,8 @@ done
 if [[ $ALICE_DAQ ]]; then
   make ${JOBS+-j$JOBS}
   make static
-  # *.o files from these modules need to be copied to the install directory
-  # because AliRoot static build uses them directly
+  # *.o files from these modules need to be copied to the install 
+  # directory because AliRoot static build uses them directly
   for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
     mkdir -p $INSTALLROOT/$S/src
     cp -v $S/src/*.o $INSTALLROOT/$S/src/
@@ -148,6 +149,7 @@ module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-
                      ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
                      ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
+                     ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
                      ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
