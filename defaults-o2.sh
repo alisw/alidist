@@ -24,10 +24,6 @@ overrides:
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.0.2"
-  CMake:
-    tag: "v3.5.2"
-    prefer_system_check: |
-      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-4].*|3.5.[0-1]) exit 1 ;; esac
   libpng:
   Python-modules:
   Python:
