@@ -10,7 +10,7 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 
-echo "Building ALICE CMake. To avoid this install at least CMake 2.8.12."
+echo "Building ALICE CMake. To avoid this install at least CMake 3.5.2."
 
 cat > build-flags.cmake <<- EOF
 # Disable Java capabilities; we don't need it and on OS X might miss the
