@@ -35,14 +35,9 @@ cmake "$SOURCEDIR"                                                 \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
       -DALIROOT="$ALIROOT_ROOT"
 
-if [[ $GIT_TAG == master ]]; then
-  make -k ${JOBS+-j $JOBS} install || true
-  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS} || true
-else
-  make ${JOBS+-j $JOBS} install
-  # ctest will succeed if no load_library tests were found
-  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
-fi
+make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+# ctest will succeed if no load_library tests were found
+ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
   && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"  \
