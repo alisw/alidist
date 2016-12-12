@@ -5,6 +5,7 @@ requires:
   - fastjet:(?!.*ppc64)
   - GEANT3
   - GEANT4_VMC
+  - Vc
 build_requires:
   - CMake
   - DAQ:slc6.*
@@ -51,15 +52,10 @@ cmake $SOURCEDIR                                                  \
       ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                \
       -DOCDB_INSTALL=PLACEHOLDER
 
-if [[ $GIT_TAG == master && ! $ALICE_DAQ ]]; then
-  make -k ${JOBS+-j $JOBS} install || true
-  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS} || true
-else
-  make ${JOBS+-j $JOBS} install
-  # ctest will succeed if no load_library tests were found
-  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
-  [[ $ALICE_DAQ ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
-fi
+make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+# ctest will succeed if no load_library tests were found
+ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+[[ $ALICE_DAQ ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
 
@@ -78,7 +74,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}
+module load BASE/1.0 ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION}
 # Our environment
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME

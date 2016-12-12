@@ -1,5 +1,5 @@
 package: AliGenerators
-version: "v%(year)s%(month)s%(day)s"
+version: "v%(year)s%(month)s%(day)s%(defaults_upper)s"
 requires:
   - CRMC
   - EPOS
