@@ -52,12 +52,14 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
 fi
 make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+# install the compilation database so that we can post-check the code
+cp compile_commands.json ${INSTALLROOT}
 
 DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
 # This really means we are in development mode. We need to make sure we
