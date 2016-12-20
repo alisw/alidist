@@ -1,5 +1,5 @@
 package: Configuration
-version: master
+version: "%(short_hash)s"
 requires:
 #  - RapidJSON # etcd v2
   - curl
