@@ -30,6 +30,8 @@ overrides:
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.0.2"
+  O2:
+    version: "%(short_hash)s%(defaults_upper)s"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
