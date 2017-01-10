@@ -14,7 +14,6 @@ disable:
   - GEANT4_VMC
   - pythia
   - pythia6
-  - DDS
 overrides:
   ROOT:
     tag: "v6-08-02"
