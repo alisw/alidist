@@ -11,8 +11,7 @@ build_requires:
   - DAQ:slc6.*
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
-source: http://git.cern.ch/pub/AliRoot
-write_repo: https://git.cern.ch/reps/AliRoot
+source: https://github.com/alisw/AliRoot
 tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
