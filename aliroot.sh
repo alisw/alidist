@@ -13,8 +13,7 @@ env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 prepend_path:
   ROOT_INCLUDE_PATH: "$ALIROOT_ROOT/include"
-source: http://git.cern.ch/pub/AliRoot
-write_repo: https://git.cern.ch/reps/AliRoot
+source: https://github.com/alisw/AliRoot
 tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
