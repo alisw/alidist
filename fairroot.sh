@@ -31,6 +31,7 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
+    [[ ! $NANOMSG_ROOT ]] && PROTOBUF_ROOT=`brew --prefix nanomsg`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     SONAME=dylib
   ;;
