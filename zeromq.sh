@@ -6,7 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 prefer_system: (?!slc5.*)
 prefer_system_check: |
-  printf "#include \"zmq.h\"\n" | gcc -I$(brew --prefix zeromq)/include -xc++ - -c -M 2>&1
+  printf "#include <zmq.h>\n#if(ZMQ_VERSION < 40103)\n#error \"zmq version >= 4.1.3 needed\"\n#endif\n int main(){}" | gcc -I$(brew --prefix zeromq)/include -xc++ - -c -M 2>&1
 ---
 #!/bin/sh
 cd $SOURCEDIR
