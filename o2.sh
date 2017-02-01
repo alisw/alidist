@@ -4,6 +4,7 @@ requires:
   - FairRoot
   - AliRoot
   - DDS
+  - AliEn-Runtime
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
 incremental_recipe: |
