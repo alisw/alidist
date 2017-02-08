@@ -2,21 +2,19 @@ package: ZeroMQ
 version: v4.1.5
 source: https://github.com/alisw/zeromq
 requires:
-  - sodium
   - "GCC-Toolchain:(?!osx)"
 prefer_system: (?!slc5.*)
 prefer_system_check: |
   printf "#include <zmq.h>\n#if(ZMQ_VERSION < 40103)\n#error \"zmq version >= 4.1.3 needed\"\n#endif\n int main(){}" | gcc -I$(brew --prefix zeromq)/include -xc++ - -c -M 2>&1
 ---
 #!/bin/sh
-cd $SOURCEDIR
-./autogen.sh
+
+# Hack to avoid having to do autogen inside $SOURCEDIR
+rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 cd $BUILDDIR
-$SOURCEDIR/configure --prefix=$INSTALLROOT                      \
-                     --disable-dependency-tracking              \
-                     --with-libsodium                           \
-                     sodium_CFLAGS="-I$SODIUM_ROOT/include"     \
-                     sodium_LIBS="-L$SODIUM_ROOT/lib -lsodium"
+./autogen.sh
+./configure --prefix=$INSTALLROOT          \
+            --disable-dependency-tracking
 
 make ${JOBS+-j $JOBS}
 make install
