@@ -8,7 +8,7 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF
 
 make ${JOBS+-j $JOBS}
 make install
