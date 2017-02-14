@@ -2,8 +2,6 @@ package: AliPhysics
 version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
-build_requires:
-  - AliPhysicsData
 source: https://github.com/alisw/AliPhysics
 tag: master
 env:
@@ -12,7 +10,6 @@ incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"
-  [[ $ALIPHYSICSDATA_VERSION ]] && rsync -a --exclude='**/relocate-me.sh' $ALIPHYSICSDATA_ROOT/ $INSTALLROOT/ || true
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -40,9 +37,6 @@ cmake "$SOURCEDIR"                                                 \
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
-
-# Install AliPhysics data in the AliPhysics installation directory
-[[ $ALIPHYSICSDATA_VERSION ]] && rsync -a --exclude='**/relocate-me.sh' $ALIPHYSICSDATA_ROOT/ $INSTALLROOT/ || true
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
   && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"  \

@@ -7,7 +7,6 @@ requires:
   - GEANT4_VMC
   - Vc
 build_requires:
-  - AliRootData
   - CMake
   - DAQ:slc6.*
 env:
@@ -19,7 +18,6 @@ incremental_recipe: |
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
-  [[ $ALIROOTDATA_VERSION ]] && rsync -a --exclude='**/relocate-me.sh' $ALIROOTDATA_ROOT/ $INSTALLROOT/ || true
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -59,9 +57,6 @@ ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 [[ $ALICE_DAQ ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
-
-# Install AliRoot data in the AliRoot installation directory
-[[ $ALIROOTDATA_VERSION ]] && rsync -a --exclude='**/relocate-me.sh' $ALIROOTDATA_ROOT/ $INSTALLROOT/ || true
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
   && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"  \
