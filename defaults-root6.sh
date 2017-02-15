@@ -7,7 +7,7 @@ env:
 overrides:
   ROOT:
     version: "%(tag_basename)s"
-    tag: "v6-08-02"
+    tag: "v6-08-04"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
