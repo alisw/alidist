@@ -50,7 +50,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc      \
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
-      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
+      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
+      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                           
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
