@@ -4,6 +4,7 @@ source: https://github.com/alisw/boost.git
 tag: v1.59.0
 requires:
  - "GCC-Toolchain:(?!osx)"
+ - "Python"
 build_requires:
  - "bz2"
 prefer_system: (?!slc5)
@@ -41,7 +42,6 @@ b2 -q                        \
    --without-locale          \
    --without-math            \
    --without-mpi             \
-   --without-python          \
    --without-wave            \
    toolset=$TOOLSET          \
    link=shared               \
