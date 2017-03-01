@@ -8,6 +8,7 @@ requires:
   - opengl:(?!osx)
   - Xdevel:(?!osx)
   - FreeType:(?!osx)
+  - Python-modules
 build_requires:
   - CMake
 env:
