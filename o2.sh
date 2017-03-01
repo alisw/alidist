@@ -51,12 +51,24 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc      \
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
-      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}
+      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
 fi
 make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+
+DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+# This really means we are in development mode. We need to make sure we
+# use the real path for sources in this case. We also copy the
+# compile_commands.json file so that IDEs can make use of it directly, this
+# is a departure from our "no changes in sourcecode" policy, but for a good reason
+# and in any case the file is in gitignore.
+if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+  perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+fi
 
 # Modulefile
 mkdir -p etc/modulefiles
