@@ -14,6 +14,7 @@ disable:
   - GEANT4_VMC
   - pythia
   - pythia6
+  - hijing
 overrides:
   ROOT:
     tag: "v6-08-02"

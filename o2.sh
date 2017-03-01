@@ -5,6 +5,7 @@ requires:
   - AliRoot
   - DDS
   - Vc
+  - hijing
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
 incremental_recipe: |
