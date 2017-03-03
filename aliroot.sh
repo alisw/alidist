@@ -11,6 +11,8 @@ build_requires:
   - DAQ:slc6.*
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
+prepend_path:
+  ROOT_INCLUDE_PATH: "$ALIROOT_ROOT/include"
 source: http://git.cern.ch/pub/AliRoot
 write_repo: https://git.cern.ch/reps/AliRoot
 tag: master
@@ -90,6 +92,7 @@ setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
 setenv ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
 prepend-path PATH \$::env(ALICE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(ALICE_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
