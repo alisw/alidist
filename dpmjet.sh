@@ -1,5 +1,5 @@
 package: DPMJET
-version: "v3.0.5"
+version: "v3.0.5-alice1"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/DPMJET.git
 requires:
  - "GCC-Toolchain:(?!osx)"
