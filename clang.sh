@@ -2,6 +2,8 @@ package: Clang
 version: "3.9"
 source: https://github.com/alisw/clang
 tag: master
+build_requires:
+ - CMake
 ---
 #!/bin/sh
 
