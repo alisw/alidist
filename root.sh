@@ -106,10 +106,10 @@ else
         -Dhttp=ON                                                 \
         -Dsoversion=ON                                            \
         -Dshadowpw=OFF                                            \
-        -Dvdt=ON                                                  \
+        -Dbuiltin_vdt=ON                                                  \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
-            pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
+            pythia6 roofit soversion builtin_vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}
             ${ENABLE_COCOA:+builtin_freetype}"
   NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype}"
