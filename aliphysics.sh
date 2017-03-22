@@ -2,8 +2,7 @@ package: AliPhysics
 version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
-source: http://git.cern.ch/pub/AliPhysics
-write_repo: https://git.cern.ch/reps/AliPhysics
+source: https://gitlab.cern.ch/alice-legacy/AliPhysics-legacy.git
 tag: master
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
