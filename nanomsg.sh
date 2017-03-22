@@ -4,6 +4,9 @@ source: https://github.com/nanomsg/nanomsg
 tag: 1.0.0
 build_requires:
   - CMake
+prefer_system: "(?!slc5)"
+prefer_system_check: |
+  printf "#include \"nanomsg/nn.h\"\nint main(){}" | cc -I$(brew --prefix nanomsg)/include -Wno-deprecated-declarations -xc - -o /dev/null
 ---
 #!/bin/sh
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"
