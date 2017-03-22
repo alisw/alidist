@@ -51,6 +51,8 @@ export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
 curl -kSsL -o get-pip.py https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
+which pip
+pip install -U pip
 
 # Remove useless stuff
 rm -rvf $INSTALLROOT/share \
