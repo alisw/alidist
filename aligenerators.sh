@@ -5,6 +5,7 @@ requires:
   - CRMC
   - DPMJET
   - EPOS
+  - Herwig
   - JEWEL
   - POWHEG
   - pythia

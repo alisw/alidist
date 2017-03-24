@@ -1,7 +1,7 @@
 package: ThePEG
 version: "%(tag_basename)s"
 source: https://github.com/alisw/thepeg
-tag: "alice/v2015-08-11"
+tag: "v2.0.4"
 requires:
   - Rivet
   - pythia
@@ -45,15 +45,16 @@ mkdir -p fakeperl/bin
 ln -nfs /usr/bin/perl fakeperl/bin/perl
 export PATH="$PWD/fakeperl/bin:$PATH"
 
-sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
-sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
-sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
+#sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
+#sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
+#sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
 
 autoreconf -ivf
 export LDFLAGS="-L$LHAPDF_ROOT/lib"
 ./configure                            \
   --disable-silent-rules               \
   --enable-shared                      \
+  --enable-stdcxx11                    \
   --disable-static                     \
   --without-javagui                    \
   --prefix="$INSTALLROOT"              \
