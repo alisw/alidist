@@ -4,7 +4,7 @@ tag: "v0.9.8_1.2.4"
 source: https://github.com/alisw/alice-openssl.git
 prefer_system: (?!slc5|slc6)
 prefer_system_check: |
-  if [ `uname` == Darwin ]; then test -d `brew --prefix openssl || echo /dev/nope` || exit 1; echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1; else exit 0; fi
+  if [ `uname` == Darwin ]; then test -d `brew --prefix openssl || echo /dev/nope` || exit 1; echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1; else echo '#include <openssl/bio.h>' | c++ -x c++ - -c -o /dev/null || exit 1; fi
 build_requires:
  - zlib
  - "GCC-Toolchain:(?!osx)"
