@@ -1,6 +1,6 @@
 package: aligenmc
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "v0.0.1"
+tag: "v0.0.2"
 source: https://github.com/alisw/aligenmc
 ---
 #!/bin/bash -e

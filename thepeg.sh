@@ -1,7 +1,7 @@
 package: ThePEG
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/thepeg
-tag: "v2.0.4"
+tag: "alice/v2.0.4"
 requires:
   - Rivet
   - pythia
@@ -45,9 +45,12 @@ mkdir -p fakeperl/bin
 ln -nfs /usr/bin/perl fakeperl/bin/perl
 export PATH="$PWD/fakeperl/bin:$PATH"
 
-#sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
-#sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
-#sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
+# special treatment for ThePEG version used for DIPSY
+if [[ "$PKGVERSION" =~ "v2015-08-11" ]]; then
+    sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
+    sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
+    sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
+fi
 
 autoreconf -ivf
 export LDFLAGS="-L$LHAPDF_ROOT/lib"
@@ -66,7 +69,7 @@ export LDFLAGS="-L$LHAPDF_ROOT/lib"
   --with-fastjet="$FASTJET_ROOT"       \
   --enable-unitchecks 2>&1 | tee -a thepeg_configure.log
 grep -q 'Cannot build TheP8I without a working Pythia8 installation.' thepeg_configure.log && false
-make C_INCLUDE_PATH="${GSL_ROOT}/include" CPATH="${GSL_ROOT}/include"
+make C_INCLUDE_PATH="${GSL_ROOT}/include" CPATH="${GSL_ROOT}/include" ${JOBS:+-j $JOBS}
 make install
 
 # Modulefile

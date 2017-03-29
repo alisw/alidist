@@ -5,7 +5,7 @@ requires:
   - lhapdf
   - HepMC
   - boost
-tag: alice/v8211pre
+tag: v8223
 env:
   PYTHIA8DATA: "$PYTHIA_ROOT/share/Pythia8/xmldoc"
   PYTHIA8: "$PYTHIA_ROOT"

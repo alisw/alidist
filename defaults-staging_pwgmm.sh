@@ -11,6 +11,14 @@ overrides:
     source: https://github.com/alipwgmm/ampt
   herwig:
     source: https://github.com/alipwgmm/herwig
+  powheg:
+    source: https://github.com/alipwgmm/powheg
+  pythia6:
+    source: https://github.com/alipwgmm/pythia6
+  pythia:
+    source: https://github.com/alipwgmm/pythia8
+  sacrifice:
+    source: https://github.com/alipwgmm/sacrifice
   thepeg:
     source: https://github.com/alipwgmm/thepeg
 ---

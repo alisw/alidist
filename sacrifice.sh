@@ -1,6 +1,6 @@
 package: Sacrifice
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "v1.0.0"
+tag: "alice/v1.0.0"
 source: https://github.com/alisw/Sacrifice.git
 requires:
   - "GCC-Toolchain:(?!osx)"
