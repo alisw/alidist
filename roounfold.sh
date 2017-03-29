@@ -11,6 +11,7 @@ make ${JOBS:+-j$JOBS} install
 make test
 
 rsync -av $SOURCEDIR/include/ $INSTALLROOT/include/
+rsync -av $SOURCEDIR/RooUnfoldDict_rdict.pcm $INSTALLROOT/lib/
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
