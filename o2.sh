@@ -11,6 +11,19 @@ tag: dev
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  # install the compilation database so that we can post-check the code
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+
+  DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+  # This really means we are in development mode. We need to make sure we
+  # use the real path for sources in this case. We also copy the
+  # compile_commands.json file so that IDEs can make use of it directly, this
+  # is a departure from our "no changes in sourcecode" policy, but for a good reason
+  # and in any case the file is in gitignore.
+  if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+    perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+  fi
 valid_defaults:
   - o2
   - o2-daq
