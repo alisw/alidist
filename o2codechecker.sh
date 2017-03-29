@@ -6,12 +6,15 @@ build_requires:
   - CMake
 source: https://github.com/AliceO2Group/O2CodeChecker.git
 tag: master
+incremental_recipe: |
+  make ${JOBS+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT    \
-                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE   \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
+                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE    \
                  -DClang_DIR=$CLANG_ROOT/lib/cmake/clang \
-                 -DLLVM_DIR=$CLANG_ROOT/lib/cmake/llvm   
+                 -DLLVM_DIR=$CLANG_ROOT/lib/cmake/llvm
 make ${JOBS+-j$JOBS} install
 ctest
 
