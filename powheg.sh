@@ -1,5 +1,5 @@
 package: POWHEG
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/POWHEG
 tag: "alice/r3178"
 requires:

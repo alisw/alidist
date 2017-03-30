@@ -1,5 +1,5 @@
 package: SHERPA
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/SHERPA
 tag: "alice/v2.1.1"
 build_requires:

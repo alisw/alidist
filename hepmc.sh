@@ -1,5 +1,5 @@
 package: HepMC
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/hepmc
 tag: alice/v2.06.09
 build_requires:

@@ -1,5 +1,6 @@
 package: YODA
-version: "v1.6.3"
+version: "%(tag_basename)s%(defaults_upper)s"
+tag: "v1.6.3"
 source: https://github.com/alisw/yoda
 requires:
   - boost

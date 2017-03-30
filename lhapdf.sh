@@ -1,5 +1,5 @@
 package: lhapdf
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 tag: alice/v6.1.5
 source: https://github.com/alisw/LHAPDF
 requires:
