@@ -11,6 +11,9 @@ tag: dev
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+valid_defaults:
+  - o2
+  - o2-daq
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
