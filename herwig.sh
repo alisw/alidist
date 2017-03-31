@@ -12,7 +12,7 @@ build_requires:
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 autoreconf -ivf
-export LDFLAGS="-L$LHAPDF_ROOT/lib"
+export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib"
 ./configure                            \
     --prefix="$INSTALLROOT"            \
     --with-thepeg="${THEPEG_ROOT}"     \
