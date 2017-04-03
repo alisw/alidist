@@ -12,13 +12,14 @@ build_requires:
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 autoreconf -ivf
-export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib"
+[[ $ALIEN_RUNTIME_VERSION ]] && LDZLIB="-L$ALIEN_RUNTIME_ROOT/lib" || { [[ $ZLIB_VERSION ]] && LDZLIB="-L$ZLIB_ROOT/lib" || LDZLIB= ; }
+export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib $LDZLIB"
 ./configure                            \
     --prefix="$INSTALLROOT"            \
     --with-thepeg="${THEPEG_ROOT}"     \
     --with-gsl="${GSL_ROOT}"
 
-make ${JOBS:+-j ${JOBS}}
+make ${JOBS:+-j $JOBS}
 make install
 
 # Modulefile
