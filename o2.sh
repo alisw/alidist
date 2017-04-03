@@ -61,6 +61,7 @@ if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
 fi
 make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+
 # install the compilation database so that we can post-check the code
 cp compile_commands.json ${INSTALLROOT}
 
@@ -95,3 +96,7 @@ prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  make test
+fi
