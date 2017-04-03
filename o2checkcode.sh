@@ -22,7 +22,7 @@ cp ${O2_ROOT}/compile_commands.json .
 
 # These are checks which are currently all green, so we should
 # Now enable them.
-CHECKS="${O2_CHECKER_CHECKS:--*,modernize-*,-modernize-use-auto,-modernize-use-bool-literals,-modernize-use-using,-modernize-loop-convert,-modernize-use-bool-literals,aliceO2-member-name}"
+CHECKS="${O2_CHECKER_CHECKS:--*,modernize-*,-modernize-use-auto,-modernize-use-bool-literals,-modernize-use-using,-modernize-loop-convert,-modernize-use-bool-literals,-modernize-make-unique,aliceO2-member-name}"
 # run actual checks
 run_O2CodeChecker.py -clang-tidy-binary `which O2codecheck` ${O2_CHECKER_FIX:+-fix} -checks=$CHECKS 2>&1 | tee error-log.txt
 
