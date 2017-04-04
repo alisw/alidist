@@ -1,5 +1,5 @@
 package: EPOS
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 tag: alice/v3.111
 source: https://gitlab.cern.ch/ALICEPrivateExternals/epos.git
 requires:
