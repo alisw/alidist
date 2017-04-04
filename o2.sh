@@ -24,6 +24,9 @@ incremental_recipe: |
     perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
     ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
   fi
+  if [[ $ALIBUILD_O2_TESTS ]]; then
+    make test
+  fi
 valid_defaults:
   - o2
   - o2-daq
