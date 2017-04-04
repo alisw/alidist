@@ -1,7 +1,7 @@
 package: defaults-o2
 version: v1
 env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++11"
+  CXXFLAGS: "-fPIC -g -O2 -std=c++14"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 disable:
