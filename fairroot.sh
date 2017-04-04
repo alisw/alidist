@@ -1,7 +1,7 @@
 package: FairRoot
-version: 4b0272a
-source: https://github.com/FairRootGroup/FairRoot
-tag: 4b0272a
+version: "%(tag_basename)s"
+source: https://github.com/alisw/FairRoot
+tag: "alice-dev-20170407"
 requires:
   - generators
   - simulation
@@ -42,17 +42,19 @@ esac
 
 cmake $SOURCEDIR                                                 \
       -DMACOSX_RPATH=OFF                                         \
-      -DCMAKE_CXX_FLAGS="-std=c++11"                             \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                              \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
       -DROOTSYS=$ROOTSYS                                         \
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                    \
       -DNANOMSG_INCLUDE_DIR=$NANOMSG_ROOT/include                \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                    \
       -DGeant3_DIR=$GEANT3_ROOT                                  \
+      -DDISABLE_GO=ON                                            \
+      -DBUILD_EXAMPLES=OFF                                       \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                  \
       -DFAIRROOT_MODULAR_BUILD=ON                                \
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                          \
-      ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}  \
+      ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
