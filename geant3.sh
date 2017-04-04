@@ -4,8 +4,8 @@ requires:
   - ROOT
 build_requires:
   - CMake
-source: http://root.cern.ch/git/geant3.git
-tag: v2-2
+source: https://github.com/vmc-project/geant3
+tag: v2-3
 prepend_path:
   "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
@@ -13,10 +13,8 @@ prepend_path:
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
-                 -DROOTSYS=$ROOT_ROOT                  \
                  -DCMAKE_SKIP_RPATH=TRUE
-make ${JOBS+-j$JOBS}
-make install
+make ${JOBS:+-j $JOBS} install
 
 [[ ! -d $INSTALLROOT/lib64 ]] && ln -sf lib $INSTALLROOT/lib64
 
