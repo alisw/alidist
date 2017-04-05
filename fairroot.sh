@@ -52,7 +52,7 @@ cmake $SOURCEDIR                                                 \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                  \
       -DFAIRROOT_MODULAR_BUILD=ON                                \
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                          \
-      ${ZEROMQ_ROOT:+-DZMQ_DIR=$ZEROMQ_ROOT}                     \
+      ${ZEROMQ_ROOT:+-DZeroMQ_DIR=$ZEROMQ_ROOT}                     \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
