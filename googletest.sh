@@ -4,6 +4,7 @@ source: https://github.com/google/googletest
 tag: release-1.8.0
 build_requires:
  - "GCC-Toolchain:(?!osx)"
+ - CMake
 ---
 #!/bin/sh
 cmake $SOURCEDIR                           \
