@@ -12,6 +12,8 @@ requires:
   - protobuf
   - DDS
   - "GCC-Toolchain:(?!osx)"
+build_requires:
+  - googletest
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
   GEOMPATH:   "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
@@ -55,6 +57,7 @@ cmake $SOURCEDIR                                                 \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                           \
+      -DGTEST_ROOT=$GOOGLETEST_ROOT                              \
       -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include              \
       -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc     \
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME  \
