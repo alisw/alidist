@@ -1,7 +1,7 @@
 package: FairRoot
-version: dev
+version: v-17.03
 source: https://github.com/FairRootGroup/FairRoot
-tag: dev
+tag: v-17.03
 requires:
   - generators
   - simulation
@@ -52,7 +52,7 @@ cmake $SOURCEDIR                                                 \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                  \
       -DFAIRROOT_MODULAR_BUILD=ON                                \
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                          \
-      ${ZEROMQ_ROOT:+-DZeroMQ_DIR=$ZEROMQ_ROOT}                     \
+      ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}  \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
@@ -62,6 +62,7 @@ cmake $SOURCEDIR                                                 \
       -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc     \
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+
 # Limit the number of build processes to avoid exahusting memory when building
 # on smaller machines.
 make ${JOBS:+-j 2} install
