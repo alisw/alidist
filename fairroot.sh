@@ -1,7 +1,7 @@
 package: FairRoot
-version: v-17.03
+version: bfdaa1c
 source: https://github.com/FairRootGroup/FairRoot
-tag: v-17.03
+tag: bfdaa1c
 requires:
   - generators
   - simulation
