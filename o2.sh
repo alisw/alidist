@@ -30,6 +30,7 @@ incremental_recipe: |
 valid_defaults:
   - o2
   - o2-daq
+  - o2-dev-fairroot
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
