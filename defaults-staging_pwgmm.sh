@@ -11,6 +11,8 @@ overrides:
     source: https://github.com/alipwgmm/ampt
   herwig:
     source: https://github.com/alipwgmm/herwig
+  lhapdf:
+    source: https://github.com/alipwgmm/lhapdf
   powheg:
     source: https://github.com/alipwgmm/powheg
   pythia6:

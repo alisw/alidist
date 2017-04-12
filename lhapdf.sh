@@ -1,6 +1,6 @@
 package: lhapdf
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: alice/v6.1.5
+tag: v6.1.6
 source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
