@@ -20,6 +20,7 @@ autoreconf -f -v -i
             --enable-maintainer-mode
 make ${JOBS:+-j$JOBS}
 make ${JOBS:+-j$JOBS} install
+rm -fv $INSTALLROOT/lib/*.la
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
