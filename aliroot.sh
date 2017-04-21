@@ -41,18 +41,19 @@ EOF
 source $INSTALLROOT/etc/gcov-setup.sh
 fi
 
-cmake $SOURCEDIR                                                  \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                       \
-      -DROOTSYS="$ROOT_ROOT"                                      \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"} \
-      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}        \
-      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                  \
-      ${DPMJET_ROOT:+-DDPMJET="$DPMJET_ROOT"}                     \
-      ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}         \
-      ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                  \
-      ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                    \
-      ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                          \
-      ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                \
+cmake $SOURCEDIR                                                    \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
+      -DROOTSYS="$ROOT_ROOT"                                        \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}   \
+      ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}          \
+      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                    \
+      ${DPMJET_ROOT:+-DDPMJET="$DPMJET_ROOT"}                       \
+      ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}           \
+      ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                    \
+      ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                      \
+      ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                            \
+      ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                  \
+      ${ALICE_SHUTTLE:-DDIMDIR=$HOME/DIM -DODIR=linux -DSHUTTLE=ON} \
       -DOCDB_INSTALL=PLACEHOLDER
 
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
