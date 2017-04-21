@@ -84,8 +84,8 @@ module load BASE/1.0                                                            
             ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                          \\
             ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}          \\
             ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}                  \\
-            ${PYTHIA6_VERSION:+Pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION}                      \\
-            ${PYTHIA_VERSION:+Pythia/$PYTHIA_VERSION-$PYTHIA_REVISION}                          \\
+            ${PYTHIA6_VERSION:+pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION}                      \\
+            ${PYTHIA_VERSION:+pythia/$PYTHIA_VERSION-$PYTHIA_REVISION}                          \\
             ${VGM_VERSION:+vgm/$VGM_VERSION-$VGM_REVISION}                                      \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                              \\
             ROOT/$ROOT_VERSION-$ROOT_REVISION                                                   \\
