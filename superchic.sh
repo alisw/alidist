@@ -1,6 +1,7 @@
 package: SuperCHIC
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "v2.04"
+tag: "alice/v2.04"
+source: https://github.com/hcab14/SuperCHIC.git
 requires:
  - lhapdf
 build_requires:
@@ -9,12 +10,7 @@ build_requires:
 ---
 #!/bin/bash -e
 
-SUPERCHIC_VERSION=v2.04
-SUPERCHIC_URL=https://superchic.hepforge.org/superchic${SUPERCHIC_VERSION}.tar.gz
-
-curl ${SUPERCHIC_URL} | tar xvf -
-
-cd superchic${SUPERCHIC_VERSION}
+rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
 patch makefile <<EOF
 8c8
@@ -23,6 +19,8 @@ patch makefile <<EOF
 > LHAPDFLIB = ${LHAPDF_ROOT}/lib
 
 EOF
+
+mkdir -p obj
 
 make ${JOBS+-j $JOBS}
 
