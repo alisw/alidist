@@ -8,6 +8,7 @@ requires:
   - opengl:(?!osx)
   - Xdevel:(?!osx)
   - FreeType:(?!osx)
+  - "MySQL:slc7.*"
 build_requires:
   - CMake
 env:
