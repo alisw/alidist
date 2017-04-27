@@ -8,6 +8,10 @@ disable:
   - AliEn-Runtime
   - AliRoot
 overrides:
+  boost:
+    requires:
+      - "GCC-Toolchain:(?!osx)"
+      - Python
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
