@@ -4,7 +4,7 @@ requires:
  - AliEn-Runtime:(?!.*ppc64)
 build_requires:
  - CMake
-source: git://git.code.sf.net/p/libpng/code
+source: https://git.code.sf.net/p/libpng/code
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <png.h>\n" | gcc -xc++ - `libpng-config --cflags` -c -M 2>&1
