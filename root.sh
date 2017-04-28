@@ -35,7 +35,8 @@ unset ROOTSYS
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
-[[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
+[[ "$CXXFLAGS" == *'-std=c++11'* ]] && CXX11=1 || true
+[[ "$CXXFLAGS" == *'-std=c++14'* ]] && CXX14=1 || true
 
 case $ARCHITECTURE in
   osx*)
@@ -71,7 +72,7 @@ if [[ $ALICE_DAQ ]]; then
     --disable-ssl                       \
     --enable-mysql
   FEATURES="builtin_freetype builtin_pcre mathmore minuit2 pythia6 roofit
-            soversion ${CXX11:+cxx11} mysql xml"
+            soversion ${CXX11:+cxx11} ${CXX14:+cxx14} mysql xml"
 else
   # Normal ROOT build.
   cmake $SOURCEDIR                                                \
@@ -82,6 +83,7 @@ else
         ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
         ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
         ${CXX11:+-Dcxx11=ON}                                      \
+        ${CXX14:+-Dcxx14=ON}                                      \
         -Dfreetype=ON                                             \
         -Dbuiltin_freetype=OFF                                    \
         -Dpcre=OFF                                                \
