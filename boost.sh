@@ -14,8 +14,16 @@ prefer_system_check: |
 
 echo "Building ALICE boost. You can avoid that by installing at least boost 1.59."
 
+# Detect whether we can enable boost-python (internal boost detection is broken)
+BOOST_PYTHON=1
+python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'                   && \
+  pip --help &> /dev/null                                                                 && \
+  printf '#include \"pyconfig.h"' | gcc -c -I$(python-config --cflags) -xc -o /dev/null - || \
+  unset BOOST_PYTHON
+[[ $BOOST_PYTHON ]] || WITHOUT_PYTHON="--without-python"
+
 TMPB2=$BUILDDIR/tmp-boost-build
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   osx*) TOOLSET=darwin ;;
   *) TOOLSET=gcc ;;
 esac
@@ -41,7 +49,7 @@ b2 -q                        \
    --without-locale          \
    --without-math            \
    --without-mpi             \
-   --without-python          \
+   $WITHOUT_PYTHON           \
    --without-wave            \
    toolset=$TOOLSET          \
    link=shared               \
@@ -49,6 +57,7 @@ b2 -q                        \
    variant=release           \
    $EXTRA_CXXFLAGS           \
    install
+[[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null || true
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -63,7 +72,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}
 # Our environment
 setenv BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(BOOST_ROOT)/lib

@@ -10,6 +10,10 @@ disable:
 overrides:
   autotools:
     tag: v1.5.0
+  boost:
+    requires:
+      - "GCC-Toolchain:(?!osx)"
+      - Python
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
