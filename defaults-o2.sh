@@ -8,6 +8,8 @@ disable:
   - AliEn-Runtime
   - AliRoot
 overrides:
+  autotools:
+    tag: v1.5.0
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
