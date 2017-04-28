@@ -13,7 +13,7 @@ env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0); import sqlite3' && which pip
+  python -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (2, 7) else 0)' && pip --help > /dev/null && printf '#include \"pyconfig.h"' | gcc -c -I$(python-config --cflags) -xc -o /dev/null -
 ---
 #!/bin/bash -ex
 
