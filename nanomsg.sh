@@ -8,11 +8,12 @@ prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include \"nanomsg/nn.h\"\nint main(){}" | cc -I$(brew --prefix nanomsg)/include -Wno-deprecated-declarations -xc - -o /dev/null
 ---
-#!/bin/sh
+#!/bin/bash
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"
 make ${JOBS+-j $JOBS}
 make test
 make install
+[[ -d "$INSTALLROOT"/lib ]] || ln -nfs lib64 "$INSTALLROOT"/lib
 
 # Modulefile support
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

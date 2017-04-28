@@ -67,7 +67,9 @@ cmake $SOURCEDIR                                                 \
 
 # Limit the number of build processes to avoid exahusting memory when building
 # on smaller machines.
-make ${JOBS:+-j 2} install
+JOBS=$((${JOBS:-1}*2/5))
+[[ $JOBS -gt 0 ]] || JOBS=1
+make -j$JOBS install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -92,6 +94,7 @@ module load BASE/1.0                                                            
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                              \\
             ROOT/$ROOT_VERSION-$ROOT_REVISION                                                   \\
             ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                          \\
+            ${NANOMSG_VERSION:+nanomsg/$NANOMSG_VERSION-$NANOMSG_REVISION}                      \\
             ${DDS_ROOT:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
