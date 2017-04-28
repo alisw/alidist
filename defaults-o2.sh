@@ -36,9 +36,6 @@ overrides:
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.0.2"
-  libpng:
-  Python-modules:
-  Python:
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.7.2"
