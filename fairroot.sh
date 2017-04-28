@@ -46,7 +46,7 @@ cmake $SOURCEDIR                                                 \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
       -DROOTSYS=$ROOTSYS                                         \
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                    \
-      -DNANOMSG_INCLUDE_DIR=$NANOMSG_ROOT/include                \
+      ${NANOMSG_ROOT:+-DNANOMSG_DIR=$NANOMSG_ROOT}               \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                    \
       -DGeant3_DIR=$GEANT3_ROOT                                  \
       -DDISABLE_GO=ON                                            \
