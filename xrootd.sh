@@ -4,8 +4,7 @@ tag: v3.3.6
 source: https://github.com/xrootd/xrootd.git
 build_requires:
  - CMake
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
+ - OpenSSL
  - ApMon-CPP
  - libxml2
  - MonALISA-gSOAP-client
