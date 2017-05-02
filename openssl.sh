@@ -2,12 +2,20 @@ package: OpenSSL
 version: v0.9.8zf
 tag: "v0.9.8_1.2.4"
 source: https://github.com/alisw/alice-openssl.git
-prefer_system: (?!slc5|slc6)
+prefer_system: (?!slc5|slc6|osx)
 prefer_system_check: |
-  if [ `uname` == Darwin ]; then test -d `brew --prefix openssl || echo /dev/nope` || exit 1; echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1; else exit 0; fi
+ echo "Prefer system - shell is ${0}"
+ if [ `uname` = Darwin ]; then test -d `brew --prefix openssl || echo /dev/nope` || exit 1; fi
+ echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1
 build_requires:
  - zlib
  - "GCC-Toolchain:(?!osx)"
+system_requirement_missing: |
+ Please make sure you install openssl using Homebrew (brew install openssl)
+system_requirement: "osx.*"
+system_requirement_check: |
+ echo "System requirement - shell is ${0}"
+ echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null
 ---
 #!/bin/bash -e
 
