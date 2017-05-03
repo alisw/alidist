@@ -8,6 +8,8 @@ disable:
   - AliEn-Runtime
   - AliRoot
 overrides:
+  Vc:
+    tag: 1.3.2
   autotools:
     tag: v1.5.0
   boost:
