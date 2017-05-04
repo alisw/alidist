@@ -1,11 +1,11 @@
 package: grpc
-version: master
+version: "%(tag_basename)s"
 requires:
   - protobuf
 build_requires:
   - "GCC-Toolchain:(?!osx)"
 source: https://github.com/grpc/grpc
-tag:  master
+tag:  v1.2.5
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
