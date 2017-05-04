@@ -17,8 +17,6 @@ disable:
   - pythia6
   - hijing
 overrides:
-  Vc:
-    tag: 1.3.2
   autotools:
     tag: v1.5.0
   boost:
