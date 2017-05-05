@@ -10,7 +10,9 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ALIPHYSICS_ROOT/include"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
+  [[ ! -z $ROOT_HIST ]] && tmpROOT_HIST="$ROOT_HIST"; export ROOT_HIST=0
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+  ROOT_HIST=$tmpROOT_HIST && [[ -z $tmpROOT_HIST ]] && unset ROOT_HIST
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -38,7 +40,9 @@ cmake "$SOURCEDIR"                                                 \
 
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
+[[ ! -z $ROOT_HIST ]] && tmpROOT_HIST="$ROOT_HIST"; export ROOT_HIST=0
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+ROOT_HIST=$tmpROOT_HIST && [[ -z $tmpROOT_HIST ]] && unset ROOT_HIST
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
   && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"  \
