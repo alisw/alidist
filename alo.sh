@@ -1,5 +1,5 @@
 package: alo
-version: master
+version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
   - O2
@@ -44,16 +44,14 @@ proc ModulesHelp { } {
   global version
   puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 }
-set  version  $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_ROOT:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${ALIROOT_VERSION:+AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION}
-
 # Our environment
-setenv ALO_ROOT $::env(BASEDIR)/alo/$version
+setenv ALO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(ALO_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALO_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALO_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-
