@@ -3,6 +3,8 @@ version: v4.1.5
 source: https://github.com/alisw/zeromq
 requires:
   - "GCC-Toolchain:(?!osx)"
+build_requires:
+  - autotools
 prefer_system: (?!slc5.*)
 prefer_system_check: |
   printf "#include <zmq.h>\n#if(ZMQ_VERSION < 40103)\n#error \"zmq version >= 4.1.3 needed\"\n#endif\n int main(){}" | gcc -I$(brew --prefix zeromq)/include $([[ -d $(brew --prefix zeromq) ]] || echo "-l:libzmq.a") -xc++ - 2>&1
