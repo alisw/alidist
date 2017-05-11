@@ -3,8 +3,7 @@ version: "v2-19-le%(defaults_upper)s"
 build_requires:
  - zlib
  - libxml2
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
+ - OpenSSL
  - AliEn-CAs
  - gSOAP
  - MonALISA-gSOAP-client
