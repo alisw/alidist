@@ -28,7 +28,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 \\
        ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv APMON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(APMON_ROOT)/bin
-EoF
+setenv APMON_CPP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(APMON_CPP_ROOT)/bin
+EoF 
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
