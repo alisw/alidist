@@ -26,7 +26,7 @@ cmake $SOURCEDIR                                              \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}  \
-      ${APMON_ROOT:+-DAPMON_ROOT=$APMON_ROOT}                
+      ${APMON_CPP_ROOT:+-DAPMON_ROOT=$APMON_CPP_ROOT}                
 
 make ${JOBS+-j $JOBS} install
 
@@ -43,7 +43,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_VERSION:+boost/$APMON_VERSION-$APMON_REVISION}  ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION 
+module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_CPP_VERSION:+boost/$APMON_CPP_VERSION-$APMON_CPP_REVISION}  ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION 
 # Our environment
 setenv Monitoring_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(Monitoring_ROOT)/bin
