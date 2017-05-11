@@ -40,8 +40,8 @@ cmake $SOURCEDIR                                              \
     -DFAIRROOTPATH=$FAIRROOT_ROOT \
     -DFairRoot_DIR=$FAIRROOT_ROOT                               \
     -DROOTSYS=$ROOTSYS \
-    ${Configuration_ROOT:+-Configuration_ROOT=$Configuration_ROOT} \
-    ${Monitoring_ROOT:+-Monitoring_ROOT=$Monitoring_ROOT}
+    ${Configuration_ROOT:+-DConfiguration_ROOT=$Configuration_ROOT} \
+    ${Monitoring_ROOT:+-DMonitoring_ROOT=$Monitoring_ROOT}
 
 make ${JOBS+-j $JOBS} install
 
