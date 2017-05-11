@@ -50,6 +50,7 @@ overrides:
       which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-5].*) exit 1 ;; esac
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
+  ApMon-CPP@dev:
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
