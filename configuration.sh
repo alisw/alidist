@@ -10,10 +10,10 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
-tag:  master
+tag:  v1.0.0
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+#  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
 
@@ -28,7 +28,7 @@ cmake $SOURCEDIR                                              \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}
 
-make ${JOBS+-j 1} install
+make ${JOBS+-j $JOBS} install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -44,7 +44,10 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}  ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION 
 # Our environment
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
+setenv Configuration_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(Configuration_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(Configuration_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
 EoF
+#pwd
+#mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
