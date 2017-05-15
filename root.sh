@@ -10,6 +10,7 @@ requires:
   - FreeType:(?!osx)
 build_requires:
   - CMake
+  - "availabilitymacros:(osx.*)"
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
