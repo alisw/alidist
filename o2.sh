@@ -2,7 +2,6 @@ package: O2
 version: dev
 requires:
   - FairRoot
-  - AliRoot
   - DDS
   - Vc
   - hijing
