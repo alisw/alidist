@@ -1,7 +1,7 @@
 package: ThePEG
 version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/thepeg
-tag: "alice/v2.0.4"
+tag: "v2.0.4-alice1"
 requires:
   - Rivet
   - pythia
