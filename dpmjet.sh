@@ -6,6 +6,7 @@ requires:
  - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - "Xcode:(osx.*)"
 ---
 #!/bin/bash -e
 

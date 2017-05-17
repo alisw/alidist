@@ -14,6 +14,7 @@ build_requires:
  - UUID
 requires:
  - "GCC-Toolchain:(?!osx)"
+ - "Xcode:(osx.*)"
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:

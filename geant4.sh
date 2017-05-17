@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - "Xcode:(osx.*)"
 env:
   G4INSTALL: "$GEANT4_ROOT"
   G4INSTALL_DATA: "$GEANT4_ROOT/share/Geant4-10.1.3"

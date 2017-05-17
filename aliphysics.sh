@@ -2,6 +2,8 @@ package: AliPhysics
 version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
+build_requires:
+  - "Xcode:(osx.*)"
 source: https://github.com/alisw/AliPhysics
 tag: master
 env:

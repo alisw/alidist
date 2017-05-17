@@ -8,6 +8,7 @@ requires:
   - vgm
 build_requires:
   - CMake
+  - "Xcode:(osx.*)"
 env:
   G4VMCINSTALL: "$GEANT4_VMC_ROOT"
 ---
