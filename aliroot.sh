@@ -48,6 +48,7 @@ cmake $SOURCEDIR                                                     \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}           \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                     \
       ${DPMJET_ROOT:+-DDPMJET="$DPMJET_ROOT"}                        \
+      ${ZEROMQ_ROOT:+-DZEROMQ=$ZEROMQ_ROOT}                          \
       ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}            \
       ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                     \
       ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                       \
