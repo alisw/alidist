@@ -11,6 +11,7 @@ requires:
   - "MySQL:slc7.*"
 build_requires:
   - CMake
+  - "Xcode:(osx.*)"
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:

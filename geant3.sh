@@ -4,6 +4,7 @@ requires:
   - ROOT
 build_requires:
   - CMake
+  - "Xcode:(osx.*)"
 source: https://github.com/vmc-project/geant3
 tag: v2-3
 prepend_path:
