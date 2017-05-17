@@ -11,6 +11,7 @@ requires:
   - "MySQL:slc7.*"
 build_requires:
   - CMake
+  - "availabilitymacros:(osx.*)"
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
