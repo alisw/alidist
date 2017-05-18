@@ -3,9 +3,10 @@ version: "v1.6.3"
 source: https://github.com/alisw/yoda
 requires:
   - boost
-  - Python-modules
+  - "Python-modules:slc[567]"
 build_requires:
   - autotools
+  - "Python-system:(?!slc[567])"
 prepend_path:
   PYTHONPATH: $YODA_ROOT/lib64/python2.7/site-packages:$YODA_ROOT/lib/python2.7/site-packages
 ---

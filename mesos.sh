@@ -6,7 +6,8 @@ build_requires:
 - autotools
 - protobuf
 - glog
-- Python
+- "Python:slc[567]"
+- "Python-system:(?!slc[567])"
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages

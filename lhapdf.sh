@@ -5,9 +5,10 @@ source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
  - boost
- - Python-modules
+ - "Python-modules:slc[567]"
 build_requires:
  - autotools
+ - "Python-system:(?!slc[567])"
 env:
   LHAPATH: "$LHAPDF_ROOT/share/LHAPDF"
 ---
