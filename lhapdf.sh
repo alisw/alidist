@@ -1,6 +1,6 @@
 package: lhapdf
-version: "%(tag_basename)s"
-tag: alice/v6.1.5
+version: "%(tag_basename)s%(defaults_upper)s"
+tag: v6.1.6
 source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
@@ -44,7 +44,7 @@ autoreconf -ivf
 make ${JOBS+-j $JOBS} all
 make install
 
-PDFSETS="cteq6l1"
+PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl"
 $INSTALLROOT/bin/lhapdf install $PDFSETS
 # Check if PDF sets were really installed
 for P in $PDFSETS; do

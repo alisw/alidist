@@ -1,5 +1,5 @@
 package: EPOS
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 tag: alice/v3.111
 source: https://gitlab.cern.ch/ALICEPrivateExternals/epos.git
 requires:
@@ -23,7 +23,7 @@ mkdir $OBJ
 
 export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-make ${JOBS:+-j$JOBS} LFLAGS="$LDFLAGS"
+make LFLAGS="$LDFLAGS"
 
 # "Install"
 INST_SUBROOT=$INSTALLROOT/epos

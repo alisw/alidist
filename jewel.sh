@@ -12,10 +12,11 @@ sed -i.deleteme -e 's#^LHAPDF_PATH :=.*#LHAPDF_PATH := ${LHAPDF5_ROOT}/lib#' Mak
 
 make ${JOBS:+-j$JOBS}
 
+VERSION=${PKGVERSION%%_*}
 install -d ${INSTALLROOT}/bin
 install -t ${INSTALLROOT}/bin \
-	jewel-${PKGVERSION#v}-vac \
-	jewel-${PKGVERSION#v}-simple
+	jewel-${VERSION#v}-vac \
+	jewel-${VERSION#v}-simple
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

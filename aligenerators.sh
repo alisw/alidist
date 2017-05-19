@@ -1,9 +1,11 @@
 package: AliGenerators
 version: "v%(year)s%(month)s%(day)s%(defaults_upper)s"
 requires:
+  - AMPT
   - CRMC
   - DPMJET
   - EPOS
+  - Herwig
   - JEWEL
   - POWHEG
   - pythia
@@ -12,9 +14,9 @@ requires:
   - ThePEG
   - AGILe
   - Sacrifice
+  - aligenmc
 build_requires:
   - EPOS-test
-  - ThePEG-test
 ---
 #!/bin/bash -ex
 
@@ -32,11 +34,17 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \
+  AGILe/$AGILE_VERSION-$AGILE_REVISION \
+  aligenmc/$ALIGENMC_VERSION-$ALIGENMC_REVISION \
+  AMPT/$AMPT_VERSION-$AMPT_REVISION \
   CRMC/$CRMC_VERSION-$CRMC_REVISION \
+  DPMJET/$DPMJET_VERSION-$DPMJET_REVISION \
   JEWEL/$JEWEL_VERSION-$JEWEL_REVISION \
+  Herwig/$HERWIG_VERSION-$HERWIG_REVISION \
   POWHEG/$POWHEG_VERSION-$POWHEG_REVISION \
   pythia/$PYTHIA_VERSION-$PYTHIA_REVISION \
   pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION \
+  Sacrifice/$SACRIFICE_VERSION-$SACRIFICE_REVISION \
   SHERPA/$SHERPA_VERSION-$SHERPA_REVISION \
   ThePEG/$THEPEG_VERSION-$THEPEG_REVISION
 EoF

@@ -1,11 +1,11 @@
 package: pythia
-version: "%(tag_basename)s"
+version: "%(tag_basename)s%(defaults_upper)s"
 source: https://github.com/alisw/pythia8
 requires:
   - lhapdf
   - HepMC
   - boost
-tag: alice/v8211pre
+tag: v8223
 env:
   PYTHIA8DATA: "$PYTHIA_ROOT/share/Pythia8/xmldoc"
   PYTHIA8: "$PYTHIA_ROOT"
