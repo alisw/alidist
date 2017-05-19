@@ -9,7 +9,6 @@ requires:
   - Vc
 build_requires:
   - CMake
-  - DAQ:slc6.*
   - "Xcode:(osx.*)"
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
