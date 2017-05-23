@@ -25,6 +25,7 @@ cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
                    -DENABLE_READLINE=FALSE                            \
                    -DCMAKE_BUILD_TYPE=RelWithDebInfo                  \
                    ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}  \
+                   -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"      \
                    -DZLIB_ROOT=$ZLIB_ROOT
 make ${JOBS:+-j$JOBS}
 make install
