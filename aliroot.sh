@@ -54,7 +54,8 @@ cmake $SOURCEDIR                                                     \
       ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                       \
       ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                             \
       ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                   \
-      ${ALICE_SHUTTLE:+-DDIMDIR=$HOME/DIM -DODIR=linux -DSHUTTLE=ON} \
+      ${ALICE_SHUTTLE:+-DDIMDIR=$HOME/dim -DODIR=linux}              \
+      ${ALICE_SHUTTLE:+-DSHUTTLE=ON -DApMon=$ALIEN_RUNTIME_ROOT}     \
       -DOCDB_INSTALL=PLACEHOLDER
 
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
