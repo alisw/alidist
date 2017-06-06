@@ -1,5 +1,4 @@
 package: Monitoring
-version: master
 requires:
   - Configuration
   - curl
@@ -9,7 +8,7 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Monitoring
-tag:  v1.0.0
+version: v1.2.0
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

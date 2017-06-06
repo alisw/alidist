@@ -1,5 +1,4 @@
 package: flpproto
-version: alibuild-compilable
 requires:
   - Monitoring
   - Configuration
@@ -8,7 +7,7 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/FlpPrototype
-#tag:  alibuild-compilable
+version: v0.1.0
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
