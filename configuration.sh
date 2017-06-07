@@ -1,7 +1,5 @@
 package: Configuration
-version: master
 requires:
-#  - RapidJSON # etcd v2
   - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -10,7 +8,7 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
-tag:  v1.0.0
+version:  v1.0.0
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
