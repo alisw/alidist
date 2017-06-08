@@ -13,7 +13,8 @@ overrides:
   boost:
     requires:
       - "GCC-Toolchain:(?!osx)"
-      - Python
+      - "Python:slc[567]"
+      - "Python-system:(?!slc[567])"
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
@@ -29,7 +30,8 @@ overrides:
       - opengl:(?!osx)
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
-      - Python-modules
+      - "Python-modules:slc[567]"
+      - "Python-system:(?!slc[567])"
   AliRoot:
     requires:
       - ROOT

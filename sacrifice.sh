@@ -7,10 +7,11 @@ requires:
   - boost
   - lhapdf
   - HepMC
-  - Python
+  - "Python:slc[567]"
   - pythia
 build_requires:
   - autotools
+  - "Python-system:(?!slc[567])"
 ---
 #!/bin/bash -e
 
