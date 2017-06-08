@@ -4,8 +4,6 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++14"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-disable:
-  - AliEn-Runtime
 overrides:
   autotools:
     tag: v1.5.0
