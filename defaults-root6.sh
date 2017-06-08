@@ -6,8 +6,8 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   ROOT:
-    version: "%(tag_basename)s"
-    tag: "v6-08-04"
+    version: "v6-08-06+git_%(short_hash)s"
+    tag: e2951b4cc49ee88651a69a0b54a583333c0ae263
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
