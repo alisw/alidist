@@ -8,6 +8,8 @@ requires:
   - hijing
 source: https://github.com/AliceO2Group/AliceO2
 tag: dev
+prepend_path:
+  ROOT_INCLUDE_PATH: "$O2_ROOT/include"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -111,6 +113,7 @@ setenv VMCWORKDIR \$::env(O2_ROOT)/share
 prepend-path PATH \$::env(O2_ROOT)/bin
 prepend-path MANPATH \$::env(O2_ROOT)/share/man
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
