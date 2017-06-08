@@ -11,6 +11,7 @@ build_requires:
  - curl
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print certifi.where()\")"
+  PYTHONHOME: "$PYTHON_ROOT"
 prefer_system: (?!slc5)
 prefer_system_check:
   python -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (2, 7) else 0)' && pip --help > /dev/null && printf '#include "pyconfig.h"' | gcc -c -I$(python-config --includes) -xc -o /dev/null -
@@ -60,6 +61,17 @@ find $INSTALLROOT/lib/python* \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
 
+# Execute some commands in a clean environment
+cat > $INSTALLROOT/bin/yum-cleanenv <<'EOF'
+#!/bin/bash
+exec env -i /usr/bin/"$(basename "$0")" "$@"
+EOF
+chmod +x $INSTALLROOT/bin/yum-cleanenv
+for F in $(echo /usr/bin/yum*) $(echo /usr/bin/rpm*); do
+  [[ -e $F ]] || continue
+  ln -nfs yum-cleanenv $INSTALLROOT/bin/"$(basename "$F")"
+done
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -78,6 +90,7 @@ module load BASE/1.0 $([[ $ALIEN_RUNTIME_VERSION ]] && echo "AliEn-Runtime/$ALIE
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PYTHONHOME \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(PYTHON_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(PYTHON_ROOT)/lib")
