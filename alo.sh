@@ -3,6 +3,7 @@ version: "%(commit_hash)s%(defaults_upper)s"
 requires:
   - AliRoot
   - O2
+  - RapidJSON
 build_requires:
   - CMake
 source: https://github.com/mrrtf/alo
@@ -32,6 +33,7 @@ cmake $SOURCEDIR \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
     -DALIROOT="$ALIROOT_ROOT" \
     -DROOTSYS="$ROOT_ROOT" \
+    -DRAPIDJSON_INCLUDEDIR="$RAPIDJSON_ROOT/include" \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 
 make ${JOBS+-j $JOBS} install
