@@ -61,7 +61,7 @@ cmake $SOURCEDIR                                                     \
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
-[[ $ALICE_DAQ ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
+[[ $ALICE_DAQ && ! $ALICE_DISABLE_DA_RPMS ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
 
