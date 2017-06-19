@@ -6,7 +6,7 @@ build_requires:
   - CMake
   - "Xcode:(osx.*)"
 source: https://github.com/vmc-project/geant3
-tag: v2-3
+tag: v2-4
 prepend_path:
   "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"

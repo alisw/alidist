@@ -18,6 +18,8 @@ env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
   GEOMPATH:   "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
   CONFIG_DIR: "$FAIRROOT_ROOT/share/fairbase/examples/common/gconfig"
+prepend_path:
+  ROOT_INCLUDE_PATH: "$FAIRROOT_ROOT/include"
 ---
 #!/bin/sh
 
@@ -104,5 +106,6 @@ setenv GEOMPATH \$::env(VMCWORKDIR)/common/geometry
 setenv CONFIG_DIR \$::env(VMCWORKDIR)/common/gconfig
 prepend-path PATH \$::env(FAIRROOT_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FAIRROOT_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(FAIRROOT_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FAIRROOT_ROOT)/lib")
 EoF
