@@ -15,21 +15,18 @@ cp "${O2_ROOT}"/compile_commands.json .
 
 # We will try to setup a list of files to be checked by using 2 specific git commits to compare.
 
-# For this we to retrieve the git directory (hack since we have no other way of getting this info):
-O2SOURCEPATH=$(grep -m 1 "SOURCES/O2.*/Common/" compile_commands.json | sed 's|.*\s-I\(/.*SOURCES/O2/.*\)/Common/.*|\1|')
-# No source path (or empty source path) means fatal error
-if [ -d "${O2SOURCEPATH}" ]; then
-  echo "This is a valid directory"
-else
-  echo "This is not a valid directory"
-  exit 1
-fi
+# For this we to retrieve the git directory
+O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") ]) )')
+[[ -e $O2_SRC/CMakeLists.txt ]]
+# test whether a git repo
+[[ -e $O2_SRC/.git ]]
+
 BASECOMMIT=${O2CHECKCODE_BASECOMMIT:=${ALIBOT_PR_BASE}}
 HEADCOMMIT=${O2CHECKCODE_HEADCOMMIT:=${ALIBOT_PR_HEAD}}
 
 # We query git if a base commit was given, which we treat as an indication for a delta check.
 if [ -n "${BASECOMMIT}" ]; then
-  cd ${O2SOURCEPATH}
+  cd ${O2_SRC}
   O2_CHECKCODE_CHANGEDFILES=$(git diff ${HEADCOMMIT} ${BASECOMMIT} --name-only)
   # convert to ":" separated list
   O2_CHECKCODE_CHANGEDFILES=$(echo ${O2_CHECKCODE_CHANGEDFILES} | tr -t ' ' ':')
@@ -55,10 +52,6 @@ run_O2CodeChecker.py -clang-tidy-binary $(which O2codecheck) -header-filter=.*SO
 
 # Turn warnings into errors
 sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.txt.0 error-log.txt
-
-# Get full list of .cxx/.h files
-O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") ]) )')
-[[ -e $O2_SRC/CMakeLists.txt ]]
 
 # Run copyright notice check
 COPYRIGHT="$(cat <<'EOF'
