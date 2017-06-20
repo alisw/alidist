@@ -22,8 +22,9 @@ O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([
 BASECOMMIT=${O2CHECKCODE_BASECOMMIT:=${ALIBUILD_PR_BASE}}
 HEADCOMMIT=${O2CHECKCODE_HEADCOMMIT:=${ALIBUILD_PR_HEAD}}
 
-# We query Git if a base commit was given, which we treat as an indication for a delta check
-if [[ $BASECOMMIT ]]; then
+# We query Git if a base commit was given, which we treat as an indication for a delta check. With
+# more than 50 files changed we run the checks on all files.
+if [[ $BASECOMMIT && $(cd "$O2_SRC" && git diff $HEADCOMMIT $BASECOMMIT --name-only | wc -l) -le 50 ]]; then
   O2_CHECKCODE_CHANGEDFILES=$(cd "$O2_SRC" && git diff $HEADCOMMIT $BASECOMMIT --name-only               | \
                               grep -E '\.cxx$|\.h$'                                                      | \
                               while read FILE; do [[ -e "$O2_SRC/$FILE" ]] && echo "$FILE" || true; done | \
