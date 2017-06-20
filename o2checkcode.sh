@@ -13,29 +13,22 @@ version: "1.0"
 # compile_commands.json file is available under $O2_ROOT
 cp "${O2_ROOT}"/compile_commands.json .
 
-# We will try to setup a list of files to be checked by using 2 specific git commits to compare.
+# We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
-# For this we to retrieve the git directory
+# Heuristically guess source directory
 O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") ]) )')
-[[ -e $O2_SRC/CMakeLists.txt ]]
-# test whether a git repo
-[[ -e $O2_SRC/.git ]]
+[[ -e "$O2_SRC"/CMakeLists.txt && -d "$O2_SRC"/.git ]]
 
-BASECOMMIT=${O2CHECKCODE_BASECOMMIT:=${ALIBOT_PR_BASE}}
-HEADCOMMIT=${O2CHECKCODE_HEADCOMMIT:=${ALIBOT_PR_HEAD}}
+BASECOMMIT=${O2CHECKCODE_BASECOMMIT:=${ALIBUILD_PR_BASE}}
+HEADCOMMIT=${O2CHECKCODE_HEADCOMMIT:=${ALIBUILD_PR_HEAD}}
 
-# We query git if a base commit was given, which we treat as an indication for a delta check.
-if [ -n "${BASECOMMIT}" ]; then
-  cd ${O2_SRC}
-  O2_CHECKCODE_CHANGEDFILES=$(git diff ${HEADCOMMIT} ${BASECOMMIT} --name-only)
-  # convert to ":" separated list
-  O2_CHECKCODE_CHANGEDFILES=$(echo ${O2_CHECKCODE_CHANGEDFILES} | tr -t ' ' ':')
-  # exit normally if changeset is null
-  if [ "${O2_CHECKCODE_CHANGEDFILES}" == "" ]; then
-    echo "Nothing changed with respect to base commit ... not checking anything"
+# We query Git if a base commit was given, which we treat as an indication for a delta check
+if [[ $BASECOMMIT ]]; then
+  O2_CHECKCODE_CHANGEDFILES=$(cd "$O2_SRC"; git diff $HEADCOMMIT $BASECOMMIT --name-only | xargs echo | sed -e 's/ /:/g')
+  if [[ ! $O2_CHECKCODE_CHANGEDFILES ]]; then
+    echo "Nothing changed with respect to base commit: not checking anything"
     exit 0
   fi
-  cd $OLDPWD
 fi
 
 # Call a tool to filter out unwanted sources (ROOT dicts, etc) from the compilations database.
