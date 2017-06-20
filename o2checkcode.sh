@@ -24,7 +24,10 @@ HEADCOMMIT=${O2CHECKCODE_HEADCOMMIT:=${ALIBUILD_PR_HEAD}}
 
 # We query Git if a base commit was given, which we treat as an indication for a delta check
 if [[ $BASECOMMIT ]]; then
-  O2_CHECKCODE_CHANGEDFILES=$(cd "$O2_SRC"; git diff $HEADCOMMIT $BASECOMMIT --name-only | xargs echo | sed -e 's/ /:/g')
+  O2_CHECKCODE_CHANGEDFILES=$(cd "$O2_SRC" && git diff $HEADCOMMIT $BASECOMMIT --name-only               | \
+                              grep -E '\.cxx$|\.h$'                                                      | \
+                              while read FILE; do [[ -e "$O2_SRC/$FILE" ]] && echo "$FILE" || true; done | \
+                              xargs echo | sed -e 's/ /:/g')
   if [[ ! $O2_CHECKCODE_CHANGEDFILES ]]; then
     echo "Nothing changed with respect to base commit: not checking anything"
     exit 0
