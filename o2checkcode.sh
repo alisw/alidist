@@ -65,8 +65,9 @@ EOF
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
 set +x
 while read FILE; do
+  FILE="$O2_SRC/$FILE"
   [[ "$(head -n$COPYRIGHT_LINES "$FILE")" == "$COPYRIGHT" ]] || { printf "$FILE:1:1: error: missing or malformed copyright notice\n" >> error-log.txt; }
-done < <(find "$O2_SRC" -name '*.cxx' -o -name '*.h')
+done < <(echo "$O2_CHECKCODE_CHANGEDFILES" | sed -e 's/:/\n/g')
 
 # Tell user what to do in case of copyright notice error
 if grep -q "malformed copyright notice" error-log.txt; then
