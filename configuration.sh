@@ -8,7 +8,8 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
-version:  v1.0.0
+tag:  v1.0.0
+version: "%(tag_basename)s"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

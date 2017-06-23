@@ -8,7 +8,8 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Monitoring
-version: v1.2.0
+version: "%(tag_basename)s"
+tag: v1.2.0
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
