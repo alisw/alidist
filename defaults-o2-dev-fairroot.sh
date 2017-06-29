@@ -19,6 +19,7 @@ overrides:
   autotools:
     tag: v1.5.0
   boost:
+    tag: "v1.64.0"
     requires:
       - "GCC-Toolchain:(?!osx)"
       - Python
@@ -47,9 +48,9 @@ overrides:
     version: "%(short_hash)s%(defaults_upper)s"
   CMake:
     version: "%(tag_basename)s"
-    tag: "v3.7.2"
+    tag: "v3.8.2"
     prefer_system_check: |
-      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-5].*) exit 1 ;; esac
+      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-7].*) exit 1 ;; esac
   FairRoot:
     version: dev
     tag: dev
