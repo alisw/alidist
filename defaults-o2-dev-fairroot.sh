@@ -19,7 +19,7 @@ overrides:
   autotools:
     tag: v1.5.0
   boost:
-    tag: "v1.64.0"
+    tag: "v1.64.0-alice1"
     requires:
       - "GCC-Toolchain:(?!osx)"
       - Python
