@@ -51,13 +51,14 @@ b2 -q                        \
    --without-mpi             \
    $WITHOUT_PYTHON           \
    --without-wave            \
+   --debug-configuration     \
    toolset=$TOOLSET          \
    link=shared               \
    threading=multi           \
    variant=release           \
    $EXTRA_CXXFLAGS           \
    install
-[[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null || true
+[[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
