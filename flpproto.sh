@@ -8,7 +8,7 @@ build_requires:
   - CMake
 source: https://github.com/AliceO2Group/FlpPrototype
 version: "%(tag_basename)s"
-tag: v0.3.0
+tag: v0.4.4
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
