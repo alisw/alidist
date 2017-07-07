@@ -4,9 +4,6 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++14"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-disable:
-  - AliEn-Runtime
-  - AliRoot
 overrides:
   autotools:
     tag: v1.5.0
@@ -26,7 +23,8 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
       - Python
   ROOT:
-    tag: "v6-08-02"
+    version: "v6-08-06+git_%(short_hash)s"
+    tag: e2951b4cc49ee88651a69a0b54a583333c0ae263
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
@@ -35,9 +33,11 @@ overrides:
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - Python-modules
+      - GCC-Toolchain:(?!osx)
   AliRoot:
     requires:
       - ROOT
+      - DPMJET
       - fastjet:(?!.*ppc64)
       - GEANT3
       - GEANT4_VMC
