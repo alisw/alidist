@@ -65,6 +65,7 @@ module load BASE/1.0                                                            
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                        
 
 # Our environment
+setenv FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
