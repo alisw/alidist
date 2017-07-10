@@ -94,6 +94,7 @@ else
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
         -DCMAKE_C_COMPILER=$COMPILER_CC                           \
         -DCMAKE_LINKER=$COMPILER_LD                               \
+        ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}  \

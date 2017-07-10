@@ -26,7 +26,7 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
       - Python
   ROOT:
-    tag: "v6-08-02"
+    tag: "v6-10-02"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
