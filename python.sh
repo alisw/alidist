@@ -14,7 +14,7 @@ env:
   PYTHONHOME: "$PYTHON_ROOT"
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (2, 7) else 0)' && pip --help > /dev/null && printf '#include "pyconfig.h"' | gcc -c -I$(python-config --includes) -xc -o /dev/null -
+  python -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (2, 7) else 0)' && pip --help > /dev/null && printf '#include "pyconfig.h"' | gcc -c -I$(python-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 ---
 #!/bin/bash -ex
 

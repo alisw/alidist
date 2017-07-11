@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - MySQL
 source: https://github.com/AliceO2Group/FlpPrototype
 version: "%(tag_basename)s"
 tag: v0.4.4
