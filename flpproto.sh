@@ -5,7 +5,8 @@ requires:
   - O2
   - "GCC-Toolchain:(?!osx)"
   - "PDA:slc7.*"
-build_requires: 
+  - "dim:(?!osx)"
+build_requires:
   - CMake
   - MySQL
 source: https://github.com/AliceO2Group/FlpPrototype
@@ -45,7 +46,8 @@ cmake $SOURCEDIR                                              \
     -DROOTSYS=$ROOTSYS \
     ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
     ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
-    ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT} 
+    ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT} \
+    ${DIM_VERSION:+-DDIM_ROOT=$DIM_ROOT}
 
 make ${JOBS+-j $JOBS} install
 
@@ -66,7 +68,8 @@ module load BASE/1.0                                                            
             O2/$O2_VERSION-$O2_REVISION                                                         \\
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                 \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                        \\
-            PDA/$PDA_VERSION-$PDA_REVISION  
+            PDA/$PDA_VERSION-$PDA_REVISION                                                      \\
+            dim/$DIM_VERSION-$DIM_REVISION                   
 
 # Our environment
 setenv FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
