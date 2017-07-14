@@ -12,8 +12,8 @@ prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml';
-  if [ $? -ne 0 ]; then printf "Required Python modules are missing. You can install them with pip (better as root):\n  pip install matplotlib numpy certifi ipython ipywidgets ipykernel notebook metakernel pyyaml\n"; exit 1; fi
+  python -c 'import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml,cython';
+  if [ $? -ne 0 ]; then printf "Required Python modules are missing. You can install them with pip (better as root):\n  pip install matplotlib numpy certifi ipython ipywidgets ipykernel notebook metakernel pyyaml cython\n"; exit 1; fi
 ---
 #!/bin/bash -ex
 
@@ -31,6 +31,7 @@ If you want to avoid this please install the following modules (pip recommended)
   - notebook
   - metakernel
   - pyyaml
+  - cython
 
 EoF
 fi
@@ -52,7 +53,8 @@ for X in "mock==1.0.0"         \
          "ipykernel==4.5.0"    \
          "notebook==4.2.3"     \
          "metakernel==0.14.0"  \
-         "pyyaml"
+         "pyyaml"              \
+         "cython==0.25.2"
 do
   pip install --user $X
 done

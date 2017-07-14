@@ -13,10 +13,13 @@ prepend_path:
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
+(
+unset PYTHON_VERSION
 autoreconf -ivf
 ./configure --prefix="$INSTALLROOT" --with-boost="$Boost"
 make -j$JOBS
 make install
+)
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
