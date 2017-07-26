@@ -6,6 +6,8 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+prefer_system_check: |
+  printf "#include <Vc/version.h>\n" | c++ -xc++ - -c -M 2>&1
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF
