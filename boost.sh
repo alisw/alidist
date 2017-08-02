@@ -8,7 +8,7 @@ build_requires:
  - "bz2"
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | cc -I$(brew --prefix boost)/include -xc++ - -o /dev/null && printf "int main(){}" | cc -L$(brew --prefix boost)/lib -xc++ - -o /dev/null -lboost_system -lboost_thread
 ---
 #!/bin/bash -e
 
