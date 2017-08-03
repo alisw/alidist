@@ -8,7 +8,8 @@ build_requires:
  - "bz2"
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | cc -I$(brew --prefix boost)/include -xc++ - -o /dev/null && printf "int main(){}" | cc -L$(brew --prefix boost)/lib -xc++ - -o /dev/null -lboost_system -lboost_thread || printf "int main(){}" | cc -L$(brew --prefix boost)/lib -xc++ - -o /dev/null -lboost_system -lboost_thread-mt
+    printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | cc -I$(brew --prefix boost)/include -xc++ - -o /dev/null && (printf "int main(){}" | cc -L$(brew --prefix boost)/lib -xc++ - -o /dev/null -lboost_system -lboost_thread || printf "int main(){}" | cc -L$(brew --prefix boost)/lib -xc++ - -o /dev/null -lboost_system -lboost_thread-mt;)
+    if [ $? -ne 0 ]; then printf "One or more boost libraries are missing on your system.\n * On a RHEL-compatible system you probably need: boost-devel\n * On an Ubuntu-like system you probably need: libboost-all-dev"; exit 1; fi
 ---
 #!/bin/bash -e
 
