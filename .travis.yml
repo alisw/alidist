@@ -4,7 +4,7 @@ install: |
     pip install pyyaml
 script: |
   set -e
-  for x in `git diff --name-only HEAD...master | grep .sh`; do
+  for x in `git diff --name-only $TRAVIS_COMMIT_RANGE | grep .sh`; do
     echo Linting $x
-    scripts/lint-recipe $x
+    scripts/lint-recipes $x
   done
