@@ -55,4 +55,39 @@ prepend-path PERLLIB \$::env(ALIEN_RUNTIME_ROOT)/lib/perl
 setenv GSHELL_ROOT \$::env(ALIEN_RUNTIME_ROOT)
 setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
 setenv GSHELL_NO_GCC 1
+# check if Globus certificate is expiring soon
+set CERT "$::env(HOME)/.globus/usercert.pem"
+set status [catch {exec which openssl > /dev/null 2>&1} output]
+if { $status == 0 } {
+  if { [file isfile $CERT] } {
+    set status [catch {exec openssl x509 -in "$CERT" -noout -checkend 0 > /dev/null 2>&1} output]
+    if { $status == 1 } {
+      set MSG "Your certificate has expired"
+    } else {
+      set status [catch {exec openssl x509 -in "$CERT" -noout -checkend 604800 > /dev/null 2>&1} output]
+      if {$status == 1} {
+        set MSG "Your certificate is going to expire in less than one week"
+      }
+    }
+  } else {
+    set MSG "Cannot find certificate file $CERT"
+  }
+}
+# COLORS with tcl escaped [
+set Cm "\033\[35m"
+set Cy "\033\[33m"
+set Cc "\033\[36m"
+set Cb "\033\[34m"
+set Cg "\033\[32m"
+set Cr "\033\[31m"
+set Cw "\033\[37m"
+set Cz "\033\[0m"
+set Br "\033\[41m"
+set By "\033\[43m"
+if { [info exists MSG] && $MSG ne ""} {
+  puts stderr "${MSG}"
+}
+if { [info exists MSG] && $MSG ne ""} {
+  puts stderr "${Br}${Cw}!!! ${MSG} !!!${Cz}"
+}
 EoF
