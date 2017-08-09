@@ -1,0 +1,10 @@
+dist: trusty
+language: python
+install: |
+    pip install pyyaml
+script: |
+  set -e
+  for x in `git diff --name-only HEAD...master | grep .sh`; do
+    echo Linting $x
+    scripts/lint-recipe $x
+  done
