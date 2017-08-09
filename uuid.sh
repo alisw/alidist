@@ -25,9 +25,9 @@ autoreconf -ivf
             --enable-libuuid
 make ${JOBS:+-j$JOBS} libuuid.la
 mkdir -p $INSTALLROOT/lib
-cp -p .libs/libuuid.a* $INSTALLROOT/lib
+cp -a .libs/libuuid.a* $INSTALLROOT/lib
 if [[ ${ARCHITECTURE:0:3} != osx ]]; then
-  cp -p .libs/libuuid.so* $INSTALLROOT/lib
+  cp -a .libs/libuuid.so* $INSTALLROOT/lib
 fi
 mkdir -p $INSTALLROOT/include
 make install-uuidincHEADERS
