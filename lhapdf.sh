@@ -44,7 +44,7 @@ autoreconf -ivf
 make ${JOBS+-j $JOBS} all
 make install
 
-PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl"
+PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl cteq66"
 PATH=$INSTALLROOT/bin:$PATH lhapdf --pdfdir=$INSTALLROOT/share/LHAPDF  \
                                    --listdir=$INSTALLROOT/share/LHAPDF \
                                    install $PDFSETS
