@@ -1,6 +1,6 @@
 package: YODA
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "v1.6.3"
+tag: "v1.6.3-alice1"
 source: https://github.com/alisw/yoda
 requires:
   - boost
@@ -13,8 +13,8 @@ prepend_path:
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
-autoreconf -ivf
-./configure --prefix="$INSTALLROOT" --with-boost="$Boost"
+[[ -e .missing_timestamps ]] && ./missing-timestamps.sh --apply || autoreconf -ivf
+./configure --prefix="$INSTALLROOT"
 make -j$JOBS
 make install
 
