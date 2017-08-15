@@ -1,20 +1,19 @@
-package: Configuration
+package: InfoLogger
 version: "%(tag_basename)s"
-tag:  v1.0.0
+tag: v0.2.0
 requires:
-  - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - protobuf
-  - grpc
+  - Common-O2
+  - MySQL
 build_requires:
   - CMake
-source: https://github.com/AliceO2Group/Configuration
+source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/sh
+#!/bin/bash -ex
 
 case $ARCHITECTURE in
   osx*) BOOST_ROOT=$(brew --prefix boost) ;;
@@ -22,9 +21,8 @@ esac
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
+      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT} 
 
 make ${JOBS+-j $JOBS} install
 
@@ -39,11 +37,15 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}  ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION 
+module load BASE/1.0                                                          \\
+            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  
+
 # Our environment
-setenv Configuration_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(Configuration_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(Configuration_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+setenv INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(INFOLOGGER_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(INFOLOGGER_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(INFOLOGGER_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
