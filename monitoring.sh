@@ -1,4 +1,6 @@
 package: Monitoring
+version: "%(tag_basename)s"
+tag: v1.3.0
 requires:
   - Configuration
   - curl
@@ -8,13 +10,11 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Monitoring
-version: "%(tag_basename)s"
-tag: v1.3.0
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/sh
+#!/bin/bash -ex
 
 case $ARCHITECTURE in
   osx*) BOOST_ROOT=$(brew --prefix boost) ;;
@@ -22,11 +22,9 @@ esac
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      -DCMAKE_PREFIX_PATH=$PROTOBUF_ROOT                      \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}  \
-      ${APMON_CPP_ROOT:+-DAPMON_ROOT=$APMON_CPP_ROOT}
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
+      ${APMON_CPP_VERSION:+-DAPMON_ROOT=$APMON_CPP_ROOT}         \
+      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}   
 
 make ${JOBS+-j $JOBS} install
 
@@ -41,7 +39,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_CPP_VERSION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}  ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                        
+module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_CPP_VERSION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}  ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                        
 
 # Our environment
 setenv Monitoring_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

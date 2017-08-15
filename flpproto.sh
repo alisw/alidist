@@ -1,23 +1,24 @@
 package: flpproto
+version: "%(tag_basename)s"
+tag: v0.6.0
 requires:
+  - Common-O2
   - Monitoring
   - Configuration
   - O2
   - "GCC-Toolchain:(?!osx)"
-  - "PDA:slc7.*"
-  - "dim:(?!osx)"
+  - InfoLogger
+  - ReadoutCard
 build_requires:
   - CMake
   - MySQL
 source: https://github.com/AliceO2Group/FlpPrototype
-version: "%(tag_basename)s"
-tag: v0.4.6
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 ---
-#!/bin/sh
+#!/bin/bash -ex
 
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
@@ -40,14 +41,15 @@ esac
 cmake $SOURCEDIR                                              \
     -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
     -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old" \
-    ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}     \
+    ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}     \
     -DFAIRROOTPATH=$FAIRROOT_ROOT \
     -DFairRoot_DIR=$FAIRROOT_ROOT                               \
     -DROOTSYS=$ROOTSYS \
+    ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT} \
     ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
     ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
-    ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT} \
-    ${DIM_VERSION:+-DDIM_ROOT=$DIM_ROOT}
+    ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
+    ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} 
 
 make ${JOBS+-j $JOBS} install
 
@@ -64,12 +66,13 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 
 # Dependencies
 module load BASE/1.0                                                                            \\
-            ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             O2/$O2_VERSION-$O2_REVISION                                                         \\
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                 \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                        \\
-            PDA/$PDA_VERSION-$PDA_REVISION                                                      \\
-            dim/$DIM_VERSION-$DIM_REVISION                   
+            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                    \\
+            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION                                 \\
+            ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION                              \\
 
 # Our environment
 setenv FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
