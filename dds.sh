@@ -10,7 +10,8 @@ tag: "1.4"
 #!/bin/sh
 
 case $ARCHITECTURE in
-  osx*) BOOST_ROOT=$(brew --prefix boost) ;;
+  osx*) 
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
 esac
 
 cmake $SOURCEDIR                                              \
