@@ -15,6 +15,7 @@ requires:
   - AGILe
   - Sacrifice
   - aligenmc
+  - FONLL
 build_requires:
   - EPOS-test
 ---
