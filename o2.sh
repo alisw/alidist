@@ -2,7 +2,6 @@ package: O2
 version: dev
 requires:
   - FairRoot
-  - AliRoot
   - DDS
   - Vc
   - hijing
@@ -75,6 +74,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}                      \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 if [[ $GIT_TAG == master ]]; then
