@@ -1,6 +1,6 @@
 package: DDS
 version: "master-%(short_hash)s"
-tag: "1.6"
+tag: "1.4"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
