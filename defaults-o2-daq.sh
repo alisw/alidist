@@ -1,8 +1,8 @@
 package: defaults-o2-daq
 version: v1
 env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++14"
-  CFLAGS: "-fPIC -g -O2"
+  CXXFLAGS: "-fPIC -O2 -std=c++14"
+  CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 disable:
   - AliEn-Runtime
