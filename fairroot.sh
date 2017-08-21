@@ -1,7 +1,7 @@
 package: FairRoot
 version: "%(tag_basename)s"
-source: https://github.com/alisw/FairRoot
 tag: "alice-dev-20170711"
+source: https://github.com/alisw/FairRoot
 requires:
   - generators
   - simulation
@@ -45,7 +45,7 @@ esac
 cmake $SOURCEDIR                                                 \
       -DMACOSX_RPATH=OFF                                         \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                              \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DROOTSYS=$ROOTSYS                                         \
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                    \
       ${NANOMSG_ROOT:+-DNANOMSG_DIR=$NANOMSG_ROOT}               \
