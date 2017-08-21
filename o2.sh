@@ -1,12 +1,12 @@
 package: O2
 version: dev
+tag: dev
 requires:
   - FairRoot
   - DDS
   - Vc
   - hijing
 source: https://github.com/AliceO2Group/AliceO2
-tag: dev
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
 incremental_recipe: |
