@@ -14,7 +14,7 @@ env:
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR"                             \
-  -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}       \
   -DGeant4VMC_USE_VGM=ON                       \
   -DCMAKE_INSTALL_LIBDIR=lib                   \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
@@ -40,6 +40,7 @@ module load BASE/1.0 ${GEANT4_VERSION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} 
 # Our environment
 setenv GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv G4VMCINSTALL \$::env(GEANT4_VMC_ROOT)
+setenv GEANT4VMC_MACRO_DIR \$::env(GEANT4_VMC_ROOT)/share/examples/macro
 prepend-path PATH \$::env(GEANT4_VMC_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANT4_VMC_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_VMC_ROOT)/lib")
