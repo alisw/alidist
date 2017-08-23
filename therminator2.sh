@@ -1,7 +1,7 @@
 package: Therminator2
 version: "%(tag_basename)s%(defaults_upper)s"
 tag: "alice/v2.0.3"
-source: https://github.com/maciekniewielki/therminator
+source: https://github.com/alipwgmm/therminator
 requires:
  - "GCC-Toolchain:(?!osx)"
  - HepMC
