@@ -4,7 +4,9 @@ install: |
     pip install pyyaml
 script: |
   set -e
-  for x in `git diff --name-only $TRAVIS_COMMIT_RANGE | grep .sh`; do
-    echo Linting $x
-    scripts/lint-recipes $x
+  ERR=
+  for X in $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep .sh); do
+    echo Linting $X
+    scripts/lint-recipes $X || ERR="$ERR $X"
   done
+  [[ ! $ERR ]] || { echo "The following recipes need to be fixed:" $ERR; exit 1; }
