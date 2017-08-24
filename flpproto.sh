@@ -1,6 +1,6 @@
 package: flpproto
 version: "%(tag_basename)s"
-tag: v0.6.0
+tag: v0.7.0
 requires:
   - Common-O2
   - Monitoring
@@ -9,6 +9,9 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - InfoLogger
   - ReadoutCard
+  - DataSampling
+  - Readout
+  - QualityControl
 build_requires:
   - CMake
   - MySQL
@@ -49,7 +52,10 @@ cmake $SOURCEDIR                                              \
     ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
     ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
     ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
-    ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} 
+    ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} \
+    ${DATASAMPLING_VERSION:+-DDataSampling_ROOT=$DATASAMPLING_ROOT} \
+    ${READOUT_VERSION:+-DReadout_ROOT=$READOUT_ROOT} \
+    ${QUALITYCONTROL_VERSION:+-DQualityControl_ROOT=$QUALITYCONTROL_ROOT} 
 
 make ${JOBS+-j $JOBS} install
 
@@ -65,14 +71,18 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 
 # Dependencies
-module load BASE/1.0                                                                            \\
+module load BASE/1.0                                                      \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            O2/$O2_VERSION-$O2_REVISION                                                         \\
-            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                 \\
-            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                        \\
-            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                    \\
-            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION                                 \\
-            ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION                              \\
+            O2/$O2_VERSION-$O2_REVISION                                   \\
+            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION           \\
+            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION  \\
+            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION              \\
+            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION           \\
+            ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION        \\
+            DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION     \\
+            Readout/$READOUT_VERSION-$READOUT_REVISION                    \\
+            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                 \\
+            QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION
 
 # Our environment
 setenv FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
