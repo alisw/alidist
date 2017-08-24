@@ -27,16 +27,29 @@ IN_ERROR=10000
 def keyState(key):
     return globals().get("IN_" + key.upper() + "_KEY", IN_GENERIC_KEY_VALUE)
 
+def stateKey(state):
+    for x in globals():
+        if type(globals().get(x)) != int: continue
+        if x.startswith("IN_") and globals().get(x) == state:
+            return x
+    return "<none_%d>" % state
+
 def error(s, event):
     print(s)
     print(event.start_mark)
     print(event)
     sys.exit(1)
 
+def debug(s):
+    print("DEBUG: %s" % s)
+
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("filename")
+    parser.add_argument("-d", "--debug", dest="debug", action="store_true", default=False, help="Show debug messages")
     args = parser.parse_args()
+    if not args.debug:
+        debug = lambda x: None
     state = IN_START_STREAM
     events = yaml.parse(open(args.filename,"r").read())
     states = []
@@ -51,6 +64,13 @@ if __name__ == "__main__":
             reprocessState = False
         else:
             event = events.next()
+        debug("%s#%d <%s> %s (%s) %d:%s" % ("  "*len(states),
+                                            numberOfProperties,
+                                            event.value if hasattr(event, "value") else "***",
+                                            str(event),
+                                            stateKey(state),
+                                            len(states),
+                                            states))
         if state == IN_START_STREAM:
             if type(event) != StreamStartEvent:
                 error("Cannot find start of stream", event)
@@ -108,8 +128,10 @@ if __name__ == "__main__":
                 states.append(state)
                 state = IN_GENERIC_LIST
                 continue
-            numberOfProperties += 1
-            state = keyState(event.value)
+            # ScalarEvent
+            if len(states) == 0:
+                numberOfProperties += 1
+                state = keyState(event.value)
         elif state == IN_GENERIC_LIST:
             if type(event) == SequenceStartEvent:
                 states.append(state)
