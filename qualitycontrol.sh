@@ -12,7 +12,7 @@ requires:
   - Configuration
 build_requires:
   - CMake
-source: https://github.com/AliceO2Group/Readout
+source: https://github.com/AliceO2Group/QualityControl
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
