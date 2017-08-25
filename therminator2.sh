@@ -1,5 +1,5 @@
 package: Therminator2
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "alice/v2.0.3"
 source: https://github.com/alipwgmm/therminator
 requires:
