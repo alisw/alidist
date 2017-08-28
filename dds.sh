@@ -14,18 +14,16 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
 esac
 
-cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}
+cmake $SOURCEDIR                                                         \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
 
 # Limit the number of build processes to avoid exahusting memory when building
 # on smaller machines.
 JOBS=$((${JOBS:-1}*2/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 
-make -j$JOBS wn_bin
+#make -j$JOBS wn_bin  # disabled for now
 make -j$JOBS install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
