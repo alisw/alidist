@@ -27,7 +27,8 @@ cmake $SOURCEDIR                                              \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
       ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
       ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT}                    \
-      ${DIM_VERSION:+-DDIM_ROOT=$DIM_ROOT}
+      ${DIM_VERSION:+-DDIM_ROOT=$DIM_ROOT}                    \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
 

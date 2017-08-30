@@ -34,7 +34,8 @@ cmake $SOURCEDIR                                              \
       ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} \
       ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
       ${FAIRROOT_VERSION:+-DFAIRROOTPATH=$FAIRROOT_ROOT}      \
-      ${FAIRROOT_VERSION:+-DFairRoot_DIR=$FAIRROOT_ROOT}      
+      ${FAIRROOT_VERSION:+-DFairRoot_DIR=$FAIRROOT_ROOT}      \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
 
