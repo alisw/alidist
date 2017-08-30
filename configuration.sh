@@ -24,7 +24,8 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}
+      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}  \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
 

@@ -24,7 +24,8 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
       ${APMON_CPP_VERSION:+-DAPMON_ROOT=$APMON_CPP_ROOT}         \
-      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}   
+      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}   \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
 
 make ${JOBS+-j $JOBS} install
 
