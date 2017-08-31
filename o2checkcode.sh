@@ -1,11 +1,11 @@
 package: o2checkcode
+version: "1.0"
 requires:
   - O2
   - o2codechecker
 build_requires:
   - CMake
 force_rebuild: 1
-version: "1.0"
 ---
 #!/bin/bash -e
 
@@ -65,8 +65,11 @@ COPYRIGHT="$(cat <<'EOF'
 EOF
 )"
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
+COPYRIGHT_EXCLUDE_REGEXP="^Framework/DebugGUI/"  # exclude files from the copyright check
 set +x
 while read FILE; do
+  [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}
+  [[ ! $FILE =~ $COPYRIGHT_EXCLUDE_REGEXP ]] || continue
   FILE="$O2_SRC/$FILE"
   [[ "$(head -n$COPYRIGHT_LINES "$FILE")" == "$COPYRIGHT" ]] || { printf "$FILE:1:1: error: missing or malformed copyright notice\n" >> error-log.txt; }
 done < <([[ $O2_CHECKCODE_CHANGEDFILES ]] && echo "$O2_CHECKCODE_CHANGEDFILES" | sed -e 's/:/\n/g' \
