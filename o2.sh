@@ -33,6 +33,7 @@ valid_defaults:
   - o2
   - o2-daq
   - o2-dev-fairroot
+  - alo
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
