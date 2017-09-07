@@ -11,7 +11,6 @@ prefer_system_check: |
 #!/bin/bash
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"
 make ${JOBS+-j $JOBS}
-make test
 make install
 [[ -d "$INSTALLROOT"/lib ]] || ln -nfs lib64 "$INSTALLROOT"/lib
 
