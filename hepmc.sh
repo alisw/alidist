@@ -8,11 +8,15 @@ build_requires:
 ---
 #!/bin/bash -e
 
-cmake  $SOURCEDIR                           \
-       -Dmomentum=GEV                       \
-       -Dlength=MM                          \
-       -Dbuild_docs:BOOL=OFF                \
-       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+cmake                                        \
+       -Dmomentum=GEV                        \
+       -Dlength=MM                           \
+       -Dbuild_docs:BOOL=OFF                 \
+       ${C_COMPILER:+-DCMAKE_C_COMPILER=$C_COMPILER}                      \
+       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}                \
+       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
+       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
+       $SOURCEDIR
 
 make ${JOBS+-j $JOBS}
 make install
