@@ -8,8 +8,11 @@ build_requires:
 
 ---
 #!/bin/sh
-cmake ${SOURCEDIR}                           \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
+cmake                                                                 \
+      ${Fortran_COMPILER:+-DCMAKE_Fortran_COMPILER=$Fortran_COMPILER} \
+      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                            \
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
+      ${SOURCEDIR}
 
 make ${JOBS+-j$JOBS}
 make install
