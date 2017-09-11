@@ -10,6 +10,8 @@ requires:
   - "dim:(?!osx)"
 build_requires:
   - CMake
+prepend_path:
+  PYTHONPATH: $READOUTCARD_ROOT/lib
 source: https://github.com/AliceO2Group/ReadoutCard
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
