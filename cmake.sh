@@ -25,6 +25,11 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
 EOF
 
+# Set the environment variables CC and CXX if a compiler is defined in the defaults file
+# In case CC and CXX are defined the corresponding compilers are used during compilation
+[[ -z "$CXX_COMPILER" ]] || export CXX=$CXX_COMPILER
+[[ -z "$C_COMPILER" ]] || export CC=$C_COMPILER
+
 $SOURCEDIR/bootstrap --prefix=$INSTALLROOT \
                      --init=build-flags.cmake \
                      ${JOBS:+--parallel=$JOBS}
