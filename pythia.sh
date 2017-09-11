@@ -19,8 +19,14 @@ case $ARCHITECTURE in
   ;;
 esac
 
+# Set the environment variables CC and CXX if a compiler is defined in the defaults file
+# In case CC and CXX are defined the corresponding compilers are used during compilation
+[[ -z "$CXX_COMPILER" ]] || export CXX=$CXX_COMPILER
+[[ -z "$C_COMPILER" ]] || export CC=$C_COMPILER
+
 ./configure --prefix=$INSTALLROOT \
             --enable-shared \
+            --cxx-common="$CXXFLAGS" \
             --with-hepmc2=${HEPMC_ROOT} \
             ${LHAPDF_ROOT:+--with-lhapdf6="$LHAPDF_ROOT"} \
             ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"}
