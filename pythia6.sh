@@ -1,20 +1,25 @@
 # a pythia6 recipe based on the one from FairROOT
 package: pythia6
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: "428-alice1"
+tag: "alice/428"
 source: https://github.com/alisw/pythia6.git
 build_requires:
   - CMake
 ---
 #!/bin/sh
 
-cmake ${SOURCEDIR}                           \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
+cmake                                                                 \
+      ${C_COMPILER:+-DCMAKE_C_COMPILER=$C_COMPILER}                   \
+      ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}             \
+      ${Fortran_COMPILER:+-DCMAKE_Fortran_COMPILER=$Fortran_COMPILER} \
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}                          \
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
+      ${SOURCEDIR}
 
 make ${JOBS+-j$JOBS}
 make install
-tar -c lib include | tar -x -C $INSTALLROOT 
+ln -s libpythia6.so $INSTALLROOT/lib/libPythia6.so
+tar -c lib include | tar -x -C $INSTALLROOT
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

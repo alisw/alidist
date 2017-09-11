@@ -17,14 +17,18 @@ case $ARCHITECTURE in
   *) ;;
 esac
 
-cmake $SOURCEDIR                                         \
+cmake \
+  ${C_COMPILER:+-DCMAKE_C_COMPILER=$C_COMPILER}          \
+  ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}    \
+  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                   \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"             \
   -DBUILD_SHARED_LIBS=YES                                \
   ${BOOST_ROOT:+-DBOOST_ROOT:PATH="$BOOST_ROOT"}         \
   ${BOOST_ROOT:+-DBoost_DIR:PATH="$BOOST_ROOT"}          \
   ${BOOST_ROOT:+-DBoost_INCLUDE_DIR:PATH="$BOOST_ROOT/include"}  \
   -DCMAKE_SKIP_RPATH=YES                                 \
-  -DSKIP_INSTALL_FILES=1
+  -DSKIP_INSTALL_FILES=1                                 \
+  $SOURCEDIR
 
 make ${JOBS+-j $JOBS} install
 

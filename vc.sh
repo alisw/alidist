@@ -11,7 +11,13 @@ prefer_system_check: |
   printf "#include <Vc/version.h>\n#if Vc_VERSION_CHECK(1,3,2) > Vc_VERSION_NUMBER\n#error Incorrect Vc version\n#endif" | c++ -xc++ - -c -M 2>&1
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF
+cmake                                                 \
+  ${C_COMPILER:+-DCMAKE_C_COMPILER=$C_COMPILER}       \
+  ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER} \
+  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                \
+  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                 \
+  -DBUILD_TESTING=OFF                                 \
+  $SOURCEDIR
 
 make ${JOBS+-j $JOBS}
 make install
