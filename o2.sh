@@ -56,7 +56,11 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+cmake                                                             \
+      ${C_COMPILER:+-DCMAKE_C_COMPILER=$C_COMPILER}               \
+      ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}         \
+      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                        \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DFairRoot_DIR=$FAIRROOT_ROOT                               \
       -DALICEO2_MODULAR_BUILD=ON                                  \
@@ -75,8 +79,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}   \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                          \
+      $SOURCEDIR
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
