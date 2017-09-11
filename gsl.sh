@@ -16,6 +16,12 @@ rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 perl -p -i -e "s/doc//" Makefile.am
 perl -p -i -e "s|doc/Makefile||" configure.ac
 autoreconf -f -v -i
+
+# Set the environment variables CC and CXX if a compiler is defined in the defaults file 
+# In case CC and CXX are defined the corresponding compilers are used during compilation  
+[[ -z "$CXX_COMPILER" ]] || export CXX=$CXX_COMPILER
+[[ -z "$C_COMPILER" ]] || export CC=$C_COMPILER
+
 ./configure --prefix="$INSTALLROOT" \
             --enable-maintainer-mode
 make ${JOBS:+-j$JOBS}
