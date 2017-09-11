@@ -23,14 +23,69 @@ python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'         
 [[ $BOOST_PYTHON ]] || WITHOUT_PYTHON="--without-python"
 
 TMPB2=$BUILDDIR/tmp-boost-build
-case $ARCHITECTURE in
-  osx*) TOOLSET=darwin ;;
-  *) TOOLSET=gcc ;;
-esac
+
+if [ -z "$CXX_COMPILER" ]; then
+  case $ARCHITECTURE in
+    osx*)
+      TOOLSET=darwin
+      ;;
+    *)
+      TOOLSET=gcc
+      ;;
+  esac
+else
+  # In case the compiler is defined with the full path add the path to the PATH environment variable
+  # Otherwise boost may pickup the wrong compiler
+  DIR=${CXX_COMPILER%/*}
+  [[ -z "$DIR" ]] || export PATH=$DIR:$PATH
+  case $CXX_COMPILER in
+    *icpc*)
+      case $ARCHITECTURE in
+        osx*)
+          TOOLSET=intel-darwin
+          ;;
+        *)
+          TOOLSET=intel-linux
+          ;;
+      esac
+      ;;
+    *clang++*)
+      TOOLSET=clang
+      ;;
+    *g++*)
+      case $ARCHITECTURE in
+        osx*)
+          TOOLSET=darwin
+          ;;
+        *)
+          TOOLSET=gcc
+          ;;
+      esac
+      ;;
+    *)
+      echo "Compiler is not supported"
+      exit 1
+      ;;
+  esac
+fi
+
+if [[ $CXXFLAGS == *"-std=c++11"* ]]; then
+  EXTRA_CXXFLAGS="cxxflags=\"-std=c++11\""
+  if [[ $CXXFLAGS == *"-stdlib=libc++"* ]]; then
+    EXTRA_CXXFLAGS="cxxflags=\"-std=c++11\" cxxflags=\"-stdlib=libc++\" linkflags=\"-stdlib=libc++\""
+  fi
+elif [[ $CXXFLAGS == *"-std=c++14"* ]]; then
+  EXTRA_CXXFLAGS="cxxflags=\"-std=c++14\""
+  if [[ $CXXFLAGS == *"-stdlib=libc++"* ]]; then
+    EXTRA_CXXFLAGS="cxxflags=\"-std=c++14\" cxxflags=\"-stdlib=libc++\" linkflags=\"-stdlib=libc++\""
+  fi
+else
+  EXTRA_CXXFLAGS=""
+fi
 
 rsync -a $SOURCEDIR/ $BUILDDIR/
 cd $BUILDDIR/tools/build
-bash bootstrap.sh $TOOLSET
+bash bootstrap.sh --with-toolset=$TOOLSET
 mkdir -p $TMPB2
 ./b2 install --prefix=$TMPB2
 export PATH=$TMPB2/bin:$PATH
