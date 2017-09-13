@@ -11,7 +11,12 @@ force_rebuild: 1
 
 # Runs a set of (selected) code checks on the O2 code-base. Assumes the
 # compile_commands.json file is available under $O2_ROOT
-cp "${MONITORING_ROOT}"/compile_commands.json .
+
+: ${CHECKCODE_REPO?"CHECKCODE_REPO env variable needs to be set"}
+REPO_ROOT=$(eval echo "\$${CHECKCODE_REPO}_ROOT")
+REPO_VERSION=$(eval echo "\$${CHECKCODE_REPO}_VERSION")
+cp "${REPO_ROOT}"/compile_commands.json .
+sed -ie "s|BUILD/[^/]*|SOURCES|g" compile_commands.json
 
 # We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
