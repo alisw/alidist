@@ -22,6 +22,7 @@ cmake $SOURCEDIR                                              \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
+cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile
