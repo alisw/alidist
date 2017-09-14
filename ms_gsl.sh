@@ -1,7 +1,7 @@
 package: ms_gsl
 version: "1"
-source: https://github.com/Microsoft/GSL.git
 tag: b014508
+source: https://github.com/Microsoft/GSL.git
 ---
 #!/bin/bash -e
 
