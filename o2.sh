@@ -6,6 +6,7 @@ requires:
   - DDS
   - Vc
   - hijing
+  - ms_gsl
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
@@ -76,6 +77,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}   \
+      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 if [[ $GIT_TAG == master ]]; then
