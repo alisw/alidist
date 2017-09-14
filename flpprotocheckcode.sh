@@ -9,18 +9,18 @@ force_rebuild: 1
 ---
 #!/bin/bash -e
 
-# Runs a set of (selected) code checks on the O2 code-base. Assumes the
-# compile_commands.json file is available under $O2_ROOT
-
-: ${CHECKCODE_REPO?"CHECKCODE_REPO env variable needs to be set"}
-REPO_ROOT=$(eval echo "\$${CHECKCODE_REPO}_ROOT")
-REPO_VERSION=$(eval echo "\$${CHECKCODE_REPO}_VERSION")
+# Runs a set of (selected) code checks on one of the FLP Prototype modules
+# MODULE_TO_CHECK env var specifies module name that will be checked, it must be set by user
+# Assumes that compile_commands.json file is available in the INSTALLDIR of the module
+: ${MODULE_TO_CHECK?"MODULE_TO_CHECK env variable needs to be set"}
+REPO_ROOT=$(eval echo "\$${MODULE_TO_CHECK}_ROOT")
+REPO_VERSION=$(eval echo "\$${MODULE_TO_CHECK}_VERSION")
 cp "${REPO_ROOT}"/compile_commands.json .
 sed -ie "s|BUILD/[^/]*|SOURCES|g" compile_commands.json
 
 # We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
-# Heuristically guess source directory
+# Heuristically guess source directory of the module
 O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") ]) )')
 [[ -e "$O2_SRC"/CMakeLists.txt && -d "$O2_SRC"/.git ]]
 
