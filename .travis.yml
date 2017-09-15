@@ -8,5 +8,7 @@ script: |
   for X in $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep .sh); do
     echo Linting $X
     scripts/lint-recipes $X || ERR="$ERR $X"
+    [[ $X != defaults-* ]] || continue
+    grep -q '#%Module1.0' $X || { echo "$X: Missing Modulefile"; ERR="$ERR $X"; }
   done
   [[ ! $ERR ]] || { echo "The following recipes need to be fixed:" $ERR; exit 1; }
