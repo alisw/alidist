@@ -27,6 +27,7 @@ cmake $SOURCEDIR                                              \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}  \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
+cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile
