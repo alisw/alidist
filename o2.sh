@@ -58,6 +58,11 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
+# For the PR checkers (which sets ALIBUILD_O2_TESTS)
+# we impose -Werror as a compiler flag
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  CXXFLAGS="${CXXFLAGS} -Werror"
+fi
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DFairRoot_DIR=$FAIRROOT_ROOT                               \
