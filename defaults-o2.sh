@@ -34,6 +34,7 @@ overrides:
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - Python-modules
+      - "GCC-Toolchain:(?!osx)"
   AliRoot:
     requires:
       - ROOT
