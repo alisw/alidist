@@ -29,7 +29,7 @@ incremental_recipe: |
   fi
   if [[ $ALIBUILD_O2_TESTS ]]; then
     export O2_ROOT=$INSTALLROOT
-    CTEST_OUTPUT_ON_FAILURE=1 make test
+    CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
   fi
 valid_defaults:
   - o2
@@ -130,5 +130,5 @@ mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INS
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
-  CTEST_OUTPUT_ON_FAILURE=1 make test
+  CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
 fi
