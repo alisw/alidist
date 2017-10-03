@@ -1,6 +1,6 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: v3.3.6-alice1
+tag: v3.3.6-alice2
 source: https://github.com/alisw/xrootd.git
 build_requires:
  - CMake
