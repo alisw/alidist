@@ -7,6 +7,7 @@ configuration* @alisw/daq-experts
 datasampling* @alisw/daq-experts
 daq* @alisw/daq-experts
 monitoring* @alisw/daq-experts
+infologger* @alisw/daq-experts
 
 # PWGMM
 agile* @alisw/pwgmm
