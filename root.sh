@@ -105,6 +105,7 @@ else
         -Dpythia6_nolink=ON                                       \
         -Droofit=ON                                               \
         -Dhttp=ON                                                 \
+        -Droot7=OFF                                               \
         -Dsoversion=ON                                            \
         -Dshadowpw=OFF                                            \
         -Dvdt=ON                                                  \
@@ -114,7 +115,7 @@ else
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}
             ${ENABLE_COCOA:+builtin_freetype}"
-  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype}"
+  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype} root7"
 fi
 
 # Check if all required features are enabled
