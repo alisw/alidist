@@ -6,7 +6,6 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 disable:
   - AliEn-Runtime
-  - AliRoot
 overrides:
   autotools:
     tag: v1.5.0
