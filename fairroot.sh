@@ -44,6 +44,14 @@ esac
 
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
+if [ -n "$PROTOBUF_ROOT" ]; then
+    PROTOBUF_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc
+    PROTOBUF_LIB=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME
+else
+    PROTOBUF_EXECUTABLE=`which protoc`
+    PROTOBUF_LIB=libprotobuf.$SONAME
+fi
+
 cmake $SOURCEDIR                                                 \
       -DMACOSX_RPATH=OFF                                         \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                              \
@@ -66,8 +74,8 @@ cmake $SOURCEDIR                                                 \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                           \
       -DGTEST_ROOT=$GOOGLETEST_ROOT                              \
       -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include              \
-      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc     \
-      -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME  \
+      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_EXECUTABLE          \
+      -DPROTOBUF_LIBRARY=$PROTOBUF_LIBRARY                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 # Limit the number of build processes to avoid exahusting memory when building

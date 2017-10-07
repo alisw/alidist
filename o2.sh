@@ -59,6 +59,14 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
+if [ -n "$PROTOBUF_ROOT" ]; then
+    PROTOBUF_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc
+    PROTOBUF_LIB=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME
+else
+    PROTOBUF_EXECUTABLE=`which protoc`
+    PROTOBUF_LIB=`which protoc | sed "s,bin/protoc,lib/libprotobuf.$SONAME,"`
+fi
+
 # For the PR checkers (which sets ALIBUILD_O2_TESTS)
 # we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
@@ -77,10 +85,10 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                           \
       -DZMQ_DIR=$ZEROMQ_ROOT                                      \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                      \
-      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                \
+      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                 \
       -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include               \
-      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc      \
-      -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
+      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_EXECUTABLE           \
+      -DPROTOBUF_LIBRARY=$PROTOBUF_LIB                            \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}   \
