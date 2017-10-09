@@ -3,9 +3,10 @@ package: HLTO2CATracking
 version: "%(tag_basename)s"
 tag: hlt_o2_ca_tracking-v1.0
 source: https://github.com/davidrohr/AliRoot
+requires:
+  - GCC-Toolchain:(?!osx)
 build_requires:
   - CMake
-  - GCC-Toolchain:(?!osx)
 
 ---
 #!/bin/sh
