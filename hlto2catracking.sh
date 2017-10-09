@@ -5,10 +5,12 @@ tag: hlt_o2_ca_tracking-v1.0
 source: https://github.com/davidrohr/AliRoot
 build_requires:
   - CMake
+  - GCC-Toolchain:(?!osx)
 
 ---
 #!/bin/sh
 cmake ${SOURCEDIR}/HLT/TPCLib/tracking-standalone/cmake_Standalone/ \
+      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                          \
       -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
 
 make ${JOBS+-j$JOBS}
