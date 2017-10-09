@@ -59,41 +59,33 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
-if [ -n "$PROTOBUF_ROOT" ]; then
-    PROTOBUF_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc
-    PROTOBUF_LIB=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME
-else
-    PROTOBUF_EXECUTABLE=`which protoc`
-    PROTOBUF_LIB=`which protoc | sed "s,bin/protoc,lib/libprotobuf.$SONAME,"`
-fi
-
 # For the PR checkers (which sets ALIBUILD_O2_TESTS)
 # we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror"
 fi
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                           \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
-      -DFairRoot_DIR=$FAIRROOT_ROOT                               \
-      -DALICEO2_MODULAR_BUILD=ON                                  \
-      -DROOTSYS=$ROOTSYS                                          \
-      ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}    \
-      ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                   \
-      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                   \
-      -DFAIRROOTPATH=$FAIRROOT_ROOT                               \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                     \
-      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                           \
-      -DZMQ_DIR=$ZEROMQ_ROOT                                      \
-      -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                      \
-      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                 \
-      -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include               \
-      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_EXECUTABLE           \
-      -DPROTOBUF_LIBRARY=$PROTOBUF_LIB                            \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
-      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}   \
-      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                   \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                          \
+      -DFairRoot_DIR=$FAIRROOT_ROOT                                            \
+      -DALICEO2_MODULAR_BUILD=ON                                               \
+      -DROOTSYS=$ROOTSYS                                                       \
+      ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}                 \
+      ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                                \
+      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                \
+      -DFAIRROOTPATH=$FAIRROOT_ROOT                                            \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                  \
+      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                        \
+      -DZMQ_DIR=$ZEROMQ_ROOT                                                   \
+      -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                                   \
+      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                              \
+      -DPROTOBUF_INCLUDE_DIR=$(dirname $(which protoc))/../include             \
+      -DPROTOBUF_PROTOC_EXECUTABLE=$(which protoc)                             \
+      -DPROTOBUF_LIBRARY=$(dirname $(which protoc))/../lib/libprotobuf.$SONAME \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                         \
+      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}               \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                \
+      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                       \
       ${O2HLTCATRACKING_VERSION:+-DO2_TPCCA_TRACKING_LIB_DIR=$O2HLTCATRACKING_ROOT}
 
 if [[ $GIT_TAG == master ]]; then
