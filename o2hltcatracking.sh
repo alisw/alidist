@@ -1,5 +1,4 @@
-# Package for the HLT TPC O2 CA Tracking library in standalone build (This package is to be used if AliRoot is not in the dependency)
-package: HLTO2CATracking
+package: O2HLTCATracking
 version: "%(tag_basename)s"
 tag: hlt_o2_ca_tracking-v1.1
 source: https://github.com/davidrohr/AliRoot
@@ -7,9 +6,8 @@ requires:
   - GCC-Toolchain:(?!osx)
 build_requires:
   - CMake
-
 ---
-#!/bin/sh
+#!/bin/bash -e
 cmake ${SOURCEDIR}/HLT/TPCLib/tracking-standalone/cmake_Standalone/ \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                          \
       -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
