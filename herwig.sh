@@ -1,7 +1,7 @@
 package: Herwig
-version: "%(tag_basename)s%(defaults_upper)s"
-source: https://github.com/alisw/herwig
+version: "%(tag_basename)s"
 tag: "v7.0.4-alice1"
+source: https://github.com/alisw/herwig
 requires:
   - GSL
   - ThePEG

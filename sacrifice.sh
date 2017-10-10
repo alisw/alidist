@@ -1,5 +1,5 @@
 package: Sacrifice
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "v1.0.0-alice1"
 source: https://github.com/alisw/Sacrifice.git
 requires:

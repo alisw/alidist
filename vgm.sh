@@ -1,5 +1,5 @@
 package: vgm
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "4.3-alice1"
 source: https://github.com/alisw/vgm.git
 requires:

@@ -1,6 +1,6 @@
 # a pythia6 recipe based on the one from FairROOT
 package: pythia6
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "428-alice1"
 source: https://github.com/alisw/pythia6.git
 build_requires:

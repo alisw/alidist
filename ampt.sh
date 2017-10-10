@@ -1,5 +1,5 @@
 package: AMPT
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "alice/v1.26t7-v2.26t7"
 source: https://github.com/alisw/ampt
 requires:

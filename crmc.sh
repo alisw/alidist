@@ -1,5 +1,5 @@
 package: CRMC
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: alice/v1.5.4
 source: https://github.com/alisw/crmc.git
 requires:

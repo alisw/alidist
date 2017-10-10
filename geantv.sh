@@ -1,7 +1,7 @@
 package: GEANTV
-version: "%(tag_basename)s%(defaults_upper)s"
-source: https://gitlab.cern.ch/GeantV/geant.git
+version: "%(tag_basename)s"
 tag: master
+source: https://gitlab.cern.ch/GeantV/geant.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - VecGeom

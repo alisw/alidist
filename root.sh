@@ -1,5 +1,5 @@
 package: ROOT
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: v5-34-30-alice8
 source: https://github.com/alisw/root
 requires:

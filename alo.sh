@@ -1,5 +1,5 @@
 package: alo
-version: "%(commit_hash)s%(defaults_upper)s"
+version: "%(commit_hash)s"
 tag: master
 requires:
   - AliRoot

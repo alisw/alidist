@@ -1,5 +1,5 @@
 package: boost
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: v1.59.0
 source: https://github.com/alisw/boost.git
 requires:

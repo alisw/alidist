@@ -1,5 +1,5 @@
 package: YODA
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "v1.6.3-alice1"
 source: https://github.com/alisw/yoda
 requires:
