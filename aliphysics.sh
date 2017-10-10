@@ -1,11 +1,11 @@
 package: AliPhysics
-version: "%(commit_hash)s%(defaults_upper)s"
+version: "%(commit_hash)s"
+tag: master
 requires:
   - AliRoot
 build_requires:
   - "Xcode:(osx.*)"
 source: https://github.com/alisw/AliPhysics
-tag: master
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
 prepend_path:

@@ -1,5 +1,5 @@
 package: GEANT4_VMC
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "v3-2-p1-alice1"
 source: https://github.com/alisw/geant4_vmc
 requires:

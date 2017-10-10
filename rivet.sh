@@ -1,5 +1,5 @@
 package: Rivet
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: 2.5.1-alice1
 source: https://github.com/alisw/rivet
 requires:
