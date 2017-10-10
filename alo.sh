@@ -1,5 +1,6 @@
 package: alo
 version: "%(commit_hash)s%(defaults_upper)s"
+tag: master
 requires:
   - AliRoot
   - O2
@@ -7,7 +8,6 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/mrrtf/alo
-tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
