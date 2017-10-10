@@ -1,7 +1,7 @@
 # Package for the HLT TPC O2 CA Tracking library in standalone build (This package is to be used if AliRoot is not in the dependency)
 package: HLTO2CATracking
 version: "%(tag_basename)s"
-tag: hlt_o2_ca_tracking-v1.0
+tag: hlt_o2_ca_tracking-v1.1
 source: https://github.com/davidrohr/AliRoot
 requires:
   - GCC-Toolchain:(?!osx)
