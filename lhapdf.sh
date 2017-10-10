@@ -11,6 +11,9 @@ build_requires:
  - autotools
 env:
   LHAPATH: "$LHAPDF_ROOT/share/LHAPDF"
+prefer_system: "(?!slc5)"
+prefer_system_check: |
+  printf "#include \"LHAPDF/Version.h\"\nint main(){}" | c++ -I$(brew --prefix LHAPDF)/include -Wno-deprecated-declarations -xc++ - -o /dev/null
 ---
 #!/bin/bash -ex
 case $ARCHITECTURE in
