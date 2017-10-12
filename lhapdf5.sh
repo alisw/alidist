@@ -1,6 +1,6 @@
 package: lhapdf5
-tag: alice/v5.9.1
 version: "%(tag_basename)s%(defaults_upper)s"
+tag: alice/v5.9.1
 source: https://github.com/alisw/LHAPDF
 env:
   LHAPATH: "$LHAPDF5_ROOT/share/lhapdf"
@@ -16,7 +16,7 @@ rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 make ${JOBS+-j $JOBS} all
 make install
 
-PDFSETS="cteq6l cteq6ll CT10 CT10nlo MSTW2008nnlo EPS09LOR_208 EPS09NLOR_208"
+PDFSETS="cteq6l cteq6ll CT10 CT10nlo MSTW2008nnlo EPS09LOR_208 EPS09NLOR_208 cteq66a cteq66a0 cteq4m"
 pushd $INSTALLROOT/share/lhapdf
   $INSTALLROOT/bin/lhapdf-getdata $PDFSETS
   # Check if PDF sets were really installed

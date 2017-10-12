@@ -51,6 +51,12 @@ case $ARCHITECTURE in
   ;;
 esac
 
+#If pythia6 is not provided, perform late linking
+if [[ -z $PYTHIA6_ROOT ]]
+then
+    PYHIA6_LATE=TRUE
+fi
+
 if [[ $ALICE_DAQ ]]; then
   # DAQ requires static ROOT, only supported by ./configure (not CMake).
   export ROOTSYS=$BUILDDIR
@@ -90,6 +96,7 @@ else
         -Dbuiltin_freetype=OFF                                    \
         -Dpcre=OFF                                                \
         -Dbuiltin_pcre=ON                                         \
+        -Drpath=ON                                                \
         ${ENABLE_COCOA:+-Dcocoa=ON}                               \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
         -DCMAKE_C_COMPILER=$COMPILER_CC                           \
@@ -100,9 +107,12 @@ else
         ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}  \
         ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
         ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
+	${PYTHIA_ROOT:+-DPYTHIA8_DIR=$PYTHIA_ROOT}                \
+	${PYTHIA6_ROOT:+-DPYTHIA6_LIBRARY=$PYTHIA6_ROOT/lib/libpythia6.so}\
+	${PYTHIA6_ROOT:+-Dpythia6=ON}                             \
         -Dpgsql=OFF                                               \
         -Dminuit2=ON                                              \
-        -Dpythia6_nolink=ON                                       \
+	${PYTHIA6_LATE:+-Dpythia6_nolink=ON}                      \
         -Droofit=ON                                               \
         -Dhttp=ON                                                 \
         -Droot7=OFF                                               \
@@ -111,7 +121,7 @@ else
         -Dvdt=ON                                                  \
         -Dbuiltin_vdt=ON                                          \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
-  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
+  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http ${PYTHIA_ROOT:+pythia8}
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}
             ${ENABLE_COCOA:+builtin_freetype}"
@@ -157,7 +167,9 @@ module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-
                      ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
                      ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-                     ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
+                     ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
+                     ${PYTHIA_VERSION:+pythia/$PYTHIA_VERSION-$PYTHIA_REVISION}                                 \\
+                     ${PYTHIA6_VERSION:+pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
