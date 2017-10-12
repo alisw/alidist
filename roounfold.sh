@@ -1,6 +1,6 @@
 package: RooUnfold
 version: "%(tag_basename)s%(defaults_upper)s"
-tag: alice/V02-00-01
+tag: V02-00-01-alice2
 source: https://github.com/alisw/RooUnfold
 requires:
  - ROOT
