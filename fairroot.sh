@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(tag_basename)s"
-tag: "alice-dev-20171006"
+tag: "alice-dev-20171012"
 source: https://github.com/alisw/FairRoot
 requires:
   - generators
@@ -65,9 +65,7 @@ cmake $SOURCEDIR                                                 \
       -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}           \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                           \
       -DGTEST_ROOT=$GOOGLETEST_ROOT                              \
-      -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include              \
-      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc     \
-      -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME  \
+      ${PROTOBUF_ROOT:+-DProtoBuf_DIR=$PROTOBUF_ROOT}            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 # Limit the number of build processes to avoid exahusting memory when building
