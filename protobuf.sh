@@ -4,9 +4,8 @@ source: https://github.com/google/protobuf
 build_requires:
  - autotools
  - "GCC-Toolchain:(?!osx)"
-prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include \"google/protobuf/message.h\"\nint main(){}" | c++ -I$(brew --prefix protobuf)/include -Wno-deprecated-declarations -xc++ - -o /dev/null && protoc -h &> /dev/null
+   printf "#include <google/protobuf/stubs/common.h>\n#if (GOOGLE_PROTOBUF_VERSION < 2006001)\n#error \"System protobuf cannot be used, please install a version >= 2.6.1\"\n#endif\n" | cc -xc++ - -c -o /dev/null && protoc --version
 ---
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
