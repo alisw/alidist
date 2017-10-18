@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v1.0.0
+tag:  v1.1.0
 requires:
   - curl
   - boost
@@ -8,6 +8,7 @@ requires:
   - protobuf
   - grpc
   - Common-O2
+  - MySQL
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
@@ -29,7 +30,6 @@ cmake $SOURCEDIR                                              \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile
@@ -43,7 +43,13 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}  ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION grpc/$GRPC_VERSION-$GRPC_REVISION Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION
+module load BASE/1.0                                                          \\
+            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION} \\
+            grpc/$GRPC_VERSION-$GRPC_REVISION                                 \\
+            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION
+
 # Our environment
 setenv Configuration_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(Configuration_ROOT)/bin
