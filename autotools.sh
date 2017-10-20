@@ -1,7 +1,7 @@
 package: autotools
 version: "%(tag_basename)s"
-source: https://github.com/alisw/autotools
 tag: v1.4.0
+source: https://github.com/alisw/autotools
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
   export PATH=$PATH:$(brew --prefix gettext || true)/bin;
