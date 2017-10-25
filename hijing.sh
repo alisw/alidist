@@ -3,6 +3,8 @@ package: hijing
 version: "%(tag_basename)s"
 tag: "v1.36"
 source: https://github.com/alisw/hijing.git
+requires:
+  - GCC-Toolchain:(?!osx)
 build_requires:
   - CMake
 
