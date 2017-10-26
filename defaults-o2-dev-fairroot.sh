@@ -7,14 +7,6 @@ env:
 disable:
   - AliEn-Runtime
   - AliRoot
-  - simulation
-  - generators
-  - GEANT4
-  - GEANT3
-  - GEANT4_VMC
-  - pythia
-  - pythia6
-  - hijing
 overrides:
   autotools:
     tag: v1.5.0
@@ -59,6 +51,7 @@ overrides:
   FairRoot:
     version: dev
     tag: dev
+    source: https://github.com/FairRootGroup/FairRoot
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
