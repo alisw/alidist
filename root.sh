@@ -113,9 +113,14 @@ else
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
-            ${ALIEN_RUNTIME_ROOT:+alien monalisa}
-            ${ENABLE_COCOA:+builtin_freetype}"
-  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype} root7"
+            ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
+  NO_FEATURES="root7"
+
+  if [[ "$ENABLE_COCOA" != "" ]]; then
+    FEATURES="$FEATURES builtin_freetype"
+  elif [[ "$FREETYPE_ROOT" != "" ]]; then
+    NO_FEATURES="$FEATURES builtin_freetype"
+  fi
 fi
 
 # Check if all required features are enabled
