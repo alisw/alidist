@@ -55,9 +55,9 @@ notebook==4.2.3
 metakernel==0.14.0
 pyyaml
 EOF
-for X in `cat requirements.txt | sed -e "s/=.*//"`; do
-  pip install --user --disable-pip-version-check $X -r ./requirements.txt
-done
+
+pip install --user --disable-pip-version-check -r ./requirements.txt
+
 unset PYTHONUSERBASE
 
 # Install matplotlib (quite tricky)
