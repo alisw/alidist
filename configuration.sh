@@ -47,8 +47,8 @@ module load BASE/1.0                                                          \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION} \\
-            grpc/$GRPC_VERSION-$GRPC_REVISION                                 \\
-            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION
+            ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                \\
+            ${COMMON_O2_VERSION:+Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION}
 
 # Our environment
 setenv Configuration_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
