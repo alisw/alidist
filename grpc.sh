@@ -6,6 +6,8 @@ requires:
 build_requires:
   - "GCC-Toolchain:(?!osx)"
 source: https://github.com/grpc/grpc
+prefer_system: "(?!slc5)"
+prefer_system_check: which grpc_cpp_plugin
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -31,7 +33,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
+module load BASE/1.0
 # Our environment
 prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
