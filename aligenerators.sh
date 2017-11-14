@@ -1,5 +1,5 @@
 package: AliGenerators
-version: "v%(year)s%(month)s%(day)s%(defaults_upper)s"
+version: "v%(year)s%(month)s%(day)s"
 requires:
   - AMPT
   - CRMC
@@ -15,6 +15,7 @@ requires:
   - AGILe
   - Sacrifice
   - aligenmc
+  - FONLL
 build_requires:
   - EPOS-test
 ---

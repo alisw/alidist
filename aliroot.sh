@@ -1,5 +1,6 @@
 package: AliRoot
-version: "%(commit_hash)s%(defaults_upper)s"
+version: "%(commit_hash)s"
+tag: master
 requires:
   - ROOT
   - DPMJET
@@ -15,7 +16,6 @@ env:
 prepend_path:
   ROOT_INCLUDE_PATH: "$ALIROOT_ROOT/include"
 source: https://github.com/alisw/AliRoot
-tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}

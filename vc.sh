@@ -1,11 +1,14 @@
 package: Vc
-version: "%(tag_basename)s%(defaults_upper)s"
-source: https://github.com/VcDevel/Vc.git
+version: "%(tag_basename)s"
 tag: 1.3.2
+source: https://github.com/VcDevel/Vc.git
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+prefer_system: (?!slc5)
+prefer_system_check: |
+  printf "#include <Vc/version.h>\n#if Vc_VERSION_CHECK(1,3,2) > Vc_VERSION_NUMBER\n#error Incorrect Vc version\n#endif" | c++ -xc++ - -c -M 2>&1
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF

@@ -1,7 +1,7 @@
 package: nanomsg
 version: v1.0.0+git_%(short_hash)s
-source: https://github.com/nanomsg/nanomsg
 tag: c52f1bedca6b72fb31b473929d99f2fe90a13445
+source: https://github.com/nanomsg/nanomsg
 build_requires:
   - CMake
 prefer_system: "(?!slc5)"
@@ -11,7 +11,6 @@ prefer_system_check: |
 #!/bin/bash
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"
 make ${JOBS+-j $JOBS}
-make test
 make install
 [[ -d "$INSTALLROOT"/lib ]] || ln -nfs lib64 "$INSTALLROOT"/lib
 

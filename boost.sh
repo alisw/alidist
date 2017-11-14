@@ -1,7 +1,7 @@
 package: boost
-version: "%(tag_basename)s%(defaults_upper)s"
-source: https://github.com/alisw/boost.git
+version: "%(tag_basename)s"
 tag: v1.59.0
+source: https://github.com/alisw/boost.git
 requires:
  - "GCC-Toolchain:(?!osx)"
 build_requires:
@@ -18,7 +18,7 @@ echo "Building ALICE boost. You can avoid that by installing at least boost 1.59
 BOOST_PYTHON=1
 python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'                   && \
   pip --help &> /dev/null                                                                 && \
-  printf '#include \"pyconfig.h"' | gcc -c -I$(python-config --cflags) -xc -o /dev/null - || \
+  printf '#include \"pyconfig.h"' | gcc -c $(python-config --includes) -xc -o /dev/null - || \
   unset BOOST_PYTHON
 [[ $BOOST_PYTHON ]] || WITHOUT_PYTHON="--without-python"
 

@@ -1,7 +1,7 @@
 package: FairRoot
 version: "%(tag_basename)s"
+tag: "alice-dev-20171027"
 source: https://github.com/alisw/FairRoot
-tag: "alice-dev-20170711"
 requires:
   - generators
   - simulation
@@ -42,10 +42,12 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
+[[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
+
 cmake $SOURCEDIR                                                 \
       -DMACOSX_RPATH=OFF                                         \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                              \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DROOTSYS=$ROOTSYS                                         \
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                    \
       ${NANOMSG_ROOT:+-DNANOMSG_DIR=$NANOMSG_ROOT}               \
@@ -60,11 +62,10 @@ cmake $SOURCEDIR                                                 \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
+      -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}           \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                           \
       -DGTEST_ROOT=$GOOGLETEST_ROOT                              \
-      -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include              \
-      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc     \
-      -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME  \
+      ${PROTOBUF_ROOT:+-DProtoBuf_DIR=$PROTOBUF_ROOT}            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 # Limit the number of build processes to avoid exahusting memory when building

@@ -1,7 +1,7 @@
 package: VecGeom
-version: "%(tag_basename)s%(defaults_upper)s"
-source: https://gitlab.cern.ch/VecGeom/VecGeom.git
+version: "%(tag_basename)s"
 tag: master
+source: https://gitlab.cern.ch/VecGeom/VecGeom.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Vc"

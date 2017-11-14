@@ -1,7 +1,7 @@
 package: jemalloc
-version: "v%(commit_hash)s%(defaults_upper)s"
-source: https://github.com/jemalloc/jemalloc
+version: "v%(commit_hash)s"
 tag: 4.1.0
+source: https://github.com/jemalloc/jemalloc
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - autotools

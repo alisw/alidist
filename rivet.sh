@@ -1,5 +1,5 @@
 package: Rivet
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: 2.5.1-alice1
 source: https://github.com/alisw/rivet
 requires:
@@ -44,6 +44,8 @@ fi
 
 [[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
 
+(
+unset PYTHON_VERSION
 autoreconf -ivf
 ./configure                                 \
   --prefix="$INSTALLROOT"                   \
@@ -56,6 +58,7 @@ autoreconf -ivf
   ${CXX11:+--enable-stdcxx11}
 make -j$JOBS
 make install
+)
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
