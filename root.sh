@@ -116,10 +116,10 @@ else
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
   NO_FEATURES="root7"
 
-  if [[ "$ENABLE_COCOA" != "" ]]; then
+  if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
-  elif [[ "$FREETYPE_ROOT" != "" ]]; then
-    NO_FEATURES="$FEATURES builtin_freetype"
+  elif [[ $FREETYPE_ROOT ]]; then
+    NO_FEATURES="$NO_FEATURES builtin_freetype"
   fi
 fi
 
