@@ -7,14 +7,6 @@ env:
 disable:
   - AliEn-Runtime
   - AliRoot
-  - simulation
-  - generators
-  - GEANT4
-  - GEANT3
-  - GEANT4_VMC
-  - pythia
-  - pythia6
-  - hijing
 overrides:
   autotools:
     tag: v1.5.0
@@ -53,12 +45,13 @@ overrides:
     version: "%(short_hash)s%(defaults_upper)s"
   CMake:
     version: "%(tag_basename)s"
-    tag: "v3.8.2"
+    tag: "v3.9.4"
     prefer_system_check: |
-      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-7].*) exit 1 ;; esac
+      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-8].*|3.9.[0-3]) exit 1 ;; esac
   FairRoot:
     version: dev
     tag: dev
+    source: https://github.com/FairRootGroup/FairRoot
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
