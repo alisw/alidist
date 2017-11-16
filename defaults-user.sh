@@ -6,14 +6,14 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   AliRoot:
-    version: v5-09-19
+    version: "%(tag_basename)s"
     tag: v5-09-19
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
-    version: v5-09-19-01
+    version: "%(tag_basename)s"
     tag: v5-09-19-01
 ---
 # To be used with aliBuild option `--defaults user`.
