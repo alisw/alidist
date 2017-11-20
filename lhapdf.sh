@@ -1,5 +1,5 @@
 package: lhapdf
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: v6.1.6
 source: https://github.com/alisw/LHAPDF
 requires:

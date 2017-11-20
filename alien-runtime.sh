@@ -1,5 +1,8 @@
 package: AliEn-Runtime
-version: "v2-19-le%(defaults_upper)s"
+version: "v2-19-le"
+requires:
+ - "GCC-Toolchain:(?!osx)"
+ - "Xcode:(osx.*)"
 build_requires:
  - zlib
  - libxml2
@@ -12,9 +15,6 @@ build_requires:
  - XRootD
  - xalienfs
  - UUID
-requires:
- - "GCC-Toolchain:(?!osx)"
- - "Xcode:(osx.*)"
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:

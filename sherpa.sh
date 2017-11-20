@@ -1,7 +1,7 @@
 package: SHERPA
-version: "%(tag_basename)s%(defaults_upper)s"
-source: https://github.com/alisw/SHERPA
+version: "%(tag_basename)s"
 tag: "alice/v2.1.1"
+source: https://github.com/alisw/SHERPA
 build_requires:
   - curl
   - autotools

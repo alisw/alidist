@@ -14,7 +14,7 @@ overrides:
   ROOT:
     version: "%(tag_basename)s"
     version: "v6-10-06+git_%(short_hash)s"
-    tag: "85fcb7c2ff9d2c7fd836419c055d8b0fb40ffb28"
+    tag: "c54db1c10b19b05f157dc44078b45edd9f38c741"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
@@ -23,9 +23,14 @@ overrides:
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - Python-modules
+      - "GCC-Toolchain:(?!osx)"
   GSL:
     prefer_system_check: |
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
+  AliRoot:
+    version: "%(commit_hash)s_ROOT6"
+  AliPhysics:
+    version: "%(commit_hash)s_ROOT6"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

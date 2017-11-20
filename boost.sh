@@ -1,5 +1,5 @@
 package: boost
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: v1.59.0
 source: https://github.com/alisw/boost.git
 requires:
@@ -11,8 +11,6 @@ prefer_system_check: |
   printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
 ---
 #!/bin/bash -e
-
-echo "Building ALICE boost. You can avoid that by installing at least boost 1.59."
 
 # Detect whether we can enable boost-python (internal boost detection is broken)
 BOOST_PYTHON=1
@@ -59,6 +57,15 @@ b2 -q                        \
    $EXTRA_CXXFLAGS           \
    install
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
+
+# We need to tell boost libraries linking other boost libraries to look for them
+# inside the same directory as the main ones, on macOS (@loader_path).
+if [[ $ARCHITECTURE == osx* ]]; then
+  for LIB in $INSTALLROOT/lib/libboost*.dylib; do
+    otool -L $LIB | grep -v $(basename $LIB) | grep -oE 'libboost_[^ ]+' | \
+      xargs -I{} install_name_tool -change {} @loader_path/{} "$LIB"
+  done
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

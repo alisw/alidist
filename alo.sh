@@ -1,5 +1,6 @@
 package: alo
-version: "%(commit_hash)s%(defaults_upper)s"
+version: "%(commit_hash)s"
+tag: master
 requires:
   - AliRoot
   - O2
@@ -7,7 +8,6 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/mrrtf/alo
-tag: master
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -34,7 +34,8 @@ cmake $SOURCEDIR \
     -DALIROOT="$ALIROOT_ROOT" \
     -DROOTSYS="$ROOT_ROOT" \
     -DRAPIDJSON_INCLUDEDIR="$RAPIDJSON_ROOT/include" \
-    -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+    ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
 
 make ${JOBS+-j $JOBS} install
 

@@ -1,6 +1,6 @@
 package: DPMJET
-version: "%(tag_basename)s%(defaults_upper)s"
-tag: "v3.0.5-alice3"
+version: "%(tag_basename)s"
+tag: "v3.0.5-alice4"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/DPMJET.git
 requires:
  - "GCC-Toolchain:(?!osx)"

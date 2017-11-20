@@ -6,7 +6,11 @@ requires:
   - DDS
   - Vc
   - hijing
+<<<<<<< HEAD
   - HepMC3
+=======
+  - O2HLTCATracking
+>>>>>>> master
 build_requires:
   - ms_gsl
 source: https://github.com/AliceO2Group/AliceO2
@@ -77,16 +81,15 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                           \
       -DZMQ_DIR=$ZEROMQ_ROOT                                      \
       -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                      \
-      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                \
-      -DPROTOBUF_INCLUDE_DIR=$PROTOBUF_ROOT/include               \
-      -DPROTOBUF_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc      \
-      -DPROTOBUF_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME   \
+      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                 \
+      ${PROTOBUF_ROOT:+-DProtoBuf_DIR=$PROTOBUF_ROOT}             \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                            \
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}  \
       ${HEPMC3_ROOT:+-DHEPMC3_DIR=$HEPMC3_ROOT}                    \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}   \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                   \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                          \
+      ${O2HLTCATRACKING_VERSION:+-DO2_TPCCA_TRACKING_LIB_DIR=$O2HLTCATRACKING_ROOT}
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
@@ -118,7 +121,11 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
+<<<<<<< HEAD
 module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${HEPMC3_VERSION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION}
+=======
+module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${O2HLTCATRACKING_VERSION:+O2HLTCATracking/$O2HLTCATRACKING_VERSION-$O2HLTCATRACKING_REVISION}
+>>>>>>> master
 # Our environment
 setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share

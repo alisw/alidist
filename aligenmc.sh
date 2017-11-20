@@ -1,5 +1,5 @@
 package: aligenmc
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
 tag: "v0.0.3"
 source: https://github.com/alisw/aligenmc
 ---

@@ -1,11 +1,11 @@
 package: o2codechecker
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
+tag: master
 requires:
   - Clang
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/O2CodeChecker.git
-tag: master
 incremental_recipe: |
   make ${JOBS+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
