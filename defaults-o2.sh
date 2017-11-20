@@ -53,11 +53,6 @@ overrides:
     tag: "v3.9.4"
     prefer_system_check: |
       which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-8].*|3.9.[0-3]) exit 1 ;; esac
-  simulation:
-    requires:
-      - GEANT4_VMC
-      - GEANT4
-      - GEANT3
   pythia:
     requires:
       - lhapdf
