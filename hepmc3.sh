@@ -1,7 +1,7 @@
 package: HepMC3
 version: "%(tag_basename)s"
-source: https://gitlab.cern.ch/hepmc/HepMC3.git
 tag: 3.0.0
+source: https://gitlab.cern.ch/hepmc/HepMC3.git
 requires:
   - ROOT
 build_requires:
