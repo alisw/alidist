@@ -1,5 +1,5 @@
 package: O2
-version: dev
+version: "%(tag_basename)s"
 tag: dev
 requires:
   - FairRoot
