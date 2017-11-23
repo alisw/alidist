@@ -7,7 +7,7 @@ requires:
   - boost
   - lhapdf5
   - HepMC
-  - Python
+  - Python-modules
 build_requires:
   - autotools
 ---

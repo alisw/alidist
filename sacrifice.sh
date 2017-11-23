@@ -7,7 +7,7 @@ requires:
   - boost
   - lhapdf
   - HepMC
-  - Python
+  - Python-modules
   - pythia
 build_requires:
   - autotools

@@ -1,12 +1,12 @@
 package: mesos
 version: v0.28.2
-source: https://git-wip-us.apache.org/repos/asf/mesos.git
 tag: 0.28.2
+source: https://git-wip-us.apache.org/repos/asf/mesos.git
 build_requires:
 - autotools
 - protobuf
 - glog
-- Python
+- Python-modules
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
