@@ -35,6 +35,8 @@ overrides:
       - FreeType:(?!osx)
       - Python-modules
       - "GCC-Toolchain:(?!osx)"
+      - libpng
+      - lzma
   AliRoot:
     requires:
       - ROOT
