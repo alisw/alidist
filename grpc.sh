@@ -21,6 +21,11 @@ git submodule update --init # aie aie aie
 make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
 make prefix=$INSTALLROOT install
 
+# Add missing symlink. Must be relative, because the directory is moved around after the build
+cd $INSTALLROOT/lib
+ln -s ./libgrpc++.so.1.2.5 ./libgrpc++.so.1
+cd -
+
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
