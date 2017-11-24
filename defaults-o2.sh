@@ -4,6 +4,7 @@ env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
+  CXXSTD: "14"
 disable:
   - AliEn-Runtime
 overrides:
@@ -57,6 +58,17 @@ overrides:
     version: "%(commit_hash)s_O2"
   AliPhysics:
     version: "%(commit_hash)s_O2"
+  GEANT4:
+    tag: v10.3.3
+    source: https://gitlab.cern.ch/geant4/geant4.git
+  GEANT4_VMC:
+    tag: "v3-5"
+    source: https://github.com/vmc-project/geant4_vmc
+  vgm:
+    tag: "v4-4"
+    source: https://github.com/vmc-project/vgm
+  GEANT3:
+    tag: v2-5
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
