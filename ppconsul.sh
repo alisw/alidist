@@ -1,12 +1,12 @@
 package: Ppconsul
 version: 0.0.1
+tag: 8ade80d0528b563d4b58bc4f09815fc1e3d5be19
 source: https://github.com/oliora/ppconsul
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
-tag: 8ade80d0528b563d4b58bc4f09815fc1e3d5be19
 ---
 #!/bin/sh
 
