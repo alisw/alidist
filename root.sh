@@ -29,7 +29,7 @@ incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cd $INSTALLROOT/test
-  env PATH=$INSTALLROOT/bin:$PATH LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH make ${JOBS+-j$JOBS}
+  env PATH="$INSTALLROOT/bin:$PATH" LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" DYLD_LIBRARY_PATH="$INSTALLROOT/lib:$DYLD_LIBRARY_PATH" make ${JOBS+-j$JOBS}
 ---
 #!/bin/bash -e
 unset ROOTSYS
