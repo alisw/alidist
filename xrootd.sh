@@ -20,7 +20,7 @@ esac
 cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
                    -DCMAKE_INSTALL_LIBDIR=$INSTALLROOT/lib            \
                    -DENABLE_CRYPTO=TRUE                               \
-                   -DENABLE_PERL=TRUE                                 \
+                   -DENABLE_PERL=FALSE                                \
                    -DENABLE_KRB5=FALSE                                \
                    -DENABLE_READLINE=FALSE                            \
                    -DCMAKE_BUILD_TYPE=RelWithDebInfo                  \

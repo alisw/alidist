@@ -22,6 +22,10 @@ overrides:
     build_requires:
       - DAQ
       - CMake
+  ROOT:
+    requires: []
+    build_requires:
+      - CMake
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

@@ -12,8 +12,6 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 
-echo "Building ALICE boost. You can avoid that by installing at least boost 1.59."
-
 # Detect whether we can enable boost-python (internal boost detection is broken)
 BOOST_PYTHON=1
 python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'                   && \
@@ -59,6 +57,15 @@ b2 -q                        \
    $EXTRA_CXXFLAGS           \
    install
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
+
+# We need to tell boost libraries linking other boost libraries to look for them
+# inside the same directory as the main ones, on macOS (@loader_path).
+if [[ $ARCHITECTURE == osx* ]]; then
+  for LIB in $INSTALLROOT/lib/libboost*.dylib; do
+    otool -L $LIB | grep -v $(basename $LIB) | grep -oE 'libboost_[^ ]+' | \
+      xargs -I{} install_name_tool -change {} @loader_path/{} "$LIB"
+  done
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

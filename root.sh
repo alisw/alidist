@@ -61,7 +61,6 @@ if [[ $ALICE_DAQ ]]; then
     --enable-soversion                  \
     --enable-builtin-freetype           \
     --enable-builtin-pcre               \
-    --enable-mathmore                   \
     --with-f77=gfortran                 \
     --with-cc=$COMPILER_CC              \
     --with-cxx=$COMPILER_CXX            \
@@ -72,50 +71,57 @@ if [[ $ALICE_DAQ ]]; then
     --disable-globus                    \
     --disable-krb5                      \
     --disable-ssl                       \
+    --disable-alien                     \
     --enable-mysql
-  FEATURES="builtin_freetype builtin_pcre mathmore minuit2 pythia6 roofit
+  FEATURES="builtin_freetype builtin_pcre minuit2 pythia6 roofit
             soversion ${CXX11:+cxx11} ${CXX14:+cxx14} mysql xml"
+  NO_FEATURES="ssl alien"
 else
   # Normal ROOT build.
-  cmake $SOURCEDIR                                                \
-        -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                      \
-        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
-        ${ALIEN_RUNTIME_ROOT:+-Dalien=ON}                         \
-        ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}    \
-        ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT} \
-        ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}     \
-        ${CXX11:+-Dcxx11=ON}                                      \
-        ${CXX14:+-Dcxx14=ON}                                      \
-        -Dfreetype=ON                                             \
-        -Dbuiltin_freetype=OFF                                    \
-        -Dpcre=OFF                                                \
-        -Dbuiltin_pcre=ON                                         \
-        ${ENABLE_COCOA:+-Dcocoa=ON}                               \
-        -DCMAKE_CXX_COMPILER=$COMPILER_CXX                        \
-        -DCMAKE_C_COMPILER=$COMPILER_CC                           \
-        -DCMAKE_LINKER=$COMPILER_LD                               \
+  cmake $SOURCEDIR                                                                       \
+        -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
+        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+        ${ALIEN_RUNTIME_ROOT:+-Dalien=ON}                                                \
+        ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                           \
+        ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                        \
+        ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}                            \
+        ${CXX11:+-Dcxx11=ON}                                                             \
+        ${CXX14:+-Dcxx14=ON}                                                             \
+        -Dfreetype=ON                                                                    \
+        -Dbuiltin_freetype=OFF                                                           \
+        -Dpcre=OFF                                                                       \
+        -Dbuiltin_pcre=ON                                                                \
+        ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
+        -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
+        -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
+        -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
-        ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}       \
-        ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}     \
-        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}  \
-        ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}       \
-        ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                          \
-        -Dpgsql=OFF                                               \
-        -Dminuit2=ON                                              \
-        -Dpythia6_nolink=ON                                       \
-        -Droofit=ON                                               \
-        -Dhttp=ON                                                 \
-        -Droot7=OFF                                               \
-        -Dsoversion=ON                                            \
-        -Dshadowpw=OFF                                            \
-        -Dvdt=ON                                                  \
-        -Dbuiltin_vdt=ON                                          \
+        ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}                              \
+        ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}                            \
+        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}             \
+        ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}                              \
+        ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
+        -Dpgsql=OFF                                                                      \
+        -Dminuit2=ON                                                                     \
+        -Dpythia6_nolink=ON                                                              \
+        -Droofit=ON                                                                      \
+        -Dhttp=ON                                                                        \
+        -Droot7=OFF                                                                      \
+        -Dsoversion=ON                                                                   \
+        -Dshadowpw=OFF                                                                   \
+        -Dvdt=ON                                                                         \
+        -Dbuiltin_vdt=ON                                                                 \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
-            ${ALIEN_RUNTIME_ROOT:+alien monalisa}
-            ${ENABLE_COCOA:+builtin_freetype}"
-  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype} root7"
+            ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
+  NO_FEATURES="root7"
+
+  if [[ $ENABLE_COCOA ]]; then
+    FEATURES="$FEATURES builtin_freetype"
+  elif [[ $FREETYPE_ROOT ]]; then
+    NO_FEATURES="$NO_FEATURES builtin_freetype"
+  fi
 fi
 
 # Check if all required features are enabled

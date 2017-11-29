@@ -1,11 +1,13 @@
 package: grpc
 version: "%(tag_basename)s"
+tag:  v1.2.5
 requires:
   - protobuf
 build_requires:
   - "GCC-Toolchain:(?!osx)"
 source: https://github.com/grpc/grpc
-tag:  v1.2.5
+prefer_system: "(?!slc5)"
+prefer_system_check: which grpc_cpp_plugin
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -18,6 +20,11 @@ git submodule update --init # aie aie aie
 
 make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
 make prefix=$INSTALLROOT install
+
+# Add missing symlink. Must be relative, because the directory is moved around after the build
+cd $INSTALLROOT/lib
+ln -s ./libgrpc++.so.1.2.5 ./libgrpc++.so.1
+cd -
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

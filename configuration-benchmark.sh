@@ -1,6 +1,6 @@
 package: Configuration-Benchmark
 version: "%(tag_basename)s"
-tag: v0.1.1
+tag: v0.2.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
