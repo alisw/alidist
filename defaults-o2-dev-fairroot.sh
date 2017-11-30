@@ -58,7 +58,7 @@ overrides:
     source: https://gitlab.cern.ch/geant4/geant4.git
   GEANT4_VMC:
     tag: "v3-5"
-    source: https://github.com/vmc/geant4_vmc
+    source: https://github.com/vmc-project/geant4_vmc
   vgm:
     tag: "v4-4"
     source: https://github.com/vmc-project/vgm
