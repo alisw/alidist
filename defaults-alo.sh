@@ -33,8 +33,8 @@ overrides:
       which gfortran || { echo "gfortran missing"; exit 1; }
       which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x060200)\n#error \"System's GCC cannot be used: we need at least GCC 6.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
-    version: "v6-10-06+git_%(short_hash)s"
-    tag: "c54db1c10b19b05f157dc44078b45edd9f38c741"
+    version: "%(tag_basename)s"
+    tag: "v6-10-08"
     source: https://github.com/root-mirror/root
     requires:
       - GSL
