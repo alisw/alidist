@@ -1,7 +1,7 @@
 package: googlebenchmark
 version: "1.3.0"
-source: https://github.com/google/benchmark
 tag: v1.3.0
+source: https://github.com/google/benchmark
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - CMake
