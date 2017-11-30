@@ -17,8 +17,8 @@ overrides:
     tag: v5-09-20-01
   ROOT:
     version: "%(tag_basename)s"
-    version: "v6-10-06+git_%(short_hash)s"
-    tag: "c54db1c10b19b05f157dc44078b45edd9f38c741"
+    version: "%(tag_basename)s"
+    tag: "v6-10-08"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
