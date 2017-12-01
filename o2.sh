@@ -1,5 +1,5 @@
 package: O2
-version: dev
+version: "%(tag_basename)s"
 tag: dev
 requires:
   - FairRoot
@@ -73,6 +73,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}    \
       ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                   \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                   \
+      ${VGM_ROOT:+-DVGM_DIR=$VGM_ROOT}                            \
+      ${GEANT4_VMC_ROOT:+-DGEANT4_VMC_DIR=$GEANT4_VMC_ROOT}       \
       -DFAIRROOTPATH=$FAIRROOT_ROOT                               \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                     \
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                           \
@@ -86,6 +88,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}   \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                          \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                     \
       ${O2HLTCATRACKING_VERSION:+-DO2_TPCCA_TRACKING_LIB_DIR=$O2HLTCATRACKING_ROOT}
 
 if [[ $GIT_TAG == master ]]; then

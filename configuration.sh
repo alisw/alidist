@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v1.1.0
+tag:  v1.2.0
 requires:
   - curl
   - boost
@@ -10,6 +10,7 @@ requires:
   - Common-O2
   - MySQL
   - RapidJSON
+  - Ppconsul
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
@@ -33,6 +34,8 @@ cmake $SOURCEDIR                                              \
       -DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.so  \
       ${GRPC_ROOT:+-DGRPC_ROOT=${GRPC_ROOT}}                  \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include        \
+      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include        \
+      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib            \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
@@ -53,6 +56,7 @@ module load BASE/1.0                                                          \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION} \\
             ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                \\
+            Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION                     \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION
 
 # Our environment
