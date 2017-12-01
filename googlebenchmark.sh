@@ -8,7 +8,7 @@ build_requires:
 ---
 #!/bin/sh
 cmake $SOURCEDIR                           \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
 make ${JOBS+-j $JOBS}
 make install
