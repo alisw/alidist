@@ -16,6 +16,7 @@ requires:
   - Sacrifice
   - aligenmc
   - FONLL
+  - Therminator2
 build_requires:
   - EPOS-test
 ---
@@ -47,5 +48,6 @@ module load BASE/1.0 \
   pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION \
   Sacrifice/$SACRIFICE_VERSION-$SACRIFICE_REVISION \
   SHERPA/$SHERPA_VERSION-$SHERPA_REVISION \
-  ThePEG/$THEPEG_VERSION-$THEPEG_REVISION
+  ThePEG/$THEPEG_VERSION-$THEPEG_REVISION \
+  Therminator2/$THERMINATOR2_VERSION-$THERMINATOR2_REVISION
 EoF
