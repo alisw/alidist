@@ -8,9 +8,9 @@ requires:
   - protobuf
   - grpc
   - Common-O2
-  - MySQL
   - RapidJSON
   - Ppconsul
+  - "MySQL:slc.*"
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
