@@ -1,4 +1,4 @@
-package: defaults-o2-full
+package: defaults-o2-prod
 version: v1
 env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"

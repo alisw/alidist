@@ -40,7 +40,7 @@ valid_defaults:
   - o2-daq
   - o2-dev-fairroot
   - alo
-  - o2-full
+  - o2-prod
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
