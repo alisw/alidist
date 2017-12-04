@@ -10,7 +10,6 @@ disable:
   - grpc
   - Ppconsul
   - ApMon-CPP
-  - MySQL
 overrides:
   autotools:
     tag: v1.5.0
