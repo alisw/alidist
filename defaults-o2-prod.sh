@@ -14,7 +14,7 @@ overrides:
     tag: "v1.64.0-alice1"
     requires:
       - "GCC-Toolchain:(?!osx)"
-      - Python
+      - Python-modules
     prefer_system_check: |
       printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106400 || BOOST_VERSION > 106499)\n#error \"Cannot use system's boost: boost 1.64 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
   GCC-Toolchain:
@@ -35,7 +35,10 @@ overrides:
       - FreeType:(?!osx)
       - Python-modules
       - "GCC-Toolchain:(?!osx)"
+      - libpng
+      - lzma
   AliRoot:
+    version: "%(commit_hash)s_O2"
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
@@ -54,8 +57,10 @@ overrides:
     tag: "v3.9.4"
     prefer_system_check: |
       which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-8].*|3.9.[0-3]) exit 1 ;; esac
-  AliRoot:
-    version: "%(commit_hash)s_O2"
+  pythia:
+    requires:
+      - lhapdf
+      - boost
   AliPhysics:
     version: "%(commit_hash)s_O2"
   GEANT4:

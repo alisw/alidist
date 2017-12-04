@@ -41,6 +41,7 @@ overrides:
       - libpng
       - lzma
   AliRoot:
+    version: "%(commit_hash)s_O2"
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
@@ -63,8 +64,6 @@ overrides:
     requires:
       - lhapdf
       - boost
-  AliRoot:
-    version: "%(commit_hash)s_O2"
   AliPhysics:
     version: "%(commit_hash)s_O2"
   GEANT4:
