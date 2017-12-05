@@ -9,7 +9,7 @@ requires:
   - grpc
   - Common-O2
   - RapidJSON
-  - Ppconsul
+  - "Ppconsul:(?!osx)"
   - "MySQL:slc.*"
 build_requires:
   - CMake
