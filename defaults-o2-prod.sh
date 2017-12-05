@@ -1,4 +1,4 @@
-package: defaults-o2
+package: defaults-o2-prod
 version: v1
 env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"
@@ -7,9 +7,6 @@ env:
   CXXSTD: "14"
 disable:
   - AliEn-Runtime
-  - grpc
-  - Ppconsul
-  - ApMon-CPP
 overrides:
   autotools:
     tag: v1.5.0
