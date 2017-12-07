@@ -6,7 +6,6 @@ requires:
   - DDS
   - Vc
   - hijing
-  - HepMC3
   - O2HLTCATracking
   - Configuration
   - Monitoring
