@@ -2,6 +2,7 @@ package: alo
 version: "%(commit_hash)s"
 tag: master
 requires:
+  - googlebenchmark
   - AliRoot
   - O2
   - RapidJSON

@@ -1,9 +1,10 @@
 package: defaults-alo
 version: v1
 env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++14"
-  CFLAGS: "-fPIC -g -O2"
+  CXXFLAGS: "-fPIC -O2 -std=c++14"
+  CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
+  CXXSTD: "14"
 disable:
   - AliEn-Runtime
   - simulation
@@ -16,6 +17,9 @@ disable:
   - pythia
   - pythia6
   - hijing
+  - grpc
+  - Ppconsul
+  - ApMon-CPP
 overrides:
   autotools:
     tag: v1.5.0
@@ -37,12 +41,13 @@ overrides:
     tag: "v6-10-08"
     source: https://github.com/root-mirror/root
     requires:
+      - AliEn-Runtime:(?!.*ppc64)
       - GSL
       - opengl:(?!osx)
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - Python-modules
-      - libxml2
+      - "GCC-Toolchain:(?!osx)"
       - libpng
       - lzma
   GSL:
