@@ -4,6 +4,7 @@ requires:
   - GEANT4_VMC
   - GEANT4
   - GEANT3
+  - HepMC
 ---
 #!/bin/bash -e
 
