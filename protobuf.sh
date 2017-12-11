@@ -6,7 +6,7 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include \"google/protobuf/message.h\"\nint main(){}" | c++ -I$(brew --prefix protobuf)/include -Wno-deprecated-declarations -xc++ - -o /dev/null && protoc -h &> /dev/null
+    which protoc >& /dev/null && case `protoc --version | awk '{print $2}' | cut -d. -f1,2,3 | head -n1` in [0-2]*) exit 1 ;;esac
 ---
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
