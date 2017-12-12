@@ -21,7 +21,10 @@ incremental_recipe: |
 #!/bin/sh
 
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+  osx*) 
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
+  ;;
 esac
 
 cmake $SOURCEDIR                                              \
@@ -30,8 +33,8 @@ cmake $SOURCEDIR                                              \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}  \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
-      -DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include         \
-      -DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.so  \
+      ${PROTOBUF_ROOT:+-DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include} \
+      ${PROTOBUF_ROOT:+-DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.so} \
       ${GRPC_ROOT:+-DGRPC_ROOT=${GRPC_ROOT}}                  \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include        \
       -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include        \
