@@ -50,7 +50,10 @@ cd $BUILDDIR
 export PATH=$INSTALLROOT/bin:$PATH
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
-curl -kSsL -o get-pip.py https://bootstrap.pypa.io/get-pip.py
+for U in https://bootstrap.pypa.io/get-pip.py \
+         https://raw.githubusercontent.com/pypa/get-pip/master/get-pip.py; do
+  curl -kSsL -o get-pip.py $U || continue && break
+done
 python get-pip.py
 pip install -U pip
 
