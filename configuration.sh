@@ -37,7 +37,7 @@ cmake $SOURCEDIR                                                    \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}           \
       -DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include               \
       -DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.${LIBEXT} \
-      ${GRPC_ROOT:+-DGRPC_ROOT=${GRPC_ROOT}}                        \
+      ${GRPC_VERSION:+-DGRPC_ROOT=${GRPC_ROOT}}                     \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include              \
       -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include              \
       -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                  \
