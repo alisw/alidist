@@ -7,7 +7,13 @@ tag: v1.1.0
 ---
 #!/bin/sh
 
-cmake $SOURCEDIR                                              \
+GCC_VERSION_MAJOR=$(gcc --version | awk 'NR==1 {print $3}' | cut -d '.' -f1)
+if [ "$GCC_VERSION_MAJOR" -ge "7" ]; then
+  NO_ERROR_FALLTHROUGH="-Wno-error=implicit-fallthrough"
+fi
+
+cmake $SOURCEDIR                                                       \
+      ${NO_ERROR_FALLTHROUGH:+-DCMAKE_CXX_FLAGS=$NO_ERROR_FALLTHROUGH} \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
 
 make ${JOBS:+-j$JOBS} install
