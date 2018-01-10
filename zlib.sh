@@ -1,7 +1,7 @@
 package: zlib
 version: "%(tag_basename)s"
-source: https://github.com/star-externals/zlib
 tag: v1.2.8
+source: https://github.com/star-externals/zlib
 build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
