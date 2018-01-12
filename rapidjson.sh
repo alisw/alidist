@@ -1,9 +1,9 @@
 package: RapidJSON
 version: 1.1.0
+tag: 4c8fa695f4c1f1c68104ff4c780ab0c6e6ef86ee
 source: https://github.com/alisw/rapidjson
 build_requires:
   - CMake
-tag: 4c8fa695f4c1f1c68104ff4c780ab0c6e6ef86ee
 ---
 #!/bin/sh
 
