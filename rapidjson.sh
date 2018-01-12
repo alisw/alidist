@@ -1,19 +1,13 @@
 package: RapidJSON
 version: 1.1.0
-source: https://github.com/miloyip/rapidjson
+source: https://github.com/alisw/rapidjson
 build_requires:
   - CMake
-tag: v1.1.0
+tag: 4c8fa695f4c1f1c68104ff4c780ab0c6e6ef86ee
 ---
 #!/bin/sh
 
-GCC_VERSION_MAJOR=$(gcc --version | awk 'NR==1 {print $3}' | cut -d '.' -f1)
-if [ "$GCC_VERSION_MAJOR" -ge "7" ]; then
-  NO_ERROR_FALLTHROUGH="-Wno-error=implicit-fallthrough"
-fi
-
 cmake $SOURCEDIR                                                       \
-      ${NO_ERROR_FALLTHROUGH:+-DCMAKE_CXX_FLAGS=$NO_ERROR_FALLTHROUGH} \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
 
 make ${JOBS:+-j$JOBS} install
