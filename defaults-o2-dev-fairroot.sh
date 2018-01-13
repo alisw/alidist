@@ -46,6 +46,11 @@ overrides:
     tag: "v3.0.2"
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
+    build_requires:
+      - ms_gsl
+      - lcov
+    env:
+      CMAKE_BUILD_TYPE=COVERAGE
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.9.4"
