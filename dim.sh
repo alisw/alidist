@@ -5,6 +5,7 @@ requires:
 build_requires:
   - curl
   - motif
+  - gmake
 ---
 #!/bin/bash -e
 
