@@ -34,21 +34,20 @@ incremental_recipe: |
   if [[ $ALIBUILD_O2_TESTS ]]; then
     export O2_ROOT=$INSTALLROOT
     # Clean up old coverage data
-    find . -name "*.gcov" -delete
-    find . -name "*.gcda" -delete
+    find . -name "*.gcov" -o -name "*.gcda" -delete
     CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
   fi
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
   if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
     rm -rf coverage.info
-    lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info # capture coverage info
-    lcov --remove coverage.info '*/usr/*' --output-file coverage.info # filter out system
-    lcov --remove coverage.info '*/boost/*' --output-file coverage.info # filter out boost 
-    lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info # filter out ROOT
-    lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info # filter out FairRoot
-    lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info # filter out FairRoot
-    lcov --list coverage.info #debug info
+    lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
+    lcov --remove coverage.info '*/usr/*' --output-file coverage.info
+    lcov --remove coverage.info '*/boost/*' --output-file coverage.info 
+    lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
+    lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
+    lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
+    lcov --list coverage.info
   fi
 valid_defaults:
   - o2
@@ -156,8 +155,7 @@ mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INS
 if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
   # Clean up old coverage data
-  find . -name "*.gcov" -delete
-  find . -name "*.gcda" -delete
+  find . -name "*.gcov" -o -name "*.gcda" -delete
   CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
 fi
 
@@ -165,11 +163,11 @@ fi
 # by the calling driver to codecov.io or similar service
 if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   rm -rf coverage.info
-  lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info # capture coverage info
-  lcov --remove coverage.info '*/usr/*' --output-file coverage.info # filter out system
-  lcov --remove coverage.info '*/boost/*' --output-file coverage.info # filter out boost 
-  lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info # filter out ROOT
-  lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info # filter out FairRoot
-  lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info # filter out FairRoot
-  lcov --list coverage.info #debug info
+  lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
+  lcov --remove coverage.info '*/usr/*' --output-file coverage.info
+  lcov --remove coverage.info '*/boost/*' --output-file coverage.info 
+  lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
+  lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
+  lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
+  lcov --list coverage.info
 fi
