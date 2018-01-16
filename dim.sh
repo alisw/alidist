@@ -20,6 +20,11 @@ cd $FILE_NAME
 tr -d '\015' < setup.sh > setup2.sh
 mv setup2.sh setup.sh
 
+# DIM installation needs `gmake` (`make` is not sufficient)
+mkdir buildbin
+export PATH="$PWD/buildbin:$PATH"
+ln -nfs $(which make) buildbin/gmake
+
 # Build (needs special environment)
 ( export OS=Linux
   source setup.sh
