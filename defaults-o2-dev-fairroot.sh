@@ -49,8 +49,6 @@ overrides:
     build_requires:
       - ms_gsl
       - lcov
-    env:
-      CMAKE_BUILD_TYPE: COVERAGE
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.9.4"

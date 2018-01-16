@@ -2,6 +2,8 @@ package: lcov
 version: v1.13
 tag: v1.13
 source: https://github.com/linux-test-project/lcov.git
+env:
+  CMAKE_BUILD_TYPE=COVERAGE
 ---
 #!/bin/sh
 rsync -av $SOURCEDIR/ $BUILDDIR/
