@@ -1,12 +1,12 @@
 package: zlib
 version: "%(tag_basename)s"
-source: https://github.com/star-externals/zlib
 tag: v1.2.8
+source: https://github.com/star-externals/zlib
 build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include <zlib.h>\n" | gcc -xc++ - -c -M 2>&1
+  printf "#include <zlib.h>\n" | cc -xc++ - -c -M 2>&1
 ---
 #!/bin/sh
 
