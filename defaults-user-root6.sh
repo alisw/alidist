@@ -18,7 +18,7 @@ overrides:
   ROOT:
     version: "%(tag_basename)s"
     version: "%(tag_basename)s"
-    tag: "v6-10-08"
+    tag: "v6-12-04"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
