@@ -8,6 +8,7 @@ requires:
   - RapidJSON
 build_requires:
   - CMake
+  - ms_gsl
 source: https://github.com/mrrtf/alo
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -36,6 +37,8 @@ cmake $SOURCEDIR \
     -DROOTSYS="$ROOT_ROOT" \
     -DRAPIDJSON_INCLUDEDIR="$RAPIDJSON_ROOT/include" \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+    -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include \
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
 
 make ${JOBS+-j $JOBS} install
