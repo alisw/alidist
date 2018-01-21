@@ -109,6 +109,7 @@ else
         -Dshadowpw=OFF                                                                   \
         -Dvdt=ON                                                                         \
         -Dbuiltin_vdt=ON                                                                 \
+        ${ALIEN_RUNTIME_VERSION:+-Dmonalisa=ON}                                          \
         -Dkrb5=OFF                                                                       \
         -Dldap=OFF                                                                       \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
