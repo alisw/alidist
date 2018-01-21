@@ -22,25 +22,25 @@ incremental_recipe: |
 
 LIBEXT=so
 case $ARCHITECTURE in
-    osx*)
-      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
-      LIBEXT=dylib
-    ;;
+  osx*) 
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
+    LIBEXT=dylib
+  ;;
 esac
 
-cmake $SOURCEDIR                                                    \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                           \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                       \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                        \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}        \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}           \
-      -DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include               \
-      -DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.${LIBEXT} \
-      ${GRPC_VERSION:+-DGRPC_ROOT=${GRPC_ROOT}}                     \
-      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include              \
-      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include              \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                  \
+cmake $SOURCEDIR                                              \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
+      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                  \
+      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}  \
+      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
+      ${PROTOBUF_ROOT:+-DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include} \
+      ${PROTOBUF_ROOT:+-DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.${LIBEXT}} \
+      ${GRPC_VERSION:+-DGRPC_ROOT=${GRPC_ROOT}}               \
+      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include        \
+      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include        \
+      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib            \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
