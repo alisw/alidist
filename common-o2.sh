@@ -10,9 +10,6 @@ source: https://github.com/AliceO2Group/Common
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-  if [[ $ALIBUILD_O2_TESTS ]]; then
-    CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
-  fi
 ---
 #!/bin/bash -ex
 
@@ -48,7 +45,3 @@ prepend-path LD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-
-if [[ $ALIBUILD_O2_TESTS ]]; then
-  CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
-fi
