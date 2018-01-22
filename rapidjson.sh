@@ -1,13 +1,13 @@
 package: RapidJSON
 version: 1.1.0
-source: https://github.com/miloyip/rapidjson
+tag: 4c8fa695f4c1f1c68104ff4c780ab0c6e6ef86ee
+source: https://github.com/alisw/rapidjson
 build_requires:
   - CMake
-tag: v1.1.0
 ---
 #!/bin/sh
 
-cmake $SOURCEDIR                                              \
+cmake $SOURCEDIR                                                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
 
 make ${JOBS:+-j$JOBS} install

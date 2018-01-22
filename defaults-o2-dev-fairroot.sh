@@ -28,7 +28,7 @@ overrides:
       which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x060200)\n#error \"System's GCC cannot be used: we need at least GCC 6.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
     version: "%(tag_basename)s"
-    tag: "v6-10-08"
+    tag: "v6-12-04"
     source: https://github.com/root-mirror/root
     requires:
       - GSL
@@ -46,6 +46,9 @@ overrides:
     tag: "v3.0.2"
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
+    build_requires:
+      - ms_gsl
+      - lcov
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.9.4"
