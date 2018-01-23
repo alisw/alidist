@@ -1,5 +1,6 @@
 package: arrow
-version: 3fdeac74c80593ebde7a8eeb148cea9f6e0d1b38
+version: v0.8.0
+tag: apache-arrow-0.8.0
 source: https://github.com/apache/arrow
 requires:
   - flatbuffers
@@ -22,6 +23,15 @@ cmake $SOURCEDIR/cpp                          \
       -DARROW_BUILD_BENCHMARKS=OFF            \
       -DARROW_BUILD_TESTS=OFF                 \
       -DARROW_JEMALLOC=OFF                    \
+      -DARROW_HDFS=OFF                        \
+      -DARROW_IPC=OFF                         \
+      -DARROW_USE_SSE=ON                      \
+      -DARROW_WITH_LZ4=ON                     \
+      -DARROW_WITH_SNAPPY=OFF                 \
+      -DARROW_WITH_GRPC=OFF                   \
+      -DARROW_WITH_ZSTD=ON                    \
+      -DARROW_WITH_ZLIB=ON                    \
+      -DARROW_NO_DEPRECATED_API=ON            \
       -DBOOST_ROOT=$BOOST_ROOT                \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
       -DARROW_PYTHON=OFF

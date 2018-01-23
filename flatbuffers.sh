@@ -1,5 +1,5 @@
 package: flatbuffers
-version: v1.6.0
+version: v1.8.0
 source: https://github.com/google/flatbuffers
 requires:
   - zlib
@@ -11,7 +11,8 @@ prefer_system_check: |
   printf "#include \"flatbuffers/flatbuffers.h\"\nint main(){}" | c++ -I$(brew --prefix flatbuffers)/include -xc++ -std=c++11 - -o /dev/null
 ---
 mkdir -p $INSTALLROOT
-cmake $SOURCEDIR                              \
+cmake $SOURCEDIR                          \
+      -G "Unix Makefiles"                 \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 make ${JOBS:+-j $JOBS}
