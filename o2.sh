@@ -47,9 +47,9 @@ incremental_recipe: |
     lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
     lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
     lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
-    perl -p -i -e "s|$SOURCEDIR||" coverage.info # Remove the absolute path for sources
-    perl -p -i -e "s|$BUILDDIR||" coverage.info # Remove the absolute path for generated files
-    perl -p -i -e "s|^[0-9]+/||" coverage.info # Remove PR location path
+    perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
+    perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
+    perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
     lcov --list coverage.info
   fi
 valid_defaults:
@@ -172,5 +172,8 @@ if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
   lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
   lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
+  perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
+  perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
+  perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
   lcov --list coverage.info
 fi
