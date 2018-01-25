@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - SWIG
 source: https://github.com/AliceO2Group/Common
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
