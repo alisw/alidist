@@ -15,7 +15,10 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+    osx*) 
+      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+      [[ ! $SWIG_ROOT ]] && SWIG_ROOT=$(brew --prefix swig)
+    ;;
 esac
 
 cmake $SOURCEDIR                                              \
