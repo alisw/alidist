@@ -8,7 +8,6 @@ build_requires:
  - "osx-system-openssl:(osx.*)"
  - ApMon-CPP
  - libxml2
- - MonALISA-gSOAP-client
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
