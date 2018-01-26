@@ -1,7 +1,7 @@
 package: SWIG
 version: 3.0.12
-source: https://github.com/swig/swig
 tag: rel-3.0.12
+source: https://github.com/swig/swig
 build_requires:
   - autotools
   - "GCC-Toolchain:(?!osx)"
