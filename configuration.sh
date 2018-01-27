@@ -29,19 +29,18 @@ case $ARCHITECTURE in
     ;;
 esac
 
-cmake $SOURCEDIR                                                    \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                           \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                       \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                        \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}        \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}           \
-      -DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include               \
-      -DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.${LIBEXT} \
-      ${GRPC_VERSION:+-DGRPC_ROOT=${GRPC_ROOT}}                     \
-      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include              \
-      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include              \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                  \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake $SOURCEDIR                                                                         \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                            \
+      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                                             \
+      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}                             \
+      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}                                \
+      ${PROTOBUF_VERSION:+-DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include}               \
+      ${PROTOBUF_VERSION:+-DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.${LIBEXT}} \
+      ${GRPC_VERSION:+-DGRPC_ROOT=${GRPC_ROOT}}                                          \
+      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                   \
+      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include                                   \
+      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                                       \
 
 make ${JOBS+-j $JOBS} install
 
