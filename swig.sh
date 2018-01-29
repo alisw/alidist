@@ -1,7 +1,7 @@
 package: SWIG
-version: 3.0.7
+version: 3.0.12
+tag: rel-3.0.12
 source: https://github.com/swig/swig
-tag: rel-3.0.7
 build_requires:
   - autotools
   - "GCC-Toolchain:(?!osx)"
@@ -9,7 +9,12 @@ build_requires:
 env:
   SWIG_LIB: "$SWIG_ROOT/share/swig/$SWIG_VERSION"
 prefer_system: (?!slc5)
-prefer_system_check: which swig
+prefer_system_check: |
+  verge() {
+      [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
+  }
+  # Check for swig 3.0.12 or later
+  which swig && verge 3.0.12 $(swig -version | grep Version | sed -e 's/[^0-9]*//') 
 ---
 #!/bin/sh
 rsync -av --delete --exclude '**/.git' $SOURCEDIR/ .
