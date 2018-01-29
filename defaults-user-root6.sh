@@ -7,14 +7,14 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-21
+    tag: v5-09-22
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-21-01
+    tag: v5-09-22-01
   ROOT:
     version: "%(tag_basename)s"
     version: "%(tag_basename)s"
