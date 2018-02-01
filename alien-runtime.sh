@@ -9,8 +9,6 @@ build_requires:
  - "OpenSSL:(?!osx)"
  - "osx-system-openssl:(osx.*)"
  - AliEn-CAs
- - gSOAP
- - MonALISA-gSOAP-client
  - ApMon-CPP
  - XRootD
  - xalienfs

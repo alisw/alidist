@@ -16,6 +16,7 @@ disable:
   - pythia
   - pythia6
   - hijing
+  - HepMC3
 overrides:
   autotools:
     tag: v1.5.0

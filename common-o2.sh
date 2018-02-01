@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - SWIG
 source: https://github.com/AliceO2Group/Common
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -14,7 +15,10 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+    osx*) 
+      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+      [[ ! $SWIG_ROOT ]] && SWIG_ROOT=$(brew --prefix swig)
+    ;;
 esac
 
 cmake $SOURCEDIR                                              \

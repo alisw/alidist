@@ -1,7 +1,7 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
-source: https://github.com/alisw/gcc-toolchain
 tag: v4.9.3-alice3
+source: https://github.com/alisw/gcc-toolchain
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
   "DYLD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
@@ -12,7 +12,7 @@ prefer_system: .*
 prefer_system_check: |
   set -e
   which gfortran || { echo "gfortran missing"; exit 1; }
-  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x040800) || ((GCCVER >= 0x050000) && (GCCVER < 0x050300)) || (GCCVER >= 0x060000)\n#error \"System's GCC cannot be used: we need 4.8, 4.9 or 5.X (with the exception of 5.0 to 5.2). We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null 
+  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x040800) || ((GCCVER >= 0x050000) && (GCCVER < 0x050300))\n#error \"System's GCC cannot be used: we need 4.8, 4.9 or anything newer than 5.3. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
 
