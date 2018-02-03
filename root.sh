@@ -93,6 +93,7 @@ else
         -Dbuiltin_afterimage=ON                                                          \
         -Dbuiltin_ftgl=ON                                                                \
         -Dbuiltin_glew=ON                                                                \
+        -Dbuiltin_lzma=ON                                                                \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
