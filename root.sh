@@ -125,7 +125,6 @@ else
         -Dcastor=OFF                                                                     \
         -Drfio=OFF                                                                       \
         -Dodbc=OFF                                                                       \
-        -Dsqlite=OFF                                                                     \
         -Ddcache=OFF                                                                     \
         -Doracle=OFF                                                                     \
         -Dfitsio=OFF                                                                     \
