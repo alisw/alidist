@@ -89,7 +89,6 @@ else
         -Dbuiltin_freetype=OFF                                                           \
         -Dpcre=OFF                                                                       \
         -Dbuiltin_pcre=ON                                                                \
-        -Dasimage=ON                                                                     \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
