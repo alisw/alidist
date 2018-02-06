@@ -124,7 +124,6 @@ else
         -Dgfal=OFF                                                                       \
         -Dcastor=OFF                                                                     \
         -Drfio=OFF                                                                       \
-        -Dodbc=OFF                                                                       \
         -Ddcache=OFF                                                                     \
         -Doracle=OFF                                                                     \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
