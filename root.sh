@@ -76,7 +76,6 @@ if [[ $ALICE_DAQ ]]; then
   NO_FEATURES="ssl alien"
 else
   # Normal ROOT build.
-  [[ -n "${ALIBUILD_ROOT_CMAKE_ADDOPTS}" ]] && echo -ne "\n\nALIBUILD_ROOT_CMAKE_ADDOPTS is set!!\n>>>>>>>   User customization of aliBuild root cmake is enabled!   <<<<<<<\n\n"
   cmake $SOURCEDIR                                                                       \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
@@ -131,7 +130,6 @@ else
         -Ddcache=OFF                                                                     \
         -Doracle=OFF                                                                     \
         -Dfitsio=OFF                                                                     \
-        ${ALIBUILD_ROOT_CMAKE_ADDOPTS:+${ALIBUILD_ROOT_CMAKE_ADDOPTS}}                   \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
