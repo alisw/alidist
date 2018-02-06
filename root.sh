@@ -125,7 +125,7 @@ else
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
-  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 ldap"
+  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 ldap gviz"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
