@@ -2,7 +2,6 @@ package: Monitoring
 version: "%(tag_basename)s"
 tag: v1.5.3
 requires:
-  - Configuration
   - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
