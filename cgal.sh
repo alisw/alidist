@@ -18,7 +18,7 @@ esac
 PKGID=35136
 URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/"
 
-curl -Lo cgal.tar.bz2 "$URL"
+curl -kLo cgal.tar.bz2 "$URL"
 tar xjf cgal.tar.bz2
 cd CGAL-*
 
