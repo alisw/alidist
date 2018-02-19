@@ -1,4 +1,4 @@
-package: defaults-o2-daq
+package: defaults-o2-dataflow
 version: v1
 env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"
