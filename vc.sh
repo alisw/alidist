@@ -1,6 +1,6 @@
 package: Vc
 version: "%(tag_basename)s"
-tag: 1.3.2
+tag: 1.3.3
 source: https://github.com/VcDevel/Vc.git
 requires:
   - "GCC-Toolchain:(?!osx)"
