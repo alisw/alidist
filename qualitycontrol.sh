@@ -10,6 +10,7 @@ requires:
   - DataSampling
   - Monitoring
   - Configuration
+  - O2
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/QualityControl
@@ -31,8 +32,10 @@ cmake $SOURCEDIR                                              \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
       ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
+      ${O2_VERSION:+-DO2_ROOT=$O2_ROOT}                       \
       ${FAIRROOT_VERSION:+-DFAIRROOTPATH=$FAIRROOT_ROOT}      \
       ${FAIRROOT_VERSION:+-DFairRoot_DIR=$FAIRROOT_ROOT}      \
+      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -57,7 +60,8 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
             DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION         \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION
+            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                     \\
+            O2/$O2_VERSION-$O2_REVISION
 
 # Our environment
 setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
