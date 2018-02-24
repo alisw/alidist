@@ -16,6 +16,11 @@ source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
 incremental_recipe: |
+  # In incremental mode we need to clean the installation area, because we might otherwise
+  # accumulate unused libs/dictionaries which cause 'duplicate symbol' errors in ROOT
+  # leading to failing PR checks
+  find $INSTALLROOT -mindepth 1 -exec rm -r -f {} ';'
+
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
