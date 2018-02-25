@@ -1,16 +1,12 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v1.2.2
+tag:  v1.3.0
 requires:
   - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - protobuf
-  - grpc
-  - Common-O2
   - RapidJSON
   - "Ppconsul:(?!osx)"
-  - "MySQL:slc.*"
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Configuration
@@ -24,24 +20,18 @@ LIBEXT=so
 case $ARCHITECTURE in
     osx*)
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
       LIBEXT=dylib
     ;;
 esac
 
-cmake $SOURCEDIR                                                    \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                           \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                       \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                        \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}        \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}           \
-      -DPROTOBUF_INCLUDE_DIR=${PROTOBUF_ROOT}/include               \
-      -DPROTOBUF_LIBRARY=${PROTOBUF_ROOT}/lib/libprotobuf.${LIBEXT} \
-      ${GRPC_VERSION:+-DGRPC_ROOT=${GRPC_ROOT}}                     \
-      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include              \
-      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include              \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                  \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake $SOURCEDIR                                                                         \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                            \
+      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                                             \
+      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}                             \
+      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                   \
+      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include                                   \
+      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                                       \
 
 make ${JOBS+-j $JOBS} install
 
@@ -58,10 +48,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION} \\
-            ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION} \\
-            ${PPCONSUL_VERSION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION} \\
-            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION
+            ${PPCONSUL_VERSION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}
 
 # Our environment
 setenv Configuration_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

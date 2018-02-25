@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: v5-34-30-alice8
+tag: v5-34-30-alice9
 source: https://github.com/alisw/root
 requires:
   - AliEn-Runtime:(?!.*ppc64)
@@ -112,11 +112,12 @@ else
         ${ALIEN_RUNTIME_VERSION:+-Dmonalisa=ON}                                          \
         -Dkrb5=OFF                                                                       \
         -Dldap=OFF                                                                       \
+        -Dgviz=OFF                                                                       \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}"
-  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 ldap"
+  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 ldap gviz"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"

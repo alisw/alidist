@@ -1,4 +1,4 @@
-package: defaults-o2-daq
+package: defaults-o2-dataflow
 version: v1
 env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"
@@ -16,6 +16,7 @@ disable:
   - pythia
   - pythia6
   - hijing
+  - HepMC3
 overrides:
   autotools:
     tag: v1.5.0

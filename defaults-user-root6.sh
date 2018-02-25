@@ -7,18 +7,18 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-21
+    tag: v5-09-23a
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-21-01
+    tag: v5-09-23a-01
   ROOT:
     version: "%(tag_basename)s"
     version: "%(tag_basename)s"
-    tag: "v6-12-04"
+    tag: "v6-10-08"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
