@@ -1,6 +1,6 @@
 package: AMPT
 version: "%(tag_basename)s"
-tag: "alice/v1.26t7-v2.26t7"
+tag: "v1.26t7-v2.26t7-alice1"
 source: https://github.com/alisw/ampt
 requires:
  - "GCC-Toolchain:(?!osx)"
