@@ -1,6 +1,6 @@
 package: EPOS
 version: "%(tag_basename)s"
-tag: alice/v3.111
+tag: "v3.111-alice1"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/epos.git
 requires:
   - ROOT

@@ -1,6 +1,6 @@
 package: Herwig
 version: "%(tag_basename)s"
-tag: "v7.0.4-alice1"
+tag: "v7.1.2"
 source: https://github.com/alisw/herwig
 requires:
   - GSL
