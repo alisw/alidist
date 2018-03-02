@@ -60,7 +60,7 @@ unset PYTHONUSERBASE
 
 # Install matplotlib (quite tricky)
 MATPLOTLIB_VER="1.4.3"
-MATPLOTLIB_URL="http://downloads.sourceforge.net/project/matplotlib/matplotlib/matplotlib-${MATPLOTLIB_VER}/matplotlib-${MATPLOTLIB_VER}.tar.gz"
+MATPLOTLIB_URL="https://github.com/matplotlib/matplotlib/archive/${MATPLOTLIB_VER}.tar.gz"
 curl -Lo matplotlib.tgz $MATPLOTLIB_URL
 tar xzf matplotlib.tgz
 cd matplotlib-$MATPLOTLIB_VER
