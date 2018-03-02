@@ -17,7 +17,8 @@ cmake .                                        \
     -DBUILD_SHARED_LIBS=YES                    \
     ${ZLIB_ROOT:+-DZLIB_ROOT:PATH=$ZLIB_ROOT}  \
     -DCMAKE_SKIP_RPATH=YES                     \
-    -DSKIP_INSTALL_FILES=1
+    -DSKIP_INSTALL_FILES=1                     \
+    -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j $JOBS}
 make install
 
