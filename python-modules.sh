@@ -59,11 +59,10 @@ done
 unset PYTHONUSERBASE
 
 # Install matplotlib (quite tricky)
-MATPLOTLIB_VER="1.4.3"
-MATPLOTLIB_URL="https://github.com/matplotlib/matplotlib/archive/${MATPLOTLIB_VER}.tar.gz"
-curl -Lo matplotlib.tgz $MATPLOTLIB_URL
-tar xzf matplotlib.tgz
-cd matplotlib-$MATPLOTLIB_VER
+MATPLOTLIB_GITREF="v1.4.3"
+MATPLOTLIB_URL="https://github.com/matplotlib/matplotlib/archive/${MATPLOTLIB_GITREF}.tar.gz"
+curl -SsL "$MATPLOTLIB_URL" | tar xzf -
+cd matplotlib-*
 cat > setup.cfg <<EOF
 [directories]
 basedirlist  = ${FREETYPE_ROOT:+$PWD/fake_freetype_root,$FREETYPE_ROOT,}${LIBPNG_ROOT:+$LIBPNG_ROOT,}${ZLIB_ROOT:+$ZLIB_ROOT,}/usr/X11R6,$(freetype-config --prefix),$(libpng-config --prefix)
