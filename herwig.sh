@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 tag: "v7.1.2"
 source: https://github.com/alisw/herwig
 requires:
+  - GMP
   - GSL
   - ThePEG
 build_requires:
