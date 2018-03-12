@@ -1,31 +1,43 @@
-# Everything has to be approved by ALICE Offline admins
-* @alisw/alice-offline-admins
+# Default: infrastructure admins
+*                   @alisw/infrastructure-admins
 
-# DAQ stuff
-readout* @alisw/daq-experts
-configuration* @alisw/daq-experts
-datasampling* @alisw/daq-experts
-daq* @alisw/daq-experts
-monitoring* @alisw/daq-experts
-infologger* @alisw/daq-experts
+# Dataflow team
+common-o2*          @alisw/dataflow-experts
+configuration*      @alisw/dataflow-experts
+datasampling*       @alisw/dataflow-experts
+flpproto*           @alisw/dataflow-experts
+infologger*         @alisw/dataflow-experts
+monitoring*         @alisw/dataflow-experts
+pda*                @alisw/dataflow-experts
+ppconsul*           @alisw/dataflow-experts
+qualitycontrol*     @alisw/dataflow-experts
+rapidjson*          @alisw/dataflow-experts
+readout*            @alisw/dataflow-experts
 
 # PWGMM
-agile* @alisw/pwgmm
-aligenerators* @alisw/pwgmm
-crmc* @alisw/pwgmm
-epos* @alisw/pwgmm
-hepmc* @alisw/pwgmm
-jewel* @alisw/pwgmm
-lhapdf* @alisw/pwgmm
-powheg* @alisw/pwgmm
-pythia* @alisw/pwgmm
-rivet* @alisw/pwgmm
-sherpa* @alisw/pwgmm
-thepeg* @alisw/pwgmm
-yoda* @alisw/pwgmm
+aligenerators*      @alisw/pwgmm
+ampt*               @alisw/pwgmm
+crmc*               @alisw/pwgmm
+dpmjet*             @alisw/pwgmm
+epos*               @alisw/pwgmm
+herwig*             @alisw/pwgmm
+jewel*              @alisw/pwgmm
+powheg*             @alisw/pwgmm
+pythia*             @alisw/pwgmm
+sherpa*             @alisw/pwgmm
+thepeg*             @alisw/pwgmm
+agile*              @alisw/pwgmm
+sacrifice*          @alisw/pwgmm
+aligenmc*           @alisw/pwgmm
+fonll*              @alisw/pwgmm
+ttherminator*       @alisw/pwgmm
+hepmc*              @alisw/pwgmm
+lhapdf*             @alisw/pwgmm
+rivet*              @alisw/pwgmm
+yoda*               @alisw/pwgmm
 
 # Simulation
-geant* @alisw/simulation-experts
-vmc* @alisw/simulation-experts
-vgm* @alisw/simulation-experts
-vecgeom* @alisw/simulation-experts
+geant*              @alisw/simulation-experts
+vmc*                @alisw/simulation-experts
+vgm*                @alisw/simulation-experts
+vecgeom*            @alisw/simulation-experts
