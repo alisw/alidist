@@ -1,7 +1,7 @@
 package: O2HLTCATracking
 version: "%(tag_basename)s"
-tag: hlt_o2_ca_tracking-v1.6
-source: https://github.com/davidrohr/AliRoot
+tag: hlt_o2_ca_tracking-v1.7
+source: https://github.com/alisw/AliRoot
 requires:
   - GCC-Toolchain:(?!osx)
 build_requires:
