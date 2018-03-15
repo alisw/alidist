@@ -45,3 +45,6 @@ vecgeom*            @alisw/simulation-experts
 # Muon Run3 Reconstruction Task Force
 alo*                @alisw/mrrtf
 defaults-alo*       @alisw/mrrtf
+
+# Add useless stuff
+useless*            @alisw/useless
