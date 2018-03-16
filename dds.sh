@@ -1,6 +1,6 @@
 package: DDS
 version: "%(tag_basename)s"
-tag: "1.7"
+tag: "2.0"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
@@ -23,7 +23,7 @@ cmake $SOURCEDIR                                                         \
 JOBS=$((${JOBS:-1}*2/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 
-#make -j$JOBS wn_bin  # disabled for now
+make -j$JOBS wn_bin
 make -j$JOBS install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
