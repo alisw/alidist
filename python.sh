@@ -37,6 +37,27 @@ done
 export LDFLAGS=$(echo $LDFLAGS)
 export CPPFLAGS=$(echo $CPPFLAGS)
 
+# OpenSSL and zlib from AliEn?
+if [[ $ALIEN_RUNTIME_VERSION ]]; then
+  OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
+  ZLIB_ROOT=${ZLIB_ROOT:+$ALIEN_RUNTIME_ROOT}
+fi
+
+# Set own OpenSSL if appropriate
+if [[ $OPENSSL_ROOT ]]; then
+  export CPATH="$OPENSSL_ROOT/include:$OPENSSL_ROOT/include/openssl:$CPATH"
+  export CPPFLAGS="-I$OPENSSL_ROOT/include -I$OPENSSL_ROOT/include/openssl $CPPFLAGS"
+  export CFLAGS="-I$OPENSSL_ROOT/include -I$OPENSSL_ROOT/include/openssl"
+  cat >> Modules/Setup.dist <<EOF
+
+SSL=$OPENSSL_ROOT
+_ssl _ssl.c \
+        -DUSE_SSL -I\$(SSL)/include -I\$(SSL)/include/openssl \
+        -L\$(SSL)/lib -lssl -lcrypto
+EOF
+
+fi
+
 ./configure --prefix=$INSTALLROOT \
             --enable-shared       \
             --with-system-expat   \
@@ -75,6 +96,9 @@ for F in $(echo /usr/bin/yum*) $(echo /usr/bin/rpm*); do
   ln -nfs yum-cleanenv $INSTALLROOT/bin/"$(basename "$F")"
 done
 
+# Get OpenSSL and zlib at runtime from AliEn-Runtime if appropriate
+[[ $ALIEN_RUNTIME_VERSION ]] && unset OPENSSL_VERSION ZLIB_VERSION
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -88,8 +112,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 $([[ $ALIEN_RUNTIME_VERSION ]] && echo "AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION" || echo "${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}") \\
-                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION} \\
+module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} \\
+                     ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}                                     \\
+                     ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                         \\
+                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                             \\
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
