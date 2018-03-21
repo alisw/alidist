@@ -76,7 +76,13 @@ for U in https://bootstrap.pypa.io/get-pip.py \
   curl -kSsL -o get-pip.py $U || continue && break
 done
 python get-pip.py
-pip install -U pip
+python "$INSTALLROOT/bin/pip" install -U pip
+
+# Remove long shebangs (by default max is 128 chars on Linux)
+pushd "$INSTALLROOT/bin"
+  sed -i.deleteme -e "1 s|^#!${INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
+  rm -f *.deleteme
+popd
 
 # Remove useless stuff
 rm -rvf $INSTALLROOT/share \
