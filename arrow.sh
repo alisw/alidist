@@ -52,10 +52,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${FLATBUFFERS_VERSION:+flatbuffers/${FLATBUFFERS_VERSION}-${FLATBUFFERS_REVISION}}
 # Our environment
-setenv ARRAW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ARRAW_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ARRAW_ROOT)/lib")
-prepend-path PATH \$::env(ARRAW_ROOT)/bin
+setenv ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(ARROW_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ARROW_ROOT)/lib")
+prepend-path PATH \$::env(ARROW_ROOT)/bin
 EoF
