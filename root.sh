@@ -10,6 +10,7 @@ requires:
   - FreeType:(?!osx)
   - "MySQL:slc7.*"
   - GCC-Toolchain:(?!osx)
+  - Python-modules
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -44,10 +45,19 @@ case $ARCHITECTURE in
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
-    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
-    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=`brew --prefix openssl`
+    [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
+    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl)
   ;;
 esac
+
+if [[ $ALIEN_RUNTIME_VERSION ]]; then
+  # AliEn-Runtime: we take OpenSSL, XRootD and libxml2 from there, in case they
+  # were not taken from the system
+  OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
+  XROOTD_ROOT=${XROOTD_VERSION:+$ALIEN_RUNTIME_ROOT}
+  LIBXML2_ROOT=${LIBXML2_VERSION:+$ALIEN_RUNTIME_ROOT}
+  [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
+fi
 
 if [[ $ALICE_DAQ ]]; then
   # DAQ requires static ROOT, only supported by ./configure (not CMake).
@@ -79,10 +89,10 @@ else
   cmake $SOURCEDIR                                                                       \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
-        ${ALIEN_RUNTIME_ROOT:+-Dalien=ON}                                                \
-        ${ALIEN_RUNTIME_ROOT:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                           \
-        ${ALIEN_RUNTIME_ROOT:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                        \
-        ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$ALIEN_RUNTIME_ROOT}                            \
+        ${ALIEN_RUNTIME_VERSION:+-Dalien=ON}                                             \
+        ${ALIEN_RUNTIME_VERSION:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                        \
+        ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
+        ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
         ${CXX11:+-Dcxx11=ON}                                                             \
         ${CXX14:+-Dcxx14=ON}                                                             \
         -Dfreetype=ON                                                                    \
@@ -92,12 +102,12 @@ else
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
+        -DCMAKE_Fortran_COMPILER=gfortran                                                \
         -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
-        ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$ALIEN_RUNTIME_ROOT}                              \
-        ${SYS_OPENSSL_ROOT:+-DOPENSSL_ROOT=$SYS_OPENSSL_ROOT}                            \
-        ${SYS_OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$SYS_OPENSSL_ROOT/include}             \
-        ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$ALIEN_RUNTIME_ROOT}                              \
+        ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
+        ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
+        ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
         ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
         -Dpgsql=OFF                                                                      \
         -Dminuit2=ON                                                                     \
@@ -125,7 +135,7 @@ else
   fi
 fi
 
-# Check if all required features are enabled
+# Check if all important features are enabled/disabled as requested
 bin/root-config --features
 for FEATURE in $FEATURES; do
   bin/root-config --has-$FEATURE | grep -q yes
@@ -147,6 +157,12 @@ if [[ $ALICE_DAQ ]]; then
 fi
 make ${JOBS+-j$JOBS} install
 
+
+if [[ $ALIEN_RUNTIME_VERSION ]]; then
+  # Get them from AliEn-Runtime in the Modulefile
+  unset OPENSSL_VERSION XROOTD_VERSION LIBXML2_VERSION
+fi
+
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
@@ -158,7 +174,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}        \\
+module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
+                     ${OPENSSL_VERSION:+OpenSSL/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}                 \\
+                     ${XROOTD_VERSION:+XRootD/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}                   \\
+                     ${LIBXML2_VERSION:+libxml2/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}                 \\
                      ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
                      ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
