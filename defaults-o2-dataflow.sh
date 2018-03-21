@@ -8,6 +8,7 @@ env:
 disable:
   - AliEn-Runtime
   - AliRoot
+  - ApMon-CPP
   - simulation
   - generators
   - GEANT4
