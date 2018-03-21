@@ -1,6 +1,6 @@
 package: DDS
 version: "%(tag_basename)s"
-tag: "1.7"
+tag: "2.0"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
@@ -14,6 +14,8 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
 esac
 
+[[ $GCC_TOOLCHAIN_ROOT ]] && export DDS_LD_LIBRARY_PATH="$GCC_TOOLCHAIN_ROOT/lib64"
+
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
@@ -23,7 +25,7 @@ cmake $SOURCEDIR                                                         \
 JOBS=$((${JOBS:-1}*2/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 
-#make -j$JOBS wn_bin  # disabled for now
+make -j$JOBS wn_bin
 make -j$JOBS install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
