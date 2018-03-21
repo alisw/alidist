@@ -10,6 +10,7 @@ requires:
   - FreeType:(?!osx)
   - "MySQL:slc7.*"
   - GCC-Toolchain:(?!osx)
+  - Python-modules
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
