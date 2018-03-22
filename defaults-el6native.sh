@@ -9,6 +9,8 @@ env:
 disable:
   - AliEn-Runtime
   - GCC-Toolchain
+  - Python-modules
+  - Python
 
 overrides:
   AliRoot:
