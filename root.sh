@@ -10,7 +10,6 @@ requires:
   - FreeType:(?!osx)
   - "MySQL:slc7.*"
   - GCC-Toolchain:(?!osx)
-  - Python-modules
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -59,6 +58,9 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 fi
 
+# Disable Python for non-ROOT 6 builds
+[[ -d $SOURCEDIR/interpreter/llvm ]] || NO_PYTHON=1
+
 if [[ $ALICE_DAQ ]]; then
   # DAQ requires static ROOT, only supported by ./configure (not CMake).
   export ROOTSYS=$BUILDDIR
@@ -79,6 +81,7 @@ if [[ $ALICE_DAQ ]]; then
     --disable-globus                    \
     --disable-krb5                      \
     --disable-ssl                       \
+    --disable-python                    \
     --disable-alien                     \
     --enable-mysql
   FEATURES="builtin_freetype builtin_pcre minuit2 pythia6 roofit
@@ -99,6 +102,7 @@ else
         -Dbuiltin_freetype=OFF                                                           \
         -Dpcre=OFF                                                                       \
         -Dbuiltin_pcre=ON                                                                \
+        ${NO_PYTHON:+-Dpython=OFF}                                                       \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
