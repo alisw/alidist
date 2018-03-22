@@ -63,7 +63,7 @@ fi
             --with-system-expat   \
             --with-system-ffi     \
             --enable-unicode=ucs4
-make ${JOBS:+-j$JOBS}
+make  # no multicore
 make install
 
 # Install pip
