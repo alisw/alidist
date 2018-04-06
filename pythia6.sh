@@ -12,11 +12,10 @@ build_requires:
 
 cmake ${SOURCEDIR}                           \
       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
-
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}  \
+      -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS+-j$JOBS}
 make install
-tar -c lib include | tar -x -C $INSTALLROOT 
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
