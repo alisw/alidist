@@ -62,7 +62,7 @@ b2 -q                        \
 # inside the same directory as the main ones, on macOS (@loader_path).
 if [[ $ARCHITECTURE == osx* ]]; then
   for LIB in $INSTALLROOT/lib/libboost*.dylib; do
-    otool -L $LIB | grep -v $(basename $LIB) | grep -oE 'libboost_[^ ]+' | \
+    otool -L $LIB | grep -v $(basename $LIB) | { grep -oE 'libboost_[^ ]+' || true; } | \
       xargs -I{} install_name_tool -change {} @loader_path/{} "$LIB"
   done
 fi
