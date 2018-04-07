@@ -22,14 +22,14 @@ overrides:
   autotools:
     tag: v1.5.0
   boost:
-    tag: "v1.64.0-alice1"
+    tag: "v1.66.0"
     requires:
       - "GCC-Toolchain:(?!osx)"
       - Python-modules
       - libpng
       - lzma
     prefer_system_check: |
-      printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106400 || BOOST_VERSION > 106499)\n#error \"Cannot use system's boost: boost 1.64 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+      printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106600 || BOOST_VERSION > 106699)\n#error \"Cannot use system's boost: boost 1.66 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
