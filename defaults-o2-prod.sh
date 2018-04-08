@@ -54,9 +54,9 @@ overrides:
     tag: "v3.0.2"
   CMake:
     version: "%(tag_basename)s"
-    tag: "v3.9.4"
+    tag: "v3.11.0"
     prefer_system_check: |
-      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-8].*|3.9.[0-3]) exit 1 ;; esac
+      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-9].*|3.10.*) exit 1 ;; esac
   pythia:
     requires:
       - lhapdf
