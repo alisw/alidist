@@ -39,7 +39,6 @@ b2 -q                        \
    --prefix=$INSTALLROOT     \
    --build-dir=build-boost   \
    --disable-icu             \
-   --without-container       \
    --without-context         \
    --without-coroutine       \
    --without-graph           \
