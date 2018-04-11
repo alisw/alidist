@@ -166,7 +166,7 @@ grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc
 cat >> system.rootrc.0 <<EOF
 
 # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH
-Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugin
+Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins
 EOF
 mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
