@@ -161,6 +161,14 @@ if [[ $ALICE_DAQ ]]; then
 fi
 make ${JOBS+-j$JOBS} install
 
+# Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
+grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
+cat >> system.rootrc.0 <<EOF
+
+# Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH
+Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugin
+EOF
+mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
