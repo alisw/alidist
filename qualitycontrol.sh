@@ -26,15 +26,15 @@ esac
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
-      ${DATASAMPLING_VERSION:+-DDataSampling_ROOT=$DATASAMPLING_ROOT} \
-      ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
-      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
-      ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
-      ${O2_VERSION:+-DO2_ROOT=$O2_ROOT}                       \
-      ${FAIRROOT_VERSION:+-DFAIRROOTPATH=$FAIRROOT_ROOT}      \
-      ${FAIRROOT_VERSION:+-DFairRoot_DIR=$FAIRROOT_ROOT}      \
+      -DBOOST_ROOT=$BOOST_ROOT                                \
+      -DCommon_ROOT=$COMMON_O2_ROOT                           \
+      -DDataSampling_ROOT=$DATASAMPLING_ROOT                  \
+      -DMonitoring_ROOT=$MONITORING_ROOT                      \
+      -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
+      -DInfoLogger_ROOT=$INFOLOGGER_ROOT                      \
+      -DO2_ROOT=$O2_ROOT                                      \
+      -DFAIRROOTPATH=$FAIRROOT_ROOT                           \
+      -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
