@@ -165,8 +165,9 @@ make ${JOBS+-j$JOBS} install
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
 cat >> system.rootrc.0 <<EOF
 
-# Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH
-Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins
+# Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
+# Plugins in \$ROOT_PLUGIN_PATH have priority.
+Unix.*.Root.PluginPath: \$(ROOTSYS)/etc/plugins:\$(ROOT_PLUGIN_PATH)
 EOF
 mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
