@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(tag_basename)s"
-tag: "alice-dev-20180215"
+tag: "alice-dev-20180413"
 source: https://github.com/alisw/FairRoot
 requires:
   - generators
@@ -44,28 +44,32 @@ esac
 
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
-cmake $SOURCEDIR                                                 \
-      -DMACOSX_RPATH=OFF                                         \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                              \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
-      -DROOTSYS=$ROOTSYS                                         \
-      -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                    \
-      ${NANOMSG_ROOT:+-DNANOMSG_DIR=$NANOMSG_ROOT}               \
-      -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                    \
-      -DGeant3_DIR=$GEANT3_ROOT                                  \
-      -DDISABLE_GO=ON                                            \
-      -DBUILD_EXAMPLES=OFF                                       \
-      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                  \
-      -DFAIRROOT_MODULAR_BUILD=ON                                \
-      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                          \
-      ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
-      ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}      \
-      ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}          \
-      -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}           \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                           \
-      -DGTEST_ROOT=$GOOGLETEST_ROOT                              \
-      ${PROTOBUF_ROOT:+-DProtoBuf_DIR=$PROTOBUF_ROOT}            \
+cmake $SOURCEDIR                                                                               \
+      -DMACOSX_RPATH=OFF                                                                       \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                                                            \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                \
+      -DROOTSYS=$ROOTSYS                                                                       \
+      -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                                                  \
+      ${NANOMSG_ROOT:+-DNANOMSG_DIR=$NANOMSG_ROOT}                                             \
+      -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                                                  \
+      -DGeant3_DIR=$GEANT3_ROOT                                                                \
+      -DDISABLE_GO=ON                                                                          \
+      -DBUILD_EXAMPLES=OFF                                                                     \
+      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                                \
+      -DFAIRROOT_MODULAR_BUILD=ON                                                              \
+      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                                        \
+      ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                                               \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                                  \
+      ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}                                    \
+      ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}                                        \
+      -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}                                         \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                         \
+      -DGTEST_ROOT=$GOOGLETEST_ROOT                                                            \
+      ${PROTOBUF_VERSION:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}           \
+      ${PROTOBUF_VERSION:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME} \
+      ${PROTOBUF_VERSION:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}      \
+      ${PROTOBUF_VERSION:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                       \
+      ${PROTOBUF_VERSION:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 # Limit the number of build processes to avoid exahusting memory when building
