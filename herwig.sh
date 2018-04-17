@@ -6,11 +6,16 @@ requires:
   - GMP
   - GSL
   - ThePEG
+  - lhapdf-pdfsets
 build_requires:
   - autotools
+#env:
+#  LHAPDF_DATA_PATH: "$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+export LHAPDF_DATA_PATH="$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
 
 autoreconf -ivf
 [[ $ALIEN_RUNTIME_VERSION ]] && LDZLIB="-L$ALIEN_RUNTIME_ROOT/lib" || { [[ $ZLIB_VERSION ]] && LDZLIB="-L$ZLIB_ROOT/lib" || LDZLIB= ; }
@@ -36,7 +41,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ThePEG/$THEPEG_VERSION-$THEPEG_REVISION
+module load BASE/1.0 ThePEG/$THEPEG_VERSION-$THEPEG_REVISION lhapdf-pdfsets/$LHAPDF_PDFSETS_VERSION-$LHAPDF_PDFSETS_REVISION
 # Our environment
 setenv HERWIG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv HERWIG_INSTALL_PATH \$::env(HERWIG_ROOT)/lib/Herwig

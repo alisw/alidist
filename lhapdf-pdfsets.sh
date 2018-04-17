@@ -30,6 +30,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${LHAPDF_VERSION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION}
 # Our environment
-setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv LHAPATH \$::env(LHAPDF_ROOT)/share/LHAPDF
+setenv LHAPDF_PDFSETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+append-path LHAPDF_DATA_PATH \$::env(LHAPDF_PDFSETS_ROOT)/share/LHAPDF
 EoF

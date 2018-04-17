@@ -13,7 +13,7 @@ overrides:
       which gfortran || { echo "gfortran missing"; exit 1; }
       which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x060200)\n#error \"System's GCC cannot be used: we need at least GCC 6.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
-    version: "%(tag_basename)s"
+    version: "%(tag_basename)s_PWGMMTEST"
     tag: "v6-10-08"
     source: https://github.com/root-mirror/root
     requires:
@@ -52,6 +52,8 @@ overrides:
     source: https://github.com/alipwgmm/crmc
   dpmjet:
     version: "%(tag_basename)s_PWGMMTEST"
+  epos:
+    version: "%(tag_basename)s_PWGMMTEST"
   herwig:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/herwig
@@ -88,6 +90,9 @@ overrides:
   therminator2:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/therminator
+  yoda:
+    version: "%(tag_basename)s_PWGMMTEST"
+    source: https://github.com/alipwgmm/yoda
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

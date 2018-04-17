@@ -1,6 +1,6 @@
 package: lhapdf
 version: "%(tag_basename)s"
-tag: v6.1.6
+tag: v6.2.1-alice1
 source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
@@ -62,8 +62,10 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
                      ${YAML_CPP_VERSION:+yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION} \\
                      ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
-prepend-path PATH $::env(LHAPDF_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib
-prepend-path PYTHONPATH $LHAPDF_ROOT/lib/python2.7/site-packages
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib")
+setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(LHAPDF_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
+prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python2.7/site-packages
+prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
 EoF
