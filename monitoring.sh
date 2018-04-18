@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v1.5.4
+tag: v1.6.0
 requires:
   - curl
   - boost
