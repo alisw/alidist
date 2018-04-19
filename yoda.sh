@@ -14,9 +14,13 @@ prepend_path:
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
 [[ -e .missing_timestamps ]] && ./missing-timestamps.sh --apply || autoreconf -ivf
+
+(
+unset PYTHON_VERSION
 ./configure --prefix="$INSTALLROOT"
 make -j$JOBS
 make install
+)
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
