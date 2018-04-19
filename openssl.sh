@@ -1,7 +1,7 @@
 package: OpenSSL
-version: v0.9.8zf
-tag: "v0.9.8_1.2.4"
-source: https://github.com/alisw/alice-openssl.git
+version: v1.0.2o
+tag: OpenSSL_1_0_2o
+source: https://github.com/openssl/openssl
 prefer_system: (?!slc5|slc6)
 prefer_system_check: |
   if [ `uname` = Darwin ]; then test -d `brew --prefix openssl || echo /dev/nope` || exit 1; fi; echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1
@@ -13,39 +13,47 @@ build_requires:
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 
-pushd openssl-fips
-  ./config --openssldir=$INSTALLROOT/fips \
-           fipscanisterbuild \
-           no-asm
-  # Does not build in multicore!
-  make
-  make install
-popd
+./config --prefix="$INSTALLROOT"                   \
+         --openssldir="$INSTALLROOT/etc/ssl"       \
+         --libdir=lib                              \
+         zlib                                      \
+         no-idea                                   \
+         no-mdc2                                   \
+         no-rc5                                    \
+         no-ec                                     \
+         no-ecdh                                   \
+         no-ecdsa                                  \
+         no-asm                                    \
+         no-krb5                                   \
+         shared                                    \
+         -fno-strict-aliasing                      \
+         -L"$INSTALLROOT/lib"                      \
+         -Wa,--noexecstack
+make depend
+make  # don't ever try to build in multicore
+make install
 
-pushd openssl
-  ./config --openssldir="$INSTALLROOT" \
-           --with-fipslibdir="$INSTALLROOT/fips/lib" \
-           fips \
-           zlib \
-           no-idea \
-           no-mdc2 \
-           no-rc5 \
-           no-ec \
-           no-ecdh \
-           no-ecdsa \
-           no-asm \
-           no-krb5 \
-           shared \
-           -fno-strict-aliasing \
-           -L"${INSTALLROOT}/lib" \
-           -Wa,--noexecstack \
-           -DOPENSSL_USE_NEW_FUNCTIONS
-  # Does not build in multicore!
-  make
-  make install
-popd
+# Remove static libraries and pkgconfig
+rm -rf $INSTALLROOT/lib/pkgconfig \
+       $INSTALLROOT/lib/*.a
 
-rm -rf $INSTALLROOT/pkgconfig \
-       $INSTALLROOT/fips/pkgconfig \
-       $INSTALLROOT/lib/*.a \
-       $INSTALLROOT/fips/lib/*.a
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+# Our environment
+setenv OPENSSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(OPENSSL_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib")
+EoF

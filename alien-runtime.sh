@@ -28,6 +28,7 @@ for RPKG in $BUILD_REQUIRES; do
   pushd $INSTALLROOT/../../..
     env WORK_DIR=$PWD sh -e $INSTALLROOT/relocate-me.sh
   popd
+  rm -f $INSTALLROOT/etc/modulefiles/{$RPKG,$RPKG.unrelocated} || true
 done
 
 # Modulefile
