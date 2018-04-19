@@ -9,8 +9,6 @@ requires:
   - lhapdf-pdfsets
 build_requires:
   - autotools
-#env:
-#  LHAPDF_DATA_PATH: "$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
@@ -20,9 +18,9 @@ export LHAPDF_DATA_PATH="$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LH
 autoreconf -ivf
 [[ $ALIEN_RUNTIME_VERSION ]] && LDZLIB="-L$ALIEN_RUNTIME_ROOT/lib" || { [[ $ZLIB_VERSION ]] && LDZLIB="-L$ZLIB_ROOT/lib" || LDZLIB= ; }
 export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib $LDZLIB"
-./configure                            \
-    --prefix="$INSTALLROOT"            \
-    --with-thepeg="${THEPEG_ROOT}"     \
+./configure                        \
+    --prefix="$INSTALLROOT"        \
+    --with-thepeg="${THEPEG_ROOT}" \
     --with-gsl="${GSL_ROOT}"
 
 make ${JOBS:+-j $JOBS}
