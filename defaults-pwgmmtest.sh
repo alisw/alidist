@@ -5,7 +5,6 @@ env:
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
-# taken from defaults-root6
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
@@ -31,39 +30,38 @@ overrides:
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   AliRoot:
     version: "%(commit_hash)s_PWGMMTEST"
-    tag: v5-09-22
+    tag: v5-09-27
   AliPhysics:
     version: "%(commit_hash)s_PWGMMTEST"
-    tag: v5-09-22-01
-# now for actual generators
-  agile:
+    tag: v5-09-27-01
+  AGILe:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/agile
-  aligenerators:
+  AliGenerators:
     version: "v%(year)s%(month)s%(day)s_PWGMMTEST"
   aligenmc:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/aligenmc
-  ampt:
+  AMPT:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/ampt
-  crmc:
+  CRMC:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/crmc
-  dpmjet:
+  DPMJET:
     version: "%(tag_basename)s_PWGMMTEST"
-  epos:
+  EPOS:
     version: "%(tag_basename)s_PWGMMTEST"
-  herwig:
+  Herwig:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/herwig
-  jewel:
+  JEWEL:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/jewel
   lhapdf:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/lhapdf
-  powheg:
+  POWHEG:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/powheg
   pythia6:
@@ -72,25 +70,25 @@ overrides:
   pythia:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/pythia8
-  rivet:
+  Rivet:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/rivet
-  rivet-hi:
+  Rivet-hi:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/rivet-hi
-  sacrifice:
+  Sacrifice:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/sacrifice
-  sherpa:
+  SHERPA:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/sherpa
-  thepeg:
+  ThePEG:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/thepeg
-  therminator2:
+  Therminator2:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/therminator
-  yoda:
+  YODA:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/yoda
 ---
