@@ -1,6 +1,6 @@
 package: Herwig
 version: "%(tag_basename)s"
-tag: "v7.1.2"
+tag: "v7.1.2-alice1"
 source: https://github.com/alisw/herwig
 requires:
   - GMP
@@ -13,9 +13,10 @@ build_requires:
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
+
 export LHAPDF_DATA_PATH="$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
 
-autoreconf -ivf
+[[ -e .missing_timestamps ]] && ./missing-timestamps.sh --apply || autoreconf -ivf
 [[ $ALIEN_RUNTIME_VERSION ]] && LDZLIB="-L$ALIEN_RUNTIME_ROOT/lib" || { [[ $ZLIB_VERSION ]] && LDZLIB="-L$ZLIB_ROOT/lib" || LDZLIB= ; }
 export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib $LDZLIB"
 ./configure                        \
