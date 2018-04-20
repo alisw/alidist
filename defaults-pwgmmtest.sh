@@ -61,6 +61,8 @@ overrides:
   lhapdf:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/lhapdf
+  lhapdf-pdfsets:
+    version: "v%(year)s%(month)s%(day)s_PWGMMTEST"
   POWHEG:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/powheg
