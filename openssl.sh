@@ -22,17 +22,24 @@ pushd openssl-fips
   make install
 popd
 
+OLD_OPENSSL=TRUE
+if [ "$PKG_VERSION" == "*v1.0*" ]
+then
+    unset OLD_OPENSSL
+    NEW_OPENSSL=TRUE
+fi
+
 pushd openssl
   ./config --openssldir="$INSTALLROOT" \
-           --with-fipslibdir="$INSTALLROOT/fips/lib" \
+           ${OLD_OPENSSL:+--with-fipslibdir="$INSTALLROOT/fips/lib"}  \
+           ${NEW_OPENSSL:+--with-fipslibdir="$INSTALLROOT/fips/lib/"} \
+           ${NEW_OPENSSL:+--with-fipsdir="$INSTALLROOT/fips"} \
            fips \
            zlib \
            no-idea \
            no-mdc2 \
+	   ${OLD_OPENSSL:+ no-ec no-ecdh no-ecdsa} \
            no-rc5 \
-           no-ec \
-           no-ecdh \
-           no-ecdsa \
            no-asm \
            no-krb5 \
            shared \
@@ -41,6 +48,7 @@ pushd openssl
            -Wa,--noexecstack \
            -DOPENSSL_USE_NEW_FUNCTIONS
   # Does not build in multicore!
+  ${NEW_OPENSSL:+ make depend}
   make
   make install
 popd
