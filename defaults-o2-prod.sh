@@ -67,7 +67,7 @@ overrides:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git
   GEANT4_VMC:
-    tag: "v3-5-p1"
+    tag: "v3-5"
     source: https://github.com/vmc-project/geant4_vmc
   vgm:
     tag: "v4-4"
