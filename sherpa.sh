@@ -1,6 +1,6 @@
 package: SHERPA
 version: "%(tag_basename)s"
-tag: "alice/v2.1.1"
+tag: "v2.2.4-alice1"
 source: https://github.com/alisw/SHERPA
 build_requires:
   - curl

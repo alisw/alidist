@@ -1,6 +1,6 @@
 package: JEWEL
 version: "%(tag_basename)s"
-tag: alice/v2.0.2
+tag: v2.2.0
 source: https://github.com/alisw/jewel.git
 requires:
   - lhapdf5
@@ -13,6 +13,7 @@ sed -i.deleteme -e 's#^LHAPDF_PATH :=.*#LHAPDF_PATH := ${LHAPDF5_ROOT}/lib#' Mak
 make ${JOBS:+-j$JOBS}
 
 VERSION=${PKGVERSION%%_*}
+VERSION=2.2.0
 install -d ${INSTALLROOT}/bin
 install -t ${INSTALLROOT}/bin \
 	jewel-${VERSION#v}-vac \

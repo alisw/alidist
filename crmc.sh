@@ -1,6 +1,6 @@
 package: CRMC
 version: "%(tag_basename)s"
-tag: alice/v1.5.4
+tag: v1.7.0
 source: https://github.com/alisw/crmc.git
 requires:
   - boost

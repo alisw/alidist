@@ -1,6 +1,6 @@
 package: Therminator2
 version: "%(tag_basename)s"
-tag: "alice/v2.0.3"
+tag: "v2.0.3-alice1"
 source: https://github.com/alisw/therminator
 requires:
  - "GCC-Toolchain:(?!osx)"

@@ -1,6 +1,6 @@
 package: lhapdf
 version: "%(tag_basename)s"
-tag: v6.1.6
+tag: v6.2.1-alice1
 source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
@@ -10,7 +10,7 @@ requires:
 build_requires:
  - autotools
 env:
-  LHAPATH: "$LHAPDF_ROOT/share/LHAPDF"
+  PYTHONPATH: $LHAPDF_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -ex
 case $ARCHITECTURE in
@@ -45,15 +45,6 @@ autoreconf -ivf
 make ${JOBS+-j $JOBS} all
 make install
 
-PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl cteq66"
-PATH=$INSTALLROOT/bin:$PATH lhapdf --pdfdir=$INSTALLROOT/share/LHAPDF  \
-                                   --listdir=$INSTALLROOT/share/LHAPDF \
-                                   install $PDFSETS
-# Check if PDF sets were really installed
-for P in $PDFSETS; do
-  [[ -d $INSTALLROOT/share/LHAPDF/$P ]]
-done
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -72,8 +63,9 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
                      ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv LHAPATH \$::env(LHAPDF_ROOT)/share/LHAPDF
-prepend-path PATH $::env(LHAPDF_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(LHAPDF_ROOT)/lib")
+prepend-path PATH \$::env(LHAPDF_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
+prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python2.7/site-packages
+prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
 EoF

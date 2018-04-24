@@ -17,6 +17,9 @@ requires:
   - aligenmc
   - FONLL
   - Therminator2
+  - Rivet
+  - Rivet-hi
+  - lhapdf-pdfsets
 build_requires:
   - EPOS-test
 ---
@@ -46,6 +49,7 @@ module load BASE/1.0 \
   POWHEG/$POWHEG_VERSION-$POWHEG_REVISION \
   pythia/$PYTHIA_VERSION-$PYTHIA_REVISION \
   pythia6/$PYTHIA6_VERSION-$PYTHIA6_REVISION \
+  Rivet/$RIVET_VERSION-$RIVET_REVISION \
   Sacrifice/$SACRIFICE_VERSION-$SACRIFICE_REVISION \
   SHERPA/$SHERPA_VERSION-$SHERPA_REVISION \
   ThePEG/$THEPEG_VERSION-$THEPEG_REVISION \
