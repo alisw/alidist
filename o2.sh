@@ -11,6 +11,9 @@ requires:
   - Configuration
   - Monitoring
   - ms_gsl
+  - googlebenchmark
+build_requires:
+  - RapidJSON
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
@@ -114,7 +117,9 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       ${O2HLTCATRACKING_VERSION:+-DO2_TPCCA_TRACKING_LIB_DIR=$O2HLTCATRACKING_ROOT}         \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
-      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}
+      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
+      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
+      -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark
 
 if [[ $GIT_TAG == master ]]; then
   CONTINUE_ON_ERROR=true
