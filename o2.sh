@@ -11,9 +11,9 @@ requires:
   - Configuration
   - Monitoring
   - ms_gsl
-  - googlebenchmark
 build_requires:
   - RapidJSON
+  - googlebenchmark
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
