@@ -5,7 +5,7 @@ build_requires:
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   which node || { echo "node is missing"; exit 1; }
-  if [ `$(brew --prefix node)/bin/node --version | tr -d v | awk -F \. {'print substr(0 $1, length($1), length($1) + 1) substr(0 $2, length($2), length($2) + 1)'}` -le 0809 ]; then exit 1; fi
+  if [ `$(brew --prefix node)/bin/node --version | tr -d v | awk -F \. {'print substr(0 $1, length($1), length($1) + 1) substr(0 $2, length($2), length($2) + 1)'}` -le 0809 ]; then echo "higher node version required"; exit 1; fi
 ---
 #!/bin/bash
 
