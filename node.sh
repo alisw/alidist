@@ -26,7 +26,11 @@ pushd ali-node-tmp
 	tar zxf $TAR_NAME
 popd
 
-/bin/cp -a ./ali-node-tmp/$FILE_NAME/bin/* $INSTALLROOT/.
+if [ $ARCHITECTURE = "osx" ]; then
+	/bin/cp -a ./ali-node-tmp/$FILE_NAME/bin $INSTALLROOT/.
+else
+	/bin/cp -a ./ali-node-tmp/$FILE_NAME/* $INSTALLROOT/.
+fi
 /bin/rm -rf ali-node-tmp
 
 # Modulefile
@@ -45,5 +49,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv NODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(NODE_ROOT)
+prepend-path PATH \$::env(NODE_ROOT)/bin
 EoF
