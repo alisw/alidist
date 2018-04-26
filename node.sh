@@ -10,24 +10,21 @@ prefer_system_check: |
 #!/bin/bash
 
 case $ARCHITECTURE in
-	osx*)
-		NODEOS=darwin
-	;;
-	*x86-64)
-		NODEOS=linux
-	;;
-	*)
-		NODEOS=linux
-	;;
+  osx*)
+    NODEOS=darwin
+  ;;
+  *)
+    NODEOS=linux
+  ;;
 esac
 
 FILE_NAME="$PKGNAME-$PKGVERSION-$NODEOS-x64"
 mkdir ali-node-tmp
 pushd ali-node-tmp
-	TAR_NAME="$FILE_NAME.tar.gz"
-	URL="https://nodejs.org/dist/$PKGVERSION/$TAR_NAME"	
-	curl -O -L $URL
-	tar zxf $TAR_NAME
+  TAR_NAME="$FILE_NAME.tar.gz"
+  URL="https://nodejs.org/dist/$PKGVERSION/$TAR_NAME"
+  curl -O -L $URL
+  tar zxf $TAR_NAME
 popd
 
 /bin/cp -a ./ali-node-tmp/$FILE_NAME/* $INSTALLROOT/.
