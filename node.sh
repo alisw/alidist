@@ -1,7 +1,11 @@
 package: node
-version: "v8.11.1"
+version: "v9.8.0"
 build_requires:
   - curl
+prefer_system: "(?!slc5)"
+prefer_system_check: |
+  which node || { echo "node is missing"; exit 1; }
+  if [ `$(brew --prefix node)/bin/node --version | tr -d v | awk -F \. {'print substr(0 $1, length($1), length($1) + 1) substr(0 $2, length($2), length($2) + 1)'}` -le 0809 ]; then exit 1; fi
 ---
 #!/bin/bash
 
@@ -26,11 +30,7 @@ pushd ali-node-tmp
 	tar zxf $TAR_NAME
 popd
 
-if [ $ARCHITECTURE = "osx" ]; then
-	/bin/cp -a ./ali-node-tmp/$FILE_NAME/bin $INSTALLROOT/.
-else
-	/bin/cp -a ./ali-node-tmp/$FILE_NAME/* $INSTALLROOT/.
-fi
+/bin/cp -a ./ali-node-tmp/$FILE_NAME/* $INSTALLROOT/.
 /bin/rm -rf ali-node-tmp
 
 # Modulefile
