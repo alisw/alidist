@@ -13,6 +13,7 @@ ppconsul*           @alisw/dataflow-experts
 qualitycontrol*     @alisw/dataflow-experts
 rapidjson*          @alisw/dataflow-experts
 readout*            @alisw/dataflow-experts
+node*               @alisw/dataflow-experts
 
 # PWGMM
 aligenerators*      @alisw/pwgmm
