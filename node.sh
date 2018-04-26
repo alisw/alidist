@@ -9,13 +9,9 @@ prefer_system_check: |
 ---
 #!/bin/bash
 
+NODEOS=linux
 case $ARCHITECTURE in
-  osx*)
-    NODEOS=darwin
-  ;;
-  *)
-    NODEOS=linux
-  ;;
+  osx*) NODEOS=darwin ;;
 esac
 
 FILE_NAME="$PKGNAME-$PKGVERSION-$NODEOS-x64"
