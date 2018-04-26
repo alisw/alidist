@@ -19,16 +19,12 @@ case $ARCHITECTURE in
 esac
 
 FILE_NAME="$PKGNAME-$PKGVERSION-$NODEOS-x64"
-mkdir ali-node-tmp
-pushd ali-node-tmp
-  TAR_NAME="$FILE_NAME.tar.gz"
-  URL="https://nodejs.org/dist/$PKGVERSION/$TAR_NAME"
-  curl -O -L $URL
-  tar zxf $TAR_NAME
-popd
+TAR_NAME="$FILE_NAME.tar.gz"
+URL="https://nodejs.org/dist/$PKGVERSION/$TAR_NAME"
+curl -O -L $URL
+tar zxf $TAR_NAME
 
-/bin/cp -a ./ali-node-tmp/$FILE_NAME/* $INSTALLROOT/.
-/bin/rm -rf ali-node-tmp
+rsync -a $FILE_NAME/ $INSTALLROOT/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
