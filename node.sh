@@ -17,15 +17,16 @@ case $ARCHITECTURE in
 	;;
 esac
 
+FILE_NAME="$PKGNAME-$PKGVERSION-$NODEOS-x64"
 mkdir ali-node-tmp
 pushd ali-node-tmp
-	TAR_NAME="$PKGNAME-$PKGVERSION-$NODEOS.tar.gz"
+	TAR_NAME="$FILE_NAME.tar.gz"
 	URL="https://nodejs.org/dist/$PKGVERSION/$TAR_NAME"	
 	curl -O -L $URL
 	tar zxf $TAR_NAME
 popd
 
-/bin/cp -a ./ali-node-tmp/go/* $INSTALLROOT/.
+/bin/cp -a ./ali-node-tmp/$FILE_NAME/bin/* $INSTALLROOT/.
 /bin/rm -rf ali-node-tmp
 
 # Modulefile
@@ -44,5 +45,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv NODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(NODE_ROOT)/bin
+prepend-path PATH \$::env(NODE_ROOT)
 EoF
