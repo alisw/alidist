@@ -13,6 +13,8 @@ env:
   G4VMCINSTALL: "$GEANT4_VMC_ROOT"
 ---
 #!/bin/bash -e
+export LD_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW:+${ALIBUILD_SYSTEM_VIEW}/lib:}${LD_LIBRARY_PATH}
+
 cmake "$SOURCEDIR"                             \
   -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
   -DGeant4VMC_USE_VGM=ON                       \

@@ -26,12 +26,16 @@ esac
 
 cmake $SOURCEDIR                                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
+      ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_INCLUDE_PATH=${ALIBUILD_SYSTEM_VIEW}/include}      \
+      ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW}/lib}          \
+      ${ALIBUILD_SYSTEM_VIEW:+-DC_INCLUDE_DIRS=${ALIBUILD_SYSTEM_VIEW}/include}          \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_INCLUDEDIR=$ALIBUILD_SYSTEM_VIEW/include}          \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                            \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                                             \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}                             \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                   \
       -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include                                   \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                                       \
+      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                                       
 
 make ${JOBS+-j $JOBS} install
 

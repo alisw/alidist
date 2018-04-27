@@ -19,11 +19,15 @@ case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
-cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${APMON_CPP_VERSION:+-DAPMON_ROOT=$APMON_CPP_ROOT}         \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+cmake $SOURCEDIR                                                                     \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                            \
+      ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_INCLUDE_PATH=${ALIBUILD_SYSTEM_VIEW}/include}  \
+      ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW}/lib}      \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_INCLUDEDIR=$ALIBUILD_SYSTEM_VIEW/include}      \
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                                     \
+      ${APMON_CPP_VERSION:+-DAPMON_ROOT=$APMON_CPP_ROOT}                             \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_INCLUDEDIR=$ALIBUILD_SYSTEM_VIEW/include}      \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install

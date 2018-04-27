@@ -28,23 +28,24 @@ esac
 # Taken from our stack, linked dynamically (needed at runtime):
 #   boost
 
-cmake $SOURCEDIR/cpp                       \
-      -DARROW_BUILD_BENCHMARKS=OFF         \
-      -DARROW_BUILD_TESTS=OFF              \
-      -DARROW_JEMALLOC=OFF                 \
-      -DARROW_HDFS=OFF                     \
-      -DARROW_IPC=ON                       \
-      -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT \
-      -DARROW_USE_SSE=ON                   \
-      -DARROW_WITH_LZ4=ON                  \
-      -DARROW_WITH_SNAPPY=OFF              \
-      -DARROW_WITH_GRPC=OFF                \
-      -DARROW_WITH_ZSTD=OFF                \
-      -DARROW_WITH_ZLIB=ON                 \
-      -DARROW_NO_DEPRECATED_API=ON         \
-      -DBOOST_ROOT=$BOOST_ROOT             \
-      -DARROW_WITH_BROTLI=ON               \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
+cmake $SOURCEDIR/cpp                                                             \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_INCLUDEDIR=$ALIBUILD_SYSTEM_VIEW/include}  \
+      -DARROW_BUILD_BENCHMARKS=OFF                                               \
+      -DARROW_BUILD_TESTS=OFF                                                    \
+      -DARROW_JEMALLOC=OFF                                                       \
+      -DARROW_HDFS=OFF                                                           \
+      -DARROW_IPC=ON                                                             \
+      -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT                                       \
+      -DARROW_USE_SSE=ON                                                         \
+      -DARROW_WITH_LZ4=ON                                                        \
+      -DARROW_WITH_SNAPPY=OFF                                                    \
+      -DARROW_WITH_GRPC=OFF                                                      \
+      -DARROW_WITH_ZSTD=OFF                                                      \
+      -DARROW_WITH_ZLIB=ON                                                       \
+      -DARROW_NO_DEPRECATED_API=ON                                               \
+      -DBOOST_ROOT=$BOOST_ROOT                                                   \
+      -DARROW_WITH_BROTLI=ON                                                     \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
       -DARROW_PYTHON=OFF
 
 make ${JOBS:+-j $JOBS}

@@ -16,9 +16,10 @@ esac
 
 [[ $GCC_TOOLCHAIN_ROOT ]] && export DDS_LD_LIBRARY_PATH="$GCC_TOOLCHAIN_ROOT/lib64"
 
-cmake $SOURCEDIR                                                         \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
+cmake $SOURCEDIR                                                                 \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_INCLUDEDIR=$ALIBUILD_SYSTEM_VIEW/include}  \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON}         \
 
 # Limit the number of build processes to avoid exahusting memory when building
 # on smaller machines.

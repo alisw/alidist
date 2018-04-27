@@ -45,6 +45,8 @@ esac
 
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
+export LD_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW}/lib:${LD_LIBRARY_PATH}
+
 cmake $SOURCEDIR                                                                            \
       ${MACOSX_RPATH:+-DMACOSX_RPATH=${MACOSX_RPATH}}                                       \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                                                         \
@@ -63,6 +65,10 @@ cmake $SOURCEDIR                                                                
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                               \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}                                 \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}                                     \
+      ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_PREFIX_PATH=$ALIBUILD_SYSTEM_VIEW}                                      \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_ROOT=$ALIBUILD_SYSTEM_VIEW}                                             \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_INCLUDEDIR=$ALIBUILD_SYSTEM_VIEW/include}                               \
+      ${ALIBUILD_SYSTEM_VIEW:+-DBOOST_LIBRARYDIR=$ALIBUILD_SYSTEM_VIEW/lib}                                   \
       -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}                                      \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                      \
       -DGTEST_ROOT=$GOOGLETEST_ROOT                                                         \

@@ -88,11 +88,15 @@ esac
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror"
 fi
+
+export LD_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW}/lib:${LD_LIBRARY_PATH}
+
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DFairRoot_DIR=$FAIRROOT_ROOT                                                         \
       -DALICEO2_MODULAR_BUILD=ON                                                            \
       -DROOTSYS=$ROOTSYS                                                                    \
+      ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_PREFIX_PATH=$ALIBUILD_SYSTEM_VIEW}                    \
       ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}                              \
       ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                                             \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \

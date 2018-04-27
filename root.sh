@@ -92,6 +92,9 @@ else
   cmake $SOURCEDIR                                                                       \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+        ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_INCLUDE_PATH=${ALIBUILD_SYSTEM_VIEW}/include}    \
+        ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW}/lib}        \
+        ${ALIBUILD_SYSTEM_VIEW:+-DC_INCLUDE_DIRS=${ALIBUILD_SYSTEM_VIEW}/include}        \
         ${ALIEN_RUNTIME_VERSION:+-Dalien=ON}                                             \
         ${ALIEN_RUNTIME_VERSION:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                        \
         ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \

@@ -10,8 +10,13 @@ build_requires:
 ---
 #!/bin/bash -e
 
-cmake  $SOURCEDIR                           \
-       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
+export LD_LIBRARY_PATH=${ROOT_ROOT}:${ALIBUILD_SYSTEM_VIEW}/lib:${LD_LIBRARY_PATH}
+cmake  $SOURCEDIR                                                                  \
+       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                         \
+       -DHEPMC_ENABLE_ROOTIO=ON                                                    \
+       -DROOT_DIR=${ROOT_ROOT}                                                     \
+        ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_PREFIX_PATH=${ALIBUILD_SYSTEM_VIEW}}       \
+        ${ALIBUILD_SYSTEM_VIEW:+-DCMAKE_LIBRARY_PATH=${ALIBUILD_SYSTEM_VIEW}/lib}  \
        -DROOT_DIR=$ROOT_ROOT
 
 make ${JOBS+-j $JOBS}
