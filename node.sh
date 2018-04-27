@@ -17,10 +17,10 @@ esac
 FILE_NAME="$PKGNAME-$PKGVERSION-$NODEOS-x64"
 TAR_NAME="$FILE_NAME.tar.gz"
 URL="https://nodejs.org/dist/$PKGVERSION/$TAR_NAME"
-curl -O -L $URL
-tar zxf $TAR_NAME
-
-rsync -a $FILE_NAME/ $INSTALLROOT/
+cd "$INSTALLROOT"
+curl -L $URL | tar xzf -
+mv $FILE_NAME/* .
+rmdir $FILE_NAME
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
