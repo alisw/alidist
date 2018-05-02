@@ -2,6 +2,7 @@ package: O2
 version: "%(tag_basename)s"
 tag: dev
 requires:
+  - arrow
   - FairRoot
   - DDS
   - Vc
@@ -45,7 +46,7 @@ incremental_recipe: |
     rm -rf coverage.info
     lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
     lcov --remove coverage.info '*/usr/*' --output-file coverage.info
-    lcov --remove coverage.info '*/boost/*' --output-file coverage.info 
+    lcov --remove coverage.info '*/boost/*' --output-file coverage.info
     lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
     lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
     lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
@@ -119,6 +120,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
+      ${ARROW_VERSION:+-DARROW_HOME=$ARROW_ROOT}                                            \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark
 
 if [[ $GIT_TAG == master ]]; then
@@ -151,7 +153,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${HEPMC3_VERSION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION} ${O2HLTCATRACKING_VERSION:+O2HLTCATracking/$O2HLTCATRACKING_VERSION-$O2HLTCATRACKING_REVISION} ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION} ${CONFIGURATION_VERSION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION
+module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${HEPMC3_VERSION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION} ${O2HLTCATRACKING_VERSION:+O2HLTCATracking/$O2HLTCATRACKING_VERSION-$O2HLTCATRACKING_REVISION} ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION} ${CONFIGURATION_VERSION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
 # Our environment
 setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
@@ -176,7 +178,7 @@ if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   rm -rf coverage.info
   lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
   lcov --remove coverage.info '*/usr/*' --output-file coverage.info
-  lcov --remove coverage.info '*/boost/*' --output-file coverage.info 
+  lcov --remove coverage.info '*/boost/*' --output-file coverage.info
   lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
   lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
   lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
