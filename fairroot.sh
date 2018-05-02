@@ -37,6 +37,7 @@ case $ARCHITECTURE in
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $NANOMSG_ROOT ]] && NANOMSG_ROOT=`brew --prefix nanomsg`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
+    MACOSX_RPATH=OFF
     SONAME=dylib
   ;;
   *) SONAME=so ;;
@@ -45,7 +46,7 @@ esac
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
 cmake $SOURCEDIR                                                                            \
-      -DMACOSX_RPATH=OFF                                                                    \
+      ${MACOSX_RPATH:+-DMACOSX_RPATH=${MACOSX_RPATH}}                                       \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                                                         \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
       -DROOTSYS=$ROOTSYS                                                                    \
