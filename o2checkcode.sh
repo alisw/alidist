@@ -72,7 +72,7 @@ while read FILE; do
   [[ ! $FILE =~ $COPYRIGHT_EXCLUDE_REGEXP ]] || continue
   FILE="$O2_SRC/$FILE"
   [[ "$(head -n$COPYRIGHT_LINES "$FILE")" == "$COPYRIGHT" ]] || { printf "$FILE:1:1: error: missing or malformed copyright notice\n" >> error-log.txt; }
-done < <([[ $O2_CHECKCODE_CHANGEDFILES ]] && echo "$O2_CHECKCODE_CHANGEDFILES" | sed -e 's/:/\n/g' \
+done < <([[ $O2_CHECKCODE_CHANGEDFILES ]] && echo "$O2_CHECKCODE_CHANGEDFILES" | tr ':' '\n' \
                                           || (cd "$O2_SRC"; find . -name '*.cxx' -o -name '*.h'))
 
 # Tell user what to do in case of copyright notice error
