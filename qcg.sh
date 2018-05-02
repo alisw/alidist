@@ -2,6 +2,7 @@ package: qcg
 version: "v1.0.4"
 requires:
   - node
+  - QualityControl
 build_requires:
   - node
 ---
@@ -27,7 +28,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${NODE_VERSION:+node/$NODE_VERSION-$NODE_REVISION}
+module load BASE/1.0 ${NODE_VERSION:+node/$NODE_VERSION-$NODE_REVISION} ${QUALITYCONTROL_VERSION:+QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION}
 # Our environment
 setenv QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(QCG_ROOT)/bin
