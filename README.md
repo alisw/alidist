@@ -31,6 +31,7 @@ commodo consequat.
 ```
 rsync -a $SOURCEDIR ./
 ```
+- If a package can / could be picked up from the system, do not provide, in the modulefile, any variable which is not also exposed in general by the system installation. E.g. `ROOTSYS` is fine because that kind of a standard for ROOT installations, `GCC_ROOT` is not because GCC in general does not use `GCC_ROOT`.
 
 # Guidelines for handling externals sources
 
