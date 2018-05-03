@@ -11,11 +11,9 @@ build_requires:
 cd "$INSTALLROOT"
 npm install @aliceo2/qc@$PKGVERSION --only=production --loglevel error --no-save --no-package-lock
 rsync -a --ignore-existing "node_modules/@aliceo2/qc/config-default.js" config.js
-mkdir bin; cd bin
-chmod 755 qcg>>qcg
-cat > "qcg" <<EoF
-node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js
-EoF
+mkdir bin;
+echo "node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js" > bin/qcg
+chmod +x bin/qcg
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
