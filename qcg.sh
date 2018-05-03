@@ -1,5 +1,5 @@
 package: qcg
-version: "v1.0.4"
+version: "v1.0.6"
 requires:
   - node
   - QualityControl
@@ -10,10 +10,12 @@ build_requires:
 
 cd "$INSTALLROOT"
 npm install @aliceo2/qc@$PKGVERSION --only=production --loglevel error --no-save --no-package-lock
-cp "node_modules/@aliceo2/qc/config-default.js" config.js
-mkdir bin;
-echo "node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js" > bin/qcg
-chmod +x bin/qcg
+rsync -a --ignore-existing "node_modules/@aliceo2/qc/config-default.js" config.js
+mkdir bin; cd bin
+chmod 755 qcg>>qcg
+cat > "qcg" <<EoF
+node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js
+EoF
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
