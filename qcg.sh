@@ -8,12 +8,11 @@ build_requires:
 ---
 #!/bin/bash
 
-cd "$INSTALLROOT"
-npm install @aliceo2/qc@$PKGVERSION --only=production --loglevel error --no-save --no-package-lock
-rsync -a --ignore-existing "node_modules/@aliceo2/qc/config-default.js" config.js
-mkdir bin;
-echo "node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js" > bin/qcg
-chmod +x bin/qcg
+mkdir -p "$INSTALLROOT/bin"
+npm install @aliceo2/qc@$PKGVERSION --only=production --loglevel error --no-save --no-package-lock --prefix $INSTALLROOT
+rsync -a --ignore-existing "$INSTALLROOT/node_modules/@aliceo2/qc/config-default.js" $INSTALLROOT/config.js
+echo "node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js" > $INSTALLROOT/bin/qcg
+chmod +x $INSTALLROOT/bin/qcg
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
