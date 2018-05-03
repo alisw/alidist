@@ -6,7 +6,7 @@ build_requires:
   - CMake
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include \"nanomsg/nn.h\"\nint main(){}" | cc -I$(brew --prefix nanomsg)/include -Wno-deprecated-declarations -xc - -o /dev/null
+  printf "#include \"nanomsg/nn.h\"\nint main(){}" | cc -I$(brew --prefix nanomsg)/include -Wno-deprecated-declarations ${ALIBUILD_SYSTEM_VIEW:+-I$ALIBUILD_SYSTEM_VIEW/include} -xc - -o /dev/null
 ---
 #!/bin/bash
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"

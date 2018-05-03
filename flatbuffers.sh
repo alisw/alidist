@@ -8,7 +8,7 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include \"flatbuffers/flatbuffers.h\"\nint main(){}" | c++ -I$(brew --prefix flatbuffers)/include -xc++ -std=c++11 - -o /dev/null
+  printf "#include \"flatbuffers/flatbuffers.h\"\nint main(){}" | c++ -I$(brew --prefix flatbuffers)/include -xc++ -std=c++11 ${ALIBUILD_SYSTEM_VIEW:+-I$ALIBUILD_SYSTEM_VIEW/include} - -o /dev/null
 ---
 cmake $SOURCEDIR                          \
       -G "Unix Makefiles"                 \

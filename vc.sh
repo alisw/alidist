@@ -8,7 +8,7 @@ build_requires:
   - CMake
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include <Vc/version.h>\n#if Vc_VERSION_CHECK(1,3,2) > Vc_VERSION_NUMBER\n#error Incorrect Vc version\n#endif" | c++ -xc++ - -c -M 2>&1
+  printf "#include <Vc/version.h>\n#if Vc_VERSION_CHECK(1,3,2) > Vc_VERSION_NUMBER\n#error Incorrect Vc version\n#endif" | c++ -xc++ - -c -M ${ALIBUILD_SYSTEM_VIEW:+-I$ALIBUILD_SYSTEM_VIEW/include} 2>&1
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF

@@ -19,7 +19,7 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
       - Python-modules
     prefer_system_check: |
-      printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106600 || BOOST_VERSION > 106699)\n#error \"Cannot use system's boost: boost 1.66 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+      printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106600 || BOOST_VERSION > 106699)\n#error \"Cannot use system's boost: boost 1.66 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ ${ALIBUILD_SYSTEM_VIEW:+-I$ALIBUILD_SYSTEM_VIEW/include} - -o /dev/null
   GCC-Toolchain:
     tag: v6.2.0-alice1
     prefer_system_check: |
@@ -51,7 +51,7 @@ overrides:
       - ZeroMQ
   GSL:
     prefer_system_check: |
-      printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
+      printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ ${ALIBUILD_SYSTEM_VIEW:+-I$ALIBUILD_SYSTEM_VIEW/include} - -o /dev/null
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.0.2"

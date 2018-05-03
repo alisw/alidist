@@ -7,7 +7,7 @@ build_requires:
   - autotools
 prefer_system: (?!slc5.*)
 prefer_system_check: |
-  printf "#include <zmq.h>\n#if(ZMQ_VERSION < 40103)\n#error \"zmq version >= 4.1.3 needed\"\n#endif\n int main(){}" | gcc -I$(brew --prefix zeromq)/include $([[ -d $(brew --prefix zeromq) ]] || echo "-l:libzmq.a") -xc++ - -o /dev/null 2>&1
+  printf "#include <zmq.h>\n#if(ZMQ_VERSION < 40103)\n#error \"zmq version >= 4.1.3 needed\"\n#endif\n int main(){}" | gcc -I$(brew --prefix zeromq)/include $([[ -d $(brew --prefix zeromq) ]] || echo "-l:libzmq.a") ${ALIBUILD_SYSTEM_VIEW:+-I$ALIBUILD_SYSTEM_VIEW/include -L$ALIBUILD_SYSTEM_VIEW/lib} -xc++ - -o /dev/null 2>&1
 ---
 #!/bin/sh
 
