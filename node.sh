@@ -5,7 +5,7 @@ build_requires:
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   node -h &> /dev/null || { echo "node is missing"; exit 1; }
-  if [[ printf "%d%04d%04d" $(node --version | sed -e 's/v//g; s/\./ /g') -le 900090000 ]]; then echo "higher node version required"; exit 1; fi
+  if [[ $(printf "%d%04d%04d" $(node --version | sed -e 's/v//g; s/\./ /g')) -le 900090000 ]]; then echo "higher node version required"; exit 1; fi
 ---
 #!/bin/bash
 
