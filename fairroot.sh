@@ -1,7 +1,7 @@
 package: FairRoot
 version: "%(tag_basename)s"
-tag: "alice-dev-20180413"
-source: https://github.com/alisw/FairRoot
+tag: "3b01d28"
+source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
   - simulation
