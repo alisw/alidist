@@ -33,6 +33,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv NODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(NODE_ROOT)/bin
+prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 EoF
