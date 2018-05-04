@@ -15,6 +15,7 @@ requires:
 build_requires:
   - RapidJSON
   - googlebenchmark
+  - AliTPCCommon
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
@@ -118,6 +119,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       ${O2HLTCATRACKING_ROOT:+-DO2_TPCCA_TRACKING_LIB_DIR=$O2HLTCATRACKING_ROOT}            \
+      ${ALITPCCOMMON_ROOT:+-DALITPCCOMMON_DIR=$ALITPCCOMMON_ROOT}                           \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
