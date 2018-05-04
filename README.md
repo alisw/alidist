@@ -31,7 +31,7 @@ commodo consequat.
 ```
 rsync -a $SOURCEDIR ./
 ```
-- If a package is a toolkit not really affecting physics performance, make sure your provide a `prefer_system_check` rule to have laptop user pick it up from the system.
+- If a package is a toolkit not really affecting physics performance, make sure you provide a `prefer_system_check` rule to have laptop user pick it up from the system.
 - If a package is a physics related one. Avoid providing a `prefer_system_check` unless explicitly discussed withing the Computing Board or the O2 Technical board.
 - If `SOMETHING_VERSION` or `SOMETHING_REVISION` is defined, you can assume `SOMETHING_ROOT` is defined and points to an aliBuild built package. However the opposite is not true. I.e. you should not assume that `SOMETHING_ROOT` being defined means that a `something` was built with aliBuild (it could come from the system) and you cannot assume that `SOMETHING_VERSION` and `SOMETHING_REVISION` are set. 
 - If a package can / could be picked up from the system, do not provide, in the modulefile, any variable which is not also exposed in general by the system installation. E.g. `ROOTSYS` is fine because that kind of a standard for ROOT installations, `GCC_ROOT` is not because GCC in general does not use `GCC_ROOT`.
