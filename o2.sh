@@ -38,7 +38,8 @@ incremental_recipe: |
     export O2_ROOT=$INSTALLROOT
     # Clean up old coverage data
     find . -name "*.gcov" -o -name "*.gcda" -delete
-    CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
+    ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
+    ctest -R test_Framework --output-on-failure
   fi
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
@@ -169,7 +170,8 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
   # Clean up old coverage data
   find . -name "*.gcov" -o -name "*.gcda" -delete
-  CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
+  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
+  ctest -R test_Framework --output-on-failure
 fi
 
 # Create code coverage information to be uploaded
