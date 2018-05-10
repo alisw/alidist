@@ -6,11 +6,9 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: .*
 prefer_system_check: |
-  which ninja && case `ninja --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in "^(0|2)\.|^1\.([0-7]|[9-99])\.\d*|^1\.8\.[0-1]" ) exit 1 ;; esac
+  ninja --version > /dev/null; if test $? = 127; then exit 1; else case `ninja --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in "^(0|2)\.|^1\.([0-7]|[9-99])\.\d*|^1\.8\.[0-1]" ) exit 1 ;; esac; fi; exit 0
 ---
 #!/bin/bash -e
-
-echo "Building ALICE Ninja. To avoid this install Ninja >= 1.8.2"
 
 $SOURCEDIR/configure.py --bootstrap
 mkdir -p $INSTALLROOT/bin

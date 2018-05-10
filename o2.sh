@@ -127,11 +127,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark
 
-if [[ $GIT_TAG == master && "${CMAKE_GENERATOR}" == "Unix Makefiles" ]]; then
-  CONTINUE_ON_ERROR=true
-fi
-
-cmake --build . -- ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${JOBS+-j $JOBS} install
 
 # install the compilation database so that we can post-check the code
 cp compile_commands.json ${INSTALLROOT}
