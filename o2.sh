@@ -13,7 +13,6 @@ requires:
   - Monitoring
   - ms_gsl
 build_requires:
-  - ninja
   - RapidJSON
   - googlebenchmark
 source: https://github.com/AliceO2Group/AliceO2
@@ -63,6 +62,7 @@ valid_defaults:
   - o2-dev-fairroot
   - alo
   - o2-prod
+  - o2-ninja
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
