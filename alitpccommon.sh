@@ -1,6 +1,6 @@
 package: AliTPCCommon
 version: "%(tag_basename)s"
-tag: alitpccommon-v1.0
+tag: alitpccommon-v1.1
 source: https://github.com/AliceO2Group/AliTPCCommon
 build_requires:
   - CMake
