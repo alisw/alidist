@@ -1,4 +1,4 @@
-package: defaults-o2
+package: defaults-o2-ninja
 version: v1
 env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"
