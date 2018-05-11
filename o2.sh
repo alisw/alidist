@@ -20,7 +20,7 @@ source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -63,6 +63,7 @@ valid_defaults:
   - o2-dev-fairroot
   - alo
   - o2-prod
+  - o2-ninja
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
@@ -90,7 +91,9 @@ esac
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror"
 fi
+
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DFairRoot_DIR=$FAIRROOT_ROOT                                                         \
       -DALICEO2_MODULAR_BUILD=ON                                                            \
@@ -126,10 +129,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark
 
-if [[ $GIT_TAG == master ]]; then
-  CONTINUE_ON_ERROR=true
-fi
-make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${JOBS+-j $JOBS} install
 
 # install the compilation database so that we can post-check the code
 cp compile_commands.json ${INSTALLROOT}

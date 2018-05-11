@@ -46,6 +46,7 @@ esac
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
 cmake $SOURCEDIR                                                                            \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
       ${MACOSX_RPATH:+-DMACOSX_RPATH=${MACOSX_RPATH}}                                       \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                                                         \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
@@ -77,7 +78,7 @@ cmake $SOURCEDIR                                                                
 # on smaller machines.
 JOBS=$((${JOBS:-1}*2/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
-make -j$JOBS install
+cmake --build . -- -j$JOBS install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
