@@ -93,6 +93,8 @@ if __name__ == "__main__":
             if numberOfProperties != 2:
                 error("version (or tag, if version is missing) should be the second property in the recipe", event)
             hasVersion = True
+            if "%(defaults_upper)s" in event.value:
+                error("%(defaults_upper)s variable expansion should only be specified as part of defaults.", event)
             state = IN_GENERIC_KEY_VALUE
         elif state == IN_TAG_KEY:
             if type(event) != ScalarEvent:
