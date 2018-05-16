@@ -26,7 +26,7 @@ env:
 #!/bin/bash -e
 
 cmake $SOURCEDIR                                    \
-  -DGEANT4_INSTALL_DATA_TIMEOUT=1500                \
+  -DGEANT4_INSTALL_DATA_TIMEOUT=2000                \
   -DCMAKE_CXX_FLAGS="-fPIC"                         \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"        \
   -DCMAKE_INSTALL_LIBDIR="lib"                      \
