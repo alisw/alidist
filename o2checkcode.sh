@@ -85,3 +85,19 @@ fi
 
 # Filter the actual errors from the log. Break with nonzero if errors are found
 ! ( grep " error:" error-log.txt )
+
+# Dummy modulefile
+mkdir -p $INSTALLROOT/etc/modulefiles
+cat > $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
+# Our environment
+setenv O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+EoF
