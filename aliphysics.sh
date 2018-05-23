@@ -13,14 +13,20 @@ prepend_path:
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+  cp -v compile_commands.json ${INSTALLROOT}
+  DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
+  if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
+    sed -i.deleteme -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+    rm -f compile_commands.json.deleteme
+    ln -nfs "$BUILDDIR/compile_commands.json" "$DEVEL_SOURCES/compile_commands.json"
+  fi
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-# Picking up ROOT from the system when our is disabled
-if [ "X$ROOT_ROOT" = X ]; then
-  ROOT_ROOT="$(root-config --prefix)"
-fi
+
+# Picking up ROOT from the system when ours is disabled
+[[ -z "$ROOT_ROOT" ]] && ROOT_ROOT="$(root-config --prefix)"
 
 # Uses the same setup as AliRoot
 if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
@@ -29,6 +35,7 @@ fi
 
 cmake "$SOURCEDIR"                                                 \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                           \
       -DROOTSYS="$ROOT_ROOT"                                       \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
@@ -41,6 +48,15 @@ cmake "$SOURCEDIR"                                                 \
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+
+# Copy the compile commands in the installation and source directory (only if devel mode!)
+cp -v compile_commands.json ${INSTALLROOT}
+DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
+if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  sed -i.deleteme -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  rm -f compile_commands.json.deleteme
+  ln -nfs "$BUILDDIR/compile_commands.json" "$DEVEL_SOURCES/compile_commands.json"
+fi
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
   && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"  \

@@ -20,6 +20,13 @@ source: https://github.com/alisw/AliRoot
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+  cp -v ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
+  if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
+    sed -i.deleteme -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+    rm -f compile_commands.json.deleteme
+    ln -nfs "$BUILDDIR/compile_commands.json" "$DEVEL_SOURCES/compile_commands.json"
+  fi
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -44,6 +51,7 @@ fi
 
 cmake $SOURCEDIR                                                     \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                          \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                             \
       -DROOTSYS="$ROOT_ROOT"                                         \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}    \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}           \
@@ -64,6 +72,15 @@ make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 [[ $ALICE_DAQ && ! $ALICE_DISABLE_DA_RPMS ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
+
+# Copy the compile commands in the installation and source directory (only if devel mode!)
+cp -v compile_commands.json ${INSTALLROOT}
+DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
+if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  sed -i.deleteme -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  rm -f compile_commands.json.deleteme
+  ln -nfs "$BUILDDIR/compile_commands.json" "$DEVEL_SOURCES/compile_commands.json"
+fi
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
 
