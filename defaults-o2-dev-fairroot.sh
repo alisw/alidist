@@ -61,6 +61,15 @@ overrides:
     version: dev
     tag: dev
     source: https://github.com/FairRootGroup/FairRoot
+    requires:
+      - generators
+      - simulation
+      - ROOT
+      - boost
+      - protobuf
+      - "GCC-Toolchain:(?!osx)"
+      - FairLogger
+      - FairMQ
   GEANT4:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git
