@@ -20,16 +20,12 @@ source: https://github.com/alisw/AliRoot
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
-  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-  DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
-  # This really means we are in development mode. We need to make sure we
-  # use the real path for sources in this case. We also copy the
-  # compile_commands.json file so that IDEs can make use of it directly, this
-  # is a departure from our "no changes in sourcecode" policy, but for a good reason
-  # and in any case the file is in gitignore.
-  if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
-    perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+  cp -v ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
+  if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
+    sed -i.deleteme -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+    rm -f compile_commands.json.deleteme
+    ln -nfs "$BUILDDIR/compile_commands.json" "$DEVEL_SOURCES/compile_commands.json"
   fi
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
@@ -77,18 +73,13 @@ make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 [[ $ALICE_DAQ && ! $ALICE_DISABLE_DA_RPMS ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }
 
-# install the compilation database so that we can post-check the code
-cp compile_commands.json ${INSTALLROOT}
-
-DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
-# This really means we are in development mode. We need to make sure we
-# use the real path for sources in this case. We also copy the
-# compile_commands.json file so that IDEs can make use of it directly, this
-# is a departure from our "no changes in sourcecode" policy, but for a good reason
-# and in any case the file is in gitignore.
-if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
-  perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+# Copy the compile commands in the installation and source directory (only if devel mode!)
+cp -v compile_commands.json ${INSTALLROOT}
+DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
+if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  sed -i.deleteme -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  rm -f compile_commands.json.deleteme
+  ln -nfs "$BUILDDIR/compile_commands.json" "$DEVEL_SOURCES/compile_commands.json"
 fi
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
