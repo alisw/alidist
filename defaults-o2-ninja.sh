@@ -1,12 +1,16 @@
-package: defaults-o2-prod
+package: defaults-o2-ninja
 version: v1
 env:
   CXXFLAGS: "-fPIC -O2 -std=c++14"
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "14"
+  CMAKE_GENERATOR: "Ninja"
 disable:
   - AliEn-Runtime
+  - grpc
+  - Ppconsul
+  - ApMon-CPP
 overrides:
   autotools:
     tag: v1.5.0
@@ -72,6 +76,16 @@ overrides:
   vgm:
     tag: "v4-4"
     source: https://github.com/vmc-project/vgm
+  FairRoot:
+    build_requires:
+      - googletest
+      - ninja
+  O2:
+     build_requires:
+       - ninja
+       - RapidJSON
+       - googlebenchmark
+       - AliTPCCommon
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

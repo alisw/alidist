@@ -8,18 +8,18 @@ requires:
   - Vc
   - hijing
   - HepMC3
-  - O2HLTCATracking
   - Configuration
   - Monitoring
   - ms_gsl
 build_requires:
   - RapidJSON
   - googlebenchmark
+  - AliTPCCommon
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -38,7 +38,8 @@ incremental_recipe: |
     export O2_ROOT=$INSTALLROOT
     # Clean up old coverage data
     find . -name "*.gcov" -o -name "*.gcda" -delete
-    CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
+    ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
+    ctest -R test_Framework --output-on-failure
   fi
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
@@ -61,6 +62,7 @@ valid_defaults:
   - o2-dev-fairroot
   - alo
   - o2-prod
+  - o2-ninja
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
@@ -88,7 +90,9 @@ esac
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror"
 fi
+
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DFairRoot_DIR=$FAIRROOT_ROOT                                                         \
       -DALICEO2_MODULAR_BUILD=ON                                                            \
@@ -116,17 +120,14 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
-      ${O2HLTCATRACKING_ROOT:+-DO2_TPCCA_TRACKING_LIB_DIR=$O2HLTCATRACKING_ROOT}            \
+      ${ALITPCCOMMON_ROOT:+-DALITPCCOMMON_DIR=$ALITPCCOMMON_ROOT}                           \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark
 
-if [[ $GIT_TAG == master ]]; then
-  CONTINUE_ON_ERROR=true
-fi
-make ${CONTINUE_ON_ERROR+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${JOBS+-j $JOBS} install
 
 # install the compilation database so that we can post-check the code
 cp compile_commands.json ${INSTALLROOT}
@@ -153,7 +154,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${HEPMC3_VERSION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION} ${O2HLTCATRACKING_VERSION:+O2HLTCATracking/$O2HLTCATRACKING_VERSION-$O2HLTCATRACKING_REVISION} ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION} ${CONFIGURATION_VERSION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
+module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${HEPMC3_VERSION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION} ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION} ${CONFIGURATION_VERSION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
 # Our environment
 setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
@@ -169,7 +170,8 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
   # Clean up old coverage data
   find . -name "*.gcov" -o -name "*.gcda" -delete
-  CTEST_OUTPUT_ON_FAILURE=1 ctest ${JOBS+-j $JOBS}
+  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
+  ctest -R test_Framework --output-on-failure
 fi
 
 # Create code coverage information to be uploaded

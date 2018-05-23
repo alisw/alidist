@@ -16,7 +16,7 @@ cp "${O2_ROOT}"/compile_commands.json .
 # We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
 # Heuristically guess source directory
-O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") ]) )')
+O2_SRC=$(python -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") and not "/AliTPCCommon/" in x["file"] ]) )')
 [[ -e "$O2_SRC"/CMakeLists.txt && -d "$O2_SRC"/.git ]]
 
 # We have something to compare our working directory to (ALIBUILD_BASE_HASH). We check only the
@@ -85,3 +85,19 @@ fi
 
 # Filter the actual errors from the log. Break with nonzero if errors are found
 ! ( grep " error:" error-log.txt )
+
+# Dummy modulefile
+mkdir -p $INSTALLROOT/etc/modulefiles
+cat > $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
+# Our environment
+setenv O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+EoF

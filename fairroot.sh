@@ -1,7 +1,7 @@
 package: FairRoot
-version: "%(tag_basename)s"
-tag: "alice-dev-20180413"
-source: https://github.com/alisw/FairRoot
+version: "%(short_hash)s"
+tag: "3b01d287cdd3a52cac981fab4a122e8a81ad4f4c"
+source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
   - simulation
@@ -46,6 +46,7 @@ esac
 [[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
 cmake $SOURCEDIR                                                                            \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
       ${MACOSX_RPATH:+-DMACOSX_RPATH=${MACOSX_RPATH}}                                       \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"                                                         \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
@@ -77,7 +78,7 @@ cmake $SOURCEDIR                                                                
 # on smaller machines.
 JOBS=$((${JOBS:-1}*2/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
-make -j$JOBS install
+cmake --build . -- -j$JOBS install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -93,6 +94,8 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0                                                                            \\
+            ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}          \\
+            ${FAIRMQ_VERSION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                          \\
             ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                          \\
             ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}          \\
             ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}                  \\
