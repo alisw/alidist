@@ -22,7 +22,7 @@ incremental_recipe: |
   # and in any case the file is in gitignore.
   if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
     perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json 2> /dev/null || true
+    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
   fi
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -65,7 +65,7 @@ DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
 # and in any case the file is in gitignore.
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json 2> /dev/null || true
+  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
 fi
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
