@@ -29,7 +29,7 @@ incremental_recipe: |
   # and in any case the file is in gitignore.
   if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
     perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json 2> /dev/null || true
+    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
   fi
   rsync -a $SOURCEDIR/test/ $INSTALLROOT/test
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$PKGVERSION-$PKGREVISION/"
@@ -88,7 +88,7 @@ DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
 # and in any case the file is in gitignore.
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json 2> /dev/null || true
+  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
 fi
 
 rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
