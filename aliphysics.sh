@@ -13,6 +13,17 @@ prepend_path:
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+  # This really means we are in development mode. We need to make sure we
+  # use the real path for sources in this case. We also copy the
+  # compile_commands.json file so that IDEs can make use of it directly, this
+  # is a departure from our "no changes in sourcecode" policy, but for a good reason
+  # and in any case the file is in gitignore.
+  if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+    perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+  fi
   [[ $CMAKE_BUILD_TYPE == COVERAGE ]] && mkdir -p "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/" && rsync -acv --filter='+ */' --filter='+ *.cpp' --filter='+ *.cc' --filter='+ *.h' --filter='+ *.gcno' --filter='- *' "$BUILDDIR/" "$WORK_DIR/$ARCHITECTURE/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -29,6 +40,7 @@ fi
 
 cmake "$SOURCEDIR"                                                 \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                           \
       -DROOTSYS="$ROOT_ROOT"                                       \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
@@ -41,6 +53,20 @@ cmake "$SOURCEDIR"                                                 \
 make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
+
+# install the compilation database so that we can post-check the code
+cp compile_commands.json ${INSTALLROOT}
+
+DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+# This really means we are in development mode. We need to make sure we
+# use the real path for sources in this case. We also copy the
+# compile_commands.json file so that IDEs can make use of it directly, this
+# is a departure from our "no changes in sourcecode" policy, but for a good reason
+# and in any case the file is in gitignore.
+if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+  perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+fi
 
 [[ $CMAKE_BUILD_TYPE == COVERAGE ]]                                                       \
   && mkdir -p "$WORK_DIR/${ARCHITECTURE}/profile-data/AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION/"  \
