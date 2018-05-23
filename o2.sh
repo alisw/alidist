@@ -159,7 +159,6 @@ module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION
 setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
 prepend-path PATH \$::env(O2_ROOT)/bin
-prepend-path MANPATH \$::env(O2_ROOT)/share/man
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
