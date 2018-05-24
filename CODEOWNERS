@@ -50,4 +50,4 @@ defaults-alo*       @alisw/mrrtf
 
 # Alien related stuff
 java*               @alisw/alien-experts 
-jalien*             @alisw/alienv-experts
+jalien*             @alisw/alien-experts
