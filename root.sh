@@ -63,7 +63,7 @@ fi
 [[ $NO_PYTHON ]] || { [[ $(python -c 'import sys; print(sys.version_info[0])') < 3 ]] || IS_PYTHON3=1; }
 
 if [[ $ALICE_DAQ ]]; then
-  # DAQ requires static ROOT, only supported by ./configure (not CMake).
+  # DAQ requires static ROOT, only supported by ./configure (not CMake)
   export ROOTSYS=$BUILDDIR
   $SOURCEDIR/configure                  \
     --with-pythia6-uscore=SINGLE        \
@@ -89,7 +89,7 @@ if [[ $ALICE_DAQ ]]; then
             soversion ${CXX11:+cxx11} ${CXX14:+cxx14} mysql xml"
   NO_FEATURES="ssl alien"
 else
-  # Normal ROOT build.
+  # Normal ROOT build
   cmake $SOURCEDIR                                                                       \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
@@ -128,11 +128,13 @@ else
         ${ALIEN_RUNTIME_VERSION:+-Dmonalisa=ON}                                          \
         -Dkrb5=OFF                                                                       \
         -Dgviz=OFF                                                                       \
+        -Dbuiltin_davix=OFF                                                              \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${IS_PYTHON3:+python python3}"
-  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz ${NO_PYTHON:+python python3}"
+  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
+               ${NO_PYTHON:+python python3} builtin_davix"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
