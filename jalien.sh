@@ -2,11 +2,11 @@ package: JAlien
 version: "%(tag_basename)s"
 tag: master
 source: https://gitlab.cern.ch/jalien/jalien.git
-build_requires:
- - Java
 requires:
  - Java
  - JAlien-XRootD
+build_requires:
+ - Java
 ---
 #! /bin/bash -e
 
