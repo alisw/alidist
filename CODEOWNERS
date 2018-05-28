@@ -47,3 +47,7 @@ vecgeom*            @alisw/simulation-experts
 # Muon Run3 Reconstruction Task Force
 alo*                @alisw/mrrtf
 defaults-alo*       @alisw/mrrtf
+
+# Alien related stuff
+java*               @alisw/alien-experts 
+jalien*             @alisw/alien-experts

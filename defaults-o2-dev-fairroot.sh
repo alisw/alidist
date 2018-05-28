@@ -49,9 +49,23 @@ overrides:
     tag: "v3.0.2"
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
+    requires:
+      - arrow
+      - FairRoot
+      - DDS
+      - Vc
+      - hijing
+      - HepMC3
+      - Configuration
+      - Monitoring
+      - ms_gsl
+      - FairMQ
     build_requires:
       - ms_gsl
       - lcov
+      - RapidJSON
+      - googlebenchmark
+      - AliTPCCommon
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.11.0"
