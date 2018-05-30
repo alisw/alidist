@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.2.5
+tag:  v1.9.1
 requires:
   - protobuf
 build_requires:
@@ -18,12 +18,16 @@ rsync -a $SOURCEDIR/ ./
 
 git submodule update --init # aie aie aie
 
-make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
+# gRPC has a custom Makefile which readily breaks with some environment vars, better to run it in a clean environment
+env -i HOME="$HOME" LC_CTYPE="${LC_ALL:-${LC_CTYPE:-$LANG}}" PATH="$PATH" USER="$USER" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
+
+# ldconfig won't work if we're not running make install as root, and that's ok, we don't need it
+sed -i 's/ldconfig/true/' ./Makefile
 make prefix=$INSTALLROOT install
 
 # Add missing symlink. Must be relative, because the directory is moved around after the build
 cd $INSTALLROOT/lib
-ln -s ./libgrpc++.so.1.2.5 ./libgrpc++.so.1
+ln -s ./libgrpc++.so.1.9.1 ./libgrpc++.so.1
 cd -
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
