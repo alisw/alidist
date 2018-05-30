@@ -25,11 +25,6 @@ env -i HOME="$HOME" LC_CTYPE="${LC_ALL:-${LC_CTYPE:-$LANG}}" PATH="$PATH" USER="
 sed -i 's/ldconfig/true/' ./Makefile
 make prefix=$INSTALLROOT install
 
-# Add missing symlink. Must be relative, because the directory is moved around after the build
-cd $INSTALLROOT/lib
-ln -s ./libgrpc++.so.1.9.1 ./libgrpc++.so.1
-cd -
-
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
@@ -44,7 +39,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
+setenv GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(GRPC_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(GRPC_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
 EoF
