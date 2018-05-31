@@ -1,5 +1,5 @@
 package: qcg
-version: "v1.1.2"
+version: "v1.1.6"
 requires:
   - node
   - QualityControl
