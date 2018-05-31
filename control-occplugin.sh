@@ -53,9 +53,9 @@ module load BASE/1.0 \\
             ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION}
 
 # Our environment
-setenv Control_OCCPlugin_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(Control_OCCPlugin_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(Control_OCCPlugin_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+set Control_OCCPlugin_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$Control_OCCPlugin_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$Control_OCCPlugin_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$Control_OCCPlugin_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
