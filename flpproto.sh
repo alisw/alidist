@@ -16,10 +16,16 @@ build_requires:
   - CMake
   - MySQL
 source: https://github.com/AliceO2Group/FlpPrototype
+valid_defaults:
+  - o2
+  - o2-dataflow
+  - o2-dev-fairroot
+  - alo
+  - o2-prod
+  - o2-ninja
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-
 ---
 #!/bin/bash -ex
 
