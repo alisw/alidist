@@ -55,7 +55,7 @@ overrides:
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   protobuf:
     version: "%(tag_basename)s"
-    tag: "v3.0.2"
+    tag: "v3.5.2"
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.11.0"
