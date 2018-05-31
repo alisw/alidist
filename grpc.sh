@@ -42,5 +42,5 @@ module load BASE/1.0
 setenv GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(GRPC_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GRPC_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GRPC_ROOT)/lib")
 EoF
