@@ -57,7 +57,7 @@ overrides:
     tag: "v5-09-20"
   protobuf:
     version: "%(tag_basename)s"
-    tag: "v3.0.2"
+    tag: "v3.5.2"
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.11.0"

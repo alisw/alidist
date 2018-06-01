@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.2.5
+tag:  v1.9.1
 requires:
   - protobuf
 build_requires:
@@ -18,13 +18,12 @@ rsync -a $SOURCEDIR/ ./
 
 git submodule update --init # aie aie aie
 
-make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
-make prefix=$INSTALLROOT install
+# gRPC has a custom Makefile which readily breaks with some environment vars, better to run it in a clean environment
+env -i HOME="$HOME" LC_CTYPE="${LC_ALL:-${LC_CTYPE:-$LANG}}" PATH="$PATH" USER="$USER" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
 
-# Add missing symlink. Must be relative, because the directory is moved around after the build
-cd $INSTALLROOT/lib
-ln -s ./libgrpc++.so.1.2.5 ./libgrpc++.so.1
-cd -
+# ldconfig won't work if we're not running make install as root, and that's ok, we don't need it
+sed -i 's/ldconfig/true/' ./Makefile
+make prefix=$INSTALLROOT install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -40,7 +39,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$GRPC_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$GRPC_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GRPC_ROOT/lib")
 EoF
