@@ -21,6 +21,8 @@ LIBEXT=so
 case $ARCHITECTURE in
     osx*)
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+      [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
+      [[ ! $GRPC_ROOT ]] && GRPC_ROOT=$(brew --prefix grpc)
       LIBEXT=dylib
     ;;
 esac
