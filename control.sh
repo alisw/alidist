@@ -1,30 +1,12 @@
 package: Control
-version: "%(commit_hash)s"
-tag:  master
+version: "v%(year)s%(month)s%(day)s"
 requires:
-  - coconut
-build_requires:
   - golang
-  - protobuf
-source: https://github.com/AliceO2Group/Control
-incremental_recipe: |
-  make WHAT="octld octl-executor" all
-  mkdir -p $INSTALLROOT/bin
-  cp bin/* $INSTALLROOT/bin
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  - Control-Core
+  - Control-OCCPlugin
+  - coconut
 ---
 #!/bin/bash -e
-
-GOPATH=$PWD
-PATH=$GOPATH/bin:$PATH
-BUILD=$GOPATH/src/github.com/AliceO2Group/Control
-mkdir -p $BUILD
-rsync -a --delete $SOURCEDIR/ $BUILD/
-cd $BUILD
-make WHAT="octld octl-executor" all
-mkdir -p $INSTALLROOT/bin
-cp bin/* $INSTALLROOT/bin
-cd -
 
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
@@ -37,7 +19,10 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \\
-            ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
+            ${GOLANG_VERSION:+golang/$GOLANG_VERSION-$GOLANG_REVISION} \\
+            ${CONTROL_CORE_VERSION:+Control-Core/$CONTROL_CORE_VERSION-$CONTROL_CORE_REVISION} \\
+            ${CONTROL_OCCPLUGIN_VERSION:+Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION} \\
+            ${COCONUT_VERSION:+coconut/$COCONUT_VERSION-$COCONUT_REVISION}
 
 # Our environment
 set Control_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
