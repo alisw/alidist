@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "3b01d287cdd3a52cac981fab4a122e8a81ad4f4c"
+tag: "5300e7be8a757da3abde3344020656839a4ee06f"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -11,6 +11,8 @@ requires:
   - boost
   - protobuf
   - DDS
+  - FairLogger
+  - FairMQ
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - googletest
