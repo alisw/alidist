@@ -30,8 +30,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${JAVA_ROOT:+Java/$JAVA_VERSION-$JAVA_REVISION} ${JALIEN_XROOTD_ROOT:+JAlien-XRootD/$JALIEN_XROOTD_VERSION-$JALIEN_XROOTD_REVISION}
+module load BASE/1.0 ${JAVA_ROOT:+Java/$JAVA_VERSION-$JAVA_REVISION} ${XROOTD_ROOT:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
 # Our environment
-setenv JALIEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path CLASSPATH \$::env(JALIEN_ROOT)/lib/alien-users.jar
+set JALIEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path CLASSPATH \$JALIEN_ROOT/lib/alien-users.jar
 EoF
