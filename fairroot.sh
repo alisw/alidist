@@ -31,9 +31,7 @@ case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
-    [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
-    [[ ! $NANOMSG_ROOT ]] && NANOMSG_ROOT=`brew --prefix nanomsg`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     MACOSX_RPATH=OFF
     SONAME=dylib
@@ -58,13 +56,11 @@ cmake $SOURCEDIR                                                                
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \
       -DFAIRROOT_MODULAR_BUILD=ON                                                           \
       ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                                     \
-      ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                                            \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                               \
       ${BOOST_ROOT:+-DBOOST_INCLUDEDIR=$BOOST_ROOT/include}                                 \
       ${BOOST_ROOT:+-DBOOST_LIBRARYDIR=$BOOST_ROOT/lib}                                     \
       -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}                                      \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                      \
-      -DGTEST_ROOT=$GOOGLETEST_ROOT                                                         \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}           \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME} \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}      \
@@ -72,10 +68,6 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
-# Limit the number of build processes to avoid exahusting memory when building
-# on smaller machines.
-JOBS=$((${JOBS:-1}*2/5))
-[[ $JOBS -gt 0 ]] || JOBS=1
 cmake --build . -- -j$JOBS install
 
 # Modulefile
