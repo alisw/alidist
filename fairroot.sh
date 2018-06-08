@@ -6,16 +6,12 @@ requires:
   - generators
   - simulation
   - ROOT
-  - ZeroMQ
-  - nanomsg
   - boost
   - protobuf
   - DDS
   - FairLogger
   - FairMQ
   - "GCC-Toolchain:(?!osx)"
-build_requires:
-  - googletest
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
   GEOMPATH:   "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
