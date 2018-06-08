@@ -4,15 +4,18 @@ tag: master
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
  - Java
- - JAlien-XRootD
+ - XRootD
 build_requires:
  - Java
+valid_defaults:
+ - jalien
 ---
-#! /bin/bash -e
+#!/bin/bash -e
 
 rsync -av $SOURCEDIR/ ./
 ./compile.sh users
-rsync -av . $INSTALLROOT/
+mkdir -p $INSTALLROOT/lib
+cp alien-users.jar $INSTALLROOT/lib/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -30,6 +33,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${JAVA_ROOT:+Java/$JAVA_VERSION-$JAVA_REVISION} ${JALIEN_XROOTD_ROOT:+JAlien-XRootD/$JALIEN_XROOTD_VERSION-$JALIEN_XROOTD_REVISION}
 # Our environment
 setenv JALIEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(JALIEN_ROOT)
-prepend-path LD_LIBRARY_PATH \$::env(JALIEN_ROOT)/lib
+prepend-path CLASSPATH \$::env(JALIEN_ROOT)/lib/alien-users.jar
 EoF

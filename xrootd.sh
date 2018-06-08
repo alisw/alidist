@@ -1,7 +1,7 @@
 package: XRootD
-version: "%(tag_basename)s"
-tag: v3.3.6-alice2
-source: https://github.com/alisw/xrootd.git
+version: "%(short_hash)s"
+tag: "157ee37e33133fae3f3bc6483491eae698409b7a"
+source: https://github.com/xrootd/xrootd.git
 build_requires:
  - CMake
  - "OpenSSL:(?!osx)"
@@ -13,7 +13,7 @@ build_requires:
 #!/bin/bash -e
 case $ARCHITECTURE in 
   osx*)
-    [ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
+      [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
   ;;
 esac
 cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
