@@ -1,6 +1,6 @@
 package: coconut
 version: "%(commit_hash)s"
-tag:  master
+tag: master
 build_requires:
   - golang
   - protobuf
@@ -8,8 +8,8 @@ source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
 
-export GOPATH=$PWD
-PATH=$GOPATH/bin:$PATH
+export GOPATH=$PWD/go
+export PATH=$GOPATH/bin:$PATH
 BUILD=$GOPATH/src/github.com/AliceO2Group/Control
 mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/

@@ -8,8 +8,7 @@ prefer_system_check: |
 #!/bin/bash -e
 
 ARCH=$(uname|tr '[:upper:]' '[:lower:]')-amd64
-SOURCE=https://golang.org/dl/go$PKGVERSION.$ARCH.tar.gz
-curl -LO $SOURCE
+curl -LO https://golang.org/dl/go$PKGVERSION.$ARCH.tar.gz
 tar --strip-components=1 -C $INSTALLROOT -xzf go$PKGVERSION.$ARCH.tar.gz
 
 mkdir -p etc/modulefiles
