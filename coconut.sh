@@ -8,7 +8,7 @@ source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
 
-GOPATH=$PWD
+export GOPATH=$PWD
 PATH=$GOPATH/bin:$PATH
 BUILD=$GOPATH/src/github.com/AliceO2Group/Control
 mkdir -p $BUILD
