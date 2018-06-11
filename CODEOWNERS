@@ -8,7 +8,6 @@ configuration*      @alisw/dataflow-experts
 control*            @alisw/dataflow-experts
 datasampling*       @alisw/dataflow-experts
 flpproto*           @alisw/dataflow-experts
-golang              @alisw/dataflow-experts
 infologger*         @alisw/dataflow-experts
 monitoring*         @alisw/dataflow-experts
 pda*                @alisw/dataflow-experts

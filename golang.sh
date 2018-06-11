@@ -3,24 +3,11 @@ version: "1.10.2"
 build_requires:
   - curl
 prefer_system_check: |
-  which go && case `go version | sed -e 's/go version go//' | sed -e 's/ .*//'` in 0*|1.[0-9].*) exit 1 ;; esac
-incremental_recipe: |
-  case $ARCHITECTURE in
-    osx*) ARCH=darwin-amd64 ;;
-    *) ARCH=linux-amd64 ;;
-  esac
-  SOURCE=https://golang.org/dl/go$PKGVERSION.$ARCH.tar.gz
-  curl -LO $SOURCE
-  tar --strip-components=1 -C $INSTALLROOT -xzf go$PKGVERSION.$ARCH.tar.gz
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  case `go version | sed -e 's/go version go//' | sed -e 's/ .*//'` in 0*|1.[0-9].*) exit 1 ;; esac
 ---
 #!/bin/bash -e
 
-case $ARCHITECTURE in
-  osx*) ARCH=darwin-amd64 ;;
-  *) ARCH=linux-amd64 ;;
-esac
-
+ARCH=$(uname|tr '[:upper:]' '[:lower:]')-amd64
 SOURCE=https://golang.org/dl/go$PKGVERSION.$ARCH.tar.gz
 curl -LO $SOURCE
 tar --strip-components=1 -C $INSTALLROOT -xzf go$PKGVERSION.$ARCH.tar.gz
