@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "5300e7be8a757da3abde3344020656839a4ee06f"
+tag: "717dccd866ec07af10db1e021d189e9ff2ce0209"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
