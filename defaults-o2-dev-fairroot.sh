@@ -5,6 +5,7 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "14"
+  CMAKE_GENERATOR: "Ninja"
 disable:
   - AliEn-Runtime
   - AliRoot
@@ -49,20 +50,9 @@ overrides:
     tag: "v3.5.2"
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
-    requires:
-      - arrow
-      - FairRoot
-      - DDS
-      - Vc
-      - hijing
-      - HepMC3
-      - Configuration
-      - Monitoring
-      - ms_gsl
-      - FairMQ
     build_requires:
-      - ms_gsl
       - lcov
+      - ninja
       - RapidJSON
       - googlebenchmark
       - AliTPCCommon
@@ -75,15 +65,9 @@ overrides:
     version: dev
     tag: dev
     source: https://github.com/FairRootGroup/FairRoot
-    requires:
-      - generators
-      - simulation
-      - ROOT
-      - boost
-      - protobuf
-      - "GCC-Toolchain:(?!osx)"
-      - FairLogger
-      - FairMQ
+    build_requires:
+      - googletest
+      - ninja
   GEANT4:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git

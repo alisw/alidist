@@ -11,6 +11,7 @@ requires:
   - Configuration
   - Monitoring
   - ms_gsl
+  - FairMQ
 build_requires:
   - RapidJSON
   - googlebenchmark
