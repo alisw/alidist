@@ -5,6 +5,7 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "14"
+  CMAKE_GENERATOR: "Ninja"
 disable:
   - AliEn-Runtime
   - AliRoot
@@ -46,23 +47,12 @@ overrides:
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   protobuf:
     version: "%(tag_basename)s"
-    tag: "v3.0.2"
+    tag: "v3.5.2"
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
-    requires:
-      - arrow
-      - FairRoot
-      - DDS
-      - Vc
-      - hijing
-      - HepMC3
-      - Configuration
-      - Monitoring
-      - ms_gsl
-      - FairMQ
     build_requires:
-      - ms_gsl
       - lcov
+      - ninja
       - RapidJSON
       - googlebenchmark
       - AliTPCCommon
@@ -75,15 +65,9 @@ overrides:
     version: dev
     tag: dev
     source: https://github.com/FairRootGroup/FairRoot
-    requires:
-      - generators
-      - simulation
-      - ROOT
-      - boost
-      - protobuf
-      - "GCC-Toolchain:(?!osx)"
-      - FairLogger
-      - FairMQ
+    build_requires:
+      - googletest
+      - ninja
   GEANT4:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git
