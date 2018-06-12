@@ -12,6 +12,7 @@ requires:
   - DataSampling
   - Readout
   - QualityControl
+  - qcg
 build_requires:
   - CMake
   - MySQL
