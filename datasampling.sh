@@ -1,12 +1,13 @@
 package: DataSampling
 version: "%(tag_basename)s"
-tag: v0.1.1
+tag: v0.1.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - InfoLogger
   - FairRoot
+  - FairMQ
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/DataSampling
@@ -21,6 +22,7 @@ case $ARCHITECTURE in
 esac
 
 cmake $SOURCEDIR                                              \
+      -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
