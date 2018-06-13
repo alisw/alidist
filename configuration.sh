@@ -5,9 +5,9 @@ requires:
   - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - RapidJSON
   - "Ppconsul:(?!osx)"
 build_requires:
+  - RapidJSON
   - CMake
 source: https://github.com/AliceO2Group/Configuration
 incremental_recipe: |
