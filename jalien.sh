@@ -1,12 +1,12 @@
-package: JAlien
+package: JAliEn
 version: "%(tag_basename)s"
-tag: master
+tag: "0.0.0"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
- - Java
+ - JDK
  - XRootD
 build_requires:
- - Java
+ - JDK
 valid_defaults:
  - jalien
 ---
@@ -16,6 +16,8 @@ rsync -av $SOURCEDIR/ ./
 ./compile.sh users
 mkdir -p $INSTALLROOT/lib
 cp alien-users.jar $INSTALLROOT/lib/
+
+rsync -av $PWD/bin/ $INSTALLROOT/bin/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -30,8 +32,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${JAVA_ROOT:+Java/$JAVA_VERSION-$JAVA_REVISION} ${XROOTD_ROOT:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
+module load BASE/1.0 JDK/$JDK_VERSION-$JDK_REVISION ${XROOTD_ROOT:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
 # Our environment
 set JALIEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path CLASSPATH \$JALIEN_ROOT/lib/alien-users.jar
+prepend-path PATH \$JALIEN_ROOT/bin
 EoF

@@ -1,7 +1,7 @@
 package: XRootD
-version: "%(short_hash)s"
-tag: "6e04f7dc29f7f99677883650cf41e8e80eac4d31"
-source: https://github.com/xrootd/xrootd
+version: "%(tag_basename)s"
+tag: v3.3.6-alice2
+source: https://github.com/alisw/xrootd.git
 build_requires:
  - CMake
  - "OpenSSL:(?!osx)"
@@ -13,7 +13,7 @@ build_requires:
 #!/bin/bash -e
 case $ARCHITECTURE in 
   osx*)
-      [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
+    [ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
   ;;
 esac
 cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
@@ -45,7 +45,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(XROOTD_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(XROOTD_ROOT)/lib
+set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$XROOTD_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
 EoF

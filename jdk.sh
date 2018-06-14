@@ -2,15 +2,20 @@ package: JDK
 version: "10.0.1"
 build_requires:
  - curl
+
+prefer_system: "(?!osx)"
+prefer_system_check: |
+    javac &> /dev/null && case `javac --version | awk '{print $2}'` in [0-9].*|10.0.0) exit 1 ;; esac
 ---
 #!/bin/bash -e
-ZIP_NAME="jdk-$PKGVERSION_linux-x64_bin.tar.gz"
-UNZIP_NAME="jdk-$PKGVERSION"
+
+[[ $(uname) != Linux ]] && { echo "Works on Linux only"; false; }
+
+ZIP_NAME="jdk-${PKGVERSION}_linux-x64_bin.tar.gz"
 URL="http://download.oracle.com/otn-pub/java/jdk/10.0.1+10/fb4372174a714e6b8c52526dc134031e/$ZIP_NAME"
-curl -b "oraclelicense=a" -L -O $URL
-tar xvfz $ZIP_NAME
-rsync -av $UNZIP_NAME/ $INSTALLROOT/
-export  PATH=$INSTALLROOT/Java/bin:$PATH
+
+mkdir -p "$INSTALLROOT"
+curl -b "oraclelicense=a" -L $URL | tar --strip-components 1 -C "$INSTALLROOT" -xvz 
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -27,6 +32,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv JAVA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(JAVA_ROOT)/bin
+set JDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$JDK_ROOT/bin
 EoF
