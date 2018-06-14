@@ -70,6 +70,13 @@ cmake $SOURCEDIR                                                                
 
 cmake --build . -- -j$JOBS install
 
+INCLUDE_TREE="$INSTALLROOT/include_tree"
+mkdir -p $INCLUDE_TREE
+SUBDIRS="source sink field event sim steer"
+for dir in $SUBDIRS; do
+    ln -sf "../include" $INCLUDE_TREE/$dir
+done
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -106,5 +113,6 @@ setenv CONFIG_DIR \$::env(VMCWORKDIR)/common/gconfig
 prepend-path PATH \$::env(FAIRROOT_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FAIRROOT_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(FAIRROOT_ROOT)/include
+prepend-path ROOT_INCLUDE_PATH \$::env(FAIRROOT_ROOT)/include_tree
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FAIRROOT_ROOT)/lib")
 EoF
