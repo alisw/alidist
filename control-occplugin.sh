@@ -2,7 +2,8 @@ package: Control-OCCPlugin
 version: "%(commit_hash)s"
 tag:  master
 requires:
-  - FairRoot
+  - FairMQ
+  - FairLogger
   - boost
   - grpc
   - protobuf
@@ -32,7 +33,8 @@ cmake $SOURCEDIR/occplugin                                                      
       ${BOOST_ROOT:+-DBOOSTPATH=$BOOST_ROOT}                                             \
       -DGRPCPATH=${GRPC_ROOT}                                                            \
       -DPROTOBUFPATH=${PROTOBUF_ROOT}                                                    \
-      -DFAIRROOTPATH=${FAIRROOT_ROOT}
+      -DFAIRMQPATH=${FAIRMQ_ROOT}                                                        \
+      -DFAIRLOGGERPATH=${FAIRLOGGER_ROOT}
 
 make ${JOBS+-j $JOBS} prefix=$INSTALLROOT
 make prefix=$INSTALLROOT install
@@ -51,7 +53,8 @@ module load BASE/1.0 \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${PROTOBUF_VERSION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION} \\
-            ${FAIRROOT_VERSION:+FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION} \\
+            ${FAIRMQ_VERSION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION} \\
+            ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION} \\
             ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION}
 
 # Our environment

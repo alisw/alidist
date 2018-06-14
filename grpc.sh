@@ -21,14 +21,14 @@ git submodule update --init # aie aie aie
 # gRPC has a custom Makefile which readily breaks with some environment vars, better to run it in a clean environment
 env -i HOME="$HOME" LC_CTYPE="${LC_ALL:-${LC_CTYPE:-$LANG}}" PATH="$PATH" USER="$USER" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
 
-# Add missing symlink. Must be relative, because the directory is moved around after the build.
-# This should normally not be necessary, but it is made necessary by the issues linked in the following upstream pull request: https://github.com/grpc/grpc/pull/13500
-# Once the issue gets fixed, it should be safe to remove this workaround.
-ln -s libgrpc++.so.%(tag_basename)s $INSTALLROOT/lib/libgrpc++.so.1
-
 # ldconfig won't work if we're not running make install as root, and that's ok, we don't need it
 sed -i 's/ldconfig/true/' ./Makefile
 make prefix=$INSTALLROOT install
+
+# Add missing symlink. Must be relative, because the directory is moved around after the build.
+# This should normally not be necessary, but it is made necessary by the issues linked in the following upstream pull request: https://github.com/grpc/grpc/pull/13500
+# Once the issue gets fixed, it should be safe to remove this workaround.
+ln -s libgrpc++.so.${PKGVERSION#v} $INSTALLROOT/lib/libgrpc++.so.1
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
