@@ -190,9 +190,9 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
-                     ${OPENSSL_VERSION:+OpenSSL/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}                 \\
-                     ${XROOTD_VERSION:+XRootD/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}                   \\
-                     ${LIBXML2_VERSION:+libxml2/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}                 \\
+                     ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
+                     ${XROOTD_VERSION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}                                 \\
+                     ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
                      ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
                      ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
