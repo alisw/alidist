@@ -70,8 +70,9 @@ cmake $SOURCEDIR                                                                
 
 cmake --build . -- -j$JOBS install
 
+# Work around hardcoded paths in PCM
 for DIR in source sink field event sim steer; do
-    ln -nfs ../include $INSTALLROOT/include/$DIR
+  ln -nfs ../include $INSTALLROOT/include/$DIR
 done
 
 # Modulefile
