@@ -2,7 +2,7 @@
 *                   @alisw/infrastructure-admins
 
 # Dataflow team
-coconut             @alisw/dataflow-experts
+coconut*            @alisw/dataflow-experts
 common-o2*          @alisw/dataflow-experts
 configuration*      @alisw/dataflow-experts
 control*            @alisw/dataflow-experts

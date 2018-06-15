@@ -1,5 +1,5 @@
 package: Control-OCCPlugin
-version: "v%(year)s%(month)s%(day)s-%(commit_hash)s"
+version: "v%(year)s%(month)s%(day)s-%(short_hash)s"
 tag:  master
 requires:
   - FairMQ
