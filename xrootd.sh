@@ -11,7 +11,7 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
-case $ARCHITECTURE in 
+case $ARCHITECTURE in
   osx*)
     [ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
   ;;
