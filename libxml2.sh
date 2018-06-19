@@ -1,5 +1,5 @@
 package: libxml2
-version: v2.9.3
+version: "%(tag_basename)s"
 tag: v2.9.3
 build_requires:
   - autotools
