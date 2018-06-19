@@ -17,8 +17,19 @@ overrides:
     version: "10.0.1_JALIEN"
   libxml2:
     version: "%(tag_basename)s_JALIEN"
+    overrides:
+    requires:
+      - zlib
+    build_requires:
+      - autotools
+      - "GCC-Toolchain:(?!osx)"
   OpenSSL:
     version: "v1.0.2o_JALIEN"
+    overrides:
+    requires:
+      - zlib
+    build_requires:
+      - "GCC-Toolchain:(?!osx)"
   ApMon-CPP:
     version: "%(tag_basename)s"
 ---
