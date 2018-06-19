@@ -17,16 +17,18 @@ case $ARCHITECTURE in
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
   ;;
 esac
-cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
-                   -DCMAKE_INSTALL_LIBDIR=lib                         \
-                   -DENABLE_CRYPTO=TRUE                               \
-                   -DENABLE_PERL=FALSE                                \
-                   -DENABLE_KRB5=FALSE                                \
-                   -DENABLE_READLINE=FALSE                            \
-                   -DCMAKE_BUILD_TYPE=RelWithDebInfo                  \
-                   ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}  \
-                   -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"      \
-                   -DZLIB_ROOT=$ZLIB_ROOT
+cmake "$SOURCEDIR"                                      \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}         \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
+      -DCMAKE_INSTALL_LIBDIR=lib                        \
+      -DENABLE_CRYPTO=ON                                \
+      -DENABLE_PERL=OFF                                 \
+      -DENABLE_KRB5=OFF                                 \
+      -DENABLE_READLINE=OFF                             \
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo                 \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"     \
+      -DZLIB_ROOT=$ZLIB_ROOT
 make ${JOBS:+-j$JOBS}
 make install
 
