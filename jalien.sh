@@ -14,10 +14,9 @@ valid_defaults:
 
 rsync -av $SOURCEDIR/ ./
 ./compile.sh users
-mkdir -p $INSTALLROOT/lib
+mkdir -p $INSTALLROOT/{bin,lib}
 cp alien-users.jar $INSTALLROOT/lib/
-
-rsync -av $PWD/bin/ $INSTALLROOT/bin/
+rsync -av bin/ $INSTALLROOT/bin/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
