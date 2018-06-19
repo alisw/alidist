@@ -2,7 +2,6 @@ package: JDK
 version: "10.0.1"
 build_requires:
  - curl
-
 prefer_system: "(?!osx)"
 prefer_system_check: |
     javac &> /dev/null && case `javac --version | awk '{print $2}'` in [0-9].*|10.0.0) exit 1 ;; esac
