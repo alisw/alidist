@@ -1,5 +1,5 @@
 package: coconut
-version: "%(commit_hash)s"
+version: "v%(year)s%(month)s%(day)s-%(short_hash)s"
 tag: master
 build_requires:
   - golang

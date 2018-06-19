@@ -1,5 +1,5 @@
 package: Control-OCCPlugin
-version: "%(commit_hash)s"
+version: "v%(year)s%(month)s%(day)s-%(short_hash)s"
 tag:  master
 requires:
   - FairMQ
@@ -58,9 +58,9 @@ module load BASE/1.0 \\
             ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION}
 
 # Our environment
-set Control_OCCPlugin_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$Control_OCCPlugin_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$Control_OCCPlugin_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$Control_OCCPlugin_ROOT/lib")
+setenv CONTROL_OCCPLUGIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

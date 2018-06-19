@@ -1,6 +1,6 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.2.5
+tag: v1.2.6
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
@@ -48,7 +48,9 @@ cmake $SOURCEDIR                                                 \
       -DCMAKE_INSTALL_BINDIR=bin
 
 cmake --build . ${JOBS:+-- -j$JOBS}
-ctest ${JOBS:+-j$JOBS}
+# Exclude running the protocols test suite for now, because it needs certain
+# hardcoded TCP ports to be unused, which is sometimes not the case.
+ctest -E "FairMQ.Protocols" ${JOBS:+-j$JOBS}
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 # ModuleFile
