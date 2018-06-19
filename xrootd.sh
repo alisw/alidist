@@ -11,13 +11,14 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
+
 case $ARCHITECTURE in
   osx*)
-    [ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
+    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
   ;;
 esac
 cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
-                   -DCMAKE_INSTALL_LIBDIR=$INSTALLROOT/lib            \
+                   -DCMAKE_INSTALL_LIBDIR=lib                         \
                    -DENABLE_CRYPTO=TRUE                               \
                    -DENABLE_PERL=FALSE                                \
                    -DENABLE_KRB5=FALSE                                \
@@ -28,7 +29,6 @@ cmake "$SOURCEDIR" -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
                    -DZLIB_ROOT=$ZLIB_ROOT
 make ${JOBS:+-j$JOBS}
 make install
-ln -sf lib $INSTALLROOT/lib64
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -43,7 +43,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 \\
+            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
+            ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}
 # Our environment
 set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XROOTD_ROOT/bin
