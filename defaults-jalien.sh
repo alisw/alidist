@@ -2,7 +2,6 @@ package: defaults-jalien
 version: v1
 overrides:
   xrootd:
-    version: "%(tag_basename)s"
     tag: "v4.8.3"
     source: https://github.com/xrootd/xrootd
 ---
