@@ -40,6 +40,8 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
       - libpng
       - lzma
+      - libxml2
+      - OpenSSL
   AliRoot:
     version: "%(commit_hash)s_O2"
     requires:
