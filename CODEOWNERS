@@ -50,6 +50,7 @@ vecgeom*            @alisw/simulation-experts
 alo*                @alisw/mrrtf
 defaults-alo*       @alisw/mrrtf
 
-# Alien related stuff
-java*               @alisw/alien-experts 
+# JAliEn-related stuff
+jdk*                @alisw/alien-experts
 jalien*             @alisw/alien-experts
+defaults-jalien*    @alisw/alien-experts
