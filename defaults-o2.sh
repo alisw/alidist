@@ -41,7 +41,8 @@ overrides:
       - libpng
       - lzma
       - libxml2
-      - OpenSSL
+      - "OpenSSL:(?!osx)"
+      - "osx-system-openssl:(osx.*)"
   AliRoot:
     version: "%(commit_hash)s_O2"
     requires:
