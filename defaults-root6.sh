@@ -34,6 +34,12 @@ overrides:
   AliPhysics:
     version: "%(commit_hash)s_ROOT6"
     tag: v5-09-33-01
+  GEANT4:
+    tag: v10.3.3
+    source: https://gitlab.cern.ch/geant4/geant4.git
+  GEANT4_VMC:
+    tag: "v3-5"
+    source: https://github.com/vmc-project/geant4_vmc
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
