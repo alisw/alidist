@@ -9,6 +9,8 @@ build_requires:
   - flatbuffers
   - CMake
   - "GCC-Toolchain:(?!osx)"
+env:
+  ARROW_HOME: "$ARROW_ROOT"
 ---
 mkdir -p $INSTALLROOT
 case $ARCHITECTURE in
@@ -35,6 +37,7 @@ cmake $SOURCEDIR/cpp                       \
       -DARROW_HDFS=OFF                     \
       -DARROW_IPC=ON                       \
       -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT \
+      -DCMAKE_INSTALL_LIBDIR="lib"         \
       -DARROW_USE_SSE=ON                   \
       -DARROW_WITH_LZ4=ON                  \
       -DARROW_WITH_SNAPPY=OFF              \
@@ -65,7 +68,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
-setenv ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ARROW_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ARROW_ROOT)/lib")
+setenv ARROW_HOME \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(ARROW_HOME)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ARROW_HOME)/lib")
 EoF
