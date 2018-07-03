@@ -63,7 +63,7 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   ROOT_PYTHON_FLAGS="-Dpython=ON"
   ROOT_PYTHON_FEATURES="python"
   ROOT_HAS_PYTHON=1
-  [[ ! $PYTHON_VERSION ]] || ROOT_PYTHON_FLAGS="$ROOT_PYTHON_FLAGS -DPYTHON_EXECUTABLE=$PYTHON_ROOT/bin/python -DPYTHON_INCLUDE_DIR=$PYTHON_ROOT/include"
+  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
 else
   # Non-ROOT 6 builds: disable Python
   ROOT_PYTHON_FLAGS="-Dpython=OFF"
