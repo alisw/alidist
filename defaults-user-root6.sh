@@ -1,4 +1,4 @@
-package: defaults-user
+package: defaults-user-root6
 version: v1
 env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
@@ -16,9 +16,8 @@ overrides:
     version: "%(tag_basename)s"
     tag: v5-09-33-01
   ROOT:
-    version: "%(tag_basename)s"
-    version: "%(tag_basename)s"
-    tag: "v6-10-08"
+    version: "v6-14-00+git_%(short_hash)s"
+    tag: "77868d9d46aefa79abbe34776c3617c80c48374b"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)

@@ -12,8 +12,8 @@ overrides:
       which gfortran || { echo "gfortran missing"; exit 1; }
       which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x060200)\n#error \"System's GCC cannot be used: we need at least GCC 6.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
-    version: "%(tag_basename)s"
-    tag: "v6-10-08"
+    version: "v6-14-00+git_%(short_hash)s"
+    tag: "77868d9d46aefa79abbe34776c3617c80c48374b"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
@@ -34,6 +34,12 @@ overrides:
   AliPhysics:
     version: "%(commit_hash)s_ROOT6"
     tag: v5-09-33-01
+  GEANT4:
+    tag: v10.3.3
+    source: https://gitlab.cern.ch/geant4/geant4.git
+  GEANT4_VMC:
+    tag: "v3-5"
+    source: https://github.com/vmc-project/geant4_vmc
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

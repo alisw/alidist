@@ -26,7 +26,7 @@ incremental_recipe: |
     done
     export ROOTSYS=$INSTALLROOT
   fi
-  make ${JOBS:+-j$JOBS} install
+  cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -58,12 +58,21 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 fi
 
-# Disable Python for non-ROOT 6 builds
-[[ -d $SOURCEDIR/interpreter/llvm ]] || NO_PYTHON=1
-[[ $NO_PYTHON ]] || { [[ $(python -c 'import sys; print(sys.version_info[0])') < 3 ]] || IS_PYTHON3=1; }
+if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
+  # ROOT 6+: enable Python
+  ROOT_PYTHON_FLAGS="-Dpython=ON"
+  ROOT_PYTHON_FEATURES="python"
+  ROOT_HAS_PYTHON=1
+  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
+else
+  # Non-ROOT 6 builds: disable Python
+  ROOT_PYTHON_FLAGS="-Dpython=OFF"
+  ROOT_PYTHON_FEATURES=
+  ROOT_HAS_NO_PYTHON=1
+fi
 
 if [[ $ALICE_DAQ ]]; then
-  # DAQ requires static ROOT, only supported by ./configure (not CMake).
+  # DAQ requires static ROOT, only supported by ./configure (not CMake)
   export ROOTSYS=$BUILDDIR
   $SOURCEDIR/configure                  \
     --with-pythia6-uscore=SINGLE        \
@@ -89,8 +98,9 @@ if [[ $ALICE_DAQ ]]; then
             soversion ${CXX11:+cxx11} ${CXX14:+cxx14} mysql xml"
   NO_FEATURES="ssl alien"
 else
-  # Normal ROOT build.
+  # Standard ROOT build
   cmake $SOURCEDIR                                                                       \
+        ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
         ${ALIEN_RUNTIME_VERSION:+-Dalien=ON}                                             \
@@ -103,8 +113,8 @@ else
         -Dbuiltin_freetype=OFF                                                           \
         -Dpcre=OFF                                                                       \
         -Dbuiltin_pcre=ON                                                                \
-        ${NO_PYTHON:+-Dpython=OFF}                                                       \
-        ${IS_PYTHON3:+-Dpython3=ON}                                                      \
+        $ROOT_PYTHON_FLAGS                                                               \
+        ${ARROW_VERSION:+-Darrow=ON}                                                     \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
@@ -131,8 +141,8 @@ else
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
-            ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${IS_PYTHON3:+python python3}"
-  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz ${NO_PYTHON:+python python3}"
+            ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python} ${ARROW_VERSION:+arrow}"
+  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz ${ROOT_HAS_NO_PYTHON:+python}"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
@@ -160,8 +170,11 @@ if [[ $ALICE_DAQ ]]; then
     cp -v $S/src/*.o $INSTALLROOT/$S/src/
   done
   export ROOTSYS=$INSTALLROOT
+  make ${JOBS+-j$JOBS} install
+else
+  # Invoke build/install via CMake for standard builds (supports all generators)
+  cmake --build . -- ${JOBS:+-j$JOBS} install
 fi
-make ${JOBS+-j$JOBS} install
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
@@ -198,6 +211,7 @@ module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSI
                      ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
                      ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
                      ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
+                     ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                     \\
                      ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                                 \\
                      ${LZMA_VERSION:+lzma/$LZMA_VERSION-$LZMA_REVISION}
 # Our environment
