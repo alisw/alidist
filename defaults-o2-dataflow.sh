@@ -19,6 +19,8 @@ disable:
   - hijing
   - HepMC3
 overrides:
+  AliTPCCommon:
+    tag: alitpccommon-v1.3.1
   autotools:
     tag: v1.5.0
   boost:
