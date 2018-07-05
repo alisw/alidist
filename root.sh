@@ -121,6 +121,7 @@ else
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
         -DCMAKE_Fortran_COMPILER=gfortran                                                \
+        -Dfortran=ON                                                                     \
         -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
@@ -143,7 +144,7 @@ else
         -Dbuiltin_davix=OFF                                                              \
         -Ddavix=OFF                                                                      \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
-  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
+  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http fortran
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
             ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
             ${ARROW_VERSION:+arrow}"
