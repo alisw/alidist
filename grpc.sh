@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.13.0
+tag:  v1.9.1
 requires:
   - protobuf
 build_requires:
@@ -17,11 +17,6 @@ incremental_recipe: |
 rsync -a $SOURCEDIR/ ./
 
 git submodule update --init # aie aie aie
-
-# gRPC has a silly makefile which results in calls longer than ARG_MAX. With this patch, we break up the relevant array of paths into
-# multiple shorter arrays to make the calls succeed.
-curl -LO https://github.com/grpc/grpc/files/1856581/cxx_arg_list_too_long.patch.txt
-patch -p0 -N < cxx_arg_list_too_long.patch.txt||true
 
 # gRPC has a custom Makefile which readily breaks with some environment vars, better to run it in a clean environment
 env -i HOME="$HOME" LC_CTYPE="${LC_ALL:-${LC_CTYPE:-$LANG}}" PATH="$PATH" USER="$USER" LD_LIBRARY_PATH="$LD_LIBRARY_PATH" make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
