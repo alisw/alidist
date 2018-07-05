@@ -51,9 +51,9 @@ module load BASE/1.0 \\
             ${PPCONSUL_VERSION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}
 
 # Our environment
-setenv Configuration_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(Configuration_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(Configuration_ROOT)/lib
+setenv CONFIGURATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(CONFIGURATION_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(CONFIGURATION_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
