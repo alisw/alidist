@@ -10,6 +10,8 @@ disable:
   - AliEn-Runtime
   - AliRoot
 overrides:
+  AliTPCCommon:
+    tag: alitpccommon-v1.3.1
   autotools:
     tag: v1.5.0
   boost:
@@ -22,11 +24,11 @@ overrides:
     prefer_system_check: |
       printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106600 || BOOST_VERSION > 106699)\n#error \"Cannot use system's boost: boost 1.66 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
   GCC-Toolchain:
-    tag: v6.2.0-alice1
+    tag: v7.3.0-alice1
     prefer_system_check: |
       set -e
       which gfortran || { echo "gfortran missing"; exit 1; }
-      which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x060200)\n#error \"System's GCC cannot be used: we need at least GCC 6.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
+      which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
     version: "v6-14-00+git_%(short_hash)s"
     tag: "77868d9d46aefa79abbe34776c3617c80c48374b"
@@ -42,6 +44,10 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
       - libpng
       - lzma
+    build_requires:
+      - CMake
+      - "Xcode:(osx.*)"
+      - ninja
   GSL:
     prefer_system_check: |
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
