@@ -1,12 +1,9 @@
 package: ninja
-version: "1.8.2"
-tag: "v1.8.2"
-source: https://github.com/ninja-build/ninja
+version: "fortran-%(short_hash)s"
+tag: "5cf291ec1439edffa3c93dde56128181bd5f4037"
+source: https://github.com/Kitware/ninja
 build_requires:
  - "GCC-Toolchain:(?!osx)"
-prefer_system: .*
-prefer_system_check: |
-  ninja --version > /dev/null; if test $? = 127; then exit 1; else case `ninja --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in "^(0|2)\.|^1\.([0-7]|[9-99])\.\d*|^1\.8\.[0-1]" ) exit 1 ;; esac; fi; exit 0
 ---
 #!/bin/bash -e
 
