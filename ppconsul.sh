@@ -1,6 +1,6 @@
 package: Ppconsul
-version: 0.0.1
-tag: 8ade80d0528b563d4b58bc4f09815fc1e3d5be19
+version: 0.0.2
+tag: f39961cdcfddc630616658fc9c1e833b51cba21b
 source: https://github.com/oliora/ppconsul
 requires:
   - boost
@@ -19,8 +19,19 @@ make ${JOBS:+-j$JOBS}
 #make install
 mkdir $INSTALLROOT/lib
 mkdir $INSTALLROOT/include
-cp $BUILDROOT/$PKGNAME/output/libjson11.so $INSTALLROOT/lib/
-cp $BUILDROOT/$PKGNAME/output/libppconsul.so $INSTALLROOT/lib/
+
+LIB_JSON=so
+LIB_CONSUL=so
+case $ARCHITECTURE in
+    osx*)
+      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+      LIB_JSON=a
+      LIB_CONSUL=dylib
+    ;;
+esac
+
+cp $BUILDROOT/$PKGNAME/output/libjson11.$LIB_JSON $INSTALLROOT/lib/
+cp $BUILDROOT/$PKGNAME/output/libppconsul.$LIB_CONSUL $INSTALLROOT/lib/
 cp -r $SOURCEDIR/include/* $INSTALLROOT/include/
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

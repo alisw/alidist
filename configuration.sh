@@ -5,7 +5,7 @@ requires:
   - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - "Ppconsul:(?!osx)"
+  - Ppconsul
 build_requires:
   - RapidJSON
   - CMake
@@ -16,11 +16,9 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 
-LIBEXT=so
 case $ARCHITECTURE in
     osx*)
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      LIBEXT=dylib
     ;;
 esac
 
