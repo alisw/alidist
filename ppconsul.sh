@@ -20,18 +20,8 @@ make ${JOBS:+-j$JOBS}
 mkdir $INSTALLROOT/lib
 mkdir $INSTALLROOT/include
 
-LIB_JSON=so
-LIB_CONSUL=so
-case $ARCHITECTURE in
-    osx*)
-      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      LIB_JSON=a
-      LIB_CONSUL=dylib
-    ;;
-esac
-
-cp $BUILDROOT/$PKGNAME/output/libjson11.$LIB_JSON $INSTALLROOT/lib/
-cp $BUILDROOT/$PKGNAME/output/libppconsul.$LIB_CONSUL $INSTALLROOT/lib/
+cp $BUILDROOT/$PKGNAME/output/libjson11.* $INSTALLROOT/lib/
+cp $BUILDROOT/$PKGNAME/output/libppconsul.* $INSTALLROOT/lib/
 cp -r $SOURCEDIR/include/* $INSTALLROOT/include/
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
