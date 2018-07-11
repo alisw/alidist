@@ -15,19 +15,11 @@ cmake $SOURCEDIR                                              \
       -DBUILD_SHARED_LIBS=ON                                  \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
 
-make ${JOBS:+-j$JOBS}
-#make install
-mkdir $INSTALLROOT/lib
-mkdir $INSTALLROOT/include
+make ${JOBS+-j $JOBS} install
 
-cp $BUILDROOT/$PKGNAME/output/libjson11.* $INSTALLROOT/lib/
-cp $BUILDROOT/$PKGNAME/output/libppconsul.* $INSTALLROOT/lib/
-cp -r $SOURCEDIR/include/* $INSTALLROOT/include/
-
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+#ModuleFile
+mkdir -p etc/modulefiles
+cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -36,11 +28,11 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0                                                          \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+
 # Our environment
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+setenv PPCONSUL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(PPCONSUL_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PPCONSUL_ROOT)/lib")
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
