@@ -18,7 +18,6 @@ disable:
   - pythia6
   - hijing
   - grpc
-  - Ppconsul
   - ApMon-CPP
 overrides:
   AliTPCCommon:

@@ -8,7 +8,6 @@ env:
 disable:
   - AliEn-Runtime
   - grpc
-  - Ppconsul
   - ApMon-CPP
 overrides:
   AliTPCCommon:
