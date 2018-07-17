@@ -42,9 +42,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_CPP_VERSION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}  ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
-setenv Monitoring_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(Monitoring_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(Monitoring_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(Monitoring_ROOT)/lib")
+setenv MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(MONITORING_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(MONITORING_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(MONITORING_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

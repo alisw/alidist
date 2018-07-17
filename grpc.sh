@@ -1,11 +1,11 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.9.1
+tag:  v1.13.0-alice1
 requires:
   - protobuf
 build_requires:
   - "GCC-Toolchain:(?!osx)"
-source: https://github.com/grpc/grpc
+source: https://github.com/alisw/grpc
 prefer_system: "(?!slc5)"
 prefer_system_check: which grpc_cpp_plugin
 incremental_recipe: |
