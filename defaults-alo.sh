@@ -5,6 +5,7 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "14"
+  CMAKE_GENERATOR: "Ninja"
 disable:
   - AliEn-Runtime
   - simulation
@@ -39,6 +40,7 @@ overrides:
     tag: "v6-14-04"
     source: https://github.com/root-mirror/root
     requires:
+      - arrow
       - AliEn-Runtime:(?!.*ppc64)
       - GSL
       - opengl:(?!osx)
@@ -48,11 +50,22 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
       - libpng
       - lzma
+      - libxml2
+      - "OpenSSL:(?!osx)"
+      - "osx-system-openssl:(osx.*)"
+    build_requires:
+      - CMake
+      - "Xcode:(osx.*)"
+      - ninja
+  AliRoot:
+    tag: "v5-09-36"
+    requires:
+      - ROOT
+      - Vc
+      - ZeroMQ
   GSL:
     prefer_system_check: |
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
-  AliRoot:
-    tag: "v5-09-20"
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.5.2"
@@ -61,8 +74,22 @@ overrides:
     tag: "v3.11.0"
     prefer_system_check: |
       which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-9].*|3.10.*) exit 1 ;; esac
+  FairRoot:
+    build_requires:
+      - googletest
+      - ninja
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
+    build_requires:
+      - ninja
+      - RapidJSON
+      - googlebenchmark
+      - AliTPCCommon
+  alo:
+    build_requires:
+      - CMake
+      - ms_gsl
+      - ninja
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

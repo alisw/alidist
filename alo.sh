@@ -11,7 +11,7 @@ build_requires:
   - ms_gsl
 source: https://github.com/mrrtf/alo
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cmake --build . -- ${JOBS+-j $JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -32,6 +32,7 @@ incremental_recipe: |
 echo "Build MRRTF alo"
 
 cmake $SOURCEDIR \
+    ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
     -DALIROOT="$ALIROOT_ROOT" \
     -DO2="$O2_ROOT" \
@@ -42,7 +43,7 @@ cmake $SOURCEDIR \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
 
-make ${JOBS+-j $JOBS} install
+cmake --build . -- ${JOBS+-j $JOBS} install
 
 # Modulefile
 mkdir -p etc/modulefiles
