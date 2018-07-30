@@ -1,11 +1,11 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v1.5.0
+tag:  v1.5.2
 requires:
   - curl
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - "Ppconsul:(?!osx)"
+  - Ppconsul
 build_requires:
   - RapidJSON
   - CMake
@@ -16,22 +16,20 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 
-LIBEXT=so
 case $ARCHITECTURE in
     osx*)
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      LIBEXT=dylib
     ;;
 esac
 
-cmake $SOURCEDIR                                                                         \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                            \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                                             \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}                             \
-      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                   \
-      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include                                   \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib                                       \
+cmake $SOURCEDIR                                             \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                    \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                \
+      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                 \
+      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include} \
+      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include       \
+      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include       \
+      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib
 
 make ${JOBS+-j $JOBS} install
 
