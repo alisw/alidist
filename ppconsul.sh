@@ -10,6 +10,10 @@ build_requires:
 ---
 #!/bin/bash -e
 
+if [[ CMAKE_GENERATOR == Ninja && ! $NINJA_REVISION ]]; then
+  unset CMAKE_GENERATOR
+fi
+
 cmake $SOURCEDIR                                 \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
