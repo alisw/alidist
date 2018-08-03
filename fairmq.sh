@@ -43,7 +43,7 @@ cmake $SOURCEDIR                                                 \
       -DDISABLE_COLOR=ON                                         \
       -DBUILD_DDS_PLUGIN=ON                                      \
       -DBUILD_NANOMSG_TRANSPORT=ON                               \
-      -DBUILD_EXAMPLES=OFF                                       \
+      -DBUILD_EXAMPLES=ON                                        \
       -DCMAKE_INSTALL_LIBDIR=lib                                 \
       -DCMAKE_INSTALL_BINDIR=bin
 
