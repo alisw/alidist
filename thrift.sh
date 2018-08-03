@@ -6,5 +6,5 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 system_requirement: ".*"
 system_requirement_check: |
-  which thrift
+  thrift --version
 ---
