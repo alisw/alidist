@@ -13,11 +13,15 @@ append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR                            \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DROOTSYS="$ROOTSYS"                  \
-      -DJSONC="$JSON_C_ROOT"                \
-      -DLWS="$LWS_ROOT"
+case $ARCHITECTURE in
+  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
+esac
+cmake $SOURCEDIR                                         \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
+      -DROOTSYS="$ROOTSYS"                               \
+      -DJSONC="$JSON_C_ROOT"                             \
+       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      -DLWS="$LIBWEBSOCKETS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
 # Modulefile
