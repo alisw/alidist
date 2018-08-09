@@ -82,6 +82,7 @@ case $ARCHITECTURE in
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
+    [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
     SONAME=dylib
   ;;
   *) SONAME=so ;;
@@ -128,7 +129,9 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
-      -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark
+      -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
+      ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}
+
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
