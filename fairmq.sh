@@ -50,7 +50,7 @@ cmake $SOURCEDIR                                                 \
 cmake --build . ${JOBS:+-- -j$JOBS}
 # Exclude running the protocols test suite for now, because it needs certain
 # hardcoded TCP ports to be unused, which is sometimes not the case.
-ctest -E "FairMQ.Protocols" ${JOBS:+-j$JOBS}
+ctest -E "(FairMQ.Protocols)|(Example-Region-zeromq)|(Example-Region-nanomsg)|(Example-Region-shmem)" ${JOBS:+-j$JOBS}
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 # ModuleFile
