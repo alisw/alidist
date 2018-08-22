@@ -9,6 +9,7 @@ requires:
   - hijing
   - HepMC3
   - libInfoLogger
+  - Common-O2
   - Configuration
   - Monitoring
   - ms_gsl
@@ -128,7 +129,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ALITPCCOMMON_ROOT:+-DALITPCCOMMON_DIR=$ALITPCCOMMON_ROOT}                           \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
-      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                    \
+      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
+      ${COMMON_O2_VERSION:+-DCommon_O2_ROOT=$COMMON_O2_ROOT}                                \
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
