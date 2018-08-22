@@ -18,7 +18,8 @@ make install
 
 PDFSETS="cteq6l cteq6ll CT10 CT10nlo MSTW2008nnlo EPS09LOR_208 EPS09NLOR_208"
 pushd $INSTALLROOT/share/lhapdf
-  $INSTALLROOT/bin/lhapdf-getdata $PDFSETS
+  # We need to manually specify the repository (default is HTTP, not HTTPS)
+  $INSTALLROOT/bin/lhapdf-getdata --repo https://www.hepforge.org/archive/lhapdf/pdfsets/current $PDFSETS
   # Check if PDF sets were really installed
   for P in $PDFSETS; do
     ls ${P}*
