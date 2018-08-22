@@ -39,7 +39,7 @@ overrides:
       - FreeType:(?!osx)
       - Python-modules
       - libxml2
-      - OpenSSL
+      - OpenSSL:(?!osx)
       - "GCC-Toolchain:(?!osx)"
       - libpng
       - lzma
