@@ -32,7 +32,7 @@ if [ ! $GEANT4_BUILD_MULTITHREADED ]; then
 fi
 
 # if this variable is not defined default it to OFF
-: {GEANT4_BUILD_MULTITHREADED:=OFF}
+: ${GEANT4_BUILD_MULTITHREADED:=OFF}
 
 cmake $SOURCEDIR                                             \
   -DGEANT4_INSTALL_DATA_TIMEOUT=2000                         \
