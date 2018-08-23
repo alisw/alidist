@@ -83,8 +83,11 @@ if grep -q "malformed copyright notice" error-log.txt; then
   printf "error:\nerror: List of non-compliant files will follow.\n\n"
 fi
 
-# Filter the actual errors from the log. Break with nonzero if errors are found
-! ( grep " error:" error-log.txt )
+# Show only errors from the log, break in case some were found
+echo ; echo ; echo "========== List of errors found =========="
+GRERR=0
+grep " error:" error-log.txt || GRERR=$?
+[[ $GRERR == 0 ]] && exit 1
 
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
