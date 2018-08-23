@@ -41,13 +41,14 @@ overrides:
     tag: "77868d9d46aefa79abbe34776c3617c80c48374b"
     source: https://github.com/root-mirror/root
     requires:
+      - arrow
       - GSL
       - opengl:(?!osx)
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - Python-modules
       - libxml2
-      - OpenSSL
+      - OpenSSL:(?!osx)
       - "GCC-Toolchain:(?!osx)"
       - libpng
       - lzma

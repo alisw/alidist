@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.6.1
+tag: v0.6.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -11,6 +11,7 @@ requires:
   - Monitoring
   - Configuration
   - O2
+  - arrow
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/QualityControl
@@ -36,6 +37,7 @@ cmake $SOURCEDIR                                              \
       -DFAIRROOTPATH=$FAIRROOT_ROOT                           \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
+      -DARROW_HOME=$ARROW_ROOT                                \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
