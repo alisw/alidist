@@ -10,6 +10,11 @@ build_requires:
 ---
 #!/bin/bash -e
 
+case $ARCHITECTURE in
+  osx*)
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
+esac
+
 cmake $SOURCEDIR                                 \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
