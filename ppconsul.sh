@@ -20,7 +20,7 @@ cmake $SOURCEDIR                                 \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
       -DCMAKE_INSTALL_LIBDIR=lib                 \
       -DBUILD_SHARED_LIBS=ON                     \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 mkdir -p "$INSTALLROOT/etc/modulefiles"
