@@ -1,6 +1,6 @@
 package: lhapdf
 version: "%(tag_basename)s"
-tag: v6.2.1-alice1
+tag: v6.2.1-alice2
 source: https://github.com/alisw/LHAPDF
 requires:
  - yaml-cpp
@@ -59,6 +59,7 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+                     ${PYTHON_MODULES_ROOT:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
                      ${YAML_CPP_VERSION:+yaml-cpp/$YAML_CPP_VERSION-$YAML_CPP_REVISION} \\
                      ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
