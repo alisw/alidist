@@ -31,6 +31,9 @@ if [ ! $GEANT4_BUILD_MULTITHREADED ]; then
   GEANT4_BUILD_MULTITHREADED=OFF
 fi
 
+# if this variable is not defined default it to OFF
+: {GEANT4_BUILD_MULTITHREADED:=OFF}
+
 cmake $SOURCEDIR                                             \
   -DGEANT4_INSTALL_DATA_TIMEOUT=2000                         \
   -DCMAKE_CXX_FLAGS="-fPIC"                                  \
