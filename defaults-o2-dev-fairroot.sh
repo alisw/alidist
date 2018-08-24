@@ -38,9 +38,10 @@ overrides:
       - FreeType:(?!osx)
       - Python-modules
       - libxml2
-      - OpenSSL:(?!osx)
       - "GCC-Toolchain:(?!osx)"
       - libpng
+      - "OpenSSL:(?!osx)"
+      - "osx-system-openssl:(osx.*)"
       - lzma
     build_requires:
       - CMake
@@ -52,12 +53,8 @@ overrides:
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.5.2"
-  Ppconsul:
-    build_requires:
-      - CMake
-      - ninja
   O2:
-    version: "%(short_hash)s%(defaults_upper)s"
+    version: "%(short_hash)s_O2_DEV_FAIRROOT"
     build_requires:
       - lcov
       - ninja

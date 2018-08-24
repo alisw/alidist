@@ -18,6 +18,8 @@ overrides:
     requires:
       - "GCC-Toolchain:(?!osx)"
       - Python-modules
+      - libpng
+      - lzma
     prefer_system_check: |
       printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106600 || BOOST_VERSION > 106699)\n#error \"Cannot use system's boost: boost 1.66 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
   GCC-Toolchain:
@@ -37,12 +39,12 @@ overrides:
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - Python-modules
+      - libxml2
       - "GCC-Toolchain:(?!osx)"
       - libpng
-      - lzma
-      - libxml2
       - "OpenSSL:(?!osx)"
       - "osx-system-openssl:(osx.*)"
+      - lzma
     build_requires:
       - CMake
       - "Xcode:(osx.*)"
