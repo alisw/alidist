@@ -44,18 +44,20 @@ export PYVER=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.
 # Install as much as possible with pip. Packages are installed one by one as we
 # are not sure that pip exits with nonzero in case one of the packages failed.
 export PYTHONUSERBASE=$INSTALLROOT
-for X in "mock==1.0.0"         \
-         "numpy==1.9.2"        \
-         "certifi==2015.9.6.2" \
-         "ipython==5.1.0"      \
-         "ipywidgets==5.2.2"   \
-         "ipykernel==4.5.0"    \
-         "notebook==4.2.3"     \
-         "metakernel==0.14.0"  \
-         "pyyaml"
-do
-  pip install --user $X
-done
+cat >requirements.txt << \EOF
+mock==1.0.0
+numpy==1.9.2
+certifi==2015.9.6.2
+ipython==5.1.0
+ipywidgets==5.2.2
+ipykernel==4.5.0
+notebook==4.2.3
+metakernel==0.14.0
+pyyaml
+EOF
+
+pip install --user --disable-pip-version-check -r ./requirements.txt
+
 unset PYTHONUSERBASE
 
 # Install matplotlib (quite tricky)
