@@ -14,6 +14,7 @@ requires:
   - ms_gsl
   - FairMQ
 build_requires:
+  - ninja
   - RapidJSON
   - googlebenchmark
   - AliTPCCommon

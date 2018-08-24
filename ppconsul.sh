@@ -7,6 +7,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - ninja
 ---
 #!/bin/bash -e
 

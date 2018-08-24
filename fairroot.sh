@@ -12,6 +12,8 @@ requires:
   - FairLogger
   - FairMQ
   - "GCC-Toolchain:(?!osx)"
+build_requires:
+  - ninja
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
   GEOMPATH:   "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"

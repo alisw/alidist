@@ -5,6 +5,7 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "14"
+  CMAKE_GENERATOR: "Ninja"
 disable:
   - AliEn-Runtime
   - grpc
@@ -42,6 +43,10 @@ overrides:
       - libxml2
       - "OpenSSL:(?!osx)"
       - "osx-system-openssl:(osx.*)"
+    build_requires:
+      - CMake
+      - "Xcode:(osx.*)"
+      - ninja
   AliRoot:
     version: "%(commit_hash)s_O2"
     requires:
