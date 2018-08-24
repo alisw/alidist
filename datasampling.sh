@@ -24,7 +24,7 @@ esac
 cmake $SOURCEDIR                                              \
       -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
       ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
       ${FAIRROOT_VERSION:+-DFAIRROOTPATH=$FAIRROOT_ROOT}      \
