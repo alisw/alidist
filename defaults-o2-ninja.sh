@@ -31,8 +31,7 @@ overrides:
       - CMake
       - ninja
   ROOT:
-    version: "v6-14-00+git_%(short_hash)s"
-    tag: "77868d9d46aefa79abbe34776c3617c80c48374b"
+    tag: "v6-14-04"
     source: https://github.com/root-mirror/root
     requires:
       - arrow
