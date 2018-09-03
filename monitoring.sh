@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: cmake
+tag: dev
 requires:
   - curl
   - boost
