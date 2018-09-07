@@ -8,8 +8,10 @@ requires:
   - fastjet
   - HepMC
   - boost
+build_requires:
+  - GCC-Toolchain:(?!osx)
 prepend_path:
-  PYTHONPATH: $RIVETHI_ROOT/lib64/python2.7/site-packages:$RIVETHI_ROOT/lib/python2.7/site-packages
+  PYTHONPATH: $RIVET_HI_ROOT/lib64/python2.7/site-packages:$RIVET_HI_ROOT/lib/python2.7/site-packages
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -60,6 +62,18 @@ make -j$JOBS
 make install
 )
 
+# Dependencies relocation: rely on runtime environment
+SED_EXPR="s!x!x!"  # noop
+for P in $REQUIRES $BUILD_REQUIRES; do
+  UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
+  EXPAND=$(eval echo \$${UPPER}_ROOT)
+  [[ $EXPAND ]] || continue
+  SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
+done
+cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
+mv $INSTALLROOT/bin/rivet-config.0 $INSTALLROOT/bin/rivet-config
+chmod 0755 $INSTALLROOT/bin/rivet-config
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -75,6 +89,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
+# TODO: RIVETHI_ROOT is wrong (it should be RIVET_HI_ROOT) and it is deprecated
+# in favour of using rivet-config --prefix. Leaving it for now, but it will be
+# removed upon PWGMM's decision in the future
 setenv RIVETHI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$::env(RIVETHI_ROOT)/lib/python2.7/site-packages
 prepend-path PYTHONPATH \$::env(RIVETHI_ROOT)/lib64/python2.7/site-packages

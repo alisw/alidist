@@ -8,6 +8,8 @@ requires:
   - fastjet
   - HepMC
   - boost
+build_requires:
+  - GCC-Toolchain:(?!osx)
 prepend_path:
   PYTHONPATH: $RIVET_ROOT/lib64/python2.7/site-packages:$RIVET_ROOT/lib/python2.7/site-packages
 ---
@@ -59,6 +61,18 @@ autoreconf -ivf
 make -j$JOBS
 make install
 )
+
+# Dependencies relocation: rely on runtime environment
+SED_EXPR="s!x!x!"  # noop
+for P in $REQUIRES $BUILD_REQUIRES; do
+  UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
+  EXPAND=$(eval echo \$${UPPER}_ROOT)
+  [[ $EXPAND ]] || continue
+  SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
+done
+cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
+mv $INSTALLROOT/bin/rivet-config.0 $INSTALLROOT/bin/rivet-config
+chmod 0755 $INSTALLROOT/bin/rivet-config
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
