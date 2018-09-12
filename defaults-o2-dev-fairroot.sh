@@ -76,6 +76,10 @@ overrides:
     build_requires:
       - googletest
       - ninja
+  FairMQ
+    version: dev
+    tag: dev
+    source: https://github.com/FairRootGroup/FairMQ
   GEANT4:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git
