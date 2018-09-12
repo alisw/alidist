@@ -89,6 +89,9 @@ overrides:
   vgm:
     tag: "v4-4"
     source: https://github.com/vmc-project/vgm
+  msgpack:
+    version: "v3.1.1"
+    tag: cpp-3.1.1
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
