@@ -76,7 +76,7 @@ overrides:
     build_requires:
       - googletest
       - ninja
-  FairMQ
+  FairMQ:
     version: dev
     tag: dev
     source: https://github.com/FairRootGroup/FairMQ
