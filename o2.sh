@@ -14,6 +14,7 @@ requires:
   - Monitoring
   - ms_gsl
   - FairMQ
+  - curl
 build_requires:
   - RapidJSON
   - googlebenchmark
