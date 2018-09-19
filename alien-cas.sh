@@ -1,6 +1,6 @@
 package: AliEn-CAs
 version: v1
-tag: e3aad5d2bc34016abbec3f377ca5fb22fcccb044
+tag: bcb18b10f695dbfe85599b7bbb5452720a91dddd
 source: https://github.com/alisw/alien-cas.git
 ---
 #!/bin/bash -e
