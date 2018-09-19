@@ -1,10 +1,10 @@
 package: defaults-o2-ninja
 version: v1
 env:
-  CXXFLAGS: "-fPIC -O2 -std=c++14"
+  CXXFLAGS: "-fPIC -O2 -std=c++17"
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-  CXXSTD: "14"
+  CXXSTD: "17"
   CMAKE_GENERATOR: "Ninja"
 disable:
   - AliEn-Runtime
