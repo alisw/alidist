@@ -24,12 +24,12 @@ overrides:
   autotools:
     tag: v1.5.0
   boost:
-    tag: "v1.66.0"
+    tag: "v1.68.0"
     requires:
       - "GCC-Toolchain:(?!osx)"
       - Python-modules
     prefer_system_check: |
-      printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106600 || BOOST_VERSION > 106699)\n#error \"Cannot use system's boost: boost 1.66 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+      printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106800 || BOOST_VERSION > 106899)\n#error \"Cannot use system's boost: boost 1.68 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
   GCC-Toolchain:
     tag: v7.3.0-alice1
     prefer_system_check: |

@@ -18,7 +18,8 @@ python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'         
   pip --help &> /dev/null                                                                 && \
   printf '#include \"pyconfig.h"' | gcc -c $(python-config --includes) -xc -o /dev/null - || \
   unset BOOST_PYTHON
-[[ $BOOST_PYTHON ]] || WITHOUT_PYTHON="--without-python"
+[[ $CXXSTD < 17 ]] || unset BOOST_PYTHON
+[[ $BOOST_PYTHON ]] || { WITHOUT_PYTHON="--without-python"; unset PYTHON_VERSION; }
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
@@ -53,6 +54,7 @@ b2 -q                        \
    link=shared               \
    threading=multi           \
    variant=release           \
+   ${CXXSTD:+cxxstd=$CXXSTD} \
    $EXTRA_CXXFLAGS           \
    install
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
