@@ -16,6 +16,9 @@ build_requires:
 incremental_recipe: |
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+prepend_path:
+  ROOT_INCLUDE_PATH: "$FAIRMQ_ROOT/include"
+  ROOT_INCLUDE_PATH: "$FAIRMQ_ROOT/include/fairmq"
 ---
 mkdir -p $INSTALLROOT
 
@@ -75,6 +78,8 @@ module load BASE/1.0                                                            
 setenv FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(FAIRMQ_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FAIRMQ_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include
+prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include/fairmq
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FAIRMQ_ROOT)/lib")
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
