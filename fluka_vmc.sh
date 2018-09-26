@@ -1,6 +1,6 @@
 package: FLUKA_VMC
 version: "%(tag_basename)s"
-tag: "2011.2c-vmc3"
+tag: "2011.2c-vmc4"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -22,7 +22,10 @@ popd
 mkdir -p "$INSTALLROOT/lib"
 cp -v lib/tgt_*/libfluka.* "$INSTALLROOT/lib"
 cp -v README "$INSTALLROOT/"
-rsync -av examples input "$INSTALLROOT"
+for DIR in examples input; do
+  [[ -d $DIR ]] || continue
+  rsync -av $DIR "$INSTALLROOT"
+done
 rsync -av "$FLUKA_ROOT"/*.bin "$FLUKA_ROOT"/*.dat "$INSTALLROOT/data"
 
 # Test load library
