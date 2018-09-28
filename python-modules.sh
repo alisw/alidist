@@ -45,7 +45,8 @@ export PYVER=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.
 # are not sure that pip exits with nonzero in case one of the packages failed.
 export PYTHONUSERBASE=$INSTALLROOT
 for X in "mock==1.0.0"         \
-         "numpy==1.9.2"        \
+         "numpy==1.11.1"        \
+         "root_numpy==1.15.1"        \
          "certifi==2015.9.6.2" \
          "ipython==5.1.0"      \
          "ipywidgets==5.2.2"   \
