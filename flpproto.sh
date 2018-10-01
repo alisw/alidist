@@ -1,6 +1,6 @@
 package: flpproto
 version: "%(tag_basename)s"
-tag: v0.9.0
+tag: v0.9.1
 requires:
   - Common-O2
   - Monitoring
@@ -11,6 +11,7 @@ requires:
   - ReadoutCard
   - DataSampling
   - Readout
+  - qcg
   - QualityControl
 build_requires:
   - CMake
