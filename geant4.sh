@@ -40,7 +40,7 @@ cmake $SOURCEDIR                                             \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"                 \
   -DCMAKE_INSTALL_LIBDIR="lib"                               \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
-  -DGEANT4_BUILD_TLS_MODEL:STRING="global-dynamic"           \
+  -DGEANT4_BUILD_TLS_MODEL:STRING="global_dynamic"           \
   -DGEANT4_ENABLE_TESTING=OFF                                \
   -DBUILD_SHARED_LIBS=ON                                     \
   -DGEANT4_INSTALL_EXAMPLES=OFF                              \
