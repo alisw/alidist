@@ -25,6 +25,8 @@ env:
 ---
 #!/bin/bash -e
 
+[[ $CXXSTD > 14 ]] && CXXSTD=14 || true  # Only C++14 is supported at the moment
+
 cmake $SOURCEDIR                                    \
   -DGEANT4_INSTALL_DATA_TIMEOUT=2000                \
   -DCMAKE_CXX_FLAGS="-fPIC"                         \
