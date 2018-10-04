@@ -29,8 +29,7 @@ cmake "$SOURCEDIR"                                      \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"     \
       -DZLIB_ROOT=$ZLIB_ROOT
-make ${JOBS:+-j$JOBS}
-make install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
