@@ -9,6 +9,8 @@ build_requires:
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+prepend_path:
+  ROOT_INCLUDE_PATH: "$BOOST_ROOT/include"
 ---
 #!/bin/bash -e
 
@@ -18,7 +20,13 @@ python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'         
   pip --help &> /dev/null                                                                 && \
   printf '#include \"pyconfig.h"' | gcc -c $(python-config --includes) -xc -o /dev/null - || \
   unset BOOST_PYTHON
-[[ $BOOST_PYTHON ]] || WITHOUT_PYTHON="--without-python"
+if [[ $CXXSTD && $CXXSTD -ge 17 ]]; then
+  # Compile boost with C++14 even if we are using C++17, and disable boost_python.
+  # See: https://github.com/boostorg/system/issues/26#issuecomment-413631998
+  CXXSTD=14
+  unset BOOST_PYTHON
+fi
+[[ $BOOST_PYTHON ]] || { WITHOUT_PYTHON="--without-python"; unset PYTHON_VERSION; }
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
@@ -53,7 +61,7 @@ b2 -q                        \
    link=shared               \
    threading=multi           \
    variant=release           \
-   $EXTRA_CXXFLAGS           \
+   ${CXXSTD:+cxxstd=$CXXSTD} \
    install
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
 
@@ -83,5 +91,6 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
 # Our environment
 setenv BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(BOOST_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(BOOST_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BOOST_ROOT)/lib")
 EoF
