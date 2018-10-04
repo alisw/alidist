@@ -18,7 +18,6 @@ overrides:
       which gfortran || { echo "gfortran missing"; exit 1; }
       which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
-    version: "%(tag_basename)s"
     tag: "v6-10-08"
     source: https://github.com/root-mirror/root
     requires:
@@ -41,12 +40,16 @@ overrides:
   AliRoot:
     version: "%(commit_hash)s_ROOT6"
     tag: v5-09-38
-    build-requires:
+    build_requires:
+      - CMake
+      - "Xcode:(osx.*)"
+      - AliTPCCommon
       - ninja
   AliPhysics:
     version: "%(commit_hash)s_ROOT6"
     tag: v5-09-38-01
     build-requires:
+      - "Xcode:(osx.*)"
       - ninja
   GEANT4:
     tag: v10.3.3
