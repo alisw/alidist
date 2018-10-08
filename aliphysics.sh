@@ -11,7 +11,7 @@ env:
 prepend_path:
   ROOT_INCLUDE_PATH: "$ALIPHYSICS_ROOT/include"
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cmake --build . -- ${JOBS:+-j$JOBS} install
   ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   cp -v compile_commands.json ${INSTALLROOT}
   DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
@@ -37,6 +37,7 @@ cmake "$SOURCEDIR"                                                 \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                           \
       -DROOTSYS="$ROOT_ROOT"                                       \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                    \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
@@ -45,7 +46,7 @@ cmake "$SOURCEDIR"                                                 \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
       -DALIROOT="$ALIROOT_ROOT"
 
-make ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 

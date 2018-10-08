@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.7.1
+tag: v0.7.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -38,6 +38,7 @@ cmake $SOURCEDIR                                              \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DARROW_HOME=$ARROW_ROOT                                \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
