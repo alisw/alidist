@@ -144,7 +144,7 @@ module load BASE/1.0
 regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
 if { "\$mod_name" == "GCC-Toolchain" } {
   module load Toolchain/GCC-${PKGVERSION//-*}
-  if { [is-loaded Toolchain] } { break }
+  if { [is-loaded Toolchain] } { continue }
   set base_path \$::env(BASEDIR)
 } else {
   # Loading Toolchain: autodetect prefix
