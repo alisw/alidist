@@ -27,10 +27,6 @@ env:
 
 [[ $CXXSTD > 14 ]] && CXXSTD=14 || true  # Only C++14 is supported at the moment
 
-if [ ! $GEANT4_BUILD_MULTITHREADED ]; then
-  GEANT4_BUILD_MULTITHREADED=OFF
-fi
-
 # if this variable is not defined default it to OFF
 : ${GEANT4_BUILD_MULTITHREADED:=OFF}
 
