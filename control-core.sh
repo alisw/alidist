@@ -4,6 +4,7 @@ tag: master
 build_requires:
   - golang
   - protobuf
+  - grpc
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
@@ -14,7 +15,7 @@ BUILD=$GOPATH/src/github.com/AliceO2Group/Control
 mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
-  make WHAT="octld octl-executor" all
+  make WHAT="o2control-core o2control-executor" all
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
 popd

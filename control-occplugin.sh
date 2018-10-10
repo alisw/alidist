@@ -9,6 +9,7 @@ requires:
   - protobuf
   - "GCC-Toolchain:(?!osx)"
 build_requires:
+  - grpc
   - CMake
 source: https://github.com/AliceO2Group/Control
 incremental_recipe: |
@@ -28,7 +29,7 @@ case $ARCHITECTURE in
     ;;
 esac
 
-cmake $SOURCEDIR/occplugin                                                               \
+cmake $SOURCEDIR/occ                                                                     \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
       ${BOOST_ROOT:+-DBOOSTPATH=$BOOST_ROOT}                                             \
       -DGRPCPATH=${GRPC_ROOT}                                                            \
