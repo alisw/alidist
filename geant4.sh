@@ -27,24 +27,27 @@ env:
 
 [[ $CXXSTD > 14 ]] && CXXSTD=14 || true  # Only C++14 is supported at the moment
 
-cmake $SOURCEDIR                                    \
-  -DGEANT4_INSTALL_DATA_TIMEOUT=2000                \
-  -DCMAKE_CXX_FLAGS="-fPIC"                         \
-  -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"        \
-  -DCMAKE_INSTALL_LIBDIR="lib"                      \
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo                 \
-  -DGEANT4_BUILD_TLS_MODEL:STRING="initial-exec"    \
-  -DGEANT4_ENABLE_TESTING=OFF                       \
-  -DBUILD_SHARED_LIBS=ON                            \
-  -DGEANT4_INSTALL_EXAMPLES=OFF                     \
-  -DCLHEP_ROOT_DIR:PATH="$CLHEP_ROOT"               \
-  -DGEANT4_BUILD_MULTITHREADED=OFF                  \
-  -DCMAKE_STATIC_LIBRARY_CXX_FLAGS="-fPIC"          \
-  -DCMAKE_STATIC_LIBRARY_C_FLAGS="-fPIC"            \
-  -DGEANT4_USE_G3TOG4=ON                            \
-  -DGEANT4_INSTALL_DATA=ON                          \
-  -DGEANT4_USE_SYSTEM_EXPAT=OFF                     \
-  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}           \
+# if this variable is not defined default it to OFF
+: ${GEANT4_BUILD_MULTITHREADED:=OFF}
+
+cmake $SOURCEDIR                                             \
+  -DGEANT4_INSTALL_DATA_TIMEOUT=2000                         \
+  -DCMAKE_CXX_FLAGS="-fPIC"                                  \
+  -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"                 \
+  -DCMAKE_INSTALL_LIBDIR="lib"                               \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
+  -DGEANT4_BUILD_TLS_MODEL:STRING="global-dynamic"           \
+  -DGEANT4_ENABLE_TESTING=OFF                                \
+  -DBUILD_SHARED_LIBS=ON                                     \
+  -DGEANT4_INSTALL_EXAMPLES=OFF                              \
+  -DCLHEP_ROOT_DIR:PATH="$CLHEP_ROOT"                        \
+  -DGEANT4_BUILD_MULTITHREADED="$GEANT4_BUILD_MULTITHREADED" \
+  -DCMAKE_STATIC_LIBRARY_CXX_FLAGS="-fPIC"                   \
+  -DCMAKE_STATIC_LIBRARY_C_FLAGS="-fPIC"                     \
+  -DGEANT4_USE_G3TOG4=ON                                     \
+  -DGEANT4_INSTALL_DATA=ON                                   \
+  -DGEANT4_USE_SYSTEM_EXPAT=OFF                              \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS}

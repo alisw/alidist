@@ -30,7 +30,6 @@ cmake $SOURCEDIR                                              \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DDataSampling_ROOT=$DATASAMPLING_ROOT                  \
-      -DMonitoring_ROOT=$MONITORING_ROOT                      \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
       -DInfoLogger_ROOT=$INFOLOGGER_ROOT                      \
       -DO2_ROOT=$O2_ROOT                                      \
