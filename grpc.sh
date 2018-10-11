@@ -28,7 +28,8 @@ make prefix=$INSTALLROOT install
 # Add missing symlink. Must be relative, because the directory is moved around after the build.
 # This should normally not be necessary, but it is made necessary by the issues linked in the following upstream pull request: https://github.com/grpc/grpc/pull/13500
 # Once the issue gets fixed, it should be safe to remove this workaround.
-ln -s libgrpc++.so.${PKGVERSION#v} $INSTALLROOT/lib/libgrpc++.so.1
+REALVERSION=${PKGVERSION%-alice1}
+ln -s libgrpc++.so.${REALVERSION#v} $INSTALLROOT/lib/libgrpc++.so.1
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
