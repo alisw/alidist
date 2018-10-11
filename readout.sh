@@ -7,7 +7,6 @@ requires:
   - Common-O2
   - InfoLogger
   - FairRoot
-  - DataSampling
   - Monitoring
   - Configuration
   - ReadoutCard

@@ -9,7 +9,6 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - InfoLogger
   - ReadoutCard
-  - DataSampling
   - Readout
   - qcg
   - QualityControl
