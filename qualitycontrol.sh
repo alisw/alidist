@@ -28,7 +28,6 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
-      -DDataSampling_ROOT=$DATASAMPLING_ROOT                  \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
       -DInfoLogger_ROOT=$INFOLOGGER_ROOT                      \
       -DO2_ROOT=$O2_ROOT                                      \
@@ -60,7 +59,6 @@ module load BASE/1.0                                                          \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
-            DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION         \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                     \\
             O2/$O2_VERSION-$O2_REVISION
 
