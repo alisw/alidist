@@ -148,7 +148,7 @@ else
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http fortran
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
+            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_VERSION:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
             ${ARROW_VERSION:+arrow}"
   NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
                ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix"
