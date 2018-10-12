@@ -9,7 +9,6 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - InfoLogger
   - ReadoutCard
-  - DataSampling
   - Readout
   - qcg
   - QualityControl
@@ -60,7 +59,6 @@ cmake $SOURCEDIR                                              \
     ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
     ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
     ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} \
-    ${DATASAMPLING_VERSION:+-DDataSampling_ROOT=$DATASAMPLING_ROOT} \
     ${READOUT_VERSION:+-DReadout_ROOT=$READOUT_ROOT} \
     ${QUALITYCONTROL_VERSION:+-DQualityControl_ROOT=$QUALITYCONTROL_ROOT} \
    -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -87,7 +85,6 @@ module load BASE/1.0                                                      \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION              \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION           \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION        \\
-            DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION     \\
             Readout/$READOUT_VERSION-$READOUT_REVISION                    \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                 \\
             QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION
