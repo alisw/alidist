@@ -8,9 +8,16 @@ build_requires:
   - CMake
   - SWIG
 source: https://github.com/AliceO2Group/Common
+common_recipe: |
+  function build {
+    make ${JOBS:+-j$JOBS} install
+  };
+  function install_modules {
+    mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  };
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  build
+  install_modules
 ---
 #!/bin/bash -ex
 
@@ -27,7 +34,8 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-make ${JOBS+-j $JOBS} install
+
+build
 
 #ModuleFile
 mkdir -p etc/modulefiles
@@ -48,4 +56,5 @@ prepend-path PATH \$::env(COMMON_O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib")
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+install_modules

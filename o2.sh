@@ -22,45 +22,58 @@ build_requires:
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
+common_recipe: |
+  function build {
+    cmake --build . -- ${JOBS:+-j$JOBS} install
+  };
+  function install_modulefiles {
+    mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  };
+  function install_compdb {
+    # install the compilation database so that we can post-check the code
+    cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+    DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+    # This really means we are in development mode. We need to make sure we
+    # use the real path for sources in this case. We also copy the
+    # compile_commands.json file so that IDEs can make use of it directly, this
+    # is a departure from our "no changes in sourcecode" policy, but for a good reason
+    # and in any case the file is in gitignore.
+    if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+      perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+      ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+    fi
+  };
+  function run_tests {
+    if [[ $ALIBUILD_O2_TESTS ]]; then
+      export O2_ROOT=$INSTALLROOT
+      # Clean up old coverage data
+      find . -name "*.gcov" -o -name "*.gcda" -delete
+      ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
+      ctest -R test_Framework --output-on-failure
+    fi
+  };
+  function run_coverage {
+    # Create code coverage information to be uploaded
+    # by the calling driver to codecov.io or similar service
+    if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
+      rm -rf coverage.info
+      lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
+      lcov --remove coverage.info '*/usr/*' --output-file coverage.info
+      lcov --remove coverage.info '*/boost/*' --output-file coverage.info
+      lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
+      lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
+      lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
+      perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
+      perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
+      perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
+      lcov --list coverage.info
+    fi
+  };
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
-  cmake --build . -- ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-  # install the compilation database so that we can post-check the code
-  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-
-  DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
-  # This really means we are in development mode. We need to make sure we
-  # use the real path for sources in this case. We also copy the
-  # compile_commands.json file so that IDEs can make use of it directly, this
-  # is a departure from our "no changes in sourcecode" policy, but for a good reason
-  # and in any case the file is in gitignore.
-  if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
-    perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-    ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
-  fi
-  if [[ $ALIBUILD_O2_TESTS ]]; then
-    export O2_ROOT=$INSTALLROOT
-    # Clean up old coverage data
-    find . -name "*.gcov" -o -name "*.gcda" -delete
-    ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
-    ctest -R test_Framework --output-on-failure
-  fi
-  # Create code coverage information to be uploaded
-  # by the calling driver to codecov.io or similar service
-  if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
-    rm -rf coverage.info
-    lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
-    lcov --remove coverage.info '*/usr/*' --output-file coverage.info
-    lcov --remove coverage.info '*/boost/*' --output-file coverage.info
-    lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
-    lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
-    lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
-    perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
-    perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
-    perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
-    lcov --list coverage.info
-  fi
+  build
+  install_modulefiles
+  install_compdb
 valid_defaults:
   - o2
   - o2-dataflow
@@ -138,21 +151,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}
 
 
-cmake --build . -- ${JOBS+-j $JOBS} install
-
-# install the compilation database so that we can post-check the code
-cp compile_commands.json ${INSTALLROOT}
-
-DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
-# This really means we are in development mode. We need to make sure we
-# use the real path for sources in this case. We also copy the
-# compile_commands.json file so that IDEs can make use of it directly, this
-# is a departure from our "no changes in sourcecode" policy, but for a good reason
-# and in any case the file is in gitignore.
-if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
-  perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
-fi
+build
+install_compdb
 
 # Modulefile
 mkdir -p etc/modulefiles
@@ -174,28 +174,7 @@ prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
-if [[ $ALIBUILD_O2_TESTS ]]; then
-  export O2_ROOT=$INSTALLROOT
-  # Clean up old coverage data
-  find . -name "*.gcov" -o -name "*.gcda" -delete
-  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
-  ctest -R test_Framework --output-on-failure
-fi
-
-# Create code coverage information to be uploaded
-# by the calling driver to codecov.io or similar service
-if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
-  rm -rf coverage.info
-  lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
-  lcov --remove coverage.info '*/usr/*' --output-file coverage.info
-  lcov --remove coverage.info '*/boost/*' --output-file coverage.info
-  lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
-  lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
-  lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
-  perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
-  perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
-  perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
-  lcov --list coverage.info
-fi
+install_modulefiles
+run_tests
+run_coverage
