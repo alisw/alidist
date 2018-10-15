@@ -38,6 +38,9 @@ overrides:
   AliPhysics:
     version: "%(tag_basename)s_ROOT6"
     tag: v5-09-38-01
+    requires:
+      - AliRoot
+      - RooUnfold
   GEANT4:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git
