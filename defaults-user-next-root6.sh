@@ -20,6 +20,9 @@ overrides:
   AliPhysics:
     version: "%(tag_basename)s"
     tag: v5-09-38-01
+    requires:
+      - AliRoot
+      - RooUnfold
   GCC-Toolchain:
     tag: v7.3.0-alice1
     prefer_system_check: |
