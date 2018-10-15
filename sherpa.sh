@@ -2,10 +2,11 @@ package: SHERPA
 version: "%(tag_basename)s"
 tag: "v2.2.4-alice1"
 source: https://github.com/alisw/SHERPA
+requires:
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
   - curl
   - autotools
-  - GCC-Toolchain
   - HepMC
   - lhapdf5
 ---
@@ -40,7 +41,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv SHERPA_INSTALL_PATH \$::env(SHERPA_ROOT)/lib/SHERPA
