@@ -1,13 +1,12 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.6.2
+tag: v0.8
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - InfoLogger
   - FairRoot
-  - DataSampling
   - Monitoring
   - Configuration
   - O2
@@ -29,8 +28,6 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
-      -DDataSampling_ROOT=$DATASAMPLING_ROOT                  \
-      -DMonitoring_ROOT=$MONITORING_ROOT                      \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
       -DInfoLogger_ROOT=$INFOLOGGER_ROOT                      \
       -DO2_ROOT=$O2_ROOT                                      \
@@ -38,6 +35,7 @@ cmake $SOURCEDIR                                              \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DARROW_HOME=$ARROW_ROOT                                \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -61,7 +59,6 @@ module load BASE/1.0                                                          \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
-            DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION         \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                     \\
             O2/$O2_VERSION-$O2_REVISION
 
@@ -69,6 +66,7 @@ module load BASE/1.0                                                          \\
 setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(QUALITYCONTROL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib")
+prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib" && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -6,7 +6,6 @@ coconut*            @alisw/dataflow-experts
 common-o2*          @alisw/dataflow-experts
 configuration*      @alisw/dataflow-experts
 control*            @alisw/dataflow-experts
-datasampling*       @alisw/dataflow-experts
 flpproto*           @alisw/dataflow-experts
 infologger*         @alisw/dataflow-experts
 monitoring*         @alisw/dataflow-experts

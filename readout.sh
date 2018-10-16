@@ -1,13 +1,12 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.9.0
+tag: v0.10.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - InfoLogger
   - FairRoot
-  - DataSampling
   - Monitoring
   - Configuration
   - ReadoutCard
@@ -28,7 +27,6 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
-      ${DATASAMPLING_VERSION:+-DDataSampling_ROOT=$DATASAMPLING_ROOT} \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
       ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} \
@@ -58,7 +56,6 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
-            DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION         \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION
 
 # Our environment

@@ -1,6 +1,6 @@
 package: flpproto
 version: "%(tag_basename)s"
-tag: v0.9.0
+tag: v0.9.2
 requires:
   - Common-O2
   - Monitoring
@@ -9,12 +9,9 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - InfoLogger
   - ReadoutCard
-  - DataSampling
   - Readout
+  - qcg
   - QualityControl
-build_requires:
-  - CMake
-  - MySQL
 source: https://github.com/AliceO2Group/FlpPrototype
 valid_defaults:
   - o2
@@ -24,7 +21,6 @@ valid_defaults:
   - o2-prod
   - o2-ninja
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
@@ -47,25 +43,6 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
-cmake $SOURCEDIR                                              \
-    -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-    -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old" \
-    ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}     \
-    -DFAIRROOTPATH=$FAIRROOT_ROOT \
-    -DFairRoot_DIR=$FAIRROOT_ROOT                               \
-    -DROOTSYS=$ROOTSYS \
-    ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT} \
-    ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
-    ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
-    ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
-    ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} \
-    ${DATASAMPLING_VERSION:+-DDataSampling_ROOT=$DATASAMPLING_ROOT} \
-    ${READOUT_VERSION:+-DReadout_ROOT=$READOUT_ROOT} \
-    ${QUALITYCONTROL_VERSION:+-DQualityControl_ROOT=$QUALITYCONTROL_ROOT} \
-   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
-make ${JOBS+-j $JOBS} install
-
 #ModuleFile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
@@ -86,16 +63,12 @@ module load BASE/1.0                                                      \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION              \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION           \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION        \\
-            DataSampling/$DATASAMPLING_VERSION-$DATASAMPLING_REVISION     \\
             Readout/$READOUT_VERSION-$READOUT_REVISION                    \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                 \\
             QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION
 
 # Our environment
 setenv FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 

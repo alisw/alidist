@@ -1,7 +1,7 @@
 package: yaml-cpp
-version: "v0.5.2"
+version: "%(tag_basename)s"
+tag: yaml-cpp-0.6.2
 source: https://github.com/jbeder/yaml-cpp
-tag: release-0.5.2
 requires:
   - boost
 build_requires:

@@ -1,7 +1,7 @@
 package: Vc
 version: "%(tag_basename)s"
-tag: 1.3.3
-source: https://github.com/VcDevel/Vc.git
+tag: 1.3.3-alice2
+source: https://github.com/alisw/Vc.git
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
