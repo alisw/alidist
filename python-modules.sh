@@ -1,5 +1,5 @@
 package: Python-modules
-version: "1.0"
+version: "2.0"
 requires:
   - Python
   - FreeType
@@ -22,7 +22,7 @@ if [[ ! $PYTHON_VERSION ]]; then
 Building our own Python modules.
 If you want to avoid this please install the following modules (pip recommended):
 
-  - matplotlib
+  - matplotlib #2.0.2, pyqt=4
   - numpy
   - certifi
   - ipython
@@ -30,6 +30,8 @@ If you want to avoid this please install the following modules (pip recommended)
   - ipykernel
   - notebook
   - metakernel
+  - rootpy #1.0.1
+  - root_numpy # 4.7.1
   - pyyaml
 
 EoF
@@ -44,15 +46,16 @@ export PYVER=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.
 # Install as much as possible with pip. Packages are installed one by one as we
 # are not sure that pip exits with nonzero in case one of the packages failed.
 export PYTHONUSERBASE=$INSTALLROOT
-for X in "mock==1.0.0"         \
-         "numpy==1.11.1"        \
-         "root_numpy==1.15.1"        \
-         "certifi==2015.9.6.2" \
-         "ipython==5.1.0"      \
-         "ipywidgets==5.2.2"   \
-         "ipykernel==4.5.0"    \
-         "notebook==4.2.3"     \
-         "metakernel==0.14.0"  \
+for X in "mock==2.0.0"         \
+         "numpy==1.15.2"        \
+         "certifi==2018.10.15" \
+         "ipython==5.8.0"      \
+         "ipywidgets==7.4.2"   \
+         "ipykernel==4.10.0"    \
+         "notebook==5.7.0"     \
+         "metakernel==0.20.14"  \
+         "rootpy==1.0.1"  \
+         "root_numpy==4.7.1"  \
          "pyyaml"
 do
   pip install --user $X
@@ -60,7 +63,7 @@ done
 unset PYTHONUSERBASE
 
 # Install matplotlib (quite tricky)
-MATPLOTLIB_GITREF="v1.4.3"
+MATPLOTLIB_GITREF="v2.0.2"
 MATPLOTLIB_URL="https://github.com/matplotlib/matplotlib/archive/${MATPLOTLIB_GITREF}.tar.gz"
 curl -SsL "$MATPLOTLIB_URL" | tar xzf -
 cd matplotlib-*
