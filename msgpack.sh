@@ -1,6 +1,6 @@
 package: msgpack
-version: v2.1.5
-tag: cpp-2.1.5
+version: v3.1.0
+tag: cpp-3.1.0
 source: https://github.com/msgpack/msgpack-c
 build_requires:
  - CMake
