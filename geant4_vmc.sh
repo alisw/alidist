@@ -13,12 +13,13 @@ env:
   G4VMCINSTALL: "$GEANT4_VMC_ROOT"
 ---
 #!/bin/bash -e
-cmake "$SOURCEDIR"                             \
-  -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-  -DGeant4VMC_USE_VGM=ON                       \
-  -DCMAKE_INSTALL_LIBDIR=lib                   \
-  -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
-  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
+LDFLAGS="$LDFLAGS -L$GEANT4_ROOT/lib"            \
+  cmake "$SOURCEDIR"                             \
+    -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DGeant4VMC_USE_VGM=ON                       \
+    -DCMAKE_INSTALL_LIBDIR=lib                   \
+    -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
+    ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 make ${JOBS+-j $JOBS} install
 G4VMC_SHARE=$(cd "$INSTALLROOT/share"; echo Geant4VMC-* | cut -d' ' -f1)
