@@ -3,7 +3,7 @@ version: v1
 overrides:
   xrootd:
     version: "%(tag_basename)s_JALIEN"
-    tag: "v4.8.3"
+    tag: "v4.8.5"
     source: https://github.com/xrootd/xrootd
     build_requires:
       - CMake
@@ -14,7 +14,7 @@ overrides:
       - ApMon-CPP
       - libxml2
   JDK:
-    version: "10.0.1_JALIEN"
+    version: "10.0.2_JALIEN"
   libxml2:
     version: "%(tag_basename)s_JALIEN"
     overrides:
