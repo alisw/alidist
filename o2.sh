@@ -19,6 +19,7 @@ build_requires:
   - RapidJSON
   - googlebenchmark
   - AliTPCCommon
+  - cub
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
@@ -135,7 +136,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
-      ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}
+      ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
+      ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
 
 
 cmake --build . -- ${JOBS+-j $JOBS} install
