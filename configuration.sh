@@ -7,7 +7,6 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - Ppconsul
 build_requires:
-  - RapidJSON
   - CMake
 source: https://github.com/AliceO2Group/Configuration
 incremental_recipe: |
