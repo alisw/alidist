@@ -1,12 +1,11 @@
 package: Common-O2
 version: "%(tag_basename)s"
-tag: v1.2.5
+tag: v1.3.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
-  - SWIG
 source: https://github.com/AliceO2Group/Common
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -17,13 +16,12 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*) 
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      [[ ! $SWIG_ROOT ]] && SWIG_ROOT=$(brew --prefix swig)
     ;;
 esac
 
-cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}              \
+cmake $SOURCEDIR 				\
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT 	\
+      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT} 	\
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
