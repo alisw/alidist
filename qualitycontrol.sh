@@ -13,6 +13,7 @@ requires:
   - arrow
 build_requires:
   - CMake
+  - CodingGuidelines
 source: https://github.com/AliceO2Group/QualityControl
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -23,6 +24,9 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
+
+# Copy the clang-format from CodingGuidelines
+rsync -a --ignore-existing $CODINGGUIDELINES_ROOT/.clang-format $SOURCEDIR
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
