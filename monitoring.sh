@@ -8,6 +8,7 @@ requires:
   - ApMon-CPP
 build_requires:
   - CMake
+  - CodingGuidelines
 source: https://github.com/AliceO2Group/Monitoring
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -18,6 +19,8 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
+
+rsync -a --ignore-existing $CODINGGUIDELINES_ROOT/.clang-format $SOURCEDIR # Copy .clang-format from CodingGuidelines
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \

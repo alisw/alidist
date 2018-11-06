@@ -25,8 +25,7 @@ case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
-# Copy the clang-format from CodingGuidelines
-rsync -a --ignore-existing $CODINGGUIDELINES_ROOT/.clang-format $SOURCEDIR
+rsync -a --ignore-existing $CODINGGUIDELINES_ROOT/.clang-format $SOURCEDIR # Copy .clang-format from CodingGuidelines
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \

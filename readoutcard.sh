@@ -10,6 +10,7 @@ requires:
   - "dim:(?!osx)"
 build_requires:
   - CMake
+  - CodingGuidelines
 prepend_path:
   PYTHONPATH: $READOUTCARD_ROOT/lib
 source: https://github.com/AliceO2Group/ReadoutCard
@@ -22,6 +23,8 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
+
+rsync -a --ignore-existing $CODINGGUIDELINES_ROOT/.clang-format $SOURCEDIR # Copy .clang-format from CodingGuidelines
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
