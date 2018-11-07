@@ -1,6 +1,6 @@
 package: HepMC
 version: "%(tag_basename)s"
-tag: alice/v2.06.09
+tag: v2.06.09-alice1
 source: https://github.com/alisw/hepmc
 build_requires:
   - CMake
