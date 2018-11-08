@@ -5,6 +5,7 @@ requires:
   - googlebenchmark
   - AliRoot
   - RapidJSON
+  - boost
 build_requires:
   - CMake
   - flatbuffers
