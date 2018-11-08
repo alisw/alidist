@@ -44,6 +44,7 @@ cmake "$SOURCEDIR"                                                 \
       ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"}                            \
       ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"}                            \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
+      ${TREELITE_ROOT:+-DTREELITE_ROOT="$TREELITE_ROOT"}           \
       -DALIROOT="$ALIROOT_ROOT"
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
