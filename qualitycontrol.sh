@@ -15,6 +15,8 @@ build_requires:
   - CMake
   - CodingGuidelines
 source: https://github.com/AliceO2Group/QualityControl
+prepend_path:
+  ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -71,6 +73,7 @@ setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(QUALITYCONTROL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64
+prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include 
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib" && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
