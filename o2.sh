@@ -19,6 +19,7 @@ build_requires:
   - RapidJSON
   - googlebenchmark
   - AliTPCCommon
+  - CodingGuidelines
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
@@ -90,6 +91,8 @@ case $ARCHITECTURE in
   ;;
   *) SONAME=so ;;
 esac
+
+rsync -a --ignore-existing $CODINGGUIDELINES_ROOT/.clang-format $SOURCEDIR # Copy .clang-format from CodingGuidelines
 
 # For the PR checkers (which sets ALIBUILD_O2_TESTS)
 # we impose -Werror as a compiler flag
