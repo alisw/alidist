@@ -1,6 +1,6 @@
 package: Control-Core
-version: "v%(year)s%(month)s%(day)s-%(short_hash)s"
-tag: master
+version: "%(tag_basename)s"
+tag: "v0.1"
 build_requires:
   - golang
   - protobuf

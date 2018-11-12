@@ -61,7 +61,6 @@ fi
 ./configure --prefix=$INSTALLROOT \
             --enable-shared       \
             --with-system-expat   \
-            --with-system-ffi     \
             --enable-unicode=ucs4
 make  # no multicore
 make install
