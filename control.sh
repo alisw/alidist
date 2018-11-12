@@ -1,5 +1,5 @@
 package: Control
-version: "v%(year)s%(month)s%(day)s"
+version: "v0.1"
 requires:
   - golang
   - Control-Core
