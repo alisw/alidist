@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "libtirpc-1-1-4"
 source: git://git.linux-nfs.org/projects/steved/libtirpc.git
 build_requires:
-  - CMake
+  - autotools
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
