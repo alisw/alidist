@@ -7,8 +7,9 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
-(cd ${SOURCEDIR} && ./bootstrap)
-${SOURCEDIR}/configure --enable-shared=no --prefix=${INSTALLROOT}
+rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+./bootstrap
+./configure --enable-shared=no --prefix=${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 rm -rf ${INSTALLROOT}/share
 
