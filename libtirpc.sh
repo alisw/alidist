@@ -11,7 +11,7 @@ rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 ./bootstrap
 ./configure --enable-shared=no --prefix=${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
-rm -rf ${INSTALLROOT}/share
+rm -rf ${INSTALLROOT}/share "${INSTALLROOT}"/lib/*.la "${INSTALLROOT}"/lib/pkgconfig
 
 # Modulefile
 mkdir -p etc/modulefiles
