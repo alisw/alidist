@@ -26,9 +26,7 @@ cmake $SOURCEDIR                                             \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                \
       ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                 \
       ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include} \
-      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include       \
-      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include       \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib
+      -DPpconsul_DIR=$PPCONSUL_ROOT
 
 make ${JOBS+-j $JOBS} install
 
