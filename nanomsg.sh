@@ -1,5 +1,5 @@
 package: nanomsg
-version:  1.1.3
+version:  1.1.5
 source: https://github.com/nanomsg/nanomsg
 build_requires:
   - CMake
