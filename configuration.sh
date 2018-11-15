@@ -24,8 +24,6 @@ esac
 cmake $SOURCEDIR                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                    \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                 \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include} \
       -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include       \
       -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib
 
