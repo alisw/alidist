@@ -1,7 +1,7 @@
 package: Clang
-version: "3.9"
+version: "7.0.0"
+tag: v7.0.0
 source: https://github.com/alisw/clang
-tag: master
 build_requires:
  - CMake
 ---
