@@ -1,6 +1,6 @@
 package: DDS
 version: "%(tag_basename)s"
-tag: "2.0"
+tag: "GridTest"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
