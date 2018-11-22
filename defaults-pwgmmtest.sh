@@ -30,10 +30,10 @@ overrides:
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   AliRoot:
     version: "%(commit_hash)s_PWGMMTEST"
-    tag: v5-09-42
+    tag: v5-09-42a
   AliPhysics:
     version: "%(commit_hash)s_PWGMMTEST"
-    tag: v5-09-42-01
+    tag: v5-09-42a-01
   AGILe:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/agile
