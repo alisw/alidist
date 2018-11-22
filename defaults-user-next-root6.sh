@@ -12,14 +12,14 @@ overrides:
       which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-9].*|3.10.*) exit 1 ;; esac
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-41c
+    tag: v5-09-42
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-41c-01
+    tag: v5-09-42-01
     requires:
       - AliRoot
       - RooUnfold
@@ -40,6 +40,8 @@ overrides:
       - FreeType:(?!osx)
       - Python-modules
       - "GCC-Toolchain:(?!osx)"
+      - libpng
+      - lzma
   GSL:
     prefer_system_check: |
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null

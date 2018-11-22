@@ -92,11 +92,13 @@ overrides:
       - googletest
       - ninja
   O2:
-     build_requires:
-       - ninja
-       - RapidJSON
-       - googlebenchmark
-       - AliTPCCommon
+    version: "%(short_hash)s"
+    tag: dev
+    build_requires:
+      - ninja
+      - RapidJSON
+      - googlebenchmark
+      - AliTPCCommon
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

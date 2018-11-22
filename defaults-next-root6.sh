@@ -34,10 +34,10 @@ overrides:
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   AliRoot:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-41c
+    tag: v5-09-42
   AliPhysics:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-41c-01
+    tag: v5-09-42-01
     requires:
       - AliRoot
       - RooUnfold

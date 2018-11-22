@@ -59,6 +59,7 @@ overrides:
       - ninja
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
+    tag: dev
     build_requires:
       - lcov
       - ninja
