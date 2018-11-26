@@ -66,6 +66,7 @@ overrides:
       - RapidJSON
       - googlebenchmark
       - AliTPCCommon
+      - cub
   CMake:
     version: "%(tag_basename)s"
     tag: "v3.11.0"
