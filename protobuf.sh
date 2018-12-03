@@ -1,5 +1,5 @@
 package: protobuf
-version: v2.6.1
+version: v3.5.2
 source: https://github.com/google/protobuf
 build_requires:
  - autotools
