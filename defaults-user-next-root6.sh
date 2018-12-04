@@ -17,6 +17,7 @@ overrides:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
+      - treelite
   AliPhysics:
     version: "%(tag_basename)s"
     tag: v5-09-43-01
