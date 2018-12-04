@@ -1,14 +1,17 @@
 package: boost
 version: "%(tag_basename)s"
-tag: v1.59.0
+tag: v1.68.0
 source: https://github.com/alisw/boost.git
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
+  - Python-modules
+  - libpng
+  - lzma
 build_requires:
- - "bz2"
+  - "bz2"
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 105900)\n#error \"Cannot use system's boost. Boost > 1.59.00 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 106800 || BOOST_VERSION > 106899)\n#error \"Cannot use system's boost: boost 1.68 required.\"\n#endif\nint main(){}" | gcc -I$(brew --prefix boost)/include -xc++ - -o /dev/null
 prepend_path:
   ROOT_INCLUDE_PATH: "$BOOST_ROOT/include"
 ---

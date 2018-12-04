@@ -1,5 +1,8 @@
 package: defaults-jalien
 version: v1
+disable:
+  - arrow
+  - treelite
 overrides:
   XRootD:
     version: "%(tag_basename)s_JALIEN"
@@ -36,6 +39,17 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
     build_requires:
       - autotools
+  AliPhysics:
+    version: "%(tag_basename)s"
+    tag: v5-09-43-01
+  AliRoot:
+    version: "%(tag_basename)s"
+    tag: v5-09-43
+    requires:
+      - JAliEn-ROOT
+      - ROOT
+      - fastjet:(?!.*ppc64)
+      - Vc
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

@@ -98,6 +98,15 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
+fi
+
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \

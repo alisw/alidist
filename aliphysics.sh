@@ -3,6 +3,8 @@ version: "%(commit_hash)s"
 tag: master
 requires:
   - AliRoot
+  - RooUnfold
+  - treelite
 build_requires:
   - "Xcode:(osx.*)"
 source: https://github.com/alisw/AliPhysics
@@ -31,6 +33,15 @@ incremental_recipe: |
 # Uses the same setup as AliRoot
 if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   source $ALIROOT_ROOT/etc/gcov-setup.sh
+fi
+
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
 fi
 
 cmake "$SOURCEDIR"                                                 \

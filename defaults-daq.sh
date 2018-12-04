@@ -14,6 +14,7 @@ env:
 disable:
   - AliEn-Runtime
   - GCC-Toolchain
+  - treelite
 
 overrides:
   AliRoot:
@@ -23,6 +24,8 @@ overrides:
       - DAQ
       - CMake
   ROOT:
+    tag: v5-34-30-alice10
+    source: https://github.com/alisw/root
     requires: []
     build_requires:
       - CMake

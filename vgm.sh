@@ -1,7 +1,7 @@
 package: vgm
 version: "%(tag_basename)s"
-tag: "4.3-alice1"
-source: https://github.com/alisw/vgm.git
+tag: "4.4"
+source: https://github.com/vmc-project/vgm
 requires:
   - ROOT
   - GEANT4

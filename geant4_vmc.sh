@@ -1,7 +1,7 @@
 package: GEANT4_VMC
 version: "%(tag_basename)s"
-tag: "v3-2-p3-monopole-alice1"
-source: https://github.com/alisw/geant4_vmc
+tag: "v3-6-p1"
+source: https://github.com/vmc-project/geant4_vmc
 requires:
   - ROOT
   - GEANT4
