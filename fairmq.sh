@@ -57,7 +57,7 @@ cmake --build . --target install ${JOBS:+-- -j$JOBS}
 if [[ $ALIBUILD_O2_TESTS ]]; then
   # Exclude running the protocols test suite for now, because it needs certain
   # hardcoded TCP ports to be unused, which is sometimes not the case.
-  ctest -E "(FairMQ.Protocols)|(Example-Region-zeromq)|(Example-Region-nanomsg)|(Example-Region-shmem)" ${JOBS:+-j$JOBS}
+  ctest -E "(FairMQ.Protocols)|(Example-Region-zeromq)|(Example-Region-nanomsg)|(Example-Region-shmem)" --output-on-failure ${JOBS:+-j$JOBS}
 fi
 
 # ModuleFile
