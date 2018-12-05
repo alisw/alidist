@@ -6,7 +6,8 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: .*
 prefer_system_check: |
-  which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-9].*|3.1[1-2].*|3.13.0) exit 1 ;; esac
+  verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
+  type cmake && verge 3.13.1 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
 ---
 #!/bin/bash -e
 
