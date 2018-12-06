@@ -8,7 +8,6 @@ env:
   GEANT4_BUILD_MULTITHREADED: "ON"
 disable:
   - AliEn-Runtime
-  - grpc
   - ApMon-CPP
 overrides:
   AliRoot:
