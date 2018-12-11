@@ -40,7 +40,7 @@ env -i HOME="$HOME"                             \
 
 # ldconfig won't work if we're not running make install as root, and that's ok,
 # we don't need it
-sed -i 's/ldconfig/true/' ./Makefile
+sed -i -e 's/ldconfig/true/' Makefile
 make prefix=$INSTALLROOT install
 
 # Add missing symlink. Must be relative, because the directory is moved around
