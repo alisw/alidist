@@ -4,31 +4,22 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
+disable:
+  - arrow
+  - treelite
 overrides:
-  CMake:
-    version: "%(tag_basename)s"
-    tag: "v3.11.0"
-    prefer_system_check: |
-      which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-9].*|3.10.*) exit 1 ;; esac
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-41a
+    tag: v5-09-43
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-41a-01
-  GCC-Toolchain:
-    tag: v7.3.0-alice1
-    prefer_system_check: |
-      set -e
-      which gfortran || { echo "gfortran missing"; exit 1; }
-      which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
+    tag: v5-09-43-01
   ROOT:
     tag: "v6-10-08"
-    source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
       - GSL

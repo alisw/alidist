@@ -1,6 +1,6 @@
 package: O2
-version: "%(tag_basename)s"
-tag: dev
+version: "1.0.0"
+tag: "O2-1.0.0"
 requires:
   - arrow
   - FairRoot
@@ -19,6 +19,7 @@ build_requires:
   - RapidJSON
   - googlebenchmark
   - AliTPCCommon
+  - cub
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include"
@@ -97,6 +98,15 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
+fi
+
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
@@ -135,7 +145,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
-      ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}
+      ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
+      ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
 
 
 cmake --build . -- ${JOBS+-j $JOBS} install

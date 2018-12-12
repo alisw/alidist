@@ -5,12 +5,6 @@ env:
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
-  GCC-Toolchain:
-    tag: v7.3.0-alice1
-    prefer_system_check: |
-      set -e
-      which gfortran || { echo "gfortran missing"; exit 1; }
-      which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
   ROOT:
     version: "%(tag_basename)s_PWGMMTEST"
     tag: "v6-14-04"
@@ -30,10 +24,10 @@ overrides:
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   AliRoot:
     version: "%(commit_hash)s_PWGMMTEST"
-    tag: v5-09-41a
+    tag: v5-09-43
   AliPhysics:
     version: "%(commit_hash)s_PWGMMTEST"
-    tag: v5-09-41a-01
+    tag: v5-09-43-01
   AGILe:
     version: "%(tag_basename)s_PWGMMTEST"
     source: https://github.com/alipwgmm/agile

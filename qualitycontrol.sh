@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.8.5
+tag: v0.9.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -18,13 +18,16 @@ source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  # Limit parallel builds to prevent OOM
+  JOBS=$((${JOBS:-1}*3/5))
+  [[ $JOBS -gt 0 ]] || JOBS=1
+  cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+  osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
 # Copy the clang-format from CodingGuidelines
@@ -45,27 +48,31 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-make ${JOBS+-j $JOBS} install
 
-#ModuleFile
+# Limit parallel builds to prevent OOM
+JOBS=$((${JOBS:-1}*3/5))
+[[ $JOBS -gt 0 ]] || JOBS=1
+cmake --build . -- ${JOBS:+-j$JOBS} install
+
+# Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
   puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-} 
+}
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0                                                          \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+module load BASE/1.0                                                                               \\
+            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION               \\
-            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
-            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
-            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                     \\
+            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                    \\
+            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                           \\
+            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                       \\
+            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION                                    \\
+            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
             O2/$O2_VERSION-$O2_REVISION
 
 # Our environment
@@ -73,7 +80,7 @@ setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(QUALITYCONTROL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64
-prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include 
+prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib" && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

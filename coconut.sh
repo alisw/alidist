@@ -4,6 +4,7 @@ tag: "v0.1"
 build_requires:
   - golang
   - protobuf
+  - grpc
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e

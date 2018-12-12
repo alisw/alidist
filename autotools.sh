@@ -1,6 +1,6 @@
 package: autotools
 version: "%(tag_basename)s"
-tag: v1.4.0
+tag: v1.5.0
 source: https://github.com/alisw/autotools
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
@@ -109,3 +109,6 @@ find $INSTALLROOT -name '*deleteme' -delete
 grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | \
   xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
 find $INSTALLROOT -name '*deleteme' -delete
+
+# Pretend we have a modulefile to make the linter happy (don't delete)
+#%Module

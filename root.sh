@@ -1,15 +1,21 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: v5-34-30-alice10
-source: https://github.com/alisw/root
+tag: "v6-14-04"
+source: https://github.com/root-mirror/root
 requires:
+  - arrow
   - AliEn-Runtime:(?!.*ppc64)
   - GSL
   - opengl:(?!osx)
   - Xdevel:(?!osx)
   - FreeType:(?!osx)
-  - "MySQL:slc7.*"
-  - GCC-Toolchain:(?!osx)
+  - Python-modules
+  - "GCC-Toolchain:(?!osx)"
+  - libpng
+  - lzma
+  - libxml2
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -26,6 +32,11 @@ incremental_recipe: |
     done
     export ROOTSYS=$INSTALLROOT
   fi
+
+  # Limit parallel builds to prevent OOM
+  JOBS=$((${JOBS:-1}*3/5))
+  [[ $JOBS -gt 0 ]] || JOBS=1
+
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -182,6 +193,11 @@ if [[ $ALICE_DAQ ]]; then
   make ${JOBS+-j$JOBS} install
 else
   # Invoke build/install via CMake for standard builds (supports all generators)
+
+  # Limit parallel builds to prevent OOM
+  JOBS=$((${JOBS:-1}*3/5))
+  [[ $JOBS -gt 0 ]] || JOBS=1
+
   cmake --build . -- ${JOBS:+-j$JOBS} install
 fi
 

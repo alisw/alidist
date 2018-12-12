@@ -1,16 +1,15 @@
 package: CMake
 version: "%(tag_basename)s"
-tag: "v3.5.2"
+tag: "v3.13.1"
 source: https://github.com/Kitware/CMake
 build_requires:
  - "GCC-Toolchain:(?!osx)"
 prefer_system: .*
 prefer_system_check: |
-  which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-4].*|3.5.[0-1]) exit 1 ;; esac
+  verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
+  type cmake && verge 3.13.1 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
 ---
 #!/bin/bash -e
-
-echo "Building ALICE CMake. To avoid this install at least CMake 3.5.2."
 
 cat > build-flags.cmake <<- EOF
 # Disable Java capabilities; we don't need it and on OS X might miss the
