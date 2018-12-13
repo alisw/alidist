@@ -182,6 +182,7 @@ setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
 prepend-path PATH \$::env(O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/AliTPCCommon
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
