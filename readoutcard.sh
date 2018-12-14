@@ -51,8 +51,8 @@ module load BASE/1.0                                                          \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
-            PDA/$PDA_VERSION-$PDA_REVISION                                    \\
-            dim/$DIM_VERSION-$DIM_REVISION 
+            ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}                    \\
+            ${DIM_VERSION:+dim/$DIM_VERSION-$DIM_REVISION}
 
 # Our environment
 setenv READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
