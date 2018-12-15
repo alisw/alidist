@@ -12,16 +12,20 @@ prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
 prefer_system: (?!slc5)
 prefer_system_check:
-  python -c 'import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml';
-  if [ $? -ne 0 ]; then printf "Required Python modules are missing. You can install them with pip (better as root):\n  pip install matplotlib numpy certifi ipython ipywidgets ipykernel notebook metakernel pyyaml\n"; exit 1; fi
+  python -c 'import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml,jupyter,jupyterlab,sklearn,skgarden, pandas,qgrid,ipympl,request,runtime,plotly,bqplot,bokeh,tensorflow,keras';
+  if [ $? -ne 0 ]; then printf "Required Python modules are missing. You can install them with pip (better as root):\n  pip install matplotlib numpy certifi ipython ipywidgets ipykernel notebook metakernel pyyaml jupyter jupyterlab sklearn scikit-kgarden  pandas qgrid ipympl request runtime plotly bqplot bokeh tensorflow keras\n"; exit 1; fi
 ---
 #!/bin/bash -ex
 
 if [[ ! $PYTHON_VERSION ]]; then
+  echo
   cat <<EoF
+  Required Python modules are missing.
+  You can install them with pip (better as root):
+  pip install matplotlib numpy certifi ipython ipywidgets ipykernel notebook metakernel pyyaml jupyter jupyterlab sklearn scikit-garden  pandas qgrid ipympl request runtime plotly bqplot bokeh tensorflow keras
+
 Building our own Python modules.
 If you want to avoid this please install the following modules (pip recommended):
-
   - matplotlib
   - numpy
   - certifi
@@ -31,7 +35,20 @@ If you want to avoid this please install the following modules (pip recommended)
   - notebook
   - metakernel
   - pyyaml
-
+  - jupyter
+  - jupyterlab
+  - sklearn
+  - scikit-garden
+  - pandas
+  - qgrid
+  - ipympl
+  - request
+  - runtime
+  - plotly
+  - bqplot
+  - bokeh
+  - tensorflow
+  - keras
 EoF
 fi
 
@@ -52,9 +69,24 @@ for X in "mock==1.0.0"         \
          "ipykernel==4.5.0"    \
          "notebook==4.2.3"     \
          "metakernel==0.14.0"  \
-         "pyyaml"
+         "pyyaml"              \
+         "jupyter"             \
+         "jupyterlab"          \
+         "sklearn"             \
+         "scikit-garden"       \
+         "pandas"              \
+         "qgrid"               \
+         "ipympl"              \
+         "request"             \
+         "runtime"             \
+         "plotly"              \
+         "bqplot"              \
+         "bokeh"               \
+         "tensorflow"          \
+         "keras"
+
 do
-  pip install --user $X
+  pip install --user "${X}"
 done
 unset PYTHONUSERBASE
 
