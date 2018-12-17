@@ -37,6 +37,7 @@ fi
 
 # Force pip installation of packages found in current PYTHONPATH
 unset PYTHONPATH
+unset PYTHONHOME
 
 # The X.Y in pythonX.Y
 export PYVER=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')
@@ -44,6 +45,11 @@ export PYVER=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.
 # Install as much as possible with pip. Packages are installed one by one as we
 # are not sure that pip exits with nonzero in case one of the packages failed.
 export PYTHONUSERBASE=$INSTALLROOT
+
+VENV=$(python -c 'import sys; print ("1" if hasattr(sys, "real_prefix") else "0")')
+# CAVEAT: this is not tested
+PYVENV=$(python -c 'import sys; print ("1" if (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix) else "0")')
+
 for X in "mock==1.0.0"         \
          "numpy==1.9.2"        \
          "certifi==2015.9.6.2" \
@@ -54,7 +60,12 @@ for X in "mock==1.0.0"         \
          "metakernel==0.14.0"  \
          "pyyaml"
 do
-  pip install --user $X
+  if [[ ${VENV} -eq "1"  ||  ${PYVENV} -eq "1" ]]; then
+      pip install $X
+  else    
+      pip install --user $X
+  fi
+
 done
 unset PYTHONUSERBASE
 

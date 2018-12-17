@@ -42,6 +42,8 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 unset ROOTSYS
+unset PYTHONPATH
+unset PYTHONHOME
 
 COMPILER_CC=cc
 COMPILER_CXX=c++
