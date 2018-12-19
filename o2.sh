@@ -15,6 +15,7 @@ requires:
   - ms_gsl
   - FairMQ
   - curl
+  - MCStepLogger
 build_requires:
   - RapidJSON
   - googlebenchmark
