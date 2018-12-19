@@ -44,6 +44,7 @@ geant*              @alisw/simulation-experts
 vmc*                @alisw/simulation-experts
 vgm*                @alisw/simulation-experts
 vecgeom*            @alisw/simulation-experts
+mcsteplogger*       @alisw/simulation-experts
 
 # Muon Run3 Reconstruction Task Force
 alo*                @alisw/mrrtf
