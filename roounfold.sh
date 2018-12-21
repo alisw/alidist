@@ -6,8 +6,9 @@ requires:
  - ROOT
  - boost
 ---
-cmake $SOURCEDIR                          \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+cmake $SOURCEDIR                              \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
       -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
 make test
