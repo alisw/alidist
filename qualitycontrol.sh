@@ -5,7 +5,7 @@ requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
-  - InfoLogger
+  - libInfoLogger
   - FairRoot
   - Monitoring
   - Configuration
@@ -71,7 +71,7 @@ module load BASE/1.0                                                            
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                    \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                           \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                       \\
-            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION                                    \\
+            ${LIBINFOLOGGER_VERSION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
             O2/$O2_VERSION-$O2_REVISION
 
