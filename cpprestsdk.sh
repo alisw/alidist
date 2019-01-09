@@ -17,7 +17,8 @@ cmake "$SOURCEDIR/Release"                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
       -DBUILD_TESTS=OFF                         \
       -DBUILD_SAMPLES=OFF                       \
-      -DCMAKE_BUILD_TYPE=Debug
+      -DCMAKE_BUILD_TYPE=Debug                  \
+      -DCMAKE_CXX_FLAGS=-Wno-error=conversion
 
 make ${JOBS:+-j $JOBS}
 make install
