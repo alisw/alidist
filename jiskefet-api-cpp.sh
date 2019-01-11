@@ -1,6 +1,6 @@
 package: Jiskefet-Api-Cpp
 version: "%(tag_basename)s"
-tag: v0.1.0
+tag: v0.2.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -23,7 +23,7 @@ cmake $SOURCEDIR                                    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT           \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}    \
       -DCPPREST_ROOT=${CPPRESTSDK_ROOT}          \
-      -DCPPREST_LIB=${CPPRESTSDK_ROOT}/lib64/libcpprest \
+      -DCPPREST_LIB=${CPPRESTSDK_ROOT}/lib64/libcpprest.so \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -48,7 +48,6 @@ module load BASE/1.0                                                          \\
 setenv JISKEFET_API_CPP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(JISKEFET_API_CPP_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(JISKEFET_API_CPP_ROOT)/lib
-prepend-path PYTHONPATH \$::env(JISKEFET_API_CPP_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(JISKEFET_API_CPP_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
