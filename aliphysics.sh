@@ -3,6 +3,8 @@ version: "%(commit_hash)s"
 tag: master
 requires:
   - AliRoot
+  - RooUnfold
+  - treelite
 build_requires:
   - "Xcode:(osx.*)"
 source: https://github.com/alisw/AliPhysics
@@ -41,9 +43,11 @@ cmake "$SOURCEDIR"                                                 \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
+      ${ROOUNFOLD_ROOT:+-DROOUNFOLD="$ROOUNFOLD_ROOT"}             \
       ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"}                            \
       ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"}                            \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
+      ${TREELITE_ROOT:+-DTREELITE_ROOT="$TREELITE_ROOT"}           \
       -DALIROOT="$ALIROOT_ROOT"
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
@@ -74,7 +78,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION
+module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${ROOUNFOLD_VERSION:+RooUnfold/$ROOUNFOLD_VERSION-$ROOUNFOLD_REVISION}
 # Our environment
 setenv ALIPHYSICS_VERSION \$version
 setenv ALIPHYSICS_RELEASE \$::env(ALIPHYSICS_VERSION)

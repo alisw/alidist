@@ -1,17 +1,10 @@
-package: AliTPCCommon
+package: cub
 version: "%(tag_basename)s"
-tag: alitpccommon-v2.3.2
-source: https://github.com/AliceO2Group/AliTPCCommon
-build_requires:
-  - CMake
+tag: v1.8.0
+source: https://github.com/NVlabs/cub.git
 ---
 #!/bin/bash -e
-cmake ${SOURCEDIR}/                         \
-      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}
-
-make ${JOBS+-j$JOBS}
-make install
+rsync -a --delete --exclude='**/.git' --delete-excluded "$SOURCEDIR/" "$INSTALLROOT/"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -27,5 +20,5 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
-setenv ALITPCCOMMON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CUB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF

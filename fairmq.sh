@@ -1,6 +1,6 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.3.6
+tag: v1.3.7
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
@@ -53,11 +53,10 @@ cmake $SOURCEDIR                                                 \
 cmake --build . ${JOBS:+-- -j$JOBS}
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
-# For the PR checkers (which sets ALIBUILD_O2_TESTS)
-if [[ $ALIBUILD_O2_TESTS ]]; then
-  # Exclude running the protocols test suite for now, because it needs certain
-  # hardcoded TCP ports to be unused, which is sometimes not the case.
-  ctest -E "(FairMQ.Protocols)|(Example-Region-zeromq)|(Example-Region-nanomsg)|(Example-Region-shmem)" ${JOBS:+-j$JOBS}
+# Tests will not run unless ALIBUILD_FAIRMQ_TESTS is set
+if [[ $ALIBUILD_FAIRMQ_TESTS ]]; then
+  # In order to reduce the probability of clashes, tests are not run in parallel
+  ctest --output-on-failure
 fi
 
 # ModuleFile

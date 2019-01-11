@@ -1,14 +1,17 @@
 package: defaults-jalien
 version: v1
+disable:
+  - arrow
+  - treelite
 overrides:
-  xrootd:
+  XRootD:
     version: "%(tag_basename)s_JALIEN"
     tag: "v4.8.5"
     source: https://github.com/xrootd/xrootd
     build_requires:
       - CMake
-      - "GCC-Toolchain:(?!osx)"
     requires:
+      - "GCC-Toolchain:(?!osx)"
       - "OpenSSL:(?!osx)"
       - "osx-system-openssl:(osx.*)"
       - ApMon-CPP
@@ -32,6 +35,21 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
   ApMon-CPP:
     version: "%(tag_basename)s"
+    requires:
+      - "GCC-Toolchain:(?!osx)"
+    build_requires:
+      - autotools
+  AliPhysics:
+    version: "%(tag_basename)s"
+    tag: v5-09-44a-01
+  AliRoot:
+    version: "%(tag_basename)s"
+    tag: v5-09-44a
+    requires:
+      - JAliEn-ROOT
+      - ROOT
+      - fastjet:(?!.*ppc64)
+      - Vc
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
