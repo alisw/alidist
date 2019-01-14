@@ -1,6 +1,6 @@
 package: Jiskefet-Api-Cpp
 version: "%(tag_basename)s"
-tag: v0.2.1
+tag: v0.2.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
