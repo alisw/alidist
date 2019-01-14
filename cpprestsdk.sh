@@ -38,5 +38,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(CPPRESTSDK_ROOT)/lib
+prepend-path LD_LIBRARY_PATH \$::env(CPPRESTSDK_ROOT)/lib64
 EoF
