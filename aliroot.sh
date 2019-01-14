@@ -11,7 +11,7 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
-  - AliTPCCommon
+  - AliGPU
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 prepend_path:
@@ -59,7 +59,7 @@ cmake $SOURCEDIR                                                     \
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                     \
       ${DPMJET_ROOT:+-DDPMJET="$DPMJET_ROOT"}                        \
       ${ZEROMQ_ROOT:+-DZEROMQ=$ZEROMQ_ROOT}                          \
-      ${ALITPCCOMMON_ROOT:+-DALITPCCOMMON_DIR=$ALITPCCOMMON_ROOT}    \
+      ${ALIGPU_ROOT:+-DALIGPU_DIR=$ALIGPU_ROOT}                      \
       ${ALICE_DAQ:+-DDA=ON -DDARPM=ON -DdaqDA=$DAQ_DALIB}            \
       ${ALICE_DAQ:+-DAMORE_CONFIG=$AMORE_CONFIG}                     \
       ${ALICE_DAQ:+-DDATE_CONFIG=$DATE_CONFIG}                       \

@@ -1,6 +1,6 @@
-package: AliTPCCommon
+package: AliGPU
 version: "%(tag_basename)s"
-tag: alitpccommon-v2.3.2.1
+tag: aligpu-v2.5.0
 source: https://github.com/AliceO2Group/AliTPCCommon
 build_requires:
   - CMake
@@ -27,5 +27,5 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
-setenv ALITPCCOMMON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ALIGPU_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF

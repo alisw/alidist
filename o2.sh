@@ -19,7 +19,7 @@ requires:
 build_requires:
   - RapidJSON
   - googlebenchmark
-  - AliTPCCommon
+  - AliGPU
   - cub
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
@@ -152,7 +152,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
-      ${ALITPCCOMMON_ROOT:+-DALITPCCOMMON_DIR=$ALITPCCOMMON_ROOT}                           \
+      ${ALIGPU_ROOT:+-DALIGPU_DIR=$ALIGPU_ROOT}                                             \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
       ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
@@ -196,7 +196,7 @@ setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
 prepend-path PATH \$::env(O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/AliTPCCommon
+prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/AliGPU
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
