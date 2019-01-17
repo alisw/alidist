@@ -1,6 +1,6 @@
 package: pythia
 version: "%(tag_basename)s"
-tag: v8235
+tag: v8235-alice1
 source: https://github.com/alisw/pythia8
 requires:
   - lhapdf
