@@ -28,9 +28,8 @@ JOBS=$((${JOBS:-1}*2/5))
 # This is needed because https://github.com/Homebrew/homebrew-core/pull/35735
 # seems to break the creation of the tarball.
 case $ARCHITECTURE in
-  osx*)
-make -j$JOBS wn_bin
-  ;;
+  osx*) ;;
+  *) make -j$JOBS wn_bin ;;
 esac
 
 make -j$JOBS install
