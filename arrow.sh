@@ -1,14 +1,15 @@
 package: arrow
-version: v0.10.0-alice1
-tag: apache-arrow-0.10.0-alice1
+version: v0.12.0-alice3
+tag: apache-arrow-0.12.0-alice3
 source: https://github.com/alisw/arrow
 requires:
   - boost
+  - lz4
+  - thrift
 build_requires:
   - zlib
   - flatbuffers
   - CMake
-  - "GCC-Toolchain:(?!osx)"
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -30,24 +31,28 @@ esac
 # Taken from our stack, linked dynamically (needed at runtime):
 #   boost
 
-cmake $SOURCEDIR/cpp                       \
-      -DARROW_BUILD_BENCHMARKS=OFF         \
-      -DARROW_BUILD_TESTS=OFF              \
-      -DARROW_JEMALLOC=OFF                 \
-      -DARROW_HDFS=OFF                     \
-      -DARROW_IPC=ON                       \
-      -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT \
-      -DCMAKE_INSTALL_LIBDIR="lib"         \
-      -DARROW_USE_SSE=ON                   \
-      -DARROW_WITH_LZ4=ON                  \
-      -DARROW_WITH_SNAPPY=OFF              \
-      -DARROW_WITH_GRPC=OFF                \
-      -DARROW_WITH_ZSTD=OFF                \
-      -DARROW_WITH_ZLIB=ON                 \
-      -DARROW_NO_DEPRECATED_API=ON         \
-      -DBOOST_ROOT=$BOOST_ROOT             \
-      -DARROW_WITH_BROTLI=ON               \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
+cmake $SOURCEDIR/cpp                             \
+      -DARROW_BUILD_BENCHMARKS=OFF               \
+      -DARROW_BUILD_TESTS=OFF                    \
+      -DARROW_USE_GLOG=OFF                       \
+      -DARROW_JEMALLOC=OFF                       \
+      -DARROW_HDFS=OFF                           \
+      -DARROW_IPC=ON                             \
+      -DARROW_PARQUET=ON                         \
+      -DTHRIFT_HOME=${THRIFT_ROOT}               \
+      -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT       \
+      -DCMAKE_INSTALL_LIBDIR="lib"               \
+      -DARROW_WITH_LZ4=ON                        \
+      -DLZ4_HOME=${LZ4_ROOT}                     \
+      -DLZ4_INCLUDE_DIR=${LZ4_ROOT}/include      \
+      -DLZ4_STATIC_LIB=${LZ4_ROOT}/lib/liblz4.a  \
+      -DARROW_WITH_SNAPPY=OFF                    \
+      -DARROW_WITH_ZSTD=OFF                      \
+      -DARROW_WITH_ZLIB=ON                       \
+      -DARROW_NO_DEPRECATED_API=ON               \
+      -DBOOST_ROOT=$BOOST_ROOT                   \
+      -DARROW_WITH_BROTLI=ON                     \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
       -DARROW_PYTHON=OFF
 
 make ${JOBS:+-j $JOBS}
