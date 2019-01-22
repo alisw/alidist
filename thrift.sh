@@ -26,16 +26,16 @@ rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
             --without-erlang            \
             --without-haskell           \
             --without-perl              \
-            --without-python \
+            --without-python            \
             --without-php               \
             --without-php_extension     \
             --without-ruby              \
             --without-qt                \
             --enable-libs               \
-            --disable-tests              \
-            --disable-plugin             \
-            --disable-tutorial           \
-            --with-openssl=${OPENSSL_ROOT}
+            --disable-tests             \
+            --disable-plugin            \
+            --disable-tutorial          \
+            ${OPENSSL_ROOT:+--with-openssl=${OPENSSL_ROOT}}
 make CPPFLAGS="-I${BOOST_ROOT}/include ${CPPFLAGS}" CXXFLAGS="-Wno-macro-redefined -Wno-register ${CXXFLAGS}" ${JOBS:+-j $JOBS}
 make install
 
