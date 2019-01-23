@@ -5,7 +5,6 @@ source: https://github.com/alisw/arrow
 requires:
   - boost
   - lz4
-  - thrift
 build_requires:
   - zlib
   - flatbuffers
@@ -38,8 +37,8 @@ cmake $SOURCEDIR/cpp                             \
       -DARROW_JEMALLOC=OFF                       \
       -DARROW_HDFS=OFF                           \
       -DARROW_IPC=ON                             \
-      -DARROW_PARQUET=ON                         \
-      -DTHRIFT_HOME=${THRIFT_ROOT}               \
+      ${THRIFT_ROOT:+-DARROW_PARQUET=ON}         \
+      ${THRIFT_ROOT:+-DTHRIFT_HOME=${THRIFT_ROOT}} \
       -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT       \
       -DCMAKE_INSTALL_LIBDIR="lib"               \
       -DARROW_WITH_LZ4=ON                        \
