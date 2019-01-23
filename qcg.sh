@@ -1,5 +1,5 @@
 package: qcg
-version: "%(tag_basename)s"
+version: v1.4.4
 tag: qcg-v1.4.4
 requires:
   - node
