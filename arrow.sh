@@ -49,7 +49,7 @@ cmake $SOURCEDIR/cpp                             \
       -DLZ4_STATIC_LIB=${LZ4_ROOT}/lib/liblz4.a  \
       -DARROW_WITH_SNAPPY=OFF                    \
       -DARROW_WITH_ZSTD=OFF                      \
-      -DARROW_WITH_BROTLY=OFF                    \
+      -DARROW_WITH_BROTLI=OFF                    \
       -DARROW_WITH_ZLIB=ON                       \
       -DARROW_NO_DEPRECATED_API=ON               \
       -DBOOST_ROOT=$BOOST_ROOT                   \
