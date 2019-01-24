@@ -5,6 +5,7 @@ source: https://github.com/alisw/arrow
 requires:
   - boost
   - lz4
+  - RapidJSON
 build_requires:
   - zlib
   - flatbuffers
@@ -42,11 +43,13 @@ cmake $SOURCEDIR/cpp                             \
       -DFLATBUFFERS_HOME=$FLATBUFFERS_ROOT       \
       -DCMAKE_INSTALL_LIBDIR="lib"               \
       -DARROW_WITH_LZ4=ON                        \
+      ${RAPIDJSON_ROOT:+-DRAPIDJSON_HOME=${RAPIDJSON_ROOT}} \
       -DLZ4_HOME=${LZ4_ROOT}                     \
       -DLZ4_INCLUDE_DIR=${LZ4_ROOT}/include      \
       -DLZ4_STATIC_LIB=${LZ4_ROOT}/lib/liblz4.a  \
       -DARROW_WITH_SNAPPY=OFF                    \
       -DARROW_WITH_ZSTD=OFF                      \
+      -DARROW_WITH_BROTLY=OFF                    \
       -DARROW_WITH_ZLIB=ON                       \
       -DARROW_NO_DEPRECATED_API=ON               \
       -DBOOST_ROOT=$BOOST_ROOT                   \
