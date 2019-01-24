@@ -53,7 +53,6 @@ cmake $SOURCEDIR/cpp                             \
       -DARROW_WITH_ZLIB=ON                       \
       -DARROW_NO_DEPRECATED_API=ON               \
       -DBOOST_ROOT=$BOOST_ROOT                   \
-      -DARROW_WITH_BROTLI=ON                     \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
       -DARROW_PYTHON=OFF
 
