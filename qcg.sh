@@ -1,6 +1,6 @@
 package: qcg
-version: "%(tag_basename)s"
-tag: qcg-v1.4.4
+version: v1.4.5
+tag: qcg-v1.4.5
 requires:
   - node
   - QualityControl
