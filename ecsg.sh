@@ -13,7 +13,7 @@ rsync -a --delete  $SOURCEDIR/Control/* $BUILDDIR/
 pushd $BUILDDIR
   npm install --only=production --loglevel error --no-save --no-package-lock
   mkdir -p bin
-  echo 'CONFIG=$1; [ -z "$1" ] && CONFIG="$INSTALLROOT/config.js" || CONFIG="$1"; node $INSTALLROOT/index.js $CONFIG' > bin/ecsg
+  echo "CONFIG=\$1; [ -z \"\$1\" ] && CONFIG=\"$INSTALLROOT/config.js\" || CONFIG=\"\$1\"; node \"$INSTALLROOT/index.js\" \$CONFIG" > bin/ecsg
   chmod +x bin/ecsg
 popd
 
