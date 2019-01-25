@@ -13,6 +13,7 @@ build_requires:
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
+
 mkdir -p $INSTALLROOT
 case $ARCHITECTURE in
   osx*)
