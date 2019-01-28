@@ -39,6 +39,13 @@ incremental_recipe: |
 
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+  if [[ $EXTERNAL_ALIEN ]]; then
+    echo "Building with external Alien plugin, removing interal plugin handlers."
+    rm -v "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"
+    rm -v "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C"
+    rm -v "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+  fi
 ---
 #!/bin/bash -e
 unset ROOTSYS
@@ -49,6 +56,9 @@ COMPILER_LD=c++
 [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CXX11=1 || true
 [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CXX14=1 || true
 [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CXX17=1 || true
+
+[[ $EXTERNAL_ALIEN ]] || INTERNAL_ALIEN=1
+echo "Internal alien: $INTERNAL_ALIEN"
 
 case $ARCHITECTURE in
   osx*)
@@ -116,8 +126,9 @@ else
         ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
-        ${ALIEN_RUNTIME_VERSION:+-Dalien=ON}                                             \
-        ${ALIEN_RUNTIME_VERSION:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                        \
+        ${EXTERNAL_ALIEN:+-Dalien=OFF}                                                   \
+        ${INTERNAL_ALIEN:+-Dalien=ON}                                                    \
+        ${INTERNAL_ALIEN:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                               \
         ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
         ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
         ${CXX11:+-Dcxx11=ON}                                                             \
@@ -160,10 +171,10 @@ else
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http fortran
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
+            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${INTERNAL_ALIEN:+alien} ${ROOT_HAS_PYTHON:+python}
             ${ARROW_VERSION:+arrow}"
   NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
-               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix"
+               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix ${EXTERNAL_ALIEN:+alien}"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
@@ -220,6 +231,14 @@ fi
 # Make some CMake files used by other projects relocatable
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
 find . -name '*.deleteme' -exec rm -f '{}' \; || true
+
+# Remove the plugin loader macros for builtin TAlien plugin. Use JAliEn-ROOT or AliEn-ROOT-Legacy.
+if [[ $EXTERNAL_ALIEN ]]; then
+  echo "Building with external Alien plugin, removing interal plugin handlers."
+  rm -v "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"
+  rm -v "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C"
+  rm -v "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+fi
 
 # Modulefile
 mkdir -p etc/modulefiles

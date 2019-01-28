@@ -1,21 +1,15 @@
-package: JAliEn-ROOT
+package: Old-AliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.1.0"
-source: https://gitlab.cern.ch/jalien/jalien-root
+tag: "0.0.3"
+source: https://gitlab.cern.ch/jalien/old-alien-root.git
 requires:
-  - ROOT
-env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++11"
-  CFLAGS: "-fPIC -g -O2"
-  CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-  EXTERNAL_ALIEN: 1
-build_requires:
-  - libwebsockets
-  - json-c
   - CMake
   - "GCC-Toolchain:(?!osx)"
+  - ROOT
+build_requires:
+  - xalienfs
 append_path:
-  ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
+  ROOT_PLUGIN_PATH: "$OLD_ALIEN_ROOT_ROOT/etc/plugins"
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -24,10 +18,23 @@ esac
 cmake $SOURCEDIR                                         \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       -DROOTSYS="$ROOTSYS"                               \
-      -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
-      -DLWS="$LIBWEBSOCKETS_ROOT"
+      -DALIEN_DIR="$XALIENFS_ROOT"                       \
+      -DROOT_VERSION="$ROOT_VERSION"
+
+
+
 make ${JOBS:+-j $JOBS} install
+for RPKG in $BUILD_REQUIRES; do
+  RPKG_UP=$(echo $RPKG|tr '[:lower:]' '[:upper:]'|tr '-' '_')
+  RPKG_ROOT=$(eval echo "\$${RPKG_UP}_ROOT")
+  rsync -a $RPKG_ROOT/ $INSTALLROOT/
+  pushd $INSTALLROOT/../../..
+    env WORK_DIR=$PWD sh -e $INSTALLROOT/relocate-me.sh
+  popd
+  rm -f $INSTALLROOT/etc/modulefiles/{$RPKG,$RPKG.unrelocated} || true
+done
+
 
 # Modulefile
 mkdir -p etc/modulefiles
@@ -43,10 +50,10 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
 
 # Our environment
-setenv JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(JALIEN_ROOT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib
-append-path ROOT_PLUGIN_PATH \$::env(JALIEN_ROOT_ROOT)/etc/plugins
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib")
+setenv OLD_ALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(OLD_ALIEN_ROOT_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(OLD_ALIEN_ROOT_ROOT)/lib
+append-path ROOT_PLUGIN_PATH \$::env(OLD_ALIEN_ROOT_ROOT)/etc/plugins
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OLD_ALIEN_ROOT_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
