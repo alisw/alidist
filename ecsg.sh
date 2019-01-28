@@ -1,22 +1,20 @@
-package: qcg
-version: v1.4.5
-tag: qcg-v1.4.5
+package: ecsg
+version: "v1.0.0"
+tag: qcg-v1.4.4
 requires:
   - node
-  - QualityControl
 build_requires:
-  - QualityControl
   - node
 source: https://github.com/AliceO2Group/WebUi.git
 ---
 #!/bin/bash
 
-rsync -a --delete  $SOURCEDIR/QualityControl/* $BUILDDIR/
+rsync -a --delete  $SOURCEDIR/Control/* $BUILDDIR/
 pushd $BUILDDIR
   npm install --only=production --loglevel error --no-save --no-package-lock
   mkdir -p bin
-  echo "node $INSTALLROOT/index.js $INSTALLROOT/config.js" > bin/qcg
-  chmod +x bin/qcg
+  echo "[ -z \"\$1\" ] && CONFIG=\"$INSTALLROOT/config.js\" || CONFIG=\"\$1\"; node \"$INSTALLROOT/index.js\" \$CONFIG" > bin/ecsg
+  chmod +x bin/ecsg
 popd
 
 rsync -a --delete $BUILDDIR/ $INSTALLROOT/
@@ -35,8 +33,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${NODE_VERSION:+node/$NODE_VERSION-$NODE_REVISION} ${QUALITYCONTROL_VERSION:+QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION}
+module load BASE/1.0 ${NODE_VERSION:+node/$NODE_VERSION-$NODE_REVISION}
 # Our environment
-setenv QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(QCG_ROOT)/bin
+prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 EoF
