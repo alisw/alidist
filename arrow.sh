@@ -21,7 +21,6 @@ case $ARCHITECTURE in
     [[ ! $FLATBUFFERS_ROOT ]] && FLATBUFFERS_ROOT=$(brew --prefix flatbuffers)
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
     [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
-    [[ ! $THRIFT_ROOT ]] && THRIFT_ROOT=$(brew --prefix thrift)
   ;;
 esac
 
