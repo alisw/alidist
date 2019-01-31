@@ -5,7 +5,7 @@ source: https://github.com/live-clones/hdf5.git
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
-  - cmake
+  - CMake
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <hdf5.h>\n" | gcc -xc++ - -c -o /dev/null
