@@ -12,10 +12,10 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-45
+    tag: v5-09-45a
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-45-01
+    tag: v5-09-45a-01
 
   # Use ROOT 5
   ROOT:
