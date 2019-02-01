@@ -8,8 +8,15 @@ build_requires:
   - curl
 env:
   SSL_CERT_FILE: "$(env PYTHONPATH=$PYTHON_MODULES_ROOT/lib/python$(python -c \"import distutils.sysconfig; print(distutils.sysconfig.get_python_version())\")/site-packages:$PYTHONPATH python -c \"import certifi; print certifi.where()\")"
-prepend_path:
-  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
+#prepend_path:
+#  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
+
+#env:
+#  PYVER: $(if [ $PYTHON3_VERSION ]; then printf $PYTHON3_VERSION; else printf $PYTHON_VERSION; fi) 
+#  #PYTHONPATH: "$PYTHON_MODULES_ROOT/lib/python$PYVER/site-packages:$PYTHONPATH"
+#  SSL_CERT_FILE: $(export PYTHONPATH=$PYTHON_MODULES_ROOT/lib/python$PYVER/site-packages && python -c "import certifi; print(certifi.where())")
+#prepend_path:
+#  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python$PYVER/site-packages:$PYTHONPATH
 prefer_system: (?!slc5)
 prefer_system_check:
   python -c 'import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml';
@@ -51,14 +58,14 @@ VENV=$(python -c 'import sys; print ("1" if hasattr(sys, "real_prefix") else "0"
 PYVENV=$(python -c 'import sys; print ("1" if (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix) else "0")')
 
 for X in "mock==1.0.0"         \
-         "numpy==1.9.2"        \
          "certifi==2015.9.6.2" \
          "ipython==5.1.0"      \
          "ipywidgets==5.2.2"   \
          "ipykernel==4.5.0"    \
          "notebook==4.2.3"     \
          "metakernel==0.14.0"  \
-         "pyyaml"
+         "pyyaml"              \
+         "cython"
 do
   if [[ ${VENV} -eq "1"  ||  ${PYVENV} -eq "1" ]]; then
       pip install $X
@@ -67,7 +74,23 @@ do
   fi
 
 done
+
 unset PYTHONUSERBASE
+mkdir -p $INSTALLROOT/{lib,lib64}/python$PYVER/site-packages
+
+# Build numpy from source in order to be independent from glibc version
+NUMPY_GITREF="v1.9.2"
+NUMPY_URL="https://github.com/numpy/numpy/archive/${NUMPY_GITREF}.tar.gz"
+curl -SsL "$NUMPY_URL" | tar xzf -
+pushd numpy-*
+PATH=$INSTALLROOT/bin:$PATH \
+  PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
+  python setup.py build   
+PATH=$INSTALLROOT/bin:$PATH \
+  PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
+  python setup.py install --prefix $INSTALLROOT
+popd
+
 
 # Install matplotlib (quite tricky)
 MATPLOTLIB_GITREF="v1.4.3"
@@ -93,7 +116,6 @@ if [[ $FREETYPE_ROOT ]]; then
 fi
 perl -p -i -e "s|'darwin': \['/usr/local/'|'darwin': ['$INSTALLROOT'|g" setupext.py
 
-mkdir -p $INSTALLROOT/{lib,lib64}/python$PYVER/site-packages
 python setup.py build
 PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
   python setup.py install --prefix $INSTALLROOT
@@ -127,7 +149,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
+module load BASE/1.0 ${PYTHON3_VERSION:+Python3/$PYTHON3_VERSION-$PYTHON3_REVISION} ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 # Our environment
 setenv PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(PYTHON_MODULES_ROOT)/bin
@@ -136,5 +158,5 @@ prepend-path LD_LIBRARY_PATH $::env(PYTHON_MODULES_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(PYTHON_MODULES_ROOT)/lib64" && \
                                       echo "prepend-path DYLD_LIBRARY_PATH $::env(PYTHON_MODULES_ROOT)/lib")
 prepend-path PYTHONPATH $::env(PYTHON_MODULES_ROOT)/lib/python$PYVER/site-packages
-setenv SSL_CERT_FILE  [exec python -c "import certifi; print certifi.where()"]
+setenv SSL_CERT_FILE  [exec python -c "import certifi; print(certifi.where())"]
 EoF

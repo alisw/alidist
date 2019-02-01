@@ -70,15 +70,7 @@ cd $BUILDDIR
 export PATH=$INSTALLROOT/bin:$PATH
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
 export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
-for U in https://bootstrap.pypa.io/get-pip.py \
-         https://raw.githubusercontent.com/pypa/get-pip/master/get-pip.py; do
-  curl -kSsL -o get-pip.py $U || continue && break
-done
-# Modified by SV
-#python get-pip.py
-#ls -rtlh "$INSTALLROOT/bin"
-#$INSTALLROOT/bin/python get-pip.py --target "$INSTALLROOT"
-#ls -rtlh "$INSTALLROOT/bin"
+
 ln -s $INSTALLROOT/bin/python3.6 $INSTALLROOT/bin/python
 ln -s $INSTALLROOT/bin/pip3 $INSTALLROOT/bin/pip
 python "$INSTALLROOT/bin/pip" install -U pip
