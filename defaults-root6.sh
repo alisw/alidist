@@ -12,10 +12,10 @@ overrides:
     tag: "v6-10-08"
   AliRoot:
     version: "%(commit_hash)s_ROOT6"
-    tag: v5-09-45
+    tag: v5-09-45a
   AliPhysics:
     version: "%(commit_hash)s_ROOT6"
-    tag: v5-09-45-01
+    tag: v5-09-45a-01
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
