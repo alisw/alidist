@@ -42,7 +42,9 @@ incremental_recipe: |
     ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
   fi
   if [[ $ALIBUILD_O2_TESTS ]]; then
-    export O2_ROOT=$INSTALLROOT
+     export O2_ROOT=$INSTALLROOT
+     export VMCWORKDIR=$O2_ROOT/share
+     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
     # Clean up old coverage data
     find . -name "*.gcov" -o -name "*.gcda" -delete
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
@@ -190,7 +192,9 @@ EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  export O2_ROOT=$INSTALLROOT
+    export O2_ROOT=$INSTALLROOT
+    export VMCWORKDIR=$O2_ROOT/share
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
   # Clean up old coverage data
   find . -name "*.gcov" -o -name "*.gcda" -delete
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
