@@ -9,7 +9,7 @@ source: https://github.com/AliceO2Group/WebUi.git
 #!/bin/bash -e
 
 rsync -a --delete "$SOURCEDIR/QualityControl/" .
-npm install --only=production --loglevel=verbose --no-save --no-package-lock
+npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm
 
 mkdir -p bin
 cat > bin/qcg <<EOF
