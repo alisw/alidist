@@ -8,14 +8,13 @@ build_requires:
 source: https://github.com/edenhill/librdkafka
 ---
 #!/bin/bash -ex
-cmake -H$SOURCEDIR 				\
-      -B$SOURCEDIR/_cmake_build			\
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT 	\
+cmake -H"$SOURCEDIR"                        \
+      -B"$SOURCEDIR/_cmake_build"           \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
       -DCMAKE_INSTALL_LIBDIR=lib
+cmake --build "$SOURCEDIR/_cmake_build" --target install
 
-cmake --build $SOURCEDIR/_cmake_build --target install
-
-#ModuleFile
+# ModuleFile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
@@ -30,5 +29,6 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
 
 # Our environment
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
