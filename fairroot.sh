@@ -66,6 +66,8 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}      \
       ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                       \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 cmake --build . -- -j$JOBS install
