@@ -18,10 +18,17 @@ overrides:
     version: "%(tag_basename)s"
     tag: v5-09-43-01
   Python-modules:
+    env:
+      BUILD_NUMPY: 0 
     requires:
       - Python3
       - FreeType
       - libpng
   Python3: 
     tag: 3.6 
+  Python-modules-ml:
+    requires:
+      - Python3
+      - Python-modules 
+      - ROOT
 ---

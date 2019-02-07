@@ -8,6 +8,8 @@ build_requires:
   - curl
 env:
   SSL_CERT_FILE: "$(env PYTHONPATH=$PYTHON_MODULES_ROOT/lib/python$(python -c \"import distutils.sysconfig; print(distutils.sysconfig.get_python_version())\")/site-packages:$PYTHONPATH python -c \"import certifi; print certifi.where()\")"
+  # Do not build numpy if you are going to use other ML modules
+  BUILD_NUMPY: 1
 #prepend_path:
 #  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
 
@@ -57,6 +59,7 @@ VENV=$(python -c 'import sys; print ("1" if hasattr(sys, "real_prefix") else "0"
 # CAVEAT: this is not tested
 PYVENV=$(python -c 'import sys; print ("1" if (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix) else "0")')
 
+# On SLC6 we should build numpy from source
 for X in "mock==1.0.0"         \
          "certifi==2015.9.6.2" \
          "ipython==5.1.0"      \
@@ -79,18 +82,19 @@ unset PYTHONUSERBASE
 mkdir -p $INSTALLROOT/{lib,lib64}/python$PYVER/site-packages
 
 # Build numpy from source in order to be independent from glibc version
-NUMPY_GITREF="v1.9.2"
-NUMPY_URL="https://github.com/numpy/numpy/archive/${NUMPY_GITREF}.tar.gz"
-curl -SsL "$NUMPY_URL" | tar xzf -
-pushd numpy-*
-PATH=$INSTALLROOT/bin:$PATH \
-  PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
-  python setup.py build   
-PATH=$INSTALLROOT/bin:$PATH \
-  PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
-  python setup.py install --prefix $INSTALLROOT
-popd
-
+if [[ $BUILD_NUMPY ]]; then
+  NUMPY_GITREF="v1.9.2"
+  NUMPY_URL="https://github.com/numpy/numpy/archive/${NUMPY_GITREF}.tar.gz"
+  curl -SsL "$NUMPY_URL" | tar xzf -
+  pushd numpy-*
+  PATH=$INSTALLROOT/bin:$PATH \
+    PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
+    python setup.py build
+  PATH=$INSTALLROOT/bin:$PATH \
+    PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
+    python setup.py install --prefix $INSTALLROOT
+  popd
+fi
 
 # Install matplotlib (quite tricky)
 MATPLOTLIB_GITREF="v1.4.3"
