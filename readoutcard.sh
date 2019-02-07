@@ -7,7 +7,6 @@ requires:
   - Common-O2
   - InfoLogger
   - "PDA:slc7.*"
-  - "dim:(?!osx)"
 build_requires:
   - CMake
 prepend_path:
@@ -29,7 +28,6 @@ cmake $SOURCEDIR                                              \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
       ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
       ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT}                    \
-      ${DIM_VERSION:+-DDIM_ROOT=$DIM_ROOT}                    \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -52,7 +50,6 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
             ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}                    \\
-            ${DIM_VERSION:+dim/$DIM_VERSION-$DIM_REVISION}
 
 # Our environment
 setenv READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
