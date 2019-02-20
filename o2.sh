@@ -53,7 +53,7 @@ incremental_recipe: |
     ctest -R test_Framework --output-on-failure || TESTERR=$?
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
-    for LOG in test_logs/*.log.124; do
+    for LOG in test_logs/*.nonfatal; do
       [[ -e $LOG ]] || continue
       printf "\n\n\n\n\n\n"
       cat "$LOG"
@@ -214,7 +214,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   ctest -R test_Framework --output-on-failure || TESTERR=$?
   # Display additional logs for tests that timed out in a non-fatal way
   set +x
-  for LOG in test_logs/*.log.124; do
+  for LOG in test_logs/*.nonfatal; do
     [[ -e $LOG ]] || continue
     printf "\n\n\n\n\n\n"
     cat "$LOG"
