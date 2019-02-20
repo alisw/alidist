@@ -9,7 +9,7 @@ env:
 disable:
   - AliEn-Runtime
   - JAliEn-ROOT
-  - Old-AliEn-ROOT
+  - AliEn-ROOT-Legacy
   - ApMon-CPP
 overrides:
   AliRoot:

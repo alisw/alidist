@@ -1,7 +1,7 @@
-package: Old-AliEn-ROOT
+package: AliEn-ROOT-Legacy
 version: "%(tag_basename)s"
-tag: "0.0.3"
-source: https://gitlab.cern.ch/jalien/old-alien-root.git
+tag: "0.0.4"
+source: https://gitlab.cern.ch/jalien/alien-root-legacy.git
 requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
@@ -9,7 +9,7 @@ requires:
 build_requires:
   - xalienfs
 append_path:
-  ROOT_PLUGIN_PATH: "$OLD_ALIEN_ROOT_ROOT/etc/plugins"
+  ROOT_PLUGIN_PATH: "$ALIEN_ROOT_LEGACY_ROOT/etc/plugins"
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -50,10 +50,10 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
 
 # Our environment
-setenv OLD_ALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(OLD_ALIEN_ROOT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(OLD_ALIEN_ROOT_ROOT)/lib
-append-path ROOT_PLUGIN_PATH \$::env(OLD_ALIEN_ROOT_ROOT)/etc/plugins
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OLD_ALIEN_ROOT_ROOT)/lib")
+setenv ALIEN_ROOT_LEGACY_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/lib
+append-path ROOT_PLUGIN_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/etc/plugins
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
