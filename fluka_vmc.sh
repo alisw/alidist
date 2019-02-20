@@ -1,6 +1,6 @@
 package: FLUKA_VMC
 version: "%(tag_basename)s"
-tag: "2011.2c-vmc4"
+tag: "2011.2x-vmc1"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -15,7 +15,13 @@ env:
 
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ .
 pushd source
-  make ${JOBS:+-j$JOBS}
+  ROOT_ETCDIR=$(root-config --etcdir)/vmc
+  rsync -av "$ROOT_ETCDIR"/Makefile.* .
+  for MK in Makefile.*; do
+    grep -v libgfortranbegin -- "$MK" > "$MK".0
+    mv "$MK".0 "$MK"
+  done
+  make ${JOBS:+-j$JOBS} SHELL='sh -x'
 popd
 
 # Installation
