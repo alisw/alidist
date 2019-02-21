@@ -38,4 +38,5 @@ set osname [uname sysname]
 setenv MCSTEPLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(MCSTEPLOGGER_ROOT)/lib
 prepend-path PATH \$::env(MCSTEPLOGGER_ROOT)/bin
+prepend-path ROOT_INCLUDE_PATH \$::env(MCSTEPLOGGER_ROOT)/include
 EoF
