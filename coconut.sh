@@ -1,10 +1,11 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.4"
+tag: "v0.5"
 build_requires:
   - golang
   - protobuf
   - grpc
+  - InfoLogger
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
@@ -15,7 +16,7 @@ BUILD=$GOPATH/src/github.com/AliceO2Group/Control
 mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
-  make WHAT="coconut" all
+  make WHAT="coconut peanut" all
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
 popd
