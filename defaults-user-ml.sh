@@ -4,6 +4,8 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
+  BUILD_NUMPY: 0 
+  MATPLOTLIB_VERSION: "v3.0.2" 
 disable:
   - DPMJET
   - GEANT3
@@ -18,8 +20,6 @@ overrides:
     version: "%(tag_basename)s"
     tag: v5-09-43-01
   Python-modules:
-    env:
-      BUILD_NUMPY: 0 
     requires:
       - Python3
       - FreeType

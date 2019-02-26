@@ -56,7 +56,7 @@ for X in "pandas"             \
          "scipy"              \
          "seaborn"            \
          "uproot"             \
-         "scikit-learn"       \
+         "scikit-learn==0.18"       \
          "sklearn-evaluation" \
          "tensorflow$tf_ver"  \
          "xgboost"            \
@@ -83,7 +83,7 @@ grep -IlRE '#!.*python' $INSTALLROOT/bin | \
 
 # Test whether we can load Python modules (this is not obvious as some of them
 # do not indicate some of their dependencies and break at runtime).
-#PYTHONPATH=$INSTALLROOT/lib/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
+PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
   python -c "import pandas,scipy,seaborn,uproot,sklearn,sklearn_evaluation,xgboost,tensorflow,keras"
 
 # Modulefile

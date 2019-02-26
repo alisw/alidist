@@ -10,6 +10,7 @@ env:
   SSL_CERT_FILE: "$(env PYTHONPATH=$PYTHON_MODULES_ROOT/lib/python$(python -c \"import distutils.sysconfig; print(distutils.sysconfig.get_python_version())\")/site-packages:$PYTHONPATH python -c \"import certifi; print certifi.where()\")"
   # Do not build numpy if you are going to use other ML modules
   BUILD_NUMPY: 1
+  MATPLOTLIB_VERSION: "v1.4.3" 
 #prepend_path:
 #  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python2.7/site-packages:$PYTHONPATH
 
@@ -82,7 +83,7 @@ unset PYTHONUSERBASE
 mkdir -p $INSTALLROOT/{lib,lib64}/python$PYVER/site-packages
 
 # Build numpy from source in order to be independent from glibc version
-if [[ $BUILD_NUMPY ]]; then
+if [[ $BUILD_NUMPY == 1 ]]; then
   NUMPY_GITREF="v1.9.2"
   NUMPY_URL="https://github.com/numpy/numpy/archive/${NUMPY_GITREF}.tar.gz"
   curl -SsL "$NUMPY_URL" | tar xzf -
@@ -93,11 +94,14 @@ if [[ $BUILD_NUMPY ]]; then
   PATH=$INSTALLROOT/bin:$PATH \
     PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
     python setup.py install --prefix $INSTALLROOT
+    # test if it works at runtime
+    PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
   popd
+  python -c "import numpy"
 fi
 
 # Install matplotlib (quite tricky)
-MATPLOTLIB_GITREF="v1.4.3"
+MATPLOTLIB_GITREF="${MATPLOTLIB_VERSION}"
 MATPLOTLIB_URL="https://github.com/matplotlib/matplotlib/archive/${MATPLOTLIB_GITREF}.tar.gz"
 curl -SsL "$MATPLOTLIB_URL" | tar xzf -
 cd matplotlib-*
@@ -138,7 +142,7 @@ grep -IlRE '#!.*python' $INSTALLROOT/bin | \
 # Test whether we can load Python modules (this is not obvious as some of them
 # do not indicate some of their dependencies and break at runtime).
 PYTHONPATH=$INSTALLROOT/lib64/python$PYVER/site-packages:$INSTALLROOT/lib/python$PYVER/site-packages:$PYTHONPATH \
-  python -c "import matplotlib,numpy,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml"
+  python -c "import matplotlib,certifi,IPython,ipywidgets,ipykernel,notebook.notebookapp,metakernel,yaml"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
