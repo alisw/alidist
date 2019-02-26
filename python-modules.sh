@@ -101,6 +101,10 @@ if [[ $BUILD_NUMPY == 1 ]]; then
 fi
 
 # Install matplotlib (quite tricky)
+if [[ !${MATPLOTLIB_VERSION} ]]; then 
+  MATPLOTLIB_VERSION="v1.4.3"
+fi
+
 MATPLOTLIB_GITREF="${MATPLOTLIB_VERSION}"
 MATPLOTLIB_URL="https://github.com/matplotlib/matplotlib/archive/${MATPLOTLIB_GITREF}.tar.gz"
 curl -SsL "$MATPLOTLIB_URL" | tar xzf -
