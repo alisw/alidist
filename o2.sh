@@ -15,6 +15,7 @@ requires:
   - ms_gsl
   - FairMQ
   - curl
+  - MCStepLogger
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -42,10 +43,24 @@ incremental_recipe: |
   fi
   if [[ $ALIBUILD_O2_TESTS ]]; then
     export O2_ROOT=$INSTALLROOT
-    # Clean up old coverage data
+    export VMCWORKDIR=$O2_ROOT/share
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
+    # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
-    ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
-    ctest -R test_Framework --output-on-failure
+    rm -rf test_logs
+    TESTERR=
+    ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+    ctest -R test_Framework --output-on-failure || TESTERR=$?
+    # Display additional logs for tests that timed out in a non-fatal way
+    set +x
+    for LOG in test_logs/*.nonfatal; do
+      [[ -e $LOG ]] || continue
+      printf "\n\n\n\n\n\n"
+      cat "$LOG"
+      printf "\n\n\n\n\n\n"
+    done
+    set -x
+    [[ ! $TESTERR ]] || exit 1
   fi
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
@@ -148,7 +163,6 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
       ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
 
-
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # install the compilation database so that we can post-check the code
@@ -190,10 +204,24 @@ mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INS
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
-  # Clean up old coverage data
+  export VMCWORKDIR=$O2_ROOT/share
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
+  # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
-  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS}
-  ctest -R test_Framework --output-on-failure
+  rm -rf test_logs
+  TESTERR=
+  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+  ctest -R test_Framework --output-on-failure || TESTERR=$?
+  # Display additional logs for tests that timed out in a non-fatal way
+  set +x
+  for LOG in test_logs/*.nonfatal; do
+    [[ -e $LOG ]] || continue
+    printf "\n\n\n\n\n\n"
+    cat "$LOG"
+    printf "\n\n\n\n\n\n"
+  done
+  set -x
+  [[ ! $TESTERR ]] || exit 1
 fi
 
 # Create code coverage information to be uploaded

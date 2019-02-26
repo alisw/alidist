@@ -1,18 +1,29 @@
 package: qcg
-version: "v1.3.0"
+version: v1.4.5
+tag: qcg-v1.4.5
 requires:
   - node
   - QualityControl
-build_requires:
-  - node
+source: https://github.com/AliceO2Group/WebUi.git
 ---
-#!/bin/bash
+#!/bin/bash -e
 
-mkdir -p "$INSTALLROOT/bin"
-npm install @aliceo2/qc@$PKGVERSION --only=production --loglevel error --no-save --no-package-lock --prefix $INSTALLROOT
-rsync -a --ignore-existing "$INSTALLROOT/node_modules/@aliceo2/qc/config-default.js" $INSTALLROOT/config.js
-echo "node $INSTALLROOT/node_modules/@aliceo2/qc/index.js $INSTALLROOT/config.js" > $INSTALLROOT/bin/qcg
-chmod +x $INSTALLROOT/bin/qcg
+rsync -a --delete "$SOURCEDIR/QualityControl/" .
+npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm
+
+mkdir -p bin
+cat > bin/qcg <<EOF
+#!/bin/bash
+exec node "$INSTALLROOT/index.js" "$INSTALLROOT/config.js"
+EOF
+chmod 0755 bin/qcg
+
+# Installation
+rsync -a --delete bin lib node_modules public *.js *.node package.json \
+                  "$INSTALLROOT"
+if [[ -e $INSTALLROOT/config-default.js ]]; then
+  mv -v "$INSTALLROOT/config-default.js" "$INSTALLROOT/config.js"
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

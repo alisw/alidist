@@ -1,13 +1,14 @@
 package: RooUnfold
 version: "%(tag_basename)s"
-tag: V02-00-01-alice3
+tag: V02-00-01-alice4
 source: https://github.com/alisw/RooUnfold
 requires:
  - ROOT
  - boost
 ---
-cmake $SOURCEDIR                          \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+cmake $SOURCEDIR                              \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
       -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
 make test
@@ -31,6 +32,7 @@ setenv ROOUNFOLD_VERSION $PKGVERSION
 setenv ROOUNFOLD_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ROOUNFOLD_RELEASE)
 prepend-path PATH \$::env(ROOUNFOLD_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ROOUNFOLD_ROOT)/lib
+prepend-path ROOT_INCLUDE_PATH \$::env(ROOUNFOLD_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ROOUNFOLD_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
