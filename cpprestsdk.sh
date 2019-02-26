@@ -18,7 +18,8 @@ cmake "$SOURCEDIR/Release"                      \
       -DBUILD_TESTS=OFF                         \
       -DBUILD_SAMPLES=OFF                       \
       -DCMAKE_BUILD_TYPE=Debug                  \
-      -DCMAKE_CXX_FLAGS=-Wno-error=conversion
+      -DCMAKE_CXX_FLAGS=-Wno-error=conversion   \
+      -DCPPREST_EXCLUDE_WEBSOCKETS=ON
 
 make ${JOBS:+-j $JOBS}
 make install
