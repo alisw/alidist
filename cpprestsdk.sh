@@ -6,7 +6,6 @@ requires:
 - boost
 build_requires:
 - CMake
-tag: master
 ---
 #!/bin/sh
 
