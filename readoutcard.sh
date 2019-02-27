@@ -5,7 +5,7 @@ requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
-  - InfoLogger
+  - libInfoLogger
   - "PDA:slc7.*"
 build_requires:
   - CMake
@@ -22,12 +22,12 @@ case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
-cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
-      ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
-      ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT}                    \
+cmake $SOURCEDIR                                                      \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
+      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
+      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
+      ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT}                            \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -48,7 +48,7 @@ module load BASE/1.0                                                          \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
-            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
+            libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment
