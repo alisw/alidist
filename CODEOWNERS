@@ -16,6 +16,8 @@ rapidjson*          @alisw/dataflow-experts
 readout*            @alisw/dataflow-experts
 node*               @alisw/dataflow-experts
 qcg*                @alisw/dataflow-experts
+ecsg*               @alisw/dataflow-experts
+librdkafka*         @alisw/dataflow-experts
 
 # PWGMM
 aligenerators*      @alisw/pwgmm
