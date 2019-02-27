@@ -1,6 +1,6 @@
 package: Jiskefet-Api-Cpp
 version: "%(tag_basename)s"
-tag: v0.2.3
+tag: v0.2.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -8,7 +8,7 @@ requires:
   - OpenSSL:(?!osx)
 build_requires:
   - CMake
-source: https://github.com/PascalBoeschoten/jiskefet-api-cpp
+source: https://github.com/SoftwareForScience/jiskefet-api-cpp
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -26,7 +26,7 @@ cmake $SOURCEDIR                                    \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}    \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DCPPREST_ROOT=${CPPRESTSDK_ROOT}          \
-      -DCPPREST_LIB=${CPPRESTSDK_ROOT}/lib64/libcpprest.so \
+      -DCPPREST_LIB=${CPPRESTSDK_ROOT}           \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
