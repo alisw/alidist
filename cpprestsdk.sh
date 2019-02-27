@@ -1,5 +1,6 @@
 package: cpprestsdk
-version: master
+version: "%(commit_hash)s"
+tag: master
 source: https://github.com/Microsoft/cpprestsdk
 requires:
 - boost
