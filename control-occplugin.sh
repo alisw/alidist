@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.4"
+tag: "v0.5"
 requires:
   - FairMQ
   - FairLogger
@@ -11,6 +11,7 @@ requires:
 build_requires:
   - grpc
   - CMake
+  - InfoLogger
 source: https://github.com/AliceO2Group/Control
 incremental_recipe: |
   make ${JOBS+-j $JOBS} prefix=$INSTALLROOT

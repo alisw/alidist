@@ -8,6 +8,8 @@ requires:
   - MySQL
 build_requires:
   - CMake
+  - golang
+  - SWIG
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
