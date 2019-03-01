@@ -28,7 +28,6 @@ overrides:
       - ninja
       - RapidJSON
       - googlebenchmark
-      - AliTPCCommon
       - cub
   FairRoot:
     version: dev
