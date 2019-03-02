@@ -2,6 +2,8 @@ package: Clang
 version: "7.0.0"
 tag: v7.0.0-alice1
 source: https://github.com/alisw/clang
+requires:
+ - "GCC-Toolchain:(?!osx)"
 build_requires:
  - CMake
 ---
@@ -48,7 +50,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0                                                          \\
+            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} 
 # Our environment
 setenv CLANG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CLANG_ROOT)/bin
