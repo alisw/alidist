@@ -1,5 +1,5 @@
 package: CRMC
-version: "%(tag_basename)s"
+version: "%(tag_basename)s-correctHepMC"
 tag: v1.7.0
 source: https://github.com/alisw/crmc.git
 requires:

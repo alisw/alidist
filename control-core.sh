@@ -1,10 +1,11 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v0.4"
+tag: "v0.6"
 build_requires:
   - golang
   - protobuf
   - grpc
+  - InfoLogger
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e

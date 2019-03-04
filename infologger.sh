@@ -1,6 +1,6 @@
 package: InfoLogger
 version: "%(tag_basename)s"
-tag: v1.2.2
+tag: v1.2.3
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -8,6 +8,8 @@ requires:
   - MySQL
 build_requires:
   - CMake
+  - golang
+  - SWIG
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
