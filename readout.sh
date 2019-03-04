@@ -1,12 +1,12 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.18.0
+tag: v0.19.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - libInfoLogger
-  - FairRoot
+  - FairMQ
   - Monitoring
   - Configuration
   - ReadoutCard
@@ -31,8 +31,7 @@ cmake $SOURCEDIR                                                         \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
       ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}       \
       ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}    \
-      ${FAIRROOT_VERSION:+-DFAIRROOTPATH=$FAIRROOT_ROOT}                 \
-      ${FAIRROOT_VERSION:+-DFairRoot_DIR=$FAIRROOT_ROOT}                 \
+      ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
@@ -56,7 +55,7 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION               \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION
+            FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION
 
 # Our environment
 setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
