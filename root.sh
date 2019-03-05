@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-14-04"
+tag: "v6-14-08"
 source: https://github.com/root-mirror/root
 requires:
   - arrow
