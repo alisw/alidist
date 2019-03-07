@@ -1,6 +1,6 @@
 package: libInfoLogger
 version: "%(tag_basename)s"
-tag: v1.2.3
+tag: v1.2.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -22,7 +22,7 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
-      -DINFOLOGGER_BUILD_LIB=1 \
+      -DINFOLOGGER_BUILD_LIBONLY=1 \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
