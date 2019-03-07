@@ -1,12 +1,13 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.19.0
+tag: v0.19.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - libInfoLogger
   - FairMQ
+  - FairLogger
   - Monitoring
   - Configuration
   - ReadoutCard
@@ -32,6 +33,7 @@ cmake $SOURCEDIR                                                         \
       ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}       \
       ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}    \
       ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
+      ${FAIRLOGGER_VERSION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
@@ -55,6 +57,7 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION               \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
+            FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
             FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION
 
 # Our environment
