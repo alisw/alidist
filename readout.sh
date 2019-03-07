@@ -55,7 +55,7 @@ module load BASE/1.0                                                          \\
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION               \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
-            libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION               \\
+            libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
             FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
             FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION
