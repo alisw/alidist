@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v2.2.0
+tag:  v2.2.1
 requires:
   - curl
   - boost
@@ -24,8 +24,7 @@ esac
 cmake $SOURCEDIR                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                    \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                \
-      -DPPCONSUL_INCLUDE_DIRS=${PPCONSUL_ROOT}/include       \
-      -DPPCONSUL_LIBRARY_DIRS=${PPCONSUL_ROOT}/lib
+      -Dppconsul_DIR=${PPCONSUL_ROOT}/cmake
 
 make ${JOBS+-j $JOBS} install
 
