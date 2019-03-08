@@ -19,6 +19,7 @@ qcg*                @alisw/dataflow-experts
 ecsg*               @alisw/dataflow-experts
 librdkafka*         @alisw/dataflow-experts
 libinfologger*      @alisw/dataflow-experts
+dim*                @alisw/dataflow-experts
 
 # PWGMM
 aligenerators*      @alisw/pwgmm
