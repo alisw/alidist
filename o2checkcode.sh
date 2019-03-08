@@ -43,7 +43,7 @@ ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc)' ${O2_C
 cp thinned_compile_commands.json compile_commands.json
 
 # List of enabled C++ checks (make sure they are all green)
-CHECKS="${O2_CHECKER_CHECKS:--*,modernize-*,-modernize-use-default,-modernize-pass-by-value,-modernize-use-auto,-modernize-use-bool-literals,-modernize-use-using,-modernize-loop-convert,-modernize-use-bool-literals,-modernize-make-unique,aliceO2-member-name}"
+CHECKS="${O2_CHECKER_CHECKS:--*,modernize-*,-modernize-use-default,-modernize-pass-by-value,-modernize-use-auto,-modernize-use-bool-literals,-modernize-use-using,-modernize-loop-convert,-modernize-use-bool-literals,-modernize-make-unique,-modernize-use-default-member-init,aliceO2-member-name}"
 
 # Run C++ checks
 run_O2CodeChecker.py -clang-tidy-binary $(which O2codecheck) -header-filter=.*SOURCES.* ${O2_CHECKER_FIX:+-fix} -checks=${CHECKS} 2>&1 | tee error-log.txt
