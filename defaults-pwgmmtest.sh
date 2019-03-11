@@ -7,7 +7,7 @@ env:
 overrides:
   ROOT:
     version: "%(tag_basename)s_PWGMMTEST"
-    tag: "v6-14-04"
+    tag: "v6-16-00"
     source: https://github.com/root-mirror/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
