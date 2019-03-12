@@ -1,6 +1,8 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.6"
+tag: "v0.6.1"
+requires:
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
   - golang
   - protobuf
