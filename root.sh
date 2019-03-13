@@ -127,6 +127,7 @@ else
         -Dbuiltin_freetype=OFF                                                           \
         -Dpcre=OFF                                                                       \
         -Dbuiltin_pcre=ON                                                                \
+        -Dsqlite=OFF                                                                     \
         $ROOT_PYTHON_FLAGS                                                               \
         ${ARROW_VERSION:+-Darrow=ON}                                                     \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
