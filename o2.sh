@@ -84,8 +84,9 @@ valid_defaults:
   - alo
   - o2-prod
   - o2-ninja
+  - o2-cuda
 ---
-#!/bin/sh
+#!/bin/bash -ex
 export ROOTSYS=$ROOT_ROOT
 
 # Making sure people do not have SIMPATH set when they build fairroot.
@@ -120,6 +121,10 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
   [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
   unset NINJA_BIN
+fi
+
+if [[ $BUILD_FAMILY == *o2-cuda ]]; then
+  HAS_CUDA=1
 fi
 
 unset DYLD_LIBRARY_PATH
@@ -161,6 +166,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
       ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
+      ${HAS_CUDA:+-DENABLE_CUDA=ON}                                                         \
       ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
