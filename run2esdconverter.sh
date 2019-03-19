@@ -22,9 +22,8 @@ cmake $SOURCEDIR                                 \
 
 pwd
 cd $BUILDDIR
-cmake --build . -- ${JOBS+-j $JOBS}
+cmake --build . -- ${JOBS+-j $JOBS} install
 
-make ${JOBS+-j $JOBS} install
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
 #ModuleFile
