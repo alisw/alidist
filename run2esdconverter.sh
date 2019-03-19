@@ -22,9 +22,8 @@ cmake $SOURCEDIR                                 \
 
 pwd
 cd $BUILDDIR
-cmake --build . -- ${JOBS+-j $JOBS}
+cmake --build . -- ${JOBS+-j $JOBS} install
 
-make ${JOBS+-j $JOBS} install
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
 #ModuleFile
@@ -38,13 +37,13 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ARROW_VERSION:+boost/$ARROW_VERSION-$ARROW_REVISION} ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}  ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION} ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}  ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 set RUN2ESDCONVERTER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(RUN2ESDCONVERTER_ROOT)/bin
+prepend-path PATH \$RUN2ESDCONVERTER_ROOT/bin
 # Hope is that we do not need any LD_LIBRARY_PATH, actually
-prepend-path LD_LIBRARY_PATH \$::env(RUN2ESDCONVERTER_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(RUN2ESDCONVERTER_ROOT)/lib")
+prepend-path LD_LIBRARY_PATH \$RUN2ESDCONVERTER_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$RUN2ESDCONVERTER_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
