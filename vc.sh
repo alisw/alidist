@@ -6,6 +6,8 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+prepend_path:
+  ROOT_INCLUDE_PATH: "$VC_ROOT/include"
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF

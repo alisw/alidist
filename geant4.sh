@@ -7,6 +7,8 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
+prepend_path:
+  ROOT_INCLUDE_PATH: "$GEANT4_ROOT/include:$GEANT4_ROOT/include/Geant4"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -95,6 +97,8 @@ setenv G4NEUTRONXSDATA $G4NEUTRONXSDATA
 setenv G4SAIDXSDATA $G4SAIDXSDATA
 setenv G4ENSDFSTATEDATA $G4ENSDFSTATEDATA
 prepend-path PATH \$::env(GEANT4_ROOT)/bin
+prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include/Geant4
+prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include
 prepend-path LD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib")
 EoF
