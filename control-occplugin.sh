@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.4"
+tag: "v0.6.2"
 requires:
   - FairMQ
   - FairLogger
@@ -8,6 +8,7 @@ requires:
   - grpc
   - protobuf
   - "GCC-Toolchain:(?!osx)"
+  - libInfoLogger
 build_requires:
   - grpc
   - CMake

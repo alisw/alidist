@@ -1,12 +1,13 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.17.0
+tag: v0.19.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
-  - InfoLogger
-  - FairRoot
+  - libInfoLogger
+  - FairMQ
+  - FairLogger
   - Monitoring
   - Configuration
   - ReadoutCard
@@ -23,16 +24,16 @@ case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
-cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
-      ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
+cmake $SOURCEDIR                                                         \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                         \
+      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}                \
+      ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}          \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
-      ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT} \
-      ${INFOLOGGER_VERSION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
-      ${FAIRROOT_VERSION:+-DFAIRROOTPATH=$FAIRROOT_ROOT}      \
-      ${FAIRROOT_VERSION:+-DFairRoot_DIR=$FAIRROOT_ROOT}      \
+      ${READOUTCARD_VERSION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}       \
+      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}    \
+      ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
+      ${FAIRLOGGER_VERSION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
@@ -54,9 +55,10 @@ module load BASE/1.0                                                          \\
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION               \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
-            InfoLogger/$INFOLOGGER_VERSION-$INFOLOGGER_REVISION               \\
+            libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION
+            FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
+            FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION
 
 # Our environment
 setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

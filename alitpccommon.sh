@@ -4,6 +4,8 @@ tag: alitpccommon-v2.3.2.1
 source: https://github.com/AliceO2Group/AliTPCCommon
 build_requires:
   - CMake
+prepend_path:
+  ROOT_INCLUDE_PATH: "$ALITPCCOMMON_ROOT/include"
 ---
 #!/bin/bash -e
 cmake ${SOURCEDIR}/                         \
@@ -28,4 +30,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 setenv ALITPCCOMMON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path ROOT_INCLUDE_PATH \$::env(ALITPCCOMMON_ROOT)/include
 EoF

@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-14-04"
+tag: "v6-16-00"
 source: https://github.com/root-mirror/root
 requires:
   - arrow
@@ -129,6 +129,7 @@ else
         -Dbuiltin_freetype=OFF                                                           \
         -Dpcre=OFF                                                                       \
         -Dbuiltin_pcre=ON                                                                \
+        -Dsqlite=OFF                                                                     \
         $ROOT_PYTHON_FLAGS                                                               \
         ${ARROW_VERSION:+-Darrow=ON}                                                     \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
@@ -217,6 +218,10 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
   unset OPENSSL_VERSION XROOTD_VERSION LIBXML2_VERSION
 fi
+
+# Make some CMake files used by other projects relocatable
+sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
+find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
 # Modulefile
 mkdir -p etc/modulefiles
