@@ -51,6 +51,8 @@ incremental_recipe: |
     TESTERR=
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
     ctest -R test_Framework --output-on-failure || TESTERR=$?
+    # cleanup ROOT files created by tests in build area
+    find ./ -name "*.root" -exec rm {} ';'
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
     for LOG in test_logs/*.log.124; do
@@ -212,6 +214,8 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
+  # cleanup ROOT files created by tests in build area
+  find ./ -name "*.root" -exec rm {} ';'
   # Display additional logs for tests that timed out in a non-fatal way
   set +x
   for LOG in test_logs/*.log.124; do
