@@ -45,6 +45,9 @@ incremental_recipe: |
     export O2_ROOT=$INSTALLROOT
     export VMCWORKDIR=$O2_ROOT/share
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
+    if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
+      export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
+    fi
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
     rm -rf test_logs
@@ -196,6 +199,7 @@ setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
 prepend-path PATH \$::env(O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/AliTPCCommon
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
@@ -206,6 +210,9 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
   export VMCWORKDIR=$O2_ROOT/share
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
+  if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
+    export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
+  fi
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs

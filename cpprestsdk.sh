@@ -1,11 +1,11 @@
 package: cpprestsdk
-version: master
+version: "%(commit_hash)s"
+tag: master
 source: https://github.com/Microsoft/cpprestsdk
 requires:
 - boost
 build_requires:
 - CMake
-tag: master
 ---
 #!/bin/sh
 
@@ -17,7 +17,9 @@ cmake "$SOURCEDIR/Release"                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
       -DBUILD_TESTS=OFF                         \
       -DBUILD_SAMPLES=OFF                       \
-      -DCMAKE_BUILD_TYPE=Debug
+      -DCMAKE_BUILD_TYPE=Debug                  \
+      -DCMAKE_CXX_FLAGS=-Wno-error=conversion   \
+      -DCPPREST_EXCLUDE_WEBSOCKETS=ON
 
 make ${JOBS:+-j $JOBS}
 make install
@@ -37,5 +39,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(CPPRESTSDK_ROOT)/lib
+prepend-path LD_LIBRARY_PATH \$::env(CPPRESTSDK_ROOT)/lib64
 EoF

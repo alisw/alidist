@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v2.4.0
+tag: v2.5.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -18,6 +18,10 @@ case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+fi
+
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
@@ -25,7 +29,12 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+
 make ${JOBS+-j $JOBS} install
+
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  make test
+fi
 
 #ModuleFile
 mkdir -p etc/modulefiles
