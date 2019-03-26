@@ -9,7 +9,7 @@ requires:
  - nanomsg
  - msgpack
  - DDS
- - asiofi
+ - "asiofi:(?!osx)"
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
@@ -31,18 +31,19 @@ case $ARCHITECTURE in
     [[ ! $NANOMSG_ROOT ]] && NANOMSG_ROOT=`brew --prefix nanomsg`
     [[ ! $MSGPACK_ROOT ]] && MSGPACK_ROOT=`brew --prefix msgpack`
   ;;
+  *)
+    # Check, if we want to build the ofi transport, which is for all versions v1.4.2+
+    function fairmq_build_ofi() {
+      pushd $SOURCEDIR
+      git --no-pager tag -l --merged HEAD --contains "v1.4.2" >/dev/null 2>&1
+      local res=$?
+      popd
+      return $res
+    }
+    unset BUILD_OFI
+    if fairmq_build_ofi; then BUILD_OFI=ON; fi
+  ;;
 esac
-
-# Check, if we want to build the ofi transport, which is for all versions v1.4.2+
-function fairmq_build_ofi() {
-  pushd $SOURCEDIR
-  git --no-pager tag -l --merged HEAD --contains "v1.4.2" >/dev/null 2>&1
-  local res=$?
-  popd
-  return $res
-}
-unset BUILD_OFI
-if fairmq_build_ofi; then BUILD_OFI=ON; fi
 
 cmake $SOURCEDIR                                                 \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
