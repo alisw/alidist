@@ -47,12 +47,12 @@ incremental_recipe: |
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
+    # cleanup ROOT files created by tests in build area
+    find ./ -name "*.root" -exec rm {} ';'
     rm -rf test_logs
     TESTERR=
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
     ctest -R test_Framework --output-on-failure || TESTERR=$?
-    # cleanup ROOT files created by tests in build area
-    find ./ -name "*.root" -exec rm {} ';'
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
     for LOG in test_logs/*.log.124; do
@@ -211,11 +211,11 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
+  # cleanup ROOT files created by tests in build area
+  find ./ -name "*.root" -exec rm {} ';'
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
-  # cleanup ROOT files created by tests in build area
-  find ./ -name "*.root" -exec rm {} ';'
   # Display additional logs for tests that timed out in a non-fatal way
   set +x
   for LOG in test_logs/*.log.124; do
