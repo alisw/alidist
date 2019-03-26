@@ -4,6 +4,7 @@ tag: v0.3.1
 source: https://github.com/FairRootGroup/asiofi
 requires:
   - boost
+  - ofi
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
@@ -11,8 +12,6 @@ incremental_recipe: |
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/sh
-
 mkdir -p $INSTALLROOT
 
 cmake $SOURCEDIR                                                 \
@@ -42,7 +41,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0                                                                            \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}
+            ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            ${OFI_ROOT:+ofi/$OFI_VERSION-$OFI_REVISION}
 # Our environment
 setenv ASIOFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(ASIOFI_ROOT)/bin
