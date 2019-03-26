@@ -6,6 +6,10 @@ requires:
   - boost
 build_requires:
   - CMake
+incremental_recipe: |
+  make -j$JOBS wn_bin
+  make -j$JOBS install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
 
@@ -34,10 +38,9 @@ esac
 
 make -j$JOBS install
 
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+# ModuleFile
+mkdir -p etc/modulefiles
+cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -53,3 +56,4 @@ prepend-path PATH \$::env(DDS_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(DDS_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(DDS_ROOT)/lib")
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
