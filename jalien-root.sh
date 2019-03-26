@@ -4,10 +4,6 @@ tag: "0.2.0"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
-env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++11"
-  CFLAGS: "-fPIC -g -O2"
-  CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 build_requires:
   - libwebsockets
   - json-c
