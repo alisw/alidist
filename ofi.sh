@@ -2,12 +2,13 @@ package: ofi
 version: "%(tag_basename)s"
 tag: v1.7.0
 source: https://github.com/ofiwg/libfabric
-requires:
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - autotools
 prefer_system_check: |
   pkg-config --atleast-version=1.6.0 libfabric 2>&1
+  if [ $? -ne 0 ]; then printf "libfabric was not found.\n * On RHEL-compatible systems you probably need: libfabric libfabric-devel\n * On Ubuntu-compatible systems you probably need: libfabric-bin libfabric-dev"; exit 1; fi
+  printf "#include \"rdma/fabric.h\"\nint main(){}" | gcc -xc - -o /dev/null
   if [ $? -ne 0 ]; then printf "libfabric was not found.\n * On RHEL-compatible systems you probably need: libfabric libfabric-devel\n * On Ubuntu-compatible systems you probably need: libfabric-bin libfabric-dev"; exit 1; fi
 ---
 rsync -a $SOURCEDIR/ ./
