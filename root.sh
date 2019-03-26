@@ -225,10 +225,9 @@ fi
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
 find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
-echo "Building with external Alien plugin, removing interal plugin handlers."
-rm -v "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"
-rm -v "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C"
-rm -v "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
+       "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
+       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
 # Modulefile
 mkdir -p etc/modulefiles
