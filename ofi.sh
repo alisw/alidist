@@ -13,7 +13,7 @@ prefer_system_check: |
 ---
 rsync -a $SOURCEDIR/ ./
 ./autogen.sh
-./configure --prefix=$INSTALLROOT --enable-verbs=yes --disable-mlx
+./configure --prefix=$INSTALLROOT --disable-mlx
 make ${JOBS:+-j$JOBS}
 make install
 
