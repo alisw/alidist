@@ -9,6 +9,7 @@ requires:
  - nanomsg
  - msgpack
  - DDS
+ - asiofi
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
@@ -32,7 +33,19 @@ case $ARCHITECTURE in
   ;;
 esac
 
+# Check, if we want to build the ofi transport, which is for all versions v1.4.2+
+function fairmq_build_ofi() {
+  pushd $SOURCEDIR
+  git --no-pager tag -l --merged HEAD --contains "v1.4.2" >/dev/null 2>&1
+  local res=$?
+  popd
+  return $res
+}
+unset BUILD_OFI
+if fairmq_build_ofi; then BUILD_OFI=ON; fi
+
 cmake $SOURCEDIR                                                 \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}        \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
@@ -43,14 +56,15 @@ cmake $SOURCEDIR                                                 \
       ${NANOMSG_ROOT:+-DNANOMSG_ROOT=$NANOMSG_ROOT}              \
       ${MSGPACK_ROOT:+-DMSGPACK_ROOT=$MSGPACK_ROOT}              \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
+      ${BUILD_OFI:+-DASIOFI_ROOT=$ASIOFI_ROOT}                   \
       -DDISABLE_COLOR=ON                                         \
       -DBUILD_DDS_PLUGIN=ON                                      \
       -DBUILD_NANOMSG_TRANSPORT=ON                               \
+      ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
       -DCMAKE_INSTALL_LIBDIR=lib                                 \
       -DCMAKE_INSTALL_BINDIR=bin
 
-cmake --build . ${JOBS:+-- -j$JOBS}
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 # Tests will not run unless ALIBUILD_FAIRMQ_TESTS is set
@@ -76,6 +90,7 @@ module load BASE/1.0                                                            
             ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
             ${NANOMSG_VERSION:+nanomsg/$NANOMSG_VERSION-$NANOMSG_REVISION}              \\
             ${MSGPACK_VERSION:+msgpack/$MSGPACK_VERSION-$MSGPACK_REVISION}              \\
+            ${ASIOFI_VERSION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
             ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
 setenv FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
