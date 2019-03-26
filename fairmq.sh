@@ -56,7 +56,8 @@ cmake $SOURCEDIR                                                 \
       ${NANOMSG_ROOT:+-DNANOMSG_ROOT=$NANOMSG_ROOT}              \
       ${MSGPACK_ROOT:+-DMSGPACK_ROOT=$MSGPACK_ROOT}              \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
-      ${BUILD_OFI:+-DASIOFI_ROOT=$ASIOFI_ROOT}                   \
+      ${ASIOFI_ROOT:+-DASIOFI_ROOT=$ASIOFI_ROOT}                 \
+      ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
       -DDISABLE_COLOR=ON                                         \
       -DBUILD_DDS_PLUGIN=ON                                      \
       -DBUILD_NANOMSG_TRANSPORT=ON                               \

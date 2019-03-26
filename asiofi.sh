@@ -23,6 +23,7 @@ cmake $SOURCEDIR                                                 \
       -DCMAKE_INSTALL_BINDIR=bin                                 \
       -DDISABLE_COLOR=ON                                         \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
+      ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
       -DBUILD_TESTING=ON
 
 
