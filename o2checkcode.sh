@@ -82,7 +82,7 @@ COPYRIGHT="$(cat <<'EOF'
 EOF
 )"
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
-COPYRIGHT_EXCLUDE_REGEXP="^Framework/DebugGUI/"  # exclude files from the copyright check
+COPYRIGHT_EXCLUDE_REGEXP="^Framework/DebugGUI/|^GPU/"  # exclude files from the copyright check
 set +x
 while read FILE; do
   [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}
