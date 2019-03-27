@@ -152,6 +152,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}                            \
       ${HEPMC3_ROOT:+-DHEPMC3_DIR=$HEPMC3_ROOT}                                             \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
+      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                             \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
