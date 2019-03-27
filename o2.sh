@@ -48,6 +48,7 @@ incremental_recipe: |
     if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
       export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
     fi
+    export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$ROOT_INCLUDE_PATH
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
     rm -rf test_logs
@@ -214,6 +215,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
     export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
   fi
+  export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$ROOT_INCLUDE_PATH
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
