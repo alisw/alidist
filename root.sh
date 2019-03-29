@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-14-04"
+tag: "v6-16-00"
 source: https://github.com/root-mirror/root
 requires:
   - arrow
@@ -39,6 +39,11 @@ incremental_recipe: |
 
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+  echo "Building with external Alien plugin, removing interal plugin handlers."
+  rm -v "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"
+  rm -v "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C"
+  rm -v "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 ---
 #!/bin/bash -e
 unset ROOTSYS
@@ -111,13 +116,19 @@ if [[ $ALICE_DAQ ]]; then
             soversion ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17} mysql xml"
   NO_FEATURES="ssl alien"
 else
+  ROOT_HAS_NO_FORTRAN=
+  ROOT_HAS_FORTRAN=
+  if [[ $BUILD_FAMILY == *user-next-root6 || $BUILD_FAMILY == *user-root6 || $BUILD_FAMILY == *user ]]; then
+    ROOT_HAS_NO_FORTRAN=1
+  else
+    ROOT_HAS_FORTRAN=1
+  fi
   # Standard ROOT build
   cmake $SOURCEDIR                                                                       \
         ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
-        ${ALIEN_RUNTIME_VERSION:+-Dalien=ON}                                             \
-        ${ALIEN_RUNTIME_VERSION:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                        \
+        -Dalien=OFF                                                                      \
         ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
         ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
         ${CXX11:+-Dcxx11=ON}                                                             \
@@ -127,6 +138,7 @@ else
         -Dbuiltin_freetype=OFF                                                           \
         -Dpcre=OFF                                                                       \
         -Dbuiltin_pcre=ON                                                                \
+        -Dsqlite=OFF                                                                     \
         $ROOT_PYTHON_FLAGS                                                               \
         ${ARROW_VERSION:+-Darrow=ON}                                                     \
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
@@ -134,6 +146,8 @@ else
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
         -DCMAKE_Fortran_COMPILER=gfortran                                                \
         -Dfortran=ON                                                                     \
+        ${ROOT_HAS_FORTRAN:+-DCMAKE_Fortran_COMPILER=gfortran}                           \
+        -Dfortran=${ROOT_HAS_FORTRAN:+ON}${ROOT_HAS_NO_FORTRAN:+OFF}                     \
         -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
@@ -157,12 +171,13 @@ else
         -Ddavix=OFF                                                                      \
         ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
-  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http fortran
+  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
-            ${ARROW_VERSION:+arrow}"
+            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
+            ${ARROW_VERSION:+arrow} ${ROOT_HAS_FORTRAN:+fortran}"
   NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
-               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix"
+               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien
+               ${ROOT_HAS_NO_FORTRAN:+fortran}"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
@@ -215,6 +230,14 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
   unset OPENSSL_VERSION XROOTD_VERSION LIBXML2_VERSION
 fi
+
+# Make some CMake files used by other projects relocatable
+sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
+find . -name '*.deleteme' -exec rm -f '{}' \; || true
+
+rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
+       "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
+       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
 # Modulefile
 mkdir -p etc/modulefiles

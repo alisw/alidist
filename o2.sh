@@ -23,7 +23,7 @@ build_requires:
   - cub
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
-  ROOT_INCLUDE_PATH: "$O2_ROOT/include"
+  ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/AliTPCCommon"
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
   cmake --build . -- ${JOBS:+-j$JOBS} install
@@ -45,6 +45,10 @@ incremental_recipe: |
     export O2_ROOT=$INSTALLROOT
     export VMCWORKDIR=$O2_ROOT/share
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
+    if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
+      export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
+    fi
+    export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/AliTPCCommon:$ROOT_INCLUDE_PATH
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
     # cleanup ROOT files created by tests in build area
@@ -55,7 +59,7 @@ incremental_recipe: |
     ctest -R test_Framework --output-on-failure || TESTERR=$?
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
-    for LOG in test_logs/*.log.124; do
+    for LOG in test_logs/*.nonfatal; do
       [[ -e $LOG ]] || continue
       printf "\n\n\n\n\n\n"
       cat "$LOG"
@@ -151,6 +155,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}                            \
       ${HEPMC3_ROOT:+-DHEPMC3_DIR=$HEPMC3_ROOT}                                             \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
+      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                             \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
@@ -198,6 +203,7 @@ setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
 prepend-path PATH \$::env(O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+$([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/AliTPCCommon
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
@@ -208,6 +214,10 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
   export VMCWORKDIR=$O2_ROOT/share
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
+  if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
+    export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
+  fi
+  export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/AliTPCCommon:$ROOT_INCLUDE_PATH
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
@@ -218,7 +228,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   ctest -R test_Framework --output-on-failure || TESTERR=$?
   # Display additional logs for tests that timed out in a non-fatal way
   set +x
-  for LOG in test_logs/*.log.124; do
+  for LOG in test_logs/*.nonfatal; do
     [[ -e $LOG ]] || continue
     printf "\n\n\n\n\n\n"
     cat "$LOG"
