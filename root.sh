@@ -37,13 +37,12 @@ incremental_recipe: |
   JOBS=$((${JOBS:-1}*3/5))
   [[ $JOBS -gt 0 ]] || JOBS=1
 
-  cmake --build . -- ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  cmake --build . --target install ${JOBS:+-- -j$JOBS}
+  rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
+         "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
+         "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
-  echo "Building with external Alien plugin, removing interal plugin handlers."
-  rm -v "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"
-  rm -v "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C"
-  rm -v "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
 unset ROOTSYS
@@ -144,10 +143,8 @@ else
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
-        -DCMAKE_Fortran_COMPILER=gfortran                                                \
-        -Dfortran=ON                                                                     \
-        ${ROOT_HAS_FORTRAN:+-DCMAKE_Fortran_COMPILER=gfortran}                           \
-        -Dfortran=${ROOT_HAS_FORTRAN:+ON}${ROOT_HAS_NO_FORTRAN:+OFF}                     \
+        ${ROOT_HAS_FORTRAN:+-Dfortran=ON -DCMAKE_Fortran_COMPILER=gfortran}              \
+        ${ROOT_HAS_NO_FORTRAN:+-Dfortran=OFF}                                            \
         -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
@@ -213,7 +210,7 @@ else
   JOBS=$((${JOBS:-1}*3/5))
   [[ $JOBS -gt 0 ]] || JOBS=1
 
-  cmake --build . -- ${JOBS:+-j$JOBS} install
+  cmake --build . --target install ${JOBS:+-- -j$JOBS}
 fi
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
