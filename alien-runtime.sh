@@ -49,5 +49,4 @@ $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::e
 prepend-path PATH \$::env(ALIEN_RUNTIME_ROOT)/bin
 prepend-path PERLLIB \$::env(ALIEN_RUNTIME_ROOT)/lib/perl
 setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
-setenv GSHELL_NO_GCC 1
 EoF
