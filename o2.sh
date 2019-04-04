@@ -51,6 +51,8 @@ incremental_recipe: |
     export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/AliTPCCommon:$ROOT_INCLUDE_PATH
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
+    # cleanup ROOT files created by tests in build area
+    find $PWD -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
@@ -219,6 +221,8 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
+  # cleanup ROOT files created by tests in build area
+  find $PWD -name "*.root" -delete
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
