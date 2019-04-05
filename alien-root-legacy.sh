@@ -44,8 +44,13 @@ for RPKG in $BUILD_REQUIRES; do
 done
 
 if [[ $ARCHITECTURE == osx* ]]; then
-  ln -nfs $INSTALLROOT/lib/libAliEnROOTLegacy.dylib $INSTALLROOT/lib/libAliEnROOTLegacy.so
-  ln -nfs $INSTALLROOT/lib/libXrdxAlienFs.dylib $INSTALLROOT/lib/libXrdxAlienFs.so
+  # Due to some ROOT quirks, we create .so symlinks pointing to the real .dylib libs on macOS
+  for SYMLIB in "$INSTALLROOT/lib/libAliEnROOTLegacy.so" "$INSTALLROOT/lib/libXrdxAlienFs.so"; do
+    [[ ! -e "$SYMLIB" ]] || continue
+    SYMDEST=${SYMLIB%.*}
+    SYMDEST=${SYMDEST##*/}.dylib
+    ln -nfs "$SYMDEST" "$SYMLIB"
+  done
 fi
 
 # Modulefile
