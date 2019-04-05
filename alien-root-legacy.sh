@@ -1,6 +1,6 @@
 package: AliEn-ROOT-Legacy
 version: "%(tag_basename)s"
-tag: "0.0.5"
+tag: "0.0.6"
 source: https://gitlab.cern.ch/jalien/alien-root-legacy.git
 requires:
   - CMake
@@ -42,6 +42,11 @@ for RPKG in $BUILD_REQUIRES; do
   popd
   rm -f $INSTALLROOT/etc/modulefiles/{$RPKG,$RPKG.unrelocated} || true
 done
+
+if [[ $ARCHITECTURE == osx* ]]; then
+  ln -nfs $INSTALLROOT/lib/libAliEnROOTLegacy.dylib $INSTALLROOT/lib/libAliEnROOTLegacy.so
+  ln -nfs $INSTALLROOT/lib/libXrdxAlienFs.dylib $INSTALLROOT/lib/libXrdxAlienFs.so
+fi
 
 # Modulefile
 mkdir -p etc/modulefiles
