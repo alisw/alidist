@@ -1,6 +1,6 @@
 package: AliEn-ROOT-Legacy
 version: "%(tag_basename)s"
-tag: "0.0.5"
+tag: "0.0.6"
 source: https://gitlab.cern.ch/jalien/alien-root-legacy.git
 requires:
   - CMake
@@ -10,6 +10,9 @@ build_requires:
   - xalienfs
 append_path:
   ROOT_PLUGIN_PATH: "$ALIEN_ROOT_LEGACY_ROOT/etc/plugins"
+env:
+  GSHELL_ROOT: "$ALIEN_ROOT_LEGACY_ROOT"
+  GSHELL_NO_GCC: "1"
 ---
 #!/bin/bash -e
 
@@ -40,6 +43,16 @@ for RPKG in $BUILD_REQUIRES; do
   rm -f $INSTALLROOT/etc/modulefiles/{$RPKG,$RPKG.unrelocated} || true
 done
 
+if [[ $ARCHITECTURE == osx* ]]; then
+  # Due to some ROOT quirks, we create .so symlinks pointing to the real .dylib libs on macOS
+  for SYMLIB in "$INSTALLROOT/lib/libAliEnROOTLegacy.so" "$INSTALLROOT/lib/libXrdxAlienFs.so"; do
+    [[ ! -e "$SYMLIB" ]] || continue
+    SYMDEST=${SYMLIB%.*}
+    SYMDEST=${SYMDEST##*/}.dylib
+    ln -nfs "$SYMDEST" "$SYMLIB"
+  done
+fi
+
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
@@ -55,6 +68,8 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
 
 # Our environment
 setenv ALIEN_ROOT_LEGACY_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GSHELL_ROOT \$::env(ALIEN_ROOT_LEGACY_ROOT)
+setenv GSHELL_NO_GCC 1
 prepend-path PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/lib
 append-path ROOT_PLUGIN_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/etc/plugins
