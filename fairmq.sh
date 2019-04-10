@@ -32,16 +32,10 @@ case $ARCHITECTURE in
     [[ ! $MSGPACK_ROOT ]] && MSGPACK_ROOT=`brew --prefix msgpack`
   ;;
   *)
-    # Check, if we want to build the ofi transport, which is for all versions v1.4.2+
-    function fairmq_build_ofi() {
-      pushd $SOURCEDIR
-      git --no-pager tag -l --merged HEAD --contains "v1.4.2" >/dev/null 2>&1
-      local res=$?
-      popd
-      return $res
-    }
-    unset BUILD_OFI
-    if fairmq_build_ofi; then BUILD_OFI=ON; fi
+    BUILD_OFI=ON
+    if [[ $(printf '%s\n' "1.4.2" "${PKGVERSION:1}" | sort -V | head -n1) != "1.4.2" ]]; then
+      BUILD_OFI=OFF
+    fi
   ;;
 esac
 
