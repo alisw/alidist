@@ -37,7 +37,7 @@ incremental_recipe: |
   JOBS=$((${JOBS:-1}*3/5))
   [[ $JOBS -gt 0 ]] || JOBS=1
 
-  cmake --build . -- ${JOBS:+-j$JOBS} install
+  cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -111,6 +111,13 @@ if [[ $ALICE_DAQ ]]; then
             soversion ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17} mysql xml"
   NO_FEATURES="ssl alien"
 else
+  ROOT_HAS_NO_FORTRAN=
+  ROOT_HAS_FORTRAN=
+  if [[ $BUILD_FAMILY == *user-next-root6 || $BUILD_FAMILY == *user-root6 || $BUILD_FAMILY == *user ]]; then
+    ROOT_HAS_NO_FORTRAN=1
+  else
+    ROOT_HAS_FORTRAN=1
+  fi
   # Standard ROOT build
   cmake $SOURCEDIR                                                                       \
         ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
@@ -133,8 +140,8 @@ else
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
-        -DCMAKE_Fortran_COMPILER=gfortran                                                \
-        -Dfortran=ON                                                                     \
+        ${ROOT_HAS_FORTRAN:+-Dfortran=ON -DCMAKE_Fortran_COMPILER=gfortran}              \
+        ${ROOT_HAS_NO_FORTRAN:+-Dfortran=OFF}                                            \
         -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
@@ -158,12 +165,12 @@ else
         -Ddavix=OFF                                                                      \
         ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
-  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http fortran
+  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
             ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
-            ${ARROW_VERSION:+arrow}"
+            ${ARROW_VERSION:+arrow} ${ROOT_HAS_FORTRAN:+fortran}"
   NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
-               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix"
+               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix ${ROOT_HAS_NO_FORTRAN:+fortran}"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
@@ -199,7 +206,7 @@ else
   JOBS=$((${JOBS:-1}*3/5))
   [[ $JOBS -gt 0 ]] || JOBS=1
 
-  cmake --build . -- ${JOBS:+-j$JOBS} install
+  cmake --build . --target install ${JOBS:+-- -j$JOBS}
 fi
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths

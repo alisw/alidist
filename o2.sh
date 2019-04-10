@@ -23,7 +23,7 @@ build_requires:
   - cub
 source: https://github.com/AliceO2Group/AliceO2
 prepend_path:
-  ROOT_INCLUDE_PATH: "$O2_ROOT/include"
+  ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/AliTPCCommon"
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
   cmake --build . -- ${JOBS:+-j$JOBS} install
@@ -48,8 +48,11 @@ incremental_recipe: |
     if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
       export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
     fi
+    export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/AliTPCCommon:$ROOT_INCLUDE_PATH
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
+    # cleanup ROOT files created by tests in build area
+    find $PWD -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
@@ -214,9 +217,12 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
     export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
   fi
+  export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/AliTPCCommon:$ROOT_INCLUDE_PATH
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
+  # cleanup ROOT files created by tests in build area
+  find $PWD -name "*.root" -delete
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?

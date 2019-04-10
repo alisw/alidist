@@ -82,7 +82,7 @@ COPYRIGHT="$(cat <<'EOF'
 EOF
 )"
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
-COPYRIGHT_EXCLUDE_REGEXP="^Framework/DebugGUI/"  # exclude files from the copyright check
+COPYRIGHT_EXCLUDE_REGEXP="^Framework/DebugGUI/|^GPU/"  # exclude files from the copyright check
 set +x
 while read FILE; do
   [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}
@@ -103,7 +103,7 @@ fi
 # Show only errors from the log, break in case some were found
 echo ; echo ; echo "========== List of errors found =========="
 GRERR=0
-grep " error:" error-log.txt || GRERR=$?
+grep -v clang-diagnostic-error error-log.txt | grep " error:"   || GRERR=$?
 [[ $GRERR == 0 ]] && exit 1
 
 # Dummy modulefile
