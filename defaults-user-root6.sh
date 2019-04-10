@@ -15,7 +15,6 @@ overrides:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
-      - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
     tag: v5-09-46-01
