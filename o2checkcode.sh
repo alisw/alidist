@@ -103,7 +103,7 @@ fi
 # Show only errors from the log, break in case some were found
 echo ; echo ; echo "========== List of errors found =========="
 GRERR=0
-grep " error:" error-log.txt || GRERR=$?
+grep -v clang-diagnostic-error error-log.txt | grep " error:"   || GRERR=$?
 [[ $GRERR == 0 ]] && exit 1
 
 # Dummy modulefile

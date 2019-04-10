@@ -38,10 +38,6 @@ incremental_recipe: |
   [[ $JOBS -gt 0 ]] || JOBS=1
 
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
-  rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
-         "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
-         "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
-
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -127,7 +123,8 @@ else
         ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
         -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
-        -Dalien=OFF                                                                      \
+        ${ALIEN_RUNTIME_VERSION:+-Dalien=ON}                                             \
+        ${ALIEN_RUNTIME_VERSION:+-DALIEN_DIR=$ALIEN_RUNTIME_ROOT}                        \
         ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
         ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
         ${CXX11:+-Dcxx11=ON}                                                             \
@@ -170,11 +167,10 @@ else
         -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
+            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
             ${ARROW_VERSION:+arrow} ${ROOT_HAS_FORTRAN:+fortran}"
   NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
-               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien
-               ${ROOT_HAS_NO_FORTRAN:+fortran}"
+               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix ${ROOT_HAS_NO_FORTRAN:+fortran}"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
@@ -231,10 +227,6 @@ fi
 # Make some CMake files used by other projects relocatable
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
 find . -name '*.deleteme' -exec rm -f '{}' \; || true
-
-rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
-       "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
-       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
 # Modulefile
 mkdir -p etc/modulefiles
