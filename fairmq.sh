@@ -6,7 +6,6 @@ requires:
  - boost
  - FairLogger
  - ZeroMQ
- - nanomsg
  - msgpack
  - DDS
 build_requires:
@@ -27,7 +26,6 @@ case $ARCHITECTURE in
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
-    [[ ! $NANOMSG_ROOT ]] && NANOMSG_ROOT=`brew --prefix nanomsg`
     [[ ! $MSGPACK_ROOT ]] && MSGPACK_ROOT=`brew --prefix msgpack`
   ;;
 esac
@@ -40,12 +38,11 @@ cmake $SOURCEDIR                                                 \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${FAIRLOGGER_ROOT:+-DFAIRLOGGER_ROOT=$FAIRLOGGER_ROOT}     \
       ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
-      ${NANOMSG_ROOT:+-DNANOMSG_ROOT=$NANOMSG_ROOT}              \
       ${MSGPACK_ROOT:+-DMSGPACK_ROOT=$MSGPACK_ROOT}              \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
       -DDISABLE_COLOR=ON                                         \
       -DBUILD_DDS_PLUGIN=ON                                      \
-      -DBUILD_NANOMSG_TRANSPORT=ON                               \
+      -DBUILD_NANOMSG_TRANSPORT=OFF                              \
       -DBUILD_EXAMPLES=ON                                        \
       -DCMAKE_INSTALL_LIBDIR=lib                                 \
       -DCMAKE_INSTALL_BINDIR=bin
@@ -74,7 +71,6 @@ module load BASE/1.0                                                            
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                      \\
             ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
             ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
-            ${NANOMSG_VERSION:+nanomsg/$NANOMSG_VERSION-$NANOMSG_REVISION}              \\
             ${MSGPACK_VERSION:+msgpack/$MSGPACK_VERSION-$MSGPACK_REVISION}              \\
             ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
