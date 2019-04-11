@@ -48,7 +48,6 @@ cmake $SOURCEDIR                                                                
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
       -DROOTSYS=$ROOTSYS                                                                    \
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                                               \
-      ${NANOMSG_ROOT:+-DNANOMSG_DIR=$NANOMSG_ROOT}                                          \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                                               \
       -DGeant3_DIR=$GEANT3_ROOT                                                             \
       -DDISABLE_GO=ON                                                                       \
@@ -102,7 +101,6 @@ module load BASE/1.0                                                            
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                              \\
             ROOT/$ROOT_VERSION-$ROOT_REVISION                                                   \\
             ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                          \\
-            ${NANOMSG_VERSION:+nanomsg/$NANOMSG_VERSION-$NANOMSG_REVISION}                      \\
             ${DDS_ROOT:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
