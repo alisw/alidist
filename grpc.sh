@@ -1,11 +1,13 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.15.1-alice1
+tag:  v1.19.1
 requires:
   - protobuf
+  - c-ares
 build_requires:
   - "GCC-Toolchain:(?!osx)"
-source: https://github.com/alisw/grpc
+  - CMake
+source: https://github.com/grpc/grpc
 prefer_system: "(?!slc5)"
 prefer_system_check: which grpc_cpp_plugin
 incremental_recipe: |
@@ -14,44 +16,26 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 
-if [[ $PKGVERSION =~ ^v((.+)(-alice[0-9]+)|(.+))$ ]]; then
-  # Define a variable with the version number minus the `-alice` suffix.
-  # Works also with non-ALICE versions
-  REALVERSION=${BASH_REMATCH[2]}
-  [[ $REALVERSION ]] || REALVERSION=${BASH_REMATCH[4]}
-else
-  echo "Invalid version number: $PKGVERSION"
-  exit 1
-fi
-
-# We need the sources here; do not copy everything by using `--reference` wisely
-git clone "$SOURCE0" --reference "$SOURCEDIR" .
+pushd $SOURCEDIR
 git checkout "$GIT_TAG"
 git submodule update --init
+popd
 
-# gRPC has a custom Makefile which readily breaks with some environment vars,
-# better to run it in a clean environment
-env -i HOME="$HOME"                             \
-       LC_CTYPE="${LC_ALL:-${LC_CTYPE:-$LANG}}" \
-       PATH="$PATH"                             \
-       USER="$USER"                             \
-       LD_LIBRARY_PATH="$LD_LIBRARY_PATH"       \
-       make ${JOBS:+-j$JOBS} prefix=$INSTALLROOT
+opts=(
+    -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+    -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG"
+    -DgRPC_BUILD_TESTS=OFF
+    -DBUILD_SHARED_LIBS=ON
+    -DgRPC_SSL_PROVIDER=package
+    -DgRPC_ZLIB_PROVIDER=package
+    -DgRPC_GFLAGS_PROVIDER=packet
+    -DgRPC_PROTOBUF_PROVIDER=package
+    -DgRPC_BENCHMARK_PROVIDER=packet
+    -DgRPC_CARES_PROVIDER=package
+)
 
-# ldconfig won't work if we're not running make install as root, and that's ok,
-# we don't need it
-sed -i.deleteme -e 's/ldconfig/true/' Makefile
-rm -f *.deleteme
-
-make prefix=$INSTALLROOT install
-
-# Add missing symlink. Must be relative, because the directory is moved around
-# after the build.  This should normally not be necessary, but it is made
-# necessary by the issues linked in the following upstream pull request:
-# https://github.com/grpc/grpc/pull/13500 Once the issue gets fixed, it should
-# be safe to remove this workaround.
-[[ -e $INSTALLROOT/lib/libgrpc++.so.${REALVERSION} ]] || { echo "Library libgrpc++.so.${REALVERSION} not found"; exit 1; }
-ln -nfs libgrpc++.so.${REALVERSION} $INSTALLROOT/lib/libgrpc++.so.1
+cmake $SOURCEDIR "${opts[@]}"
+make ${JOBS:+-j$JOBS} install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
