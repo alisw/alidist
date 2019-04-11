@@ -111,13 +111,6 @@ if [[ $ALICE_DAQ ]]; then
             soversion ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17} mysql xml"
   NO_FEATURES="ssl alien"
 else
-  ROOT_HAS_NO_FORTRAN=
-  ROOT_HAS_FORTRAN=
-  if [[ $BUILD_FAMILY == *user-next-root6 || $BUILD_FAMILY == *user-root6 || $BUILD_FAMILY == *user ]]; then
-    ROOT_HAS_NO_FORTRAN=1
-  else
-    ROOT_HAS_FORTRAN=1
-  fi
   # Standard ROOT build
   cmake $SOURCEDIR                                                                       \
         ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
@@ -140,8 +133,7 @@ else
         ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
         -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
         -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
-        ${ROOT_HAS_FORTRAN:+-Dfortran=ON -DCMAKE_Fortran_COMPILER=gfortran}              \
-        ${ROOT_HAS_NO_FORTRAN:+-Dfortran=OFF}                                            \
+        -Dfortran=OFF                                                                    \
         -DCMAKE_LINKER=$COMPILER_LD                                                      \
         ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
         ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
@@ -168,9 +160,9 @@ else
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
             ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+alien monalisa} ${ROOT_HAS_PYTHON:+python}
-            ${ARROW_VERSION:+arrow} ${ROOT_HAS_FORTRAN:+fortran}"
+            ${ARROW_VERSION:+arrow}"
   NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
-               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix ${ROOT_HAS_NO_FORTRAN:+fortran}"
+               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix"
 
   if [[ $ENABLE_COCOA ]]; then
     FEATURES="$FEATURES builtin_freetype"
