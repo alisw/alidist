@@ -11,6 +11,7 @@ build_requires:
  - autotools
 env:
   PYTHONPATH: $LHAPDF_ROOT/lib/python2.7/site-packages
+  PYTHONPATH: $LHAPDF_ROOT/lib64/python2.7/site-packages
 ---
 #!/bin/bash -ex
 case $ARCHITECTURE in
@@ -67,6 +68,7 @@ setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
 prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python2.7/site-packages
+prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib64/python2.7/site-packages
 prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
 EoF
