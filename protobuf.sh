@@ -9,10 +9,10 @@ prefer_system_check: |
   printf "#include \"google/protobuf/stubs/common.h\"\n#if (GOOGLE_PROTOBUF_VERSION < 3000000)\n#error \"At least protobuf 3.0.0 is required.\"\n#endif\nint main(){}" | c++ -I$(brew --prefix protobuf)/include -Wno-deprecated-declarations -xc++ - -o /dev/null && protoc -h &> /dev/null
 ---
 
-cmake $SOURCEDIR/cmake \
+cmake $SOURCEDIR/cmake                  \
     -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-    -Dprotobuf_BUILD_TESTS=NO \
-    -Dprotobuf_MODULE_COMPATIBLE=YES \
+    -Dprotobuf_BUILD_TESTS=NO           \
+    -Dprotobuf_MODULE_COMPATIBLE=YES    \
     -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j $JOBS}
 make install
