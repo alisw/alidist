@@ -21,20 +21,18 @@ git checkout "$GIT_TAG"
 git submodule update --init
 popd
 
-opts=(
-    -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
-    -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG"
-    -DgRPC_BUILD_TESTS=OFF
-    -DBUILD_SHARED_LIBS=ON
-    -DgRPC_SSL_PROVIDER=package
-    -DgRPC_ZLIB_PROVIDER=package
-    -DgRPC_GFLAGS_PROVIDER=packet
-    -DgRPC_PROTOBUF_PROVIDER=package
-    -DgRPC_BENCHMARK_PROVIDER=packet
-    -DgRPC_CARES_PROVIDER=package
-)
+cmake $SOURCEDIR \
+  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+  -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG" \
+  -DgRPC_BUILD_TESTS=OFF \
+  -DBUILD_SHARED_LIBS=ON \
+  -DgRPC_SSL_PROVIDER=package \
+  -DgRPC_ZLIB_PROVIDER=package \
+  -DgRPC_GFLAGS_PROVIDER=packet \
+  -DgRPC_PROTOBUF_PROVIDER=package \
+  -DgRPC_BENCHMARK_PROVIDER=packet \
+  -DgRPC_CARES_PROVIDER=package \
 
-cmake $SOURCEDIR "${opts[@]}"
 make ${JOBS:+-j$JOBS} install
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
