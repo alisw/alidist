@@ -10,14 +10,14 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-48
+    tag: v5-09-47b
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-48-01
+    tag: v5-09-47b-01
   ROOT:
     tag: "v6-10-08"
     requires:
