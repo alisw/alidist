@@ -14,10 +14,10 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-48
+    tag: v5-09-47b
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-48-01
+    tag: v5-09-47b-01
 
   # Use ROOT 5
   ROOT:
