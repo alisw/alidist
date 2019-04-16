@@ -1,6 +1,6 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.3.8
+tag: v1.4.2
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
@@ -8,6 +8,7 @@ requires:
  - ZeroMQ
  - msgpack
  - DDS
+ - "asiofi:(?!osx)"
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
@@ -28,9 +29,16 @@ case $ARCHITECTURE in
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $MSGPACK_ROOT ]] && MSGPACK_ROOT=`brew --prefix msgpack`
   ;;
+  *)
+    BUILD_OFI=ON
+    if [[ $(printf '%s\n' "1.4.2" "${PKGVERSION:1}" | sort -V | head -n1) != "1.4.2" ]]; then
+      BUILD_OFI=OFF
+    fi
+  ;;
 esac
 
 cmake $SOURCEDIR                                                 \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}        \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
@@ -40,14 +48,16 @@ cmake $SOURCEDIR                                                 \
       ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
       ${MSGPACK_ROOT:+-DMSGPACK_ROOT=$MSGPACK_ROOT}              \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
+      ${ASIOFI_ROOT:+-DASIOFI_ROOT=$ASIOFI_ROOT}                 \
+      ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
       -DDISABLE_COLOR=ON                                         \
       -DBUILD_DDS_PLUGIN=ON                                      \
       -DBUILD_NANOMSG_TRANSPORT=OFF                              \
+      ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
       -DCMAKE_INSTALL_LIBDIR=lib                                 \
       -DCMAKE_INSTALL_BINDIR=bin
 
-cmake --build . ${JOBS:+-- -j$JOBS}
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 # Tests will not run unless ALIBUILD_FAIRMQ_TESTS is set
@@ -72,6 +82,7 @@ module load BASE/1.0                                                            
             ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
             ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
             ${MSGPACK_VERSION:+msgpack/$MSGPACK_VERSION-$MSGPACK_REVISION}              \\
+            ${ASIOFI_VERSION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
             ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
 setenv FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
