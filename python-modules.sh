@@ -28,7 +28,6 @@ PIP_REQUIREMENTS=(
   "ipykernel==5.1.0         ipykernel"
   "ipython==7.4.0           IPython"
   "ipywidgets==7.4.2        ipywidgets"
-  "Keras==2.2.4             keras"
   "metakernel==0.20.14      metakernel"
   "mock==2.0.0              mock"
   "notebook==5.7.8          notebook.notebookapp"
@@ -39,15 +38,22 @@ PIP_REQUIREMENTS=(
   "scipy==1.2.1             scipy"
   "seaborn==0.9.0           seaborn"
   "sklearn-evaluation==0.4  sklearn_evaluation"
-  "tensorflow==1.13.1       tensorflow"
   "uproot==3.4.18           uproot"
   "xgboost==0.82            xgboost")
+
+if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_info.minor > 3006 else 0)'; then
+  # Install some ML-specific packages only with Python 3.6 at the moment
+  PIP_REQUIREMENTS+=("Keras==2.2.4        keras"
+                     "tensorflow==1.13.1  tensorflow")
+else
+  echo "WARNING: Using a Python version greater than 3.6. We cannot install Keras and TensorFlow at the moment"
+fi
 
 # Install pip packages under a user folder, but unset it right after installation
 for P in "${PIP_REQUIREMENTS[@]}"; do
   echo $P | cut -d' ' -f1
 done > requirements.txt
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
+env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU --no-warn-script-location -r requirements.txt
 
 # Find the proper Python lib library and export it
 pushd "$INSTALLROOT"
@@ -60,12 +66,19 @@ pushd "$INSTALLROOT"
 popd
 
 # Check if the modules can be loaded
-IMPORT=
+ERR_IMPORT=()
 for P in "${PIP_REQUIREMENTS[@]}"; do
-  IMPORT="$IMPORT,${P##* }"
+  IMP="${P##* }"
+  env PYTHONPATH="$INSTALLROOT/lib/python/site-packages" python3 -c "import $IMP" || ERR_IMPORT+=("$IMP")
 done
-IMPORT=${IMPORT:1}
-env PYTHONPATH="$INSTALLROOT/lib/python/site-packages" python3 -c "import $IMPORT"
+if [[ ${#ERR_IMPORT[@]} -gt 0 ]]; then
+  set +x
+  echo "FATAL: problems importing the following Python modules"
+  for IMP in "${ERR_IMPORT[@]}"; do
+    echo "* $IMP"
+  done
+  exit 1
+fi
 
 # Install matplotlib (quite tricky)
 MATPLOTLIB_TAG="3.0.3"
