@@ -3,6 +3,10 @@ version: v1
 disable:
   - arrow
   - treelite
+env:
+  CXXFLAGS: "-fPIC -g -O2 -std=c++11"
+  CFLAGS: "-fPIC -g -O2"
+  CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   XRootD:
     version: "%(tag_basename)s_JALIEN"
@@ -46,10 +50,13 @@ overrides:
     version: "%(tag_basename)s"
     tag: v5-09-47b
     requires:
-      - JAliEn-ROOT
       - ROOT
+      - DPMJET
       - fastjet:(?!.*ppc64)
+      - GEANT3
+      - GEANT4_VMC
       - Vc
+      - JAliEn-ROOT
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
