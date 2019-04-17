@@ -11,13 +11,10 @@ build_requires:
  - AliEn-CAs
  - ApMon-CPP
  - XRootD
- - xalienfs
  - UUID
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
-  GSHELL_ROOT: "$ALIEN_RUNTIME_ROOT"
-  GSHELL_NO_GCC: "1"
   X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"
 ---
 #!/bin/bash -e
@@ -51,7 +48,5 @@ prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_ROOT)/lib")
 prepend-path PATH \$::env(ALIEN_RUNTIME_ROOT)/bin
 prepend-path PERLLIB \$::env(ALIEN_RUNTIME_ROOT)/lib/perl
-setenv GSHELL_ROOT \$::env(ALIEN_RUNTIME_ROOT)
 setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
-setenv GSHELL_NO_GCC 1
 EoF
