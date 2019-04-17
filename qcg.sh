@@ -1,6 +1,6 @@
 package: qcg
-version: v1.4.5
-tag: qcg-v1.4.5
+version: "%(commit_hash)s"
+tag: no-zmq
 requires:
   - node
   - QualityControl
