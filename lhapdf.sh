@@ -10,8 +10,7 @@ requires:
 build_requires:
  - autotools
 env:
-  PYTHONPATH: $LHAPDF_ROOT/lib/python2.7/site-packages
-  PYTHONPATH: $LHAPDF_ROOT/lib64/python2.7/site-packages
+  PYTHONPATH: $LHAPDF_ROOT/lib/python/site-packages
 ---
 #!/bin/bash -ex
 case $ARCHITECTURE in
@@ -46,6 +45,19 @@ autoreconf -ivf
 make ${JOBS+-j $JOBS} all
 make install
 
+pushd "$INSTALLROOT"
+  # Fix ambiguity between lib/lib64
+  if [[ ! -d lib && -d lib64 ]]; then
+    ln -nfs lib64 lib
+  elif [[ -d lib && ! -d lib64 ]]; then
+    ln -nfs lib lib64
+  fi
+  # Uniform Python library path
+  pushd lib
+    ln -nfs python* python
+  popd
+popd
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -67,8 +79,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
 setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
-prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python2.7/site-packages
-prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib64/python2.7/site-packages
+prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python/site-packages
 prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
 EoF
