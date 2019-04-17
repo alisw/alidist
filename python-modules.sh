@@ -41,12 +41,12 @@ PIP_REQUIREMENTS=(
   "uproot==3.4.18           uproot"
   "xgboost==0.82            xgboost")
 
-if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_info.minor > 3006 else 0)'; then
+if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_info.minor > 3006 else 0)' && [[ $ARCHITECTURE != slc6* ]]; then
   # Install some ML-specific packages only with Python 3.6 at the moment
   PIP_REQUIREMENTS+=("Keras==2.2.4        keras"
                      "tensorflow==1.13.1  tensorflow")
 else
-  echo "WARNING: Using a Python version greater than 3.6. We cannot install Keras and TensorFlow at the moment"
+  echo "WARNING: Not installing Keras and TensorFlow"
 fi
 
 # Install pip packages under a user folder, but unset it right after installation
