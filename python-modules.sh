@@ -1,8 +1,8 @@
 package: Python-modules
 version: "1.0"
 requires:
-  - "Python:(?!osx)"
-  - "Python-system:(osx)"
+  - "Python:slc.*"
+  - "Python-system:(?!slc.*)"
   - FreeType
   - libpng
 build_requires:
@@ -63,6 +63,11 @@ pushd "$INSTALLROOT"
   pushd lib
     ln -nfs python$PYVER python
   popd
+  pushd bin
+    # Fix shebangs: remove hardcoded Python path
+    sed -i.deleteme -e "1 s|^#!${INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
+    rm -f *.deleteme || true
+  popd
 popd
 
 # Check if the modules can be loaded
@@ -122,7 +127,7 @@ env PYTHONPATH="$INSTALLROOT/lib/python/site-packages" python3 -c 'import matplo
 
 # Patch long shebangs (by default max is 128 chars on Linux)
 pushd "$INSTALLROOT/bin"
-  sed -i.deleteme -e "1 s|^#!${INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
+  sed -i.deleteme -e '1 s|^#!.*$|#!/usr/bin/env python3|' * || true
   rm -f *.deleteme
 popd
 
