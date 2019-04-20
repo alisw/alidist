@@ -69,7 +69,7 @@ else
   cd matplotlib-*
   cat > setup.cfg <<EOF
 [directories]
-basedirlist  = ${FREETYPE_ROOT:+$PWD/fake_freetype_root,$FREETYPE_ROOT,}${LIBPNG_ROOT:+$LIBPNG_ROOT,}${ZLIB_ROOT:+$ZLIB_ROOT,}/usr/X11R6,$(freetype-config --prefix),$(libpng-config --prefix)
+basedirlist  = ${FREETYPE_ROOT:+$PWD/fake_freetype_root,$FREETYPE_ROOT,}${LIBPNG_ROOT:+$LIBPNG_ROOT,}${ZLIB_ROOT:+$ZLIB_ROOT,}/usr/X11R6,$(if [ -x "$(which freetype-config)" ]; then freetype-config --prefix; else pkg-config --variable=prefix freetype2; fi),$(libpng-config --prefix)
 [gui_support]
 gtk = False
 gtkagg = False
