@@ -1,6 +1,6 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v0.6.2"
+tag: "v0.6.3"
 build_requires:
   - golang
   - protobuf
