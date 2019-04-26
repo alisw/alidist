@@ -31,8 +31,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-set CARES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$CARES_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$CARES_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$CARES_ROOT/lib")
+set C_ARES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$C_ARES_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$C_ARES_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$C_ARES_ROOT/lib")
 EoF
