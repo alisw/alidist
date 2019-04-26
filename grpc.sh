@@ -4,8 +4,8 @@ tag:  v1.19.1
 requires:
   - protobuf
   - c-ares
-build_requires:
   - "GCC-Toolchain:(?!osx)"
+build_requires:
   - CMake
 source: https://github.com/grpc/grpc
 prefer_system: "(?!slc5)"
@@ -47,7 +47,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0                                                          \\
+            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${C_ARES_VERSION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
+            ${PROTOBUF_VERSION:+c-ares/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
 # Our environment
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$GRPC_ROOT/bin
