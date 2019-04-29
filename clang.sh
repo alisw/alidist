@@ -3,6 +3,7 @@ version: "7.0.0"
 tag: v7.0.0-alice1
 source: https://github.com/alisw/clang
 requires:
+ - Python
  - "GCC-Toolchain:(?!osx)"
 build_requires:
  - CMake
@@ -21,6 +22,7 @@ cmake $SOURCEDIR \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
+  -DPYTHON_EXECUTABLE=$(which python3) \
   -DBUILD_SHARED_LIBS=ON
 
 make ${JOBS+-j $JOBS}
