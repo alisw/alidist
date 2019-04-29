@@ -53,7 +53,7 @@ fi
 for P in "${PIP_REQUIREMENTS[@]}"; do
   echo $P | cut -d' ' -f1
 done > requirements.txt
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU --no-warn-script-location -r requirements.txt
+env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
 pushd "$INSTALLROOT"
@@ -89,7 +89,7 @@ fi
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$INSTALLROOT pip3 install "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
