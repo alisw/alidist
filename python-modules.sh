@@ -53,7 +53,7 @@ fi
 for P in "${PIP_REQUIREMENTS[@]}"; do
   echo $P | cut -d' ' -f1
 done > requirements.txt
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU --no-warn-script-location -r requirements.txt
+env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
 pushd "$INSTALLROOT"
