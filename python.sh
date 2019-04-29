@@ -14,8 +14,9 @@ env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
+prefer_system: "(?!slc5)"
 prefer_system_check:
-  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 6) else 0)' && pip3 --help > /dev/null && printf '#include "pyconfig.h"' | gcc -c $(python-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
+  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 6) else 0)' && pip3 --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 ---
 #!/bin/bash -ex
 
