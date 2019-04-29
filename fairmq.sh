@@ -50,6 +50,7 @@ cmake $SOURCEDIR                                                 \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
       ${ASIOFI_ROOT:+-DASIOFI_ROOT=$ASIOFI_ROOT}                 \
       ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
+      ${OFI_ROOT:--DBUILD_OFI_TRANSPORT=OFF}                     \
       -DDISABLE_COLOR=ON                                         \
       -DBUILD_DDS_PLUGIN=ON                                      \
       -DBUILD_NANOMSG_TRANSPORT=OFF                              \
