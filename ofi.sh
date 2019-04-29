@@ -10,7 +10,7 @@ prefer_system_check: |
 ---
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 autoreconf -ivf
-./configure --prefix="$INSTALLROOT"
+./configure --prefix="$INSTALLROOT" --enable-mlx=no 
 make ${JOBS:+-j $JOBS} install
 
 # Modulefile
