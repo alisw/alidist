@@ -8,7 +8,7 @@ build_requires:
   - CMake
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include \"yaml-cpp/yaml.h\"\n" | gcc -I`brew --prefix yaml-cpp`/include -I`brew --prefix boost`/include -xc++ - -c -o /dev/null
+  printf "#include \"yaml-cpp/yaml.h\"\n" | c++ -std=c++17 -I`brew --prefix yaml-cpp`/include -I`brew --prefix boost`/include -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
 case $ARCHITECTURE in
