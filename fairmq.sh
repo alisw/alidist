@@ -8,7 +8,7 @@ requires:
  - ZeroMQ
  - msgpack
  - DDS
- - "asiofi:(?!osx)"
+ - asiofi
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
