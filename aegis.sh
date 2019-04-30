@@ -11,17 +11,16 @@ source: https://github.com/AliceO2Group/AEGIS.git
 prepend_path:
   LD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
   DYLD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
-  ROOT_INCLUDE_PATH: "$AEGIS_ROOT"
+  ROOT_INCLUDE_PATH: "$AEGIS_ROOT/include"
 valid_defaults:
   - o2
-  
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
-                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
+                 ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
+                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DCMAKE_SKIP_RPATH=TRUE
-make ${JOBS:+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
