@@ -1,17 +1,16 @@
 package: protobuf
-version: v3.5.2
+version: v3.7.1
 source: https://github.com/google/protobuf
 build_requires:
- - autotools
+ - CMake
  - "GCC-Toolchain:(?!osx)"
-prefer_system: "(?!slc5)"
-prefer_system_check: |
-  printf "#include \"google/protobuf/stubs/common.h\"\n#if (GOOGLE_PROTOBUF_VERSION < 3000000)\n#error \"At least protobuf 3.0.0 is required.\"\n#endif\nint main(){}" | c++ -I$(brew --prefix protobuf)/include -Wno-deprecated-declarations -xc++ - -o /dev/null && protoc -h &> /dev/null
 ---
 
-rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
-autoreconf -ivf
-./configure --prefix="$INSTALLROOT"
+cmake $SOURCEDIR/cmake                  \
+    -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+    -Dprotobuf_BUILD_TESTS=NO           \
+    -Dprotobuf_MODULE_COMPATIBLE=YES    \
+    -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j $JOBS}
 make install
 

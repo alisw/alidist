@@ -63,7 +63,7 @@ if __name__ == "__main__":
         if reprocessState:
             reprocessState = False
         else:
-            event = events.next()
+            event = next(events)
         debug("%s#%d <%s> %s (%s) %d:%s" % ("  "*len(states),
                                             numberOfProperties,
                                             event.value if hasattr(event, "value") else "***",
@@ -74,10 +74,10 @@ if __name__ == "__main__":
         if state == IN_START_STREAM:
             if type(event) != StreamStartEvent:
                 error("Cannot find start of stream", event)
-            event = events.next()
+            event = next(events)
             if type(event) != DocumentStartEvent:
                 error("Cannot find start of YAML document", event)
-            event = events.next()
+            event = next(events)
             if type(event) != MappingStartEvent:
                 error("Recipe should start with a dictionary", event)
             state = IN_GENERIC_KEY_VALUE

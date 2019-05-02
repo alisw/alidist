@@ -4,7 +4,7 @@ tag: v1.69.0
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - Python-modules
+  - "Python-modules:(?!osx)"
   - libpng
   - lzma
 build_requires:
@@ -17,20 +17,43 @@ prepend_path:
 ---
 #!/bin/bash -e
 
-# Detect whether we can enable boost-python (internal boost detection is broken)
-BOOST_PYTHON=1
-python -c 'import sys; sys.exit(1 if sys.version_info < (2, 7) else 0)'                   && \
-  pip --help &> /dev/null                                                                 && \
-  printf '#include \"pyconfig.h"' | gcc -c $(python-config --includes) -xc -o /dev/null - || \
-  unset BOOST_PYTHON
-if [[ $CXXSTD && $CXXSTD -ge 17 ]]; then
-  # Use C++14 to compile boost (even if we are using C++17 globally). Disable
-  # boost_python on macOS due to an incompatibility with the Python headers.
-  # See: https://github.com/boostorg/system/issues/26#issuecomment-413631998
-  CXXSTD=14
-  [[ $ARCHITECTURE == osx* ]] && unset BOOST_PYTHON || true
+BOOST_PYTHON=
+BOOST_CXXFLAGS=
+if [[ $ARCHITECTURE != osx* && $PYTHON_MODULES_VERSION ]]; then
+  # Enable boost_python on platforms other than macOS
+  BOOST_PYTHON=1
+  if [[ $PYTHON_VERSION ]]; then
+    # Our Python. We need to pass the appropriate flags to boost for the includes
+    BOOST_CXXFLAGS="$(python3-config --includes)"
+  else
+    # Using system's Python. We want to make sure `python-config` is available in $PATH and points
+    # to the Python 3 version. Note that a symlink will not work due to the automatic prefix
+    # calculation of the python-config script. Our own Python does not require tricks
+    if ! type python3-config &> /dev/null; then
+      echo "FATAL: cannot find python3-config in your \$PATH. Cannot enable boost_python"
+      exit 1
+    fi
+    mkdir fake_bin
+    cat > fake_bin/python-config <<\EOF
+#!/bin/bash
+exec python3-config "$@"
+EOF
+    chmod +x fake_bin/python-config
+    ln -nfs "$(which python3)" fake_bin/python
+    ln -nfs "$(which pip3)" fake_bin/pip
+    export PATH="$PWD/fake_bin:$PATH"
+  fi
 fi
-[[ $BOOST_PYTHON ]] || { WITHOUT_PYTHON="--without-python"; unset PYTHON_VERSION; }
+
+BOOST_NO_PYTHON=
+if [[ ! $BOOST_PYTHON ]]; then
+  BOOST_NO_PYTHON=1
+fi
+
+if [[ $CXXSTD && $CXXSTD -ge 17 ]]; then
+  # Use C++14: https://github.com/boostorg/system/issues/26#issuecomment-413631998
+  CXXSTD=14
+fi
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
@@ -45,28 +68,31 @@ mkdir -p $TMPB2
 ./b2 install --prefix=$TMPB2
 export PATH=$TMPB2/bin:$PATH
 cd $BUILDDIR
-b2 -q                        \
-   -d2                       \
-   ${JOBS+-j $JOBS}          \
-   --prefix=$INSTALLROOT     \
-   --build-dir=build-boost   \
-   --disable-icu             \
-   --without-context         \
-   --without-coroutine       \
-   --without-graph           \
-   --without-graph_parallel  \
-   --without-locale          \
-   --without-math            \
-   --without-mpi             \
-   $WITHOUT_PYTHON           \
-   --without-wave            \
-   --debug-configuration     \
-   toolset=$TOOLSET          \
-   link=shared               \
-   threading=multi           \
-   variant=release           \
-   ${CXXSTD:+cxxstd=$CXXSTD} \
+b2 -q                                            \
+   -d2                                           \
+   ${JOBS+-j $JOBS}                              \
+   --prefix=$INSTALLROOT                         \
+   --build-dir=build-boost                       \
+   --disable-icu                                 \
+   --without-context                             \
+   --without-coroutine                           \
+   --without-graph                               \
+   --without-graph_parallel                      \
+   --without-locale                              \
+   --without-math                                \
+   --without-mpi                                 \
+   ${BOOST_NO_PYTHON:+--without-python}          \
+   --without-wave                                \
+   --debug-configuration                         \
+   toolset=$TOOLSET                              \
+   link=shared                                   \
+   threading=multi                               \
+   variant=release                               \
+   ${BOOST_CXXFLAGS:+cxxflags="$BOOST_CXXFLAGS"} \
+   ${CXXSTD:+cxxstd=$CXXSTD}                     \
    install
+
+# If boost_python is enabled, check if it was really compiled
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
 
 # We need to tell boost libraries linking other boost libraries to look for them

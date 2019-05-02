@@ -1,6 +1,6 @@
 package: qcg
-version: v1.4.5
-tag: qcg-v1.4.5
+version: "%(commit_hash)s"
+tag: no-zmq
 requires:
   - node
   - QualityControl
@@ -9,7 +9,8 @@ source: https://github.com/AliceO2Group/WebUi.git
 #!/bin/bash -e
 
 rsync -a --delete "$SOURCEDIR/QualityControl/" .
-npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm
+( unset PYTHONHOME PYTHONPATH PYTHONUSERBASE;
+  npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm )
 
 mkdir -p bin
 cat > bin/qcg <<EOF

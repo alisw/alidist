@@ -24,19 +24,9 @@ env:
 prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
 incremental_recipe: |
-  if [[ $ALICE_DAQ ]]; then
-    export ROOTSYS=$BUILDDIR && make ${JOBS+-j$JOBS} && make static
-    for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
-      mkdir -p $INSTALLROOT/$S/src
-      cp -v $S/src/*.o $INSTALLROOT/$S/src/
-    done
-    export ROOTSYS=$INSTALLROOT
-  fi
-
   # Limit parallel builds to prevent OOM
   JOBS=$((${JOBS:-1}*3/5))
   [[ $JOBS -gt 0 ]] || JOBS=1
-
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
@@ -88,99 +78,63 @@ else
   ROOT_HAS_NO_PYTHON=1
 fi
 
-if [[ $ALICE_DAQ ]]; then
-  # DAQ requires static ROOT, only supported by ./configure (not CMake)
-  export ROOTSYS=$BUILDDIR
-  $SOURCEDIR/configure                  \
-    --with-pythia6-uscore=SINGLE        \
-    --enable-minuit2                    \
-    --enable-roofit                     \
-    --enable-soversion                  \
-    --enable-builtin-freetype           \
-    --enable-builtin-pcre               \
-    --with-f77=gfortran                 \
-    --with-cc=$COMPILER_CC              \
-    --with-cxx=$COMPILER_CXX            \
-    --with-ld=$COMPILER_LD              \
-    ${CXXFLAGS:+--cxxflags="$CXXFLAGS"} \
-    --disable-shadowpw                  \
-    --disable-astiff                    \
-    --disable-globus                    \
-    --disable-krb5                      \
-    --disable-ssl                       \
-    --disable-python                    \
-    --disable-alien                     \
-    --enable-mysql
-  FEATURES="builtin_freetype builtin_pcre minuit2 pythia6 roofit
-            soversion ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17} mysql xml"
-  NO_FEATURES="ssl alien"
-else
-  ROOT_HAS_NO_FORTRAN=
-  ROOT_HAS_FORTRAN=
-  if [[ $BUILD_FAMILY == *user-next-root6 || $BUILD_FAMILY == *user-root6 || $BUILD_FAMILY == *user ]]; then
-    ROOT_HAS_NO_FORTRAN=1
-  else
-    ROOT_HAS_FORTRAN=1
-  fi
-  # Standard ROOT build
-  cmake $SOURCEDIR                                                                       \
-        ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
-        -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
-        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
-        -Dalien=OFF                                                                      \
-        ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
-        ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
-        ${CXX11:+-Dcxx11=ON}                                                             \
-        ${CXX14:+-Dcxx14=ON}                                                             \
-        ${CXX17:+-Dcxx17=ON}                                                             \
-        -Dfreetype=ON                                                                    \
-        -Dbuiltin_freetype=OFF                                                           \
-        -Dpcre=OFF                                                                       \
-        -Dbuiltin_pcre=ON                                                                \
-        -Dsqlite=OFF                                                                     \
-        $ROOT_PYTHON_FLAGS                                                               \
-        ${ARROW_VERSION:+-Darrow=ON}                                                     \
-        ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
-        -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
-        -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
-        ${ROOT_HAS_FORTRAN:+-Dfortran=ON -DCMAKE_Fortran_COMPILER=gfortran}              \
-        ${ROOT_HAS_NO_FORTRAN:+-Dfortran=OFF}                                            \
-        -DCMAKE_LINKER=$COMPILER_LD                                                      \
-        ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
-        ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
-        ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
-        ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
-        ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
-        -Dpgsql=OFF                                                                      \
-        -Dminuit2=ON                                                                     \
-        -Dpythia6_nolink=ON                                                              \
-        -Droofit=ON                                                                      \
-        -Dhttp=ON                                                                        \
-        -Droot7=OFF                                                                      \
-        -Dsoversion=ON                                                                   \
-        -Dshadowpw=OFF                                                                   \
-        -Dvdt=ON                                                                         \
-        -Dbuiltin_vdt=ON                                                                 \
-        ${ALIEN_RUNTIME_VERSION:+-Dmonalisa=ON}                                          \
-        -Dkrb5=OFF                                                                       \
-        -Dgviz=OFF                                                                       \
-        -Dbuiltin_davix=OFF                                                              \
-        -Ddavix=OFF                                                                      \
-        ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
-        -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
-  FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
-            pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-            ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
-            ${ARROW_VERSION:+arrow} ${ROOT_HAS_FORTRAN:+fortran}"
-  NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
-               ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien
-               ${ROOT_HAS_NO_FORTRAN:+fortran}"
+# Standard ROOT build
+cmake $SOURCEDIR                                                                       \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
+      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+      -Dalien=OFF                                                                      \
+      ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
+      ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
+      ${CXX11:+-Dcxx11=ON}                                                             \
+      ${CXX14:+-Dcxx14=ON}                                                             \
+      ${CXX17:+-Dcxx17=ON}                                                             \
+      -Dfreetype=ON                                                                    \
+      -Dbuiltin_freetype=OFF                                                           \
+      -Dpcre=OFF                                                                       \
+      -Dbuiltin_pcre=ON                                                                \
+      -Dsqlite=OFF                                                                     \
+      $ROOT_PYTHON_FLAGS                                                               \
+      ${ARROW_VERSION:+-Darrow=ON}                                                     \
+      ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
+      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
+      -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
+      -Dfortran=OFF                                                                    \
+      -DCMAKE_LINKER=$COMPILER_LD                                                      \
+      ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
+      ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
+      ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
+      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
+      -Dpgsql=OFF                                                                      \
+      -Dminuit2=ON                                                                     \
+      -Dpythia6_nolink=ON                                                              \
+      -Droofit=ON                                                                      \
+      -Dhttp=ON                                                                        \
+      -Droot7=OFF                                                                      \
+      -Dsoversion=ON                                                                   \
+      -Dshadowpw=OFF                                                                   \
+      -Dvdt=ON                                                                         \
+      -Dbuiltin_vdt=ON                                                                 \
+      ${ALIEN_RUNTIME_VERSION:+-Dmonalisa=ON}                                          \
+      -Dkrb5=OFF                                                                       \
+      -Dgviz=OFF                                                                       \
+      -Dbuiltin_davix=OFF                                                              \
+      -Ddavix=OFF                                                                      \
+      ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=$(which python3)}                         \
+      -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
+          pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
+          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
+          ${ARROW_VERSION:+arrow}"
+NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
+             ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien"
 
-  if [[ $ENABLE_COCOA ]]; then
-    FEATURES="$FEATURES builtin_freetype"
-  elif [[ $FREETYPE_ROOT ]]; then
-    NO_FEATURES="$NO_FEATURES builtin_freetype"
-  fi
+if [[ $ENABLE_COCOA ]]; then
+  FEATURES="$FEATURES builtin_freetype"
+elif [[ $FREETYPE_ROOT ]]; then
+  NO_FEATURES="$NO_FEATURES builtin_freetype"
 fi
 
 # Check if all important features are enabled/disabled as requested
@@ -192,26 +146,10 @@ for FEATURE in $NO_FEATURES; do
   bin/root-config --has-$FEATURE | grep -q no
 done
 
-if [[ $ALICE_DAQ ]]; then
-  make ${JOBS+-j$JOBS}
-  make static
-  # *.o files from these modules need to be copied to the install directory
-  # because AliRoot static build uses them directly
-  for S in montecarlo/vmc tree/treeplayer io/xmlparser math/minuit2 sql/mysql; do
-    mkdir -p $INSTALLROOT/$S/src
-    cp -v $S/src/*.o $INSTALLROOT/$S/src/
-  done
-  export ROOTSYS=$INSTALLROOT
-  make ${JOBS+-j$JOBS} install
-else
-  # Invoke build/install via CMake for standard builds (supports all generators)
-
-  # Limit parallel builds to prevent OOM
-  JOBS=$((${JOBS:-1}*3/5))
-  [[ $JOBS -gt 0 ]] || JOBS=1
-
-  cmake --build . --target install ${JOBS:+-- -j$JOBS}
-fi
+# Limit parallel builds to prevent OOM
+JOBS=$((${JOBS:-1}*3/5))
+[[ $JOBS -gt 0 ]] || JOBS=1
+cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
