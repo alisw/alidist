@@ -115,6 +115,7 @@ mkdir build-gdb
 pushd build-gdb
   ../gdb/configure --prefix="$INSTALLROOT"                \
                    ${MARCH:+--build=$MARCH --host=$MARCH} \
+                   --without-python                       \
                    --disable-multilib
   make ${JOBS:+-j$JOBS} MAKEINFO=":"
   make install MAKEINFO=":"
