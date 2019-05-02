@@ -36,15 +36,18 @@ PIP_REQUIREMENTS=(
   "PyYAML==5.1              yaml"
   "scikit-learn==0.20.3     sklearn"
   "scipy==1.2.1             scipy"
-  "seaborn==0.9.0           seaborn"
-  "sklearn-evaluation==0.4  sklearn_evaluation"
   "uproot==3.4.18           uproot"
-  "xgboost==0.82            xgboost")
+  )
 
 if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_info.minor > 3006 else 0)' && [[ $ARCHITECTURE != slc6* ]]; then
   # Install some ML-specific packages only with Python 3.6 at the moment
-  PIP_REQUIREMENTS+=("Keras==2.2.4        keras"
-                     "tensorflow==1.13.1  tensorflow")
+  PIP_REQUIREMENTS+=(
+    "seaborn==0.9.0           seaborn"
+    "sklearn-evaluation==0.4  sklearn_evaluation"
+    "Keras==2.2.4             keras"
+    "tensorflow==1.13.1       tensorflow"
+    "xgboost==0.82            xgboost"
+  )
 else
   echo "WARNING: Not installing Keras and TensorFlow"
 fi
