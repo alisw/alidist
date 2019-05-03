@@ -1,10 +1,13 @@
 package: qcg
 version: "%(commit_hash)s"
-tag: no-zmq
+tag: qcg-v1.4.6
 requires:
   - node
   - QualityControl
 source: https://github.com/AliceO2Group/WebUi.git
+valid_defaults:
+  - o2
+  - o2-dataflow
 ---
 #!/bin/bash -e
 
