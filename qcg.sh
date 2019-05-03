@@ -1,5 +1,5 @@
 package: qcg
-version: "%(commit_hash)s"
+version: v1.4.6
 tag: qcg-v1.4.6
 requires:
   - node
