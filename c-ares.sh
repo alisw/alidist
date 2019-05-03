@@ -5,7 +5,6 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
 source: https://github.com/c-ares/c-ares
-prefer_system: false
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
