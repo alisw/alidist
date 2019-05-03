@@ -6,6 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
 disable:
+  - AEGIS
   - AliEn-Runtime
   - AliRoot
   - ApMon-CPP
