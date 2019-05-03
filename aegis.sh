@@ -14,6 +14,10 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$AEGIS_ROOT/include"
 valid_defaults:
   - o2
+  - o2-dataflow
+  - o2-dev-fairroot
+  - alo
+  - o2-prod
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
