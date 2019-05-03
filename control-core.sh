@@ -2,6 +2,7 @@ package: Control-Core
 version: "%(tag_basename)s"
 tag: "v0.7.0"
 build_requires:
+  - "GCC-Toolchain:(?!osx)"
   - golang
   - protobuf
   - grpc

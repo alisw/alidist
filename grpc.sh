@@ -4,6 +4,7 @@ tag:  v1.19.1
 requires:
   - protobuf
   - c-ares
+  - OpenSSL
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
