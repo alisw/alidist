@@ -12,8 +12,6 @@ prepend_path:
   LD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
   DYLD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
   ROOT_INCLUDE_PATH: "$AEGIS_ROOT/include"
-valid_defaults:
-  - o2
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
