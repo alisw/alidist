@@ -59,6 +59,10 @@ env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 pushd "$INSTALLROOT"
   if [[ -d lib64 ]]; then
     ln -nfs lib64 lib  # creates lib pointing to lib64
+  else
+    if [[ -d lib ]]; then
+       ln -nfs lib lib64 # creates lib64 pointing to lib
+    fi
   fi
   pushd lib
     ln -nfs python$PYVER python
