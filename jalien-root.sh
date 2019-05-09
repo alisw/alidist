@@ -9,6 +9,7 @@ build_requires:
   - json-c
   - CMake
   - "GCC-Toolchain:(?!osx)"
+  - zlib
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
 ---
@@ -21,6 +22,7 @@ cmake $SOURCEDIR                                         \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      -DZLIB_ROOT="$ZLIB_ROOT"                           \
       -DLWS="$LIBWEBSOCKETS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
