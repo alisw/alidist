@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.24
+tag: v0.25
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -35,7 +35,7 @@ cmake $SOURCEDIR                                                         \
       ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
       ${FAIRLOGGER_VERSION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
       ${PYTHON_VERSION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DWITH_LZ4=1
 
 make ${JOBS+-j $JOBS} install
 
