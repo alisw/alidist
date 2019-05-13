@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.25
+tag: v0.25.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -11,6 +11,8 @@ requires:
   - Monitoring
   - Configuration
   - ReadoutCard
+  - lz4
+#  - Control-OCCPlugin
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Readout
@@ -35,7 +37,9 @@ cmake $SOURCEDIR                                                         \
       ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
       ${FAIRLOGGER_VERSION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
       ${PYTHON_VERSION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DWITH_LZ4=1
+      ${LZ4_VERSION:+-DLZ4_DIR=$LZ4_ROOT}                                \
+      ${CONTROL_OCCPLUGIN_VERSION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS} install
 
@@ -58,8 +62,10 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
+            lz4/${LZ4_VERSION}-${LZ4_REVISION}                                \\
             FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
             FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION
+#            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
 setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
