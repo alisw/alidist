@@ -38,7 +38,7 @@ cmake $SOURCEDIR                                              \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
-      -DInfoLogger_ROOT=$INFOLOGGER_ROOT                      \
+      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
       -DO2_ROOT=$O2_ROOT                                      \
       -DFAIRROOTPATH=$FAIRROOT_ROOT                           \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
