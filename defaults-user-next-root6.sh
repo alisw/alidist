@@ -13,8 +13,8 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-47b
+    tag: v5-09-20fb
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-47b-01
+    tag: v5-09-20fb-01
 ---
