@@ -10,6 +10,7 @@ cmake $SOURCEDIR/cmake                  \
     -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
     -Dprotobuf_BUILD_TESTS=NO           \
     -Dprotobuf_MODULE_COMPATIBLE=YES    \
+    -Dprotobuf_BUILD_SHARED_LIBS=ON     \
     -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j $JOBS}
 make install
