@@ -47,6 +47,8 @@ if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_i
     "Keras==2.2.4             keras"
     "tensorflow==1.13.1       tensorflow"
     "xgboost==0.82            xgboost"
+    "dryable==1.0.3           dryable"
+    "responses==0.10.6         responses"
   )
 else
   echo "WARNING: Not installing Keras and TensorFlow"
