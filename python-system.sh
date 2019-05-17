@@ -3,6 +3,7 @@ version: "3.6"
 system_requirement_missing: |
   Python 3.6 is missing from your system. We need the python3 and pip3 executables in the PATH.
   It can be installed with:
+   * apt-get install python3 python3-pip python3-tk
    * brew install python3
 system_requirement: ".*"
 system_requirement_check: |
