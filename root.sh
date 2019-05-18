@@ -71,6 +71,7 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   ROOT_PYTHON_FEATURES="python"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
+  PYTHON_EXECUTABLE=$( $(which python3) -c 'import sys; print(sys.executable)')
 else
   # Non-ROOT 6 builds: disable Python
   ROOT_PYTHON_FLAGS="-Dpython=OFF"
@@ -122,7 +123,7 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_davix=OFF                                                              \
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=$(which python3)}                         \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                         \
       -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
