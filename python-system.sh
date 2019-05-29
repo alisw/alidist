@@ -7,5 +7,5 @@ system_requirement_missing: |
    * On macOS: brew install python3
 system_requirement: ".*"
 system_requirement_check: |
-  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3,6) else 0)' && pip3 help
+  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3,5) else 0)' && pip3 help
 ---
