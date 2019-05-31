@@ -59,6 +59,12 @@ fi
 for P in "${PIP_REQUIREMENTS[@]}"; do
   echo $P | cut -d' ' -f1
 done > requirements.txt
+# FIXME: required because of the newly introduced dependency on scikit-garden requires
+# a numpy to be installed separately
+# See also:
+#   https://github.com/scikit-garden/scikit-garden/issues/23
+env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
+
 env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
