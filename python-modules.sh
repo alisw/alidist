@@ -49,6 +49,7 @@ if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_i
     "xgboost==0.82            xgboost"
     "dryable==1.0.3           dryable"
     "responses==0.10.6         responses"
+    "RootInteractive==0.0.7    RootInteractive"
   )
 else
   echo "WARNING: Not installing Keras and TensorFlow"
@@ -96,7 +97,7 @@ fi
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$INSTALLROOT pip3 install  "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
