@@ -97,7 +97,7 @@ fi
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$INSTALLROOT pip3 install  "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$INSTALLROOT pip3 install  --user "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
