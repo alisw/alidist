@@ -49,6 +49,7 @@ if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_i
     "xgboost==0.82            xgboost"
     "dryable==1.0.3           dryable"
     "responses==0.10.6         responses"
+    "RootInteractive==0.0.7    RootInteractive"
   )
 else
   echo "WARNING: Not installing Keras and TensorFlow"
@@ -58,6 +59,12 @@ fi
 for P in "${PIP_REQUIREMENTS[@]}"; do
   echo $P | cut -d' ' -f1
 done > requirements.txt
+# FIXME: required because of the newly introduced dependency on scikit-garden requires
+# a numpy to be installed separately
+# See also:
+#   https://github.com/scikit-garden/scikit-garden/issues/23
+env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
+
 env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
