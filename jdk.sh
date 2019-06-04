@@ -1,5 +1,5 @@
 package: JDK
-version: "10.0.1"
+version: "12.0.1"
 build_requires:
   - curl
 prefer_system: .*
@@ -15,7 +15,12 @@ prepend_path:
 JDK_PLATFORM=linux
 [[ $ARCHITECTURE != osx* ]] || JDK_PLATFORM=osx
 
-URL="https://download.java.net/java/GA/jdk10/10.0.1/fb4372174a714e6b8c52526dc134031e/10/openjdk-10.0.1_${JDK_PLATFORM}-x64_bin.tar.gz"
+if [[ $JDK_PLATFORM == osx ]]; then
+  URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-macosx_x64.tar.gz"
+else
+  URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-linux_i686.tar.gz"  
+fi
+
 mkdir -p "$INSTALLROOT"
 curl -L $URL | tar --strip-components 1 -C "$INSTALLROOT" -xvvz
 
