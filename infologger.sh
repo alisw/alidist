@@ -1,10 +1,9 @@
 package: InfoLogger
 version: "%(tag_basename)s"
-tag: v1.2.4
+tag: v1.3.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - Common-O2
   - MySQL
 build_requires:
   - CMake
@@ -24,7 +23,6 @@ esac
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}              \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}     \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -43,8 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0                                                          \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  
+            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 setenv INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
