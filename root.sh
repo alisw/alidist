@@ -37,12 +37,19 @@ incremental_recipe: |
 #!/bin/bash -e
 unset ROOTSYS
 
+
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CXX11=1 || true
 [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CXX14=1 || true
 [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CXX17=1 || true
+
+# We do not use global options for ROOT, otherwise the -g will kill compilation 
+# on < 8GB machines
+unset CXXFLAGS
+unset CFLAGS
+unset LDFLAGS
 
 case $ARCHITECTURE in
   osx*)
