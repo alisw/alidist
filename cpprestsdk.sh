@@ -25,8 +25,7 @@ cmake "$SOURCEDIR/Release"                              \
       -DCMAKE_CXX_FLAGS=-Wno-error=conversion           \
       -DCPPREST_EXCLUDE_WEBSOCKETS=ON                   \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}        \
-      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
-
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}
 
 make ${JOBS:+-j $JOBS}
 make install
