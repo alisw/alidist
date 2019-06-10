@@ -11,20 +11,21 @@ build_requires:
 #!/bin/sh
 
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-          [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
-          ;;
+  osx*) 
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
+  ;;
 esac
 
 
-cmake "$SOURCEDIR/Release"                      \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
-      -DBUILD_TESTS=OFF                         \
-      -DBUILD_SAMPLES=OFF                       \
-      -DCMAKE_BUILD_TYPE=Debug                  \
-      -DCMAKE_CXX_FLAGS=-Wno-error=conversion   \
-      -DCPPREST_EXCLUDE_WEBSOCKETS=ON \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT} \
+cmake "$SOURCEDIR/Release"                              \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
+      -DBUILD_TESTS=OFF                                 \
+      -DBUILD_SAMPLES=OFF                               \
+      -DCMAKE_BUILD_TYPE=Debug                          \
+      -DCMAKE_CXX_FLAGS=-Wno-error=conversion           \
+      -DCPPREST_EXCLUDE_WEBSOCKETS=ON                   \
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}        \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
 
 
