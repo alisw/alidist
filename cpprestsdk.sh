@@ -17,7 +17,6 @@ case $ARCHITECTURE in
   ;;
 esac
 
-
 cmake "$SOURCEDIR/Release"                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
       -DBUILD_TESTS=OFF                                 \
