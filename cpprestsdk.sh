@@ -13,7 +13,7 @@ build_requires:
 case $ARCHITECTURE in
   osx*) 
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
   ;;
 esac
 
