@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
 tag: "v6-16-00"
-source: https://github.com/root-mirror/root
+source: https://github.com/root-project/root
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
