@@ -4,6 +4,7 @@ tag: "v3.13.1"
 source: https://github.com/Kitware/CMake
 build_requires:
  - "GCC-Toolchain:(?!osx)"
+ - make
 prefer_system: .*
 prefer_system_check: |
   verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }

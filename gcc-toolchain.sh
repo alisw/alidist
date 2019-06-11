@@ -8,6 +8,7 @@ prepend_path:
 build_requires:
  - autotools
  - yacc-like
+ - make
 prefer_system: .*
 prefer_system_check: |
   set -e
