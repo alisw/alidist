@@ -17,6 +17,7 @@ requires:
   - curl
   - MCStepLogger
   - AEGIS
+  - fmt
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -166,6 +167,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
       ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
+      ${FMT_ROOT:+-DFMT_DIR=${FMT_ROOT}}                                                    \
       ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
