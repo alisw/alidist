@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v0.28
+tag: v1.0.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -12,7 +12,7 @@ requires:
   - Configuration
   - ReadoutCard
   - lz4
-#  - Control-OCCPlugin
+  - Control-OCCPlugin
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Readout
@@ -64,8 +64,8 @@ module load BASE/1.0                                                          \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
             lz4/${LZ4_VERSION}-${LZ4_REVISION}                                \\
             FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
-            FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION
-#            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
+            FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION                           \\
+            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
 setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
