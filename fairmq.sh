@@ -52,7 +52,7 @@ cmake $SOURCEDIR                                                 \
       ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
       ${OFI_ROOT:--DBUILD_OFI_TRANSPORT=OFF}                     \
       -DDISABLE_COLOR=ON                                         \
-      -DBUILD_DDS_PLUGIN=ON                                      \
+      ${DDS_ROOT:+-DBUILD_DDS_PLUGIN=ON}                         \
       -DBUILD_NANOMSG_TRANSPORT=OFF                              \
       ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
