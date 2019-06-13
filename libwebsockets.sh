@@ -17,6 +17,7 @@ cmake $SOURCEDIR/                                                   \
       -DCMAKE_BUILD_TYPE=RELEASE                                    \
       -DLWS_WITH_STATIC=ON                                          \
       -DLWS_WITH_SHARED=OFF                                         \
+      -DLWS_WITH_IPV6=ON                                            \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib}        \
