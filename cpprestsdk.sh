@@ -4,22 +4,28 @@ tag: master
 source: https://github.com/Microsoft/cpprestsdk
 requires:
 - boost
+- OpenSSL:(?!osx)
 build_requires:
 - CMake
 ---
 #!/bin/sh
 
 case $ARCHITECTURE in
-  osx*) BOOST_ROOT=$(brew --prefix boost) ;;
+  osx*) 
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
+  ;;
 esac
 
-cmake "$SOURCEDIR/Release"                      \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
-      -DBUILD_TESTS=OFF                         \
-      -DBUILD_SAMPLES=OFF                       \
-      -DCMAKE_BUILD_TYPE=Debug                  \
-      -DCMAKE_CXX_FLAGS=-Wno-error=conversion   \
-      -DCPPREST_EXCLUDE_WEBSOCKETS=ON
+cmake "$SOURCEDIR/Release"                              \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
+      -DBUILD_TESTS=OFF                                 \
+      -DBUILD_SAMPLES=OFF                               \
+      -DCMAKE_BUILD_TYPE=Debug                          \
+      -DCMAKE_CXX_FLAGS=-Wno-error=conversion           \
+      -DCPPREST_EXCLUDE_WEBSOCKETS=ON                   \
+      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}        \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}
 
 make ${JOBS:+-j $JOBS}
 make install
@@ -36,7 +42,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0                                                          \\
+            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 # Our environment
 setenv CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(CPPRESTSDK_ROOT)/lib64
