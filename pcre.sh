@@ -1,7 +1,7 @@
 package: PCRE
 version: master
-source: https://github.com/ktf/pcre
 tag: master
+source: https://github.com/ktf/pcre
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include \"pcre.h\"\n" | c++ -I`brew --prefix pcre`/include -xc++ - -c -o /dev/null

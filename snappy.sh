@@ -1,7 +1,7 @@
 package: snappy
 version: "%(tag_basename)s"
-source: https://github.com/google/snappy
 tag: 1.1.3
+source: https://github.com/google/snappy
 build_requires:
  - "GCC-Toolchain:(?!osx)"
 system_requirement: ".*"
