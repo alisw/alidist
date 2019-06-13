@@ -6,6 +6,6 @@ system_requirement_missing: |
     * On Ubuntu-compatible systems: libbz2-dev
 system_requirement: ".*"
 system_requirement_check: |
-  printf "#include <bzlib.h>\n" | gcc -xc++ - -c -o /dev/null
+  printf "#include <bzlib.h>\n" | c++ -xc++ - -c -o /dev/null
 ---
 

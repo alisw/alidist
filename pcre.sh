@@ -4,7 +4,7 @@ source: https://github.com/ktf/pcre
 tag: master
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include \"pcre.h\"\n" | gcc -I`brew --prefix pcre`/include -xc++ - -c -o /dev/null
+  printf "#include \"pcre.h\"\n" | c++ -I`brew --prefix pcre`/include -xc++ - -c -o /dev/null
 ---
 #!/bin/sh
 echo "Building our own pcre. If you want to avoid this, please install pcre development package."

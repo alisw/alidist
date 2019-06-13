@@ -6,5 +6,5 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 system_requirement: ".*"
 system_requirement_check: |
-  printf "#include <snappy.h>\n" | gcc -xc++ -I$(brew --prefix snappy)/include - -c -M 2>&1
+  printf "#include <snappy.h>\n" | c++ -xc++ -I$(brew --prefix snappy)/include - -c -M 2>&1
 ---
