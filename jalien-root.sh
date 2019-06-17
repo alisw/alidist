@@ -1,6 +1,6 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.3.0"
+tag: "0.4.0"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
