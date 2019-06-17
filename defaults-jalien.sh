@@ -10,7 +10,7 @@ env:
 overrides:
   XRootD:
     version: "%(tag_basename)s_JALIEN"
-    tag: "v4.9.1"
+    tag: "v4.8.6"
     source: https://github.com/xrootd/xrootd
     build_requires:
       - CMake
