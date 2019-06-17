@@ -44,10 +44,10 @@ overrides:
     build_requires:
       - autotools
   AliPhysics:
-    version: "%(tag_basename)s"
+    version: "%(tag_basename)s_JALIEN"
     tag: v5-09-47c-01
   AliRoot:
-    version: "%(tag_basename)s"
+    version: "%(tag_basename)s_JALIEN"
     tag: v5-09-47c
     requires:
       - ROOT
