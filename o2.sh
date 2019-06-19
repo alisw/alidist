@@ -222,7 +222,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
   # cleanup ROOT files created by tests in build area
-  find $PWD -name "*.root" -delete
+  find $PWD -path $PWD/stage -prune -o -name "*.root" -delete
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
