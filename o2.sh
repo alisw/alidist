@@ -53,7 +53,7 @@ incremental_recipe: |
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
     # cleanup ROOT files created by tests in build area
-    find $PWD -path $PWD/stage -prune -o -name "*.root" -delete
+    find $PWD -not \( -path $PWD/stage -prune \) -name \*.root -exec rm {} \;
     rm -rf test_logs
     TESTERR=
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
@@ -222,7 +222,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
   # cleanup ROOT files created by tests in build area
-  find $PWD -path $PWD/stage -prune -o -name "*.root" -delete
+  find $PWD -not \( -path $PWD/stage -prune \) -name \*.root -exec rm {} \;
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
