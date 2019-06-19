@@ -53,7 +53,7 @@ incremental_recipe: |
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
     # cleanup ROOT files created by tests in build area
-    find $PWD -name "*.root" -delete
+    find $PWD -path $PWD/stage -prune -o -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
     ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
