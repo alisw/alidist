@@ -57,6 +57,8 @@ cmake $SOURCEDIR                                                     \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                      \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}    \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}           \
+      ${JALIEN_ROOT_ROOT:+-DJALIEN_LIBS=$JALIEN_ROOT_ROOT}           \
+      ${ALIEN_ROOT_LEGACY_ROOT:+-DALIEN_LIBS=$ALIEN_ROOT_LEGACY_ROOT}\
       ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                     \
       ${DPMJET_ROOT:+-DDPMJET="$DPMJET_ROOT"}                        \
       ${ZEROMQ_ROOT:+-DZEROMQ=$ZEROMQ_ROOT}                          \

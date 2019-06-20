@@ -10,6 +10,7 @@ build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - zlib
+  - Alice-GRID-Utils
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
 ---
@@ -23,7 +24,8 @@ cmake $SOURCEDIR                                         \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
-      -DLWS="$LIBWEBSOCKETS_ROOT"
+      -DLWS="$LIBWEBSOCKETS_ROOT"                        \
+      -DAGU="$ALICE_GRID_UTILS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
 # Modulefile

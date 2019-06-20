@@ -8,6 +8,7 @@ requires:
   - ROOT
 build_requires:
   - xalienfs
+  - Alice-GRID-Utils
 append_path:
   ROOT_PLUGIN_PATH: "$ALIEN_ROOT_LEGACY_ROOT/etc/plugins"
 prepend_path:
@@ -31,6 +32,7 @@ cmake $SOURCEDIR                                         \
       -DROOTSYS="$ROOTSYS"                               \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DALIEN_DIR="$XALIENFS_ROOT"                       \
+      -DAGU="$ALICE_GRID_UTILS_ROOT"                     \
       -DROOT_VERSION="$ROOT_MAJOR"
 
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
