@@ -7,7 +7,7 @@ build_requires:
   - curl
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include <ft2build.h>\n" | gcc -xc++ - `freetype-config --cflags` -c -M 2>&1;
+  printf "#include <ft2build.h>\n" | c++ -xc++ - `freetype-config --cflags` -c -M 2>&1;
   if [ $? -ne 0 ]; then printf "FreeType is missing on your system.\n * On RHEL-compatible systems you probably need: freetype freetype-devel\n * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev\n"; exit 1; fi
 ---
 #!/bin/bash -ex
