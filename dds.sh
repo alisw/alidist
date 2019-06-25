@@ -7,7 +7,10 @@ requires:
 build_requires:
   - CMake
 incremental_recipe: |
-  make -j$JOBS wn_bin
+  case $ARCHITECTURE in
+    osx*) ;;
+    *) make -j$JOBS wn_bin ;;
+  esac
   make -j$JOBS install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
