@@ -17,6 +17,7 @@ requires:
   - curl
   - MCStepLogger
   - AEGIS
+  - fmt
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -107,6 +108,7 @@ case $ARCHITECTURE in
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
+    [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
     SONAME=dylib
   ;;
   *) SONAME=so ;;
@@ -166,6 +168,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
       -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
       ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
+      ${FMT_ROOT:+-DFMT_ROOT=${FMT_ROOT}}                                                    \
       ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
