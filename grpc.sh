@@ -22,6 +22,13 @@ git checkout "$GIT_TAG"
 git submodule update --init
 popd
 
+case $ARCHITECTURE in
+  osx*) 
+    [[ ! $OPENSSL_ROOT ]] && BOOST_ROOT=$(brew --prefix openssl)
+    [[ ! $PROTOBUF_ROOT ]] && OPENSSL_ROOT=$(brew --prefix protobuf)
+  ;;
+esac
+
 cmake $SOURCEDIR                        \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
   -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG" \
