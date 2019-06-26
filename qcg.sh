@@ -12,8 +12,16 @@ valid_defaults:
 #!/bin/bash -e
 
 rsync -a --delete "$SOURCEDIR/QualityControl/" .
+
 ( unset PYTHONHOME PYTHONPATH PYTHONUSERBASE;
-  npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm )
+  major=$(python -c "import sys, __future__; print(sys.version_info.major);")
+  if test $major != "2"; then
+    # this hack is needed to ensure we have "python" = python2 for node-gyp
+    # which is still not python3 compliant...
+    ln -s $(which python2) $BUILDDIR/python
+    export PATH=$BUILDDIR:$PATH 
+  fi
+  npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm)
 
 mkdir -p bin
 cat > bin/qcg <<EOF
