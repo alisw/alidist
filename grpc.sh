@@ -29,16 +29,17 @@ case $ARCHITECTURE in
   ;;
 esac
 
-cmake $SOURCEDIR                        \
-  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
-  -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG" \
-  -DgRPC_BUILD_TESTS=OFF                \
-  -DBUILD_SHARED_LIBS=ON                \
-  -DgRPC_SSL_PROVIDER=package           \
-  -DgRPC_ZLIB_PROVIDER=package          \
-  -DgRPC_GFLAGS_PROVIDER=packet         \
-  -DgRPC_PROTOBUF_PROVIDER=package      \
-  -DgRPC_BENCHMARK_PROVIDER=packet      \
+cmake $SOURCEDIR                                    \
+  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
+  -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG"             \
+  -DgRPC_BUILD_TESTS=OFF                            \
+  -DBUILD_SHARED_LIBS=ON                            \
+  -DgRPC_SSL_PROVIDER=package                       \
+  -DgRPC_ZLIB_PROVIDER=package                      \
+  -DgRPC_GFLAGS_PROVIDER=packet                     \
+  -DgRPC_PROTOBUF_PROVIDER=package                  \
+  -DgRPC_BENCHMARK_PROVIDER=packet                  \
+  ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
   -DgRPC_CARES_PROVIDER=package
 
 make ${JOBS:+-j$JOBS} install
