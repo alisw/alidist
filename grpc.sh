@@ -24,8 +24,8 @@ popd
 
 case $ARCHITECTURE in
   osx*) 
-    [[ ! $OPENSSL_ROOT ]] && BOOST_ROOT=$(brew --prefix openssl)
-    [[ ! $PROTOBUF_ROOT ]] && OPENSSL_ROOT=$(brew --prefix protobuf)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
   ;;
 esac
 
