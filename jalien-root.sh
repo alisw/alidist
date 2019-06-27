@@ -1,6 +1,6 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.4.2"
+tag: "0.4.4"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
@@ -18,14 +18,17 @@ append_path:
 case $ARCHITECTURE in
   osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
 esac
-cmake $SOURCEDIR                                         \
+
+rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
+
+cmake $BUILDDIR                                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
-      -DLWS="$LIBWEBSOCKETS_ROOT"                        \
-      -DAGU="$ALICE_GRID_UTILS_ROOT"
+      -DLWS="$LIBWEBSOCKETS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
 # Modulefile

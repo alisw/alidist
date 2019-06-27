@@ -26,13 +26,15 @@ fi
 # Determine whether we are building for ROOT 5 or ROOT 6+
 [[ -x "$ROOTSYS/bin/rootcling" ]] && ROOT_MAJOR="v6-00-00" || ROOT_MAJOR="v5-00-00"
 
-cmake $SOURCEDIR                                         \
+rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
+
+cmake $BUILDDIR                                          \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       -DROOTSYS="$ROOTSYS"                               \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DALIEN_DIR="$XALIENFS_ROOT"                       \
-      -DAGU="$ALICE_GRID_UTILS_ROOT"                     \
       -DROOT_VERSION="$ROOT_MAJOR"
 
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
