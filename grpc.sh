@@ -24,7 +24,7 @@ popd
 
 case $ARCHITECTURE in
   osx*) 
-    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
   ;;
 esac
@@ -39,7 +39,7 @@ cmake $SOURCEDIR                                    \
   -DgRPC_GFLAGS_PROVIDER=packet                     \
   -DgRPC_PROTOBUF_PROVIDER=package                  \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
-  ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+  ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
   -DgRPC_CARES_PROVIDER=package
 
 make ${JOBS:+-j$JOBS} install
