@@ -58,7 +58,18 @@ JOBS=$((${JOBS:-1}*3/5))
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  make test
+  TESTERR=
+  ctest --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+  # Display additional logs for tests that timed out in a non-fatal way
+  set +x
+  for LOG in test_logs/*.nonfatal; do
+    [[ -e $LOG ]] || continue
+    printf "\n\n\n\n\n\n"
+    cat "$LOG"
+    printf "\n\n\n\n\n\n"
+  done
+  set -x
+  [[ ! $TESTERR ]] || exit 1
 fi
 
 # Modulefile
