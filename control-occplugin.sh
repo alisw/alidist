@@ -26,6 +26,7 @@ case $ARCHITECTURE in
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
       [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
       [[ ! $GRPC_ROOT ]] && GRPC_ROOT=$(brew --prefix grpc)
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
       LIBEXT=dylib
     ;;
 esac
@@ -33,6 +34,7 @@ esac
 cmake $SOURCEDIR/occ                                                                     \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
       ${BOOST_ROOT:+-DBOOSTPATH=$BOOST_ROOT}                                             \
+      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}                          \
       -DGRPCPATH=${GRPC_ROOT}                                                            \
       -DPROTOBUFPATH=${PROTOBUF_ROOT}                                                    \
       -DFAIRMQPATH=${FAIRMQ_ROOT}                                                        \
