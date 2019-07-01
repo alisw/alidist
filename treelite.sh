@@ -1,6 +1,6 @@
 package: treelite
 version: "%(tag_basename)s"
-tag: "2a12742269c1d3de553d9a12ff36bc2a5d874239"
+tag: "2a12742269"
 source: https://github.com/dmlc/treelite
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -37,8 +37,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set osname [uname sysname]
-setenv TREELITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(TREELITE_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(TREELITE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(TREELITE_ROOT)/lib")
+prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
+prepend-path ROOT_INCLUDE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/include
+prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF

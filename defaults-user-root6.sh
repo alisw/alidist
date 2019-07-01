@@ -10,7 +10,7 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-47c
+    tag: v5-09-49
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
@@ -18,7 +18,7 @@ overrides:
       - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-47c-01
+    tag: v5-09-49-01
   ROOT:
     tag: "v6-10-08"
     requires:
@@ -31,7 +31,7 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
   GSL:
     prefer_system_check: |
-      printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
+      printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | c++ -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
 ---
 # To be used with aliBuild option `--defaults user-root6`.
 #

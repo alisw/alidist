@@ -1,6 +1,6 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.3.0"
+tag: "0.4.2"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
@@ -9,6 +9,7 @@ build_requires:
   - json-c
   - CMake
   - "GCC-Toolchain:(?!osx)"
+  - zlib
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
 ---
@@ -21,6 +22,7 @@ cmake $SOURCEDIR                                         \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      -DZLIB_ROOT="$ZLIB_ROOT"                           \
       -DLWS="$LIBWEBSOCKETS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
@@ -42,6 +44,7 @@ setenv JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(JALIEN_ROOT_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib
 append-path ROOT_PLUGIN_PATH \$::env(JALIEN_ROOT_ROOT)/etc/plugins
+prepend-path ROOT_INCLUDE_PATH \$::env(JALIEN_ROOT_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

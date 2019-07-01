@@ -8,7 +8,7 @@ build_requires:
   - CMake
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include <hdf5.h>\n" | gcc -xc++ - -c -o /dev/null
+  printf "#include <hdf5.h>\n" | c++ -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
   cmake "$SOURCEDIR"                             \

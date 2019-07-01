@@ -10,7 +10,7 @@ env:
 overrides:
   XRootD:
     version: "%(tag_basename)s_JALIEN"
-    tag: "v4.9.1"
+    tag: "v4.8.6"
     source: https://github.com/xrootd/xrootd
     build_requires:
       - CMake
@@ -44,11 +44,11 @@ overrides:
     build_requires:
       - autotools
   AliPhysics:
-    version: "%(tag_basename)s"
-    tag: v5-09-47c-01
+    version: "%(tag_basename)s_JALIEN"
+    tag: v5-09-49-01
   AliRoot:
-    version: "%(tag_basename)s"
-    tag: v5-09-47c
+    version: "%(tag_basename)s_JALIEN"
+    tag: v5-09-49
     requires:
       - ROOT
       - DPMJET
