@@ -1,5 +1,5 @@
 package: Control
-version: "v0.8.3"
+version: "v0.8.4"
 requires:
   - golang
   - Control-Core
