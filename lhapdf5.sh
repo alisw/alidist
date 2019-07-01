@@ -1,6 +1,6 @@
 package: lhapdf5
 version: "%(tag_basename)s"
-tag: v5.9.1-alice1
+tag: v5.9.1-alice3
 source: https://github.com/alisw/LHAPDF
 env:
   LHAPATH: "$LHAPDF5_ROOT/share/lhapdf"

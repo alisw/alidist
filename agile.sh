@@ -1,6 +1,6 @@
 package: AGILe
 version: "%(tag_basename)s"
-tag: "v1.4.1-alice1"
+tag: "v1.4.1-alice2"
 source: https://github.com/alisw/AGILe.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -10,6 +10,7 @@ requires:
   - Python-modules
 build_requires:
   - autotools
+  - SWIG
 ---
 #!/bin/bash -e
 
