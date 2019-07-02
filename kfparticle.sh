@@ -1,7 +1,7 @@
 package: KFParticle
 version: "%(short_hash)s"
 tag: "v1.1"
-source: https://git.cbm.gsi.de/m.zyzak/KFParticle
+source: https://git.cbm.gsi.de/m.zyzak/KFParticle.git
 requires:
   - ROOT
   - "GCC-Toolchain:(?!osx)"
