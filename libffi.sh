@@ -26,7 +26,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 $([[ $ALIEN_RUNTIME_VERSION ]] && echo "AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION" || echo "${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}")
 # Our environment
-set LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$LIBFFI_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$LIBFFI_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF
