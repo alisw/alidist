@@ -1,6 +1,6 @@
 package: qcg
 version: v1.5.0
-tag: qcg-v1.5.0
+tag: "@aliceo2/qc@1.5.0"
 requires:
   - node
   - QualityControl
