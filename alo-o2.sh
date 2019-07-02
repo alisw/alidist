@@ -5,6 +5,7 @@ requires:
   - googlebenchmark
   - O2
   - RapidJSON
+  - yaml-cpp
 build_requires:
   - CMake
   - ms_gsl
