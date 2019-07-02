@@ -23,12 +23,16 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+    osx*) 
+	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+        [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+    ;;
 esac
 
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                         \
+      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}                \
       ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}          \
       ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
