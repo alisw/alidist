@@ -59,7 +59,7 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Tests
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  ctest --output-on-failure ${JOBS+-j $JOBS}
+  ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
 fi
 
 # Modulefile
