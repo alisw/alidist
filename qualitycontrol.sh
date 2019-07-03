@@ -57,7 +57,7 @@ JOBS=$((${JOBS:-1}*3/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-# Tests
+# Tests (but not the ones with label "manual")
 if [[ $ALIBUILD_O2_TESTS ]]; then
   ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
 fi
