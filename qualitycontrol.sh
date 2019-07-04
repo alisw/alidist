@@ -59,7 +59,6 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Tests (but not the ones with label "manual")
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  QUALITYCONTROL_ROOT=$INSTALLROOT
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
   ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
 fi
