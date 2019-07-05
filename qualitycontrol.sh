@@ -57,7 +57,7 @@ JOBS=$((${JOBS:-1}*3/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-# Tests (but not the ones with label "manual")
+# Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
 if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
