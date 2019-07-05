@@ -8,6 +8,7 @@ requires:
  - libpng
  - sqlite
  - "GCC-Toolchain:(?!osx)"
+ - libffi
 build_requires:
  - curl
 env:
@@ -25,7 +26,7 @@ rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 # The only way to pass externals to Python
 LDFLAGS=
 CPPFLAGS=
-for ext in $ALIEN_RUNTIME_ROOT $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT $SQLITE_ROOT; do
+for ext in $ALIEN_RUNTIME_ROOT $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT $SQLITE_ROOT $LIBFFI_ROOT; do
   LDFLAGS="$(find $ext -type d -name lib -exec echo -L\{\} \;) $LDFLAGS"
   CPPFLAGS="$(find $ext -type d -name include -exec echo -I\{\} \;) $CPPFLAGS"
 done
@@ -126,10 +127,11 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} \\
-                     ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION} \\
-                     ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
-                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION} \\
-                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION} \\
+                     ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}                                     \\
+                     ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                         \\
+                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                             \\
+                     ${LIBFFI_VERSION:+libffi/$LIBFFI_VERSION-$LIBFFI_REVISION}                             \\
+                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                     \\
                      ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
