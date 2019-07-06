@@ -84,21 +84,6 @@ pushd "$INSTALLROOT"
   popd
 popd
 
-# Check if the modules can be loaded
-ERR_IMPORT=()
-for P in "${PIP_REQUIREMENTS[@]}"; do
-  IMP="${P##* }"
-  env PYTHONPATH="$INSTALLROOT/lib/python/site-packages" python3 -c "import $IMP" || ERR_IMPORT+=("$IMP")
-done
-if [[ ${#ERR_IMPORT[@]} -gt 0 ]]; then
-  set +x
-  echo "FATAL: problems importing the following Python modules"
-  for IMP in "${ERR_IMPORT[@]}"; do
-    echo "* $IMP"
-  done
-  exit 1
-fi
-
 # Install matplotlib (quite tricky)
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
