@@ -11,6 +11,7 @@ autoreconf -ivf .
 make ${JOBS:+-j $JOBS}
 make install
 
+LIBPATH=$(find $INSTALLROOT -name libffi.so)
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -26,5 +27,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
+prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/$(basename $(dirname $LIBPATH))
 EoF
