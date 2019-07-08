@@ -1,6 +1,6 @@
 package: libxml2
 version: v2.9.2
-source: git://git.gnome.org/libxml2
+source: https://gitlab.gnome.org/GNOME/libxml2.git
 tag: v2.9.2
 build_requires:
   - autotools
