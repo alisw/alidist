@@ -15,8 +15,6 @@ build_requires:
   - "Xcode:(osx.*)"
 env:
   ROOTSYS: "$ROOT_ROOT"
-prepend_path:
-  PYTHONPATH: "$ROOTSYS/lib"
 incremental_recipe: |
   if [[ $ALICE_DAQ ]]; then
     export ROOTSYS=$BUILDDIR && make ${JOBS+-j$JOBS} && make static
@@ -103,6 +101,7 @@ else
         -Dpgsql=OFF                                               \
         -Dminuit2=ON                                              \
         -Dpythia6_nolink=ON                                       \
+        -Dpython=OFF                                              \
         -Droofit=ON                                               \
         -Dhttp=ON                                                 \
         -Droot7=OFF                                               \
@@ -110,12 +109,12 @@ else
         -Dshadowpw=OFF                                            \
         -Dvdt=ON                                                  \
         -Dbuiltin_vdt=ON                                          \
-        -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT"
+        -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT"
   FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
             pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${XROOTD_ROOT:+xrootd}
             ${ALIEN_RUNTIME_ROOT:+alien monalisa}
             ${ENABLE_COCOA:+builtin_freetype}"
-  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype} root7"
+  NO_FEATURES="${FREETYPE_ROOT:+builtin_freetype} root7 python"
 fi
 
 # Check if all required features are enabled
@@ -155,14 +154,11 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${ALIEN_RUNTIME_ROOT:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}        \\
                      ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
                      ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
-                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
-                     ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-                     ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
+                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
-prepend-path PYTHONPATH \$::env(ROOTSYS)/lib
 prepend-path PATH \$::env(ROOTSYS)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ROOTSYS)/lib")
