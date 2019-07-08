@@ -3,6 +3,8 @@ version: v3.2.1
 build_requires:
  - autotools
 source: https://github.com/libffi/libffi
+prepend_path:
+  LD_LIBRARY_PATH: "$LIBFFI_ROOT/lib64"
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ .
