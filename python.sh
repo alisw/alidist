@@ -30,7 +30,7 @@ export LIBFFI_ROOT
 LDFLAGS=
 CPPFLAGS=
 for ext in $ALIEN_RUNTIME_ROOT $ZLIB_ROOT $FREETYPE_ROOT $LIBPNG_ROOT $SQLITE_ROOT $LIBFFI_ROOT; do
-  LDFLAGS="$(find $ext -type d -name lib -o -name lib64 -exec echo -L\{\} \;) $LDFLAGS"
+  LDFLAGS="$(find $ext -type d \( -name lib -o -name lib64 \) -exec echo -L\{\} \;) $LDFLAGS"
   CPPFLAGS="$(find $ext -type d -name include -exec echo -I\{\} \;) $CPPFLAGS"
 done
 export LDFLAGS=$(echo $LDFLAGS)
