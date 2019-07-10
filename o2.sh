@@ -23,6 +23,8 @@ build_requires:
   - googlebenchmark
   - cub
 source: https://github.com/AliceO2Group/AliceO2
+env:
+  VMCWORKDIR: "$O2_ROOT/share"
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/GPU"
 incremental_recipe: |
