@@ -39,7 +39,7 @@ PIP_REQUIREMENTS=(
   "uproot==3.4.18           uproot"
   )
 
-if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_info.minor > 3006 else 0)' && [[ $ARCHITECTURE != slc6* ]]; then
+if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)' && [[ $ARCHITECTURE != slc6* ]]; then
   # Install some ML-specific packages only with Python 3.6 at the moment
   PIP_REQUIREMENTS+=(
     "seaborn==0.9.0           seaborn"
@@ -48,8 +48,8 @@ if python3 -c 'import sys; exit(1 if 1000*sys.version_info.major + sys.version_i
     "tensorflow==1.13.1       tensorflow"
     "xgboost==0.82            xgboost"
     "dryable==1.0.3           dryable"
-    "responses==0.10.6         responses"
-    "RootInteractive==0.0.9    RootInteractive"
+    "responses==0.10.6        responses"
+    "RootInteractive==0.0.9   RootInteractive"
   )
 else
   echo "WARNING: Not installing Keras and TensorFlow"
