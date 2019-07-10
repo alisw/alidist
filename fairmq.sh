@@ -6,7 +6,6 @@ requires:
  - boost
  - FairLogger
  - ZeroMQ
- - msgpack
  - DDS
  - asiofi
 build_requires:
@@ -27,7 +26,6 @@ case $ARCHITECTURE in
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
-    [[ ! $MSGPACK_ROOT ]] && MSGPACK_ROOT=`brew --prefix msgpack`
   ;;
   *)
     BUILD_OFI=ON
@@ -46,7 +44,6 @@ cmake $SOURCEDIR                                                 \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${FAIRLOGGER_ROOT:+-DFAIRLOGGER_ROOT=$FAIRLOGGER_ROOT}     \
       ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
-      ${MSGPACK_ROOT:+-DMSGPACK_ROOT=$MSGPACK_ROOT}              \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
       ${ASIOFI_ROOT:+-DASIOFI_ROOT=$ASIOFI_ROOT}                 \
       ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
@@ -82,7 +79,6 @@ module load BASE/1.0                                                            
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                      \\
             ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
             ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
-            ${MSGPACK_VERSION:+msgpack/$MSGPACK_VERSION-$MSGPACK_REVISION}              \\
             ${ASIOFI_VERSION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
             ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
@@ -91,7 +87,6 @@ prepend-path PATH \$::env(FAIRMQ_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FAIRMQ_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include
 prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include/fairmq
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FAIRMQ_ROOT)/lib")
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p $MODULEDIR && rsync -a --delete etc/modulefiles/ $MODULEDIR
