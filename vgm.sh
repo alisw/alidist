@@ -17,6 +17,12 @@ cmake "$SOURCEDIR" \
 
 make ${JOBS+-j $JOBS} install
 
+# Relocation of .cmake files
+for CMAKE in $(find "$INSTALLROOT/lib" -name '*.cmake'); do
+  sed -ideleteme -e "s!$ROOTSYS!\$ENV{ROOTSYS}!g; s!$G4INSTALL!\$ENV{G4INSTALL}!g" "$CMAKE"
+done
+find "$INSTALLROOT/lib" -name '*deleteme' -delete || true
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
