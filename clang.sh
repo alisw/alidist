@@ -33,17 +33,11 @@ case $ARCHITECTURE in
   ;;
 esac
 
-mkdir -p $INSTALLROOT/bin
 curl -o $INSTALLROOT/bin/git-clang-format https://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/git-clang-format
 chmod u+x $INSTALLROOT/bin/git-clang-format
 
-FIND_EXEC='-executable'
-mkdir findtest && touch x && chmod 0777 x
-find findtest -type f $FIND_EXEC &> /dev/null || FIND_EXEC='-perm +011'
-rm -rf findtest
-
-find $SOURCEDIR/tools/clang/tools/scan-build -type f $FIND_EXEC -exec cp {} $INSTALLROOT/bin \;
-find $SOURCEDIR/tools/clang/tools/scan-view -type f $FIND_EXEC -exec cp {} $INSTALLROOT/bin \;
+find $SOURCEDIR/tools/clang/tools/scan-build -type f -perm /111 -exec cp {} $INSTALLROOT/bin \;
+find $SOURCEDIR/tools/clang/tools/scan-view -type f -perm /111 -exec cp {} $INSTALLROOT/bin \;
 
 # Modulefile
 mkdir -p etc/modulefiles
