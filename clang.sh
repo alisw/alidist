@@ -33,6 +33,10 @@ case $ARCHITECTURE in
   ;;
 esac
 
+mkdir -p $INSTALLROOT/bin
+curl -o $INSTALLROOT/bin/git-clang-format https://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/git-clang-format
+chmod u+x $INSTALLROOT/bin/git-clang-format
+
 FIND_EXEC='-executable'
 mkdir findtest && touch x && chmod 0777 x
 find findtest -type f $FIND_EXEC &> /dev/null || FIND_EXEC='-perm +011'
