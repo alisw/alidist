@@ -32,6 +32,10 @@ incremental_recipe: |
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
          "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
+  # Reduce ROOT C++ Standard Interface Requirement to C++14 for CUDA compatibility
+  sed -i.deleteme -e "s/cxx_std_17/cxx_std_14/" "$INSTALLROOT/cmake/ROOTConfig-targets.cmake" || true
+  find . -name '*.deleteme' -exec rm -f '{}' \; || true
+
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -176,6 +180,8 @@ fi
 
 # Make some CMake files used by other projects relocatable
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
+# Reduce ROOT C++ Standard Interface Requirement to C++14 for CUDA compatibility
+sed -i.deleteme -e "s/cxx_std_17/cxx_std_14/" "$INSTALLROOT/cmake/ROOTConfig-targets.cmake" || true
 find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
