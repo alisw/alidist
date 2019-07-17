@@ -28,7 +28,7 @@ overrides:
   AliPhysics:
     version: "%(commit_hash)s_O2"
   ROOT:
-    tag: "v6-18-00"
+    tag: "v6-16-00"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
