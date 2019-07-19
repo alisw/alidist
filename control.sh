@@ -1,7 +1,6 @@
 package: Control
-version: "v0.9.1"
+version: "v0.9.2"
 requires:
-  - golang
   - Control-Core
   - Control-OCCPlugin
   - coconut
@@ -19,7 +18,6 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \\
-            ${GOLANG_VERSION:+golang/$GOLANG_VERSION-$GOLANG_REVISION} \\
             ${CONTROL_CORE_VERSION:+Control-Core/$CONTROL_CORE_VERSION-$CONTROL_CORE_REVISION} \\
             ${CONTROL_OCCPLUGIN_VERSION:+Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION} \\
             ${COCONUT_VERSION:+coconut/$COCONUT_VERSION-$COCONUT_REVISION}
