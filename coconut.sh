@@ -1,6 +1,6 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.9.1"
+tag: "v0.9.3"
 build_requires:
   - golang
   - protobuf
