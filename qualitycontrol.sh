@@ -30,7 +30,7 @@ case $ARCHITECTURE in
   osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
-# For the PR checkers (which sets ALIBUILD_O2_TESTS)
+# For the PR checkers (which sets ALIBUILD_O2_TESTS),
 # we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
