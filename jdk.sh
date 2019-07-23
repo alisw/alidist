@@ -18,7 +18,7 @@ JDK_PLATFORM=linux
 if [[ $JDK_PLATFORM == osx ]]; then
   URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-macosx_x64.tar.gz"
 else
-  URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-linux_i686.tar.gz"  
+  URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz"  
 fi
 
 mkdir -p "$INSTALLROOT"
