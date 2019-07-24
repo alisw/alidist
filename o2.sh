@@ -18,6 +18,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
+  - GLFW
 build_requires:
   - RapidJSON
   - googlebenchmark
