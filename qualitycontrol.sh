@@ -57,6 +57,13 @@ JOBS=$((${JOBS:-1}*3/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
+# Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  echo "Run the tests"
+  LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
+  ctest --output-on-failure -LE manual ;# ${JOBS+-j $JOBS}
+fi
+
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
@@ -76,7 +83,8 @@ module load BASE/1.0                                                            
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                       \\
             ${LIBINFOLOGGER_VERSION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
-            O2/$O2_VERSION-$O2_REVISION
+            O2/$O2_VERSION-$O2_REVISION                                                            \\
+            ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
 
 # Our environment
 setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
