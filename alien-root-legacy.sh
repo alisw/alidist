@@ -1,6 +1,6 @@
 package: AliEn-ROOT-Legacy
 version: "%(tag_basename)s"
-tag: "0.0.7"
+tag: "0.1.0"
 source: https://gitlab.cern.ch/jalien/alien-root-legacy.git
 requires:
   - CMake
@@ -8,6 +8,7 @@ requires:
   - ROOT
 build_requires:
   - xalienfs
+  - Alice-GRID-Utils
 append_path:
   ROOT_PLUGIN_PATH: "$ALIEN_ROOT_LEGACY_ROOT/etc/plugins"
 prepend_path:
@@ -25,7 +26,10 @@ fi
 # Determine whether we are building for ROOT 5 or ROOT 6+
 [[ -x "$ROOTSYS/bin/rootcling" ]] && ROOT_MAJOR="v6-00-00" || ROOT_MAJOR="v5-00-00"
 
-cmake $SOURCEDIR                                         \
+rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
+
+cmake $BUILDDIR                                          \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       -DROOTSYS="$ROOTSYS"                               \
