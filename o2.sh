@@ -18,6 +18,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
+  - DebugGUI
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -116,10 +117,15 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
-# For the PR checkers (which sets ALIBUILD_O2_TESTS)
-# we impose -Werror as a compiler flag
+# This affects only PR checkers
 if [[ $ALIBUILD_O2_TESTS ]]; then
+  # Impose extra errors.
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  # On OSX CI, we do not want to run the GUI, even if available.
+  case $ARCHITECTURE in
+    osx*) DPL_TESTS_BATCH_MODE=ON ;;
+    *) ;;
+  esac
 fi
 
 # Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
@@ -136,6 +142,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                            \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                            \
       ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                            \
+      ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                   \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                              \
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DDENABLE_OPENCL1=ON}                      \
@@ -177,7 +184,6 @@ prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/GPU
 prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
@@ -192,7 +198,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
-  # cleanup ROOT files created by tests in build area
+  # Clean up ROOT files created by tests in build area
   find $PWD -name "*.root" -delete
   TESTERR=
   ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
