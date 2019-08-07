@@ -118,7 +118,8 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_pcre=ON                                                                \
       -Dsqlite=OFF                                                                     \
       $ROOT_PYTHON_FLAGS                                                               \
-      ${ARROW_VERSION:+-Darrow=ON}                                                     \
+      ${ARROW_ROOT:+-Darrow=ON}                                                        \
+      ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                          \
       ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
       -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
       -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
@@ -230,6 +231,5 @@ setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
 prepend-path PYTHONPATH \$::env(ROOTSYS)/lib
 prepend-path PATH \$::env(ROOTSYS)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ROOTSYS)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
