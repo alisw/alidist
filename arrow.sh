@@ -1,7 +1,7 @@
 package: arrow
-version: v0.12.0-alice6
-tag: apache-arrow-0.12.0-alice6
-source: https://github.com/alisw/arrow
+version: v0.14.1
+tag: apache-arrow-0.14.1
+source: https://github.com/apache/arrow
 requires:
   - boost
   - lz4
@@ -10,6 +10,7 @@ build_requires:
   - zlib
   - flatbuffers
   - CMake
+  - double-conversion
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -34,6 +35,9 @@ esac
 #   boost
 
 cmake $SOURCEDIR/cpp                                         \
+      -DARROW_DEPENDENCY_SOURCE=SYSTEM                       \
+      -DCMAKE_BUILD_TYPE=Release                             \
+      -DBUILD_SHARED_LIBS=TRUE                               \
       -DARROW_BUILD_BENCHMARKS=OFF                           \
       -DARROW_BUILD_TESTS=OFF                                \
       -DARROW_USE_GLOG=OFF                                   \
@@ -42,11 +46,11 @@ cmake $SOURCEDIR/cpp                                         \
       -DARROW_IPC=ON                                         \
       ${THRIFT_ROOT:+-DARROW_PARQUET=ON}                     \
       ${THRIFT_ROOT:+-DTHRIFT_HOME=${THRIFT_ROOT}}           \
-      ${FLATBUFFERS_ROOT:+-DFLATBUFFERS_HOME=${FLATBUFFERS_ROOT}} \
+      ${FLATBUFFERS_ROOT:+-DFlatbuffers_ROOT=${FLATBUFFERS_ROOT}} \
       -DCMAKE_INSTALL_LIBDIR="lib"                           \
       -DARROW_WITH_LZ4=ON                                    \
       ${RAPIDJSON_ROOT:+-DRAPIDJSON_HOME=${RAPIDJSON_ROOT}}  \
-      ${LZ4_ROOT:+-DLZ4_HOME=${LZ4_ROOT}}                    \
+      ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                    \
       ${LZ4_ROOT:+-DLZ4_INCLUDE_DIR=${LZ4_ROOT}/include}     \
       ${LZ4_ROOT:+-DLZ4_STATIC_LIB=${LZ4_ROOT}/lib/liblz4.a} \
       -DARROW_WITH_SNAPPY=OFF                                \
