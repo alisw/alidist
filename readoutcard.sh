@@ -67,3 +67,10 @@ prepend-path PYTHONPATH \$::env(READOUTCARD_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(READOUTCARD_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# External RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EoF
+pda-kadapter-dkms >= 1.0.4
+libhugetlbfs
+libhugetlbfs-utils
+EoF

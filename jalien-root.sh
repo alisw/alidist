@@ -1,6 +1,6 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.4.2"
+tag: "0.5.1"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
@@ -10,6 +10,7 @@ build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - zlib
+  - Alice-GRID-Utils
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
 ---
@@ -17,7 +18,11 @@ append_path:
 case $ARCHITECTURE in
   osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
 esac
-cmake $SOURCEDIR                                         \
+
+rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
+
+cmake $BUILDDIR                                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
