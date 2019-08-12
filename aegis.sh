@@ -40,3 +40,5 @@ prepend-path LD_LIBRARY_PATH \$::env(AEGIS_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(AEGIS_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(AEGIS_ROOT)/lib")
 EoF
+
+Test
