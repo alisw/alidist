@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.16.0
+tag: v0.17.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -95,3 +95,19 @@ prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib" && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# Create code coverage information to be uploaded
+# by the calling driver to codecov.io or similar service
+if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
+  rm -rf coverage.info
+  lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
+  lcov --remove coverage.info '*/usr/*' --output-file coverage.info
+  lcov --remove coverage.info '*/boost/*' --output-file coverage.info
+  lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
+  lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
+  lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
+  perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
+  perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
+  perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
+  lcov --list coverage.info
+fi
