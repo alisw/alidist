@@ -1,6 +1,6 @@
 package: Rivet
 version: "%(tag_basename)s"
-tag: "2.7.2-alice1"
+tag: "2.7.2-alice2"
 source: https://github.com/alisw/rivet
 requires:
   - GSL
