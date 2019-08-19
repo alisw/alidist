@@ -26,6 +26,7 @@ case $ARCHITECTURE in
     osx*) 
 	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
         [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+        [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
     ;;
 esac
 
@@ -41,7 +42,7 @@ cmake $SOURCEDIR                                                         \
       ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
       ${FAIRLOGGER_VERSION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
       ${PYTHON_VERSION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
-      ${LZ4_VERSION:+-DLZ4_DIR=$LZ4_ROOT}                                \
+      ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_VERSION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
