@@ -1,5 +1,6 @@
 package: AliGenerators
 version: "v%(year)s%(month)s%(day)s"
+source: https://github.com/alisw/AliGenerators
 requires:
   - AMPT
   - CRMC
