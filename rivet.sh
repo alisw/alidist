@@ -1,6 +1,6 @@
 package: Rivet
 version: "%(tag_basename)s"
-tag: "2.7.2-alice1"
+tag: "2.7.2-alice2"
 source: https://github.com/alisw/rivet
 requires:
   - GSL
@@ -11,7 +11,7 @@ requires:
 build_requires:
   - GCC-Toolchain:(?!osx)
 prepend_path:
-  PYTHONPATH: $RIVET_ROOT/lib64/python2.7/site-packages:$RIVET_ROOT/lib/python2.7/site-packages
+  PYTHONPATH: $RIVET_ROOT/lib64/python3.6/site-packages:$RIVET_ROOT/lib/python3.6/site-packages
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -90,8 +90,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 setenv RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib/python2.7/site-packages
-prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib64/python2.7/site-packages
+prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib/python3.6/site-packages
+prepend-path PYTHONPATH \$::env(RIVET_ROOT)/lib64/python3.6/site-packages
 prepend-path PATH \$::env(RIVET_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(RIVET_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(RIVET_ROOT)/lib")
