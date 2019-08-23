@@ -18,9 +18,6 @@ source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
-  # Limit parallel builds to prevent OOM
-  JOBS=$((${JOBS:-1}*3/5))
-  [[ $JOBS -gt 0 ]] || JOBS=1
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -62,9 +59,6 @@ cmake $SOURCEDIR                                              \
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
-# Limit parallel builds to prevent OOM
-JOBS=$((${JOBS:-1}*3/5))
-[[ $JOBS -gt 0 ]] || JOBS=1
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
