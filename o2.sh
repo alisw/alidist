@@ -134,44 +134,10 @@ fi
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
-      -DCMAKE_MODULE_PATH="$SOURCEDIR/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules;$FAIRROOT_ROOT/share/fairbase/cmake/modules_old"  \
-      -DFairRoot_DIR=$FAIRROOT_ROOT                                                         \
-      -DALICEO2_MODULAR_BUILD=ON                                                            \
-      -DROOTSYS=$ROOTSYS                                                                    \
-      ${PYTHIA6_ROOT:+-DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib}                              \
-      ${GEANT3_ROOT:+-DGeant3_DIR=$GEANT3_ROOT}                                             \
-      ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \
-      ${VGM_ROOT:+-DVGM_DIR=$VGM_ROOT}                                                      \
-      ${GEANT4_VMC_ROOT:+-DGEANT4_VMC_DIR=$GEANT4_VMC_ROOT}                                 \
-      -DFAIRROOTPATH=$FAIRROOT_ROOT                                                         \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                               \
-      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                                     \
-      -DZMQ_DIR=$ZEROMQ_ROOT                                                                \
-      -DZMQ_INCLUDE_DIR=$ZEROMQ_ROOT/include                                                \
-      ${ALIROOT_VERSION:+-DALIROOT=$ALIROOT_ROOT}                                           \
-      ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}           \
-      ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME} \
-      ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}      \
-      ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                       \
-      ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
-      ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                      \
-      ${PYTHIA_ROOT:+-DPYTHIA8_INCLUDE_DIR=$PYTHIA_ROOT/include}                            \
-      ${HEPMC3_ROOT:+-DHEPMC3_DIR=$HEPMC3_ROOT}                                             \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
       ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                             \
-      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
-      ${MONITORING_VERSION:+-DMonitoring_ROOT=$MONITORING_ROOT}                             \
-      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT}                    \
-      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
-      ${COMMON_O2_VERSION:+-DCommon_O2_ROOT=$COMMON_O2_ROOT}                                \
-      -DRAPIDJSON_INCLUDEDIR=${RAPIDJSON_ROOT}/include                                      \
-      ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                               \
-      -Dbenchmark_DIR=${GOOGLEBENCHMARK_ROOT}/lib/cmake/benchmark                           \
-      ${GLFW_ROOT:+-DGLFW_LOCATION=$GLFW_ROOT}                                              \
-      ${FMT_ROOT:+-DFMT_ROOT=${FMT_ROOT}}                                                    \
-      ${CUB_ROOT:+-DCUB_ROOT=$CUB_ROOT}
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
