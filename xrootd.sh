@@ -23,6 +23,7 @@ cmake "$SOURCEDIR"                                      \
       -DCMAKE_INSTALL_LIBDIR=lib                        \
       -DENABLE_CRYPTO=ON                                \
       -DENABLE_PERL=OFF                                 \
+      -DENABLE_PYTHON=OFF                               \
       -DENABLE_KRB5=OFF                                 \
       -DENABLE_READLINE=OFF                             \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                 \
