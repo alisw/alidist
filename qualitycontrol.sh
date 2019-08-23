@@ -115,3 +115,8 @@ if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
   lcov --list coverage.info
 fi
+
+# Add extra RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EOF
+glfw # because the build machine some times happen to have glfw installed. Then it is necessary to have it in the destination
+EOF
