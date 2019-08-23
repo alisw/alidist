@@ -2,6 +2,7 @@
 *                   @alisw/infrastructure-admins
 
 # Dataflow team
+alf*                @alisw/dataflow-experts
 coconut*            @alisw/dataflow-experts
 common-o2*          @alisw/dataflow-experts
 configuration*      @alisw/dataflow-experts
@@ -14,6 +15,7 @@ ppconsul*           @alisw/dataflow-experts
 qualitycontrol*     @alisw/dataflow-experts
 rapidjson*          @alisw/dataflow-experts
 readout*            @alisw/dataflow-experts
+readoutcard*        @alisw/dataflow-experts
 node*               @alisw/dataflow-experts
 qcg*                @alisw/dataflow-experts
 ecsg*               @alisw/dataflow-experts
