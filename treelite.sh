@@ -37,6 +37,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set osname [uname sysname]
+setenv TREELITE_RELEASE \$version
+setenv TREELITE_VERSION $PKGVERSION
+setenv TREELITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(TREELITE_RELEASE)
 prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 prepend-path ROOT_INCLUDE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/include
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
