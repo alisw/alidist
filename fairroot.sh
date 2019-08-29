@@ -80,6 +80,7 @@ done
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
+
 cat > "$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
