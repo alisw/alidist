@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "c672f280ec8382cb2dc10b85c5fa4e64e13c5975"
+tag: "2b44237b19dc05078c974597f4508632e9b95049"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -80,6 +80,7 @@ done
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
+
 cat > "$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
