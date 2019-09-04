@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "2b44237b19dc05078c974597f4508632e9b95049"
+tag: "6af7e848585ce720e96a01d5565b1bd5e3884430"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -11,6 +11,7 @@ requires:
   - DDS
   - FairLogger
   - FairMQ
+  - yaml-cpp
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
