@@ -11,6 +11,8 @@ build_requires:
 ---
 #!/bin/bash -e
 
+sed -i "s/set (CMAKE_CXX_STANDARD 11)//" $SOURCEDIR/CMakeLists.txt
+
 cmake $SOURCEDIR                                        \
       ${VC_VERSION:+-DVc_INCLUDE_DIR=$VC_ROOT/include}  \
       ${VC_VERSIOM:+-DVc_LIBRARIES=$VCROOT/lib/libVc.a} \
