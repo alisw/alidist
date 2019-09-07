@@ -100,6 +100,10 @@ b2 -q                                            \
    ${CXXSTD:+cxxstd=$CXXSTD}                     \
    install
 
+# Remove CMake Config files, some of our dependent packages pick them up, but fail to use them
+# So for now we rely on the boost module FindBoost which comes with CMake
+rm -Rf "$INSTALLROOT"/lib/cmake
+
 # If boost_python is enabled, check if it was really compiled
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
 
