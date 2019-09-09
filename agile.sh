@@ -1,6 +1,6 @@
 package: AGILe
 version: "%(tag_basename)s"
-tag: "v1.4.1-alice2"
+tag: "v1.4.1-alice3"
 source: https://github.com/alisw/AGILe.git
 requires:
   - "GCC-Toolchain:(?!osx)"
