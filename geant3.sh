@@ -1,22 +1,22 @@
 package: GEANT3
-version: "%(tag_basename)s%(defaults_upper)s"
+version: "%(tag_basename)s"
+tag: v2-7
 requires:
   - ROOT
 build_requires:
   - CMake
-source: http://root.cern.ch/git/geant3.git
-tag: v2-2
+  - "Xcode:(osx.*)"
+source: https://github.com/vmc-project/geant3
 prepend_path:
-  "LD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
-  "DYLD_LIBRARY_PATH": "$GEANT3_ROOT/lib64"
+  LD_LIBRARY_PATH: "$GEANT3_ROOT/lib64"
+  DYLD_LIBRARY_PATH: "$GEANT3_ROOT/lib64"
+  ROOT_INCLUDE_PATH: "$GEANT3_ROOT/include/TGeant3"
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
-                 -DROOTSYS=$ROOT_ROOT                  \
                  -DCMAKE_SKIP_RPATH=TRUE
-make ${JOBS+-j$JOBS}
-make install
+make ${JOBS:+-j $JOBS} install
 
 [[ ! -d $INSTALLROOT/lib64 ]] && ln -sf lib $INSTALLROOT/lib64
 
@@ -40,5 +40,6 @@ setenv GEANT3DIR \$::env(GEANT3_ROOT)
 setenv G3SYS \$::env(GEANT3_ROOT)
 prepend-path PATH \$::env(GEANT3_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64
+prepend-path ROOT_INCLUDE_PATH \$::env(GEANT3_ROOT)/include/TGeant3
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT3_ROOT)/lib64")
 EoF
