@@ -6,6 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 disable:
   - arrow
+  - treelite
 overrides:
   AliRoot:
     version: "%(tag_basename)s"

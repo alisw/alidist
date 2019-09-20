@@ -6,6 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 disable:
   - RooUnfold
+  - treelite
 overrides:
 
   # Pinpoint AliRoot/AliPhysics
