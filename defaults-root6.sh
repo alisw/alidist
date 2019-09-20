@@ -2,7 +2,6 @@ package: defaults-root6
 version: v1
 disable:
   - arrow
-  - treelite
 env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
