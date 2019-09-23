@@ -1,6 +1,6 @@
 package: Run2ESDConverter
 version: "%(tag_basename)s"
-tag: v0.1.0
+tag: v0.1.1
 requires:
   - arrow
   - ROOT
