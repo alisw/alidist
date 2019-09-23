@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.18.1
+tag: v0.18.3
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -21,11 +21,11 @@ incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-  # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
+  # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
   if [[ $ALIBUILD_O2_TESTS ]]; then
     echo "Run the tests"
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-    ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+    ctest --output-on-failure -LE manual -E testWorkflow ${JOBS+-j $JOBS}
   fi
 ---
 #!/bin/bash -ex
@@ -72,7 +72,7 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-  ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+  ctest --output-on-failure -LE manual -E testWorkflow ${JOBS+-j $JOBS}
 fi
 
 # Modulefile
