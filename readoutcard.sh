@@ -7,7 +7,7 @@ requires:
   - Common-O2
   - libInfoLogger
   - "PDA:slc7.*"
-  - Python-modules
+  - Python
 build_requires:
   - CMake
 prepend_path:
@@ -56,7 +56,7 @@ module load BASE/1.0                                                          \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
-            ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
+            ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}        \\
             ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment
