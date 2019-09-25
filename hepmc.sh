@@ -37,3 +37,4 @@ prepend-path PATH \$::env(HEPMC_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib
 $([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(HEPMC_ROOT)/lib")
 EoF
+
