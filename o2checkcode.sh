@@ -43,8 +43,9 @@ ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc)' ${O2_C
 cp thinned_compile_commands.json compile_commands.json
 
 # List of explicitely enabled C++ checks (make sure they are all green)
-CHECKS="${O2_CHECKER_CHECKS:--*,\
-aliceO2-member-name\
+CHECKS="${O2_CHECKER_CHECKS:--*\
+,aliceO2-member-name\
+,aliceO2-namespace-naming\
 ,modernize-avoid-bind\
 ,modernize-deprecated-headers\
 ,modernize-make-shared\
