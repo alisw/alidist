@@ -15,6 +15,7 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 cmake $SOURCEDIR                                 \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
       -DROOTSYS=$ROOTSYS                         \
       -DARROW_HOME=$ARROW_ROOT                   \
