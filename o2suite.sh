@@ -23,7 +23,6 @@ valid_defaults:
 ---
 #!/bin/bash -ex
 
-
 MODULEFILE_DEPS=
 for RPKG in $REQUIRES; do
   [[ $RPKG != defaults* ]] || continue
