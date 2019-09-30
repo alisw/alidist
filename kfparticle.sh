@@ -1,7 +1,7 @@
 package: KFParticle
-version: "%(short_hash)s"
-tag: "v1.1"
-source: https://git.cbm.gsi.de/m.zyzak/KFParticle.git
+version: "alice-v1.1-1"
+tag: "alice/v1.1-1"
+source: https://github.com/alisw/KFParticle
 requires:
   - ROOT
   - "GCC-Toolchain:(?!osx)"
@@ -10,8 +10,6 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
-
-sed -i "s/set (CMAKE_CXX_STANDARD 11)//" $SOURCEDIR/CMakeLists.txt
 
 cmake $SOURCEDIR                                        \
       ${VC_VERSION:+-DVc_INCLUDE_DIR=$VC_ROOT/include}  \
