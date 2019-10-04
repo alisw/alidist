@@ -1,6 +1,6 @@
 package: HepMC
 version: "%(tag_basename)s"
-tag: v2.06.10
+tag: 2.06.10
 source: https://gitlab.cern.ch/hepmc/HepMC
 build_requires:
   - CMake
