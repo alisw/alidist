@@ -1,16 +1,18 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v0.5
+tag: v0.7
 requires:
   - boost
   - FairLogger
   - FairMQ
+  - Ppconsul
+  - grpc
   - Monitoring
+  - protobuf
   - O2
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
-  - ms_gsl
 source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -28,8 +30,10 @@ cmake $SOURCEDIR                                              \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
       ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}  \
       ${FAIRMQ_ROOT:+-DFairMQ_ROOT=$FAIRMQ_ROOT}              \
+      ${PPCONSUL_ROOT:+-Dppconsul_DIR=${PPCONSUL_ROOT}/cmake} \
       ${O2_ROOT:+-DO2_ROOT=$O2_ROOT}                          \
       ${MONITORING_ROOT:+-DMonitoring_ROOT=$MONITORING_ROOT}  \
+      ${PROTOBUF_ROOT:+-DProtobuf_ROOT=$PROTOBUF_ROOT}        \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -49,10 +53,12 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0                                                                              \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}\\
-            ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}            \\
             ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}            \\
             ${FAIRMQ_VERSION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                            \\
-            ${O2_VERSION:+O2/$O2_VERSION-$O2_REVISION}
+            ${PPCONSUL_VERSION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}                    \\
+            ${GRPC_VERSION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                                    \\
+            ${O2_VERSION:+O2/$O2_VERSION-$O2_REVISION}                                            \\
+            ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}            \\
 
 # DataDistribution environment:
 set DATADISTRIBUTION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
