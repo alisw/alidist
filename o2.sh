@@ -132,12 +132,14 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
 fi
 
 unset DYLD_LIBRARY_PATH
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                        \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                             \
-      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                             \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                       \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                            \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                            \
+      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                            \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                   \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                              \
+      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DDENABLE_OPENCL1=ON}                      \
+      ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 

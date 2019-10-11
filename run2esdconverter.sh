@@ -1,6 +1,6 @@
 package: Run2ESDConverter
 version: "%(tag_basename)s"
-tag: v0.1.0
+tag: v0.1.2
 requires:
   - arrow
   - ROOT
@@ -15,6 +15,7 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 cmake $SOURCEDIR                                 \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
       -DROOTSYS=$ROOTSYS                         \
       -DARROW_HOME=$ARROW_ROOT                   \

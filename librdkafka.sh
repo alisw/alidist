@@ -1,8 +1,9 @@
 package: librdkafka
 version: "%(tag_basename)s"
-tag: v1.0.0-RC6
+tag: v1.2.1-RC1
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - lz4
 build_requires:
   - CMake
 source: https://github.com/edenhill/librdkafka

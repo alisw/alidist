@@ -1,19 +1,7 @@
-package: libffi
-version: v3.2.1
-build_requires:
- - autotools
-source: https://github.com/libffi/libffi
-prepend_path:
-  LD_LIBRARY_PATH: "$LIBFFI_ROOT/lib64"
+package: rpm-test
+version: "1.0"
 ---
-#!/bin/bash -ex
-rsync -a $SOURCEDIR/ .
-autoreconf -ivf .
-./configure --prefix=$INSTALLROOT --disable-docs
-make ${JOBS:+-j $JOBS}
-make install
-
-LIBPATH=$(find $INSTALLROOT -name libffi.so)
+# A really empty package to test RPM creation
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -30,5 +18,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/$(basename $(dirname $LIBPATH))
+prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF

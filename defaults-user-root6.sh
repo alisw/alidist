@@ -10,7 +10,7 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-50
+    tag: v5-09-51
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
@@ -18,7 +18,7 @@ overrides:
       - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-50-01
+    tag: v5-09-51-01
   ROOT:
     tag: "v6-10-08"
     requires:
