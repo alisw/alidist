@@ -63,5 +63,4 @@ module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
 # Our environment
 set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XALIENFS_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$XALIENFS_ROOT/lib
 EoF
