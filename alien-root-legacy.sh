@@ -3,11 +3,12 @@ version: "%(tag_basename)s"
 tag: "0.1.3"
 source: https://gitlab.cern.ch/jalien/alien-root-legacy.git
 requires:
+  - ROOT
+  - XRootD
+  - xalienfs
+build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
-  - ROOT
-build_requires:
-  - xalienfs
   - Alice-GRID-Utils
 append_path:
   ROOT_PLUGIN_PATH: "$ALIEN_ROOT_LEGACY_ROOT/etc/plugins"
@@ -70,7 +71,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                  \\
+                     XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}                                            \\
+                     xalienfs/${XALIENFS_VERSION}-${XALIENFS_REVISION}
 
 # Our environment
 setenv ALIEN_ROOT_LEGACY_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
