@@ -2,12 +2,18 @@ package: xalienfs
 version: "%(tag_basename)s"
 tag: v1.0.14r1-alice3
 source: https://github.com/alisw/xalienfs.git
+requires:
+ - XRootD
+ - "OpenSSL:(?!osx)"
+ - "osx-system-openssl:(osx.*)"
+ - AliEn-Runtime
 build_requires:
  - autotools
- - XRootD
  - SWIG
  - UUID
  - libperl
+prepend_path:
+ - PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 ---
 #!/bin/bash -e
 [[ ! $SWIG_ROOT ]] && SWIG_LIB=`swig -swiglib`
@@ -36,3 +42,26 @@ export CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/
 make
 make install INSTALLSITEARCH=$INSTALLROOT/lib/perl \
              INSTALLARCHLIB=$INSTALLROOT/lib/perl
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
+            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}   \\
+            AliEn-Runtime/${ALIEN_RUNTIME_VERSION}-${ALIEN_RUNTIME_REVISION}
+
+# Our environment
+set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$XALIENFS_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$XALIENFS_ROOT/lib
+EoF
