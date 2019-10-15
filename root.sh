@@ -16,6 +16,7 @@ requires:
   - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
+  - XRootD
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -77,10 +78,9 @@ case $ARCHITECTURE in
 esac
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
-  # AliEn-Runtime: we take OpenSSL, XRootD and libxml2 from there, in case they
+  # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
   # were not taken from the system
   OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
-  XROOTD_ROOT=${XROOTD_VERSION:+$ALIEN_RUNTIME_ROOT}
   LIBXML2_ROOT=${LIBXML2_VERSION:+$ALIEN_RUNTIME_ROOT}
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
