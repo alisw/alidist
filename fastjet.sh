@@ -24,7 +24,7 @@ printf "void main() {}" | c++ -xc ${BOOST_ROOT:+-L$BOOST_ROOT/lib} -lboost_threa
   || BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread-mt"
 BOOST_LIBS="$BOOST_LIBS -lboost_system"
 
-rsync -a --delete --cvs-exclude $SOURCEDIR/ ./
+rsync -a --delete --cvs-exclude --exclude .git $SOURCEDIR/ ./
 
 # FastJet
 pushd fastjet
@@ -79,5 +79,4 @@ setenv FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(FASTJET_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FASTJET_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(FASTJET_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FASTJET_ROOT)/lib")
 EoF
