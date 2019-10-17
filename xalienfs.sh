@@ -13,7 +13,7 @@ build_requires:
  - UUID
  - libperl
 prepend_path:
- - PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
+ PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 ---
 #!/bin/bash -e
 [[ ! $SWIG_ROOT ]] && SWIG_LIB=`swig -swiglib`

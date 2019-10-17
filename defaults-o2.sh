@@ -31,6 +31,10 @@ overrides:
     version: "4.12.2"
   fastjet:
     tag: "v3.3.2_1.041-alice1"
+  XRootD:
+    version: "%(tag_basename)s_O2"
+    tag: "v4.10.0"
+    source: https://github.com/xrootd/xrootd
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
