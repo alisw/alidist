@@ -30,7 +30,7 @@ overrides:
   ROOT:
     tag: "v6-18-04" 
   cgal:
-    version: "4.11"
+    version: "4.12.2"
   fastjet:
     tag: "v3.3.2_1.041-alice1"
 ---
