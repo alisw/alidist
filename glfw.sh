@@ -50,9 +50,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
 cmake --build . -- ${JOBS+-j $JOBS} install
 # Somehow the id is lib/libglfw.3.3.dylib rather than simply libglfw.3.3.dylib
 case $ARCHITECTURE in
-  osx*)
-    install_name_tool -id $INSTALLROOT/lib/libglfw.dylib $INSTALLROOT/lib/libglfw.3.*.dylib
-  ;;
+  osx*) install_name_tool -id $INSTALLROOT/lib/libglfw.dylib $INSTALLROOT/lib/libglfw.3.*.dylib ;;
 esac
 
 # Modulefile
