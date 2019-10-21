@@ -8,6 +8,7 @@ env:
   CMAKE_GENERATOR: "Ninja"
   GEANT4_BUILD_MULTITHREADED: "ON"
 disable:
+  - AliEn-Runtime
   - AliRoot
 overrides:
   ROOT:
