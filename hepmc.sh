@@ -1,7 +1,7 @@
 package: HepMC
 version: "%(tag_basename)s"
-tag: 2.06.10
-source: https://gitlab.cern.ch/hepmc/HepMC
+tag: HEPMC_02_06_10
+source: https://gitlab.cern.ch/hepmc/HepMC.git
 build_requires:
   - CMake
   - GCC-Toolchain:(?!osx.*)
