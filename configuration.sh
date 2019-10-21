@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v2.2.1
+tag:  v2.2.4
 requires:
   - curl
   - boost
@@ -47,6 +47,5 @@ module load BASE/1.0 \\
 setenv CONFIGURATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CONFIGURATION_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(CONFIGURATION_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
