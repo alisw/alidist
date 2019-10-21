@@ -1,5 +1,5 @@
 package: Control
-version: "v0.11.0"
+version: "v0.11.1"
 requires:
   - Control-Core
   - Control-OCCPlugin
@@ -26,6 +26,5 @@ module load BASE/1.0 \\
 set Control_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$Control_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$Control_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$Control_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
