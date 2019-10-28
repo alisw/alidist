@@ -1,6 +1,6 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.4.7
+tag: v1.4.9
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
@@ -8,6 +8,7 @@ requires:
  - ZeroMQ
  - DDS
  - asiofi
+ - flatbuffers
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
@@ -45,11 +46,13 @@ cmake $SOURCEDIR                                                 \
       ${FAIRLOGGER_ROOT:+-DFAIRLOGGER_ROOT=$FAIRLOGGER_ROOT}     \
       ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
+      ${FLATBUFFERS_ROOT:+-DFLATBUFFERS_ROOT=$FLATBUFFERS_ROOT}  \
       ${ASIOFI_ROOT:+-DASIOFI_ROOT=$ASIOFI_ROOT}                 \
       ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
       ${OFI_ROOT:--DBUILD_OFI_TRANSPORT=OFF}                     \
       -DDISABLE_COLOR=ON                                         \
       ${DDS_ROOT:+-DBUILD_DDS_PLUGIN=ON}                         \
+      ${DDS_ROOT:+-DBUILD_SDK_COMMANDS=ON}                       \
       -DBUILD_NANOMSG_TRANSPORT=OFF                              \
       ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
