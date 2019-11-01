@@ -103,7 +103,6 @@ prepend-path PATH \$::env(QUALITYCONTROL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64
 prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib" && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
