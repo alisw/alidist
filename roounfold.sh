@@ -11,7 +11,7 @@ cmake $SOURCEDIR                              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
       -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
-make test
+#make test
 
 rsync -av $SOURCEDIR/include/ $INSTALLROOT/include/
 # Modulefile
