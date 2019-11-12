@@ -9,19 +9,28 @@ build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Run2ESDConverter
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cd $BUILDDIR
+  cmake --build . -- ${JOBS+-j $JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
 
-cmake $SOURCEDIR                                 \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
-      -DROOTSYS=$ROOTSYS                         \
-      -DARROW_HOME=$ARROW_ROOT                   \
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
+fi
+
+cmake $SOURCEDIR                                \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
+      -DROOTSYS=$ROOTSYS                        \
+      -DARROW_HOME=$ARROW_ROOT                  \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-pwd
 cd $BUILDDIR
 cmake --build . -- ${JOBS+-j $JOBS} install
 
