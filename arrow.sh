@@ -5,12 +5,12 @@ source: https://github.com/apache/arrow
 requires:
   - boost
   - lz4
-  - RapidJSON
   - LLVM
   - protobuf
 build_requires:
   - zlib
   - flatbuffers
+  - RapidJSON
   - CMake
   - double-conversion
   - re2

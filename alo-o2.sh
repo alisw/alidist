@@ -4,9 +4,9 @@ tag: master
 requires:
   - googlebenchmark
   - O2
-  - RapidJSON
   - yaml-cpp
 build_requires:
+  - RapidJSON
   - CMake
   - ms_gsl
 source: https://github.com/mrrtf/alo

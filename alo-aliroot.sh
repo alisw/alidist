@@ -4,11 +4,11 @@ tag: master
 requires:
   - googlebenchmark
   - AliRoot
-  - RapidJSON
   - boost
   - yaml-cpp
 build_requires:
   - CMake
+  - RapidJSON
   - flatbuffers
   - ms_gsl
 source: https://github.com/mrrtf/alo
