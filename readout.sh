@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v1.0.9
+tag: v1.1.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -81,6 +81,5 @@ module load BASE/1.0                                                          \\
 setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(READOUT_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(READOUT_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(READOUT_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
