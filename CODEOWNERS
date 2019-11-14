@@ -13,7 +13,6 @@ monitoring*         @alisw/dataflow-experts
 pda*                @alisw/dataflow-experts
 ppconsul*           @alisw/dataflow-experts
 qualitycontrol*     @alisw/dataflow-experts
-rapidjson*          @alisw/dataflow-experts
 readout*            @alisw/dataflow-experts
 readoutcard*        @alisw/dataflow-experts
 node*               @alisw/dataflow-experts
