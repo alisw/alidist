@@ -70,5 +70,4 @@ prepend-path PATH \$::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
 prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python/site-packages
 prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
 EoF
