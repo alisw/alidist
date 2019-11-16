@@ -39,7 +39,7 @@ make install
 # Needed to be able to find C++ headers.
 case $ARCHITECTURE in
   osx*)
-    find `xcode-select -p` -type d -path "*usr/include/c++" -exec ln -sf {} $INSTALLROOT/include/c++
+    find `xcode-select -p` -type d -path "*usr/include/c++" -exec ln -sf {} $INSTALLROOT/include/c++ \;
   ;;
 esac
 
