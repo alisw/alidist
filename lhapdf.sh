@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: v6.2.1-alice2
 source: https://github.com/alisw/LHAPDF
 requires:
- - Python-modules
+ - Python
  - "GCC-Toolchain:(?!osx)"
 build_requires:
  - autotools
@@ -70,5 +70,4 @@ prepend-path PATH \$::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
 prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python/site-packages
 prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
 EoF
