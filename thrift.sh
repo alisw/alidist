@@ -27,6 +27,7 @@ rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
             --without-haskell           \
             --without-perl              \
             --without-python            \
+            --without-java              \
             --without-php               \
             --without-php_extension     \
             --without-ruby              \
