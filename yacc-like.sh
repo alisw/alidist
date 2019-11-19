@@ -28,8 +28,8 @@ pushd flex
   autoreconf -ivf
   ./configure --prefix ${INSTALLROOT} --disable-manpages
 
-  make HELP2MAN="touch doc/flex.1.tmp doc/flex.x doc/flex.1 && true" MANDEPS="" ${JOBS:+-j $JOBS}
-  make HELP2MAN="touch doc/flex.1.tmp doc/flex.x doc/flex.1 && true" MANDEPS="" install
+  make HELP2MAN="true" MANDEPS="" ${JOBS:+-j $JOBS}
+  make HELP2MAN="true" MANDEPS="" install
 popd
 
 # Modulefile
