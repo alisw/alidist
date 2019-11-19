@@ -21,15 +21,15 @@ pushd bison
   autoreconf -ivf
   ./configure --prefix ${INSTALLROOT} --disable-manpages
 
-  make HELP2MAN="true" MANDEPS="" ${JOBS:+-j $JOBS}
-  make HELP2MAN="true" MANDEPS="" install
+  make HELP2MAN="touch doc/bison.1.tmp" MANDEPS="" ${JOBS:+-j $JOBS}
+  make HELP2MAN="touch doc/bison.1.tmp" MANDEPS="" install
 popd
 pushd flex
   autoreconf -ivf
   ./configure --prefix ${INSTALLROOT} --disable-manpages
 
-  make HELP2MAN="true" MANDEPS="" ${JOBS:+-j $JOBS}
-  make HELP2MAN="true" MANDEPS="" install
+  make HELP2MAN="touch doc/flex.1.tmp" MANDEPS="" ${JOBS:+-j $JOBS}
+  make HELP2MAN="touch doc/flex.1.tmp" MANDEPS="" install
 popd
 
 # Modulefile
