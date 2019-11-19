@@ -15,6 +15,7 @@ prefer_system_check: |
   which flex
 build_requires:
  - autotools
+ - GCC-Toolchain
 ---
 rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
 pushd bison
