@@ -6,7 +6,6 @@ requires:
   - boost
   - lz4
   - RapidJSON
-  - thrift
   - LLVM
   - protobuf
 build_requires:
