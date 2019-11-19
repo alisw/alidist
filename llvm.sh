@@ -59,7 +59,7 @@ rm $INSTALLROOT/lib/cmake/clang/*.bak
 cat << \EOF > test.cc
 #include <iostream>
 EOF
-$INSTALLROOT/bin/clang++ -v -c test.cc
+$INSTALLROOT/bin-safe/clang++ -v -c test.cc
 
 # Modulefile
 mkdir -p etc/modulefiles
