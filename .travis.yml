@@ -1,5 +1,9 @@
 dist: trusty
 language: python
+addons:
+  apt:
+    packages:
+    - graphviz
 install: |
     pip install pyyaml
     pip install alibuild
