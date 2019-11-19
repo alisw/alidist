@@ -6,6 +6,7 @@ install: |
 script: |
   set -e
   ERR=
+  aliBuild analytics off
   for X in $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep .sh); do
     [[ -e $X ]] || continue
     echo Linting $X
