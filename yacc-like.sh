@@ -14,6 +14,7 @@ prefer_system_check: |
   esac
   which flex
 build_requires:
+ - GCC-Toolchain
  - autotools
 ---
 rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
