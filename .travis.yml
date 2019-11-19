@@ -20,6 +20,6 @@ script: |
     if ! grep -qE '^system_requirement:' "$X"; then
       grep -q '^#%Module' "$X" || { echo "ERROR: recipe $X has no modulefile"; ERR="$ERR $X"; }
     fi
-    aliBuild deps --defaults o2 ${X%.sh} --outgraph deps.pdf --no-system --neat -c . || { echo "ERROR: recipe $X has circular dependency"; ERR="$ERR $X"; }
+    aliBuild deps --defaults o2 ${X%.sh} --outgraph deps.pdf --no-system --neat -c . | grep -q "transitive reduction not unique" && { echo "ERROR: recipe $X has circular dependency"; ERR="$ERR $X"; }
   done
   [[ ! $ERR ]] || { echo "The following recipes need to be fixed:" $ERR; exit 1; }
