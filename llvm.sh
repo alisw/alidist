@@ -19,7 +19,7 @@ unset LDFLAGS
 case $ARCHITECTURE in 
   # Needed to have the C headers
   osx*) DEFAULT_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk ;;
-  *) DEFAULT_SYSROOT=/
+  *) DEFAULT_SYSROOT="" ;;
 esac
 
 cmake ${SOURCEDIR}/llvm                                             \
@@ -41,6 +41,11 @@ case $ARCHITECTURE in
   osx*)
     find `xcode-select -p` -type d -path "*usr/include/c++" -exec ln -sf {} $INSTALLROOT/include/c++ \;
   ;;
+  *)
+  if [ "X$GCC_TOOLCHAIN_ROOT" = X ]; then
+    find $GCC_TOOLCHAIN_ROOT -type d -path "*/include/c++" -exec ln -sf {} $INSTALLROOT/include/c++ \;
+  fi
+  ;;
 esac
 
 # We do not want to have the clang executables in path
@@ -49,6 +54,12 @@ mkdir $INSTALLROOT/bin-safe
 mv $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
 sed -i.bak -e "s|bin/clang|bin-safe/clang|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
 rm $INSTALLROOT/lib/cmake/clang/*.bak
+
+# Check it actually works
+cat << \EOF > test.cc
+#include <iostream>
+EOF
+$INSTALLROOT/bin/clang++ -v -c test.cc
 
 # Modulefile
 mkdir -p etc/modulefiles
