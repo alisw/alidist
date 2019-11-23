@@ -25,11 +25,34 @@ esac
 cmake ${SOURCEDIR}/llvm                                             \
   -DCMAKE_BUILD_TYPE=Release                                        \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"                        \
+  -DCMAKE_CXX_FLAGS=-fvisibility=hidden                             \
   -DLLVM_INSTALL_UTILS=OFF                                          \
   -DBUILD_SHARED_LIBS=OFF                                           \
   -DDEFAULT_SYSROOT=OFF                                             \
   -DLLVM_ENABLE_PROJECTS="clang"                                    \
   -DLLVM_TARGETS_TO_BUILD="X86"                                     \
+  -DLLVM_INCLUDE_TESTS=OFF                                          \
+  -DCLANG_INCLUDE_TESTS=OFF                                         \
+  -DLLVM_INCLUDE_EXAMPLES=OFF                                       \
+  -DCLANG_TOOL_ARCMT_TEST_BUILD=OFF                                 \
+  -DCLANG_TOOL_CLANG_CHECK_BUILD=OFF                                \
+  -DCLANG_TOOL_CLANG_FORMAT_BUILD=OFF                               \
+  -DCLANG_TOOL_CLANG_FORMAT_VS_BUILD=OFF                            \
+  -DCLANG_TOOL_CLANG_FUZZER_BUILD=OFF                               \
+  -DCLANG_TOOL_CLANG_IMPORT_TEST_BUILD=OFF                          \
+  -DCLANG_TOOL_CLANG_OFFLOAD_BUNDLER_BUILD=OFF                      \
+  -DCLANG_TOOL_CLANG_RENAME_BUILD=OFF                               \
+  -DCLANG_TOOL_C_ARCMT_TEST_BUILD=OFF                               \
+  -DCLANG_TOOL_C_INDEX_TEST_BUILD=OFF                               \
+  -DCLANG_TOOL_DIAGTOOL_BUILD=OFF                                   \
+  -DCLANG_TOOL_LIBCLANG_BUILD=OFF                                   \
+  -DCLANG_TOOL_SCAN_BUILD_BUILD=OFF                                 \
+  -DCLANG_TOOL_SCAN_VIEW_BUILD=OFF                                  \
+  -DLLVM_TOOL_LLVM_AR_BUILD=OFF                                     \
+  -DLLVM_BUILD_TOOLS=OFF                                            \
+  -DCLANG_ENABLE_STATIC_ANALYZER=OFF                                \
+  -DCLANG_ENABLE_ARCMT=OFF                                          \
+  -DCLANG_ENABLE_FORMAT=OFF                                         \
   ${GCC_TOOLCHAIN_ROOT:+-DGCC_INSTALL_PREFIX=${GCC_TOOLCHAIN_ROOT}} \
   -DDEFAULT_SYSROOT=${DEFAULT_SYSROOT}                              \
   -DPYTHON_EXECUTABLE=$(which python)
