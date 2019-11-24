@@ -49,7 +49,7 @@ cmake ${SOURCEDIR}/llvm                                             \
   -DCLANG_TOOL_SCAN_BUILD_BUILD=OFF                                 \
   -DCLANG_TOOL_SCAN_VIEW_BUILD=OFF                                  \
   -DLLVM_TOOL_LLVM_AR_BUILD=OFF                                     \
-  -DLLVM_BUILD_TOOLS=OFF                                            \
+  -DLLVM_BUILD_TOOLS=ON                                             \
   -DCLANG_ENABLE_STATIC_ANALYZER=OFF                                \
   -DCLANG_ENABLE_ARCMT=OFF                                          \
   -DCLANG_ENABLE_FORMAT=OFF                                         \
