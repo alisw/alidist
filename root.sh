@@ -41,7 +41,6 @@ incremental_recipe: |
 #!/bin/bash -e
 unset ROOTSYS
 
-
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
