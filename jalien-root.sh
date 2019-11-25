@@ -1,6 +1,6 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.5.1"
+tag: "0.5.2"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
@@ -50,6 +50,5 @@ prepend-path PATH \$::env(JALIEN_ROOT_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib
 append-path ROOT_PLUGIN_PATH \$::env(JALIEN_ROOT_ROOT)/etc/plugins
 prepend-path ROOT_INCLUDE_PATH \$::env(JALIEN_ROOT_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
