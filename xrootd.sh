@@ -4,19 +4,13 @@ tag: v3.3.6-alice2
 source: https://github.com/alisw/xrootd.git
 build_requires:
  - CMake
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
+ - OpenSSL
  - ApMon-CPP
  - libxml2
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 
-case $ARCHITECTURE in
-  osx*)
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
-  ;;
-esac
 cmake "$SOURCEDIR"                                      \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
@@ -46,9 +40,9 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
-            ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
+            ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}
 # Our environment
 set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XROOTD_ROOT/bin

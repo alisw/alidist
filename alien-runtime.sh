@@ -6,8 +6,7 @@ requires:
 build_requires:
  - zlib
  - libxml2
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
+ - OpenSSL
  - AliEn-CAs
  - ApMon-CPP
  - XRootD

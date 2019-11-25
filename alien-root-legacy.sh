@@ -19,10 +19,6 @@ env:
 ---
 #!/bin/bash -e
 
-if [[ $ARCHITECTURE == osx* && ! $OPENSSL_ROOT ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl)
-fi
-
 # Determine whether we are building for ROOT 5 or ROOT 6+
 [[ -x "$ROOTSYS/bin/rootcling" ]] && ROOT_MAJOR="v6-00-00" || ROOT_MAJOR="v5-00-00"
 

@@ -14,8 +14,7 @@ requires:
   - libpng
   - lzma
   - libxml2
-  - "OpenSSL:(?!osx)"
-  - "osx-system-openssl:(osx.*)"
+  - OpenSSL
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -212,18 +211,18 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
-                     ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
-                     ${XROOTD_VERSION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}                                 \\
-                     ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
-                     ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
-                     ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
-                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
-                     ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-                     ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
-                     ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                     \\
-                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                                 \\
-                     ${LZMA_VERSION:+lzma/$LZMA_VERSION-$LZMA_REVISION}
+module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
+                     ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
+                     ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}                                 \\
+                     ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
+                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
+                     ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
+                     ${FREETYPE_REVISION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
+                     ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
+                     ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
+                     ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                     \\
+                     ${LIBPNG_REVISION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                                 \\
+                     ${LZMA_REVISION:+lzma/$LZMA_VERSION-$LZMA_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME

@@ -4,19 +4,32 @@ tag: OpenSSL_1_0_2o
 source: https://github.com/openssl/openssl
 prefer_system: (?!slc5|slc6)
 prefer_system_check: |
-  if [ `uname` = Darwin ]; then test -d `brew --prefix openssl || echo /dev/nope` || exit 1; fi; echo '#include <openssl/bio.h>' | c++ -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1; echo -e "#include <openssl/opensslv.h>\n#if OPENSSL_VERSION_NUMBER >= 0x10100000L\n#error \"System's GCC cannot be used: we need OpenSSL 1.0.x to build XrootD. We are going to compile our own version.\"\n#endif\nint main() { }" | cc -x c++ - -I`brew --prefix openssl`/include -c -o /dev/null || exit 1
+  # Notice that we cannot use brew anymore, because they moved to 1.1.x.
+  false
 build_requires:
- - zlib
+ - zlib:(?!osx)
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
+case $ARCHITECTURE in 
+  osx*) 
+    EXTRA_DEPS="no-zlib enable-eec_nistp_64_gcc_128 no-comp"
+    EXTRA_OPTS="-Wno-nonportable-include-path"
+  ;;
+  *) 
+    EXTRA_DEPS=zlib
+    EXTRA_OPTS="-Wa,--noexecstack" 
+  :;
+esac
 
-./config --prefix="$INSTALLROOT"                   \
+export KERNEL_BITS=64
+./config --prefix="$INSTALLROOT"                \
          --openssldir="$INSTALLROOT/etc/ssl"       \
          --libdir=lib                              \
-         zlib                                      \
+         $TARGET                                   \
+         $EXTRA_DEPS                               \
          no-idea                                   \
          no-mdc2                                   \
          no-rc5                                    \
@@ -25,17 +38,22 @@ rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
          no-ecdsa                                  \
          no-asm                                    \
          no-krb5                                   \
+         no-ssl2                                   \
+         no-ssl3                                   \
          shared                                    \
          -fno-strict-aliasing                      \
          -L"$INSTALLROOT/lib"                      \
-         -Wa,--noexecstack
+         $EXTRA_OPTS
 make depend
 make  # don't ever try to build in multicore
-make install
+make install_sw
 
 # Remove static libraries and pkgconfig
 rm -rf $INSTALLROOT/lib/pkgconfig \
        $INSTALLROOT/lib/*.a
+
+# Needed to make sure we can do the postprocessing on mac
+find $INSTALLROOT -name "*.dylib" -exec chmod u+w {} \;
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -55,5 +73,4 @@ module load BASE/1.0 ${ZLIB_VERSION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION} ${GCC_TO
 setenv OPENSSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(OPENSSL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib")
 EoF

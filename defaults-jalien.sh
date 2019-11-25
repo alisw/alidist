@@ -16,8 +16,7 @@ overrides:
       - CMake
     requires:
       - "GCC-Toolchain:(?!osx)"
-      - "OpenSSL:(?!osx)"
-      - "osx-system-openssl:(osx.*)"
+      - OpenSSL
       - ApMon-CPP
       - libxml2
   JDK:
