@@ -61,6 +61,7 @@ module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
             AliEn-Runtime/${ALIEN_RUNTIME_VERSION}-${ALIEN_RUNTIME_REVISION}
 
 # Our environment
-set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$XALIENFS_ROOT/bin
+setenv XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(XALIENFS_ROOT)/lib
+prepend-path PATH \$::env(XALIENFS_ROOT)/bin
 EoF
