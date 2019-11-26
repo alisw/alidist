@@ -51,9 +51,9 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
-            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
-            ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
+            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
+            ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}
 
 # Our environment
 set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
@@ -61,7 +61,7 @@ prepend-path PATH \$XROOTD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
 if { $XROOTD_PYTHON } {
   prepend-path PYTHONPATH \$XROOTD_ROOT/lib/python3.6/site-packages
-  module load ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-              ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
+  module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
+              ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 }
 EoF
