@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-16-00"
+tag: "v6-18-04"
 source: https://github.com/root-project/root
 requires:
   - arrow
@@ -40,7 +40,6 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 unset ROOTSYS
-
 
 COMPILER_CC=cc
 COMPILER_CXX=c++
