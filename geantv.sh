@@ -41,7 +41,7 @@ module load BASE/1.0 Pythia/$PYTHIA_VERSION-$PYTHIA_REVISION Vc/$VC_VERSION-$VC_
 # Our environment
 set osname [uname sysname]
 setenv GEANTV_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(GEANTV_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(GEANTV_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANTV_ROOT)/lib")
+prepend-path PATH \$GEANTV_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$GEANTV_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GEANTV_ROOT/lib")
 EoF

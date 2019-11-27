@@ -64,7 +64,7 @@ module load BASE/1.0 \\
 
 # Our environment
 setenv CONTROL_OCCPLUGIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/lib
+prepend-path PATH \$CONTROL_OCCPLUGIN_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CONTROL_OCCPLUGIN_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

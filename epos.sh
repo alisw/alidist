@@ -59,7 +59,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
 # Our environment
 setenv EPOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(EPOS_ROOT)/bin
+prepend-path PATH \$EPOS_ROOT/bin
 setenv EPOVSN ${EPOVSN}
 # Final slash is required by EPOS, please leave it be
 setenv EPO $::env(EPOS_ROOT)/epos/

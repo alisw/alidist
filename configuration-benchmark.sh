@@ -47,8 +47,8 @@ module load BASE/1.0                                                          \\
 
 # Our environment
 setenv CONFIGURATION_BENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CONFIGURATION_BENCHMARK_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(CONFIGURATION_BENCHMARK_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(CONFIGURATION_BENCHMARK_ROOT)/lib")
+prepend-path PATH \$CONFIGURATION_BENCHMARK_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CONFIGURATION_BENCHMARK_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$CONFIGURATION_BENCHMARK_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

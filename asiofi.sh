@@ -46,9 +46,9 @@ module load BASE/1.0                                                            
             ${OFI_ROOT:+ofi/$OFI_VERSION-$OFI_REVISION}
 # Our environment
 setenv ASIOFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(ASIOFI_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ASIOFI_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ASIOFI_ROOT)/lib")
+prepend-path PATH \$ASIOFI_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ASIOFI_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$ASIOFI_ROOT/lib")
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p $MODULEDIR && rsync -a --delete etc/modulefiles/ $MODULEDIR

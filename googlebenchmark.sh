@@ -29,7 +29,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv GOOGLEBENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(GOOGLEBENCHMARK_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GOOGLEBENCHMARK_ROOT)/lib")
+prepend-path LD_LIBRARY_PATH \$GOOGLEBENCHMARK_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GOOGLEBENCHMARK_ROOT/lib")
 EoF
 

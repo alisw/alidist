@@ -38,10 +38,10 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 # Our environment
 setenv YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(YODA_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib
-prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib64
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(YODA_ROOT)/lib")
+prepend-path PATH \$YODA_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib64
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$YODA_ROOT/lib")
 set pythonpath [exec yoda-config --pythonpath]
 prepend-path PYTHONPATH \$pythonpath
 EoF

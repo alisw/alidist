@@ -30,6 +30,6 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 # Our environment
 set osname [uname sysname]
 setenv MS_GSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path ROOT_INCLUDE_PATH \$::env(MS_GSL_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(MS_GSL_ROOT)/lib")
+prepend-path ROOT_INCLUDE_PATH \$MS_GSL_ROOT/include
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$MS_GSL_ROOT/lib")
 EoF

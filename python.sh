@@ -139,8 +139,8 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
 # Our environment
 setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHONHOME \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PYTHONPATH $::env(PYTHON_ROOT)/lib/python/site-packages
-prepend-path PATH $::env(PYTHON_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(PYTHON_ROOT)/lib
+prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
+prepend-path PATH \$PYTHON_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib
 setenv SSL_CERT_FILE  [exec python3 -c "import certifi; print(certifi.where())"]
 EoF

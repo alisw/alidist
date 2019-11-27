@@ -35,7 +35,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 # Our environment
 setenv KFPARTICLE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path ROOT_INCLUDE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/include
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+prepend-path ROOT_INCLUDE_PATH \$BASEDIR/$PKGNAME/\$version/include
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib")
 EoF

@@ -38,7 +38,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 $([[ "$ALIEN_RUNTIME_VERSION" ]] && echo AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION || echo ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION})
 # Our environment
 setenv FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(FREETYPE_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(FREETYPE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(FREETYPE_ROOT)/lib")
+prepend-path PATH \$FREETYPE_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$FREETYPE_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$FREETYPE_ROOT/lib")
 EoF

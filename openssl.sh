@@ -53,7 +53,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv OPENSSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(OPENSSL_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib")
+prepend-path PATH \$OPENSSL_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$OPENSSL_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$OPENSSL_ROOT/lib")
 EoF

@@ -40,6 +40,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv GMP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(GMP_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GMP_ROOT)/lib")
+prepend-path LD_LIBRARY_PATH \$GMP_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GMP_ROOT/lib")
 EoF

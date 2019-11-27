@@ -38,8 +38,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${ZLIB_REVISION:+zlib/${ZLIB_VERSION}-${ZLIB_REVISION}}
 # Our environment
 setenv FLATBUFFERS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(FLATBUFFERS_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(FLATBUFFERS_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FLATBUFFERS_ROOT)/lib")
-prepend-path PATH \$::env(FLATBUFFERS_ROOT)/bin
+prepend-path PATH \$FLATBUFFERS_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$FLATBUFFERS_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$FLATBUFFERS_ROOT/lib")
+prepend-path PATH \$FLATBUFFERS_ROOT/bin
 EoF

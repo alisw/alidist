@@ -39,7 +39,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 setenv LZMA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
+prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib")
 EoF

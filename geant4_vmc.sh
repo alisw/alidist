@@ -44,10 +44,10 @@ module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION}
 # Our environment
 setenv GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv G4VMCINSTALL \$::env(GEANT4_VMC_ROOT)
-prepend-path PATH \$::env(GEANT4_VMC_ROOT)/bin
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/mtroot
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/geant4vmc
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/g4root
-prepend-path LD_LIBRARY_PATH \$::env(GEANT4_VMC_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_VMC_ROOT)/lib")
+prepend-path PATH \$GEANT4_VMC_ROOT/bin
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/mtroot
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/geant4vmc
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/g4root
+prepend-path LD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib")
 EoF

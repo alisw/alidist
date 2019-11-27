@@ -83,10 +83,10 @@ module load BASE/1.0                                                            
             ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
 setenv FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(FAIRMQ_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(FAIRMQ_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include
-prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include/fairmq
+prepend-path PATH \$FAIRMQ_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$FAIRMQ_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$FAIRMQ_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$FAIRMQ_ROOT/include/fairmq
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p $MODULEDIR && rsync -a --delete etc/modulefiles/ $MODULEDIR

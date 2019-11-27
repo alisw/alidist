@@ -37,7 +37,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set osname [uname sysname]
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path ROOT_INCLUDE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/include
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
+prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
+prepend-path ROOT_INCLUDE_PATH \$BASEDIR/$PKGNAME/\$version/include
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
 EoF

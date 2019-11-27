@@ -89,7 +89,7 @@ module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSIO
 # Our environment
 setenv THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
-prepend-path PATH \$::env(THEPEG_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(THEPEG_ROOT)/lib/ThePEG")
+prepend-path PATH \$THEPEG_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$THEPEG_ROOT/lib/ThePEG
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$THEPEG_ROOT/lib/ThePEG")
 EoF

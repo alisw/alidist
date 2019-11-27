@@ -45,7 +45,7 @@ module load BASE/1.0 \\
 
 # Our environment
 setenv CONFIGURATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CONFIGURATION_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(CONFIGURATION_ROOT)/lib
+prepend-path PATH \$CONFIGURATION_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CONFIGURATION_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

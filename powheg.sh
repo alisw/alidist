@@ -39,7 +39,7 @@ module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION ${GCC_TOOLCHAIN_
 # Our environment
 setenv POWHEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv Powheg_INSTALL_PATH \$::env(POWHEG_ROOT)/lib/Powheg
-prepend-path PATH \$::env(POWHEG_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(POWHEG_ROOT)/lib/Powheg
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(POWHEG_ROOT)/lib/Powheg")
+prepend-path PATH \$POWHEG_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$POWHEG_ROOT/lib/Powheg
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$POWHEG_ROOT/lib/Powheg")
 EoF

@@ -37,8 +37,8 @@ module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 setenv LIBXML2_VERSION \$version
 setenv LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(LIBXML2_VERSION)
-prepend-path PATH \$::env(LIBXML2_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(LIBXML2_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LIBXML2_ROOT)/lib")
+prepend-path PATH \$LIBXML2_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$LIBXML2_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$LIBXML2_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

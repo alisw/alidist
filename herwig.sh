@@ -44,7 +44,7 @@ module load BASE/1.0 ThePEG/$THEPEG_VERSION-$THEPEG_REVISION lhapdf-pdfsets/$LHA
 # Our environment
 setenv HERWIG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv HERWIG_INSTALL_PATH \$::env(HERWIG_ROOT)/lib/Herwig
-prepend-path PATH \$::env(HERWIG_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(HERWIG_ROOT)/lib/Herwig
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(HERWIG_ROOT)/lib/Herwig")
+prepend-path PATH \$HERWIG_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$HERWIG_ROOT/lib/Herwig
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$HERWIG_ROOT/lib/Herwig")
 EoF

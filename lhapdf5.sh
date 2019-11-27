@@ -46,7 +46,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 # Our environment
 setenv LHAPDF5_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv LHAPATH \$::env(LHAPDF5_ROOT)/share/lhapdf
-prepend-path PATH $::env(LHAPDF5_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(LHAPDF5_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(LHAPDF5_ROOT)/lib")
+prepend-path PATH \$LHAPDF5_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$LHAPDF5_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$LHAPDF5_ROOT/lib")
 EoF

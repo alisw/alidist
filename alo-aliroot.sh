@@ -74,8 +74,8 @@ module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${BOOST_REVISION
 # Our environment
 setenv ALO_ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 
-prepend-path PATH \$::env(ALO_ALIROOT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALO_ALIROOT_ROOT)/lib
+prepend-path PATH \$ALO_ALIROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALO_ALIROOT_ROOT/lib
 EoF
 
         mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -27,7 +27,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv GLOG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(GLOG_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GLOG_ROOT)/lib")
-prepend-path PATH \$::env(GLOG_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$GLOG_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GLOG_ROOT/lib")
+prepend-path PATH \$GLOG_ROOT/bin
 EoF

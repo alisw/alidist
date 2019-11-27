@@ -53,7 +53,7 @@ module load BASE/1.0 ${LHAPDF_REVISION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION}
 setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc
 setenv PYTHIA8 \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(PYTHIA_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib")
+prepend-path PATH \$PYTHIA_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$PYTHIA_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$PYTHIA_ROOT/lib")
 EoF

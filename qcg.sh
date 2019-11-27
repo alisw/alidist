@@ -43,5 +43,5 @@ module load BASE/1.0 ${NODE_REVISION:+node/$NODE_VERSION-$NODE_REVISION} ${QUALI
 # Our environment
 setenv QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv NODE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/node_modules
-prepend-path PATH \$::env(QCG_ROOT)/bin
+prepend-path PATH \$QCG_ROOT/bin
 EoF

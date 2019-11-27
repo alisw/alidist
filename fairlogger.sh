@@ -38,9 +38,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 setenv FAIRLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(FAIRLOGGER_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(FAIRLOGGER_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FAIRLOGGER_ROOT)/lib")
+prepend-path LD_LIBRARY_PATH \$FAIRLOGGER_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$FAIRLOGGER_ROOT/include
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$FAIRLOGGER_ROOT/lib")
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p $MODULEDIR && rsync -a --delete etc/modulefiles/ $MODULEDIR

@@ -228,8 +228,8 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
-prepend-path PYTHONPATH \$::env(ROOTSYS)/lib
-prepend-path PATH \$::env(ROOTSYS)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
+prepend-path PYTHONPATH \$ROOTSYS/lib
+prepend-path PATH \$ROOTSYS/bin
+prepend-path LD_LIBRARY_PATH \$ROOTSYS/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

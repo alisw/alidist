@@ -32,8 +32,8 @@ module load BASE/1.0                                                            
 
 # Our environment
 setenv PDA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
+$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
