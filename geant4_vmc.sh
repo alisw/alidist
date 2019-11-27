@@ -49,5 +49,4 @@ prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/mtroot
 prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/geant4vmc
 prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/g4root
 prepend-path LD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib")
 EoF

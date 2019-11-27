@@ -113,5 +113,4 @@ setenv CONFIG_DIR \$::env(VMCWORKDIR)/common/gconfig
 prepend-path PATH \$FAIRROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FAIRROOT_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FAIRROOT_ROOT/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$FAIRROOT_ROOT/lib")
 EoF

@@ -41,6 +41,5 @@ module load BASE/1.0
 # Our environment
 setenv MESOS_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$MESOS_WORKQUEUE_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$MESOS_WORKQUEUE_ROOT/lib")
 prepend-path PATH \$MESOS_WORKQUEUE_ROOT/bin
 EoF

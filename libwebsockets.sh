@@ -43,6 +43,5 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 setenv LIBWEBSOCKETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$LIBWEBSOCKETS_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBWEBSOCKETS_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$LIBWEBSOCKETS_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

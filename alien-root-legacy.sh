@@ -80,6 +80,5 @@ prepend-path PATH \$ALIEN_ROOT_LEGACY_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ALIEN_ROOT_LEGACY_ROOT/lib
 append-path ROOT_PLUGIN_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/etc/plugins
 prepend-path ROOT_INCLUDE_PATH \$ALIEN_ROOT_LEGACY_ROOT/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$ALIEN_ROOT_LEGACY_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

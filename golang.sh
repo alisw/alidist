@@ -28,6 +28,5 @@ setenv GOROOT \$::env(BASEDIR)/$PKGNAME/\$version
 # NOTE: upstream requires GOROOT to be defined if installing to a nonstandard path
 prepend-path PATH \$GOROOT/bin
 prepend-path LD_LIBRARY_PATH \$GOROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GOROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

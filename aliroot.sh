@@ -112,6 +112,5 @@ prepend-path PATH \$ALICE_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ALICE_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$ALICE_ROOT/include
 prepend-path ROOT_INCLUDE_PATH \$ALICE_ROOT/include/Pythia8
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$ALICE_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

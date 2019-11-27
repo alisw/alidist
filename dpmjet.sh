@@ -33,5 +33,4 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 setenv DPMJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$DPMJET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$DPMJET_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$DPMJET_ROOT/lib")
 EoF

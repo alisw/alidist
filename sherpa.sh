@@ -47,7 +47,5 @@ setenv SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv SHERPA_INSTALL_PATH \$::env(SHERPA_ROOT)/lib/SHERPA
 prepend-path PATH \$SHERPA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$SHERPA_ROOT/lib")
 prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib/SHERPA-MC
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$SHERPA_ROOT/lib/SHERPA-MC")
 EoF

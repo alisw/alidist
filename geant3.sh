@@ -41,5 +41,4 @@ setenv G3SYS \$::env(GEANT3_ROOT)
 prepend-path PATH \$GEANT3_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$GEANT3_ROOT/lib64
 prepend-path ROOT_INCLUDE_PATH \$GEANT3_ROOT/include/TGeant3
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$GEANT3_ROOT/lib64")
 EoF

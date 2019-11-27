@@ -39,6 +39,5 @@ setenv LIBXML2_VERSION \$version
 setenv LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(LIBXML2_VERSION)
 prepend-path PATH \$LIBXML2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBXML2_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$LIBXML2_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

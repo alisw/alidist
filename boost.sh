@@ -134,5 +134,4 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 setenv BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$BOOST_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$BOOST_ROOT/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$BOOST_ROOT/lib")
 EoF

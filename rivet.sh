@@ -94,5 +94,4 @@ prepend-path PYTHONPATH \$RIVET_ROOT/lib/python3.6/site-packages
 prepend-path PYTHONPATH \$RIVET_ROOT/lib64/python3.6/site-packages
 prepend-path PATH \$RIVET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$RIVET_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$RIVET_ROOT/lib")
 EoF

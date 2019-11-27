@@ -39,6 +39,5 @@ module load BASE/1.0
 setenv MESOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$MESOS_ROOT/lib/python2.7/site-packages
 prepend-path LD_LIBRARY_PATH \$MESOS_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$MESOS_ROOT/lib")
 prepend-path PATH \$MESOS_ROOT/bin
 EoF

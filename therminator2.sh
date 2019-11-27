@@ -40,5 +40,4 @@ module load BASE/1.0 ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION} ${R
 setenv THERMINATOR2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$THERMINATOR2_ROOT/bin
 #prepend-path LD_LIBRARY_PATH \$THERMINATOR2_ROOT/lib
-#$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$THERMINATOR2_ROOT/lib")
-EoF
+#EoF
