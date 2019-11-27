@@ -27,8 +27,6 @@ overrides:
       - boost
   AliPhysics:
     version: "%(commit_hash)s_O2"
-  ROOT:
-    tag: "v6-18-04" 
   cgal:
     version: "4.12.2"
   fastjet:

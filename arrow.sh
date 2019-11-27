@@ -32,6 +32,12 @@ case $ARCHITECTURE in
     [[ ! -d $PROTOBUF_ROOT ]] && unset PROTOBUF_ROOT
     MACOSX_RPATH=OFF
     SONAME=dylib
+    cat >no-llvm-symbols.txt << EOF
+_LLVM*
+__ZN4llvm*
+__ZNK4llvm*
+EOF
+    CMAKE_SHARED_LINKER_FLAGS="-Wl,-unexported_symbols_list,$PWD/no-llvm-symbols.txt"
   ;;
   *) SONAME=so ;;
 esac
@@ -45,6 +51,7 @@ esac
 # Taken from our stack, linked dynamically (needed at runtime):
 #   boost
 cmake $SOURCEDIR/cpp                                                                                \
+      ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
