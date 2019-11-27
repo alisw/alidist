@@ -24,7 +24,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 
 # Our environment
-setenv GOROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set GOROOT \$::env(BASEDIR)/$PKGNAME/\$version
 # NOTE: upstream requires GOROOT to be defined if installing to a nonstandard path
 prepend-path PATH \$GOROOT/bin
 prepend-path LD_LIBRARY_PATH \$GOROOT/lib

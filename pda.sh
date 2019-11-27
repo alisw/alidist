@@ -31,7 +31,7 @@ module load BASE/1.0                                                            
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}                       
 
 # Our environment
-setenv PDA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set PDA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
 prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
 EoF

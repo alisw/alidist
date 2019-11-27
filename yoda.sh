@@ -37,7 +37,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 boost/$BOOST_VERSION-$BOOST_REVISION ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 # Our environment
-setenv YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$YODA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib64

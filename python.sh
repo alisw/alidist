@@ -137,8 +137,8 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
                      ${FREETYPE_REVISION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                     \\
                      ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PYTHONHOME \$::env(BASEDIR)/$PKGNAME/\$version
+set PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set PYTHONHOME \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
 prepend-path PATH \$PYTHON_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib

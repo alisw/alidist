@@ -42,7 +42,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
                      lhapdf/${LHAPDF_VERSION}-${LHAPDF_REVISION}
 # Our environment
-setenv FONLL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FONLL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FONLL_NPDF \$::env(FONLL_ROOT)/share/nPDF
 prepend-path PATH \$FONLL_ROOT/bin
 EoF

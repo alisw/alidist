@@ -45,7 +45,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
 
 # Our environment
-setenv JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$JALIEN_ROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$JALIEN_ROOT_ROOT/lib
 append-path ROOT_PLUGIN_PATH \$::env(JALIEN_ROOT_ROOT)/etc/plugins

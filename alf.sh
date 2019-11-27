@@ -51,7 +51,7 @@ module load BASE/1.0                                                          \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION
 
 # Our environment
-setenv ALF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ALF_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ALF_ROOT/lib
 prepend-path PYTHONPATH \$ALF_ROOT/lib

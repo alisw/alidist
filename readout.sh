@@ -78,7 +78,7 @@ module load BASE/1.0                                                          \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
-setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$READOUT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$READOUT_ROOT/lib
 EoF

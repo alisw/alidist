@@ -29,7 +29,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 # Our environment
-setenv AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$AMPT_ROOT/bin
 #prepend-path LD_LIBRARY_PATH \$AMPT_ROOT/lib
 #EoF

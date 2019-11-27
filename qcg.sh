@@ -41,7 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${NODE_REVISION:+node/$NODE_VERSION-$NODE_REVISION} ${QUALITYCONTROL_REVISION:+QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION}
 # Our environment
-setenv QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv NODE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/node_modules
+set QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set NODE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/node_modules
 prepend-path PATH \$QCG_ROOT/bin
 EoF

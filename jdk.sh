@@ -45,6 +45,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv JAVA_HOME \$::env(BASEDIR)/$PKGNAME/\$version${JAVA_HOME_SUBDIR}
+set JAVA_HOME \$::env(BASEDIR)/$PKGNAME/\$version${JAVA_HOME_SUBDIR}
 prepend-path PATH \$JAVA_HOME/bin
 EoF

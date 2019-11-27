@@ -30,7 +30,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv DPMJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set DPMJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$DPMJET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$DPMJET_ROOT/lib
 EoF

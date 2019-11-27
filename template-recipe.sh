@@ -29,7 +29,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MYGENERATOR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set MYGENERATOR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$MYGENERATOR_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$MYGENERATOR_ROOT/lib
 EoF

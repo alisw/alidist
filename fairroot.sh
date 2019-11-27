@@ -106,7 +106,7 @@ module load BASE/1.0                                                            
             ${DDS_ROOT:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
             ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv FAIRROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FAIRROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(FAIRROOT_ROOT)/share/fairbase/examples
 setenv GEOMPATH \$::env(VMCWORKDIR)/common/geometry
 setenv CONFIG_DIR \$::env(VMCWORKDIR)/common/gconfig

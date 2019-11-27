@@ -92,7 +92,7 @@ module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_
 # TODO: RIVETHI_ROOT is wrong (it should be RIVET_HI_ROOT) and it is deprecated
 # in favour of using rivet-config --prefix. Leaving it for now, but it will be
 # removed upon PWGMM's decision in the future
-setenv RIVETHI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set RIVETHI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$RIVETHI_ROOT/lib/python2.7/site-packages
 prepend-path PYTHONPATH \$RIVETHI_ROOT/lib64/python2.7/site-packages
 prepend-path PATH \$RIVETHI_ROOT/bin

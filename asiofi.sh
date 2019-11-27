@@ -45,7 +45,7 @@ module load BASE/1.0                                                            
             ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
             ${OFI_ROOT:+ofi/$OFI_VERSION-$OFI_REVISION}
 # Our environment
-setenv ASIOFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ASIOFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ASIOFI_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ASIOFI_ROOT/lib
 EoF

@@ -31,7 +31,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv CCTOOLS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set CCTOOLS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$CCTOOLS_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CCTOOLS_ROOT/lib
 EoF

@@ -20,5 +20,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv ALIROOT_OCDB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALIROOT_OCDB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF

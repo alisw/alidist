@@ -40,7 +40,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MESOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set MESOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$MESOS_ROOT/lib/python2.7/site-packages
 prepend-path LD_LIBRARY_PATH \$MESOS_ROOT/lib
 prepend-path PATH \$MESOS_ROOT/bin

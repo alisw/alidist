@@ -98,7 +98,7 @@ module load BASE/1.0                                                            
             ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
 
 # Our environment
-setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$QUALITYCONTROL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64

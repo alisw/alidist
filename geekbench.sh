@@ -24,6 +24,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv GEEKBENCH_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set GEEKBENCH_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$GEEKBENCH_ROOT/bin
 EoF

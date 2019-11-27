@@ -82,7 +82,7 @@ module load BASE/1.0                                                            
             ${ASIOFI_REVISION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
             ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
-setenv FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$FAIRMQ_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FAIRMQ_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FAIRMQ_ROOT/include

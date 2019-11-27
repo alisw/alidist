@@ -30,7 +30,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv PROTOBUF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set PROTOBUF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$PROTOBUF_ROOT/lib
 prepend-path PATH \$PROTOBUF_ROOT/bin
 EoF

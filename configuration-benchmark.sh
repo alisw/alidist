@@ -46,7 +46,7 @@ module load BASE/1.0                                                          \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION
 
 # Our environment
-setenv CONFIGURATION_BENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set CONFIGURATION_BENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$CONFIGURATION_BENCHMARK_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CONFIGURATION_BENCHMARK_ROOT/lib
 EoF

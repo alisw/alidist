@@ -35,7 +35,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 # Our environment
 set osname [uname sysname]
-setenv MCSTEPLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set MCSTEPLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$MCSTEPLOGGER_ROOT/lib
 prepend-path PATH \$MCSTEPLOGGER_ROOT/bin
 prepend-path ROOT_INCLUDE_PATH \$MCSTEPLOGGER_ROOT/include

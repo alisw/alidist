@@ -30,7 +30,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv JEMALLOC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set JEMALLOC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$JEMALLOC_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$JEMALLOC_ROOT/lib
 setenv LD_PRELOAD \$::env(JEMALLOC_ROOT)/lib/libjemalloc.so

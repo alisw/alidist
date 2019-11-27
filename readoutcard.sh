@@ -63,7 +63,7 @@ module load BASE/1.0                                                          \\
             ${PDA_REVISION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment
-setenv READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$READOUTCARD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$READOUTCARD_ROOT/lib
 prepend-path PYTHONPATH \$READOUTCARD_ROOT/lib
