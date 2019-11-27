@@ -15,7 +15,7 @@ install -d ${INSTALLROOT}/bin
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
-PROCESSES="${FASTJET_VERSION:+dijet }hvq W Z"
+PROCESSES="${FASTJET_REVISION:+dijet }hvq W Z"
 for proc in ${PROCESSES}; do
     mkdir ${proc}/{obj,obj-gfortran}
     make -C ${proc}
@@ -35,7 +35,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}
+module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}
 # Our environment
 setenv POWHEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv Powheg_INSTALL_PATH \$::env(POWHEG_ROOT)/lib/Powheg

@@ -23,7 +23,7 @@ esac
 
 cmake $SOURCEDIR                                    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT           \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}    \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}    \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DCPPREST_ROOT=${CPPRESTSDK_ROOT}          \
       -DCPPREST_LIB=${CPPRESTSDK_ROOT}           \
@@ -44,10 +44,10 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION
 module load BASE/1.0                                                          \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
-            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}            \\
-            ${CPPRESTSDK_VERSION:+cpprestsdk/$CPPRESTSDK_VERSION-$CPPRESTSDK_REVISION} \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}            \\
+            ${CPPRESTSDK_REVISION:+cpprestsdk/$CPPRESTSDK_VERSION-$CPPRESTSDK_REVISION} \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 set JISKEFET_API_CPP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

@@ -31,12 +31,12 @@ fi
 
 cmake $SOURCEDIR                                                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
-      ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
-      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
-      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
-      ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT}                            \
-      ${PYTHON_VERSION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}            \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
+      ${COMMON_O2_REVISION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
+      ${CONFIGURATION_REVISION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
+      ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
+      ${PDA_REVISION:+-DPDA_ROOT=$PDA_ROOT}                            \
+      ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}            \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -54,13 +54,13 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION
 module load BASE/1.0                                                          \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
-            ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}        \\
-            ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}
+            ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}        \\
+            ${PDA_REVISION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment
 setenv READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

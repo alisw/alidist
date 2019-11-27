@@ -24,7 +24,7 @@ cmake "$SOURCEDIR/Release"                              \
       -DCMAKE_BUILD_TYPE=Debug                          \
       -DCMAKE_CXX_FLAGS=-Wno-error=conversion           \
       -DCPPREST_EXCLUDE_WEBSOCKETS=ON                   \
-      ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}        \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}        \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}
 
 make ${JOBS:+-j $JOBS}
@@ -43,8 +43,8 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0                                                          \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
-            ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 # Our environment
 setenv CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(CPPRESTSDK_ROOT)/lib64

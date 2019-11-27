@@ -29,7 +29,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${CLANG_VERSION:+Clang/$CLANG_VERSION-$CLANG_REVISION}
+module load BASE/1.0 ${CLANG_REVISION:+Clang/$CLANG_VERSION-$CLANG_REVISION}
 # Our environment
 setenv O2CODECHECKER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(O2CODECHECKER_ROOT)/bin
