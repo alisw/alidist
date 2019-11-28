@@ -10,7 +10,6 @@ build_requires:
 source: https://github.com/AliceO2Group/AEGIS.git
 prepend_path:
   LD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
-  DYLD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
   ROOT_INCLUDE_PATH: "$AEGIS_ROOT/include"
 ---
 #!/bin/bash -e

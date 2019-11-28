@@ -9,7 +9,6 @@ build_requires:
 source: https://github.com/vmc-project/geant3
 prepend_path:
   LD_LIBRARY_PATH: "$GEANT3_ROOT/lib64"
-  DYLD_LIBRARY_PATH: "$GEANT3_ROOT/lib64"
   ROOT_INCLUDE_PATH: "$GEANT3_ROOT/include/TGeant3"
 ---
 #!/bin/bash -e
