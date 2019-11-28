@@ -35,5 +35,4 @@ setenv VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(VC_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(VC_ROOT)/lib
 prepend-path ROOT_INCLUDE_PATH \$::env(VC_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(VC_ROOT)/lib")
 EoF

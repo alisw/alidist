@@ -43,5 +43,4 @@ set osname [uname sysname]
 setenv GEANTV_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(GEANTV_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANTV_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANTV_ROOT)/lib")
 EoF

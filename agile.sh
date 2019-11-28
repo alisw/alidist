@@ -53,5 +53,4 @@ setenv AGILE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$::env(AGILE_ROOT)/lib/python2.7/site-packages
 prepend-path PATH \$::env(AGILE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(AGILE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(AGILE_ROOT)/lib")
 EoF

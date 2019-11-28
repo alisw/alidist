@@ -46,5 +46,4 @@ setenv HERWIG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv HERWIG_INSTALL_PATH \$::env(HERWIG_ROOT)/lib/Herwig
 prepend-path PATH \$::env(HERWIG_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(HERWIG_ROOT)/lib/Herwig
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(HERWIG_ROOT)/lib/Herwig")
 EoF

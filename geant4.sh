@@ -100,5 +100,4 @@ prepend-path PATH \$::env(GEANT4_ROOT)/bin
 prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include/Geant4
 prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include
 prepend-path LD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib")
 EoF

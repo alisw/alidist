@@ -48,5 +48,4 @@ module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${HDF5_
 setenv JETSCAPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(JETSCAPE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(JETSCAPE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(JETSCAPE_ROOT)/lib")
 EoF

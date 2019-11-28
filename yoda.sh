@@ -41,7 +41,6 @@ setenv YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(YODA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(YODA_ROOT)/lib64
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(YODA_ROOT)/lib")
 set pythonpath [exec yoda-config --pythonpath]
 prepend-path PYTHONPATH \$pythonpath
 EoF

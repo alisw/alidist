@@ -29,5 +29,4 @@ setenv AURORA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(AURORA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(AURORA_ROOT)/lib
 prepend-path PERL5LIB $::env(AURORA_ROOT)/lib/perl5
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(AURORA_ROOT)/lib")
 EoF

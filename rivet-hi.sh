@@ -97,5 +97,4 @@ prepend-path PYTHONPATH \$::env(RIVETHI_ROOT)/lib/python2.7/site-packages
 prepend-path PYTHONPATH \$::env(RIVETHI_ROOT)/lib64/python2.7/site-packages
 prepend-path PATH \$::env(RIVETHI_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(RIVETHI_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(RIVETHI_ROOT)/lib")
 EoF

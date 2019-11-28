@@ -55,5 +55,4 @@ module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION} ${GCC_T
 setenv OPENSSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(OPENSSL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OPENSSL_ROOT)/lib")
 EoF

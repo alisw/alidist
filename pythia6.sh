@@ -35,6 +35,5 @@ module load BASE/1.0
 setenv PYTHIA6_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib
 prepend-path AGILE_GEN_PATH \$::env(PYTHIA6_ROOT)
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib")
 EoF
 

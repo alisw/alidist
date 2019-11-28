@@ -41,5 +41,4 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 setenv LZMA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
 EoF

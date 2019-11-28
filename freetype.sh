@@ -40,5 +40,4 @@ module load BASE/1.0 $([[ "$ALIEN_RUNTIME_VERSION" ]] && echo AliEn-Runtime/$ALI
 setenv FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(FREETYPE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(FREETYPE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(FREETYPE_ROOT)/lib")
 EoF
