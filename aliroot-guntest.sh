@@ -18,3 +18,21 @@ cd test/gun
 
 # test outcome and return the error code
 WITHESDCHECK=${ALIPHYSICS_REVISION:+yes} ./finalcheck.sh
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+cat > "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION AliRoot-OCDB/$ALIROOT_OCDB_VERSION-$ALIROOT_OCDB_REVISION
+# Our environment
+setenv ALIROOT_GUNTEST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+EoF

@@ -1,7 +1,7 @@
 package: aurora
 version: alice1
-source: https://github.com/alisw/aurora
 tag: alice/0.16.0
+source: https://github.com/alisw/aurora
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ ./

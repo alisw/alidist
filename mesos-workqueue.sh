@@ -1,7 +1,7 @@
 package: mesos-workqueue
 version: 0.0.2-%(short_hash)s
-source: https://github.com/alisw/mesos-workqueue
 tag: master
+source: https://github.com/alisw/mesos-workqueue
 requires:
 - mesos
 - protobuf

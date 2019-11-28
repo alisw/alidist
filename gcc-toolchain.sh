@@ -4,7 +4,6 @@ tag: v7.3.0-alice1
 source: https://github.com/alisw/gcc-toolchain
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
-  "DYLD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
 build_requires:
  - autotools
  - yacc-like
@@ -101,7 +100,6 @@ popd
 # From now on, use own linker and GCC
 export PATH="$INSTALLROOT/bin:$PATH"
 export LD_LIBRARY_PATH="$INSTALLROOT/lib64:$INSTALLROOT/lib:$LD_LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="$INSTALLROOT/lib64:$INSTALLROOT/lib:$DYLD_LIBRARY_PATH"
 hash -r
 
 # Test own linker and own GCC

@@ -11,7 +11,6 @@ build_requires:
   - autotools
 prepend_path:
   LD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
-  DYLD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
 env:
   ThePEG_INSTALL_PATH: "$THEPEG_ROOT/lib/ThePEG"
 ---

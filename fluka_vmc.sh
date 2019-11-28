@@ -50,7 +50,6 @@ int loadFluka() {
 }
 EOF
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
-export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
 export ROOT_HIST=0
 root -l -b -q -n loadFluka.C++
 

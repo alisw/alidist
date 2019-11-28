@@ -1,7 +1,7 @@
 package: MPFR
 version: v3.1.3
-source: https://github.com/alisw/MPFR.git
 tag: v3.1.3
+source: https://github.com/alisw/MPFR.git
 build_requires:
   - autotools
   - GMP

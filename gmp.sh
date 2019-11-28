@@ -1,7 +1,7 @@
 package: GMP
 version: v6.0.0
-source: https://github.com/alisw/GMP.git
 tag: v6.0.0
+source: https://github.com/alisw/GMP.git
 requires:
  - "GCC-Toolchain:(?!osx)"
 ---
