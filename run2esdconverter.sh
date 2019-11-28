@@ -5,23 +5,34 @@ requires:
   - arrow
   - ROOT
   - "GCC-Toolchain:(?!osx)"
+  - ms_gsl
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Run2ESDConverter
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cd $BUILDDIR
+  cmake --build . -- ${JOBS+-j $JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
+fi
 
-cmake $SOURCEDIR                                 \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
-      -DROOTSYS=$ROOTSYS                         \
-      -DARROW_HOME=$ARROW_ROOT                   \
+cmake $SOURCEDIR                                \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
+      -DCMAKE_CXX_STANDARD=17                   \
+      -DROOTSYS=$ROOTSYS                        \
+      -DARROW_HOME=$ARROW_ROOT                  \
+      -DMS_GSL_ROOT=$MS_GSL_ROOT                \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-pwd
 cd $BUILDDIR
 cmake --build . -- ${JOBS+-j $JOBS} install
 
@@ -38,7 +49,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}  ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION} \\
+                     ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}     \\
+                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 set RUN2ESDCONVERTER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
