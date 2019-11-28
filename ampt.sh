@@ -10,7 +10,7 @@ requires:
 
 cmake  $SOURCEDIR                           \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
-       ${HEPMC_VERSION:+-DHEPMC_ROOT=$HEPMC_ROOT}
+       ${HEPMC_REVISION:+-DHEPMC_ROOT=$HEPMC_ROOT}
 
 make ${JOBS+-j $JOBS} install
 
@@ -27,7 +27,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${HEPMC_VERSION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
+module load BASE/1.0 ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 # Our environment
 setenv AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(AMPT_ROOT)/bin

@@ -57,7 +57,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 
 # Dependencies
 module load BASE/1.0                                                      \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             O2/$O2_VERSION-$O2_REVISION                                   \\
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION           \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION  \\

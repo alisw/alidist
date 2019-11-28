@@ -17,4 +17,4 @@ cd test/gun
 ./runtest.sh
 
 # test outcome and return the error code
-WITHESDCHECK=${ALIPHYSICS_VERSION:+yes} ./finalcheck.sh
+WITHESDCHECK=${ALIPHYSICS_REVISION:+yes} ./finalcheck.sh

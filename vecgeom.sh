@@ -34,7 +34,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 Vc/$VC_VERSION-$VC_REVISION ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
+module load BASE/1.0 Vc/$VC_VERSION-$VC_REVISION ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 # Our environment
 set osname [uname sysname]
 setenv VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
