@@ -79,17 +79,17 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0                                                                    \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                      \\
-            ${FAIRLOGGER_VERSION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
-            ${ZEROMQ_VERSION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
-            ${ASIOFI_VERSION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
-            ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION}
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                      \\
+            ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
+            ${ZEROMQ_REVISION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
+            ${ASIOFI_REVISION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
+            ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}
 # Our environment
-setenv FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(FAIRMQ_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(FAIRMQ_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include
-prepend-path ROOT_INCLUDE_PATH \$::env(FAIRMQ_ROOT)/include/fairmq
+set FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$FAIRMQ_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$FAIRMQ_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$FAIRMQ_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$FAIRMQ_ROOT/include/fairmq
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p $MODULEDIR && rsync -a --delete etc/modulefiles/ $MODULEDIR
