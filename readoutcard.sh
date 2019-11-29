@@ -63,10 +63,14 @@ module load BASE/1.0                                                          \\
             ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment
+set READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$READOUT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$READOUT_ROOT/lib
+
 setenv READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(READOUTCARD_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(READOUTCARD_ROOT)/lib
-prepend-path PYTHONPATH \$::env(READOUTCARD_ROOT)/lib
+prepend-path PATH \$READOUTCARD_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$READOUTCARD_ROOT/lib
+prepend-path PYTHONPATH \$READOUTCARD_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
