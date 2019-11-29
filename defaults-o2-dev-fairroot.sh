@@ -45,7 +45,7 @@ overrides:
     tag: cpp-3.1.1
   XRootD:
     version: "%(tag_basename)s_O2"
-    tag: "v4.10.0"
+    tag: "v4.11.0"
     source: https://github.com/xrootd/xrootd
 ---
 # This file is included in any build recipe and it's only used to set

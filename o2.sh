@@ -18,6 +18,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
+  - JAliEn-ROOT
 build_requires:
   - RapidJSON
   - googlebenchmark
