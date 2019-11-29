@@ -14,9 +14,6 @@ append_path:
   ROOT_PLUGIN_PATH: "$ALIEN_ROOT_LEGACY_ROOT/etc/plugins"
 prepend_path:
   ROOT_INCLUDE_PATH: "$ALIEN_ROOT_LEGACY_ROOT/include"
-env:
-  GSHELL_ROOT: "$ALIEN_ROOT_LEGACY_ROOT"
-  GSHELL_NO_GCC: "1"
 ---
 #!/bin/bash -e
 
@@ -39,16 +36,6 @@ cmake $BUILDDIR                                          \
       -DROOT_VERSION="$ROOT_MAJOR"
 
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
-
-for RPKG in $BUILD_REQUIRES; do
-  RPKG_UP=$(echo $RPKG|tr '[:lower:]' '[:upper:]'|tr '-' '_')
-  RPKG_ROOT=$(eval echo "\$${RPKG_UP}_ROOT")
-  rsync -a $RPKG_ROOT/ $INSTALLROOT/
-  pushd $INSTALLROOT/../../..
-    env WORK_DIR=$PWD sh -e $INSTALLROOT/relocate-me.sh
-  popd
-  rm -f $INSTALLROOT/etc/modulefiles/{$RPKG,$RPKG.unrelocated} || true
-done
 
 if [[ $ARCHITECTURE == osx* ]]; then
   # Due to some ROOT quirks, we create .so symlinks pointing to the real .dylib libs on macOS
@@ -77,12 +64,10 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSI
                      xalienfs/${XALIENFS_VERSION}-${XALIENFS_REVISION}
 
 # Our environment
-setenv ALIEN_ROOT_LEGACY_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv GSHELL_ROOT \$::env(ALIEN_ROOT_LEGACY_ROOT)
-setenv GSHELL_NO_GCC 1
-prepend-path PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/lib
-append-path ROOT_PLUGIN_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/etc/plugins
-prepend-path ROOT_INCLUDE_PATH \$::env(ALIEN_ROOT_LEGACY_ROOT)/include
+set ALIEN_ROOT_LEGACY_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$ALIEN_ROOT_LEGACY_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALIEN_ROOT_LEGACY_ROOT/lib
+append-path ROOT_PLUGIN_PATH \$ALIEN_ROOT_LEGACY_ROOT/etc/plugins
+prepend-path ROOT_INCLUDE_PATH \$ALIEN_ROOT_LEGACY_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

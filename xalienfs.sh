@@ -14,6 +14,9 @@ build_requires:
  - libperl
 prepend_path:
  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
+env:
+  GSHELL_ROOT: "$XALIENFS_ROOT"
+  GSHELL_NO_GCC: "1"
 ---
 #!/bin/bash -e
 [[ ! $SWIG_ROOT ]] && SWIG_LIB=`swig -swiglib`
@@ -61,7 +64,11 @@ module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
             AliEn-Runtime/${ALIEN_RUNTIME_VERSION}-${ALIEN_RUNTIME_REVISION}
 
 # Our environment
-setenv XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(XALIENFS_ROOT)/lib
-prepend-path PATH \$::env(XALIENFS_ROOT)/bin
+set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+
+setenv GSHELL_ROOT \$XALIENFS_ROOT
+setenv GSHELL_NO_GCC 1
+
+prepend-path LD_LIBRARY_PATH \$XALIENFS_ROOT/lib
+prepend-path PATH \$XALIENFS_ROOT/bin
 EoF
