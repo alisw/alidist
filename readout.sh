@@ -78,8 +78,8 @@ module load BASE/1.0                                                          \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
-setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(READOUT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(READOUT_ROOT)/lib
+set READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$READOUT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$READOUT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
