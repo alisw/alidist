@@ -1,6 +1,6 @@
 package: ReadoutCard
 version: "%(tag_basename)s"
-tag: v0.14.6
+tag: v0.15.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
