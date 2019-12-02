@@ -32,4 +32,4 @@ module load BASE/1.0 ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 setenv AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(AMPT_ROOT)/bin
 #prepend-path LD_LIBRARY_PATH \$::env(AMPT_ROOT)/lib
-#EoF
+EoF
