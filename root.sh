@@ -228,9 +228,9 @@ setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
 
-set ROOTSYS  \$::env(ROOTSYS)
-prepend-path PYTHONPATH \$ROOTSYS/lib
-prepend-path PATH \$ROOTSYS/bin
-prepend-path LD_LIBRARY_PATH \$ROOTSYS/lib
+set ROOT_ROOT  \$::env(ROOTSYS)
+prepend-path PYTHONPATH \$ROOT_ROOT/lib
+prepend-path PATH \$ROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
