@@ -180,7 +180,6 @@ prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$O2_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
