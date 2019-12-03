@@ -35,7 +35,6 @@ case $ARCHITECTURE in
     fi
   ;;
 esac
-
 cmake $SOURCEDIR                                                 \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}        \
