@@ -1,6 +1,6 @@
 package: treelite
 version: "%(tag_basename)s"
-tag: "2a12742269"
+tag: "a7a0839"
 source: https://github.com/dmlc/treelite
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -17,7 +17,8 @@ popd
 
 cmake src                                   \
   ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
-  -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
+  -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"     \
+  -DUSE_OPENMP=OFF
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
@@ -39,5 +40,6 @@ module load BASE/1.0
 set osname [uname sysname]
 prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
 prepend-path ROOT_INCLUDE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/include
+prepend-path ROOT_INCLUDE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/runtime/native/include
 prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF
