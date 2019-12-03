@@ -16,6 +16,7 @@ requires:
   - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
+  - XRootD
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -77,10 +78,9 @@ case $ARCHITECTURE in
 esac
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
-  # AliEn-Runtime: we take OpenSSL, XRootD and libxml2 from there, in case they
+  # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
   # were not taken from the system
   OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
-  XROOTD_ROOT=${XROOTD_VERSION:+$ALIEN_RUNTIME_ROOT}
   LIBXML2_ROOT=${LIBXML2_VERSION:+$ALIEN_RUNTIME_ROOT}
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
@@ -227,8 +227,10 @@ module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSI
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
-prepend-path PYTHONPATH \$::env(ROOTSYS)/lib
-prepend-path PATH \$::env(ROOTSYS)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
+
+set ROOT_ROOT  \$::env(ROOTSYS)
+prepend-path PYTHONPATH \$ROOT_ROOT/lib
+prepend-path PATH \$ROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
