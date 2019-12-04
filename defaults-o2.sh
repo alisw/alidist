@@ -29,7 +29,6 @@ overrides:
   fastjet:
     tag: "v3.3.2_1.041-alice1"
   XRootD:
-    version: "%(tag_basename)s_O2"
     tag: "v4.11.1-rc1-alice"
     source: https://github.com/atlantic777/xrootd
 ---

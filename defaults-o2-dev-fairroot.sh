@@ -44,7 +44,6 @@ overrides:
     version: "v3.1.1"
     tag: cpp-3.1.1
   XRootD:
-    version: "%(tag_basename)s_O2"
     tag: "v4.11.1-rc1-alice"
     source: https://github.com/atlantic777/xrootd
 ---
