@@ -103,8 +103,74 @@ else
 fi
 
 unset DYLD_LIBRARY_PATH
+
+mkdir -p ./src_tmp
+rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
+if [ 0`echo $PKGVERSION | grep -o ^v.` == 0v6 ] && [ "0$ARROW_HOME" != "0" ]; then
+
+patch -p0 <<EOF
+diff --git a/interpreter/CMakeLists.txt b/interpreter/CMakeLists.txt
+index ed753e72a65..52b9c5ae51a 100644
+--- src_tmp/interpreter/CMakeLists.txt
++++ src_tmp/interpreter/CMakeLists.txt
+@@ -114,7 +114,8 @@ if(clingtest)
+                                        ENVIRONMENT \${CLINGTEST_EXECUTABLE})
+ else()
+   #---Build LLVM/Clang with symbol visibility=hidden--------------------------------------------------
+-  ROOT_ADD_CXX_FLAG(CMAKE_CXX_FLAGS -fvisibility=hidden)
++  set(CMAKE_CXX_VISIBILITY_PRESET hidden)
++  set(CMAKE_C_VISIBILITY_PRESET hidden)
+ endif()
+ 
+ #--- Build LLVM/Clang with modules -----------------------------------------------------------------
+diff --git a/interpreter/cling/CMakeLists.txt b/interpreter/cling/CMakeLists.txt
+index e0faf77d355..8471a490e3f 100644
+--- src_tmp/interpreter/cling/CMakeLists.txt
++++ src_tmp/interpreter/cling/CMakeLists.txt
+@@ -311,6 +311,9 @@ string(REGEX REPLACE "[0-9].([0-9]+)~[a-zA-Z]+" "\\1" CLING_VERSION_MINOR \${CLIN
+ if(DEFINED ROOT_BINARY_DIR)
+   # Building as part of ROOT.
+   set(CLING_VERSION ROOT_\${CLING_VERSION})
++  set(CMAKE_CXX_VISIBILITY_PRESET default)
++  set(CMAKE_C_VISIBILITY_PRESET default)
++  set(CMAKE_VISIBILITY_INLINES_HIDDEN "ON")
+ endif()
+ message(STATUS "Cling version (from VERSION file): \${CLING_VERSION}")
+ 
+EOF
+patch -p0 <<EOF
+diff --git a/core/base/src/TROOT.cxx b/core/base/src/TROOT.cxx
+index 16fd2cb0b31..a912fdcac1b 100644
+--- src_tmp/core/base/src/TROOT.cxx
++++ src_tmp/core/base/src/TROOT.cxx
+@@ -2038,22 +2038,6 @@ void TROOT::InitInterpreter()
+    // rootcling.
+    if (!dlsym(RTLD_DEFAULT, "usedToIdentifyRootClingByDlSym")
+        && !dlsym(RTLD_DEFAULT, "usedToIdentifyStaticRoot")) {
+-      // Make sure no llvm symbols are visible before loading libCling. If they
+-      // exist libCling will use those and not ours, causing havoc in the
+-      // interpreter. Look for an extern "C" symbol to avoid mangling; look for a
+-      // symbol from llvm because clang builds on top, so users would likely
+-      // have also their own llvm symbols when providing their own clang.
+-      void *LLVMEnablePrettyStackTraceAddr = 0;
+-      // Can't use gSystem->DynFindSymbol() because that iterates over all *known*
+-      // libraries which is not the same!
+-      LLVMEnablePrettyStackTraceAddr = dlsym(RTLD_DEFAULT, "LLVMEnablePrettyStackTrace");
+-      // FIXME: When we configure with -Dclingtest=On we intentionally export the symbols. Silence this error.
+-      if (LLVMEnablePrettyStackTraceAddr) {
+-         Error("InitInterpreter()", "LLVM SYMBOLS ARE EXPOSED TO CLING! "
+-               "This will cause problems; please hide them or dlopen() them "
+-               "after the call to TROOT::InitInterpreter()!");
+-      }
+-
+       char *libRIO = gSystem->DynamicPathName("libRIO");
+       void *libRIOHandle = dlopen(libRIO, RTLD_NOW|RTLD_GLOBAL);
+       delete [] libRIO;
+EOF
+fi
+
 # Standard ROOT build
-cmake $SOURCEDIR                                                                       \
+cmake ./src_tmp                                                                        \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
