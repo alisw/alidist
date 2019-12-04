@@ -18,6 +18,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
+  - openmp
 build_requires:
   - RapidJSON
   - googlebenchmark
