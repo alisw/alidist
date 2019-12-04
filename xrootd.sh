@@ -12,14 +12,17 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
+[[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
+PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
+
 case $ARCHITECTURE in
   osx*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
+    MACOS_SYSROOT="$(find `xcode-select -p` -type d -path *usr/include/c++)"
+    PYTHON_EXECUTABLE="CFLAGS=\"${MACOS_SYSROOT}\" ${PYTHON_EXECUTABLE}"
   ;;
 esac
 
-[[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
-PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
 
 cmake "$SOURCEDIR"                                             \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                \
