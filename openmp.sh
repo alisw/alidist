@@ -6,6 +6,6 @@ system_requirement_missing: |
     * On Linux it comes with the compiler
 system_requirement: ".*"
 system_requirement_check: |
-  printf "#include <omp.h>\n" | c++ -xc++ - -c -o /dev/null
+  printf "#include <omp.h>\n" | c++ -xc++ - -fopenmp -c -o /dev/null
 ---
 
