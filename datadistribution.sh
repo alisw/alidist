@@ -66,9 +66,9 @@ set DATADISTRIBUTION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$DATADISTRIBUTION_ROOT/bin
 
 # Not used for now:
-# prepend-path LD_LIBRARY_PATH \$::env(DATADISTRIBUTION_ROOT)/lib
-# prepend-path LD_LIBRARY_PATH \$::env(DATADISTRIBUTION_ROOT)/lib64
-# prepend-path ROOT_INCLUDE_PATH \$::env(DATADISTRIBUTION_ROOT)/include
+# prepend-path LD_LIBRARY_PATH \$DATADISTRIBUTION_ROOT/lib
+# prepend-path LD_LIBRARY_PATH \$DATADISTRIBUTION_ROOT/lib64
+# prepend-path ROOT_INCLUDE_PATH \$DATADISTRIBUTION_ROOT/include
 
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
