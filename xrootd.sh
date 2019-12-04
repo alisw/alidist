@@ -23,7 +23,6 @@ case $ARCHITECTURE in
   ;;
 esac
 
-
 cmake "$SOURCEDIR"                                             \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                      \
