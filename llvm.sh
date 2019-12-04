@@ -20,7 +20,7 @@ case $ARCHITECTURE in
   # Needed to have the C headers
   osx*) 
     XCODE_PATH=`xcode-select -p`
-    DEFAULT_SYSROOT=$(find $XCODE_PATH -type d -path "*/MacOSX.sdk/usr/include")
+    DEFAULT_SYSROOT=$(find $XCODE_PATH -type d -path "*/MacOSX.sdk/usr/include" | sed -e 's|/usr/include||g')
   ;;
   *) DEFAULT_SYSROOT="" ;;
 esac
