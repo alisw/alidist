@@ -108,7 +108,7 @@ for F in $(echo /usr/bin/yum*) $(echo /usr/bin/rpm*); do
 done
 
 # Get OpenSSL and zlib at runtime from AliEn-Runtime if appropriate
-[[ $ALIEN_RUNTIME_VERSION ]] && unset OPENSSL_VERSION ZLIB_VERSION
+[[ $ALIEN_RUNTIME_VERSION ]] && unset OPENSSL_VERSION ZLIB_VERSION OPENSSL_REVISION ZLIB_REVISION
 
 # Test if Tcl/Tk support is enabled (requires tk-devel or similar installed)
 env PATH="$INSTALLROOT/bin:$PATH" \
