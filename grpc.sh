@@ -43,11 +43,6 @@ cmake $SOURCEDIR                                    \
 
 make ${JOBS:+-j$JOBS} install
 
-if [[ $ARCHITECTURE == osx* ]]; then
-
-  install_name_tool -change libgrpc_plugin_support.dylib @rpath/libgrpc_plugin_support.dylib $INSTALLROOT/bin/grpc_cpp_plugin
-
-fi
 
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

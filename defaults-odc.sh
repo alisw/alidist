@@ -12,11 +12,13 @@ disable:
   - AliRoot
 overrides:
   FairMQ:
-    tag: bump-dds
-    source: https://github.com/rbx/FairMQ/
+    tag: dev
+    source: https://github.com/FairRootGroup/FairMQ/
   DDS:
     tag: master
     source: https://github.com/FairRootGroup/DDS
   grpc:
-    version: v1.23.0
+    tag: v1.24.3-p1
+    source: https://github.com/FairRootGroup/grpc
+
 ---
