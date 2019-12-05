@@ -151,8 +151,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 # Our environment
-setenv PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(PYTHON_MODULES_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(PYTHON_MODULES_ROOT)/lib
-prepend-path PYTHONPATH $::env(PYTHON_MODULES_ROOT)/lib/python/site-packages
+set PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$PYTHON_MODULES_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$PYTHON_MODULES_ROOT/lib
+prepend-path PYTHONPATH \$PYTHON_MODULES_ROOT/lib/python/site-packages
 EoF

@@ -11,14 +11,6 @@ overrides:
     version: "%(tag_basename)s_JALIEN"
     tag: "v4.10.0"
     source: https://github.com/xrootd/xrootd
-    build_requires:
-      - CMake
-    requires:
-      - "GCC-Toolchain:(?!osx)"
-      - "OpenSSL:(?!osx)"
-      - "osx-system-openssl:(osx.*)"
-      - ApMon-CPP
-      - libxml2
   JDK:
     version: "12.0.1_JALIEN"
   libxml2:

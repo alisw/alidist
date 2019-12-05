@@ -1,6 +1,6 @@
 package: ALF
 version: "%(tag_basename)s"
-tag: v0.3.1
+tag: v0.4.0
 requires:
   - Common-O2
   - "dim:(?!osx)"
