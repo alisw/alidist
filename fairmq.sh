@@ -52,6 +52,7 @@ cmake $SOURCEDIR                                                 \
       -DDISABLE_COLOR=ON                                         \
       ${DDS_ROOT:+-DBUILD_DDS_PLUGIN=ON}                         \
       ${DDS_ROOT:+-DBUILD_SDK_COMMANDS=ON}                       \
+      ${DDS_ROOT:+-DBUILD_SDK=ON}                                \
       -DBUILD_NANOMSG_TRANSPORT=OFF                              \
       ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
