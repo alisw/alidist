@@ -6,6 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
   GEANT4_BUILD_MULTITHREADED: "ON"
+  ENABLE_VMC: "ON"
 disable:
   - AliEn-Runtime
   - JAliEn-ROOT
