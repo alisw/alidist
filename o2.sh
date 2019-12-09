@@ -18,6 +18,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
+  - JAliEn-ROOT
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -172,12 +173,13 @@ module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION
 # Our environment
 setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv VMCWORKDIR \$::env(O2_ROOT)/share
-prepend-path PATH \$::env(O2_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+
+set O2_ROOT \$::env(O2_ROOT)
+prepend-path PATH \$O2_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
-prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/GPU
-prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
+prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
+prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 

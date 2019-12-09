@@ -8,9 +8,8 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   XRootD:
-    version: "%(tag_basename)s_JALIEN"
-    tag: "v4.10.0"
-    source: https://github.com/xrootd/xrootd
+    tag: "v4.11.1-rc1-alice"
+    source: https://github.com/atlantic777/xrootd
   JDK:
     version: "12.0.1_JALIEN"
   libxml2:
