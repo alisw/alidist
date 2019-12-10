@@ -5,6 +5,7 @@ source: https://github.com/alisw/xrootd.git
 requires:
  - "OpenSSL:(?!osx)"
  - Python-modules
+ - AliEn-Runtime
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
@@ -34,7 +35,7 @@ cmake "$SOURCEDIR"                                             \
       -DENABLE_KRB5=OFF                                        \
       -DENABLE_READLINE=OFF                                    \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                        \
-      ${UUID_ROOT:+-I$UUID_ROOT/include -L$UUID_ROOT/lib}      \
+      ${UUID_ROOT:+-DUUID_ROOT=$UUID_ROOT}                      \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}        \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                     \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
