@@ -35,5 +35,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set JEWEL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(JEWEL_ROOT)/bin
+prepend-path PATH \$JEWEL_ROOT/bin
 EoF
