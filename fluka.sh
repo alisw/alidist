@@ -42,5 +42,5 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 set FLUKA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUFOR gfortran
-prepend-path PATH \$FLUKA_ROOT:\$::env(FLUKA_ROOT)/flutil
+prepend-path PATH \$FLUKA_ROOT:\$FLUKA_ROOT/flutil
 EoF
