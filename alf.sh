@@ -52,8 +52,8 @@ module load BASE/1.0                                                          \\
 
 # Our environment
 set ALF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(ALF_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALF_ROOT)/lib
-prepend-path PYTHONPATH \$::env(ALF_ROOT)/lib
+prepend-path PATH \$ALF_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALF_ROOT/lib
+prepend-path PYTHONPATH \$ALF_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

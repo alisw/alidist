@@ -26,7 +26,7 @@ module load BASE/1.0
 # Our environment
 setenv GOROOT \$::env(BASEDIR)/$PKGNAME/\$version
 # NOTE: upstream requires GOROOT to be defined if installing to a nonstandard path
-prepend-path PATH \$::env(GOROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(GOROOT)/lib
+prepend-path PATH \$GOROOT/bin
+prepend-path LD_LIBRARY_PATH \$GOROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

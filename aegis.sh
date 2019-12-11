@@ -35,6 +35,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION 
 # Our environment
 set AEGIS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(AEGIS_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(AEGIS_ROOT)/include
+prepend-path LD_LIBRARY_PATH \$AEGIS_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$AEGIS_ROOT/include
 EoF

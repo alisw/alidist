@@ -33,7 +33,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set PYTHIA6_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(PYTHIA6_ROOT)/lib
-prepend-path AGILE_GEN_PATH \$::env(PYTHIA6_ROOT)
+prepend-path LD_LIBRARY_PATH \$PYTHIA6_ROOT/lib
+prepend-path AGILE_GEN_PATH \$PYTHIA6_ROOT
 EoF
 

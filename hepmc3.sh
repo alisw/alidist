@@ -34,7 +34,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 # Our environment
 set HEPMC3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(HEPMC3_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(HEPMC3_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(HEPMC3_ROOT)/include
+prepend-path PATH \$HEPMC3_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$HEPMC3_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$HEPMC3_ROOT/include
 EoF

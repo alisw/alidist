@@ -32,7 +32,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 # Our environment
 set osname [uname sysname]
 set VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(VC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(VC_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(VC_ROOT)/include
+prepend-path PATH \$VC_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$VC_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$VC_ROOT/include
 EoF

@@ -132,6 +132,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}
 # Our environment
 set BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(BOOST_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(BOOST_ROOT)/include
+prepend-path LD_LIBRARY_PATH \$BOOST_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$BOOST_ROOT/include
 EoF

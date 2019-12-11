@@ -30,8 +30,8 @@ module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${BOOST_REVISION:+boost/$
 setenv ROOUNFOLD_RELEASE \$version
 setenv ROOUNFOLD_VERSION $PKGVERSION
 setenv ROOUNFOLD_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ROOUNFOLD_RELEASE)
-prepend-path PATH \$::env(ROOUNFOLD_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ROOUNFOLD_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(ROOUNFOLD_ROOT)/include
+prepend-path PATH \$ROOUNFOLD_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ROOUNFOLD_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$ROOUNFOLD_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

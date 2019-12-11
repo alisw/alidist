@@ -41,7 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set ALIEN_RUNTIME_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_ROOT)/lib
-prepend-path PATH \$::env(ALIEN_RUNTIME_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$ALIEN_RUNTIME_ROOT/lib
+prepend-path PATH \$ALIEN_RUNTIME_ROOT/bin
 setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
 EoF

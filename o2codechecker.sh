@@ -32,7 +32,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${CLANG_REVISION:+Clang/$CLANG_VERSION-$CLANG_REVISION}
 # Our environment
 set O2CODECHECKER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(O2CODECHECKER_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(O2CODECHECKER_ROOT)/lib
+prepend-path PATH \$O2CODECHECKER_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$O2CODECHECKER_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

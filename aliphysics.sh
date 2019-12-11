@@ -84,8 +84,8 @@ module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${ROOUNFOLD_REVI
 setenv ALIPHYSICS_VERSION \$version
 setenv ALIPHYSICS_RELEASE \$::env(ALIPHYSICS_VERSION)
 setenv ALICE_PHYSICS \$::env(BASEDIR)/$PKGNAME/\$::env(ALIPHYSICS_RELEASE)
-prepend-path PATH \$::env(ALICE_PHYSICS)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALICE_PHYSICS)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(ALICE_PHYSICS)/include
+prepend-path PATH \$ALICE_PHYSICS/bin
+prepend-path LD_LIBRARY_PATH \$ALICE_PHYSICS/lib
+prepend-path ROOT_INCLUDE_PATH \$ALICE_PHYSICS/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -71,5 +71,5 @@ module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${GCC_T
 set FLUKA_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUVMC \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version/data
-prepend-path LD_LIBRARY_PATH \$::env(FLUKA_VMC_ROOT)/lib
+prepend-path LD_LIBRARY_PATH \$FLUKA_VMC_ROOT/lib
 EoF

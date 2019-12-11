@@ -96,8 +96,8 @@ setenv G4NEUTRONHPDATA $G4NEUTRONHPDATA
 setenv G4NEUTRONXSDATA $G4NEUTRONXSDATA
 setenv G4SAIDXSDATA $G4SAIDXSDATA
 setenv G4ENSDFSTATEDATA $G4ENSDFSTATEDATA
-prepend-path PATH \$::env(GEANT4_ROOT)/bin
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include/Geant4
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include
-prepend-path LD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib
+prepend-path PATH \$GEANT4_ROOT/bin
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include/Geant4
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include
+prepend-path LD_LIBRARY_PATH \$GEANT4_ROOT/lib
 EoF

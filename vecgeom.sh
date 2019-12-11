@@ -38,6 +38,6 @@ module load BASE/1.0 Vc/$VC_VERSION-$VC_REVISION ${ROOT_REVISION:+ROOT/$ROOT_VER
 # Our environment
 set osname [uname sysname]
 set VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(VC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(VC_ROOT)/lib
+prepend-path PATH \$VC_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$VC_ROOT/lib
 EoF

@@ -34,6 +34,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set HDF5_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(HDF5_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(HDF5_ROOT)/lib
+prepend-path PATH \$HDF5_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$HDF5_ROOT/lib
 EoF

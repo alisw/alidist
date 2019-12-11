@@ -50,7 +50,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 HepMC/$HEPMC_VERSION-$HEPMC_REVISION lhapdf5/${LHAPDF5_VERSION}-${LHAPDF5_REVISION} ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}
 # Our environment
 set AGILE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PYTHONPATH \$::env(AGILE_ROOT)/lib/python2.7/site-packages
-prepend-path PATH \$::env(AGILE_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(AGILE_ROOT)/lib
+prepend-path PYTHONPATH \$AGILE_ROOT/lib/python2.7/site-packages
+prepend-path PATH \$AGILE_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$AGILE_ROOT/lib
 EoF

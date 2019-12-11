@@ -31,6 +31,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set DPMJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(DPMJET_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(DPMJET_ROOT)/lib
+prepend-path PATH \$DPMJET_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$DPMJET_ROOT/lib
 EoF

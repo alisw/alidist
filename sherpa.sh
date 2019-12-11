@@ -45,7 +45,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 # Our environment
 set SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv SHERPA_INSTALL_PATH \$::env(SHERPA_ROOT)/lib/SHERPA
-prepend-path PATH \$::env(SHERPA_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(SHERPA_ROOT)/lib
-prepend-path LD_LIBRARY_PATH \$::env(SHERPA_ROOT)/lib/SHERPA-MC
+prepend-path PATH \$SHERPA_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib/SHERPA-MC
 EoF

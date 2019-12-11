@@ -155,7 +155,7 @@ if { "\$mod_name" == "GCC-Toolchain" } {
 }
 # Our environment
 setenv GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
-prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib
-prepend-path LD_LIBRARY_PATH \$::env(GCC_TOOLCHAIN_ROOT)/lib64
-prepend-path PATH \$::env(GCC_TOOLCHAIN_ROOT)/bin
+prepend-path LD_LIBRARY_PATH \$GCC_TOOLCHAIN_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$GCC_TOOLCHAIN_ROOT/lib64
+prepend-path PATH \$GCC_TOOLCHAIN_ROOT/bin
 EoF

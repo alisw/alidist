@@ -36,7 +36,7 @@ module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 # Our environment
 set osname [uname sysname]
 set MCSTEPLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(MCSTEPLOGGER_ROOT)/lib
-prepend-path PATH \$::env(MCSTEPLOGGER_ROOT)/bin
-prepend-path ROOT_INCLUDE_PATH \$::env(MCSTEPLOGGER_ROOT)/include
+prepend-path LD_LIBRARY_PATH \$MCSTEPLOGGER_ROOT/lib
+prepend-path PATH \$MCSTEPLOGGER_ROOT/bin
+prepend-path ROOT_INCLUDE_PATH \$MCSTEPLOGGER_ROOT/include
 EoF

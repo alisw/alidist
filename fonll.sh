@@ -44,5 +44,5 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 # Our environment
 set FONLL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FONLL_NPDF \$::env(FONLL_ROOT)/share/nPDF
-prepend-path PATH \$::env(FONLL_ROOT)/bin
+prepend-path PATH \$FONLL_ROOT/bin
 EoF

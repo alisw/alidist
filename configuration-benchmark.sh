@@ -47,7 +47,7 @@ module load BASE/1.0                                                          \\
 
 # Our environment
 set CONFIGURATION_BENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CONFIGURATION_BENCHMARK_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(CONFIGURATION_BENCHMARK_ROOT)/lib
+prepend-path PATH \$CONFIGURATION_BENCHMARK_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CONFIGURATION_BENCHMARK_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
