@@ -5,11 +5,13 @@ source: https://github.com/alisw/xrootd.git
 requires:
  - "OpenSSL:(?!osx)"
  - Python-modules
+ - AliEn-Runtime
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
  - libxml2
  - "GCC-Toolchain:(?!osx)"
+ - UUID
 ---
 #!/bin/bash -e
 [[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
@@ -33,6 +35,7 @@ cmake "$SOURCEDIR"                                             \
       -DENABLE_KRB5=OFF                                        \
       -DENABLE_READLINE=OFF                                    \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                        \
+      ${UUID_ROOT:+-DUUID_ROOT=$UUID_ROOT}                      \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}        \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                     \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
@@ -55,7 +58,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 \
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
-            ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}
+            ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
+            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 
 # Our environment
 set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
