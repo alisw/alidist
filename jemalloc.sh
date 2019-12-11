@@ -33,5 +33,5 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 set JEMALLOC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$JEMALLOC_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$JEMALLOC_ROOT/lib
-set LD_PRELOAD \$::env(JEMALLOC_ROOT)/lib/libjemalloc.so
+setenv LD_PRELOAD \$::env(JEMALLOC_ROOT)/lib/libjemalloc.so
 EoF

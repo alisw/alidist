@@ -43,7 +43,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ThePEG/$THEPEG_VERSION-$THEPEG_REVISION lhapdf-pdfsets/$LHAPDF_PDFSETS_VERSION-$LHAPDF_PDFSETS_REVISION
 # Our environment
 set HERWIG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-set HERWIG_INSTALL_PATH \$::env(HERWIG_ROOT)/lib/Herwig
+setenv HERWIG_INSTALL_PATH \$::env(HERWIG_ROOT)/lib/Herwig
 prepend-path PATH \$HERWIG_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$HERWIG_ROOT/lib/Herwig
 EoF
