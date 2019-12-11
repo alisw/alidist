@@ -51,7 +51,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${LHAPDF_REVISION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION} ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 # Our environment
 set PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc
+set PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc
 setenv PYTHIA8 \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$PYTHIA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHIA_ROOT/lib

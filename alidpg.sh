@@ -22,6 +22,6 @@ module load BASE/1.0
 # Our environment
 setenv ALIDPG_RELEASE \$version
 setenv ALIDPG_VERSION $PKGVERSION
-setenv ALIDPG_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIDPG_RELEASE)
+set ALIDPG_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIDPG_RELEASE)
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

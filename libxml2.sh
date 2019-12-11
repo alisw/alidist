@@ -36,7 +36,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 setenv LIBXML2_VERSION \$version
-setenv LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(LIBXML2_VERSION)
+set LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(LIBXML2_VERSION)
 prepend-path PATH \$LIBXML2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBXML2_ROOT/lib
 EoF

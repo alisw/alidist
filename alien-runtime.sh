@@ -43,5 +43,5 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 set ALIEN_RUNTIME_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$ALIEN_RUNTIME_ROOT/lib
 prepend-path PATH \$ALIEN_RUNTIME_ROOT/bin
-setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
+set X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
 EoF

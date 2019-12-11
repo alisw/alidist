@@ -45,7 +45,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${PYTHON_MODULES_ROOT:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 # Our environment
 set LHAPDF5_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv LHAPATH \$::env(LHAPDF5_ROOT)/share/lhapdf
+set LHAPATH \$::env(LHAPDF5_ROOT)/share/lhapdf
 prepend-path PATH $::env(LHAPDF5_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(LHAPDF5_ROOT)/lib
 EoF

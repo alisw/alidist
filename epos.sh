@@ -62,5 +62,5 @@ set EPOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(EPOS_ROOT)/bin
 setenv EPOVSN ${EPOVSN}
 # Final slash is required by EPOS, please leave it be
-setenv EPO $::env(EPOS_ROOT)/epos/
+set EPO $::env(EPOS_ROOT)/epos/
 EoF
