@@ -119,5 +119,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
 # Our environment
-setenv O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF

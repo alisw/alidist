@@ -44,7 +44,7 @@ module load BASE/1.0 \\
             ${PPCONSUL_REVISION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}
 
 # Our environment
-setenv CONFIGURATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set CONFIGURATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CONFIGURATION_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(CONFIGURATION_ROOT)/lib
 EoF

@@ -25,7 +25,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv AURORA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set AURORA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(AURORA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(AURORA_ROOT)/lib
 prepend-path PERL5LIB $::env(AURORA_ROOT)/lib/perl5

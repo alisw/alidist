@@ -74,7 +74,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 cgal/$CGAL_VERSION-$CGAL_REVISION
 # Our environment
-setenv FASTJET \$::env(BASEDIR)/$PKGNAME/\$version
+set FASTJET \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(FASTJET_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FASTJET_ROOT)/lib

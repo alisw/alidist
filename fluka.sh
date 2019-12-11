@@ -39,7 +39,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv FLUKA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FLUKA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUFOR gfortran
 prepend-path PATH \$::env(FLUKA_ROOT):\$::env(FLUKA_ROOT)/flutil

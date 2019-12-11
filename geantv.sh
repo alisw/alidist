@@ -40,7 +40,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 Pythia/$PYTHIA_VERSION-$PYTHIA_REVISION Vc/$VC_VERSION-$VC_REVISION VecGeom/$VECGEOM_VERSION-$VECGEOM_REVISION GEANT4/$GEANT4_VERSION-$GEANT4_REVISION HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION
 # Our environment
 set osname [uname sysname]
-setenv GEANTV_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set GEANTV_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(GEANTV_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(GEANTV_ROOT)/lib
 EoF

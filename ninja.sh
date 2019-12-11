@@ -24,7 +24,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv NINJA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set NINJA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(NINJA_ROOT)/bin
 EoF
 

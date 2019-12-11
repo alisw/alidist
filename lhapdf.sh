@@ -65,7 +65,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
                      ${PYTHON_MODULES_ROOT:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} 
 # Our environment
-setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(LHAPDF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
 prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python/site-packages

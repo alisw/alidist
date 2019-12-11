@@ -28,7 +28,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv GOOGLEBENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set GOOGLEBENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(GOOGLEBENCHMARK_ROOT)/lib
 EoF
 

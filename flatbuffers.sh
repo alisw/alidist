@@ -37,7 +37,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${ZLIB_REVISION:+zlib/${ZLIB_VERSION}-${ZLIB_REVISION}}
 # Our environment
-setenv FLATBUFFERS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FLATBUFFERS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(FLATBUFFERS_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(FLATBUFFERS_ROOT)/lib
 prepend-path PATH \$::env(FLATBUFFERS_ROOT)/bin

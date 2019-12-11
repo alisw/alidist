@@ -43,7 +43,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv SHERPA_INSTALL_PATH \$::env(SHERPA_ROOT)/lib/SHERPA
 prepend-path PATH \$::env(SHERPA_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(SHERPA_ROOT)/lib

@@ -86,7 +86,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION}
 # Our environment
-setenv THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
 prepend-path PATH \$::env(THEPEG_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(THEPEG_ROOT)/lib/ThePEG

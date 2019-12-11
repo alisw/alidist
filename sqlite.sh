@@ -34,7 +34,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv SQLITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set SQLITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH $::env(SQLITE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH $::env(SQLITE_ROOT)/lib
 EoF

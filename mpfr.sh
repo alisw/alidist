@@ -37,6 +37,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$::env(MPFR_ROOT)/lib
 EoF

@@ -69,7 +69,7 @@ module load BASE/1.0                                                      \\
             QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION
 
 # Our environment
-setenv FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 

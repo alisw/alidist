@@ -37,7 +37,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 lhapdf5/$LHAPDF5_VERSION-$LHAPDF5_REVISION ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}
 # Our environment
-setenv POWHEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set POWHEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv Powheg_INSTALL_PATH \$::env(POWHEG_ROOT)/lib/Powheg
 prepend-path PATH \$::env(POWHEG_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(POWHEG_ROOT)/lib/Powheg
