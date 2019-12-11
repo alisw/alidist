@@ -28,5 +28,6 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
+set BASEDIR \$::env(BASEDIR)
 prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
 EoF

@@ -32,6 +32,7 @@ module load BASE/1.0                                                            
 
 # Our environment
 set PDA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set BASEDIR \$::env(BASEDIR)
 prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
 prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
 EoF
