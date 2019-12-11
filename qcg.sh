@@ -1,6 +1,6 @@
 package: qcg
-version: v1.6.6
-tag: "@aliceo2/qc@1.6.6"
+version: v1.6.7
+tag: "@aliceo2/qc@1.6.7"
 requires:
   - node
   - QualityControl
@@ -41,7 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${NODE_REVISION:+node/$NODE_VERSION-$NODE_REVISION} ${QUALITYCONTROL_REVISION:+QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION}
 # Our environment
-setenv QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv NODE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/node_modules
-prepend-path PATH \$::env(QCG_ROOT)/bin
+prepend-path PATH \$QCG_ROOT/bin
 EoF

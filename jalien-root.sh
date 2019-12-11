@@ -4,6 +4,7 @@ tag: "0.5.2"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
+  - xjalienfs
 build_requires:
   - libwebsockets
   - json-c
@@ -42,7 +43,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                  \\
+                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}
 
 # Our environment
 set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

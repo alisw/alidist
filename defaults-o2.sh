@@ -7,11 +7,6 @@ env:
   CXXSTD: "17"
   GEANT4_BUILD_MULTITHREADED: "ON"
   ENABLE_VMC: "ON"
-disable:
-  - AliEn-Runtime
-  - JAliEn-ROOT
-  - AliEn-ROOT-Legacy
-  - ApMon-CPP
 overrides:
   AliRoot:
     version: "%(commit_hash)s_O2"
@@ -22,6 +17,7 @@ overrides:
       - GEANT4_VMC
       - Vc
       - ZeroMQ
+      - JAliEn-ROOT
   pythia:
     requires:
       - lhapdf
@@ -33,9 +29,8 @@ overrides:
   fastjet:
     tag: "v3.3.2_1.041-alice1"
   XRootD:
-    version: "%(tag_basename)s_O2"
-    tag: "v4.10.0"
-    source: https://github.com/xrootd/xrootd
+    tag: "v4.11.1-rc1-alice"
+    source: https://github.com/atlantic777/xrootd
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
