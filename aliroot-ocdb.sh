@@ -1,7 +1,7 @@
 package: AliRoot-OCDB
-source: https://gitlab.cern.ch/alisw/AliRootOCDB.git
 version: "%(short_hash)s"
 tag: master
+source: https://gitlab.cern.ch/alisw/AliRootOCDB.git
 ---
 #!/bin/bash -e
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $INSTALLROOT/
