@@ -28,7 +28,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} cctools/$CCTOOLS_VERSION-$CCTOOLS_REVISION
 # Our environment
-setenv ALIEN_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALIEN_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(ALIEN_WORKQUEUE_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALIEN_WORKQUEUE_ROOT)/lib
 EoF

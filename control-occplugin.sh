@@ -63,7 +63,7 @@ module load BASE/1.0 \\
             ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION}
 
 # Our environment
-setenv CONTROL_OCCPLUGIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set CONTROL_OCCPLUGIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(CONTROL_OCCPLUGIN_ROOT)/lib
 EoF

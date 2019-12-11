@@ -29,6 +29,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set osname [uname sysname]
-setenv MS_GSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set MS_GSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path ROOT_INCLUDE_PATH \$::env(MS_GSL_ROOT)/include
 EoF

@@ -41,7 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
-setenv COMMON_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set COMMON_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(COMMON_O2_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib
 EoF

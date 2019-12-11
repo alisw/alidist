@@ -72,7 +72,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} yaml-cpp
 # Our environment
-setenv ALO_ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALO_ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 
 prepend-path PATH \$::env(ALO_ALIROOT_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALO_ALIROOT_ROOT)/lib
