@@ -30,16 +30,29 @@ rsync -a --delete --cvs-exclude --exclude .git $SOURCEDIR/ ./
 pushd fastjet
   autoreconf -i -v -f
   [[ "${ARCHITECTURE:0:3}" != osx ]] && ARCH_FLAGS='-Wl,--no-as-needed'
-  ADDITIONAL_FLAGS="-L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
-  export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
-  export CFLAGS="$CFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
-  export CPATH="${BOOST_INC}$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
-  export C_INCLUDE_PATH="${BOOST_INC}$GMP_ROOT/include:$MPFR_ROOT/include"
-  ./configure --enable-shared         \
-              --enable-cgal           \
-              --with-cgal=$CGAL_ROOT  \
-              --prefix=$INSTALLROOT   \
-              --enable-allcxxplugins
+  if [[ $GIT_TAG < "v3.3.3" ]]
+  then
+    ADDITIONAL_FLAGS="-L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+    export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
+    export CFLAGS="$CFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
+    export CPATH="${BOOST_INC}$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
+    export C_INCLUDE_PATH="${BOOST_INC}$GMP_ROOT/include:$MPFR_ROOT/include"
+    ./configure --enable-shared         \
+                --enable-cgal           \
+                --with-cgal=$CGAL_ROOT  \
+                --prefix=$INSTALLROOT   \
+                --enable-allcxxplugins
+  else
+    export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS"
+    ./configure --enable-shared         \
+                --enable-cgal           \
+                --with-cgaldir=$CGAL_ROOT  \
+                --with-cgal-boostdir=$BOOST_ROOT  \
+                --with-cgal-gmpdir=$GMP_ROOT  \
+                --with-cgal-mpfrdir=$MPFR_ROOT  \
+                --prefix=$INSTALLROOT   \
+                --enable-allcxxplugins
+  fi
   make ${JOBS:+-j$JOBS}
   make install
 popd
@@ -72,10 +85,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 cgal/$CGAL_VERSION-$CGAL_REVISION
+module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}
 # Our environment
-set FASTJET \$::env(BASEDIR)/$PKGNAME/\$version
 set FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FASTJET \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$FASTJET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FASTJET_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FASTJET_ROOT/include
