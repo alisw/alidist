@@ -1,17 +1,18 @@
-package: RapidJSON
-version: "%(tag_basename)s"
-tag: 091de040edb3355dcf2f4a18c425aec51b906f08
-source: https://github.com/Tencent/rapidjson.git
+package: re2
+version: "2019-09-01"
+source: https://github.com/google/re2
 build_requires:
-  - CMake
+ - "GCC-Toolchain:(?!osx)"
+ - CMake
 ---
 #!/bin/sh
+cmake $SOURCEDIR                           \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
-cmake $SOURCEDIR                                                       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
+make ${JOBS+-j $JOBS}
+make install
 
-make ${JOBS:+-j$JOBS} install
-
+# Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
@@ -25,5 +26,4 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0
-# Our environment
 EoF

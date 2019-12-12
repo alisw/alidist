@@ -1,6 +1,6 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v0.10.1"
+tag: "v0.11.1"
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - golang
@@ -39,6 +39,5 @@ module load BASE/1.0 \\
 set CONTROL_CORE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$CONTROL_CORE_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CONTROL_CORE_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$CONTROL_CORE_ROOT/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

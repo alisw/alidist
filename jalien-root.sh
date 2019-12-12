@@ -1,9 +1,10 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.5.1"
+tag: "0.5.2"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
+  - xjalienfs
 build_requires:
   - libwebsockets
   - json-c
@@ -42,14 +43,15 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                  \\
+                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}
 
 # Our environment
-setenv JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(JALIEN_ROOT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib
-append-path ROOT_PLUGIN_PATH \$::env(JALIEN_ROOT_ROOT)/etc/plugins
-prepend-path ROOT_INCLUDE_PATH \$::env(JALIEN_ROOT_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(JALIEN_ROOT_ROOT)/lib")
+set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$JALIEN_ROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$JALIEN_ROOT_ROOT/lib
+append-path ROOT_PLUGIN_PATH \$JALIEN_ROOT_ROOT/etc/plugins
+prepend-path ROOT_INCLUDE_PATH \$JALIEN_ROOT_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

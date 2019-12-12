@@ -1,6 +1,6 @@
 package: ALF
 version: "%(tag_basename)s"
-tag: v0.2.1
+tag: v0.4.0
 requires:
   - Common-O2
   - "dim:(?!osx)"
@@ -55,6 +55,5 @@ setenv ALF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(ALF_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(ALF_ROOT)/lib
 prepend-path PYTHONPATH \$::env(ALF_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALF_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

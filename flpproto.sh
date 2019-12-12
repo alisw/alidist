@@ -12,6 +12,7 @@ requires:
   - Readout
   - qcg
   - QualityControl
+  - ALF
 source: https://github.com/AliceO2Group/FlpPrototype
 valid_defaults:
   - o2

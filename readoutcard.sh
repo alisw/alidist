@@ -1,10 +1,11 @@
 package: ReadoutCard
 version: "%(tag_basename)s"
-tag: v0.12.0
+tag: v0.15.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
+  - Configuration
   - libInfoLogger
   - "PDA:slc7.*"
   - Python
@@ -32,6 +33,7 @@ cmake $SOURCEDIR                                                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
       ${COMMON_O2_VERSION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
+      ${CONFIGURATION_VERSION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
       ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
       ${PDA_VERSION:+-DPDA_ROOT=$PDA_ROOT}                            \
       ${PYTHON_VERSION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}            \
@@ -55,16 +57,16 @@ module load BASE/1.0                                                          \\
             ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
             ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
+            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}        \\
             ${PDA_VERSION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment
-setenv READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(READOUTCARD_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(READOUTCARD_ROOT)/lib
-prepend-path PYTHONPATH \$::env(READOUTCARD_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(READOUTCARD_ROOT)/lib")
+set READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$READOUTCARD_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$READOUTCARD_ROOT/lib
+prepend-path PYTHONPATH \$READOUTCARD_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
