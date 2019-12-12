@@ -11,7 +11,7 @@ build_requires:
  - "osx-system-openssl:(osx.*)"
  - libxml2
  - "GCC-Toolchain:(?!osx)"
- - UUID
+ - UUID:(?!osx)
 ---
 #!/bin/bash -e
 [[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
@@ -24,6 +24,7 @@ case $ARCHITECTURE in
     MACOS_SYSROOT="$(find `xcode-select -p` -type d -path *usr/include/c++)"
     PYTHON_EXECUTABLE="CFLAGS=\"${MACOS_SYSROOT}\" ${PYTHON_EXECUTABLE}"
     SONAME="dylib"
+    unset UUID_ROOT
   ;;
 esac
 
