@@ -17,27 +17,31 @@ build_requires:
 [[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
 PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
 
+SONAME="so"
 case $ARCHITECTURE in
   osx*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
     MACOS_SYSROOT="$(find `xcode-select -p` -type d -path *usr/include/c++)"
     PYTHON_EXECUTABLE="CFLAGS=\"${MACOS_SYSROOT}\" ${PYTHON_EXECUTABLE}"
+    SONAME="dylib"
   ;;
 esac
 
-cmake "$SOURCEDIR"                                             \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                      \
-      -DCMAKE_INSTALL_LIBDIR=lib                               \
-      -DENABLE_CRYPTO=ON                                       \
-      -DENABLE_PERL=OFF                                        \
-      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE} \
-      -DENABLE_KRB5=OFF                                        \
-      -DENABLE_READLINE=OFF                                    \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo                        \
-      ${UUID_ROOT:+-DUUID_ROOT=$UUID_ROOT}                      \
-      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}        \
-      ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                     \
+cmake "$SOURCEDIR"                                                    \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      -DCMAKE_INSTALL_LIBDIR=lib                                      \
+      -DENABLE_CRYPTO=ON                                              \
+      -DENABLE_PERL=OFF                                               \
+      -DENABLE_PYTHON=ON                                              \
+      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
+      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.${SONAME}} \
+      ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
+      -DENABLE_KRB5=OFF                                               \
+      -DENABLE_READLINE=OFF                                           \
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
+      ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
