@@ -33,9 +33,9 @@ cmake "$SOURCEDIR"                                                    \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
-      -DENABLE_PYTHON=ON                                              \
+      ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
-      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.${SONAME}} \
+      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.$SONAME}   \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
       -DENABLE_KRB5=OFF                                               \
       -DENABLE_READLINE=OFF                                           \
