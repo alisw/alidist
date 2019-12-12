@@ -12,6 +12,11 @@ prefer_system_check: |
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ ./
 make -j ${JOBS+-j $JOBS}
 make PREFIX=$INSTALLROOT INCLUDEDIR=$INSTALLROOT/include install
+case $ARCHITECTURE in
+  osx*)
+    install_name_tool -id liblz4.dylib $INSTALLROOT/lib/liblz4.dylib
+  ;;
+esac
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

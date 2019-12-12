@@ -9,8 +9,6 @@ requires:
 build_requires:
   - CMake
 source: https://github.com/grpc/grpc
-prefer_system: "(?!slc5)"
-prefer_system_check: which grpc_cpp_plugin
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

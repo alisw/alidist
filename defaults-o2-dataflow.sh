@@ -19,6 +19,9 @@ disable:
   - pythia6
   - hijing
   - HepMC3
+  - XRootD
+  - xjalienfs
+  - JAliEn-ROOT
 overrides:
   O2:
     version: "%(short_hash)s%(defaults_upper)s"

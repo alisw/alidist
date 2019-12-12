@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v1.0.1
+tag: v1.2.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -26,8 +26,14 @@ case $ARCHITECTURE in
     osx*) 
 	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
         [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+        [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
     ;;
 esac
+
+# Enforce no warning code in the PR checker
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+fi
 
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
@@ -41,7 +47,7 @@ cmake $SOURCEDIR                                                         \
       ${FAIRMQ_VERSION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
       ${FAIRLOGGER_VERSION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
       ${PYTHON_VERSION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
-      ${LZ4_VERSION:+-DLZ4_DIR=$LZ4_ROOT}                                \
+      ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_VERSION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
@@ -72,9 +78,8 @@ module load BASE/1.0                                                          \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
-setenv READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(READOUT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(READOUT_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(READOUT_ROOT)/lib")
+set READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$READOUT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$READOUT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

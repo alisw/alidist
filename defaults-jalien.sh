@@ -2,24 +2,14 @@ package: defaults-jalien
 version: v1
 disable:
   - arrow
-  - treelite
 env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   XRootD:
-    version: "%(tag_basename)s_JALIEN"
-    tag: "v4.8.6"
-    source: https://github.com/xrootd/xrootd
-    build_requires:
-      - CMake
-    requires:
-      - "GCC-Toolchain:(?!osx)"
-      - "OpenSSL:(?!osx)"
-      - "osx-system-openssl:(osx.*)"
-      - ApMon-CPP
-      - libxml2
+    tag: "v4.11.1-rc1-alice"
+    source: https://github.com/atlantic777/xrootd
   JDK:
     version: "12.0.1_JALIEN"
   libxml2:
@@ -45,10 +35,10 @@ overrides:
       - autotools
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-50-01
+    tag: v5-09-51-01
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-50
+    tag: v5-09-51
     requires:
       - ROOT
       - DPMJET

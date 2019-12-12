@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.16.0
+tag: v0.19.6 
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -18,11 +18,15 @@ source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
-  # Limit parallel builds to prevent OOM
-  JOBS=$((${JOBS:-1}*3/5))
-  [[ $JOBS -gt 0 ]] || JOBS=1
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
+  if [[ $ALIBUILD_O2_TESTS ]]; then
+    echo "Run the tests"
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
+    ctest --output-on-failure -LE manual -E testWorkflow ${JOBS+-j $JOBS}
+  fi
 ---
 #!/bin/bash -ex
 
@@ -36,8 +40,18 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
+fi
+
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
@@ -52,16 +66,13 @@ cmake $SOURCEDIR                                              \
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
-# Limit parallel builds to prevent OOM
-JOBS=$((${JOBS:-1}*3/5))
-[[ $JOBS -gt 0 ]] || JOBS=1
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
 if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-  ctest --output-on-failure -LE manual ;# ${JOBS+-j $JOBS}
+  ctest --output-on-failure -LE manual -E testWorkflow ${JOBS+-j $JOBS}
 fi
 
 # Modulefile
@@ -92,6 +103,26 @@ prepend-path PATH \$::env(QUALITYCONTROL_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64
 prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib" && echo "prepend-path DYLD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# Create code coverage information to be uploaded
+# by the calling driver to codecov.io or similar service
+if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
+  rm -rf coverage.info
+  lcov --base-directory $SOURCEDIR --directory . --capture --output-file coverage.info
+  lcov --remove coverage.info '*/usr/*' --output-file coverage.info
+  lcov --remove coverage.info '*/boost/*' --output-file coverage.info
+  lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
+  lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
+  lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
+  perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
+  perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
+  perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
+  lcov --list coverage.info
+fi
+
+# Add extra RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EOF
+glfw # because the build machine some times happen to have glfw installed. Then it is necessary to have it in the destination
+EOF

@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "c672f280ec8382cb2dc10b85c5fa4e64e13c5975"
+tag: "6af7e848585ce720e96a01d5565b1bd5e3884430"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -11,6 +11,7 @@ requires:
   - DDS
   - FairLogger
   - FairMQ
+  - yaml-cpp
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
@@ -80,6 +81,7 @@ done
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
+
 cat > "$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {

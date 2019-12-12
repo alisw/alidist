@@ -19,7 +19,7 @@ make install
 
 PDFSETS="cteq6lg CT10 CT10nlo MSTW2008nnlo_mcrange EPS09LOR_208 EPS09NLOR_208"
 pushd $INSTALLROOT/share/lhapdf
-  PDFREPO=https://www.hepforge.org/downloads/lhapdf/pdfsets/5.9.1
+  PDFREPO=https://lhapdf.hepforge.org/downloads?f=pdfsets/5.9.1/
   # Check if PDF sets were really installed
   for P in $PDFSETS; do
     PDFFILE=$(printf "%s.LHgrid" $P)

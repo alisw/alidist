@@ -1,19 +1,32 @@
 dist: trusty
 language: python
+addons:
+  apt:
+    packages:
+    - graphviz
 install: |
     pip install pyyaml
+    pip install alibuild
 script: |
   set -e
   ERR=
+  aliBuild analytics off
   for X in $(git diff --name-only $TRAVIS_COMMIT_RANGE | grep .sh); do
     [[ -e $X ]] || continue
     echo Linting $X
     scripts/lint-recipes $X || ERR="$ERR $X"
+    # This should really be cleaned up, since macOS cleans any DYLD_LIBRARY_PATH
+    # when launching children processes, making it completely irrelevant.
+    # In any case we correctly handle rpath in our macOS builds.
+    grep -v "unset DYLD_LIBRARY_PATH" $X | grep DYLD_LIBRARY_PATH && ERR="$ERR $X"
+    # Modules 4 does not allow having colons in prepend-path anymore
+    grep prepend-path $X | grep ':' && ERR="$ERR $X"
     [[ $X == defaults-*.sh ]] && continue
 
     # If a recipe is not a system requirement, it must have a Modulefile
     if ! grep -qE '^system_requirement:' "$X"; then
       grep -q '^#%Module' "$X" || { echo "ERROR: recipe $X has no modulefile"; ERR="$ERR $X"; }
     fi
+    aliBuild deps --defaults o2 ${X%.sh} --outgraph deps.pdf --no-system --neat -c . 2>&1 | grep -q "transitive reduction not unique" && { echo "ERROR: recipe $X has circular dependency"; ERR="$ERR $X"; }
   done
   [[ ! $ERR ]] || { echo "The following recipes need to be fixed:" $ERR; exit 1; }

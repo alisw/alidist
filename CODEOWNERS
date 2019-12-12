@@ -2,6 +2,7 @@
 *                   @alisw/infrastructure-admins
 
 # Dataflow team
+alf*                @alisw/dataflow-experts
 coconut*            @alisw/dataflow-experts
 common-o2*          @alisw/dataflow-experts
 configuration*      @alisw/dataflow-experts
@@ -12,8 +13,8 @@ monitoring*         @alisw/dataflow-experts
 pda*                @alisw/dataflow-experts
 ppconsul*           @alisw/dataflow-experts
 qualitycontrol*     @alisw/dataflow-experts
-rapidjson*          @alisw/dataflow-experts
 readout*            @alisw/dataflow-experts
+readoutcard*        @alisw/dataflow-experts
 node*               @alisw/dataflow-experts
 qcg*                @alisw/dataflow-experts
 ecsg*               @alisw/dataflow-experts
@@ -23,26 +24,26 @@ dim*                @alisw/dataflow-experts
 defaults-o2-dataflow* @alisw/dataflow-experts
 
 # PWGMM
-aligenerators*      @alisw/pwgmm
-ampt*               @alisw/pwgmm
-crmc*               @alisw/pwgmm
-dpmjet*             @alisw/pwgmm
-epos*               @alisw/pwgmm
-herwig*             @alisw/pwgmm
-jewel*              @alisw/pwgmm
-powheg*             @alisw/pwgmm
-pythia*             @alisw/pwgmm
-sherpa*             @alisw/pwgmm
-thepeg*             @alisw/pwgmm
-agile*              @alisw/pwgmm
-sacrifice*          @alisw/pwgmm
-aligenmc*           @alisw/pwgmm
-fonll*              @alisw/pwgmm
-ttherminator*       @alisw/pwgmm
-hepmc*              @alisw/pwgmm
-lhapdf*             @alisw/pwgmm
-rivet*              @alisw/pwgmm
-yoda*               @alisw/pwgmm
+aligenerators*      @alisw/pagmc
+ampt*               @alisw/pagmc
+crmc*               @alisw/pagmc
+dpmjet*             @alisw/pagmc
+epos*               @alisw/pagmc
+herwig*             @alisw/pagmc
+jewel*              @alisw/pagmc
+powheg*             @alisw/pagmc
+pythia*             @alisw/pagmc
+sherpa*             @alisw/pagmc
+thepeg*             @alisw/pagmc
+agile*              @alisw/pagmc
+sacrifice*          @alisw/pagmc
+aligenmc*           @alisw/pagmc
+fonll*              @alisw/pagmc
+ttherminator*       @alisw/pagmc
+hepmc*              @alisw/pagmc
+lhapdf*             @alisw/pagmc
+rivet*              @alisw/pagmc
+yoda*               @alisw/pagmc
 
 # Simulation
 geant*              @alisw/simulation-experts

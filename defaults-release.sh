@@ -12,10 +12,10 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-50
+    tag: v5-09-51
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-50-01
+    tag: v5-09-51-01
 
   # Use ROOT 5
   ROOT:
@@ -29,6 +29,7 @@ overrides:
       - FreeType:(?!osx)
       - "MySQL:slc7.*"
       - GCC-Toolchain:(?!osx)
+      - XRootD
     build_requires:
       - CMake
       - "Xcode:(osx.*)"

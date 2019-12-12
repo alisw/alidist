@@ -1,6 +1,6 @@
 package: InfoLogger
 version: "%(tag_basename)s"
-tag: v1.3.3
+tag: v1.3.7
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -19,6 +19,11 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
+
+# Enforce no warning code in the PR checker
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+fi
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
@@ -47,6 +52,5 @@ module load BASE/1.0                                                          \\
 setenv INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(INFOLOGGER_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(INFOLOGGER_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(INFOLOGGER_ROOT)/lib")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

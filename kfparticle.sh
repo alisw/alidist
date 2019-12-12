@@ -1,7 +1,7 @@
 package: KFParticle
-version: "%(short_hash)s"
-tag: "v1.1"
-source: https://git.cbm.gsi.de/m.zyzak/KFParticle.git
+version: "alice-v1.1-1"
+tag: "alice/v1.1-1"
+source: https://github.com/alisw/KFParticle
 requires:
   - ROOT
   - "GCC-Toolchain:(?!osx)"

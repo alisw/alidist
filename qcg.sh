@@ -1,6 +1,6 @@
 package: qcg
-version: v1.5.0
-tag: "@aliceo2/qc@1.5.0"
+version: v1.6.7
+tag: "@aliceo2/qc@1.6.7"
 requires:
   - node
   - QualityControl
@@ -10,31 +10,20 @@ valid_defaults:
   - o2-dataflow
 ---
 #!/bin/bash -e
-
-rsync -a --delete "$SOURCEDIR/QualityControl/" .
-
-( unset PYTHONHOME PYTHONPATH PYTHONUSERBASE;
-  major=$(python -c "import sys, __future__; print(sys.version_info.major);")
-  if test $major != "2"; then
-    # this hack is needed to ensure we have "python" = python2 for node-gyp
-    # which is still not python3 compliant...
-    ln -s $(which python2) $BUILDDIR/python
-    export PATH=$BUILDDIR:$PATH 
-  fi
-  npm install --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm)
+npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm
 
 mkdir -p bin
 cat > bin/qcg <<EOF
 #!/bin/bash
-exec node "$INSTALLROOT/index.js" "$INSTALLROOT/config.js"
+exec node "$INSTALLROOT/node_modules/@aliceo2/qc/index.js" "$INSTALLROOT/node_modules/@aliceo2/qc/config.js"
 EOF
 chmod 0755 bin/qcg
 
 # Installation
-rsync -a --delete bin lib node_modules public *.js *.node package.json \
-                  "$INSTALLROOT"
-if [[ -e $INSTALLROOT/config-default.js ]]; then
-  mv -v "$INSTALLROOT/config-default.js" "$INSTALLROOT/config.js"
+rsync -a --delete node_modules bin "$INSTALLROOT"
+
+if [[ -e $INSTALLROOT/node_modules/@aliceo2/qc/config-default.js ]]; then
+  mv -v "$INSTALLROOT/node_modules/@aliceo2/qc/config-default.js" "$INSTALLROOT/node_modules/@aliceo2/qc/config.js"
 fi
 
 # Modulefile
@@ -52,6 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${NODE_VERSION:+node/$NODE_VERSION-$NODE_REVISION} ${QUALITYCONTROL_VERSION:+QualityControl/$QUALITYCONTROL_VERSION-$QUALITYCONTROL_REVISION}
 # Our environment
-setenv QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(QCG_ROOT)/bin
+set QCG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv NODE_PATH \$::env(BASEDIR)/$PKGNAME/\$version/node_modules
+prepend-path PATH \$QCG_ROOT/bin
 EoF

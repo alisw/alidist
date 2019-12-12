@@ -1,17 +1,9 @@
-package: RapidJSON
-version: "%(tag_basename)s"
-tag: 091de040edb3355dcf2f4a18c425aec51b906f08
-source: https://github.com/Tencent/rapidjson.git
-build_requires:
-  - CMake
+package: rpm-test
+version: "1.0"
 ---
-#!/bin/sh
+# A really empty package to test RPM creation
 
-cmake $SOURCEDIR                                                       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
-
-make ${JOBS:+-j$JOBS} install
-
+# Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
@@ -26,4 +18,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
+prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
 EoF

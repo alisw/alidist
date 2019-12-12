@@ -9,11 +9,12 @@ prepend_path:
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ .
 autoreconf -ivf .
-./configure --prefix=$INSTALLROOT
+./configure --prefix=$INSTALLROOT --disable-docs
 make ${JOBS:+-j $JOBS}
 make install
 
 LIBPATH=$(find $INSTALLROOT -name libffi.so)
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

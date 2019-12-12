@@ -12,6 +12,7 @@ requires:
   - Readout
   - qcg
   - QualityControl
+  - Run2ESDConverter
 valid_defaults:
   - o2
   - o2-dataflow

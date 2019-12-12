@@ -1,17 +1,15 @@
-package: RapidJSON
+package: Alice-GRID-Utils
 version: "%(tag_basename)s"
-tag: 091de040edb3355dcf2f4a18c425aec51b906f08
-source: https://github.com/Tencent/rapidjson.git
-build_requires:
-  - CMake
+tag: "0.0.6"
+source: https://gitlab.cern.ch/nhardi/alice-grid-utils.git
 ---
-#!/bin/sh
+#!/bin/bash -e
 
-cmake $SOURCEDIR                                                       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
+DST="$INSTALLROOT/include"
+mkdir -p "$DST"
+cp -v $SOURCEDIR/*.h "$DST/"
 
-make ${JOBS:+-j$JOBS} install
-
+# Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
@@ -23,7 +21,3 @@ proc ModulesHelp { } {
 }
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-EoF
