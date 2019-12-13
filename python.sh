@@ -138,6 +138,7 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
                      ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PYTHON_ROOT \$PYTHON_ROOT
 setenv PYTHONHOME \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
 prepend-path PATH \$PYTHON_ROOT/bin

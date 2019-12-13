@@ -40,5 +40,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set GMP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GMP_ROOT \$GMP_ROOT
 prepend-path LD_LIBRARY_PATH \$GMP_ROOT/lib
 EoF

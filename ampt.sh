@@ -30,6 +30,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 # Our environment
 set AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv AMPT_ROOT \$AMPT_ROOT
 prepend-path PATH \$AMPT_ROOT/bin
 #prepend-path LD_LIBRARY_PATH \$AMPT_ROOT/lib
 EoF

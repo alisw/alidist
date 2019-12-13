@@ -34,4 +34,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 $MODULEFILE_REQUIRES
 # Our environment
 set GENERATORS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GENERATORS_ROOT \$GENERATORS_ROOT
 EoF

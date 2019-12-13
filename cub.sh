@@ -21,4 +21,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 set CUB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CUB_ROOT \$CUB_ROOT
 EoF

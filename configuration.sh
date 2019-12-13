@@ -45,6 +45,7 @@ module load BASE/1.0 \\
 
 # Our environment
 set CONFIGURATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CONFIGURATION_ROOT \$CONFIGURATION_ROOT
 prepend-path PATH \$CONFIGURATION_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CONFIGURATION_ROOT/lib
 EoF

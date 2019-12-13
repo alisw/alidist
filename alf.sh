@@ -52,6 +52,7 @@ module load BASE/1.0                                                          \\
 
 # Our environment
 set ALF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ALF_ROOT \$ALF_ROOT
 prepend-path PATH \$ALF_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ALF_ROOT/lib
 prepend-path PYTHONPATH \$ALF_ROOT/lib

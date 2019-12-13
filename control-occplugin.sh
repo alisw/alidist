@@ -64,6 +64,7 @@ module load BASE/1.0 \\
 
 # Our environment
 set CONTROL_OCCPLUGIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CONTROL_OCCPLUGIN_ROOT \$CONTROL_OCCPLUGIN_ROOT
 prepend-path PATH \$CONTROL_OCCPLUGIN_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CONTROL_OCCPLUGIN_ROOT/lib
 EoF

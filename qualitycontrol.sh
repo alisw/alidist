@@ -99,6 +99,7 @@ module load BASE/1.0                                                            
 
 # Our environment
 set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv QUALITYCONTROL_ROOT \$QUALITYCONTROL_ROOT
 prepend-path PATH \$QUALITYCONTROL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64

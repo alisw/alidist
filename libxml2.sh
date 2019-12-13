@@ -37,6 +37,7 @@ module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 setenv LIBXML2_VERSION \$version
 set LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(LIBXML2_VERSION)
+setenv LIBXML2_ROOT \$LIBXML2_ROOT
 prepend-path PATH \$LIBXML2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBXML2_ROOT/lib
 EoF

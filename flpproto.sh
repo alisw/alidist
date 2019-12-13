@@ -70,6 +70,7 @@ module load BASE/1.0                                                      \\
 
 # Our environment
 set FLPPROTO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FLPPROTO_ROOT \$FLPPROTO_ROOT
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 

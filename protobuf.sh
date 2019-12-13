@@ -31,6 +31,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set PROTOBUF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PROTOBUF_ROOT \$PROTOBUF_ROOT
 prepend-path LD_LIBRARY_PATH \$PROTOBUF_ROOT/lib
 prepend-path PATH \$PROTOBUF_ROOT/bin
 EoF

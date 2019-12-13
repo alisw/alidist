@@ -41,6 +41,7 @@ module load BASE/1.0 Pythia/$PYTHIA_VERSION-$PYTHIA_REVISION Vc/$VC_VERSION-$VC_
 # Our environment
 set osname [uname sysname]
 set GEANTV_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GEANTV_ROOT \$GEANTV_ROOT
 prepend-path PATH \$GEANTV_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$GEANTV_ROOT/lib
 EoF

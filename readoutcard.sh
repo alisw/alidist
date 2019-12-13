@@ -64,6 +64,7 @@ module load BASE/1.0                                                          \\
 
 # Our environment
 set READOUTCARD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv READOUTCARD_ROOT \$READOUTCARD_ROOT
 prepend-path PATH \$READOUTCARD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$READOUTCARD_ROOT/lib
 prepend-path PYTHONPATH \$READOUTCARD_ROOT/lib

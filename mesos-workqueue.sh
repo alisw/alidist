@@ -40,6 +40,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set MESOS_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MESOS_WORKQUEUE_ROOT \$MESOS_WORKQUEUE_ROOT
 prepend-path LD_LIBRARY_PATH \$MESOS_WORKQUEUE_ROOT/lib
 prepend-path PATH \$MESOS_WORKQUEUE_ROOT/bin
 EoF

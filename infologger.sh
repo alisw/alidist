@@ -50,6 +50,7 @@ module load BASE/1.0                                                          \\
 
 # Our environment
 set INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv INFOLOGGER_ROOT \$INFOLOGGER_ROOT
 prepend-path PATH \$INFOLOGGER_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$INFOLOGGER_ROOT/lib
 EoF

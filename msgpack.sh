@@ -34,6 +34,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set MSGPACK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MSGPACK_ROOT \$MSGPACK_ROOT
 prepend-path LD_LIBRARY_PATH \$MSGPACK_ROOT/lib
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

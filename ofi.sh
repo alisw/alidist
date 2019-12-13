@@ -29,6 +29,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set OFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv OFI_ROOT \$OFI_ROOT
 prepend-path PATH \$OFI_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$OFI_ROOT/lib
 EoF

@@ -93,6 +93,7 @@ module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_
 # in favour of using rivet-config --prefix. Leaving it for now, but it will be
 # removed upon PWGMM's decision in the future
 set RIVETHI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv RIVETHI_ROOT \$RIVETHI_ROOT
 prepend-path PYTHONPATH \$RIVETHI_ROOT/lib/python2.7/site-packages
 prepend-path PYTHONPATH \$RIVETHI_ROOT/lib64/python2.7/site-packages
 prepend-path PATH \$RIVETHI_ROOT/bin

@@ -23,5 +23,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set ALIGENMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ALIGENMC_ROOT \$ALIGENMC_ROOT
 prepend-path PATH \$ALIGENMC_ROOT
 EoF

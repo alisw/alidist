@@ -71,6 +71,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
 # Our environment
 set ALO_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ALO_O2_ROOT \$ALO_O2_ROOT
 
 prepend-path PATH \$ALO_O2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ALO_O2_ROOT/lib

@@ -41,6 +41,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set MESOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MESOS_ROOT \$MESOS_ROOT
 prepend-path PYTHONPATH \$MESOS_ROOT/lib/python2.7/site-packages
 prepend-path LD_LIBRARY_PATH \$MESOS_ROOT/lib
 prepend-path PATH \$MESOS_ROOT/bin

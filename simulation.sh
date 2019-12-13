@@ -35,4 +35,5 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 $MODULEFILE_REQUIRES
 # Our environment
 set SIMULATION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv SIMULATION_ROOT \$SIMULATION_ROOT
 EoF

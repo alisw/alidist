@@ -35,6 +35,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
 set GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GEANT3_ROOT \$GEANT3_ROOT
 setenv GEANT3DIR \$GEANT3_ROOT
 setenv G3SYS \$GEANT3_ROOT
 prepend-path PATH \$GEANT3_ROOT/bin

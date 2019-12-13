@@ -39,5 +39,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 GEANT4/$GEANT4_VERSION-$GEANT4_REVISION ROOT/$ROOT_VERSION-$ROOT_REVISION
 # Our environment
 set VGM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv VGM_ROOT \$VGM_ROOT
 prepend-path LD_LIBRARY_PATH \$VGM_ROOT/lib
 EoF

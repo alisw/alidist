@@ -51,6 +51,7 @@ module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${A
 
 # Our environment
 set MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MONITORING_ROOT \$MONITORING_ROOT
 prepend-path PATH \$MONITORING_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$MONITORING_ROOT/lib
 EoF

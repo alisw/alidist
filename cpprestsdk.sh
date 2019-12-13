@@ -47,5 +47,6 @@ module load BASE/1.0                                                          \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 # Our environment
 set CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CPPRESTSDK_ROOT \$CPPRESTSDK_ROOT
 prepend-path LD_LIBRARY_PATH \$CPPRESTSDK_ROOT/lib64
 EoF

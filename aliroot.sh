@@ -108,6 +108,7 @@ setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
 setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
 set ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
+setenv ALICE_ROOT \$ALICE_ROOT
 prepend-path PATH \$ALICE_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ALICE_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$ALICE_ROOT/include

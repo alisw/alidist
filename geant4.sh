@@ -86,6 +86,7 @@ module load BASE/1.0
 # Our environment
 set osname [uname sysname]
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GEANT4_ROOT \$GEANT4_ROOT
 setenv G4INSTALL \$GEANT4_ROOT
 setenv G4INSTALL_DATA \$::env(G4INSTALL)/share/
 setenv G4SYSTEM \$osname-g++

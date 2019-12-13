@@ -63,6 +63,7 @@ module load BASE/1.0 \
 
 # Our environment
 set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv XROOTD_ROOT \$XROOTD_ROOT
 prepend-path PATH \$XROOTD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
 if { $XROOTD_PYTHON } {

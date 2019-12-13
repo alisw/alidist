@@ -32,6 +32,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set HIJING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv HIJING_ROOT \$HIJING_ROOT
 prepend-path LD_LIBRARY_PATH \$HIJING_ROOT/lib
 EoF
 

@@ -27,6 +27,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set GLOG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GLOG_ROOT \$GLOG_ROOT
 prepend-path LD_LIBRARY_PATH \$GLOG_ROOT/lib
 prepend-path PATH \$GLOG_ROOT/bin
 EoF

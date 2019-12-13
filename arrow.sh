@@ -105,5 +105,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 set ARROW_HOME \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ARROW_HOME \$ARROW_HOME
 prepend-path LD_LIBRARY_PATH \$ARROW_HOME/lib
 EoF

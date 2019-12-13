@@ -42,6 +42,7 @@ module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${G
 
 # Our environment
 set COMMON_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv COMMON_O2_ROOT \$COMMON_O2_ROOT
 prepend-path PATH \$COMMON_O2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$COMMON_O2_ROOT/lib
 EoF

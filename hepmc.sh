@@ -33,6 +33,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set HEPMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv HEPMC_ROOT \$HEPMC_ROOT
 prepend-path PATH \$HEPMC_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$HEPMC_ROOT/lib
 EoF

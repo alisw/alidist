@@ -66,6 +66,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
                      ${PYTHON_MODULES_ROOT:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} 
 # Our environment
 set LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LHAPDF_ROOT \$LHAPDF_ROOT
 prepend-path PATH \$LHAPDF_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LHAPDF_ROOT/lib
 prepend-path PYTHONPATH \$LHAPDF_ROOT/lib/python/site-packages

@@ -65,6 +65,7 @@ module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
 
 # Our environment
 set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv XALIENFS_ROOT \$XALIENFS_ROOT
 
 set GSHELL_ROOT \$XALIENFS_ROOT
 setenv GSHELL_NO_GCC 1

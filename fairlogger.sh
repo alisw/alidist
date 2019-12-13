@@ -38,6 +38,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 # Our environment
 set FAIRLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FAIRLOGGER_ROOT \$FAIRLOGGER_ROOT
 prepend-path LD_LIBRARY_PATH \$FAIRLOGGER_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FAIRLOGGER_ROOT/include
 EoF

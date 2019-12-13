@@ -90,6 +90,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 set RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv RIVET_ROOT \$RIVET_ROOT
 prepend-path PYTHONPATH \$RIVET_ROOT/lib/python3.6/site-packages
 prepend-path PYTHONPATH \$RIVET_ROOT/lib64/python3.6/site-packages
 prepend-path PATH \$RIVET_ROOT/bin
