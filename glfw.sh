@@ -35,8 +35,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 EoF
-fi
-exit 0
+  fi
+  exit 0
 ;;
 esac
 
