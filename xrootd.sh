@@ -21,8 +21,6 @@ SONAME="so"
 case $ARCHITECTURE in
   osx*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
-    MACOS_SYSROOT="$(find `xcode-select -p` -type d -path *usr/include/c++)"
-    PYTHON_EXECUTABLE="CFLAGS=\"${MACOS_SYSROOT}\" ${PYTHON_EXECUTABLE}"
     SONAME="dylib"
     unset UUID_ROOT
   ;;
