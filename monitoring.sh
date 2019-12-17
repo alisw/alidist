@@ -4,7 +4,6 @@ tag: v2.6.3
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - ApMon-CPP
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Monitoring
@@ -25,7 +24,6 @@ fi
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_VERSION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${APMON_CPP_VERSION:+-DAPMON_ROOT=$APMON_CPP_ROOT}         \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -47,7 +45,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_CPP_VERSION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}  ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 setenv MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
