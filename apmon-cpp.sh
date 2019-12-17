@@ -2,7 +2,6 @@ package: ApMon-CPP
 version: "%(tag_basename)s"
 tag: v2.2.8-alice2
 source: https://github.com/alisw/apmon-cpp.git
-requires:
 build_requires:
  - libtirpc
  - autotools
