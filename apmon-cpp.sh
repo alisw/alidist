@@ -2,7 +2,9 @@ package: ApMon-CPP
 version: "%(tag_basename)s"
 tag: v2.2.8-alice2
 source: https://github.com/alisw/apmon-cpp.git
+requires:
 build_requires:
+ - libtirpc
  - autotools
  - "GCC-Toolchain:(?!osx)"
 ---
@@ -10,6 +12,14 @@ build_requires:
 rsync -a --exclude='**/.git' --delete --delete-excluded \
       $SOURCEDIR/ ./
 autoreconf -ivf
+
+# TODO: check if rpc.h really didn't come with glibc
+if [[ -n ${LIBTIRPC_ROOT} ]];
+then
+  export CXXFLAGS="${CXXFLAGS} -I${LIBTIRPC_ROOT}/include/tirpc"
+  export LDFLAGS="${LDFLAGS} -ltirpc -L${LIBTIRPC_ROOT}/lib"
+fi
+
 ./configure --prefix=$INSTALLROOT
 make ${JOBS:+-j$JOBS}
 make install

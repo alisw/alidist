@@ -31,8 +31,6 @@ overrides:
     version: "%(tag_basename)s"
     requires:
       - "GCC-Toolchain:(?!osx)"
-    build_requires:
-      - autotools
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
     tag: v5-09-51-01
