@@ -55,7 +55,7 @@ cmake $SOURCEDIR                                              \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
-      ${LIBINFOLOGGER_VERSION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
+      ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
       -DO2_ROOT=$O2_ROOT                                      \
       -DFAIRROOTPATH=$FAIRROOT_ROOT                           \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
@@ -87,22 +87,23 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0                                                                               \\
-            ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
-            ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                    \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                           \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                       \\
-            ${LIBINFOLOGGER_VERSION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
+            ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
             O2/$O2_VERSION-$O2_REVISION                                                            \\
-            ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
+            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
 
 # Our environment
-setenv QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(QUALITYCONTROL_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib
-prepend-path LD_LIBRARY_PATH \$::env(QUALITYCONTROL_ROOT)/lib64
-prepend-path ROOT_INCLUDE_PATH \$::env(QUALITYCONTROL_ROOT)/include
+set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv QUALITYCONTROL_ROOT \$QUALITYCONTROL_ROOT
+prepend-path PATH \$QUALITYCONTROL_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64
+prepend-path ROOT_INCLUDE_PATH \$QUALITYCONTROL_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
