@@ -1,6 +1,6 @@
 package: DebugGUI
 version: "v0.1.0-%(short_hash)s"
-tag: 55c12c2
+tag: d2501a0
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
