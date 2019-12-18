@@ -7,8 +7,6 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
-# TODO: add a check to pick it up from system
-# if yes, test if rpc.h comes for glibc or libtirpc
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 ./bootstrap
 ./configure --enable-shared=no --disable-gssapi --prefix=${INSTALLROOT}
