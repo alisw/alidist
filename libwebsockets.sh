@@ -1,6 +1,6 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v2.4.2"
+tag: "v3.0.1"
 source: https://github.com/warmcat/libwebsockets
 build_requires:
   - CMake
