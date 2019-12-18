@@ -7,6 +7,7 @@ requires:
   - libpng
 build_requires:
   - curl
+  - Python-modules-list
 prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python/site-packages
 ---
@@ -18,53 +19,17 @@ export PYVER=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig
 # Ignore what is already in PYTHONPATH. We will set PYTHONPATH or PYTHONUSERBASE per command
 unset PYTHONPATH
 
-# *** IMPORTANT NOTE FOR CONTRIBUTORS ***
-# In order to ensure reproducibility (i.e. if we rebuild this same package over time we want to get
-# the exact same result) we absolutely need to specify the exact versions of the desired packages.
-# In order to get the exact versions, you can use `pip freeze` on your local installation.
-PIP_REQUIREMENTS=(
-  # pack==version           import_module
-  "requests==2.21.0         requests"
-  "ipykernel==5.1.0         ipykernel"
-  "ipython==7.4.0           IPython"
-  "ipywidgets==7.4.2        ipywidgets"
-  "metakernel==0.20.14      metakernel"
-  "mock==2.0.0              mock"
-  "notebook==5.7.8          notebook.notebookapp"
-  "numpy==1.16.2            numpy"
-  "pandas==0.24.2           pandas"
-  "PyYAML==5.1              yaml"
-  "scikit-learn==0.20.3     sklearn"
-  "scipy==1.2.1             scipy"
-  "uproot==3.4.18           uproot"
-  )
-
+# PIP_REQUIREMENTS & PIP36_REQUIREMENTS come from Python-modules-list
+echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
 if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)' && [[ $ARCHITECTURE != slc6* ]]; then
-  # Install some ML-specific packages only with Python 3.6 at the moment
-  PIP_REQUIREMENTS+=(
-    "seaborn==0.9.0           seaborn"
-    "sklearn-evaluation==0.4  sklearn_evaluation"
-    "Keras==2.2.4             keras"
-    "tensorflow==1.13.1       tensorflow"
-    "xgboost==0.82            xgboost"
-    "dryable==1.0.3           dryable"
-    "responses==0.10.6        responses"
-    "RootInteractive==0.0.10   RootInteractive"
-  )
-else
-  echo "WARNING: Not installing Keras and TensorFlow"
+  echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
 fi
 
-# Install pip packages under a user folder, but unset it right after installation
-for P in "${PIP_REQUIREMENTS[@]}"; do
-  echo $P | cut -d' ' -f1
-done > requirements.txt
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
-
+grep scikit-garden requirements.txt && env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
 env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
