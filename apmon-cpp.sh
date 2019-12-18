@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: v2.2.8-alice2
 source: https://github.com/alisw/apmon-cpp.git
 build_requires:
- - libtirpc:(!?osx)
+ - "libtirpc:(?!osx)"
  - autotools
  - "GCC-Toolchain:(?!osx)"
 ---
