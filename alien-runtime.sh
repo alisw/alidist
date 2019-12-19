@@ -9,10 +9,7 @@ build_requires:
  - OpenSSL
  - AliEn-CAs
  - ApMon-CPP
- - XRootD
  - UUID
-prepend_path:
-  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
   X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"
 ---
@@ -42,9 +39,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv ALIEN_RUNTIME_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ALIEN_RUNTIME_ROOT)/lib
-prepend-path PATH \$::env(ALIEN_RUNTIME_ROOT)/bin
-prepend-path PERLLIB \$::env(ALIEN_RUNTIME_ROOT)/lib/perl
-setenv X509_CERT_DIR \$::env(ALIEN_RUNTIME_ROOT)/globus/share/certificates
+set ALIEN_RUNTIME_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$ALIEN_RUNTIME_ROOT/lib
+prepend-path PATH \$ALIEN_RUNTIME_ROOT/bin
+setenv X509_CERT_DIR \$ALIEN_RUNTIME_ROOT/globus/share/certificates
 EoF

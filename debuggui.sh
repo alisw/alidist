@@ -1,6 +1,6 @@
 package: DebugGUI
-version: "%(tag_basename)s"
-tag: v0.1.0
+version: "v0.1.0-%(short_hash)s"
+tag: 55c12c2
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
@@ -13,6 +13,15 @@ case $ARCHITECTURE in
       [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
     ;;
 esac
+
+# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
+if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+  NINJA_BIN=ninja-build
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  unset NINJA_BIN
+fi
 
 cmake $SOURCEDIR                          \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \

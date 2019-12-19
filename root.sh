@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-16-00"
+tag: "v6-18-04"
 source: https://github.com/root-project/root
 requires:
   - arrow
@@ -15,6 +15,7 @@ requires:
   - lzma
   - libxml2
   - OpenSSL
+  - XRootD
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -39,7 +40,6 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 unset ROOTSYS
-
 
 COMPILER_CC=cc
 COMPILER_CXX=c++
@@ -77,10 +77,9 @@ case $ARCHITECTURE in
 esac
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
-  # AliEn-Runtime: we take OpenSSL, XRootD and libxml2 from there, in case they
+  # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
   # were not taken from the system
   OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
-  XROOTD_ROOT=${XROOTD_VERSION:+$ALIEN_RUNTIME_ROOT}
   LIBXML2_ROOT=${LIBXML2_VERSION:+$ALIEN_RUNTIME_ROOT}
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
@@ -187,7 +186,7 @@ mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
-  unset OPENSSL_VERSION XROOTD_VERSION LIBXML2_VERSION
+  unset OPENSSL_VERSION LIBXML2_VERSION
 fi
 
 # Make some CMake files used by other projects relocatable
@@ -227,8 +226,10 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
-prepend-path PYTHONPATH \$::env(ROOTSYS)/lib
-prepend-path PATH \$::env(ROOTSYS)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ROOTSYS)/lib
+
+set ROOT_ROOT  \$::env(ROOTSYS)
+prepend-path PYTHONPATH \$ROOT_ROOT/lib
+prepend-path PATH \$ROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

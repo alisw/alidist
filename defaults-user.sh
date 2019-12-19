@@ -31,6 +31,7 @@ overrides:
       - FreeType:(?!osx)
       - "MySQL:slc7.*"
       - GCC-Toolchain:(?!osx)
+      - XRootD
     build_requires:
       - CMake
       - "Xcode:(osx.*)"
