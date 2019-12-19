@@ -29,7 +29,7 @@ fi
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep scikit-garden requirements.txt && env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
 env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
