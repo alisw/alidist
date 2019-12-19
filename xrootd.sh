@@ -48,9 +48,12 @@ cmake "$SOURCEDIR"                                                    \
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-pushd $INSTALLROOT
-XRD_PYTHON_PATH="$(find . -path '*site-packages' -type d)"
+if [[ x"$XROOTD_PYTHON" == x"True" ]];
+then
+  pushd $INSTALLROOT
+  XRD_PYTHON_PATH="$(find . -path '*site-packages' -type d)"
 popd
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
