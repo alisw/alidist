@@ -20,6 +20,8 @@ overrides:
     build_requires:
       - autotools
       - "GCC-Toolchain:(?!osx)"
+  ROOT:
+    version: "v6-16-00"
   OpenSSL:
     version: "v1.0.2o_JALIEN"
     overrides:
