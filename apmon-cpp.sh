@@ -22,6 +22,8 @@ fi
 make ${JOBS:+-j$JOBS}
 make install
 
+find $INSTALLROOT -name '*.la' | xargs rm -v
+
 # Modules
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
