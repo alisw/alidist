@@ -22,7 +22,7 @@ fi
 make ${JOBS:+-j$JOBS}
 make install
 
-find $INSTALLROOT -name '*.la' | xargs rm -v
+find $INSTALLROOT -name '*.la' -delete
 
 # Modules
 mkdir -p etc/modulefiles
