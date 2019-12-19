@@ -22,7 +22,7 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
   ROOT:
     version: "%(tag_basename)s_XRD4"
-    version: "v6-16-00"
+    tag: "v6-16-00"
   OpenSSL:
     version: "v1.0.2o_JALIEN"
     overrides:
