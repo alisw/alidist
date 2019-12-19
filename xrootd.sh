@@ -24,12 +24,7 @@ case $ARCHITECTURE in
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
-    LOCAL_PYTHON_EXECUTABLE="$PWD/python.sh"
-    echo '#!/bin/bash' > "$LOCAL_PYTHON_EXECUTABLE"
-    echo 'export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"' >> "$LOCAL_PYTHON_EXECUTABLE"
-    echo "$PYTHON_EXECUTABLE" '$@' >> "$LOCAL_PYTHON_EXECUTABLE"
-    chmod +x "$LOCAL_PYTHON_EXECUTABLE"
-    PYTHON_EXECUTABLE="$LOCAL_PYTHON_EXECUTABLE"
+    export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
   ;;
 esac
@@ -52,6 +47,10 @@ cmake "$SOURCEDIR"                                                    \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
+
+pushd $INSTALLROOT
+XRD_PYTHON_PATH="$(find . -path '*site-packages' -type d)"
+popd
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -77,7 +76,7 @@ set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XROOTD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
 if { $XROOTD_PYTHON } {
-  prepend-path PYTHONPATH \$XROOTD_ROOT/lib/python3.6/site-packages
+  prepend-path PYTHONPATH \${XROOTD_ROOT}/${XRD_PYTHON_PATH}
   module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
               ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 }
