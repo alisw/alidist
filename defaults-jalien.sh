@@ -21,6 +21,7 @@ overrides:
       - autotools
       - "GCC-Toolchain:(?!osx)"
   ROOT:
+    version: "%(tag_basename)s_XRD4"
     version: "v6-16-00"
   OpenSSL:
     version: "v1.0.2o_JALIEN"
@@ -49,8 +50,6 @@ overrides:
       - GEANT4_VMC
       - Vc
       - JAliEn-ROOT
-  ROOT:
-    version: "%(tag_basename)s_XRD4"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

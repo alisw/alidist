@@ -12,6 +12,7 @@ disable:
   - AliRoot
 overrides:
   ROOT:
+    version: "%(tag_basename)s_XRD4"
     build_requires:
       - CMake
       - "Xcode:(osx.*)"
@@ -46,8 +47,6 @@ overrides:
   XRootD:
     tag: "v4.11.1-rc1-alice"
     source: https://github.com/atlantic777/xrootd
-  ROOT:
-    version: "%(tag_basename)s_XRD4"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
