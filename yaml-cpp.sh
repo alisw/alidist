@@ -12,7 +12,6 @@ prefer_system_check: |
 ---
 #!/bin/sh
 case $ARCHITECTURE in
-  slc5*) sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt ;;
   osx*) [[ $BOOST_ROOT ]] || BOOST_ROOT=`brew --prefix boost` ;;
   *) ;;
 esac
@@ -24,6 +23,7 @@ cmake $SOURCEDIR                                         \
   ${BOOST_ROOT:+-DBoost_DIR:PATH="$BOOST_ROOT"}          \
   ${BOOST_ROOT:+-DBoost_INCLUDE_DIR:PATH="$BOOST_ROOT/include"}  \
   -DCMAKE_SKIP_RPATH=YES                                 \
+  -DYAML_CPP_BUILD_TESTS=NO                              \
   -DSKIP_INSTALL_FILES=1
 
 make ${JOBS+-j $JOBS} install

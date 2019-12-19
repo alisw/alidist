@@ -9,7 +9,7 @@ build_requires:
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 ./bootstrap
-./configure --enable-shared=no --prefix=${INSTALLROOT}
+./configure --enable-shared=no --disable-gssapi --prefix=${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 rm -rf ${INSTALLROOT}/share "${INSTALLROOT}"/lib/*.la "${INSTALLROOT}"/lib/pkgconfig
 
