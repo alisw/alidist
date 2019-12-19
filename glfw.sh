@@ -35,6 +35,22 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 EoF
+  else
+        # Modulefile
+        MODULEDIR="$INSTALLROOT/etc/modulefiles"
+        MODULEFILE="$MODULEDIR/$PKGNAME"
+        mkdir -p "$MODULEDIR"
+cat >"$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "Dummy package for GLFW in order to publish it on CVMFS. $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+EoF
   fi
   exit 0
 ;;
