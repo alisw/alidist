@@ -48,7 +48,7 @@ pushd "$PYTHON_MODULES_INSTALLROOT"
   popd
   pushd bin
     # Fix shebangs: remove hardcoded Python path
-    sed -i.deleteme -e "1 s|^#!${$PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
+    sed -i.deleteme -e "1 s|^#!${PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
     rm -f *.deleteme || true
   popd
 popd
@@ -57,7 +57,7 @@ popd
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$$PYTHON_MODULES_INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$PYTHON_MODULES_INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
@@ -100,7 +100,7 @@ pushd "$PYTHON_MODULES_INSTALLROOT/bin"
 popd
 
 # Remove useless stuff
-rm -rvf "$$PYTHON_MODULES_INSTALLROOT"/share "$PYTHON_MODULES_INSTALLROOT"/lib/python*/test
+rm -rvf "$PYTHON_MODULES_INSTALLROOT"/share "$PYTHON_MODULES_INSTALLROOT"/lib/python*/test
 find "$PYTHON_MODULES_INSTALLROOT"/lib/python* \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
