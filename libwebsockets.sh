@@ -12,6 +12,7 @@ build_requires:
 case $ARCHITECTURE in
   osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
 esac
+
 cmake $SOURCEDIR/                                                   \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
       -DCMAKE_BUILD_TYPE=RELEASE                                    \
