@@ -9,7 +9,7 @@ build_requires:
   - curl
   - Python-modules-list
 prepend_path:
-  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python/site-packages
+  PYTHONPATH: $PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
 ---
 #!/bin/bash -ex
 
@@ -25,15 +25,19 @@ if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_i
   echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
 fi
 
+# We use a different INSTALLROOT, so that we can build updatable RPMS which
+# do not conflict with the underlying Python installation.
+PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
+mkdir -p $PYTHON_MODULES_INSTALLROOT
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep RootInteractive requirements.txt && env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU numpy
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
-pushd "$INSTALLROOT"
+pushd "$PYTHON_MODULES_INSTALLROOT"
   if [[ -d lib64 ]]; then
     ln -nfs lib64 lib  # creates lib pointing to lib64
   elif [[ -d lib ]]; then
@@ -44,7 +48,7 @@ pushd "$INSTALLROOT"
   popd
   pushd bin
     # Fix shebangs: remove hardcoded Python path
-    sed -i.deleteme -e "1 s|^#!${INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
+    sed -i.deleteme -e "1 s|^#!${$PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
     rm -f *.deleteme || true
   popd
 popd
@@ -53,7 +57,7 @@ popd
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$$PYTHON_MODULES_INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
@@ -80,24 +84,24 @@ EOF
     ln -nfs $FREETYPE_ROOT/include/freetype2 fake_freetype_root/include
   fi
 
-  export PYTHONPATH="$INSTALLROOT/lib/python/site-packages"
+  export PYTHONPATH="$PYTHON_MODULES_INSTALLROOT/lib/python/site-packages"
     python3 setup.py build
-    python3 setup.py install --prefix "$INSTALLROOT"
+    python3 setup.py install --prefix "$PYTHON_MODULES_INSTALLROOT"
   unset PYTHONPATH
 fi
 
 # Test if matplotlib can be loaded
-env PYTHONPATH="$INSTALLROOT/lib/python/site-packages" python3 -c 'import matplotlib'
+env PYTHONPATH="$PYTHON_MODULES_INSTALLROOT/lib/python/site-packages" python3 -c 'import matplotlib'
 
 # Patch long shebangs (by default max is 128 chars on Linux)
-pushd "$INSTALLROOT/bin"
+pushd "$PYTHON_MODULES_INSTALLROOT/bin"
   sed -i.deleteme -e '1 s|^#!.*$|#!/usr/bin/env python3|' * || true
   rm -f *.deleteme
 popd
 
 # Remove useless stuff
-rm -rvf "$INSTALLROOT"/share "$INSTALLROOT"/lib/python*/test
-find "$INSTALLROOT"/lib/python* \
+rm -rvf "$$PYTHON_MODULES_INSTALLROOT"/share "$PYTHON_MODULES_INSTALLROOT"/lib/python*/test
+find "$PYTHON_MODULES_INSTALLROOT"/lib/python* \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
 
@@ -117,7 +121,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 # Our environment
 set PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$PYTHON_MODULES_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$PYTHON_MODULES_ROOT/lib
-prepend-path PYTHONPATH \$PYTHON_MODULES_ROOT/lib/python/site-packages
+prepend-path PATH \$PYTHON_MODULES_ROOT/share/python-modules/bin
+prepend-path LD_LIBRARY_PATH \$PYTHON_MODULES_ROOT/share/python-modules/lib
+prepend-path PYTHONPATH \$PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
 EoF
