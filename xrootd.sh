@@ -17,11 +17,19 @@ build_requires:
 [[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
 PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
 
-SONAME="so"
 case $ARCHITECTURE in
   osx*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
-    SONAME="dylib"
+
+    # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
+    # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
+    # This fix is needed only on MacOS when building XRootD Python bindings.
+    LOCAL_PYTHON_EXECUTABLE="$PWD/python.sh"
+    echo '#!/bin/bash' > "$LOCAL_PYTHON_EXECUTABLE"
+    echo 'export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"' >> "$LOCAL_PYTHON_EXECUTABLE"
+    echo "$PYTHON_EXECUTABLE" '$@' >> "$LOCAL_PYTHON_EXECUTABLE"
+    chmod +x "$LOCAL_PYTHON_EXECUTABLE"
+    PYTHON_EXECUTABLE="$LOCAL_PYTHON_EXECUTABLE"
     unset UUID_ROOT
   ;;
 esac
@@ -34,7 +42,7 @@ cmake "$SOURCEDIR"                                                    \
       -DENABLE_PERL=OFF                                               \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
-      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.$SONAME}   \
+      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
       -DENABLE_KRB5=OFF                                               \
       -DENABLE_READLINE=OFF                                           \
