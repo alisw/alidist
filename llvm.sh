@@ -22,8 +22,7 @@ case $ARCHITECTURE in
     XCODE_PATH=`xcode-select -p`
     DEFAULT_SYSROOT=$(find $XCODE_PATH -type d -path "*/MacOSX.sdk/usr/include" | sed -e 's|/usr/include||g')
     if [ "X$DEFAULT_SYSROOT" = X ]; then
-      XCODE_PATH=`xcrun --show-sdk-path`
-      DEFAULT_SYSROOT=$(find $XCODE_PATH -type d -path "*/MacOSX.sdk/usr/include" | sed -e 's|/usr/include||g')
+      DEFAULT_SYSROOT=`xcrun --show-sdk-path`
     fi
   ;;
   *) DEFAULT_SYSROOT="" ;;
