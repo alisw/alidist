@@ -8,8 +8,8 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
   XRootD:
-    tag: "v4.11.1-rc1-alice"
-    source: https://github.com/atlantic777/xrootd
+    tag: "v4.11.1"
+    source: https://github.com/xrootd/xrootd
   JDK:
     version: "12.0.1_JALIEN"
   libxml2:
@@ -33,10 +33,10 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-51-01
+    tag: v5-09-53-01
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-51
+    tag: v5-09-53
     requires:
       - ROOT
       - DPMJET

@@ -1,5 +1,5 @@
 package: lhapdf-pdfsets
-version: "v%(year)s%(month)s%(day)s"
+version: "v%(year)s"
 build_requires:
  - lhapdf
 ---
