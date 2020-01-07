@@ -25,7 +25,6 @@ env:
     responses==0.10.6
     RootInteractive==0.0.10
 ---
-#!/bin/bash -ex
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
