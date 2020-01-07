@@ -105,6 +105,7 @@ prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64
 prepend-path ROOT_INCLUDE_PATH \$QUALITYCONTROL_ROOT/include
 EoF
+
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 # Create code coverage information to be uploaded
