@@ -17,7 +17,10 @@ append_path:
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
-  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
+  osx*) 
+	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
+	[[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsocket)
+  ;;
 esac
 
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
