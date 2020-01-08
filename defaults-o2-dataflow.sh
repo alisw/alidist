@@ -23,6 +23,10 @@ disable:
   - xjalienfs
   - JAliEn-ROOT
 overrides:
+  Python-modules-list:
+    env:
+      PIP_REQUIREMENTS: |
+        requests==2.21.0
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
     tag: dev
