@@ -5,12 +5,12 @@ source: https://github.com/apache/arrow
 requires:
   - boost
   - lz4
-  - RapidJSON
   - LLVM
   - protobuf
 build_requires:
   - zlib
   - flatbuffers
+  - RapidJSON
   - CMake
   - double-conversion
   - re2
@@ -104,6 +104,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
-setenv ARROW_HOME \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ARROW_HOME)/lib
+set ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$ARROW_ROOT/lib
 EoF
