@@ -41,6 +41,9 @@ esac
 
 make -j$JOBS install
 
+find "$INSTALLROOT/lib" -name "libboost_*" -delete
+rm -f "$INSTALLROOT/LICENSE"
+
 # ModuleFile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
