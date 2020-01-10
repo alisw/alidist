@@ -1,5 +1,5 @@
 package: libperl
-version: 1.0
+version: "1.0"
 system_requirement_missing: "Please install libperl and perl-ExtUtils-Embed development package on your system"
 system_requirement: ".*"
 system_requirement_check: |
