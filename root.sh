@@ -204,7 +204,8 @@ find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
-       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"     \
+       "$INSTALLROOT/LICENSE"
 
 # Modulefile
 mkdir -p etc/modulefiles
