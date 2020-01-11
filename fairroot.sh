@@ -8,7 +8,6 @@ requires:
   - ROOT
   - boost
   - protobuf
-  - DDS
   - FairLogger
   - FairMQ
   - yaml-cpp
