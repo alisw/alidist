@@ -1,6 +1,6 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v2.4.2"
+tag: "v3.0.1"
 source: https://github.com/warmcat/libwebsockets
 build_requires:
   - CMake
@@ -15,6 +15,7 @@ prefer_system_check: |
 case $ARCHITECTURE in
   osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
 esac
+
 cmake $SOURCEDIR/                                                   \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
       -DCMAKE_BUILD_TYPE=RELEASE                                    \
@@ -45,7 +46,6 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
                      ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 # Our environment
 set LIBWEBSOCKETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$LIBWEBSOCKETS_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBWEBSOCKETS_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
