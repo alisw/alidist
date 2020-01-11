@@ -4,7 +4,6 @@ tag: "O2-1.0.0"
 requires:
   - arrow
   - FairRoot
-  - DDS
   - Vc
   - hijing
   - HepMC3
