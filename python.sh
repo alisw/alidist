@@ -39,7 +39,9 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
   ZLIB_ROOT=${ZLIB_ROOT:+$ALIEN_RUNTIME_ROOT}
 fi
-[ ! "X$OPENSSL_ROOT" = X ] || OPENSSL_ROOT=`brew --prefix openssl`
+case $ARCHITECTURE in
+  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
+esac
 
 # Set own OpenSSL if appropriate
 if [[ $OPENSSL_ROOT ]]; then
