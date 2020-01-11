@@ -1,7 +1,7 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: v3.3.6-alice2
-source: https://github.com/alisw/xrootd.git
+tag: "v4.11.1"
+source: https://github.com/xrootd/xrootd
 requires:
  - "OpenSSL:(?!osx)"
  - Python-modules
