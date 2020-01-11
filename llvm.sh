@@ -25,7 +25,7 @@ case $ARCHITECTURE in
       DEFAULT_SYSROOT=`xcrun --show-sdk-path`
     fi
   ;;
-  *) DEFAULT_SYSROOT="" ;;
+  *) DEFAULT_SYSROOT="$GCC_TOOLCHAIN_ROOT" ;;
 esac
 
 cmake ${SOURCEDIR}/llvm                                             \
