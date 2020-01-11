@@ -8,7 +8,7 @@ requires:
   - GEANT3
   - GEANT4_VMC
   - Vc
-  - AliEn-ROOT-Legacy
+  - JAliEn-ROOT
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -102,16 +102,24 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${DPMJET_VERSION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_VERSION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_VERSION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${JALIEN_ROOT_VERSION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION} ${ALIEN_ROOT_LEGACY_VERSION:+AliEn-ROOT-Legacy/$ALIEN_ROOT_LEGACY_VERSION-$ALIEN_ROOT_LEGACY_REVISION}
+module load BASE/1.0                                                                                                \\
+            ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}                                                     \\
+            ${DPMJET_REVISION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION}                                             \\
+            ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                                         \\
+            ${GEANT3_REVISION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                                             \\
+            ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}                             \\
+            ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                                             \\
+            ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}                         \\
+            ${ALIEN_ROOT_LEGACY_REVISION:+AliEn-ROOT-Legacy/$ALIEN_ROOT_LEGACY_VERSION-$ALIEN_ROOT_LEGACY_REVISION}
 # Our environment
+set ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
 setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
-setenv ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
-prepend-path PATH \$::env(ALICE_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(ALICE_ROOT)/include
-prepend-path ROOT_INCLUDE_PATH \$::env(ALICE_ROOT)/include/Pythia8
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ALICE_ROOT)/lib")
+setenv ALICE_ROOT \$ALIROOT_ROOT
+prepend-path PATH \$ALIROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALIROOT_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$ALIROOT_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$ALIROOT_ROOT/include/Pythia8
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

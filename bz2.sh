@@ -1,5 +1,5 @@
 package: bz2
-version: 1.0
+version: "1.0"
 system_requirement_missing: |
   Please install bzip2 development package on your system:
     * On RHEL-compatible systems: bzip2-devel
