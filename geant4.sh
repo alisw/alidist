@@ -4,7 +4,6 @@ tag: "v10.4.2"
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - xercesc
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -51,7 +50,6 @@ cmake $SOURCEDIR                                             \
   -DGEANT4_INSTALL_DATA=ON                                   \
   -DGEANT4_USE_SYSTEM_EXPAT=OFF                              \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}          \
-  -DGEANT4_USE_GDML=ON                                       \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
