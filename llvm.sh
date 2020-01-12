@@ -18,7 +18,13 @@ unset LDFLAGS
 
 case $ARCHITECTURE in 
   # Needed to have the C headers
-  osx*) DEFAULT_SYSROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk ;;
+  osx*) 
+    XCODE_PATH=`xcode-select -p`
+    DEFAULT_SYSROOT=$(find $XCODE_PATH -type d -path "*/MacOSX.sdk/usr/include" | sed -e 's|/usr/include||g')
+    if [ "X$DEFAULT_SYSROOT" = X ]; then
+      DEFAULT_SYSROOT=`xcrun --show-sdk-path`
+    fi
+  ;;
   *) DEFAULT_SYSROOT="" ;;
 esac
 

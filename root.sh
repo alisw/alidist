@@ -65,6 +65,7 @@ unset CXXFLAGS
 unset CFLAGS
 unset LDFLAGS
 
+SONAME=so
 case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
@@ -72,8 +73,10 @@ case $ARCHITECTURE in
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
+    SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
   ;;
 esac
 
@@ -99,6 +102,7 @@ else
   ROOT_HAS_NO_PYTHON=1
 fi
 
+unset DYLD_LIBRARY_PATH
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
@@ -129,6 +133,8 @@ cmake $SOURCEDIR                                                                
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
       ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
+      ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
+      ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
@@ -187,7 +193,7 @@ mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
-  unset OPENSSL_VERSION XROOTD_VERSION LIBXML2_VERSION
+  unset OPENSSL_VERSION LIBXML2_VERSION
 fi
 
 # Make some CMake files used by other projects relocatable
@@ -198,7 +204,8 @@ find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
-       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"     \
+       "$INSTALLROOT/LICENSE"
 
 # Modulefile
 mkdir -p etc/modulefiles
@@ -211,18 +218,18 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
-                     ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
-                     ${XROOTD_VERSION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}                                 \\
-                     ${LIBXML2_VERSION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
-                     ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
-                     ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
-                     ${FREETYPE_VERSION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
-                     ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-                     ${PYTHON_MODULES_VERSION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
-                     ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                     \\
-                     ${LIBPNG_VERSION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                                 \\
-                     ${LZMA_VERSION:+lzma/$LZMA_VERSION-$LZMA_REVISION}
+module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
+                     ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
+                     ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}                                 \\
+                     ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
+                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
+                     ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION}                                             \\
+                     ${FREETYPE_REVISION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                         \\
+                     ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
+                     ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
+                     ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                     \\
+                     ${LIBPNG_REVISION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                                 \\
+                     ${LZMA_REVISION:+lzma/$LZMA_VERSION-$LZMA_REVISION}
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME

@@ -6,7 +6,7 @@ requires:
  - boost
  - FairLogger
  - ZeroMQ
- - DDS:(?!osx)
+ - "DDS:(?!osx)"
  - asiofi
  - flatbuffers
 build_requires:

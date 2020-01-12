@@ -1,5 +1,5 @@
 package: sip-check
-version: 1.0
+version: "1.0"
 system_requirement_missing: |
   Please make sure you have SIP disabled.
 

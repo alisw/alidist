@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
  - JDK
  - XRootD
+ - xjalienfs
 valid_defaults:
  - jalien
 ---

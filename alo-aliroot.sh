@@ -4,11 +4,11 @@ tag: master
 requires:
   - googlebenchmark
   - AliRoot
-  - RapidJSON
   - boost
   - yaml-cpp
 build_requires:
   - CMake
+  - RapidJSON
   - flatbuffers
   - ms_gsl
 source: https://github.com/mrrtf/alo
@@ -70,12 +70,14 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} yaml-cpp
+module load BASE/1.0                                                     \\ 
+       AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION                        \\
+       ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} yaml-cpp
 # Our environment
-setenv ALO_ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALO_ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 
-prepend-path PATH \$::env(ALO_ALIROOT_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALO_ALIROOT_ROOT)/lib
+prepend-path PATH \$ALO_ALIROOT_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALO_ALIROOT_ROOT/lib
 EoF
 
-        mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
