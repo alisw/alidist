@@ -11,14 +11,7 @@ disable:
   - AliEn-Runtime
   - AliRoot
 overrides:
-  FairMQ:
-    tag: dev
-    source: https://github.com/FairRootGroup/FairMQ/
-  DDS:
-    tag: master
-    source: https://github.com/FairRootGroup/DDS
   grpc:
     tag: v1.24.3-p1
     source: https://github.com/FairRootGroup/grpc
-
 ---
