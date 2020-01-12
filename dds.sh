@@ -1,6 +1,6 @@
 package: DDS
-version: "%(tag_basename)s"
-tag: "2.4"
+version: "3.1"
+tag: "3.1"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
@@ -14,8 +14,6 @@ incremental_recipe: |
   make -j$JOBS install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/bash -ex
-
 case $ARCHITECTURE in
   osx*)
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
