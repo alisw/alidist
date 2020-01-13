@@ -8,7 +8,7 @@ requires:
   - GEANT3
   - GEANT4_VMC
   - Vc
-  - AliEn-ROOT-Legacy
+  - JAliEn-ROOT
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -102,8 +102,17 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${DPMJET_REVISION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION} ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${GEANT3_REVISION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION} ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION} ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION} ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION} ${ALIEN_ROOT_LEGACY_REVISION:+AliEn-ROOT-Legacy/$ALIEN_ROOT_LEGACY_VERSION-$ALIEN_ROOT_LEGACY_REVISION}
+module load BASE/1.0                                                                                                \\
+            ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}                                                     \\
+            ${DPMJET_REVISION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION}                                             \\
+            ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                                         \\
+            ${GEANT3_REVISION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                                             \\
+            ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}                             \\
+            ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                                             \\
+            ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}                         \\
+            ${ALIEN_ROOT_LEGACY_REVISION:+AliEn-ROOT-Legacy/$ALIEN_ROOT_LEGACY_VERSION-$ALIEN_ROOT_LEGACY_REVISION}
 # Our environment
+set ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
 setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)

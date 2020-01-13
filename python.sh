@@ -1,6 +1,6 @@
 package: Python
 version: "%(tag_basename)s"
-tag: v3.6.8
+tag: v3.6.10
 source: https://github.com/python/cpython
 requires:
  - AliEn-Runtime:(?!.*ppc64)
@@ -19,8 +19,6 @@ prefer_system: "(?!slc5)"
 prefer_system_check:
   python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && pip3 --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 ---
-#!/bin/bash -ex
-
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
 # According to cmsdist, this is required to pick up our own version
@@ -41,6 +39,9 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
   ZLIB_ROOT=${ZLIB_ROOT:+$ALIEN_RUNTIME_ROOT}
 fi
+case $ARCHITECTURE in
+  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
+esac
 
 # Set own OpenSSL if appropriate
 if [[ $OPENSSL_ROOT ]]; then
@@ -96,25 +97,8 @@ find "$INSTALLROOT"/lib/python* \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
 
-# Execute some commands in a clean environment
-cat > "$INSTALLROOT"/bin/yum-cleanenv <<'EOF'
-#!/bin/bash
-exec env -i /usr/bin/"$(basename "$0")" "$@"
-EOF
-chmod +x "$INSTALLROOT"/bin/yum-cleanenv
-for F in $(echo /usr/bin/yum*) $(echo /usr/bin/rpm*); do
-  [[ -e $F ]] || continue
-  ln -nfs yum-cleanenv "$INSTALLROOT"/bin/"$(basename "$F")"
-done
-
 # Get OpenSSL and zlib at runtime from AliEn-Runtime if appropriate
-[[ $ALIEN_RUNTIME_VERSION ]] && unset OPENSSL_VERSION ZLIB_VERSION OPENSSL_REVISION ZLIB_REVISION
-
-# Test if Tcl/Tk support is enabled (requires tk-devel or similar installed)
-env PATH="$INSTALLROOT/bin:$PATH" \
-    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
-    PYTHONHOME="$INSTALLROOT" \
-    python3 -c 'import _tkinter'
+[[ $ALIEN_RUNTIME_REVISION ]] && unset OPENSSL_REVISION ZLIB_REVISION
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -139,7 +123,7 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
 # Our environment
 set PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHON_ROOT \$PYTHON_ROOT
-setenv PYTHONHOME \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PYTHONHOME \$PYTHON_ROOT
 prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
 prepend-path PATH \$PYTHON_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib

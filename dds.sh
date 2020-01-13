@@ -1,6 +1,6 @@
 package: DDS
-version: "%(tag_basename)s"
-tag: "2.4"
+version: "3.1"
+tag: "3.1"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
@@ -14,8 +14,6 @@ incremental_recipe: |
   make -j$JOBS install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/bash -ex
-
 case $ARCHITECTURE in
   osx*)
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
@@ -41,6 +39,9 @@ esac
 
 make -j$JOBS install
 
+find "$INSTALLROOT/lib" -name "libboost_*" -delete
+rm -f "$INSTALLROOT/LICENSE"
+
 # ModuleFile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
@@ -52,7 +53,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set DDS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv DDS_ROOT \$DDS_ROOT

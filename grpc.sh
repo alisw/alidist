@@ -21,7 +21,7 @@ git submodule update --init
 popd
 
 case $ARCHITECTURE in
-  osx*) 
+  osx*)
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
   ;;
@@ -37,10 +37,13 @@ cmake $SOURCEDIR                                    \
   -DgRPC_GFLAGS_PROVIDER=packet                     \
   -DgRPC_PROTOBUF_PROVIDER=package                  \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
+  -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
   ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
   -DgRPC_CARES_PROVIDER=package
 
 make ${JOBS:+-j$JOBS} install
+
+
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

@@ -65,6 +65,7 @@ unset CXXFLAGS
 unset CFLAGS
 unset LDFLAGS
 
+SONAME=so
 case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
@@ -72,8 +73,10 @@ case $ARCHITECTURE in
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
+    SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
   ;;
 esac
 
@@ -99,6 +102,7 @@ else
   ROOT_HAS_NO_PYTHON=1
 fi
 
+unset DYLD_LIBRARY_PATH
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
@@ -129,6 +133,8 @@ cmake $SOURCEDIR                                                                
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
       ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
+      ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
+      ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
@@ -199,7 +205,8 @@ find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
-       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+       "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"     \
+       "$INSTALLROOT/LICENSE"
 
 # Modulefile
 mkdir -p etc/modulefiles
