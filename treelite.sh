@@ -37,8 +37,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-set TREELITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path PATH \$TREELITE_ROOT
+set TREELITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$TREELITE_ROOT/bin
 prepend-path ROOT_INCLUDE_PATH \$TREELITE_ROOT/include
 prepend-path ROOT_INCLUDE_PATH \$TREELITE_ROOT/runtime/native/include
 prepend-path LD_LIBRARY_PATH \$TREELITE_ROOT/lib
