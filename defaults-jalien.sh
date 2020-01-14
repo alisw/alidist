@@ -36,10 +36,10 @@ overrides:
       - autotools
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-52-01
+    tag: v5-09-52b-01
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-52
+    tag: v5-09-52b
     requires:
       - ROOT
       - DPMJET
