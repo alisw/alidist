@@ -51,6 +51,13 @@ cmake $SOURCEDIR                                                         \
       ${CONTROL_OCCPLUGIN_VERSION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
+echo "environment in readout.sh:"
+env
+echo "------------------------------------"
+echo | clang++ -E -Wp,-v -
+printf "#include <math.h>\n int main(){isnan(0.0); return 0;}\n " | clang++ -x c++ -std=c++17 -
+printf "#include <cmath>\n int main(){std::isnan(0.0); return 0;}\n " | clang++ -x c++ -std=c++17 -
+
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile
