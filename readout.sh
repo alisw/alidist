@@ -58,7 +58,7 @@ echo | clang++ -E -Wp,-v -
 printf "#include <math.h>\n int main(){isnan(0.0); return 0;}\n " | clang++ -x c++ -std=c++17 -
 printf "#include <cmath>\n int main(){std::isnan(0.0); return 0;}\n " | clang++ -x c++ -std=c++17 -
 
-VERBOSE=1 make ${JOBS+-j $JOBS} install
+VERBOSE=1 make -j 1 install
 
 #ModuleFile
 mkdir -p etc/modulefiles
