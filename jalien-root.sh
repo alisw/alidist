@@ -5,6 +5,8 @@ source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
   - xjalienfs
+  - libjalienws
+  - XRootD
 build_requires:
   - libwebsockets
   - json-c
@@ -32,6 +34,7 @@ cmake $BUILDDIR                                          \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
+      -DXROOTD_ROOT_DIR="$XROOTD_ROOT"                   \
       -DLWS="$LIBWEBSOCKETS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
@@ -47,8 +50,9 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                  \\
-                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}
+                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                   \\
+                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}                 \\
+                     ${LIBJALIENWS_REVISION:+libjalienws/$LIBJALIENWS_VERSION-$LIBJALIENWS_REVISION}
 
 # Our environment
 set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
