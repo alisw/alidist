@@ -1,10 +1,11 @@
 package: FreeType
-version: v2.6
+version: v2.10.1
 requires:
  - AliEn-Runtime:(?!.*ppc64)
 build_requires:
   - autotools
   - curl
+  - libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <ft2build.h>\n" | c++ -xc++ - `freetype-config --cflags` -c -M 2>&1;
