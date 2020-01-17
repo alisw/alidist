@@ -53,8 +53,8 @@ module load BASE/1.0                                                            
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
-setenv MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(MONITORING_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(MONITORING_ROOT)/lib
+set MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$MONITORING_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$MONITORING_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
