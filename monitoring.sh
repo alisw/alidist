@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v2.6.3
+tag: v2.6.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -47,7 +47,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${APMON_CPP_REVISION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}  ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0                                                                                \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            ${APMON_CPP_REVISION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}                 \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 set MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

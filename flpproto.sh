@@ -12,7 +12,7 @@ requires:
   - Readout
   - qcg
   - QualityControl
-  - ALF
+  - "ALF(?!osx)"
 source: https://github.com/AliceO2Group/FlpPrototype
 valid_defaults:
   - o2
