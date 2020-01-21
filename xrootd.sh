@@ -29,7 +29,7 @@ case $ARCHITECTURE in
   ;;
 esac
 
-rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+rsync -a --delete $SOURCEDIR/ $BUILDDIR
 
 [ x"$XROOTD_V4" = x"True" ] && sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
 
