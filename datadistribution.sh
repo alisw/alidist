@@ -58,7 +58,7 @@ module load BASE/1.0                                                            
             ${PPCONSUL_REVISION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}                     \\
             ${GRPC_REVISION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                                     \\
             ${O2_REVISION:+O2/$O2_VERSION-$O2_REVISION}                                             \\
-            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}             \\
+            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}
 
 # DataDistribution environment:
 set DATADISTRIBUTION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

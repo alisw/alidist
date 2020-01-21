@@ -33,9 +33,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MSGPACK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(MSGPACK_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(MSGPACK_ROOT)/lib")
+set MSGPACK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MSGPACK_ROOT \$MSGPACK_ROOT
+prepend-path LD_LIBRARY_PATH \$MSGPACK_ROOT/lib
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p $MODULEDIR && rsync -a --delete etc/modulefiles/ $MODULEDIR

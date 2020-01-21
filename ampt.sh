@@ -10,7 +10,7 @@ requires:
 
 cmake  $SOURCEDIR                           \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
-       ${HEPMC_VERSION:+-DHEPMC_ROOT=$HEPMC_ROOT}
+       ${HEPMC_REVISION:+-DHEPMC_ROOT=$HEPMC_ROOT}
 
 make ${JOBS+-j $JOBS} install
 
@@ -27,10 +27,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${HEPMC_VERSION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
+module load BASE/1.0 ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 # Our environment
-setenv AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(AMPT_ROOT)/bin
-#prepend-path LD_LIBRARY_PATH \$::env(AMPT_ROOT)/lib
-#$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(AMPT_ROOT)/lib")
+set AMPT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv AMPT_ROOT \$AMPT_ROOT
+prepend-path PATH \$AMPT_ROOT/bin
+#prepend-path LD_LIBRARY_PATH \$AMPT_ROOT/lib
 EoF

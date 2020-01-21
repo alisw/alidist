@@ -1,7 +1,7 @@
 package: sodium
 version: v1.0.8
-source: https://github.com/jedisct1/libsodium
 tag: 1.0.8
+source: https://github.com/jedisct1/libsodium
 build_requires:
   - autotools
   - "GCC-Toolchain:(?!osx)"
@@ -29,7 +29,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv SODIUM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(SODIUM_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(SODIUM_ROOT)/lib")
+set SODIUM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv SODIUM_ROOT \$SODIUM_ROOT
+prepend-path LD_LIBRARY_PATH \$SODIUM_ROOT/lib
 EoF

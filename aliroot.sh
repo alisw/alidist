@@ -116,10 +116,11 @@ set ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ALIROOT_VERSION \$version
 setenv ALICE \$::env(BASEDIR)/$PKGNAME
 setenv ALIROOT_RELEASE \$::env(ALIROOT_VERSION)
-setenv ALICE_ROOT \$ALIROOT_ROOT
-prepend-path PATH \$ALIROOT_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$ALIROOT_ROOT/lib
-prepend-path ROOT_INCLUDE_PATH \$ALIROOT_ROOT/include
-prepend-path ROOT_INCLUDE_PATH \$ALIROOT_ROOT/include/Pythia8
+set ALICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ALIROOT_RELEASE)
+setenv ALICE_ROOT \$ALICE_ROOT
+prepend-path PATH \$ALICE_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALICE_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$ALICE_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$ALICE_ROOT/include/Pythia8
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

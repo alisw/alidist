@@ -49,11 +49,11 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 HepMC/$HEPMC_VERSION-$HEPMC_REVISION lhapdf/${LHAPDF_VERSION}-${LHAPDF_REVISION} ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} pythia/${PYTHIA_VERSION}-${PYTHIA_REVISION}
+module load BASE/1.0 HepMC/$HEPMC_VERSION-$HEPMC_REVISION lhapdf/${LHAPDF_VERSION}-${LHAPDF_REVISION} ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} pythia/${PYTHIA_VERSION}-${PYTHIA_REVISION}
 # Our environment
-setenv SACRIFICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PYTHONPATH \$::env(SACRIFICE_ROOT)/lib/python2.7/site-packages
-prepend-path PATH \$::env(SACRIFICE_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(SACRIFICE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(SACRIFICE_ROOT)/lib")
+set SACRIFICE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv SACRIFICE_ROOT \$SACRIFICE_ROOT
+prepend-path PYTHONPATH \$SACRIFICE_ROOT/lib/python2.7/site-packages
+prepend-path PATH \$SACRIFICE_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$SACRIFICE_ROOT/lib
 EoF

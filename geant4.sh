@@ -86,8 +86,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${XERCESC_VERSION:+xercesc/$XERCESC_VERSION-$XERCESC_REVISION}
 # Our environment
 set osname [uname sysname]
-setenv GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv G4INSTALL \$::env(GEANT4_ROOT)
+set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GEANT4_ROOT \$GEANT4_ROOT
+setenv G4INSTALL \$GEANT4_ROOT
 setenv G4INSTALL_DATA \$::env(G4INSTALL)/share/
 setenv G4SYSTEM \$osname-g++
 setenv G4LEVELGAMMADATA $G4LEVELGAMMADATA

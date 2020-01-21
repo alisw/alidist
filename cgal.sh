@@ -80,9 +80,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
-setenv CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CGAL_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(CGAL_ROOT)/lib
+set CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$CGAL_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CGAL_ROOT/lib
 EoF
