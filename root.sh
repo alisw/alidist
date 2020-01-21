@@ -193,7 +193,7 @@ mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
-  unset OPENSSL_VERSION LIBXML2_VERSION
+  unset OPENSSL_REVISION LIBXML2_REVISION
 fi
 
 # Make some CMake files used by other projects relocatable
