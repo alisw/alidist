@@ -19,7 +19,7 @@ make install
 # Work around potentially faulty CMake (missing `install` for binaries)
 mkdir -p $INSTALLROOT/bin
 for BIN in flathash flatc flatsamplebinary flatsampletext flattests; do
-  cp -np $BIN $INSTALLROOT/bin/
+  [ -e $BIN ] && cp -np $BIN $INSTALLROOT/bin/
 done
 
 # Modulefile
