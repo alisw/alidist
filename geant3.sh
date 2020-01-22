@@ -12,8 +12,9 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT3_ROOT/include/TGeant3"
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
-                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE  \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
+                 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE     \
+                 ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
                  -DCMAKE_SKIP_RPATH=TRUE
 make ${JOBS:+-j $JOBS} install
 
