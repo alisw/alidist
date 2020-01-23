@@ -1,7 +1,7 @@
 package: mesos-workqueue
 version: 0.0.2-%(short_hash)s
-source: https://github.com/alisw/mesos-workqueue
 tag: master
+source: https://github.com/alisw/mesos-workqueue
 requires:
 - mesos
 - protobuf
@@ -39,8 +39,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MESOS_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(MESOS_WORKQUEUE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(MESOS_WORKQUEUE_ROOT)/lib")
-prepend-path PATH \$::env(MESOS_WORKQUEUE_ROOT)/bin
+set MESOS_WORKQUEUE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MESOS_WORKQUEUE_ROOT \$MESOS_WORKQUEUE_ROOT
+prepend-path LD_LIBRARY_PATH \$MESOS_WORKQUEUE_ROOT/lib
+prepend-path PATH \$MESOS_WORKQUEUE_ROOT/bin
 EoF

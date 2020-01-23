@@ -10,7 +10,6 @@ build_requires:
 source: https://github.com/AliceO2Group/AEGIS.git
 prepend_path:
   LD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
-  DYLD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
   ROOT_INCLUDE_PATH: "$AEGIS_ROOT/include"
 ---
 #!/bin/bash -e
@@ -35,8 +34,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION 
 # Our environment
-setenv AEGIS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(AEGIS_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(AEGIS_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(AEGIS_ROOT)/lib")
+set AEGIS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv AEGIS_ROOT \$AEGIS_ROOT
+prepend-path LD_LIBRARY_PATH \$AEGIS_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$AEGIS_ROOT/include
 EoF

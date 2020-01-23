@@ -28,12 +28,12 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set osname [uname sysname]
-setenv VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(VC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(VC_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(VC_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(VC_ROOT)/lib")
+set VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv VC_ROOT \$VC_ROOT
+prepend-path PATH \$VC_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$VC_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$VC_ROOT/include
 EoF

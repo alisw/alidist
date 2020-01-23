@@ -1,7 +1,7 @@
 package: aurora
 version: alice1
-source: https://github.com/alisw/aurora
 tag: alice/0.16.0
+source: https://github.com/alisw/aurora
 ---
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ ./
@@ -25,9 +25,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv AURORA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(AURORA_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(AURORA_ROOT)/lib
-prepend-path PERL5LIB $::env(AURORA_ROOT)/lib/perl5
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(AURORA_ROOT)/lib")
+set AURORA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$AURORA_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$AURORA_ROOT/lib
+prepend-path PERL5LIB \$AURORA_ROOT/lib/perl5
 EoF

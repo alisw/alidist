@@ -84,7 +84,7 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
   # were not taken from the system
   OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
-  LIBXML2_ROOT=${LIBXML2_VERSION:+$ALIEN_RUNTIME_ROOT}
+  LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 
@@ -109,7 +109,7 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
-      ${ALIEN_RUNTIME_VERSION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
+      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
       ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       ${CXX11:+-Dcxx11=ON}                                                             \
@@ -128,7 +128,7 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
       -Dfortran=OFF                                                                    \
       -DCMAKE_LINKER=$COMPILER_LD                                                      \
-      ${GCC_TOOLCHAIN_VERSION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
+      ${GCC_TOOLCHAIN_REVISION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
       ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
@@ -145,7 +145,7 @@ cmake $SOURCEDIR                                                                
       -Dshadowpw=OFF                                                                   \
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
-      ${ALIEN_RUNTIME_VERSION:+-Dmonalisa=ON}                                          \
+      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                          \
       -Dkrb5=OFF                                                                       \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
@@ -157,8 +157,8 @@ cmake $SOURCEDIR                                                                
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
-          ${ARROW_VERSION:+arrow}"
-NO_FEATURES="root7 ${LZMA_VERSION:+builtin_lzma} ${LIBPNG_VERSION:+builtin_png} krb5 gviz
+          ${ARROW_REVISION:+arrow}"
+NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
              ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien"
 
 if [[ $ENABLE_COCOA ]]; then
@@ -193,7 +193,7 @@ mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
   # Get them from AliEn-Runtime in the Modulefile
-  unset OPENSSL_VERSION LIBXML2_VERSION
+  unset OPENSSL_VERSION LIBXML2_VERSION OPENSSL_REVISION LIBXML2_REVISION
 fi
 
 # Make some CMake files used by other projects relocatable

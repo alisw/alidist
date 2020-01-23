@@ -11,7 +11,6 @@ build_requires:
   - autotools
 prepend_path:
   LD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
-  DYLD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
 env:
   ThePEG_INSTALL_PATH: "$THEPEG_ROOT/lib/ThePEG"
 ---
@@ -85,11 +84,11 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION ${GSL_VERSION:+GSL/$GSL_VERSION-$GSL_REVISION}
+module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION}
 # Our environment
-setenv THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv THEPEG_ROOT \$THEPEG_ROOT
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
-prepend-path PATH \$::env(THEPEG_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(THEPEG_ROOT)/lib/ThePEG")
+prepend-path PATH \$THEPEG_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$THEPEG_ROOT/lib/ThePEG
 EoF

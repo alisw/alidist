@@ -46,6 +46,8 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
                      ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 # Our environment
 set LIBWEBSOCKETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LIBWEBSOCKETS_ROOT \$LIBWEBSOCKETS_ROOT
+prepend-path PATH \$LIBWEBSOCKETS_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBWEBSOCKETS_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -190,10 +190,11 @@ module load BASE/1.0 \\
             ${DEBUGGUI_REVISION:+DebugGUI/$DEBUGGUI_VERSION-$DEBUGGUI_REVISION}                     \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
 # Our environment
-setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv VMCWORKDIR \$::env(O2_ROOT)/share
+set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv O2_ROOT \$O2_ROOT
+setenv VMCWORKDIR \$O2_ROOT/share
 
-set O2_ROOT \$::env(O2_ROOT)
+set O2_ROOT \$O2_ROOT
 prepend-path PATH \$O2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")

@@ -1,7 +1,7 @@
 package: MPFR
 version: v3.1.3
-source: https://github.com/alisw/MPFR.git
 tag: v3.1.3
+source: https://github.com/alisw/MPFR.git
 build_requires:
   - autotools
   - GMP
@@ -37,7 +37,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(MPFR_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(MPFR_ROOT)/lib")
+set MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MPFR_ROOT \$MPFR_ROOT
+prepend-path LD_LIBRARY_PATH \$MPFR_ROOT/lib
 EoF

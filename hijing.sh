@@ -31,8 +31,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv HIJING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(HIJING_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(HIJING_ROOT)/lib")
+set HIJING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv HIJING_ROOT \$HIJING_ROOT
+prepend-path LD_LIBRARY_PATH \$HIJING_ROOT/lib
 EoF
 
