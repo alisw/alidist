@@ -24,6 +24,7 @@ case $ARCHITECTURE in
   osx*)
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
+    EXTRA_MODULE_COMMAND="prepend-path DYLD_FALLBACK_LIBRARY_PATH \$GRPC_ROOT/lib"
   ;;
 esac
 
@@ -65,4 +66,5 @@ module load BASE/1.0                                                          \\
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$GRPC_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$GRPC_ROOT/lib
+${EXTRA_MODULE_COMMAND}
 EoF
