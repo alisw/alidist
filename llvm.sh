@@ -27,6 +27,8 @@ case $ARCHITECTURE in
   ;;
   # This will most likely fail if we start producing binary packages for Ubuntu, but for the moment we do not.
   ubuntu*) DEFAULT_SYSROOT="" ;;
+  debian*) DEFAULT_SYSROOT="" ;;
+  unknown*) DEFAULT_SYSROOT="" ;;
   *) DEFAULT_SYSROOT="/usr" ;;
 esac
 
