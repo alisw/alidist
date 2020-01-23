@@ -26,7 +26,9 @@ case $ARCHITECTURE in
       DEFAULT_SYSROOT=`xcrun --show-sdk-path`
     fi
   ;;
-  *) DEFAULT_SYSROOT="" ;;
+  # This will most likely fail if we start producing binary packages for Ubuntu, but for the moment we do not.
+  ubuntu*) DEFAULT_SYSROOT="" ;;
+  *) DEFAULT_SYSROOT="/usr" ;;
 esac
 
 # note that BUILD_SHARED_LIBS=ON IS NEEDED FOR ADDING DYNAMIC PLUGINS
