@@ -48,8 +48,10 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv DIM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version
+set DIM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv DIM_ROOT \$DIM_ROOT
+set BASEDIR \$::env(BASEDIR)
+prepend-path PATH \$BASEDIR/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

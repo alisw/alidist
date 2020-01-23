@@ -7,8 +7,9 @@ requires:
   - libpng
 build_requires:
   - curl
+  - Python-modules-list
 prepend_path:
-  PYTHONPATH: $PYTHON_MODULES_ROOT/lib/python/site-packages
+  PYTHONPATH: $PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
 ---
 #!/bin/bash -ex
 
@@ -18,57 +19,25 @@ export PYVER=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig
 # Ignore what is already in PYTHONPATH. We will set PYTHONPATH or PYTHONUSERBASE per command
 unset PYTHONPATH
 
-# *** IMPORTANT NOTE FOR CONTRIBUTORS ***
-# In order to ensure reproducibility (i.e. if we rebuild this same package over time we want to get
-# the exact same result) we absolutely need to specify the exact versions of the desired packages.
-# In order to get the exact versions, you can use `pip freeze` on your local installation.
-PIP_REQUIREMENTS=(
-  # pack==version           import_module
-  "requests==2.21.0         requests"
-  "ipykernel==5.1.0         ipykernel"
-  "ipython==7.4.0           IPython"
-  "ipywidgets==7.4.2        ipywidgets"
-  "metakernel==0.20.14      metakernel"
-  "mock==2.0.0              mock"
-  "notebook==5.7.8          notebook.notebookapp"
-  "numpy==1.16.2            numpy"
-  "pandas==0.24.2           pandas"
-  "PyYAML==5.1              yaml"
-  "scikit-learn==0.20.3     sklearn"
-  "scipy==1.2.1             scipy"
-  "uproot==3.4.18           uproot"
-  )
-
+# PIP_REQUIREMENTS & PIP36_REQUIREMENTS come from Python-modules-list
+echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
 if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)' && [[ $ARCHITECTURE != slc6* ]]; then
-  # Install some ML-specific packages only with Python 3.6 at the moment
-  PIP_REQUIREMENTS+=(
-    "seaborn==0.9.0           seaborn"
-    "sklearn-evaluation==0.4  sklearn_evaluation"
-    "Keras==2.2.4             keras"
-    "tensorflow==1.13.1       tensorflow"
-    "xgboost==0.82            xgboost"
-    "dryable==1.0.3           dryable"
-    "responses==0.10.6        responses"
-    "RootInteractive==0.0.10   RootInteractive"
-  )
-else
-  echo "WARNING: Not installing Keras and TensorFlow"
+  echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
 fi
 
-# Install pip packages under a user folder, but unset it right after installation
-for P in "${PIP_REQUIREMENTS[@]}"; do
-  echo $P | cut -d' ' -f1
-done > requirements.txt
+# We use a different INSTALLROOT, so that we can build updatable RPMS which
+# do not conflict with the underlying Python installation.
+PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
+mkdir -p $PYTHON_MODULES_INSTALLROOT
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU numpy
-
-env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -IU -r requirements.txt
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU numpy
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
-pushd "$INSTALLROOT"
+pushd "$PYTHON_MODULES_INSTALLROOT"
   if [[ -d lib64 ]]; then
     ln -nfs lib64 lib  # creates lib pointing to lib64
   elif [[ -d lib ]]; then
@@ -79,7 +48,7 @@ pushd "$INSTALLROOT"
   popd
   pushd bin
     # Fix shebangs: remove hardcoded Python path
-    sed -i.deleteme -e "1 s|^#!${INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
+    sed -i.deleteme -e "1 s|^#!${PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
     rm -f *.deleteme || true
   popd
 popd
@@ -88,7 +57,7 @@ popd
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$PYTHON_MODULES_INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
@@ -115,24 +84,24 @@ EOF
     ln -nfs $FREETYPE_ROOT/include/freetype2 fake_freetype_root/include
   fi
 
-  export PYTHONPATH="$INSTALLROOT/lib/python/site-packages"
+  export PYTHONPATH="$PYTHON_MODULES_INSTALLROOT/lib/python/site-packages"
     python3 setup.py build
-    python3 setup.py install --prefix "$INSTALLROOT"
+    python3 setup.py install --prefix "$PYTHON_MODULES_INSTALLROOT"
   unset PYTHONPATH
 fi
 
 # Test if matplotlib can be loaded
-env PYTHONPATH="$INSTALLROOT/lib/python/site-packages" python3 -c 'import matplotlib'
+env PYTHONPATH="$PYTHON_MODULES_INSTALLROOT/lib/python/site-packages" python3 -c 'import matplotlib'
 
 # Patch long shebangs (by default max is 128 chars on Linux)
-pushd "$INSTALLROOT/bin"
+pushd "$PYTHON_MODULES_INSTALLROOT/bin"
   sed -i.deleteme -e '1 s|^#!.*$|#!/usr/bin/env python3|' * || true
   rm -f *.deleteme
 popd
 
 # Remove useless stuff
-rm -rvf "$INSTALLROOT"/share "$INSTALLROOT"/lib/python*/test
-find "$INSTALLROOT"/lib/python* \
+rm -rvf "$PYTHON_MODULES_INSTALLROOT"/share "$PYTHON_MODULES_INSTALLROOT"/lib/python*/test
+find "$PYTHON_MODULES_INSTALLROOT"/lib/python* \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
 
@@ -149,11 +118,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${PYTHON_VERSION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${ALIEN_RUNTIME_VERSION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
+module load BASE/1.0 ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 # Our environment
-setenv PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(PYTHON_MODULES_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(PYTHON_MODULES_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(PYTHON_MODULES_ROOT)/lib")
-prepend-path PYTHONPATH $::env(PYTHON_MODULES_ROOT)/lib/python/site-packages
+set PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$PYTHON_MODULES_ROOT/share/python-modules/bin
+prepend-path LD_LIBRARY_PATH \$PYTHON_MODULES_ROOT/share/python-modules/lib
+prepend-path PYTHONPATH \$PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
 EoF

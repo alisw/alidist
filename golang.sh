@@ -1,5 +1,5 @@
 package: golang
-version: "1.12.7"
+version: "1.13.6"
 build_requires:
   - curl
 prefer_system_check: |
@@ -24,10 +24,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0
 
 # Our environment
-setenv GOROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set GOROOT \$::env(BASEDIR)/$PKGNAME/\$version
 # NOTE: upstream requires GOROOT to be defined if installing to a nonstandard path
-prepend-path PATH \$::env(GOROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(GOROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GOROOT)/lib")
+prepend-path PATH \$GOROOT/bin
+prepend-path LD_LIBRARY_PATH \$GOROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

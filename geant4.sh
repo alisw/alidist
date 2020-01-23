@@ -49,6 +49,7 @@ cmake $SOURCEDIR                                             \
   -DGEANT4_USE_G3TOG4=ON                                     \
   -DGEANT4_INSTALL_DATA=ON                                   \
   -DGEANT4_USE_SYSTEM_EXPAT=OFF                              \
+  ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}          \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                    \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
@@ -82,11 +83,12 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0 ${XERCESC_VERSION:+xercesc/$XERCESC_VERSION-$XERCESC_REVISION}
 # Our environment
 set osname [uname sysname]
-setenv GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv G4INSTALL \$::env(GEANT4_ROOT)
+set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GEANT4_ROOT \$GEANT4_ROOT
+setenv G4INSTALL \$GEANT4_ROOT
 setenv G4INSTALL_DATA \$::env(G4INSTALL)/share/
 setenv G4SYSTEM \$osname-g++
 setenv G4LEVELGAMMADATA $G4LEVELGAMMADATA
@@ -96,9 +98,9 @@ setenv G4NEUTRONHPDATA $G4NEUTRONHPDATA
 setenv G4NEUTRONXSDATA $G4NEUTRONXSDATA
 setenv G4SAIDXSDATA $G4SAIDXSDATA
 setenv G4ENSDFSTATEDATA $G4ENSDFSTATEDATA
-prepend-path PATH \$::env(GEANT4_ROOT)/bin
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include/Geant4
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_ROOT)/include
-prepend-path LD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_ROOT)/lib")
+set G4BASE \$::env(GEANT4_ROOT)
+prepend-path PATH \$G4BASE/bin
+prepend-path ROOT_INCLUDE_PATH \$G4BASE/include/Geant4
+prepend-path ROOT_INCLUDE_PATH \$G4BASE/include
+prepend-path LD_LIBRARY_PATH \$G4BASE/lib
 EoF

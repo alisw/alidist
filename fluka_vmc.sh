@@ -50,7 +50,6 @@ int loadFluka() {
 }
 EOF
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
-export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
 export ROOT_HIST=0
 root -l -b -q -n loadFluka.C++
 
@@ -67,11 +66,11 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv FLUKA_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FLUKA_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FLUKA_VMC_ROOT \$FLUKA_VMC_ROOT
 setenv FLUVMC \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version/data
-prepend-path LD_LIBRARY_PATH \$::env(FLUKA_VMC_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(FLUKA_VMC_ROOT)/lib")
+prepend-path LD_LIBRARY_PATH \$FLUKA_VMC_ROOT/lib
 EoF

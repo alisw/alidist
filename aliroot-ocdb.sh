@@ -1,7 +1,7 @@
 package: AliRoot-OCDB
-source: https://gitlab.cern.ch/alisw/AliRootOCDB.git
 version: "%(short_hash)s"
 tag: master
+source: https://gitlab.cern.ch/alisw/AliRootOCDB.git
 ---
 #!/bin/bash -e
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $INSTALLROOT/
@@ -20,5 +20,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv ALIROOT_OCDB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALIROOT_OCDB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ALIROOT_OCDB_ROOT \$ALIROOT_OCDB_ROOT
 EoF

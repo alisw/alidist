@@ -35,10 +35,10 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} HepMC/$HEPMC_VERSION-$HEPMC_REVISION
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
-setenv CRMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(CRMC_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(CRMC_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(CRMC_ROOT)/lib")
+set CRMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CRMC_ROOT \$CRMC_ROOT
+prepend-path PATH \$CRMC_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CRMC_ROOT/lib
 EoF

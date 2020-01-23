@@ -11,7 +11,7 @@ cmake $SOURCEDIR                              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
       -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
-make test
+#make test
 
 rsync -av $SOURCEDIR/include/ $INSTALLROOT/include/
 # Modulefile
@@ -25,14 +25,14 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 setenv ROOUNFOLD_RELEASE \$version
 setenv ROOUNFOLD_VERSION $PKGVERSION
-setenv ROOUNFOLD_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ROOUNFOLD_RELEASE)
-prepend-path PATH \$::env(ROOUNFOLD_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ROOUNFOLD_ROOT)/lib
-prepend-path ROOT_INCLUDE_PATH \$::env(ROOUNFOLD_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ROOUNFOLD_ROOT)/lib")
+set ROOUNFOLD_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(ROOUNFOLD_RELEASE)
+setenv ROOUNFOLD_ROOT \$ROOUNFOLD_ROOT
+prepend-path PATH \$ROOUNFOLD_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ROOUNFOLD_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$ROOUNFOLD_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

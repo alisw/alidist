@@ -1,5 +1,5 @@
 package: cgal
-version: "v4.6.3"
+version: "4.6.3"
 requires:
   - boost
 build_requires:
@@ -15,17 +15,15 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
-PKGID=35136
-URL="https://gforge.inria.fr/frs/download.php/file/${PKGID}/"
+URL="https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
 
-curl -kLo cgal.tar.bz2 "$URL"
-tar xjf cgal.tar.bz2
+curl -kLo cgal.tar.xz "$URL"
+tar xJf cgal.tar.xz
 cd CGAL-*
 
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="-L$BOOST_ROOT/lib"
   export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
-  export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$DYLD_LIBRARY_PATH"
 fi
 
 export MPFR_LIB_DIR="${MPFR_ROOT}/lib"
@@ -82,10 +80,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
-setenv CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CGAL_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(CGAL_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(CGAL_ROOT)/lib")
+set CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$CGAL_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CGAL_ROOT/lib
 EoF

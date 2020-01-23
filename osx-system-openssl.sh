@@ -1,5 +1,5 @@
 package: osx-system-openssl
-version: 1.0
+version: "1.0"
 system_requirement_missing: |
   Please make sure you install openssl using Homebrew (brew install openssl)
 system_requirement: "osx.*"

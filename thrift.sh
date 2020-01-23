@@ -27,6 +27,7 @@ rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
             --without-haskell           \
             --without-perl              \
             --without-python            \
+            --without-java              \
             --without-php               \
             --without-php_extension     \
             --without-ruby              \
@@ -36,7 +37,7 @@ rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
             --disable-plugin            \
             --disable-tutorial          \
             ${OPENSSL_ROOT:+--with-openssl=${OPENSSL_ROOT}}
-make CPPFLAGS="-I${BOOST_ROOT}/include ${CPPFLAGS}" CXXFLAGS="-Wno-macro-redefined -Wno-register ${CXXFLAGS}" ${JOBS:+-j $JOBS}
+make CPPFLAGS="-I${BOOST_ROOT}/include ${CPPFLAGS}" CXXFLAGS="-Wno-error -fPIC -O2" ${JOBS:+-j $JOBS}
 make install
 
 # Modulefile
@@ -54,7 +55,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+set BASEDIR \$::env(BASEDIR)
+prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
 EoF

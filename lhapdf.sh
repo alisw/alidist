@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: v6.2.1-alice2
 source: https://github.com/alisw/LHAPDF
 requires:
- - Python-modules
+ - Python
  - "GCC-Toolchain:(?!osx)"
 build_requires:
  - autotools
@@ -62,13 +62,13 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
                      ${PYTHON_MODULES_ROOT:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} 
 # Our environment
-setenv LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(LHAPDF_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib
-prepend-path PYTHONPATH \$::env(LHAPDF_ROOT)/lib/python/site-packages
-prepend-path LHAPDF_DATA_PATH \$::env(LHAPDF_ROOT)/share/LHAPDF
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LHAPDF_ROOT)/lib")
+set LHAPDF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LHAPDF_ROOT \$LHAPDF_ROOT
+prepend-path PATH \$LHAPDF_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$LHAPDF_ROOT/lib
+prepend-path PYTHONPATH \$LHAPDF_ROOT/lib/python/site-packages
+prepend-path LHAPDF_DATA_PATH \$LHAPDF_ROOT/share/LHAPDF
 EoF

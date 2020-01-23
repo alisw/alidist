@@ -1,0 +1,17 @@
+name: Jenkins RPM
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'monitoring.sh'
+
+jobs:
+  trigger_jenkins:
+    runs-on: macOS-10.14
+    steps:
+      - run: brew remove curl
+      - run: |
+          echo "${{ secrets.KERBEROS_PASSWORD }}" | kinit "${{ secrets.KERBEROS_USERNAME }}@${{ secrets.KERBEROS_HOSTNAME }}"
+          curl -X POST -k --negotiate -u : https://${{ secrets.ALIJENKINS_HOSTNAME }}/kerberos/job/build-any-ib/buildWithParameters -H 'Content-Type: application/x-www-form-urlencoded' -d 'PACKAGE_NAME=O2Suite&DEFAULTS=o2-dataflow&ARCHITECTURE=slc7_x86-64'

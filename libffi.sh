@@ -9,11 +9,14 @@ prepend_path:
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ .
 autoreconf -ivf .
-./configure --prefix=$INSTALLROOT
+./configure --prefix=$INSTALLROOT --disable-docs
 make ${JOBS:+-j $JOBS}
 make install
 
-LIBPATH=$(find $INSTALLROOT -name libffi.so)
+LIBPATH=$(find $INSTALLROOT -name libffi.so -o -name libffi.dylib -o -name libffi.a | head -n 1)
+# Do not install info documentation
+rm -fr "$INSTALLROOT/share/info"
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -29,5 +32,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/$(basename $(dirname $LIBPATH))
+set LIBFFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$LIBFFI_ROOT/$(basename $(dirname $LIBPATH))
 EoF

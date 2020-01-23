@@ -29,8 +29,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv MYGENERATOR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(MYGENERATOR_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(MYGENERATOR_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(MYGENERATOR_ROOT)/lib")
+set MYGENERATOR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv MYGENERATOR_ROOT \$MYGENERATOR_ROOT
+prepend-path PATH \$MYGENERATOR_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$MYGENERATOR_ROOT/lib
 EoF

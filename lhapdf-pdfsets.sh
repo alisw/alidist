@@ -1,5 +1,5 @@
 package: lhapdf-pdfsets
-version: "v%(year)s%(month)s%(day)s"
+version: "v%(year)s"
 build_requires:
  - lhapdf
 ---
@@ -36,8 +36,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${LHAPDF_VERSION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION}
+module load BASE/1.0 ${LHAPDF_REVISION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION}
 # Our environment
-setenv LHAPDF_PDFSETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set LHAPDF_PDFSETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LHAPDF_PDFSETS_ROOT \$LHAPDF_PDFSETS_ROOT
 append-path LHAPDF_DATA_PATH \$::env(LHAPDF_PDFSETS_ROOT)/share/LHAPDF
 EoF
