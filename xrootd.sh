@@ -29,7 +29,14 @@ case $ARCHITECTURE in
   ;;
 esac
 
-cmake "$SOURCEDIR"                                                    \
+rsync -a --delete $SOURCEDIR/ $BUILDDIR
+
+[ x"$XROOTD_V4" = x"True" ] && sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
+
+
+mkdir build
+pushd build
+cmake "$BUILDDIR"                                                     \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
@@ -47,6 +54,7 @@ cmake "$SOURCEDIR"                                                    \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
+popd
 
 if [[ x"$XROOTD_PYTHON" == x"True" ]];
 then
