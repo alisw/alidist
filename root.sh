@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-18-04"
-source: https://github.com/root-project/root
+tag: "v6-18-04-alice1"
+source: https://github.com/alisw/root
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
@@ -109,7 +109,7 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
-      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
+      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       ${CXX11:+-Dcxx11=ON}                                                             \
@@ -145,7 +145,7 @@ cmake $SOURCEDIR                                                                
       -Dshadowpw=OFF                                                                   \
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
-      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                          \
+      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dkrb5=OFF                                                                       \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \

@@ -5,7 +5,7 @@ source: https://github.com/apache/arrow
 requires:
   - boost
   - lz4
-  - LLVM
+  - Clang
   - protobuf
 build_requires:
   - zlib
@@ -50,7 +50,13 @@ esac
 #
 # Taken from our stack, linked dynamically (needed at runtime):
 #   boost
-cmake $SOURCEDIR/cpp                                                                                \
+
+mkdir -p ./src_tmp
+rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
+CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
+sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
+
+cmake ./src_tmp/cpp                                                                                 \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
@@ -84,7 +90,7 @@ cmake $SOURCEDIR/cpp                                                            
       -DARROW_PYTHON=OFF                                                                            \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
-      -DCLANG_EXECUTABLE=${LLVM_ROOT}/bin-safe/clang++
+      -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang++
 
 make ${JOBS:+-j $JOBS}
 make install
