@@ -1,6 +1,6 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v0.7
+tag: v0.7.1
 requires:
   - boost
   - FairLogger
