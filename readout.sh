@@ -32,7 +32,12 @@ esac
 
 # Enforce no warning code in the PR checker
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  if [[ $ARCHITECTURE != osx ]] ; then
+    # there seems to be a bug in CMake with -Werror which adds unwanted 
+    # includes that lead to failing builds. skip it for now.
+    # https://alice.its.cern.ch/jira/browse/O2-1074
+    CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  fi
 fi
 
 cmake $SOURCEDIR                                                         \
