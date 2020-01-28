@@ -21,7 +21,6 @@ cp -r $SOURCEDIR/bin ${INSTALLROOT}/bin
 cp ${ALIEN_PY} ${INSTALLROOT}/bin/alien.py
 chmod +x ${INSTALLROOT}/bin/*
 
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
