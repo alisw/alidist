@@ -26,6 +26,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
     osx*) ;;
     *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
   esac
+fi
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
