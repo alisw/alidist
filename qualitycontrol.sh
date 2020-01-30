@@ -37,7 +37,13 @@ esac
 # For the PR checkers (which sets ALIBUILD_O2_TESTS),
 # we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  # there seems to be a bug in CMake in macOS with -Werror which adds unwanted 
+  # includes that lead to failing builds. skip it for now.
+  # https://alice.its.cern.ch/jira/browse/O2-1074
+  case $ARCHITECTURE in 
+    osx*) ;;
+    *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
+  esac
 fi
 
 # Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1

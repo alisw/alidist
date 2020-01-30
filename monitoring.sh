@@ -19,8 +19,13 @@ case $ARCHITECTURE in
 esac
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
-fi
+  # there seems to be a bug in CMake in macOS with -Werror which adds unwanted 
+  # includes that lead to failing builds. skip it for now.
+  # https://alice.its.cern.ch/jira/browse/O2-1074
+  case $ARCHITECTURE in 
+    osx*) ;;
+    *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
+  esac
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
