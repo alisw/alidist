@@ -8,7 +8,8 @@ requires:
   - Configuration
   - libInfoLogger
   - "PDA:slc7.*"
-  - Python
+  - "Python:slc.*"
+  - "Python-system:(?!slc.*)"
 build_requires:
   - CMake
 prepend_path:

@@ -3,7 +3,8 @@ version: "v9.0.0"
 tag: "llvmorg-9.0.0"
 source: https://github.com/llvm/llvm-project
 requires:
- - Python
+ - "Python:slc.*"
+ - "Python-system:(?!slc.*)"
  - "GCC-Toolchain:(?!osx)"
 build_requires:
  - CMake
