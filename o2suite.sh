@@ -13,6 +13,7 @@ requires:
   - qcg
   - QualityControl
   - Run2ESDConverter
+  - DataDistribution
 valid_defaults:
   - o2
   - o2-dataflow
