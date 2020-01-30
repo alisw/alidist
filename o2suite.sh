@@ -13,7 +13,7 @@ requires:
   - qcg
   - QualityControl
   - Run2ESDConverter
-  - DataDistribution
+  - "DataDistribution:(?!osx)"
 valid_defaults:
   - o2
   - o2-dataflow
