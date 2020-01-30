@@ -24,17 +24,6 @@ case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
 esac
 
-# Enforce no warning code in the PR checker
-if [[ $ALIBUILD_O2_TESTS ]]; then
-  # there seems to be a bug in CMake in macOS with -Werror which adds unwanted 
-  # includes that lead to failing builds. skip it for now.
-  # https://alice.its.cern.ch/jira/browse/O2-1074
-  case $ARCHITECTURE in 
-    osx*) ;;
-    *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
-  esac
-fi
-
 cmake $SOURCEDIR                                                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
