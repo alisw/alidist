@@ -119,14 +119,6 @@ esac
 
 # This affects only PR checkers
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  # Impose extra errors.
-  # there seems to be a bug in CMake in macOS with -Werror which adds unwanted 
-  # includes that lead to failing builds. skip it for now.
-  # https://alice.its.cern.ch/jira/browse/O2-1074
-  case $ARCHITECTURE in 
-    osx*) ;;
-    *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
-  esac
   # On OSX CI, we do not want to run the GUI, even if available.
   case $ARCHITECTURE in
     osx*) DPL_TESTS_BATCH_MODE=ON ;;
