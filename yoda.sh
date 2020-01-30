@@ -4,7 +4,8 @@ tag: "v1.7.4"
 source: https://github.com/alisw/yoda
 requires:
   - boost
-  - Python
+  - "Python:slc.*"
+  - "Python-system:(?!slc.*)"
 build_requires:
   - autotools
 prepend_path:
