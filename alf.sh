@@ -16,17 +16,6 @@ incremental_recipe: |
 ---
 #!/bin/bash -ex
 
-# Enforce no warning code in the PR checker
-if [[ $ALIBUILD_O2_TESTS ]]; then
-  # there seems to be a bug in CMake in macOS with -Werror which adds unwanted 
-  # includes that lead to failing builds. skip it for now.
-  # https://alice.its.cern.ch/jira/browse/O2-1074
-  case $ARCHITECTURE in 
-    osx*) ;;
-    *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
-  esac
-fi
-
 cmake $SOURCEDIR                                                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
       ${COMMON_O2_REVISION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
