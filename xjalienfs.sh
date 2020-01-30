@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: 1.0.2
+tag: "1.0.3"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
  - "OpenSSL:(?!osx)"
@@ -20,7 +20,6 @@ ALIEN_PY=$(find ${INSTALLROOT} -name alien.py)
 cp -r $SOURCEDIR/bin ${INSTALLROOT}/bin
 cp ${ALIEN_PY} ${INSTALLROOT}/bin/alien.py
 chmod +x ${INSTALLROOT}/bin/*
-
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
