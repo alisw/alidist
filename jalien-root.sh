@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
   - xjalienfs
+  - XRootD
 build_requires:
   - libwebsockets
   - json-c
@@ -32,6 +33,7 @@ cmake $BUILDDIR                                          \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
+      -DXROOTD_ROOT_DIR="$XROOTD_ROOT"                   \
       -DLWS="$LIBWEBSOCKETS_ROOT"
 make ${JOBS:+-j $JOBS} install
 
