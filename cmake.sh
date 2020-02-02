@@ -1,7 +1,7 @@
 package: CMake
 version: "%(tag_basename)s"
-tag: "v3.16.3-alice1"
-source: https://github.com/alisw/CMake
+tag: "v3.16.3-alice2"
+source: https://github.com/davidrohr/CMake
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - make
