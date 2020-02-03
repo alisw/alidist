@@ -9,7 +9,7 @@ build_requires:
   - zlib
 prefer_system: "osx"
 prefer_system_check: |
-  printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"#endif\nint main(){}' | c++ -I$(brew --prefix libwebsockets)/include -xc++ -std=c++17 - -o /dev/null
+  printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\nint main(){}' | c++ -I$(brew --prefix libwebsockets)/include -xc++ -std=c++17 - -o /dev/null
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
