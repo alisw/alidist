@@ -20,14 +20,22 @@ case $ARCHITECTURE in
   osx*) 
 	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
 	[[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+	[[ ! $LIBUV_ROOT && $LIBWEBSOCKETS_ROOT ]] && LIBUV_ROOT=$(brew --prefix libuv)
   ;;
 esac
+
+if [[ "$LIBUV_ROOT" != '' ]]; then
+  export LDFLAGS="$LDFLAGS -L$LIBUV_ROOT/lib -luv"
+  export LD_LIBRARY_PATH="$LIBUV_ROOT/lib:$LD_LIBRARY_PATH"
+  export CXXFLAGS="-I$LIBUV_ROOT/include $CXXFLAGS"
+fi
 
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
 
 cmake $BUILDDIR                                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"                      \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
