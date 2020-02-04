@@ -9,7 +9,8 @@ build_requires:
   - zlib
 prefer_system: "osx"
 prefer_system_check: |
-	printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\nint main(){}' | c++ -I$(brew --prefix libwebsockets)/include -xc++ -std=c++17 - -o /dev/null || exit 1; echo -e "#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 2004000 || LWS_LIBRARY_VERSION_NUMBER >= 3001000\n#error "JAliEn-ROOT requires libwebsockets 3.0.x but other version was detected"\n#endif\nint main() {}" | c++ -x c++ -I$(brew --prefix libwebsockets)/include -std=c++17 - -o /dev/null || exit 1
+  printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | c++ -I$(brew --prefix libwebsockets)/include -c -xc++ -std=c++17 - -o /dev/null
+  printf '#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 2004000 || LWS_LIBRARY_VERSION_NUMBER >= 3001000\n#error \"JAliEn-ROOT requires libwebsockets 3.0.x but other version was detected\"\n#endif\n' | c++ -c -x c++ -I$(brew --prefix libwebsockets)/include -std=c++17 - -o /dev/null || exit 1
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
