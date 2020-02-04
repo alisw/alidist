@@ -1,6 +1,6 @@
 package: asiofi
 version: "%(tag_basename)s"
-tag: v0.3.1
+tag: v0.4.3
 source: https://github.com/FairRootGroup/asiofi
 requires:
   - boost
