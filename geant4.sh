@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v10.4.2-alice2"
+tag: "v10.4.2-alice3"
 source: https://github.com/alisw/GEANT4
 requires:
   - "GCC-Toolchain:(?!osx)"
