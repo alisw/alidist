@@ -7,7 +7,7 @@ requires:
  - FairLogger
  - ZeroMQ
  - "DDS:(?!osx)"
- - asiofi
+ - "asiofi:(?!osx)"
  - flatbuffers
 build_requires:
  - CMake
@@ -27,6 +27,8 @@ case $ARCHITECTURE in
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
+    BUILD_OFI=OFF
+    unset OFI_ROOT
   ;;
   *)
     BUILD_OFI=ON
