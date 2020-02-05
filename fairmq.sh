@@ -27,13 +27,13 @@ case $ARCHITECTURE in
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
-    BUILD_OFI=OFF
+    unset BUILD_OFI
     unset OFI_ROOT
   ;;
   *)
     BUILD_OFI=ON
     if [[ $(printf '%s\n' "1.4.2" "${PKGVERSION:1}" | sort -V | head -n1) != "1.4.2" ]]; then
-      BUILD_OFI=OFF
+      unset BUILD_OFI
     fi
   ;;
 esac
