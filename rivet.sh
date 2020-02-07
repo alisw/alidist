@@ -32,7 +32,7 @@ rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 # Boost flags are also necessary
 export LDFLAGS="$ARCH_LDFLAGS -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib -lCGAL"
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-export CXXFLAGS="$CXXFLAGS -I${MPFR_ROOT}/include -I${GMP_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF"
+export CXXFLAGS="$CXXFLAGS -Wno-error=deprecated-declarations -I${MPFR_ROOT}/include -I${GMP_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF"
 
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="$LDFLAGS -L$BOOST_ROOT/lib"
