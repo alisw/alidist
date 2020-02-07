@@ -55,6 +55,9 @@ proc ModulesHelp { } {
   global version
   puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 }
+
+system test -e ~/.rootrc && grep -iq PluginPath ~/.rootrc && echo "WARNING: Your local rootrc config might overwrite ROOT TGrid plugin path"
+
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
