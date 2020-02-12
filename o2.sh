@@ -30,6 +30,21 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/GPU"
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
+  if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+    NINJA_BIN=ninja-build
+    type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+    type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+    [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+    unset NINJA_BIN
+  fi
+  if [ "X$CMAKE_GENERATOR" = XNinja ]; then
+    # Find the old binary byproducts
+    find stage/{bin,lib,tests} -type f > old.txt
+    # Find new targets
+    ninja -t targets all  | grep stage | cut -f1 -d: > new.txt
+    # Delete all those which are found twice (i.e. which are in old.txt only)
+    cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
+  fi
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
