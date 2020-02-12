@@ -1,18 +1,18 @@
 package: Herwig
 version: "%(tag_basename)s"
-tag: "v7.1.2-alice1"
+tag: "v7.2.0"
 source: https://github.com/alisw/herwig
 requires:
   - GMP
   - GSL
   - ThePEG
+  - lhapdf
   - lhapdf-pdfsets
 build_requires:
   - autotools
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
-
 
 export LHAPDF_DATA_PATH="$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
 

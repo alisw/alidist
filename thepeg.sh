@@ -1,6 +1,6 @@
 package: ThePEG
 version: "%(tag_basename)s"
-tag: "v2.1.2"
+tag: "v2.2.0"
 source: https://github.com/alisw/thepeg
 requires:
   - Rivet
