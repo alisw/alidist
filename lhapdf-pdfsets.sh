@@ -8,7 +8,8 @@ build_requires:
 PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl cteq66 CT10nlo"
 if [ ! -d $INSTALLROOT/share/LHAPDF ]; then mkdir -p $INSTALLROOT/share/LHAPDF; fi
 pushd $INSTALLROOT/share/LHAPDF
-  REPO=https://lhapdf.hepforge.org/downloads?f=pdfsets/6.2.1
+  # REPO=https://lhapdf.hepforge.org/downloads?f=pdfsets/6.2.1
+  REPO=http://lhapdfsets.web.cern.ch/lhapdfsets/current/ 
   for P in $PDFSETS; do
     PDFPACK=$(printf "%s.tar.gz" $P)
     PDFEXT=$(printf "%s/%s" $REPO $PDFPACK)
