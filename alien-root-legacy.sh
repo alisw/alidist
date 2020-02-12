@@ -16,7 +16,6 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ALIEN_ROOT_LEGACY_ROOT/include"
 ---
 #!/bin/bash -e
-
 if [[ $ARCHITECTURE == osx* && ! $OPENSSL_ROOT ]]; then
   OPENSSL_ROOT=$(brew --prefix openssl)
 fi
