@@ -11,6 +11,7 @@ requires:
 build_requires:
   - curl
   - autotools
+  - cgal
 ---
 #!/bin/bash -e
 
@@ -22,12 +23,14 @@ autoreconf -ivf
 mkdir -p fakewget && [[ -d fakewget ]]
 printf '#!/bin/bash\nexec curl -fO $1' > fakewget/wget && chmod +x fakewget/wget
 
-PATH=$PATH:fakewget ./configure --prefix=$INSTALLROOT        \
-                                --with-sqlite3=install       \
-                                --enable-hepmc2=$HEPMC_ROOT  \
-                                --enable-lhapdf=$LHAPDF_ROOT
-				                        --enable-openloops=$OPENLOOPS_ROOT \
-			                          --enable-fastjet=$FASTJET_ROOT
+PATH=$PATH:fakewget 
+export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib"
+./configure --prefix=$INSTALLROOT        \
+              --with-sqlite3=install       \
+              --enable-hepmc2=$HEPMC_ROOT  \
+              --enable-lhapdf=$LHAPDF_ROOT \
+              --enable-openloops=$OPENLOOPS_ROOT \
+        	    --enable-fastjet=$FASTJET_ROOT
 
 make ${JOBS+-j $JOBS}
 make install
