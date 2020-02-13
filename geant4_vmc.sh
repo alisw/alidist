@@ -40,14 +40,15 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GEANT4_VERSION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} ${ROOT_VERSION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} vgm/$VGM_VERSION-$VGM_REVISION
+module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} \\
+                     ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}         \\
+                     vgm/$VGM_VERSION-$VGM_REVISION
 # Our environment
-setenv GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv G4VMCINSTALL \$::env(GEANT4_VMC_ROOT)
-prepend-path PATH \$::env(GEANT4_VMC_ROOT)/bin
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/mtroot
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/geant4vmc
-prepend-path ROOT_INCLUDE_PATH \$::env(GEANT4_VMC_ROOT)/include/g4root
-prepend-path LD_LIBRARY_PATH \$::env(GEANT4_VMC_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GEANT4_VMC_ROOT)/lib")
+set GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv G4VMCINSTALL \$GEANT4_VMC_ROOT
+prepend-path PATH \$GEANT4_VMC_ROOT/bin
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/mtroot
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/geant4vmc
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/g4root
+prepend-path LD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib
 EoF
