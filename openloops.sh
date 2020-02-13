@@ -1,7 +1,7 @@
 package: Openloops
 version: "%(tag_basename)s"
-tag: "alice/v2.1.0"
-source: https://github.com/mfasDa/Openloops
+tag: "v2.1.0-alice1"
+source: https://github.com/alisw/Openloops
 requires:
   - "GCC-Toolchain:(?!osx)"
 ---
