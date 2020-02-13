@@ -38,11 +38,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 
 # Our environment
-setenv OPENLOOPS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv OpenLoopsPath \$::env(OPENLOOPS_ROOT)
-prepend-path PATH \$::env(OPENLOOPS_ROOT)
-prepend-path LD_LIBRARY_PATH \$::env(OPENLOOPS_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OPENLOOPS_ROOT)/lib")
-prepend-path LD_LIBRARY_PATH \$::env(OPENLOOPS_ROOT)/proclib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(OPENLOOPS_ROOT)/proclib")
+set OPENLOOPS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv OpenLoopsPath \$OPENLOOPS_ROOT
+prepend-path PATH \$OPENLOOPS_ROOT
+prepend-path LD_LIBRARY_PATH \$OPENLOOPS_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$OPENLOOPS_ROOT/proclib
 EoF
