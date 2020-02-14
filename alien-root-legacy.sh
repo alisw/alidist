@@ -33,6 +33,7 @@ cmake $BUILDDIR                                          \
       -DROOTSYS="$ROOTSYS"                               \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
       -DALIEN_DIR="$XALIENFS_ROOT"                       \
+      -DXROOTD_ROOT_DIR="$XROOTD_ROOT"                   \
       -DROOT_VERSION="$ROOT_MAJOR"
 
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
