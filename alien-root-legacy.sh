@@ -16,13 +16,12 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ALIEN_ROOT_LEGACY_ROOT/include"
 ---
 #!/bin/bash -e
-
 if [[ $ARCHITECTURE == osx* && ! $OPENSSL_ROOT ]]; then
   OPENSSL_ROOT=$(brew --prefix openssl)
 fi
 
 # Determine whether we are building for ROOT 5 or ROOT 6+
-[[ -x "$ROOTSYS/bin/rootcling" ]] && ROOT_MAJOR="v6-00-00" || ROOT_MAJOR="v5-00-00"
+type $ROOTSYS/bin/rootcling && ROOT_MAJOR="v6-00-00" || ROOT_MAJOR="v5-00-00"
 
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc

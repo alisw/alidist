@@ -6,10 +6,10 @@ requires:
  - "OpenSSL:(?!osx)"
  - Python-modules
  - AliEn-Runtime
+ - libxml2
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
- - libxml2
  - "GCC-Toolchain:(?!osx)"
  - UUID:(?!osx)
 ---

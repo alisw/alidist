@@ -7,6 +7,10 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
   - "OpenSSL:(?!osx)"
   - zlib
+prefer_system: "osx"
+prefer_system_check: |
+  printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | c++ -I$(brew --prefix libwebsockets)/include -c -xc++ -std=c++17 - -o /dev/null
+  printf '#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 2004000 || LWS_LIBRARY_VERSION_NUMBER >= 3001000\n#error \"JAliEn-ROOT requires libwebsockets 3.0.x but other version was detected\"\n#endif\n' | c++ -c -x c++ -I$(brew --prefix libwebsockets)/include -std=c++17 - -o /dev/null || exit 1
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -40,9 +44,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${OPENSSL_VERSION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 # Our environment
-setenv LIBWEBSOCKETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(LIBWEBSOCKETS_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(LIBWEBSOCKETS_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LIBWEBSOCKETS_ROOT)/lib")
+set LIBWEBSOCKETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$LIBWEBSOCKETS_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$LIBWEBSOCKETS_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
