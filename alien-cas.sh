@@ -1,6 +1,6 @@
 package: AliEn-CAs
 version: v1
-tag: 4a5bccfccd2c32cc32eb53ae44e213d19b536d2d
+tag: [[[ TOBEDEFINED ]]]
 source: https://github.com/alisw/alien-cas.git
 ---
 #!/bin/bash -e
