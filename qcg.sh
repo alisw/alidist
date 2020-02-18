@@ -10,7 +10,7 @@ valid_defaults:
   - o2-dataflow
 ---
 #!/bin/bash -e
-npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm
+npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm --prefix ./
 
 mkdir -p bin
 cat > bin/qcg <<EOF
@@ -20,7 +20,10 @@ EOF
 chmod 0755 bin/qcg
 
 # Installation
+echo "AAA"
+pwd
 rsync -a --delete node_modules bin "$INSTALLROOT"
+echo "BBB"
 
 if [[ -e $INSTALLROOT/node_modules/@aliceo2/qc/config-default.js ]]; then
   mv -v "$INSTALLROOT/node_modules/@aliceo2/qc/config-default.js" "$INSTALLROOT/node_modules/@aliceo2/qc/config.js"
