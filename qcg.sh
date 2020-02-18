@@ -20,10 +20,7 @@ EOF
 chmod 0755 bin/qcg
 
 # Installation
-echo "AAA"
-pwd
 rsync -a --delete node_modules bin "$INSTALLROOT"
-echo "BBB"
 
 if [[ -e $INSTALLROOT/node_modules/@aliceo2/qc/config-default.js ]]; then
   mv -v "$INSTALLROOT/node_modules/@aliceo2/qc/config-default.js" "$INSTALLROOT/node_modules/@aliceo2/qc/config.js"
