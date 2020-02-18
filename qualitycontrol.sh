@@ -11,6 +11,7 @@ requires:
   - Configuration
   - O2
   - arrow
+  - Control-OCCPlugin
 build_requires:
   - CMake
   - CodingGuidelines
@@ -61,6 +62,7 @@ cmake $SOURCEDIR                                              \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DARROW_HOME=$ARROW_ROOT                                \
+      ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
@@ -95,7 +97,8 @@ module load BASE/1.0                                                            
             ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
             O2/$O2_VERSION-$O2_REVISION                                                            \\
-            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
+            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                \\
+            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
 set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
