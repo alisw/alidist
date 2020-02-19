@@ -12,6 +12,7 @@ build_requires:
   - curl
   - autotools
   - cgal
+  - GMP
 ---
 #!/bin/bash -e
 
@@ -24,7 +25,7 @@ mkdir -p fakewget && [[ -d fakewget ]]
 printf '#!/bin/bash\nexec curl -fO $1' > fakewget/wget && chmod +x fakewget/wget
 
 PATH=$PATH:fakewget 
-export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib"
+export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib  -L$GMP_ROOT/lib"
 ./configure --prefix=$INSTALLROOT        \
               --with-sqlite3=install       \
               --enable-hepmc2=$HEPMC_ROOT  \
@@ -48,12 +49,16 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${LHAPDF_VERSION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION} ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION} ${HEPMC2_VERSION:+hepmc3/$HEPMC2_VERSION-$HEPMC2_REVISION} ${OPENLOOPS_VERSION:+openloops/$OPENLOOPS_VERSION-$OPENLOOPS_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}               \\
+                     ${LHAPDF_PDFSETS_REVISION:+lhapdf-pdfsets/$LHAPDF_PDFSETS_VERSION-$LHAPDF_PDFSETS_REVISION}           \\
+                     ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                                       \\
+                     ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}                                               \\
+                     ${OPENLOOPS_REVISION:+Openloops/$OPENLOOPS_VERSION-$OPENLOOPS_REVISION}
 # Our environment
 set SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv SHERPA_ROOT \$SHERPA_ROOT
 setenv SHERPA_INSTALL_PATH \$::env(SHERPA_ROOT)/lib/SHERPA
-setenv SHERPA_SHARE_PATH=\$::env(SHERPA_ROOT)/share/SHERPA-MC
+setenv SHERPA_SHARE_PATH \$::env(SHERPA_ROOT)/share/SHERPA-MC
 prepend-path PATH \$SHERPA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib/SHERPA-MC
