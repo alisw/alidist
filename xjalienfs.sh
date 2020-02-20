@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "1.0.4"
+tag: "1.0.5"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
  - "OpenSSL:(?!osx)"
@@ -15,11 +15,8 @@ requires:
 env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 pip3 install --user file://${SOURCEDIR}
 XJALIENFS_SITEPACKAGES=$(find ${INSTALLROOT} -name site-packages)
 
-ALIEN_PY=$(find ${INSTALLROOT} -name alien.py)
-
-cp -r $SOURCEDIR/bin ${INSTALLROOT}/bin
-cp ${ALIEN_PY} ${INSTALLROOT}/bin/alien.py
-chmod +x ${INSTALLROOT}/bin/*
+ALIEN_PY=$(find ${INSTALLROOT} -path '*/bin/*' -name alien.py)
+sed -i 's/#!.*python.*/#!\/usr\/bin\/env python3/' $(dirname ${ALIEN_PY})/*
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
