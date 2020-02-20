@@ -16,7 +16,7 @@ env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 pip3 install --user file://${SOURCE
 XJALIENFS_SITEPACKAGES=$(find ${INSTALLROOT} -name site-packages)
 
 ALIEN_PY=$(find ${INSTALLROOT} -path '*/bin/*' -name alien.py)
-sed -i 's/#!.*python.*/#!\/usr\/bin\/env python3/' $(dirname ${ALIEN_PY})/*
+sed -i '' 's/#!.*python.*/#!\/usr\/bin\/env python3/' $(dirname ${ALIEN_PY})/*
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
