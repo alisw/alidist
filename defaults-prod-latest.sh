@@ -7,10 +7,10 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-20i
+    tag: v5-09-20j
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-20i-01
+    tag: v5-09-20j-01
 ---
 # To be used with aliBuild option `--defaults prod-latest`.
 #
