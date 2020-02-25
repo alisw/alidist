@@ -32,7 +32,7 @@ overrides:
 
   # Use ROOT 5
   ROOT:
-    tag: v5-34-30-alice10
+    tag: v5-34-30-alice11
     source: https://github.com/alisw/root
     requires:
       - AliEn-Runtime:(?!.*ppc64)
