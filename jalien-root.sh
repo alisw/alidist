@@ -17,6 +17,7 @@ append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
 ---
 #!/bin/bash -e
+
 case $ARCHITECTURE in
   osx*) 
 	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
