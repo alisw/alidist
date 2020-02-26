@@ -48,12 +48,12 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${LHAPDF_VERSION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION} ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${HEPMC_VERSION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
+module load BASE/1.0 ${LHAPDF_REVISION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION} ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
 # Our environment
-setenv PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PYTHIA8DATA \$::env(PYTHIA_ROOT)/share/Pythia8/xmldoc
+set PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PYTHIA_ROOT \$PYTHIA_ROOT
+setenv PYTHIA8DATA \$PYTHIA_ROOT/share/Pythia8/xmldoc
 setenv PYTHIA8 \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(PYTHIA_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(PYTHIA_ROOT)/lib")
+prepend-path PATH \$PYTHIA_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$PYTHIA_ROOT/lib
 EoF

@@ -1,10 +1,9 @@
 package: O2
-version: "1.0.0"
-tag: "O2-1.0.0"
+version: "v1.2.0"
+tag: "v1.2.0"
 requires:
   - arrow
   - FairRoot
-  - DDS
   - Vc
   - hijing
   - HepMC3
@@ -19,6 +18,8 @@ requires:
   - AEGIS
   - fmt
   - openmp
+  - DebugGUI
+  - JAliEn-ROOT
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -117,10 +118,15 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
-# For the PR checkers (which sets ALIBUILD_O2_TESTS)
-# we impose -Werror as a compiler flag
+# This affects only PR checkers
 if [[ $ALIBUILD_O2_TESTS ]]; then
+  # Impose extra errors.
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  # On OSX CI, we do not want to run the GUI, even if available.
+  case $ARCHITECTURE in
+    osx*) DPL_TESTS_BATCH_MODE=ON ;;
+    *) ;;
+  esac
 fi
 
 # Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
@@ -133,13 +139,14 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
 fi
 
 unset DYLD_LIBRARY_PATH
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                       \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                            \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                            \
-      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                            \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                   \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                              \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DDENABLE_OPENCL1=ON}                      \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                           \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                           \
+      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                           \
+      ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
+      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
@@ -169,16 +176,31 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION ${DDS_VERSION:+DDS/$DDS_VERSION-$DDS_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${VC_VERSION:+Vc/$VC_VERSION-$VC_REVISION} ${HEPMC3_VERSION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION} ${MONITORING_VERSION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION} ${CONFIGURATION_VERSION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} ${LIBINFOLOGGER_VERSION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} ${COMMON_O2_VERSION:+Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION} ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION ${ARROW_VERSION:+arrow/$ARROW_VERSION-$ARROW_REVISION} ${AEGIS_VERSION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
+module load BASE/1.0 \\
+            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                           \\
+            ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                             \\
+            ${HEPMC3_REVISION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION}                             \\
+            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}             \\
+            ${CONFIGURATION_REVISION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} \\
+            ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
+            ${COMMON_O2_REVISION:+Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION}                 \\
+            ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION                                                 \\
+            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
+            ${DEBUGGUI_REVISION:+DebugGUI/$DEBUGGUI_VERSION-$DEBUGGUI_REVISION}                     \\
+            ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
 # Our environment
-setenv O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv VMCWORKDIR \$::env(O2_ROOT)/share
-prepend-path PATH \$::env(O2_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(O2_ROOT)/lib
+set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv O2_ROOT \$O2_ROOT
+setenv VMCWORKDIR \$O2_ROOT/share
+
+set O2_ROOT \$O2_ROOT
+prepend-path PATH \$O2_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
-prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include/GPU
-prepend-path ROOT_INCLUDE_PATH \$::env(O2_ROOT)/include
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(O2_ROOT)/lib")
+prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
+prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
@@ -193,10 +215,10 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up old coverage data and tests logs
   find . -name "*.gcov" -o -name "*.gcda" -delete
   rm -rf test_logs
-  # cleanup ROOT files created by tests in build area
+  # Clean up ROOT files created by tests in build area
   find $PWD -name "*.root" -delete
   TESTERR=
-  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+  ctest -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
   # Display additional logs for tests that timed out in a non-fatal way
   set +x

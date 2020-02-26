@@ -34,8 +34,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-setenv SQLITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH $::env(SQLITE_ROOT)/bin
-prepend-path LD_LIBRARY_PATH $::env(SQLITE_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH $::env(SQLITE_ROOT)/lib")
+set SQLITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv SQLITE_ROOT \$SQLITE_ROOT
+prepend-path PATH \$SQLITE_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$SQLITE_ROOT/lib
 EoF

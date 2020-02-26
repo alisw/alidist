@@ -1,7 +1,7 @@
 package: GMP
 version: v6.0.0
-source: https://github.com/alisw/GMP.git
 tag: v6.0.0
+source: https://github.com/alisw/GMP.git
 requires:
  - "GCC-Toolchain:(?!osx)"
 ---
@@ -39,7 +39,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv GMP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(GMP_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(GMP_ROOT)/lib")
+set GMP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv GMP_ROOT \$GMP_ROOT
+prepend-path LD_LIBRARY_PATH \$GMP_ROOT/lib
 EoF

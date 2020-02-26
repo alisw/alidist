@@ -12,7 +12,6 @@ prefer_system_check: |
 ---
 #!/bin/sh
 case $ARCHITECTURE in
-  slc5*) sed -i -e 's/-Wno-c99-extensions //' $SOURCEDIR/test/CMakeLists.txt ;;
   osx*) [[ $BOOST_ROOT ]] || BOOST_ROOT=`brew --prefix boost` ;;
   *) ;;
 esac
@@ -24,6 +23,7 @@ cmake $SOURCEDIR                                         \
   ${BOOST_ROOT:+-DBoost_DIR:PATH="$BOOST_ROOT"}          \
   ${BOOST_ROOT:+-DBoost_INCLUDE_DIR:PATH="$BOOST_ROOT/include"}  \
   -DCMAKE_SKIP_RPATH=YES                                 \
+  -DYAML_CPP_BUILD_TESTS=NO                              \
   -DSKIP_INSTALL_FILES=1
 
 make ${JOBS+-j $JOBS} install
@@ -41,9 +41,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
-setenv YAMLCPP \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(YAMLCPP)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(YAMLCPP)/lib")
+set YAMLCPP \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$YAMLCPP/lib
 EoF

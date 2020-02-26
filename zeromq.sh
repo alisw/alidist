@@ -1,6 +1,6 @@
 package: ZeroMQ
-version: v4.1.5
-source: https://github.com/alisw/zeromq
+version: v4.3.2
+source: https://github.com/zeromq/libzmq
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
@@ -36,7 +36,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${SODIUM_ROOT:+sodium/$SODIUM_VERSION-$SODIUM_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv ZEROMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ZEROMQ_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(ZEROMQ_ROOT)/lib")
+set ZEROMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ZEROMQ_ROOT \$ZEROMQ_ROOT
+prepend-path LD_LIBRARY_PATH \$ZEROMQ_ROOT/lib
 EoF

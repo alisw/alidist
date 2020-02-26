@@ -19,7 +19,6 @@ requires:
   - FONLL
   - Therminator2
   - Rivet
-  - Rivet-hi
   - lhapdf-pdfsets
 build_requires:
   - EPOS-test

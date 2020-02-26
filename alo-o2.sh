@@ -4,9 +4,9 @@ tag: master
 requires:
   - googlebenchmark
   - O2
-  - RapidJSON
   - yaml-cpp
 build_requires:
+  - RapidJSON
   - CMake
   - ms_gsl
 source: https://github.com/mrrtf/alo
@@ -70,10 +70,10 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
 # Our environment
-setenv ALO_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ALO_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 
-prepend-path PATH \$::env(ALO_O2_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(ALO_O2_ROOT)/lib
+prepend-path PATH \$ALO_O2_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$ALO_O2_ROOT/lib
 EoF
 
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

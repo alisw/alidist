@@ -1,14 +1,14 @@
 package: CMake
 version: "%(tag_basename)s"
-tag: "v3.13.1"
-source: https://github.com/Kitware/CMake
+tag: "v3.16.3-alice2"
+source: https://github.com/alisw/CMake
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - make
-prefer_system: .*
+prefer_system: "(?!osx)"
 prefer_system_check: |
   verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
-  type cmake && verge 3.13.1 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
+  type cmake && verge 3.16.3 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
 ---
 #!/bin/bash -e
 
@@ -47,7 +47,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 \\
        ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv CMAKE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(CMAKE_ROOT)/bin
+set CMAKE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CMAKE_ROOT \$CMAKE_ROOT
+prepend-path PATH \$CMAKE_ROOT/bin
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

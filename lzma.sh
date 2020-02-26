@@ -5,17 +5,17 @@ source: https://github.com/alisw/liblzma
 build_requires:
   - autotools
   - "GCC-Toolchain:(?!osx)"
+  - rsync
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <lzma.h>\n" | c++ -xc++ - -c -M 2>&1
 ---
-#!/bin/bash -e
-
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 ./autogen.sh
 ./configure CFLAGS="$CFLAGS -fPIC -Ofast" \
             --prefix="$INSTALLROOT"       \
-            --disable-static              \
+            --disable-shared              \
+            --enable-static               \
             --disable-nls                 \
             --disable-rpath               \
             --disable-dependency-tracking \
@@ -38,8 +38,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
-setenv LZMA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib
-prepend-path PATH \$::env(BASEDIR)/$PKGNAME/\$version/bin
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(BASEDIR)/$PKGNAME/\$version/lib")
+set LZMA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LZMA_ROOT \$LZMA_ROOT
+set BASEDIR \$::env(BASEDIR)
+prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
+prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
 EoF

@@ -39,10 +39,11 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
                      lhapdf/${LHAPDF_VERSION}-${LHAPDF_REVISION}
 # Our environment
-setenv FONLL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set FONLL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FONLL_ROOT \$FONLL_ROOT
 setenv FONLL_NPDF \$::env(FONLL_ROOT)/share/nPDF
-prepend-path PATH \$::env(FONLL_ROOT)/bin
+prepend-path PATH \$FONLL_ROOT/bin
 EoF

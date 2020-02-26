@@ -6,11 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
   GEANT4_BUILD_MULTITHREADED: "ON"
-disable:
-  - AliEn-Runtime
-  - JAliEn-ROOT
-  - AliEn-ROOT-Legacy
-  - ApMon-CPP
+  ENABLE_VMC: "ON"
 overrides:
   AliRoot:
     version: "%(commit_hash)s_O2"
@@ -21,6 +17,7 @@ overrides:
       - GEANT4_VMC
       - Vc
       - ZeroMQ
+      - JAliEn-ROOT
   pythia:
     requires:
       - lhapdf
@@ -32,8 +29,7 @@ overrides:
   fastjet:
     tag: "v3.3.2_1.041-alice1"
   XRootD:
-    version: "%(tag_basename)s_O2"
-    tag: "v4.10.0"
+    tag: "v4.11.1"
     source: https://github.com/xrootd/xrootd
 ---
 # This file is included in any build recipe and it's only used to set

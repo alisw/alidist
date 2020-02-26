@@ -82,7 +82,7 @@ COPYRIGHT="$(cat <<'EOF'
 EOF
 )"
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
-COPYRIGHT_EXCLUDE_REGEXP="^Framework/DebugGUI/"  # exclude files from the copyright check
+COPYRIGHT_EXCLUDE_REGEXP="/3rdparty/"  # exclude files from the copyright check
 set +x
 while read FILE; do
   [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}
@@ -119,5 +119,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
 # Our environment
-setenv O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv O2CHECKCODE_ROOT \$O2CHECKCODE_ROOT
 EoF

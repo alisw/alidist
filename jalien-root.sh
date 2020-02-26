@@ -1,9 +1,10 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.5.2"
+tag: "0.5.4"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
+  - xjalienfs
 build_requires:
   - libwebsockets
   - json-c
@@ -16,7 +17,10 @@ append_path:
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
-  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
+  osx*) 
+	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl)
+	[[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+  ;;
 esac
 
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
@@ -42,7 +46,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ROOT/${ROOT_VERSION}-${ROOT_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                  \\
+                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}
 
 # Our environment
 set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

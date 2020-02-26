@@ -1,6 +1,6 @@
 package: Common-O2
 version: "%(tag_basename)s"
-tag: v1.4.6
+tag: v1.4.8
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -38,12 +38,12 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_VERSION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_VERSION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
-setenv COMMON_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$::env(COMMON_O2_ROOT)/bin
-prepend-path LD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(COMMON_O2_ROOT)/lib")
+set COMMON_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv COMMON_O2_ROOT \$COMMON_O2_ROOT
+prepend-path PATH \$COMMON_O2_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$COMMON_O2_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
