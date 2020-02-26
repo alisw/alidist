@@ -33,10 +33,10 @@ overrides:
       - "GCC-Toolchain:(?!osx)"
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-53c-01
+    tag: v5-09-53d-01
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-53c
+    tag: v5-09-53d
     requires:
       - ROOT
       - DPMJET
