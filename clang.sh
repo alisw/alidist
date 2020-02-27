@@ -38,6 +38,7 @@ esac
 # to clang-tidy (for instance)
 cmake $SOURCEDIR/llvm \
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
+  -DLLVM_TARGETS_TO_BUILD="X86" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
