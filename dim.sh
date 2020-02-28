@@ -1,5 +1,5 @@
 package: dim
-version: "v20r24"
+version: "v20r26"
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
