@@ -14,6 +14,14 @@ build_requires:
   - "Xcode:(osx.*)"
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
+overrides:
+  # same versions of MC packages as in production
+  VGM
+    version: v4-4
+  GEANT4_VMC
+    version: v3-6-p6-inclxx-biasing-p2
+  GEANT4
+    version: v10.4.2
 prepend_path:
   ROOT_INCLUDE_PATH: "$ALIROOT_ROOT/include"
 source: https://github.com/alisw/AliRoot
