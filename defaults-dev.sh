@@ -4,6 +4,10 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
+
+disable:
+  - arrow
+
 overrides:
   fastjet:
     version: "v3.3.4_1.042"
