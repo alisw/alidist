@@ -127,5 +127,12 @@ setenv PYTHONHOME \$PYTHON_ROOT
 prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
 prepend-path PATH \$PYTHON_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib
-setenv SSL_CERT_FILE  [exec python3 -c "import certifi; print(certifi.where())"]
+
+set CVMFS_CERT_DIR "/cvmfs/alice.cern.ch/etc/grid-security/certificates"
+
+if { [file exists \$CVMFS_CERT_DIR] } {
+  setenv SSL_CERT_DIR \$CVMFS_CERT_DIR
+} else {
+  setenv SSL_CERT_DIR \$::env(X509_CERT_DIR)
+}
 EoF
