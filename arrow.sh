@@ -90,6 +90,7 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_PYTHON=OFF                                                                            \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
+      -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
       -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang++
 
 make ${JOBS:+-j $JOBS}
