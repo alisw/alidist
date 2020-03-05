@@ -10,8 +10,8 @@ disable:
 
 overrides:
   fastjet:
-    version: "v3.3.4_1.042"
-    tag: "v3.3.4_1.042"
+    version: "v3.3.3_1.042"
+    tag: "v3.3.3_1.042"
 
   # Minimal boost with no Python & co. to avoid YODA asking for cython
   boost:
