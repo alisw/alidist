@@ -59,8 +59,10 @@ popd
 if [[ x"$XROOTD_PYTHON" == x"True" ]];
 then
   pushd $INSTALLROOT
-  XRD_PYTHON_PATH="$(find . -path '*site-packages' -type d)"
-popd
+    pushd lib
+      ln -s python* python
+    popd
+  popd
 fi
 
 # Modulefile
@@ -87,7 +89,7 @@ set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XROOTD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
 if { $XROOTD_PYTHON } {
-  prepend-path PYTHONPATH \${XROOTD_ROOT}/${XRD_PYTHON_PATH}
+  prepend-path PYTHONPATH \${XROOTD_ROOT}/lib/python/site-packages
   module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
               ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 }
