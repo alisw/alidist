@@ -1,7 +1,7 @@
 package: SHERPA
 version: "%(tag_basename)s"
 tag: "v2.2.8-alice1"
-source: https://github.com/mfasDa/SHERPA
+source: https://github.com/alisw/SHERPA
 requires:
   - "GCC-Toolchain:(?!osx)"
   - Openloops
