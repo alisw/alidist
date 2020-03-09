@@ -32,7 +32,10 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-  osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+    osx*) 
+		  [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+		  [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+    ;;
 esac
 
 # For the PR checkers (which sets ALIBUILD_O2_TESTS),
@@ -64,6 +67,7 @@ cmake $SOURCEDIR                                              \
       -DARROW_HOME=$ARROW_ROOT                                \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
+      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
