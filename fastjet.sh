@@ -4,8 +4,6 @@ tag: "v3.2.1_1.024-alice3"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
-build_requires:
-  - sip-check:(osx.*)
 env:
   FASTJET: "$FASTJET_ROOT"
 ---
@@ -30,7 +28,8 @@ rsync -a --delete --cvs-exclude --exclude .git $SOURCEDIR/ ./
 pushd fastjet
   autoreconf -i -v -f
   [[ "${ARCHITECTURE:0:3}" != osx ]] && ARCH_FLAGS='-Wl,--no-as-needed'
-  if [[ $GIT_TAG < "v3.3.3" ]]
+  FJTAG=${GIT_TAG#alice-}
+  if [[ $FJTAG < "v3.3.3" ]]
   then
     ADDITIONAL_FLAGS="-L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
     export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
