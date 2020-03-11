@@ -1,6 +1,5 @@
 package: AliRoot
-version: "%(commit_hash)s"
-tag: master
+tag: v5-09-02-devel-itsgeom3
 requires:
   - ROOT
   - DPMJET
