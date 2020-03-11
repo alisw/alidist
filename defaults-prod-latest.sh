@@ -46,17 +46,20 @@ overrides:
 
   # Use VMC packages compatible with ROOT 5
   GEANT3:
-    version: "%(tag_basename)s"
-    tag: v2-7
-  VGM:
-    version: "%(tag_basename)s"
-    tag: v4-4
+    version: "v2-7" 
+    tag: "v2-7"
   GEANT4_VMC
-    version: "%(tag_basename)s"
-    tag: v3-6-p6-inclxx-biasing-p2
+    version: "v3-6-p6-inclxx-biasing-p2"
+    tag: "v3-6-p6-inclxx-biasing-p2"
+    requires:
+      - GEANT4
+      - VGM
   GEANT4:
-    version: "%(tag_basename)s"
-    tag: v10.4.2
+    version: "v10.4.2"
+    tag: "v10.4.2"
+  VGM:
+    version: "v4-4"
+    tag: "v4-4"
 
   # ROOT 5 requires GSL < 2
   GSL:

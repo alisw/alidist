@@ -47,20 +47,6 @@ overrides:
       - CMake
       - "Xcode:(osx.*)"
 
-  # Use VMC packages compatible with ROOT 5
-  GEANT3:
-    version: "%(tag_basename)s"
-    tag: v2-7
-  VGM:
-    version: "%(tag_basename)s"
-    tag: v4-4
-  GEANT4_VMC
-    version: "%(tag_basename)s"
-    tag: v3-6-p6-inclxx-biasing-p2
-  GEANT4:
-    version: "%(tag_basename)s"
-    tag: v10.4.2
-
   # ROOT 5 requires GSL < 2
   GSL:
     prefer_system_check: |
