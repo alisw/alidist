@@ -187,7 +187,8 @@ cat >> system.rootrc.0 <<EOF
 
 # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
 # Plugins in \$ROOT_PLUGIN_PATH have priority.
-Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins
+Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins:
+Unix.*.Root.DynamicPath: .:\$(ROOT_DYN_PATH):
 EOF
 mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
@@ -239,5 +240,6 @@ set ROOT_ROOT  \$::env(ROOTSYS)
 prepend-path PYTHONPATH \$ROOT_ROOT/lib
 prepend-path PATH \$ROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
+prepend-path ROOT_DYN_PATH ""
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
