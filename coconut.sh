@@ -1,6 +1,6 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.12.2"
+tag: "v0.12.90"
 build_requires:
   - golang
   - protobuf
@@ -12,11 +12,13 @@ source: https://github.com/AliceO2Group/Control
 
 export GOPATH=$PWD/go
 export PATH=$GOPATH/bin:$PATH
+export GO111MODULE=on
 BUILD=$GOPATH/src/github.com/AliceO2Group/Control
 mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
-  make WHAT="coconut peanut" all
+  make vendor
+  make WHAT="coconut peanut"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
 popd
