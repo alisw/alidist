@@ -48,7 +48,7 @@ overrides:
   GEANT3:
     version: "v2-7" 
     tag: "v2-7"
-  GEANT4_VMC
+  GEANT4_VMC:
     version: "v3-6-p6-inclxx-biasing-p2"
     tag: "v3-6-p6-inclxx-biasing-p2"
     requires:
