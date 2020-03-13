@@ -12,11 +12,13 @@ source: https://github.com/AliceO2Group/Control
 
 export GOPATH=$PWD/go
 export PATH=$GOPATH/bin:$PATH
+export GO111MODULE=on
 BUILD=$GOPATH/src/github.com/AliceO2Group/Control
 mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
-  make WHAT="coconut peanut" all
+  make vendor
+  make WHAT="coconut peanut"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
 popd
