@@ -15,12 +15,14 @@ case $ARCHITECTURE in
   ;;
 esac
 
-export LIBRARY_PATH="${BOOST_ROOT:+$BOOST_ROOT/lib:}$LIBRARY_PATH"
-BOOST_INC=${BOOST_ROOT:+$BOOST_ROOT/include:}
-printf "void main() {}" | c++ -xc ${BOOST_ROOT:+-L$BOOST_ROOT/lib} -lboost_thread - -o /dev/null 2>/dev/null  \
-  && BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread"                                              \
-  || BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread-mt"
-BOOST_LIBS="$BOOST_LIBS -lboost_system"
+if [[ $GGAL_ROOT ]]; then
+  export LIBRARY_PATH="${BOOST_ROOT:+$BOOST_ROOT/lib:}$LIBRARY_PATH"
+  BOOST_INC=${BOOST_ROOT:+$BOOST_ROOT/include:}
+  printf "void main() {}" | c++ -xc ${BOOST_ROOT:+-L$BOOST_ROOT/lib} -lboost_thread - -o /dev/null 2>/dev/null  \
+    && BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread"                                              \
+    || BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread-mt"
+  BOOST_LIBS="$BOOST_LIBS -lboost_system"
+fi
 
 rsync -a --delete --cvs-exclude --exclude .git $SOURCEDIR/ ./
 
@@ -31,24 +33,23 @@ pushd fastjet
   FJTAG=${GIT_TAG#alice-}
   if [[ $FJTAG < "v3.3.3" ]]
   then
-    ADDITIONAL_FLAGS="-L$GMP_ROOT/lib -lgmp -L$MPFR_ROOT/lib -lmpfr $BOOST_LIBS -L$CGAL_ROOT/lib -lCGAL ${BOOST_ROOT:+-I$BOOST_ROOT/include} -I$CGAL_ROOT/include -I$GMP_ROOT/include -I$MPFR_ROOT/include -DCGAL_DO_NOT_USE_MPZF -O2 -g"
+    ADDITIONAL_FLAGS="${GMP_ROOT:+-L$GMP_ROOT/lib -lgmp} ${MPFR_ROOT:+-L$MPFR_ROOT/lib -lmpfr} $BOOST_LIBS ${CGAL_ROOT:+-L$CGAL_ROOT/lib -lCGAL -I$CGAL_ROOT/include} ${BOOST_ROOT:+-I$BOOST_ROOT/include} ${GMP_ROOT:+-I$GMP_ROOT/include} ${MPFR_ROOT:+-I$MPFR_ROOT/include} ${CGAL_ROOT:+-DCGAL_DO_NOT_USE_MPZF} -O2 -g"
     export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
     export CFLAGS="$CFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
-    export CPATH="${BOOST_INC}$CGAL_ROOT/include:$GMP_ROOT/include:$MPFR_ROOT/include"
-    export C_INCLUDE_PATH="${BOOST_INC}$GMP_ROOT/include:$MPFR_ROOT/include"
-    ./configure --enable-shared         \
-                --enable-cgal           \
-                --with-cgal=$CGAL_ROOT  \
-                --prefix=$INSTALLROOT   \
+    export CPATH="${BOOST_INC}${CGAL_ROOT:+$CGAL_ROOT/include:}${GMP_ROOT:+$GMP_ROOT/include:}${MPFR_ROOT:+$MPFR_ROOT/include}"
+    export C_INCLUDE_PATH="${BOOST_INC}${GMP_ROOT:+$GMP_ROOT/include:}${MPFR_ROOT:+$MPFR_ROOT/include}"
+    ./configure --enable-shared \
+                ${CGAL_ROOT:+--enable-cgal --with-cgal=$CGAL_ROOT} \
+                --prefix=$INSTALLROOT \
                 --enable-allcxxplugins
   else
     export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS"
     ./configure --enable-shared         \
-                --enable-cgal           \
+                ${CGAL_ROOT:+--enable-cgal \
                 --with-cgaldir=$CGAL_ROOT  \
                 --with-cgal-boostdir=$BOOST_ROOT  \
-                --with-cgal-gmpdir=$GMP_ROOT  \
-                --with-cgal-mpfrdir=$MPFR_ROOT  \
+                ${GMP_ROOT:+--with-cgal-gmpdir=$GMP_ROOT}  \
+                ${MPFR_ROOT:+--with-cgal-mpfrdir=$MPFR_ROOT}}  \
                 --prefix=$INSTALLROOT   \
                 --enable-allcxxplugins
   fi
@@ -87,7 +88,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}
 # Our environment
 set FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FASTJET \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FASTJET \$FASTJET_ROOT
 prepend-path PATH \$FASTJET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FASTJET_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FASTJET_ROOT/include
