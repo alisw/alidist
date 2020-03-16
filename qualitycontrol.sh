@@ -122,6 +122,7 @@ prepend-path PATH \$QUALITYCONTROL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64
 prepend-path ROOT_INCLUDE_PATH \$QUALITYCONTROL_ROOT/include
+prepend-path ROOT_DYN_PATH \$QUALITYCONTROL_ROOT/lib
 EoF
 
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
