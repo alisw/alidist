@@ -1,6 +1,6 @@
 package: JEWEL
 version: "%(tag_basename)s"
-tag: v2.2.0
+tag: v2.2.0-alice1
 source: https://github.com/alisw/jewel.git
 requires:
   - lhapdf5
