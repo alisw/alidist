@@ -240,6 +240,6 @@ set ROOT_ROOT  \$::env(ROOTSYS)
 prepend-path PYTHONPATH \$ROOT_ROOT/lib
 prepend-path PATH \$ROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
-prepend-path ROOT_DYN_PATH ""
+prepend-path ROOT_DYN_PATH \$ROOT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
