@@ -86,8 +86,8 @@ cat << \EOF > test.cc
 EOF
 $INSTALLROOT/bin-safe/clang++ -v -c test.cc
 
-curl -o $INSTALLROOT/bin/git-clang-format https://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/git-clang-format
-chmod u+x $INSTALLROOT/bin/git-clang-format
+curl -o $INSTALLROOT/bin-safe/git-clang-format https://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/git-clang-format
+chmod u+x $INSTALLROOT/bin-safe/git-clang-format
 
 # Modulefile
 mkdir -p etc/modulefiles
