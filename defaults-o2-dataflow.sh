@@ -10,7 +10,9 @@ disable:
   - AliEn-Runtime
   - AliRoot
   - ApMon-CPP
+  - cgal
   - simulation
+  - fastjet
   - generators
   - GEANT4
   - GEANT3
