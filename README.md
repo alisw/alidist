@@ -99,3 +99,5 @@ including capitalization.
 Please open a JIRA issue with your request at:
 
 https://alice.its.cern.ch/jira/secure/CreateIssue!default.jspa
+
+Make sure you select "Dependencies" as component. 
