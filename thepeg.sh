@@ -9,6 +9,7 @@ requires:
   - boost
 build_requires:
   - autotools
+  - GMP
 prepend_path:
   LD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
 env:
