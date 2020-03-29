@@ -5,7 +5,7 @@ source: https://github.com/Kitware/CMake
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - make
-prefer_system: "(?!osx)"
+prefer_system: .*
 prefer_system_check: |
   verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
   type cmake && verge 3.17.0 `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3`
