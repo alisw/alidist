@@ -57,7 +57,7 @@ fi
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
-  osx*) TOOLSET=clang ;;
+  osx*) TOOLSET=clang-darwin ;;
   *) TOOLSET=gcc ;;
 esac
 
