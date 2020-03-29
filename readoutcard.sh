@@ -38,7 +38,8 @@ cmake $SOURCEDIR                                                      \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
       ${PDA_REVISION:+-DPDA_ROOT=$PDA_ROOT}                            \
       ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}            \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                               \
+      -DBUILD_SHARED_LIBS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
