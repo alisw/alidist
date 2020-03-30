@@ -10,7 +10,7 @@ valid_defaults:
   - o2-dataflow
 ---
 #!/bin/bash -e
-npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm --prefix ./
+NODE_GYP_FORCE_PYTHON=/usr/bin/python3 npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm --prefix ./
 
 mkdir -p bin
 cat > bin/qcg <<EOF
