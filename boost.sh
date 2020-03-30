@@ -57,7 +57,7 @@ fi
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
-  osx*) TOOLSET=darwin ;;
+  osx*) TOOLSET=clang-darwin ;;
   *) TOOLSET=gcc ;;
 esac
 
@@ -99,6 +99,7 @@ b2 -q                                            \
    ${BOOST_CXXFLAGS:+cxxflags="$BOOST_CXXFLAGS"} \
    ${CXXSTD:+cxxstd=$CXXSTD}                     \
    install
+
 
 # Remove CMake Config files, some of our dependent packages pick them up, but fail to use them
 # So for now we rely on the boost module FindBoost which comes with CMake
