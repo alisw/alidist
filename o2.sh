@@ -199,6 +199,7 @@ setenv VMCWORKDIR \$O2_ROOT/share
 set O2_ROOT \$O2_ROOT
 prepend-path PATH \$O2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
+prepend-path ROOT_DYN_PATH \$O2_ROOT/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
