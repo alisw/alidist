@@ -20,7 +20,7 @@ make ${JOBS:+-j $JOBS} install
 
 [[ ! -d $INSTALLROOT/lib64 ]] && ln -sf lib $INSTALLROOT/lib64
 
-# Modulefile
+#  Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"

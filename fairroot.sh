@@ -21,7 +21,7 @@ prepend_path:
 ---
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
-# fairroot, so this really should be cleaned up in FairRoot itself for
+# fairroot,  so this really should be cleaned up in FairRoot itself for
 # maximum safety.
 unset SIMPATH
 
