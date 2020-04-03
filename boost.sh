@@ -9,9 +9,6 @@ requires:
   - lzma
 build_requires:
   - "bz2"
-prefer_system: (?!slc5)
-prefer_system_check: |
-  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 107200 || BOOST_VERSION > 107299)\n#error \"Cannot use system's boost: boost 1.70 required.\"\n#endif\nint main(){}" | c++ -I$(brew --prefix boost)/include -xc++ - -o /dev/null
 prepend_path:
   ROOT_INCLUDE_PATH: "$BOOST_ROOT/include"
 ---
