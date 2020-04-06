@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-18-04-alice1"
+tag: "v6-20-02-alice3"
 source: https://github.com/alisw/root
 requires:
   - arrow
@@ -42,7 +42,7 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
-  v6-18*) 
+  v6-20*) 
      ENABLE_VMC=1
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
@@ -86,14 +86,18 @@ fi
 
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpython=ON"
-  ROOT_PYTHON_FEATURES="python"
+  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+  ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
-  PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
+  PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
+  PYTHON_INCLUDE_DIRS=$(python3-config --includes | cut -f1 -d' ' | cut -c3-)
+  PYTHON_LIBRARY_DIR=$(python3-config --ldflags | cut -f1 -d' ' | cut -c3-)
+  PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
+  PYTHON_LIBRARIES=${PYTHON_INCLUDE_DIRS}/${PYTHON_LIBNAME}.${SONAME}
 else
   # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpython=OFF"
+  ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
   ROOT_PYTHON_FEATURES=
   ROOT_HAS_NO_PYTHON=1
 fi
@@ -149,13 +153,15 @@ cmake $SOURCEDIR                                                                
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIRS=${PYTHON_INCLUDE_DIRS}}                 \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
       -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
+          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
-             ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien"
+             ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix alien"
 
 if [[ $ENABLE_COCOA ]]; then
   FEATURES="$FEATURES builtin_freetype"
