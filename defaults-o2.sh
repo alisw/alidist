@@ -5,13 +5,14 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
-  GEANT4_BUILD_MULTITHREADED: "ON"
+  GEANT4_BUILD_MULTITHREADED: "OFF"
   ENABLE_VMC: "ON"
 overrides:
   AliRoot:
     version: "%(commit_hash)s_O2"
     requires:
       - ROOT
+      - DPMJET
       - fastjet:(?!.*ppc64)
       - GEANT3
       - GEANT4_VMC
