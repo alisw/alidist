@@ -96,8 +96,8 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   python3-config --libs
 
   PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
-  PYTHON_INCLUDE_DIR=$(python3-config --includes | cut -f1 -d' ' | cut -c3-)
-  PYTHON_LIBRARY_DIR=$(python3-config --ldflags | cut -f1 -d' ' | cut -c3-)
+  PYTHON_INCLUDE_DIR=$(python3-config --includes | sed -e's/^[ ]*-I//' | cut -f1 -d' ')
+  PYTHON_LIBRARY_DIR=$(python3-config --ldflags | sed -e's/^[ ]*-L//' | cut -f1 -d' ')
   PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
   PYTHON_LIBRARIES=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
 else
