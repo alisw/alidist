@@ -90,6 +90,11 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
+  python3-config --exec-prefix
+  python3-config --includes
+  python3-config --ldflags
+  python3-config --libs
+
   PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
   PYTHON_INCLUDE_DIR=$(python3-config --includes | cut -f1 -d' ' | cut -c3-)
   PYTHON_LIBRARY_DIR=$(python3-config --ldflags | cut -f1 -d' ' | cut -c3-)
