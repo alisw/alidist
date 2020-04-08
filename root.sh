@@ -99,7 +99,7 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   PYTHON_INCLUDE_DIR=$(python3-config --includes | cut -f1 -d' ' | cut -c3-)
   PYTHON_LIBRARY_DIR=$(python3-config --ldflags | cut -f1 -d' ' | cut -c3-)
   PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
-  PYTHON_LIBRARIES=${PYTHON_LIBRARY_DIR}/${PYTHON_LIBNAME}.${SONAME}
+  PYTHON_LIBRARIES=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
 else
   # Non-ROOT 6 builds: disable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
