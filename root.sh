@@ -89,9 +89,9 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   ROOT_PYTHON_FLAGS="-Dpyroot=ON"
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
-  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIRS=<path_to_Python.h>
+  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
   PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
-  PYTHON_INCLUDE_DIRS=$(python3-config --includes | sed -e's/^[ ]*-I//' | cut -f1 -d' ')
+  PYTHON_INCLUDE_DIR=$(python3-config --includes | sed -e's/^[ ]*-I//' | cut -f1 -d' ')
   PYTHON_LIBRARY_DIR=$(python3-config --ldflags | sed -e's/^[ ]*-L//' | cut -f1 -d' ')
   PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
   PYTHON_LIBRARIES=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
@@ -154,7 +154,7 @@ cmake $SOURCEDIR                                                                
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIRS=${PYTHON_INCLUDE_DIRS}}                   \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
       ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
       -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
