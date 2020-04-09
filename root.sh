@@ -94,7 +94,7 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   PYTHON_INCLUDE_DIR=$(python3-config --includes | sed -e's/^[ ]*-I//' | cut -f1 -d' ')
   PYTHON_LIBRARY_DIR=$(python3-config --ldflags | sed -e's/^[ ]*-L//' | cut -f1 -d' ')
   PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
-  PYTHON_LIBRARIES=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
+  PYTHON_LIBRARY=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
 else
   # Non-ROOT 6 builds: disable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
@@ -135,6 +135,7 @@ cmake $SOURCEDIR                                                                
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
@@ -161,6 +162,7 @@ cmake $SOURCEDIR                                                                
       ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIRS=${PYTHON_INCLUDE_DIR}}                  \
       ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
