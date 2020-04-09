@@ -156,11 +156,13 @@ cmake $SOURCEDIR                                                                
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
       ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIRS=${PYTHON_INCLUDE_DIR}}                  \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
+      ${ROOT_HAS_PYTHON:+-DPython_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
       ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
       ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIRS=${PYTHON_INCLUDE_DIR}}                  \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARY=${PYTHON_LIBRARY}}                           \
-      -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
