@@ -6,6 +6,7 @@ requires:
   - pythia6
 build_requires:
   - CMake
+  - hijing
   - "Xcode:(osx.*)"
 source: https://github.com/AliceO2Group/AEGIS.git
 prepend_path:
