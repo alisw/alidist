@@ -83,6 +83,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 set CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CGAL_ROOT \$CGAL_ROOT
 prepend-path PATH \$CGAL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CGAL_ROOT/lib
 EoF
