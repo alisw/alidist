@@ -24,6 +24,7 @@ cmake $SOURCEDIR                                                 \
       -DDISABLE_COLOR=ON                                         \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
+      -DBUILD_SHARED_LIBS=ON                                     \
       -DBUILD_TESTING=ON
 
 

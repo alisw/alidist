@@ -14,6 +14,7 @@ build_requires:
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
           ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
           -DROOT_DIR=${ROOT_ROOT}                      \
+          -DBUILD_SHARED_LIBS=ON                       \
           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS}
