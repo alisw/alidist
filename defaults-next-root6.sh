@@ -9,8 +9,8 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-44a
+    tag: v5-09-44f
   AliPhysics:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-44a-01
+    tag: v5-09-44f-01
 ---
