@@ -21,7 +21,7 @@ prepend_path:
 ---
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
-# fairroot,  so this really should be cleaned up in FairRoot itself for
+# fairroot, so this really should be cleaned up in FairRoot itself for
 # maximum safety.
 unset SIMPATH
 
@@ -63,6 +63,7 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
+      -DCMAKE_INSTALL_LIBDIR=lib                                                            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 cmake --build . -- -j$JOBS install

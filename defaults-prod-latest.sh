@@ -46,8 +46,8 @@ overrides:
 
   # Use VMC packages compatible with ROOT 5
   GEANT3:
-    version: "v2-7" 
-    tag: "v2-7"
+    version: "v2-7-p1"
+    tag: "v2-7-p1"
   GEANT4_VMC:
     version: "v3-6-p6-inclxx-biasing-p2"
     tag: "v3-6-p6-inclxx-biasing-p2"
