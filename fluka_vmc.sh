@@ -26,20 +26,20 @@ popd
 
 # Installation
 mkdir -p "$INSTALLROOT/lib"
-cp -v lib/tgt_*/libfluka.* "$INSTALLROOT/lib"
+cp -v lib/tgt_*/libflukavmc.* tmp/tgt_*/*.pcm "$INSTALLROOT/lib"
 cp -v README "$INSTALLROOT/"
 for DIR in examples input; do
   [[ -d $DIR ]] || continue
   rsync -av $DIR "$INSTALLROOT"
 done
-rsync -av "$FLUKA_ROOT"/*.bin "$FLUKA_ROOT"/*.dat "$INSTALLROOT/data"
+rsync -av "$FLUKA_ROOT"/data "$INSTALLROOT/data"
 
 # Test load library
 cat > loadFluka.C <<\EOF
 #include <iostream>
 #include <TSystem.h>
 int loadFluka() {
-  const char *libs[] = { "libVMC", "libPhysics", "libEG", "libfluka" };
+  const char *libs[] = { "libVMC", "libPhysics", "libEG", "libflukavmc" };
   for (auto &lib : libs) {
     if (gSystem->Load(lib) < 0) {
       std::cout << "Cannot load library " << lib << std::endl;
