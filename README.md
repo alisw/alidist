@@ -68,7 +68,8 @@ Whenever you need to build a new external, you should consider the following:
  
         git checkout -b alice/<fork-point> <fork-point>
 
-    patches should be applied on such a branch.
+    patches should be applied on such a branch. You should then tag your development as:
+    `<version>-alice<x>` where `<x>` is an incremental number for a given official `<version>`.
   - If no git repository is available, or if mirroring the whole repository is
     not desirable, create a repository with a `master` branch. On the master
     branch import relevant released tarballs, one commit per tarball. Make sure
@@ -87,7 +88,8 @@ Whenever you need to build a new external, you should consider the following:
 
         git checkout -b alice/<version> <version>
 
-    and add your patches on such a branch.
+    and add your patches on such a branch. You should then tag your development as:
+    `<version>-alice<x>` where `<x>` is an incremental number for a given official `<version>`.
   - Do not create extra branches unless you do need to patch the original sources.
 
 Moreover try to keep the package name (as specified inside the recipe
