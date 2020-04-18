@@ -24,7 +24,7 @@ env:
     xgboost==0.82
     dryable==1.0.3
     responses==0.10.6
-    RootInteractive==0.0.17
+    RootInteractive==0.0.10
 ---
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
