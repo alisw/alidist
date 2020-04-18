@@ -16,6 +16,7 @@ env:
     scipy==1.2.1
     uproot==3.4.18
   PIP36_REQUIREMENTS: |
+    Cython==0.29.16
     seaborn==0.9.0
     sklearn-evaluation==0.4
     Keras==2.2.4
