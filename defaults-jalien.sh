@@ -13,6 +13,8 @@ overrides:
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
     tag: v5-09-53-01
+  autotools:
+    tag: v1.5.0
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
