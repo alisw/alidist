@@ -85,7 +85,7 @@ popd
 
 # automake -- requires: m4, autoconf, gettext
 pushd automake*
-  sh ./bootstrap
+  [ -e bootstrap ] && sh ./bootstrap
   ./configure --prefix $INSTALLROOT
   make MAKEINFO=true ${JOBS+-j $JOBS}
   make MAKEINFO=true install
