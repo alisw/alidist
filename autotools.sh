@@ -42,6 +42,15 @@ if [ -d help2man* ]; then
   popd
 fi
 
+# m4 -- requires: nothing special
+pushd m4*
+  autoreconf -ivf
+  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
+  make ${JOBS+-j $JOBS}
+  make install
+  hash -r
+popd
+
 # autoconf -- requires: m4
 # FIXME: is that really true? on slc7 it fails if I do it the other way around
 # with the latest version of autoconf / m4
@@ -50,15 +59,6 @@ pushd autoconf*
   ./configure --prefix $INSTALLROOT
   make MAKEINFO=true ${JOBS+-j $JOBS}
   make MAKEINFO=true install
-  hash -r
-popd
-
-# m4 -- requires: nothing special
-pushd m4*
-  autoreconf -ivf
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS}
-  make install
   hash -r
 popd
 
