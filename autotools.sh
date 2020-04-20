@@ -18,6 +18,7 @@ build_requires:
 unset CXXFLAGS
 unset CFLAGS
 export EMACS=no
+USE_AUTORECONF={$USE_AUTORECONF:=true}
 
 echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
@@ -44,7 +45,7 @@ fi
 
 # m4 -- requires: nothing special
 pushd m4*
-  autoreconf -ivf
+  $USE_AUTORECONF && autoreconf -ivf
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS}
   make install
@@ -55,7 +56,7 @@ popd
 # FIXME: is that really true? on slc7 it fails if I do it the other way around
 # with the latest version of autoconf / m4
 pushd autoconf*
-  autoreconf -ivf
+  $USE_AUTORECONF && autoreconf -ivf
   ./configure --prefix $INSTALLROOT
   make MAKEINFO=true ${JOBS+-j $JOBS}
   make MAKEINFO=true install
@@ -64,7 +65,7 @@ popd
 
 # gettext -- requires: nothing special
 pushd gettext*
-  autoreconf -ivf
+  $USE_AUTORECONF && autoreconf -ivf
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
