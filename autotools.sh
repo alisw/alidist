@@ -33,12 +33,14 @@ export PATH=$INSTALLROOT/bin:$PATH
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
 
 # help2man
-pushd help2man*
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS}
-  make install
-  hash -r
-popd
+if [ -d help2man* ]; then
+  pushd help2man*
+    ./configure --disable-dependency-tracking --prefix $INSTALLROOT
+    make ${JOBS+-j $JOBS}
+    make install
+    hash -r
+  popd
+fi
 
 # autoconf -- requires: m4
 # FIXME: is that really true? on slc7 it fails if I do it the other way around
