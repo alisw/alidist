@@ -18,7 +18,7 @@ build_requires:
 unset CXXFLAGS
 unset CFLAGS
 export EMACS=no
-USE_AUTORECONF={$USE_AUTORECONF:=true}
+USE_AUTORECONF=${USE_AUTORECONF:="true"}
 
 echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
