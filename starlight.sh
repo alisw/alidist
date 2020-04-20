@@ -16,7 +16,15 @@ mkdir -p $INSTALLROOT/bin
 cp ./starlight $INSTALLROOT/bin/.
 mkdir -p $INSTALLROOT/lib
 cp ./libStarlib.a $INSTALLROOT/lib/.
-cp -r $SOURCEDIR/config $INSTALLROOT
+cp -r $SOURCEDIR/config $INSTALLROOT/.
+cp -r $SOURCEDIR/include $INSTALLROOT/.
+cp -r $SOURCEDIR/HepMC $INSTALLROOT/.
+
+#ConfigFile
+cat << EOF > $INSTALLROOT/bin/starlight-config
+echo $INSTALLROOT
+EOF
+chmod +x $INSTALLROOT/bin/starlight-config
 
 #ModuleFile
 mkdir -p etc/modulefiles
