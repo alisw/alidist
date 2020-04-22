@@ -53,11 +53,11 @@ overrides:
     tag: "v3-6-p6-inclxx-biasing-p2"
     requires:
       - GEANT4
-      - VGM
+      - vgm
   GEANT4:
     version: "v10.4.2"
     tag: "v10.4.2"
-  VGM:
+  vgm:
     version: "v4-4"
     tag: "v4-4"
 
