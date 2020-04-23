@@ -249,3 +249,8 @@ prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
 prepend-path ROOT_DYN_PATH \$ROOT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# External RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EoF
+glibc-headers
+EoF
