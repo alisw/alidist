@@ -9,7 +9,7 @@ build_requires:
   - FLUKA
 env:
   FLUVMC: "$FLUKA_VMC_ROOT"
-  FLUPRO: "$FLUKA_VMC_ROOT/data"
+  FLUPRO: "$FLUKA_VMC_ROOT"
 ---
 #!/bin/bash -e
 
@@ -32,7 +32,7 @@ for DIR in examples input; do
   [[ -d $DIR ]] || continue
   rsync -av $DIR "$INSTALLROOT"
 done
-rsync -av "$FLUKA_ROOT"/data "$INSTALLROOT/data"
+rsync -av "$FLUKA_ROOT"/data "$INSTALLROOT/"
 
 # Test load library
 cat > loadFluka.C <<\EOF
@@ -71,6 +71,7 @@ module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${GCC_T
 set FLUKA_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUKA_VMC_ROOT \$FLUKA_VMC_ROOT
 setenv FLUVMC \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version/data
+setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FLUKADATA \$::env(BASEDIR)/$PKGNAME/\$version/data
 prepend-path LD_LIBRARY_PATH \$FLUKA_VMC_ROOT/lib
 EoF
