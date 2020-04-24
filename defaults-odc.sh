@@ -5,7 +5,6 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
-  CMAKE_GENERATOR: "Ninja"
   GEANT4_BUILD_MULTITHREADED: "ON"
 disable:
   - AliEn-Runtime
