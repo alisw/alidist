@@ -12,7 +12,7 @@ valid_defaults:
 #!/bin/bash -e
 npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm --prefix ./
 
-mkdir -p bin
+mkdir -p bin 
 cat > bin/qcg <<EOF
 #!/bin/bash
 exec node "$INSTALLROOT/node_modules/@aliceo2/qc/index.js" "$INSTALLROOT/node_modules/@aliceo2/qc/config.js"
