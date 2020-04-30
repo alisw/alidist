@@ -67,11 +67,19 @@ pushd autoconf*
   hash -r
 popd
 
+# libtool -- requires: m4
+pushd libtool*
+  ./configure --disable-dependency-tracking --prefix $INSTALLROOT --enable-ltdl-install
+  make ${JOBS+-j $JOBS}
+  make install
+  hash -r
+popd
+
 # Do not judge me. I am simply trying to float.
 # Apparently slc6 needs a different order compared
 # to the rest.
 case $ARCHITECTURE in
-  slc6*)
+  slc6*|ubuntu14*)
     # automake -- requires: m4, autoconf, gettext
     pushd automake*
       $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
@@ -83,6 +91,7 @@ case $ARCHITECTURE in
   ;;
   *) ;;
 esac
+
 
 # gettext -- requires: nothing special
 pushd gettext*
@@ -99,6 +108,7 @@ pushd gettext*
               --disable-acl \
               --disable-java \
               --disable-dependency-tracking \
+	      --without-emacs \
               --disable-silent-rules
   make ${JOBS+-j $JOBS}
   make install
@@ -107,7 +117,7 @@ popd
 
 # Do not judge me. I am simply trying to float.
 case $ARCHITECTURE in
-  slc6*) ;;
+  slc6*|ubuntu14*) ;;
   *)
     # automake -- requires: m4, autoconf, gettext
     pushd automake*
@@ -120,13 +130,6 @@ case $ARCHITECTURE in
   ;;
 esac
 
-# libtool -- requires: m4
-pushd libtool*
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT --enable-ltdl-install
-  make ${JOBS+-j $JOBS}
-  make install
-  hash -r
-popd
 
 # pkgconfig -- requires: nothing special
 pushd pkg-config*
