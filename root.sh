@@ -150,6 +150,7 @@ cmake $SOURCEDIR                                                                
       -Dkrb5=OFF                                                                       \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
+      -Dbuiltin_afterimage=ON                                                          \
       ${ENABLE_VMC:+-Dvmc=ON}                                                          \
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
