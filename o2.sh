@@ -46,7 +46,7 @@ incremental_recipe: |
     perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
     ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
   fi
-  if [[ $ALIBUILD_O2_TESTS ]] && [[ ! $ALIBUILD_O2_FORCE_GPU ]]; then
+  if [[ $ALIBUILD_O2_TESTS ]]; then
     export O2_ROOT=$INSTALLROOT
     export VMCWORKDIR=$O2_ROOT/share
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
@@ -208,7 +208,7 @@ prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
-if [[ $ALIBUILD_O2_TESTS ]] && [[ ! $ALIBUILD_O2_FORCE_GPU ]]; then
+if [[ $ALIBUILD_O2_TESTS ]]; then
   export O2_ROOT=$INSTALLROOT
   export VMCWORKDIR=$O2_ROOT/share
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
