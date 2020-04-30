@@ -66,10 +66,12 @@ module load BASE/1.0                                                            
             ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}                     \\
             ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
             ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
+            ${GRPC_REVISION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                                     \\            
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
             
 # Our environment
 set ODC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ODC_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ODC_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$ODC_ROOT/lib64
 EoF
