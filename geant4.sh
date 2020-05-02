@@ -29,11 +29,6 @@ env:
   G4SAIDXSDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT  '*data*G4SAIDDATA*'`"
 
 ---
-
-#!/bin/bash -e
-
-#[[ $CXXSTD > 14 ]] && CXXSTD=14 || true  # Only C++14 is supported at the moment
-
 # if this variable is not defined default it to OFF
 : ${GEANT4_BUILD_MULTITHREADED:=OFF}
 
