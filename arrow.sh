@@ -1,6 +1,6 @@
 package: arrow
-version: v0.14.1
-tag: apache-arrow-0.14.1
+version: v0.17.0
+tag: apache-arrow-0.17.0
 source: https://github.com/apache/arrow
 requires:
   - boost
@@ -55,11 +55,13 @@ mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
 sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
+sed -i.deleteme -e "s/set(ARROW_LLVM_VERSIONS \".*\")/set(ARROW_LLVM_VERSIONS \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
 
 cmake ./src_tmp/cpp                                                                                 \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
+      -DCMAKE_CXX_STANDARD=17                                                                       \
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
       -DARROW_BUILD_BENCHMARKS=OFF                                                                  \
       -DARROW_BUILD_TESTS=OFF                                                                       \
@@ -89,7 +91,9 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_PYTHON=OFF                                                                            \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
+      -DARROW_COMPUTE=ON                                                                            \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
+      -DARROW_LLVM_VERSIONS=9                                                                       \
       -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang++
 
 make ${JOBS:+-j $JOBS}
