@@ -1,6 +1,6 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "6af7e848585ce720e96a01d5565b1bd5e3884430"
+tag: "4ab2d2b1f0392ad93b92026d70fe049c38665f7d"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -63,6 +63,7 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
+      -DCMAKE_INSTALL_LIBDIR=lib                                                            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 cmake --build . -- -j$JOBS install
