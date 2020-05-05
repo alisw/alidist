@@ -17,7 +17,8 @@ prepend_path:
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
-                 -DCMAKE_SKIP_RPATH=TRUE
+                 -DCMAKE_SKIP_RPATH=TRUE                   \
+		 -DCMAKE_Fortran_FLAGS="-std=legacy"
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
