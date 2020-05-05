@@ -10,10 +10,12 @@ build_requires:
 ---
 #!/bin/sh
 
-cmake ${SOURCEDIR}                           \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}  \
-      -DCMAKE_INSTALL_LIBDIR=lib
+cmake ${SOURCEDIR}                              \
+      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}    \
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}     \
+      -DCMAKE_INSTALL_LIBDIR=lib                \
+      -DCMAKE_Fortran_FLAGS="-std=legacy"       \
+      -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--allow-multiple-definition"
 make ${JOBS+-j$JOBS}
 make install
 
