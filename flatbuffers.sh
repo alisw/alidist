@@ -12,13 +12,14 @@ prefer_system_check: |
 ---
 cmake $SOURCEDIR                          \
       -G "Unix Makefiles"                 \
+      -DFLATBUFFERS_BUILD_TESTS=OFF       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 make ${JOBS:+-j $JOBS}
 make install
 
 # Work around potentially faulty CMake (missing `install` for binaries)
 mkdir -p $INSTALLROOT/bin
-for BIN in flathash flatc flatsamplebinary flatsampletext flattests; do
+for BIN in flathash flatc; do
   [[ -e $INSTALLROOT/bin/$BIN ]] || cp -p $BIN $INSTALLROOT/bin/
 done
 
