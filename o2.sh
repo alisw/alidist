@@ -40,6 +40,7 @@ incremental_recipe: |
   fi
   if [ "X$CMAKE_GENERATOR" = XNinja ]; then
     # Find the old binary byproducts
+    mkdir -p stage/{bin,lib,tests}
     find stage/{bin,lib,tests} -type f > old.txt
     # Find new targets
     ninja -t targets all  | grep stage | cut -f1 -d: > new.txt
