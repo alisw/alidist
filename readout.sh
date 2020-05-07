@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v1.3.9
+tag: v1.3.10
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -21,7 +21,6 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
-
 case $ARCHITECTURE in
     osx*) 
 	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
