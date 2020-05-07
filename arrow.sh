@@ -57,6 +57,14 @@ CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
 sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
 sed -i.deleteme -e "s/set(ARROW_LLVM_VERSIONS \".*\")/set(ARROW_LLVM_VERSIONS \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
 
+case $ARCHITECTURE in
+  osx*) ;;
+  *)
+   # this patches version script to hide llvm symbols in gandiva library
+   sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
+   ;;
+esac
+
 cmake ./src_tmp/cpp                                                                                 \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
@@ -94,7 +102,7 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_COMPUTE=ON                                                                            \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
       -DARROW_LLVM_VERSIONS=9                                                                       \
-      -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang++
+      -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
 
 make ${JOBS:+-j $JOBS}
 make install
