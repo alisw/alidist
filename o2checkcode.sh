@@ -43,24 +43,23 @@ ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc)' ${O2_C
 cp thinned_compile_commands.json compile_commands.json
 
 # List of explicitely enabled C++ checks (make sure they are all green)
-CHECKS="${O2_CHECKER_CHECKS:--*         \
-,aliceO2-member-name                    \
-,aliceO2-namespace-naming               \
-,modernize-avoid-bind                   \
-,modernize-deprecated-headers           \
-,modernize-make-shared                  \
-,modernize-raw-string-literal           \
-,modernize-redundant-void-arg           \
-,modernize-replace-auto-ptr             \
-,modernize-replace-random-shuffle       \
-,modernize-return-braced-init-list      \
-,modernize-shrink-to-fit                \
-,modernize-unary-static-assert          \
-,modernize-use-equals-default           \
-,modernize-use-noexcept                 \
-,modernize-use-nullptr                  \
-,modernize-use-override                 \
-,modernize-use-transparent-functors     \
+CHECKS="${O2_CHECKER_CHECKS:--*,\
+aliceO2-member-name\
+,modernize-avoid-bind\
+,modernize-deprecated-headers\
+,modernize-make-shared\
+,modernize-raw-string-literal\
+,modernize-redundant-void-arg\
+,modernize-replace-auto-ptr\
+,modernize-replace-random-shuffle\
+,modernize-return-braced-init-list\
+,modernize-shrink-to-fit\
+,modernize-unary-static-assert\
+,modernize-use-equals-default\
+,modernize-use-noexcept\
+,modernize-use-nullptr\
+,modernize-use-override\
+,modernize-use-transparent-functors\
 ,modernize-use-uncaught-exceptions}"
 
 # Run C++ checks
