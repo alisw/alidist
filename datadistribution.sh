@@ -1,6 +1,6 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v0.7
+tag: v0.7.3
 requires:
   - boost
   - FairLogger
@@ -15,6 +15,10 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
 source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
+  # reduce number of compile slots if invoked  by Jenkins
+  if [[ -v JENKINS_HOME ]]; then
+    JOBS=1
+  fi
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -37,6 +41,10 @@ cmake $SOURCEDIR                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+# reduce number of compile slots if invoked by Jenkins
+if [[ -v JENKINS_HOME ]]; then
+  JOBS=1
+fi
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile

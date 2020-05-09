@@ -1,11 +1,11 @@
 package: arrow
-version: v0.14.1
-tag: apache-arrow-0.14.1
+version: v0.17.0
+tag: apache-arrow-0.17.0
 source: https://github.com/apache/arrow
 requires:
   - boost
   - lz4
-  - LLVM
+  - Clang
   - protobuf
 build_requires:
   - zlib
@@ -50,10 +50,26 @@ esac
 #
 # Taken from our stack, linked dynamically (needed at runtime):
 #   boost
-cmake $SOURCEDIR/cpp                                                                                \
+
+mkdir -p ./src_tmp
+rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
+CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
+sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
+sed -i.deleteme -e "s/set(ARROW_LLVM_VERSIONS \".*\")/set(ARROW_LLVM_VERSIONS \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
+
+case $ARCHITECTURE in
+  osx*) ;;
+  *)
+   # this patches version script to hide llvm symbols in gandiva library
+   sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
+   ;;
+esac
+
+cmake ./src_tmp/cpp                                                                                 \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
+      -DCMAKE_CXX_STANDARD=17                                                                       \
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
       -DARROW_BUILD_BENCHMARKS=OFF                                                                  \
       -DARROW_BUILD_TESTS=OFF                                                                       \
@@ -72,8 +88,7 @@ cmake $SOURCEDIR/cpp                                                            
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}              \
       ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                               \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                      \
-      ${BOOST_ROOT:+-DBoost_DIR=$BOOST_ROOT}                                                        \
-      ${BOOST_ROOT:+-DBoost_INCLUDE_DIR=$BOOST_ROOT/include}                                        \
+      ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                                                       \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
@@ -84,7 +99,10 @@ cmake $SOURCEDIR/cpp                                                            
       -DARROW_PYTHON=OFF                                                                            \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
-      -DCLANG_EXECUTABLE=${LLVM_ROOT}/bin-safe/clang++
+      -DARROW_COMPUTE=ON                                                                            \
+      -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
+      -DARROW_LLVM_VERSIONS=9                                                                       \
+      -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
 
 make ${JOBS:+-j $JOBS}
 make install
@@ -102,7 +120,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} \\
+                     ${CLANG_REVISION:+Clang/$CLANG_VERSION-$CLANG_REVISION}
 # Our environment
 set ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$ARROW_ROOT/lib

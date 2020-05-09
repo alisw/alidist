@@ -1,6 +1,6 @@
 package: O2
-version: "1.0.0"
-tag: "O2-1.0.0"
+version: "v1.2.0"
+tag: "v1.2.0"
 requires:
   - arrow
   - FairRoot
@@ -19,6 +19,7 @@ requires:
   - fmt
   - DebugGUI
   - JAliEn-ROOT
+  - fastjet
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -30,6 +31,22 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/GPU"
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
+  if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
+    NINJA_BIN=ninja-build
+    type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
+    type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
+    [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+    unset NINJA_BIN
+  fi
+  if [ "X$CMAKE_GENERATOR" = XNinja ]; then
+    # Find the old binary byproducts
+    mkdir -p stage/{bin,lib,tests}
+    find stage/{bin,lib,tests} -type f > old.txt
+    # Find new targets
+    ninja -t targets all  | grep stage | cut -f1 -d: > new.txt
+    # Delete all those which are found twice (i.e. which are in old.txt only)
+    cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
+  fi
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
@@ -59,7 +76,7 @@ incremental_recipe: |
     find $PWD -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
-    ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+    ctest -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
     ctest -R test_Framework --output-on-failure || TESTERR=$?
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
@@ -106,6 +123,7 @@ unset SIMPATH
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $CURL_ROOT ]] && CURL_ROOT=`brew --prefix curl`
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
     [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=`brew --prefix zeromq`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
@@ -138,15 +156,17 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
 fi
 
 unset DYLD_LIBRARY_PATH
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                       \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                            \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                            \
-      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                            \
-      ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                              \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                   \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                              \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DDENABLE_OPENCL1=ON}                      \
-      ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75}
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                           \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                           \
+      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                           \
+      ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
+      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
+      ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75} \
+      ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
+      ${ARROW_ROOT:+-Dgandiva_DIR=$ARROW_ROOT/lib/cmake/arrow}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
@@ -188,6 +208,7 @@ module load BASE/1.0 \\
             ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION                                                 \\
             ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
             ${DEBUGGUI_REVISION:+DebugGUI/$DEBUGGUI_VERSION-$DEBUGGUI_REVISION}                     \\
+            ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
@@ -197,6 +218,7 @@ setenv VMCWORKDIR \$O2_ROOT/share
 set O2_ROOT \$O2_ROOT
 prepend-path PATH \$O2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
+prepend-path ROOT_DYN_PATH \$O2_ROOT/lib
 $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
@@ -217,7 +239,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up ROOT files created by tests in build area
   find $PWD -name "*.root" -delete
   TESTERR=
-  ctest -E test_Framework --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+  ctest -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -R test_Framework --output-on-failure || TESTERR=$?
   # Display additional logs for tests that timed out in a non-fatal way
   set +x

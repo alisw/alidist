@@ -12,6 +12,7 @@ overrides:
     version: "%(commit_hash)s_O2"
     requires:
       - ROOT
+      - DPMJET
       - fastjet:(?!.*ppc64)
       - GEANT3
       - GEANT4_VMC
@@ -19,6 +20,7 @@ overrides:
       - ZeroMQ
       - JAliEn-ROOT
   pythia:
+    tag: "v8302"
     requires:
       - lhapdf
       - boost
@@ -27,7 +29,7 @@ overrides:
   cgal:
     version: "4.12.2"
   fastjet:
-    tag: "v3.3.2_1.041-alice1"
+    tag: "v3.3.3_1.042-alice1"
   XRootD:
     tag: "v4.11.1"
     source: https://github.com/xrootd/xrootd

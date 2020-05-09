@@ -1,6 +1,6 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.4.12
+tag: v1.4.15
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
@@ -42,6 +42,7 @@ cmake $SOURCEDIR                                                 \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
       ${GOOGLETEST_ROOT:+-DGTEST_ROOT=$GOOGLETEST_ROOT}          \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
+      ${BOOST_ROOT:+-DBoost_NO_BOOST_CMAKE=ON}                   \
       ${FAIRLOGGER_ROOT:+-DFAIRLOGGER_ROOT=$FAIRLOGGER_ROOT}     \
       ${ZEROMQ_ROOT:+-DZEROMQ_ROOT=$ZEROMQ_ROOT}                 \
       ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
@@ -56,8 +57,11 @@ cmake $SOURCEDIR                                                 \
       -DBUILD_NANOMSG_TRANSPORT=OFF                              \
       ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
+      -DBUILD_TESTING=${ALIBUILD_FAIRMQ_TESTS:-OFF}              \
       -DCMAKE_INSTALL_LIBDIR=lib                                 \
       -DCMAKE_INSTALL_BINDIR=bin
+# NOTE: FairMQ examples must always be built in RPMs as they are used for
+#       AliECS integration testing. Please do not disable them.
 
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 

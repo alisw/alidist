@@ -1,11 +1,12 @@
 package: AEGIS
 version: "%(tag_basename)s"
-tag: v1.0
+tag: v1.1
 requires:
   - ROOT
   - pythia6
 build_requires:
   - CMake
+  - hijing
   - "Xcode:(osx.*)"
 source: https://github.com/AliceO2Group/AEGIS.git
 prepend_path:

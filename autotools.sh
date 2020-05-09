@@ -1,6 +1,6 @@
 package: autotools
 version: "%(tag_basename)s"
-tag: v1.5.0
+tag: v1.6.3
 source: https://github.com/alisw/autotools
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
@@ -19,6 +19,11 @@ unset CXXFLAGS
 unset CFLAGS
 export EMACS=no
 
+case $ARCHITECTURE in
+  slc6*) USE_AUTORECONF=${USE_AUTORECONF:="false"} ;;
+  *) USE_AUTORECONF=${USE_AUTORECONF:="true"} ;;
+esac
+
 echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
 # Restore original timestamps to avoid reconf (Git does not preserve them)
@@ -28,16 +33,37 @@ popd
 
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ .
 
-# Use our auto* tools while we build them
+# Use our auto* tools as we build them
 export PATH=$INSTALLROOT/bin:$PATH
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
-export DYLD_LIBRARY_PATH=$INSTALLROOT/lib:$DYLD_LIBRARY_PATH
+
+# help2man
+if [ -d help2man* ]; then
+  pushd help2man*
+    ./configure --disable-dependency-tracking --prefix $INSTALLROOT
+    make ${JOBS+-j $JOBS}
+    make install
+    hash -r
+  popd
+fi
 
 # m4 -- requires: nothing special
 pushd m4*
+  $USE_AUTORECONF && autoreconf -ivf
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS}
   make install
+  hash -r
+popd
+
+# autoconf -- requires: m4
+# FIXME: is that really true? on slc7 it fails if I do it the other way around
+# with the latest version of autoconf / m4
+pushd autoconf*
+  $USE_AUTORECONF && autoreconf -ivf
+  ./configure --prefix $INSTALLROOT
+  make MAKEINFO=true ${JOBS+-j $JOBS}
+  make MAKEINFO=true install
   hash -r
 popd
 
@@ -49,16 +75,27 @@ pushd libtool*
   hash -r
 popd
 
-# autoconf -- requires: m4
-pushd autoconf*
-  ./configure --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS}
-  make install
-  hash -r
-popd
+# Do not judge me. I am simply trying to float.
+# Apparently slc6 needs a different order compared
+# to the rest.
+case $ARCHITECTURE in
+  slc6*|ubuntu14*)
+    # automake -- requires: m4, autoconf, gettext
+    pushd automake*
+      $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
+      ./configure --prefix $INSTALLROOT
+      make MAKEINFO=true ${JOBS+-j $JOBS}
+      make MAKEINFO=true install
+      hash -r
+    popd
+  ;;
+  *) ;;
+esac
+
 
 # gettext -- requires: nothing special
 pushd gettext*
+  $USE_AUTORECONF && autoreconf -ivf
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
@@ -71,19 +108,28 @@ pushd gettext*
               --disable-acl \
               --disable-java \
               --disable-dependency-tracking \
+	      --without-emacs \
               --disable-silent-rules
   make ${JOBS+-j $JOBS}
   make install
   hash -r
 popd
 
-# automake -- requires: m4, autoconf, gettext
-pushd automake*
-  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-  make ${JOBS+-j $JOBS}
-  make install
-  hash -r
-popd
+# Do not judge me. I am simply trying to float.
+case $ARCHITECTURE in
+  slc6*|ubuntu14*) ;;
+  *)
+    # automake -- requires: m4, autoconf, gettext
+    pushd automake*
+      $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
+      ./configure --prefix $INSTALLROOT
+      make MAKEINFO=true ${JOBS+-j $JOBS}
+      make MAKEINFO=true install
+      hash -r
+    popd
+  ;;
+esac
+
 
 # pkgconfig -- requires: nothing special
 pushd pkg-config*

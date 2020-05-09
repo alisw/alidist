@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.12.1"
+tag: "v0.13.3"
 requires:
   - FairMQ
   - FairLogger
@@ -38,7 +38,8 @@ cmake $SOURCEDIR/occ                                                            
       -DGRPCPATH=${GRPC_ROOT}                                                            \
       -DPROTOBUFPATH=${PROTOBUF_ROOT}                                                    \
       -DFAIRMQPATH=${FAIRMQ_ROOT}                                                        \
-      -DFAIRLOGGERPATH=${FAIRLOGGER_ROOT}
+      -DFAIRLOGGERPATH=${FAIRLOGGER_ROOT}                                                \
+      -DBUILD_SHARED_LIBS=ON
 
 make ${JOBS+-j $JOBS} prefix=$INSTALLROOT
 make prefix=$INSTALLROOT install

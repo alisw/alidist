@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-18-04"
-source: https://github.com/root-project/root
+tag: "v6-20-02-alice6"
+source: https://github.com/alisw/root
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
@@ -33,10 +33,6 @@ incremental_recipe: |
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
          "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
-  # Reduce ROOT C++ Standard Interface Requirement to C++14 for CUDA compatibility
-  sed -i.deleteme -e "s/cxx_std_17/cxx_std_14/" "$INSTALLROOT/cmake/ROOTConfig-targets.cmake" || true
-  find . -name '*.deleteme' -exec rm -f '{}' \; || true
-
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
@@ -46,7 +42,7 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
-  v6-18*) 
+  v6-20*) 
      ENABLE_VMC=1
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
@@ -59,8 +55,8 @@ case $PKGVERSION in
   ;;
 esac
 
-# We do not use global options for ROOT, otherwise the -g will kill compilation 
-# on < 8GB machines
+# We do not use global options for ROOT, otherwise the -g will 
+# kill compilation on < 8GB machines
 unset CXXFLAGS
 unset CFLAGS
 unset LDFLAGS
@@ -90,14 +86,18 @@ fi
 
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpython=ON"
-  ROOT_PYTHON_FEATURES="python"
+  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+  ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
-  PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
+  PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
+  PYTHON_INCLUDE_DIR=$(python3-config --includes | sed -e's/^[ ]*-I//' | cut -f1 -d' ')
+  PYTHON_LIBRARY_DIR=$(python3-config --ldflags | sed -e's/^[ ]*-L//' | cut -f1 -d' ')
+  PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
+  PYTHON_LIBRARY=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
 else
   # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpython=OFF"
+  ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
   ROOT_PYTHON_FEATURES=
   ROOT_HAS_NO_PYTHON=1
 fi
@@ -109,7 +109,7 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
-      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                     \
+      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       ${CXX11:+-Dcxx11=ON}                                                             \
@@ -135,6 +135,7 @@ cmake $SOURCEDIR                                                                
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
@@ -145,21 +146,30 @@ cmake $SOURCEDIR                                                                
       -Dshadowpw=OFF                                                                   \
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
-      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                          \
+      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dkrb5=OFF                                                                       \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
+      -Dbuiltin_afterimage=ON                                                          \
       ${ENABLE_VMC:+-Dvmc=ON}                                                          \
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
-      -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+      ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
+      ${ROOT_HAS_PYTHON:+-DPython_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
+      ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
+      ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIRS=${PYTHON_INCLUDE_DIR}}                  \
+      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
-          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+python}
+          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
-             ${ROOT_HAS_NO_PYTHON:+python} builtin_davix davix alien"
+             ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix alien"
 
 if [[ $ENABLE_COCOA ]]; then
   FEATURES="$FEATURES builtin_freetype"
@@ -187,7 +197,8 @@ cat >> system.rootrc.0 <<EOF
 
 # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
 # Plugins in \$ROOT_PLUGIN_PATH have priority.
-Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins
+Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins:
+Unix.*.Root.DynamicPath: .:\$(ROOT_DYN_PATH):
 EOF
 mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
@@ -198,9 +209,6 @@ fi
 
 # Make some CMake files used by other projects relocatable
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
-# Reduce ROOT C++ Standard Interface Requirement to C++14 for CUDA compatibility
-sed -i.deleteme -e "s/cxx_std_17/cxx_std_14/" "$INSTALLROOT/cmake/ROOTConfig-targets.cmake" || true
-find . -name '*.deleteme' -exec rm -f '{}' \; || true
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
@@ -239,5 +247,11 @@ set ROOT_ROOT  \$::env(ROOTSYS)
 prepend-path PYTHONPATH \$ROOT_ROOT/lib
 prepend-path PATH \$ROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ROOT_ROOT/lib
+prepend-path ROOT_DYN_PATH \$ROOT_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# External RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EoF
+glibc-headers
+EoF

@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v1.2.5
+tag: v1.3.10
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -21,7 +21,6 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
-
 case $ARCHITECTURE in
     osx*) 
 	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
@@ -32,7 +31,13 @@ esac
 
 # Enforce no warning code in the PR checker
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  # there seems to be a bug in CMake in macOS with -Werror which adds unwanted 
+  # includes that lead to failing builds. skip it for now.
+  # https://alice.its.cern.ch/jira/browse/O2-1074
+  case $ARCHITECTURE in 
+    osx*) ;;
+    *) CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations" ;;
+  esac
 fi
 
 cmake $SOURCEDIR                                                         \
@@ -49,7 +54,8 @@ cmake $SOURCEDIR                                                         \
       ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
       ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                  \
+      -DBUILD_SHARED_LIBS=ON
 
 make ${JOBS+-j $JOBS} install
 
@@ -72,7 +78,7 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
-            lz4/${LZ4_VERSION}-${LZ4_REVISION}                                \\
+            ${LZ4_REVISION:+lz4/$LZ4_VERSION-$LZ4_REVISION}                                \\
             FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
             FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION                           \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION

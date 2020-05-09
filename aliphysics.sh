@@ -88,5 +88,6 @@ setenv ALICE_PHYSICS \$ALICE_PHYSICS
 prepend-path PATH \$ALICE_PHYSICS/bin
 prepend-path LD_LIBRARY_PATH \$ALICE_PHYSICS/lib
 prepend-path ROOT_INCLUDE_PATH \$ALICE_PHYSICS/include
+prepend-path ROOT_DYN_PATH \$ALICE_PHYSICS/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

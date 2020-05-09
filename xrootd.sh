@@ -6,10 +6,10 @@ requires:
  - "OpenSSL:(?!osx)"
  - Python-modules
  - AliEn-Runtime
+ - libxml2
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
- - libxml2
  - "GCC-Toolchain:(?!osx)"
  - UUID:(?!osx)
 ---
@@ -29,7 +29,14 @@ case $ARCHITECTURE in
   ;;
 esac
 
-cmake "$SOURCEDIR"                                                    \
+rsync -a --delete $SOURCEDIR/ $BUILDDIR
+
+[ x"$XROOTD_V4" = x"True" ] && sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
+
+
+mkdir build
+pushd build
+cmake "$BUILDDIR"                                                     \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
@@ -47,12 +54,15 @@ cmake "$SOURCEDIR"                                                    \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
+popd
 
 if [[ x"$XROOTD_PYTHON" == x"True" ]];
 then
   pushd $INSTALLROOT
-  XRD_PYTHON_PATH="$(find . -path '*site-packages' -type d)"
-popd
+    pushd lib
+      ln -s python* python
+    popd
+  popd
 fi
 
 # Modulefile
@@ -79,7 +89,7 @@ set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XROOTD_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
 if { $XROOTD_PYTHON } {
-  prepend-path PYTHONPATH \${XROOTD_ROOT}/${XRD_PYTHON_PATH}
+  prepend-path PYTHONPATH \${XROOTD_ROOT}/lib/python/site-packages
   module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
               ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 }
