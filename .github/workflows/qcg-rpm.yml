@@ -9,7 +9,7 @@ on:
 
 jobs:
   trigger_jenkins_for_qcg:
-    runs-on: macOS-10.14
+    runs-on: macOS-10.15
     steps:
       - run: brew remove curl
       - run: |
@@ -22,4 +22,4 @@ jobs:
             --anyauth \
             -u : https://${{ secrets.ALIJENKINS_HOSTNAME }}/kerberos/job/build-any-ib/buildWithParameters \
             -H 'Content-Type: application/x-www-form-urlencoded' \
-            -d 'PACKAGE_NAME=$PACKAGE_NAME&DEFAULTS=$DEFAULTS&ARCHITECTURE=$ARCHITECTURE' \
+            -d 'PACKAGE_NAME=$PACKAGE_NAME&DEFAULTS=$DEFAULTS&ARCHITECTURE=$ARCHITECTURE'
