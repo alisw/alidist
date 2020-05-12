@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.13.3"
+tag: "v0.13.90"
 requires:
   - FairMQ
   - FairLogger
@@ -10,7 +10,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - libInfoLogger
 build_requires:
-  - grpc
+  - RapidJSON
   - CMake
 source: https://github.com/AliceO2Group/Control
 incremental_recipe: |
@@ -39,6 +39,7 @@ cmake $SOURCEDIR/occ                                                            
       -DPROTOBUFPATH=${PROTOBUF_ROOT}                                                    \
       -DFAIRMQPATH=${FAIRMQ_ROOT}                                                        \
       -DFAIRLOGGERPATH=${FAIRLOGGER_ROOT}                                                \
+      ${RAPIDJSON_ROOT:+-DRapidJSON_ROOT=${RAPIDJSON_ROOT}}                              \
       -DBUILD_SHARED_LIBS=ON
 
 make ${JOBS+-j $JOBS} prefix=$INSTALLROOT
