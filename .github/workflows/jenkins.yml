@@ -14,7 +14,7 @@ jobs:
     steps:
       - run: brew remove curl
       - run: |
-          echo "${{ secrets.KERBEROS_PASSWORD }}" | kinit "${{ secrets.KERBEROS_USERNAME }}@cern.ch"
+          echo "${{ secrets.KERBEROS_PASSWORD }}" | kinit "${{ secrets.KERBEROS_USERNAME }}@CERN.CH"
           curl -X POST  \
             -k \
             --anyauth \
