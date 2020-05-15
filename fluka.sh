@@ -6,14 +6,14 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 env:
   FLUPRO: "$FLUKA_ROOT/lib"
-  FLUFOR: "gfortran"
+  FC: "gfortran"
 prepend_path:
   PATH: "$FLUKA_ROOT/bin"
 ---
 #!/bin/bash -e
 
 export FLUPRO=$PWD
-export FLUFOR=gfortran
+export FC=gfortran
 
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ "$INSTALLROOT"
 cd "$INSTALLROOT"
@@ -37,7 +37,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-
 set FLUKA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUKA_ROOT \$FLUKA_ROOT
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version/lib
-setenv FLUFOR gfortran
+setenv FC gfortran
 prepend-path PATH \$FLUKA_ROOT
 prepend-path PATH \$FLUKA_ROOT/bin
 EoF
