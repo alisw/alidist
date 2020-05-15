@@ -1,6 +1,6 @@
 package: FLUKA
 version: "%(tag_basename)s"
-tag: "2011-3.0-vmc1"
+tag: "2011-3.0-vmc2"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA.git
 requires:
   - "GCC-Toolchain:(?!osx)"
