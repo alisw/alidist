@@ -39,6 +39,7 @@ cmake . \
       -DWITH_CGAL_ImageIO:BOOL=ON \
       -DWITH_CGAL_Qt3:BOOL=OFF \
       -DWITH_CGAL_Qt4:BOOL=OFF \
+      -DWITH_CGAL_Qt5:BOOL=OFF \
       -DWITH_Coin3D:BOOL=OFF \
       -DWITH_ESBTL:BOOL=OFF \
       -DWITH_Eigen3:BOOL=OFF \
