@@ -42,6 +42,7 @@ cmake "$BUILDDIR"                                                     \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
+      -DVOMSXRD_SUBMODULE=OFF                                         \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
