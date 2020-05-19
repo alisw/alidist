@@ -1,6 +1,6 @@
 package: cub
 version: "%(tag_basename)s"
-tag: v1.8.0
+tag: 1.8.0
 source: https://github.com/NVlabs/cub.git
 ---
 #!/bin/bash -e
