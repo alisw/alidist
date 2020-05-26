@@ -1,6 +1,7 @@
 package: Readout
 version: "%(tag_basename)s"
 tag: v1.4.0
+requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
