@@ -41,10 +41,10 @@ overrides:
       - autotools
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-44f-01
+    tag: v5-09-44g-01
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-44f
+    tag: v5-09-44g
     requires:
       - JAliEn-ROOT
       - ROOT
