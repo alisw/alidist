@@ -4,6 +4,7 @@ tag: 34bc77ae9c3ba58a1b6dc684e80fc9187782fd2b
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
+  - libuv
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/DebugGUI
@@ -11,6 +12,7 @@ source: https://github.com/AliceO2Group/DebugGUI
 case $ARCHITECTURE in
     osx*)
       [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
+      [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=`brew --prefix libuv`
     ;;
 esac
 
