@@ -11,7 +11,8 @@ prefer_system_check: |
 ---
 #!/bin/sh
 cmake $SOURCEDIR                                             \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                    \
+      -DCMAKE_INSTALL_LIBDIR=lib
 
 make ${JOBS+-j $JOBS}
 make install
