@@ -32,10 +32,15 @@ incremental_recipe: |
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-    osx*) 
-		  [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-		  [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
-    ;;
+  osx*) 
+      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+      [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=$(brew --prefix libuv)
+      SONAME=dylib
+  ;;
+  *) 
+      SONAME=so
+  ;;
 esac
 
 # For the PR checkers (which sets ALIBUILD_O2_TESTS),
@@ -68,6 +73,8 @@ cmake $SOURCEDIR                                              \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
       ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
+      ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}             \
+      ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}       \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
