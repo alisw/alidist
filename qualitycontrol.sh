@@ -26,7 +26,8 @@ incremental_recipe: |
   if [[ $ALIBUILD_O2_TESTS ]]; then
     echo "Run the tests"
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-    ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+    PATH=$PATH:$INSTALLROOT/bin
+    ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
   fi
 ---
 #!/bin/bash -ex
@@ -85,7 +86,8 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-  ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+  PATH=$PATH:$INSTALLROOT/bin
+  ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
 fi
 
 DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
