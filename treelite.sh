@@ -1,6 +1,6 @@
 package: treelite
 version: "%(tag_basename)s"
-tag: "a7a0839"
+tag: "8498081"
 source: https://github.com/dmlc/treelite
 requires:
   - "GCC-Toolchain:(?!osx)"
