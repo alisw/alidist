@@ -15,6 +15,7 @@ env:
     scikit-learn==0.20.3
     scipy==1.2.1
     uproot==3.4.18
+    setuptools==44.1.1
   PIP36_REQUIREMENTS: |
     Cython==0.29.16
     seaborn==0.9.0
