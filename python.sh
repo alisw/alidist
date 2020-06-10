@@ -80,6 +80,12 @@ pushd "$INSTALLROOT/bin"
   [[ -x python3-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python3-config
 popd
 
+# Make sure we have the latest pip
+env PATH="$INSTALLROOT/bin:$PATH"                       \
+    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
+    PYTHONHOME="$INSTALLROOT"                           \
+    pip3 install --upgrade pip
+
 # Install Python SSL certificates right away
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
