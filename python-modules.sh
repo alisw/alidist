@@ -34,10 +34,10 @@ mkdir -p $PYTHON_MODULES_INSTALLROOT
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU numpy
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --isolated --user -IU numpy
 # Do not move cython from 0.29.06 for now since 3.0.0rc1 breaks on GPU
-grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU cython==0.29.16
-env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU -r requirements.txt
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --isolated --user -IU cython==0.29.16
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --isolated --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
 pushd "$PYTHON_MODULES_INSTALLROOT"
@@ -60,7 +60,7 @@ popd
 MATPLOTLIB_TAG="3.0.3"
 if [[ $ARCHITECTURE != slc* ]]; then
   # Simply get it via pip in most cases
-  env PYTHONUSERBASE=$PYTHON_MODULES_INSTALLROOT pip3 install --user "matplotlib==$MATPLOTLIB_TAG"
+  env PYTHONUSERBASE=$PYTHON_MODULES_INSTALLROOT pip3 install --isolated --user "matplotlib==$MATPLOTLIB_TAG"
 else
 
   # We are on a RHEL-compatible OS. We compile it ourselves, and link it to our dependencies
