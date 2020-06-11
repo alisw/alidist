@@ -11,7 +11,8 @@ env:
     notebook==5.7.8
     numpy==1.16.2
     pandas==0.24.2
-    PyYAML==5.1
+    setuptools
+    PyYAML==5.3.1
     scikit-learn==0.20.3
     scipy==1.2.1
     uproot==3.4.18
