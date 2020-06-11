@@ -87,10 +87,16 @@ env PATH="$INSTALLROOT/bin:$PATH"                       \
     pip3 install --upgrade pip
 
 # Install Python SSL certificates right away
-env PATH="$INSTALLROOT/bin:$PATH" \
+env PATH="$INSTALLROOT/bin:$PATH"                       \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
-    PYTHONHOME="$INSTALLROOT" \
+    PYTHONHOME="$INSTALLROOT"                           \
     pip3 install 'certifi==2019.3.9'
+
+# Force install setuptools
+env PATH="$INSTALLROOT/bin:$PATH"                       \
+    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
+    PYTHONHOME="$INSTALLROOT"                           \
+    pip3 install 'setuptools'
 
 # Uniform Python library path
 pushd "$INSTALLROOT/lib"
