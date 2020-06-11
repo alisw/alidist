@@ -25,6 +25,7 @@ if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_i
   echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
 fi
 
+which pip3
 # We use a different INSTALLROOT, so that we can build updatable RPMS which
 # do not conflict with the underlying Python installation.
 PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
