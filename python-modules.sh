@@ -29,6 +29,8 @@ fi
 # do not conflict with the underlying Python installation.
 PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
 mkdir -p $PYTHON_MODULES_INSTALLROOT
+# Install setuptools upfront, since this seems to create issues now...
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU setuptools
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
