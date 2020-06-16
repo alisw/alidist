@@ -5,7 +5,6 @@ requires:
 build_requires:
   - autotools
   - curl
-  - libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <ft2build.h>\n" | c++ -xc++ - `freetype-config --cflags` -c -M 2>&1;
@@ -17,7 +16,8 @@ curl -L -o freetype.tgz $URL
 tar xzf freetype.tgz
 rm -f freetype.tgz
 cd freetype-${PKGVERSION:1}
-./configure --prefix=$INSTALLROOT \
+./configure --prefix=$INSTALLROOT                \
+            --with-png=no                        \
             ${ZLIB_ROOT:+--with-zlib=$ZLIB_ROOT}
 
 make ${JOBS:+-j$JOBS}

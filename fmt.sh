@@ -6,6 +6,8 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+prepend_path:
+  ROOT_INCLUDE_PATH: "$FMT_ROOT/include"
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DFMT_TEST=OFF
@@ -27,4 +29,7 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+# Our environment
+set FMT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path ROOT_INCLUDE_PATH \$FMT_ROOT/include
 EoF

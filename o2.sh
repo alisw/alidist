@@ -20,6 +20,7 @@ requires:
   - DebugGUI
   - JAliEn-ROOT
   - fastjet
+  - libuv
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -45,7 +46,8 @@ incremental_recipe: |
     # Find new targets
     ninja -t targets all  | grep stage | cut -f1 -d: > new.txt
     # Delete all those which are found twice (i.e. which are in old.txt only)
-    cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
+    # FIXME: this breaks some corner cases, apparently...
+    # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
   fi
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -166,6 +168,9 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75} \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
+      ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}                                              \
+      ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}                                        \
+      ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=ON}                                                            \
       ${ARROW_ROOT:+-Dgandiva_DIR=$ARROW_ROOT/lib/cmake/arrow}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
@@ -208,6 +213,7 @@ module load BASE/1.0 \\
             ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION                                                 \\
             ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
             ${DEBUGGUI_REVISION:+DebugGUI/$DEBUGGUI_VERSION-$DEBUGGUI_REVISION}                     \\
+            ${LIBUV_REVISION:+libuv/$LIBUV_VERSION-$LIBUV_REVISION}                                 \\
             ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
 # Our environment

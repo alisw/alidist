@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v1.3.10
+tag: v1.4.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -13,6 +13,7 @@ requires:
   - ReadoutCard
   - lz4
   - Control-OCCPlugin
+  - ZeroMQ
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Readout
@@ -26,6 +27,7 @@ case $ARCHITECTURE in
 	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
         [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
+        [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=$(brew --prefix zeromq)
     ;;
 esac
 
@@ -54,6 +56,7 @@ cmake $SOURCEDIR                                                         \
       ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
       ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
+      ${ZEROMQ_REVISION:+-DZMQ_ROOT=$ZEROMQ_ROOT}                       \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                  \
       -DBUILD_SHARED_LIBS=ON
 
@@ -81,6 +84,7 @@ module load BASE/1.0                                                          \\
             ${LZ4_REVISION:+lz4/$LZ4_VERSION-$LZ4_REVISION}                                \\
             FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
             FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION                           \\
+            ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION                           \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
