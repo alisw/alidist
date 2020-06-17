@@ -81,10 +81,10 @@ module load BASE/1.0                                                          \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
             ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION            \\
-            ${LZ4_REVISION:+lz4/$LZ4_VERSION-$LZ4_REVISION}                                \\
+            ${LZ4_REVISION:+lz4/$LZ4_VERSION-$LZ4_REVISION}                   \\
             FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION               \\
             FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION                           \\
-            ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION                           \\
+            ${ZEROMQ_REVISION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}       \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
