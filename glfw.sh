@@ -13,6 +13,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
   ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}          \
   -DBUILD_SHARED_LIBS=ON                             \
   -DGLFW_BUILD_EXAMPLES=OFF                          \
+  -DCMAKE_INSTALL_LIBDIR=lib                         \
   -DGLFW_BUILD_TESTS=OFF                             \
   -DGLFW_BUILD_DOCS=OFF
 
