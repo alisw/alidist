@@ -2,6 +2,8 @@ package: FairLogger
 version: "%(tag_basename)s"
 tag: v1.5.0
 source: https://github.com/FairRootGroup/FairLogger
+requires:
+ - fmt
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
@@ -18,6 +20,7 @@ cmake $SOURCEDIR                                                 \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
       -DDISABLE_COLOR=ON                                         \
+      -DUSE_EXTERNAL_FMT=ON                                      \
       -DCMAKE_INSTALL_LIBDIR=lib
 
 cmake --build . ${JOBS:+-- -j$JOBS}
