@@ -14,6 +14,7 @@ requires:
   - lz4
   - Control-OCCPlugin
   - ZeroMQ
+  - fmt
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Readout
@@ -24,10 +25,11 @@ incremental_recipe: |
 #!/bin/bash -ex
 case $ARCHITECTURE in
     osx*) 
-	[[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+        [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
         [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
         [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
         [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=$(brew --prefix zeromq)
+        [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
     ;;
 esac
 

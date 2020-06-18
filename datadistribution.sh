@@ -10,6 +10,7 @@ requires:
   - Monitoring
   - protobuf
   - O2
+  - fmt
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
@@ -24,8 +25,12 @@ incremental_recipe: |
 ---
 #!/bin/bash -ex
 
+
 case $ARCHITECTURE in
-    osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+    osx*)
+        [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+        [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
+    ;;
 esac
 
 cmake $SOURCEDIR                                              \
