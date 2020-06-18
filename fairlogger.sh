@@ -13,6 +13,16 @@ incremental_recipe: |
 prepend_path:
   ROOT_INCLUDE_PATH: "$FAIRLOGGER_ROOT/include"
 ---
+#!/bin/bash
+
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
+  ;;
+  *) ;;
+esac
+
 mkdir -p $INSTALLROOT
 
 cmake $SOURCEDIR                                                 \
