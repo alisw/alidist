@@ -49,7 +49,8 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0
+module load BASE/1.0                                        \
+       ${FMT_REVISION:+fmt/${FMT_VERSION}-${FMT_REVISION}}
 # Our environment
 set FAIRLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$FAIRLOGGER_ROOT/lib
