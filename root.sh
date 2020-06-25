@@ -84,10 +84,25 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 
+#determine ROOT version for PYTHON check
+ROOT_VERSION_MAJOR=$(echo $PKGVERSION | cut -d '-' -f1)
+ROOT_VERSION_MAJOR_NUM=${ROOT_VERSION_MAJOR:1:1}
+ROOT_VERSION_MINOR=$(echo $PKGVERSION | cut -d '-' -f2)
+ROOT_VERSION_PATCH=$(echo $PKGVERSION | cut -d '-' -f3)
+ROOT_VERSION_ALICE=$(echo $PKGVERSION | cut -d '-' -f4)
+PYROOT_FEATURE=
+if [ $ROOT_VERSION_MAJOR_NUM -eq 6 ]; then
+  if [ $ROOT_VERSION_MINOR -ge 20 ]; then
+    PYROOT_FEATURE="pyroot"
+  else
+    PYROOT_FEATURE="python"
+  fi
+fi
+
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
-  ROOT_PYTHON_FEATURES="pyroot"
+  ROOT_PYTHON_FLAGS="-D$PYROOT_FEATURE=ON"
+  ROOT_PYTHON_FEATURES=$PYROOT_FEATURE
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
   PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
@@ -169,7 +184,7 @@ FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
-             ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix alien"
+             ${ROOT_HAS_NO_PYTHON:+$PYROOT_FEATURE} builtin_davix davix alien"
 
 if [[ $ENABLE_COCOA ]]; then
   FEATURES="$FEATURES builtin_freetype"
