@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.27.3
+tag:  v1.30.0-alice1
 requires:
   - protobuf
   - c-ares
@@ -8,7 +8,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
-source: https://github.com/grpc/grpc
+source: https://github.com/alisw/grpc
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
