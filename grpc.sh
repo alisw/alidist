@@ -38,6 +38,7 @@ cmake $SOURCEDIR                                    \
   -DgRPC_PROTOBUF_PROVIDER=package                  \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
+  -DgRPC_BUILD_CSHARP_EXT=OFF                       \
   ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
   -DgRPC_CARES_PROVIDER=package
 
