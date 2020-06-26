@@ -1,7 +1,7 @@
 package: arrow
-version: v0.17.0
-tag: apache-arrow-0.17.0
-source: https://github.com/apache/arrow
+version: "v0.17.1-%(short_hash)s"
+tag: b58a5cab5500d5a34e8c8b66e847244352e50518
+source: https://github.com/alisw/arrow.git
 requires:
   - boost
   - lz4
