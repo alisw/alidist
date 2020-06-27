@@ -25,7 +25,7 @@ script: |
 
     # If a recipe is not a system requirement, it must have a Modulefile
     if ! grep -qE '^system_requirement:' "$X"; then
-      grep -q '^#%Module' "$X" || { echo "ERROR: recipe $X has no modulefile"; ERR="$ERR $X"; }
+      grep -q '\(^#%Module\|alibuild-generate-module\)' "$X" || { echo "ERROR: recipe $X has no modulefile"; ERR="$ERR $X"; }
     fi
     aliBuild deps --defaults o2 ${X%.sh} --outgraph deps.pdf --no-system --neat -c . 2>&1 | grep -q "transitive reduction not unique" && { echo "ERROR: recipe $X has circular dependency"; ERR="$ERR $X"; }
   done
