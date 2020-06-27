@@ -8,6 +8,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - abseil
 source: https://github.com/alisw/grpc
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -36,6 +37,7 @@ cmake $SOURCEDIR                                    \
   -DgRPC_ZLIB_PROVIDER=package                      \
   -DgRPC_GFLAGS_PROVIDER=packet                     \
   -DgRPC_PROTOBUF_PROVIDER=package                  \
+  -DgRPC_ABSL_PROVIDER=package                      \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
   -DgRPC_BUILD_CSHARP_EXT=OFF                       \
