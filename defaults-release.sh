@@ -8,10 +8,10 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-24d
+    tag: v5-09-24e
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-24d-01
+    tag: v5-09-24e-01
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
