@@ -7,6 +7,7 @@ requires:
   - libuv
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/DebugGUI
 ---
 case $ARCHITECTURE in
@@ -35,18 +36,8 @@ cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-                     ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}
-
+alibuild-generate-module > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set DEBUGGUI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$DEBUGGUI_ROOT/bin
