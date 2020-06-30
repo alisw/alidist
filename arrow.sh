@@ -1,5 +1,5 @@
 package: arrow
-version: "v0.17.1-%(short_hash)s"
+version: "v0.17.1"
 tag: b58a5cab5500d5a34e8c8b66e847244352e50518
 source: https://github.com/alisw/arrow.git
 requires:
