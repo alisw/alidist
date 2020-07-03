@@ -1,6 +1,6 @@
 package: JETSCAPE
-version: "v1-00-alice1"
-tag: "983ee2575b55bfb1f3593aab1bd6420342152c18"
+version: "%(tag_basename)s"
+tag: "v3.0.2"
 source: https://github.com/jetscape/jetscape
 requires:
   - boost
@@ -29,6 +29,10 @@ esac
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+
+# must put some stuff by hands for the time being
+cp runJetscape $INSTALLROOT/bin/.
+cp -r $SOURCEDIR/config $INSTALLROOT/.
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
