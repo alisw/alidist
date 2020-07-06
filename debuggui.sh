@@ -23,6 +23,7 @@ case $ARCHITECTURE in
     *) 
       DEFINES="-DTRACY_NO_FILESELECTOR"
       EXTRA_LIBS="-lGL -lGLEW"
+      [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
 esac
 
