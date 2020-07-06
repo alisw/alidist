@@ -22,7 +22,7 @@ case $ARCHITECTURE in
     ;;
     *) 
       DEFINES="-DTRACY_NO_FILESELECTOR"
-      EXTRA_LIBS="-lGL"
+      EXTRA_LIBS="-lGL -lGLEW"
     ;;
 esac
 
