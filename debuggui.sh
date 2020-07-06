@@ -1,19 +1,28 @@
 package: DebugGUI
-version: "v0.1.0-%(short_hash)s"
-tag: 34bc77ae9c3ba58a1b6dc684e80fc9187782fd2b
+version: "v0.2.0"
+tag: f3d259727ffbe7426031dd99fd4742003eb3e6b5
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
+  - FreeType
   - libuv
 build_requires:
+  - capstone
   - CMake
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/DebugGUI
 ---
+
 case $ARCHITECTURE in
     osx*)
       [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
       [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=`brew --prefix libuv`
+      [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT=`brew --prefix freetype`
+      EXTRA_LIBS="-framework CoreFoundation -framework AppKit"
+    ;;
+    *) 
+      DEFINES="-DTRACY_NO_FILESELECTOR"
+      EXTRA_LIBS="-lGL"
     ;;
 esac
 
@@ -25,6 +34,19 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
   unset NINJA_BIN
 fi
+
+# build the tracy profiler
+rsync -av $SOURCEDIR/tracy/ tracy/
+pushd tracy/profiler/build/unix
+  make                                                                                                                          \
+      LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
+      DEFINES="$DEFINES"                                                                                                        \
+      INCLUDES="-I$CAPSTONE_ROOT/include -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w -I$FREETYPE_ROOT/include/freetype2 -I$GLFW_ROOT/include"
+popd
+mkdir -p $INSTALLROOT/{include/tracy,bin}
+cp tracy/profiler/build/unix/Tracy-debug $INSTALLROOT/bin/tracy-profiler
+cp tracy/*.{h,hpp,cpp} $INSTALLROOT/include/tracy
+cp -r tracy/{common,client,libbacktrace} $INSTALLROOT/include/tracy/
 
 cmake $SOURCEDIR                          \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
