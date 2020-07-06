@@ -41,7 +41,7 @@ pushd tracy/profiler/build/unix
   make                                                                                                                          \
       LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
       DEFINES="$DEFINES"                                                                                                        \
-      TBB=                                                                                                                      \
+      TBB=off                                                                                                                   \
       INCLUDES="-I$CAPSTONE_ROOT/include -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w ${FREETYPE_ROOT:+-I$FREETYPE_ROOT/include/freetype2} -I${GLFW_ROOT:+$GLFW_ROOT/include}"
 popd
 mkdir -p $INSTALLROOT/{include/tracy,bin}
