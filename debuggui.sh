@@ -23,6 +23,7 @@ case $ARCHITECTURE in
     *) 
       DEFINES="-DTRACY_NO_FILESELECTOR"
       EXTRA_LIBS="-lGL"
+      [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
 esac
 
@@ -41,7 +42,8 @@ pushd tracy/profiler/build/unix
   make                                                                                                                          \
       LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
       DEFINES="$DEFINES"                                                                                                        \
-      INCLUDES="-I$CAPSTONE_ROOT/include -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w -I$FREETYPE_ROOT/include/freetype2 -I$GLFW_ROOT/include"
+      TBB=off                                                                                                                   \
+      INCLUDES="-I$CAPSTONE_ROOT/include -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w ${FREETYPE_ROOT:+-I$FREETYPE_ROOT/include/freetype2} -I${GLFW_ROOT:+$GLFW_ROOT/include}"
 popd
 mkdir -p $INSTALLROOT/{include/tracy,bin}
 cp tracy/profiler/build/unix/Tracy-debug $INSTALLROOT/bin/tracy-profiler
