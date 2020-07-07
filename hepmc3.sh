@@ -13,7 +13,8 @@ build_requires:
 cmake  $SOURCEDIR                          \
        -DROOT_DIR=$ROOT_ROOT               \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-       -DCMAKE_INSTALL_LIBDIR=lib
+       -DCMAKE_INSTALL_LIBDIR=lib          \
+       -DHEPMC3_ENABLE_PYTHON=OFF
 
 make ${JOBS+-j $JOBS}
 make install
