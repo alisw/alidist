@@ -21,7 +21,7 @@ case $ARCHITECTURE in
       EXTRA_LIBS="-framework CoreFoundation -framework AppKit"
     ;;
     *) 
-      DEFINES="-DTRACY_NO_FILESELECTOR"
+      DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR"
       EXTRA_LIBS="-lGL"
       [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
