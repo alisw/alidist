@@ -22,6 +22,9 @@ make -j$JOBS
 make install
 )
 
+### list the content of lib directory
+ls -ld $INSTALL_ROOT/lib/*
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
