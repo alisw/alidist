@@ -23,7 +23,7 @@ make install
 )
 
 ### list the content of lib directory
-ls -ld $INSTALL_ROOT/lib/*
+ls -ld $INSTALLROOT/lib
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
