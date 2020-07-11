@@ -8,4 +8,3 @@ system_requirement: ".*"
 system_requirement_check: |
   printf "#include <omp.h>\n" | c++ -xc++ - -fopenmp -c -o /dev/null
 ---
-
