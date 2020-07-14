@@ -35,7 +35,7 @@ env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU setupto
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU numpy
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU numpy==1.16.2
 # Do not move cython from 0.29.06 for now since 3.0.0rc1 breaks on GPU
 grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU cython==0.29.16
 env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU -r requirements.txt
