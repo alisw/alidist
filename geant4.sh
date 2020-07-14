@@ -92,7 +92,7 @@ set osname [uname sysname]
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
 setenv G4INSTALL \$GEANT4_ROOT
-setenv G4INSTALL_DATA \$::env(G4INSTALL)/share/
+setenv G4INSTALL_DATA \$GEANT4_ROOT/share/
 setenv G4SYSTEM \$osname-g++
 
 setenv G4ABLADATA ${G4ABLADATA:-not-defined}
@@ -107,9 +107,9 @@ setenv G4PIIDATA ${G4PIIDATA:-not-defined}
 setenv G4RADIOACTIVEDATA  ${G4RADIOACTIVEDATA:-not-defined}
 setenv G4REALSURFACEDATA ${G4REALSURFACEDATA:-not-defined}
 setenv G4SAIDXSDATA ${G4SAIDXSDATA:-not-defined}
-set G4BASE \$::env(GEANT4_ROOT)
-prepend-path PATH \$G4BASE/bin
-prepend-path ROOT_INCLUDE_PATH \$G4BASE/include/Geant4
-prepend-path ROOT_INCLUDE_PATH \$G4BASE/include
-prepend-path LD_LIBRARY_PATH \$G4BASE/lib
+set G4BASE \$GEANT4_ROOT
+prepend-path PATH \$GEANT4_ROOT/bin
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include/Geant4
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include
+prepend-path LD_LIBRARY_PATH \$GEANT4_ROOT/lib
 EoF
