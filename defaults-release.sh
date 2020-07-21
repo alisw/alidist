@@ -19,9 +19,6 @@ overrides:
   GEANT4_VMC:
     version: "v3-6-p6-inclxx-biasing-p2"
     tag: "v3-6-p6-inclxx-biasing-p2"
-    requires:
-      - GEANT4
-      - vgm
   GEANT4:
     source: https://github.com/alisw/geant4.git
     version: "v10.4.2-alice3"
