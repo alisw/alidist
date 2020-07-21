@@ -54,7 +54,7 @@ overrides:
     prefer_system_check: |
       printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | gcc  -I$(brew --prefix gsl)/include -xc++ - -o /dev/null
   AliRoot:
-    tag: "v5-09-02g"
+    tag: "v5-09-02h"
   protobuf:
     version: "%(tag_basename)s"
     tag: "v3.0.2"
