@@ -62,6 +62,9 @@ make -j$JOBS
 make install
 )
 
+# Remove libRivet.la
+rm $INSTALLROOT/lib/libRivet.la
+
 # Dependencies relocation: rely on runtime environment
 SED_EXPR="s!x!x!"  # noop
 for P in $REQUIRES $BUILD_REQUIRES; do
