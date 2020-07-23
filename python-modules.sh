@@ -30,15 +30,16 @@ fi
 PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
 mkdir -p $PYTHON_MODULES_INSTALLROOT
 # Install setuptools upfront, since this seems to create issues now...
-env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU setuptools
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" python3 -m pip install --user -IU setuptools
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" python3 -m pip install --user -IU wheel
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU numpy
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" python3 -m pip install --user -IU numpy
 # Do not move cython from 0.29.06 for now since 3.0.0rc1 breaks on GPU
-grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU cython==0.29.16
-env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" pip3 install --user -IU -r requirements.txt
+grep RootInteractive requirements.txt && env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" python3 -m pip install --user -IU cython==0.29.16
+env PYTHONUSERBASE="$PYTHON_MODULES_INSTALLROOT" python3 -m pip install --user -IU -r requirements.txt
 
 # Find the proper Python lib library and export it
 pushd "$PYTHON_MODULES_INSTALLROOT"
