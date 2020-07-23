@@ -31,7 +31,7 @@ rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
          -Wa,--noexecstack
 make depend
 make  # don't ever try to build in multicore
-make install
+make install_sw # no not install man pages
 
 # Remove static libraries and pkgconfig
 rm -rf $INSTALLROOT/lib/pkgconfig \
