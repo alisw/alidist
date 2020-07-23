@@ -24,6 +24,15 @@ env:
     xgboost==0.82
     dryable==1.0.3
     responses==0.10.6
+  PIP38_REQUIREMENTS: |
+    Cython==0.29.16
+    seaborn==0.9.0
+    sklearn-evaluation==0.4
+    Keras==2.2.4
+    tensorflow==2.2.0
+    xgboost==0.82
+    dryable==1.0.3
+    responses==0.10.6  
 ---
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
