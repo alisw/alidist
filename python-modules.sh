@@ -19,12 +19,18 @@ export PYVER=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig
 # Ignore what is already in PYTHONPATH. We will set PYTHONPATH or PYTHONUSERBASE per command
 unset PYTHONPATH
 
-# PIP_REQUIREMENTS & PIP36_REQUIREMENTS come from Python-modules-list
+# PIP_REQUIREMENTS, PIP36_REQUIREMENTS, PIP38_REQUIREMENTS come from python-modules-list.sh
 echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
-if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)' && [[ $ARCHITECTURE != slc6* ]]; then
-  echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
-fi
-
+case $ARCHITECTURE in
+  slc6*);;
+  *)
+  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
+    echo $PIP38_REQUIREMENTS | tr \  \\n >> requirements.txt
+  elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)'; then
+    echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
+  fi
+  ;;
+esac
 # We use a different INSTALLROOT, so that we can build updatable RPMS which
 # do not conflict with the underlying Python installation.
 PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
