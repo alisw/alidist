@@ -12,7 +12,8 @@ requires:
   - Readout
   - qcg
   - QualityControl
-  - Run2ESDConverter
+  - "DataDistribution:(?!osx)"
+  - "ALF:(?!osx)"
 valid_defaults:
   - o2
   - o2-dataflow

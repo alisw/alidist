@@ -39,6 +39,7 @@ cmake . \
       -DWITH_CGAL_ImageIO:BOOL=ON \
       -DWITH_CGAL_Qt3:BOOL=OFF \
       -DWITH_CGAL_Qt4:BOOL=OFF \
+      -DWITH_CGAL_Qt5:BOOL=OFF \
       -DWITH_Coin3D:BOOL=OFF \
       -DWITH_ESBTL:BOOL=OFF \
       -DWITH_Eigen3:BOOL=OFF \
@@ -83,6 +84,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
 # Our environment
 set CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CGAL_ROOT \$CGAL_ROOT
 prepend-path PATH \$CGAL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CGAL_ROOT/lib
 EoF

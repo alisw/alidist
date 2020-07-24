@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "1.0.3"
+tag: "1.2.2"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
  - "OpenSSL:(?!osx)"
@@ -12,14 +12,17 @@ requires:
 #!/bin/bash -e
 
 # env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -r alibuild_requirements.txt
-env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 pip3 install --user file://${SOURCEDIR}
-XJALIENFS_SITEPACKAGES=$(find ${INSTALLROOT} -name site-packages)
+env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --user file://${SOURCEDIR}
 
-ALIEN_PY=$(find ${INSTALLROOT} -name alien.py)
+sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' ${INSTALLROOT}/bin/*
+rm -v ${INSTALLROOT}/bin/*.bak
 
-cp -r $SOURCEDIR/bin ${INSTALLROOT}/bin
-cp ${ALIEN_PY} ${INSTALLROOT}/bin/alien.py
-chmod +x ${INSTALLROOT}/bin/*
+ # Uniform Python library path
+pushd ${INSTALLROOT}
+  pushd lib
+    ln -nfs python* python
+  popd
+popd
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -39,6 +42,7 @@ module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}         
             ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
 	    ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
-prepend-path PYTHONPATH $XJALIENFS_SITEPACKAGES
-prepend-path PATH $INSTALLROOT/bin
+set XJALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PYTHONPATH \$XJALIENFS_ROOT/lib/python/site-packages
+prepend-path PATH \$XJALIENFS_ROOT/bin
 EoF

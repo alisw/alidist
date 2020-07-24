@@ -1,17 +1,15 @@
 package: boost
 version: "%(tag_basename)s"
-tag: v1.70.0
+tag: v1.72.0-alice1
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Python-modules:(?!osx)"
   - libpng
-  - lzma
+  - zlib
 build_requires:
-  - "bz2"
-prefer_system: (?!slc5)
-prefer_system_check: |
-  printf "#include \"boost/version.hpp\"\n# if (BOOST_VERSION < 107000 || BOOST_VERSION > 107099)\n#error \"Cannot use system's boost: boost 1.70 required.\"\n#endif\nint main(){}" | c++ -I$(brew --prefix boost)/include -xc++ - -o /dev/null
+  - lzma
+  - bz2
 prepend_path:
   ROOT_INCLUDE_PATH: "$BOOST_ROOT/include"
 ---
@@ -57,7 +55,7 @@ fi
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
-  osx*) TOOLSET=darwin ;;
+  osx*) TOOLSET=clang-darwin ;;
   *) TOOLSET=gcc ;;
 esac
 
@@ -67,11 +65,11 @@ cd $BUILDDIR/tools/build
 # the ABI suffix. E.g. ../include/python3 rather than ../include/python3m.
 # This is causing havok on different combinations of Ubuntu / Anaconda
 # installations.
+bash bootstrap.sh $TOOLSET
 case $ARCHITECTURE in
   osx*)  ;;
   *) export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:$(python3 -c 'import sysconfig; print(sysconfig.get_path("include"))')" ;;
 esac
-bash bootstrap.sh $TOOLSET
 mkdir -p $TMPB2
 ./b2 install --prefix=$TMPB2
 export PATH=$TMPB2/bin:$PATH
@@ -92,6 +90,13 @@ b2 -q                                            \
    ${BOOST_NO_PYTHON:+--without-python}          \
    --without-wave                                \
    --debug-configuration                         \
+   -sNO_ZSTD=1                                   \
+   ${BZ2_ROOT:+-sBZIP2_INCLUDE="$BZ2_ROOT/include"}  \
+   ${BZ2_ROOT:+-sBZIP2_LIBPATH="$BZ2_ROOT/lib"}      \
+   ${ZLIB_ROOT:+-sZLIB_INCLUDE="$ZLIB_ROOT/include"} \
+   ${ZLIB_ROOT:+-sZLIB_LIBPATH="$ZLIB_ROOT/lib"}     \
+   ${LZMA_ROOT:+-sLZMA_INCLUDE="$LZMA_ROOT/include"} \
+   ${LZMA_ROOT:+-sLZMA_LIBPATH="$LZMA_ROOT/lib"}     \
    toolset=$TOOLSET                              \
    link=shared                                   \
    threading=multi                               \
@@ -99,10 +104,6 @@ b2 -q                                            \
    ${BOOST_CXXFLAGS:+cxxflags="$BOOST_CXXFLAGS"} \
    ${CXXSTD:+cxxstd=$CXXSTD}                     \
    install
-
-# Remove CMake Config files, some of our dependent packages pick them up, but fail to use them
-# So for now we rely on the boost module FindBoost which comes with CMake
-rm -Rf "$INSTALLROOT"/lib/cmake
 
 # If boost_python is enabled, check if it was really compiled
 [[ $BOOST_PYTHON ]] && ls -1 "$INSTALLROOT"/lib/*boost_python* > /dev/null
@@ -129,7 +130,9 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+                     ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                             \\
+                     ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
 # Our environment
 set BOOST_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$BOOST_ROOT/lib

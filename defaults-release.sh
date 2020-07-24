@@ -12,7 +12,7 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-53
+    tag: v5-09-54a
     requires:
       - ROOT
       - DPMJET
@@ -23,7 +23,7 @@ overrides:
       - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-53-01
+    tag: v5-09-54a-01
   XRootD:
     tag: v3.3.6-alice2
     source: https://github.com/alisw/xrootd.git
@@ -43,6 +43,23 @@ overrides:
     build_requires:
       - CMake
       - "Xcode:(osx.*)"
+
+  # Use VMC packages compatible with ROOT 5
+  GEANT3:
+    version: "v2-7-p2"
+    tag: "v2-7-p2"
+  GEANT4_VMC:
+    version: "v3-6-p6-inclxx-biasing-p2"
+    tag: "v3-6-p6-inclxx-biasing-p2"
+    requires:
+      - GEANT4
+      - vgm
+  GEANT4:
+    version: "v10.4.2"
+    tag: "v10.4.2"
+  vgm:
+    version: "v4-4"
+    tag: "v4-4"
 
   # ROOT 5 requires GSL < 2
   GSL:

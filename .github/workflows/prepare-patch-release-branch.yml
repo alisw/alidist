@@ -1,0 +1,46 @@
+name: Prepare AliPhysics tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to prepare'
+        required: true
+        default: 'v5-09-XXy'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Decide which branch to use
+      run: |
+        cat << EOF
+        ::set-output name=branch::$(echo AliPhysics-${{ github.event.inputs.tag }}-01-patches | sed -e's/[a-z][a-z]*-01-patches$/-01-patches/')
+        EOF
+      id: decide_release_branch
+    - uses: actions/checkout@v2
+      with:
+        ref: "${{ steps.decide_release_branch.outputs.branch }}"
+    - name: Update the branch
+      run: |
+        git checkout ${{ steps.decide_release_branch.outputs.branch }}
+        git grep -l v5-09 | xargs perl -p -i -e 's/v5-09-[0-9][0-9][a-z]*/${{ github.event.inputs.tag }}/g'
+        git add .
+        git diff
+        git config --global user.email "alibuild@cern.ch"
+        git config --global user.name "ALICE Action Bot"
+        git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
+        git push
+        git tag AliPhysics-${{ github.event.inputs.tag }}-01
+        git push origin AliPhysics-${{ github.event.inputs.tag }}-01
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: AliPhysics-${{ github.event.inputs.tag }}-01
+        release_name: AliPhysics-${{ github.event.inputs.tag }}-01
+        draft: false
+        prerelease: false
+

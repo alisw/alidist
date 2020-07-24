@@ -1,5 +1,5 @@
 package: node
-version: "v12.13.0"
+version: "v13.12.0"
 build_requires:
   - curl
 prefer_system: "(?!slc5)"

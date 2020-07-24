@@ -1,6 +1,6 @@
 package: Rivet
 version: "%(tag_basename)s"
-tag: "2.7.2-alice3"
+tag: "3.1.1-alice1"
 source: https://github.com/alisw/rivet
 requires:
   - GSL
@@ -62,6 +62,9 @@ make -j$JOBS
 make install
 )
 
+# Remove libRivet.la
+rm $INSTALLROOT/lib/libRivet.la
+
 # Dependencies relocation: rely on runtime environment
 SED_EXPR="s!x!x!"  # noop
 for P in $REQUIRES $BUILD_REQUIRES; do
@@ -87,7 +90,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
+module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION} ${GMP_REVISION:+GMP/$GMP_VERSION-$GMP_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 set RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv RIVET_ROOT \$RIVET_ROOT
@@ -95,4 +98,16 @@ prepend-path PYTHONPATH \$RIVET_ROOT/lib/python3.6/site-packages
 prepend-path PYTHONPATH \$RIVET_ROOT/lib64/python3.6/site-packages
 prepend-path PATH \$RIVET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$RIVET_ROOT/lib
+
+# Producing plots with (/rivet/bin/make-plots, in python) requires dedicated LaTeX packages
+# which are not always there on the system (alidock, lxplus ...)
+# -> need to point to such packages, actually shipped together with Rivet sources
+# Consider the official source info in /rivet/rivetenv.sh to see what is needed
+# (TEXMFHOME, HOMETEXMF, TEXMFCNF, TEXINPUTS, LATEXINPUTS)
+# Here trying to keep the env variable changes to their minimum, i.e touch only TEXINPUTS, LATEXINPUTS
+# Manual prepend-path for TEX variables
+set Old_TEXINPUTS [exec which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS]
+set Extra_RivetTEXINPUTS \$RIVET_ROOT/share/Rivet/texmf/tex//
+setenv TEXINPUTS  \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
+setenv LATEXINPUTS \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 EoF

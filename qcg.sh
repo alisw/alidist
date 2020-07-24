@@ -1,6 +1,6 @@
 package: qcg
-version: v1.6.9
-tag: "@aliceo2/qc@1.6.9"
+version: v1.8.6
+tag: "@aliceo2/qc@1.8.6"
 requires:
   - node
   - QualityControl
@@ -10,7 +10,7 @@ valid_defaults:
   - o2-dataflow
 ---
 #!/bin/bash -e
-npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm
+npm install @aliceo2/qc@${PKGVERSION:1} --only=production --loglevel=verbose --no-save --no-package-lock --unsafe-perm --prefix ./
 
 mkdir -p bin
 cat > bin/qcg <<EOF

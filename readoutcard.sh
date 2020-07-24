@@ -1,11 +1,12 @@
 package: ReadoutCard
 version: "%(tag_basename)s"
-tag: v0.18.4
+tag: v0.22.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - Configuration
+  - Monitoring
   - libInfoLogger
   - "PDA:slc7.*"
   - "Python:slc.*"
@@ -35,10 +36,12 @@ cmake $SOURCEDIR                                                      \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
       ${COMMON_O2_REVISION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
       ${CONFIGURATION_REVISION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
+      ${MONITORING_REVISION:+-DMonitoring_ROOT=$MONITORING_ROOT} \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
       ${PDA_REVISION:+-DPDA_ROOT=$PDA_ROOT}                            \
       ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}            \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                               \
+      -DBUILD_SHARED_LIBS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
@@ -55,12 +58,13 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION
 module load BASE/1.0                                                          \\
-            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}           \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION      \\
+            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION               \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
-            ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}        \\
+            ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}       \\
             ${PDA_REVISION:+PDA/$PDA_VERSION-$PDA_REVISION}
 
 # Our environment

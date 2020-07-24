@@ -1,16 +1,29 @@
 package: DebugGUI
-version: "v0.1.0-%(short_hash)s"
-tag: 655f92e9c9d0bd89ecb62a15d98d4fd6ada54392
+version: "v0.2.0"
+tag: f3d259727ffbe7426031dd99fd4742003eb3e6b5
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
+  - FreeType
+  - libuv
 build_requires:
+  - capstone
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/DebugGUI
 ---
+
 case $ARCHITECTURE in
     osx*)
       [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
+      [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=`brew --prefix libuv`
+      [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT=`brew --prefix freetype`
+      EXTRA_LIBS="-framework CoreFoundation -framework AppKit"
+    ;;
+    *) 
+      DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR"
+      EXTRA_LIBS="-lGL"
+      [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
 esac
 
@@ -23,6 +36,20 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   unset NINJA_BIN
 fi
 
+# build the tracy profiler
+rsync -av $SOURCEDIR/tracy/ tracy/
+pushd tracy/profiler/build/unix
+  make                                                                                                                          \
+      LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
+      DEFINES="$DEFINES"                                                                                                        \
+      TBB=off                                                                                                                   \
+      INCLUDES="-I$CAPSTONE_ROOT/include -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w ${FREETYPE_ROOT:+-I$FREETYPE_ROOT/include/freetype2} -I${GLFW_ROOT:+$GLFW_ROOT/include}"
+popd
+mkdir -p $INSTALLROOT/{include/tracy,bin}
+cp tracy/profiler/build/unix/Tracy-debug $INSTALLROOT/bin/tracy-profiler
+cp tracy/*.{h,hpp,cpp} $INSTALLROOT/include/tracy
+cp -r tracy/{common,client,libbacktrace} $INSTALLROOT/include/tracy/
+
 cmake $SOURCEDIR                          \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -33,18 +60,8 @@ cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-                     ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}
-
+alibuild-generate-module > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set DEBUGGUI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$DEBUGGUI_ROOT/bin

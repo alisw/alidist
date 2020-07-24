@@ -44,6 +44,7 @@ hepmc*              @alisw/pagmc
 lhapdf*             @alisw/pagmc
 rivet*              @alisw/pagmc
 yoda*               @alisw/pagmc
+delphes             @alisw/pagmc
 
 # Simulation
 geant*              @alisw/simulation-experts
@@ -60,3 +61,7 @@ defaults-alo*       @alisw/mrrtf
 jdk*                @alisw/alien-experts
 jalien*             @alisw/alien-experts
 defaults-jalien*    @alisw/alien-experts
+xjalienfs*          @alisw/alien-experts
+
+# EPN
+datadistribution*   @alisw/epn-experts

@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v0.20.1
+tag: v1.0.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -11,9 +11,11 @@ requires:
   - Configuration
   - O2
   - arrow
+  - Control-OCCPlugin
 build_requires:
   - CMake
   - CodingGuidelines
+  - RapidJSON
 source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
@@ -25,13 +27,22 @@ incremental_recipe: |
   if [[ $ALIBUILD_O2_TESTS ]]; then
     echo "Run the tests"
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-    ctest --output-on-failure -LE manual -E "(testWorkflow|testCheckWorkflow)" ${JOBS+-j $JOBS}
+    PATH=$PATH:$INSTALLROOT/bin
+    ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
   fi
 ---
 #!/bin/bash -ex
 
 case $ARCHITECTURE in
-  osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
+  osx*) 
+      [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+      [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=$(brew --prefix libuv)
+      SONAME=dylib
+  ;;
+  *) 
+      SONAME=so
+  ;;
 esac
 
 # For the PR checkers (which sets ALIBUILD_O2_TESTS),
@@ -61,7 +72,11 @@ cmake $SOURCEDIR                                              \
       -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DARROW_HOME=$ARROW_ROOT                                \
+      ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
+      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
+      ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}             \
+      ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}       \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -72,7 +87,19 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
-  ctest --output-on-failure -LE manual -E "(testWorkflow|testCheckWorkflow)" ${JOBS+-j $JOBS}
+  PATH=$PATH:$INSTALLROOT/bin
+  ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+fi
+
+DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+# This really means we are in development mode. We need to make sure we
+# use the real path for sources in this case. We also copy the
+# compile_commands.json file so that IDEs can make use of it directly, this
+# is a departure from our "no changes in sourcecode" policy, but for a good reason
+# and in any case the file is in gitignore.
+if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+  perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
 fi
 
 # Modulefile
@@ -95,7 +122,8 @@ module load BASE/1.0                                                            
             ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
             FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
             O2/$O2_VERSION-$O2_REVISION                                                            \\
-            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}
+            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                \\
+            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
 
 # Our environment
 set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
@@ -104,6 +132,7 @@ prepend-path PATH \$QUALITYCONTROL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64
 prepend-path ROOT_INCLUDE_PATH \$QUALITYCONTROL_ROOT/include
+prepend-path ROOT_DYN_PATH \$QUALITYCONTROL_ROOT/lib
 EoF
 
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

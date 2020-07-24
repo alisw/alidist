@@ -1,6 +1,6 @@
 package: ms_gsl
-version: "1"
-tag: b014508
+version: "2.1.0"
+tag: v2.1.0
 source: https://github.com/Microsoft/GSL.git
 prepend_path:
   ROOT_INCLUDE_PATH: "$MS_GSL_ROOT/include"

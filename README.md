@@ -68,7 +68,8 @@ Whenever you need to build a new external, you should consider the following:
  
         git checkout -b alice/<fork-point> <fork-point>
 
-    patches should be applied on such a branch.
+    patches should be applied on such a branch. You should then tag your development as:
+    `<version>-alice<x>` where `<x>` is an incremental number for a given official `<version>`.
   - If no git repository is available, or if mirroring the whole repository is
     not desirable, create a repository with a `master` branch. On the master
     branch import relevant released tarballs, one commit per tarball. Make sure
@@ -87,33 +88,18 @@ Whenever you need to build a new external, you should consider the following:
 
         git checkout -b alice/<version> <version>
 
-    and add your patches on such a branch.
+    and add your patches on such a branch. You should then tag your development as:
+    `<version>-alice<x>` where `<x>` is an incremental number for a given official `<version>`.
   - Do not create extra branches unless you do need to patch the original sources.
 
 Moreover try to keep the package name (as specified inside the recipe
 in the `package` field of the header) and the repository name the same,
 including capitalization.
 
-# PWGMM owned packages
+## Request a new package
 
-The following packages have been agreed to be under PWGMM ownership and will require its signoff to be deployed in production.
+Please open a JIRA issue with your request at:
 
-- aligenerators
-- crmc
-- epos
-- epos-test
-- hepmc
-- jewel
-- lhapdf
-- lhapdf5
-- powheg
-- pythia
-- pythia6
-- rivet
-- rivet-test
-- sherpa
-- thepeg
-- thepeg-test
-- yoda
+https://alice.its.cern.ch/jira/secure/CreateIssue!default.jspa
 
-Plus any of their dependencies.
+Make sure you select "Dependencies" as component. 

@@ -38,15 +38,27 @@ esac
 # to clang-tidy (for instance)
 cmake $SOURCEDIR/llvm \
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
+  -DLLVM_TARGETS_TO_BUILD="X86" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
   -DPYTHON_EXECUTABLE=$(which python3) \
   -DDEFAULT_SYSROOT=${DEFAULT_SYSROOT} \
-  -DBUILD_SHARED_LIBS=ON
+  -DLLVM_BUILD_LLVM_DYLIB=ON \
+  -DBUILD_SHARED_LIBS=OFF
 
 make ${JOBS+-j $JOBS}
 make install
+
+#add correct rpath to dylibs on mac as long as there is no better way to controll rpath in the LLVM CMake.
+case $ARCHITECTURE in
+  osx*)
+  # add rpath to all libraries in lib and change their IDs to be absolute paths
+  find ${INSTALLROOT}/lib -name "*.dylib" ! -name "*ios*.dylib" -exec install_name_tool -add_rpath "${INSTALLROOT}/lib" {} \; -exec install_name_tool -id {} {} \;
+  # in lib/clang/*/lib/darwin, the relative rpath is wrong and needs to be corrected from "@loader_path/../lib" to "@loader_path/../darwin" 
+  find ${INSTALLROOT}/lib/clang/*/lib/darwin \( -name "*.dylib" -a \( ! -name "*ios*.dylib" \) \) -exec install_name_tool -add_rpath "@loader_path/../darwin" {} \;
+  ;;
+esac
 
 # Needed to be able to find C++ headers.
 case $ARCHITECTURE in
@@ -75,8 +87,8 @@ cat << \EOF > test.cc
 EOF
 $INSTALLROOT/bin-safe/clang++ -v -c test.cc
 
-curl -o $INSTALLROOT/bin/git-clang-format https://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/git-clang-format
-chmod u+x $INSTALLROOT/bin/git-clang-format
+curl -o $INSTALLROOT/bin-safe/git-clang-format https://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format/git-clang-format
+chmod u+x $INSTALLROOT/bin-safe/git-clang-format
 
 # Modulefile
 mkdir -p etc/modulefiles

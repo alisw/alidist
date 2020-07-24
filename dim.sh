@@ -1,5 +1,5 @@
 package: dim
-version: "v20r24"
+version: "v20r26"
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
@@ -33,6 +33,7 @@ ln -nfs $(which make) buildbin/gmake
 
 # Installation
 rsync -av dim/ $INSTALLROOT/dim/                # headers
+rsync -av --exclude "webDi*" WebDID/ $INSTALLROOT/WebDID/ #webdid without executables
 rsync -av --exclude "*.o" linux/ $INSTALLROOT/  # executables and libraries
 
 # Modulefile

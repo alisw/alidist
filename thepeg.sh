@@ -1,6 +1,6 @@
 package: ThePEG
 version: "%(tag_basename)s"
-tag: "v2.1.2"
+tag: "v2.2.0"
 source: https://github.com/alisw/thepeg
 requires:
   - Rivet
@@ -9,6 +9,7 @@ requires:
   - boost
 build_requires:
   - autotools
+  - GMP
 prepend_path:
   LD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
 env:

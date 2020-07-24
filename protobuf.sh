@@ -1,5 +1,5 @@
 package: protobuf
-version: v3.7.1
+version: v3.12.3
 source: https://github.com/google/protobuf
 build_requires:
  - CMake
@@ -10,7 +10,7 @@ cmake $SOURCEDIR/cmake                  \
     -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
     -Dprotobuf_BUILD_TESTS=NO           \
     -Dprotobuf_MODULE_COMPATIBLE=YES    \
-    -Dprotobuf_BUILD_SHARED_LIBS=ON     \
+    -Dprotobuf_BUILD_SHARED_LIBS=OFF    \
     -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j $JOBS}
 make install

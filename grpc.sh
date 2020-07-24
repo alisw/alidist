@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.19.1
+tag:  v1.30.0-alice1
 requires:
   - protobuf
   - c-ares
@@ -8,7 +8,8 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
-source: https://github.com/grpc/grpc
+  - abseil
+source: https://github.com/alisw/grpc
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -36,8 +37,10 @@ cmake $SOURCEDIR                                    \
   -DgRPC_ZLIB_PROVIDER=package                      \
   -DgRPC_GFLAGS_PROVIDER=packet                     \
   -DgRPC_PROTOBUF_PROVIDER=package                  \
+  -DgRPC_ABSL_PROVIDER=package                      \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
+  -DgRPC_BUILD_CSHARP_EXT=OFF                       \
   ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
   -DgRPC_CARES_PROVIDER=package
 
@@ -60,6 +63,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0                                                          \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${C_ARES_REVISION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
+            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
             ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
 # Our environment
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

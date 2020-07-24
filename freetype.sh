@@ -1,5 +1,5 @@
 package: FreeType
-version: v2.6
+version: v2.10.1
 requires:
  - AliEn-Runtime:(?!.*ppc64)
 build_requires:
@@ -16,7 +16,8 @@ curl -L -o freetype.tgz $URL
 tar xzf freetype.tgz
 rm -f freetype.tgz
 cd freetype-${PKGVERSION:1}
-./configure --prefix=$INSTALLROOT \
+./configure --prefix=$INSTALLROOT                \
+            --with-png=no                        \
             ${ZLIB_ROOT:+--with-zlib=$ZLIB_ROOT}
 
 make ${JOBS:+-j$JOBS}

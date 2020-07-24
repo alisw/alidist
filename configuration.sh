@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v2.2.5
+tag:  v2.2.6
 requires:
   - curl
   - boost
