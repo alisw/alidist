@@ -16,8 +16,8 @@ overrides:
     version: "v2-7-p2"
     tag: "v2-7-p2"
   GEANT4_VMC:
-    version: "v3-6-p6-inclxx-biasing-p4"
-    tag: "v3-6-p6-inclxx-biasing-p4"
+    version: "v3-6-p6-inclxx-biasing-p5"
+    tag: "v3-6-p6-inclxx-biasing-p5"
   GEANT4:
     source: https://github.com/alisw/geant4.git
     version: "v10.4.2-alice3"
