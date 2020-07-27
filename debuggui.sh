@@ -55,7 +55,6 @@ cmake $SOURCEDIR                          \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile
