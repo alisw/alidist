@@ -1,6 +1,6 @@
 package: alibuild-recipe-tools
-version: "0.1.0"
-tag: "v0.1.0"
+version: "0.1.1"
+tag: "v0.1.1"
 source: https://github.com/alisw/alibuild-recipe-tools
 ---
 mkdir -p $INSTALLROOT/bin

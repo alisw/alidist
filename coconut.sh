@@ -1,11 +1,10 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.14.4"
+tag: "v0.15.0"
 build_requires:
   - golang
   - protobuf
   - grpc
-  - InfoLogger
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e

@@ -1,6 +1,6 @@
 package: DDS
-version: "3.4"
-tag: "3.4"
+version: "3.5.1"
+tag: "3.5.1"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost

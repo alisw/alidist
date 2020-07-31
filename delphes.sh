@@ -11,7 +11,6 @@ build_requires:
 source: https://github.com/alisw/delphes.git
 #prepend_path:
 #  LD_LIBRARY_PATH: "$O2_ROOT/lib"
-#  DYLD_LIBRARY_PATH: "$O2_ROOT/lib"
 #  ROOT_INCLUDE_PATH: "$O2_ROOT/include"
 ---
 #!/bin/bash -ex
