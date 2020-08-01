@@ -27,9 +27,9 @@ jobs:
         ref: "${{ steps.decide_release_branch.outputs.branch }}"
     - name: Update the branch
       run: |
+        git config --global user.email "alibuild@cern.ch"
+        git config --global user.name "ALICE Action Bot"
         git checkout ${{ steps.decide_release_branch.outputs.branch }}
         git fetch --all
         git cherry-pick ${{ github.event.inputs.commit }}
-        git config --global user.email "alibuild@cern.ch"
-        git config --global user.name "ALICE Action Bot"
         git push
