@@ -7,14 +7,14 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-24e
+    tag: v5-09-24f
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-24e-01
+    tag: v5-09-24f-01
 ---
 # To be used with aliBuild option `--defaults user`.
 #
