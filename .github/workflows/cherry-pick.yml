@@ -6,7 +6,7 @@ on:
       commit:
         description: 'Commit to cherrypick'
         required: true
-      branch:
+      tag:
         description: 'Branch to cherry pick to'
         required: true
         default: 'v5-09-XX'
