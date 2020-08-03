@@ -13,7 +13,7 @@ requires:
   - qcg
   - QualityControl
   - "DataDistribution:(?!osx)"
-  - "ALF:(?!osx)"
+  - "ALF:(?!osx|slc8)"
 valid_defaults:
   - o2
   - o2-dataflow
