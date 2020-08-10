@@ -8,8 +8,8 @@ requires:
   - Configuration
   - Monitoring
   - libInfoLogger
-  - "PDA:slc7.*"
-  - "Python:slc.*"
+  - "PDA:(?!osx)"
+  - "Python:(?!osx)"
   - "Python-system:(?!slc.*)"
 build_requires:
   - CMake
