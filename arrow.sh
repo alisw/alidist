@@ -54,8 +54,6 @@ esac
 mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
-sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
-sed -i.deleteme -e "s/set(ARROW_LLVM_VERSIONS \".*\")/set(ARROW_LLVM_VERSIONS \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
 
 case $ARCHITECTURE in
   osx*) ;;
