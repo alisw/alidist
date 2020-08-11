@@ -53,8 +53,6 @@ python3 -m pip install --user -IU wheel
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
 grep RootInteractive requirements.txt && python3 -m pip install --user -IU numpy
-# Do not move cython from 0.29.06 for now since 3.0.0rc1 breaks on GPU
-grep RootInteractive requirements.txt && python3 -m pip install --user -IU cython==0.29.16
 python3 -m pip install --user -IU -r requirements.txt
 
 # Major.minor version of Python
