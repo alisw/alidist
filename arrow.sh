@@ -1,6 +1,6 @@
 package: arrow
-version: "v0.17.1"
-tag: ee5415fa064a9840878ac46b74d0646eb74bbb85
+version: "v1.0.0"
+tag: c0ae26ac5f6ece589e830e1b86d543e2b1de7989
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
@@ -54,8 +54,6 @@ esac
 mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
-sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
-sed -i.deleteme -e "s/set(ARROW_LLVM_VERSIONS \".*\")/set(ARROW_LLVM_VERSIONS \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
 
 case $ARCHITECTURE in
   osx*) ;;
