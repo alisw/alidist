@@ -5,6 +5,10 @@ source: https://github.com/JuliaStrings/utf8proc
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - alibuild-recipe-tools
+prefer_system: "(?!osx)"
+prefer_system_check: \
+  brew --prefix utf8proc > /dev/null;
+  if [ $? -ne 0 ]; then printf "Use brew install utf8proc"; exit 1; fi
 ---
 rsync -a --delete --exclude "**/.git" $SOURCEDIR/ .
 make ${JOBS+-j $JOBS} install prefix=$INSTALLROOT
