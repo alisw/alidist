@@ -15,6 +15,7 @@ build_requires:
   - CMake
   - double-conversion
   - re2
+  - alibuild-recipe-tools
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -112,19 +113,8 @@ make install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
+alibuild-generate-module > "$MODULEFILE"
 cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} \\
-                     ${LZ4_REVISION:+lz4/$LZ4_VERSION-$LZ4_REVISION}         \\
-                     ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}     \\
-                     ${CLANG_REVISION:+Clang/$CLANG_VERSION-$CLANG_REVISION}
 # Our environment
 set ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$ARROW_ROOT/lib
