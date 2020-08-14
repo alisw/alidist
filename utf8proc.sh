@@ -1,7 +1,7 @@
 package: utf8proc
 version: "v2.5.0"
-source: https://github.com/JuliaStrings/utf8proc
 tag: v2.5.0
+source: https://github.com/JuliaStrings/utf8proc
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - alibuild-recipe-tools
