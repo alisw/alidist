@@ -7,7 +7,7 @@ build_requires:
  - alibuild-recipe-tools
 prefer_system: "(?!osx)"
 prefer_system_check: \
-  brew --prefix utf8proc > /dev/null;
+  printf "#include <utf8proc.h>\n" | c++ -c -I$(brew --prefix utf8proc)/include -xc++ - -o /dev/null 2>&1;
   if [ $? -ne 0 ]; then printf "Use brew install utf8proc"; exit 1; fi
 ---
 rsync -a --delete --exclude "**/.git" $SOURCEDIR/ .
