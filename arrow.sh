@@ -56,7 +56,6 @@ esac
 
 mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
-CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
 
 case $ARCHITECTURE in
   osx*) ;;
@@ -103,7 +102,6 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_GANDIVA=ON                                                                            \
       -DARROW_COMPUTE=ON                                                                            \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DARROW_LLVM_VERSIONS=9                                                                       \
       -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
 
 make ${JOBS:+-j $JOBS}
