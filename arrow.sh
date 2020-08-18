@@ -113,6 +113,7 @@ MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
+
 # Our environment
 set ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$ARROW_ROOT/lib
