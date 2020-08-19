@@ -83,6 +83,7 @@ cmake ./src_tmp/cpp                                                             
       -DCMAKE_INSTALL_LIBDIR="lib"                                                                  \
       -DARROW_WITH_LZ4=ON                                                                           \
       ${RAPIDJSON_ROOT:+-DRapidJSON_ROOT=${RAPIDJSON_ROOT}}                                         \
+      ${RE2_ROOT:+-DRE2_ROOT=${RE2_ROOT}}                                                           \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}                   \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME}         \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}              \
