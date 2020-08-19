@@ -6,7 +6,7 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
  - alibuild-recipe-tools
 prefer_system: "(?!osx)"
-prefer_system_check: \
+prefer_system_check: |
   printf "#include <utf8proc.h>\n" | c++ -c -I$(brew --prefix utf8proc)/include -xc++ - -o /dev/null 2>&1;
   if [ $? -ne 0 ]; then printf "Use brew install utf8proc"; exit 1; fi
 ---
