@@ -32,6 +32,7 @@ jobs:
         git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
         git push
         git tag AliPhysics-${{ github.event.inputs.tag }}-01
+        git push --set-upstream origin ${{ steps.decide_release_branch.outputs.branch }}
         git push --set-upstream origin AliPhysics-${{ github.event.inputs.tag }}-01
     - name: Create Release
       id: create_release
