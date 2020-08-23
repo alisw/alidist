@@ -20,7 +20,7 @@ jobs:
       id: decide_release_branch
     - uses: actions/checkout@v2
       with:
-        ref: "${{ steps.decide_release_branch.outputs.branch }}"
+        ref: "master"
     - name: Update the branch
       run: |
         git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
