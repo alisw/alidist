@@ -1,5 +1,5 @@
 package: o2codechecker
-version: v1.1
+version: v10.0
 tag: v10.0
 requires:
   - Clang
