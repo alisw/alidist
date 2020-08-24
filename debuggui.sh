@@ -22,7 +22,7 @@ case $ARCHITECTURE in
     ;;
     *) 
       DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR"
-      EXTRA_LIBS="-lGL"
+      EXTRA_LIBS="-lGL -ltbb"
       [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
 esac
