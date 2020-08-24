@@ -1,6 +1,6 @@
 package: ReadoutCard
 version: "%(tag_basename)s"
-tag: v0.21.2
+tag: v0.22.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -8,8 +8,8 @@ requires:
   - Configuration
   - Monitoring
   - libInfoLogger
-  - "PDA:slc7.*"
-  - "Python:slc.*"
+  - "PDA:(?!osx)"
+  - "Python:(?!osx)"
   - "Python-system:(?!slc.*)"
 build_requires:
   - CMake

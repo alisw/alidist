@@ -133,5 +133,5 @@ setenv PYTHONHOME \$PYTHON_ROOT
 prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
 prepend-path PATH \$PYTHON_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib
-setenv SSL_CERT_FILE  [exec python3 -c "import certifi; print(certifi.where())"]
+setenv SSL_CERT_FILE  [exec \$PYTHON_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
 EoF
