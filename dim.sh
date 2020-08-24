@@ -1,20 +1,16 @@
 package: dim
-version: "v20r26"
+version: "%(tag_basename)s"
+tag: v20r26
+source: https://github.com/alisw/dim
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
-  - curl
   - motif
 ---
 #!/bin/bash -e
 
-FILE_NAME="dim_$PKGVERSION"
-ZIP_NAME="$FILE_NAME.zip"
-URL="https://dim.web.cern.ch/dim/$ZIP_NAME"
-
-curl -L -O $URL
-unzip $ZIP_NAME
-cd $FILE_NAME
+rsync -a $SOURCEDIR/ $BUILDDIR/
+cd $BUILDDIR
 
 # setup.sh is DOS-encoded
 tr -d '\015' < setup.sh > setup2.sh
