@@ -6,11 +6,20 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - motif
+  - curl
 ---
 #!/bin/bash -e
 
-rsync -a $SOURCEDIR/ $BUILDDIR/
-cd $BUILDDIR
+#rsync -a $SOURCEDIR/ $BUILDDIR/
+#cd $BUILDDIR
+
+FILE_NAME="dim_$PKGVERSION"
+ZIP_NAME="$FILE_NAME.zip"
+URL="https://dim.web.cern.ch/dim/$ZIP_NAME"
+
+curl -L -O $URL
+unzip $ZIP_NAME
+cd $FILE_NAME
 
 # setup.sh is DOS-encoded
 tr -d '\015' < setup.sh > setup2.sh
