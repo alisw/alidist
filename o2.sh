@@ -167,6 +167,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75} \
+      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF -DENABLE_OPENCL2=OFF}         \
       ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
       ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
