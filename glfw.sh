@@ -10,7 +10,7 @@ prefer_system_check: |
   printf "#if ! __has_include(<GLFW/glfw3.h>)\n#error \"GLFW not found, checking if we can build it.\"\n#endif\n" | cc -xc++ -std=c++17 - -c -o /dev/null
 ---
 
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+cmake --debug-output $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
   ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}          \
   -DBUILD_SHARED_LIBS=ON                             \
   -DGLFW_BUILD_EXAMPLES=OFF                          \
