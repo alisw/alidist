@@ -28,7 +28,7 @@ env:
   G4SAIDXSDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4SAIDXSDATA | sed 's/[^ ]* [^ ]* //'`"
 
 ---
-# if this variable is not defined default it to OFF
+# If this variable is not defined default it to OFF
 : ${GEANT4_BUILD_MULTITHREADED:=OFF}
 
 # Data sets directory:
