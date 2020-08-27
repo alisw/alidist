@@ -1,6 +1,6 @@
 package: GLFW
-version: "3.3-%(short_hash)s"
-tag: 090b16bfae282606472f876d6b2fd23f
+version: "3.3.2"
+tag: 3.3.2
 source: https://github.com/glfw/glfw.git
 build_requires:
   - CMake
