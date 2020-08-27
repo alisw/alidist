@@ -1,6 +1,6 @@
 package: Clang
-version: "v9.0.0"
-tag: "llvmorg-9.0.0"
+version: "v10.0.1"
+tag: "llvmorg-10.0.1"
 source: https://github.com/llvm/llvm-project
 requires:
  - "Python:slc.*"

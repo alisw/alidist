@@ -1,6 +1,6 @@
 package: o2codechecker
-version: "%(tag_basename)s"
-tag: master
+version: v10.0
+tag: v10.0
 requires:
   - Clang
 build_requires:

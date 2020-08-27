@@ -20,19 +20,20 @@ jobs:
       id: decide_release_branch
     - uses: actions/checkout@v2
       with:
-        ref: "${{ steps.decide_release_branch.outputs.branch }}"
+        ref: "master"
     - name: Update the branch
       run: |
-        git checkout ${{ steps.decide_release_branch.outputs.branch }}
+        set -x
+        git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
         git grep -l v5-09 | xargs perl -p -i -e 's/v5-09-[0-9][0-9][a-z]*/${{ github.event.inputs.tag }}/g'
         git add .
         git diff
         git config --global user.email "alibuild@cern.ch"
         git config --global user.name "ALICE Action Bot"
         git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
-        git push
+        git push --set-upstream origin ${{ steps.decide_release_branch.outputs.branch }}
         git tag AliPhysics-${{ github.event.inputs.tag }}-01
-        git push origin AliPhysics-${{ github.event.inputs.tag }}-01
+        git push --set-upstream origin AliPhysics-${{ github.event.inputs.tag }}-01
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1

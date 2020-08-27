@@ -9,7 +9,9 @@ prefer_system: "(?!osx)"
 prefer_system_check: |
   printf "#if ! __has_include(<GLFW/glfw3.h>)\n#error \"GLFW not found, checking if we can build it.\"\n#endif\n" | cc -xc++ -std=c++17 - -c -o /dev/null
 ---
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+
+# FIXME: --debug-output somehow needed to get CMake 3.18.2 to work
+cmake --debug-output $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
   ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}          \
   -DBUILD_SHARED_LIBS=ON                             \
   -DGLFW_BUILD_EXAMPLES=OFF                          \

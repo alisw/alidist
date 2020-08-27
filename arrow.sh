@@ -1,12 +1,13 @@
 package: arrow
-version: "v0.17.1"
-tag: ee5415fa064a9840878ac46b74d0646eb74bbb85
+version: "v1.0.0"
+tag: c0ae26ac5f6ece589e830e1b86d543e2b1de7989
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
   - lz4
   - Clang
   - protobuf
+  - utf8proc
 build_requires:
   - zlib
   - flatbuffers
@@ -14,6 +15,7 @@ build_requires:
   - CMake
   - double-conversion
   - re2
+  - alibuild-recipe-tools
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -26,6 +28,7 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
     [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(dirname $(dirname $(which lz4)))
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(dirname $(dirname $(which protoc)))
+    [[ ! $UTF8PROC_ROOT ]] && UTF8PROC_ROOT=$(brew --prefix utf8proc)
     [[ ! -d $FLATBUFFERS_ROOT ]] && unset FLATBUFFERS_ROOT
     [[ ! -d $BOOST_ROOT ]] && unset BOOST_ROOT
     [[ ! -d $LZ4_ROOT ]] && unset LZ4_ROOT
@@ -53,9 +56,6 @@ esac
 
 mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
-CLANG_VERSION_SHORT=`echo $CLANG_VERSION | sed "s/\.[0-9]*\$//" | sed "s/^v//"`
-sed -i.deleteme -e "s/set(ARROW_LLVM_VERSION \".*\")/set(ARROW_LLVM_VERSION \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
-sed -i.deleteme -e "s/set(ARROW_LLVM_VERSIONS \".*\")/set(ARROW_LLVM_VERSIONS \"$CLANG_VERSION_SHORT\")/" "./src_tmp/cpp/CMakeLists.txt" || true
 
 case $ARCHITECTURE in
   osx*) ;;
@@ -83,6 +83,7 @@ cmake ./src_tmp/cpp                                                             
       -DCMAKE_INSTALL_LIBDIR="lib"                                                                  \
       -DARROW_WITH_LZ4=ON                                                                           \
       ${RAPIDJSON_ROOT:+-DRapidJSON_ROOT=${RAPIDJSON_ROOT}}                                         \
+      ${RE2_ROOT:+-DRE2_ROOT=${RE2_ROOT}}                                                           \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}                   \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME}         \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}              \
@@ -90,6 +91,7 @@ cmake ./src_tmp/cpp                                                             
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                      \
       ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                                                       \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
+      ${UTF8PROC_ROOT:+-Dutf8proc_ROOT=${UTF8PROC_ROOT}}                                            \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
@@ -101,7 +103,6 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_GANDIVA=ON                                                                            \
       -DARROW_COMPUTE=ON                                                                            \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DARROW_LLVM_VERSIONS=9                                                                       \
       -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
 
 make ${JOBS:+-j $JOBS}
@@ -111,19 +112,9 @@ make install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} \\
-                     ${LZ4_REVISION:+lz4/$LZ4_VERSION-$LZ4_REVISION}         \\
-                     ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}     \\
-                     ${CLANG_REVISION:+Clang/$CLANG_VERSION-$CLANG_REVISION}
+alibuild-generate-module > "$MODULEFILE"
+cat >> "$MODULEFILE" <<EoF
+
 # Our environment
 set ARROW_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$ARROW_ROOT/lib
