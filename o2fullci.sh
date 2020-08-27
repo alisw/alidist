@@ -1,6 +1,6 @@
-package: FullCI
+package: O2FullCI
 version: "1.0.0"
-tag: "FullCI-1.0.0"
+tag: "O2FullCI-1.0.0"
 requires:
   - O2Suite
   - o2checkcode
