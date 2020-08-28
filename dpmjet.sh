@@ -1,6 +1,6 @@
 package: DPMJET
 version: "%(tag_basename)s"
-tag: "v3.0.5-alice4"
+tag: "v3.0.5-alice5"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/DPMJET.git
 requires:
  - "GCC-Toolchain:(?!osx)"
@@ -9,9 +9,16 @@ build_requires:
   - "Xcode:(osx.*)"
 ---
 #!/bin/bash -e
+FVERSION=`gfortran --version | grep -i fortran | sed -e 's/.* //' | cut -d. -f1`
+SPECIALFFLAGS=""
+if [ $FVERSION -ge 10 ]; then
+   echo "Fortran version $FVERSION"
+   SPECIALFFLAGS=1
+fi
 
 cmake  $SOURCEDIR                           \
-       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
+       ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 
 make ${JOBS+-j $JOBS} install
 
