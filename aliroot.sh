@@ -49,10 +49,16 @@ EOF
 source $INSTALLROOT/etc/gcov-setup.sh
 fi
 
+FVERSION=`gfortran --version | grep -i fortran | sed -e 's/.* //' | cut -d. -f1`
+SPECIALFFLAGS=""
+if [ $FVERSION -ge 10 ]; then
+   echo "Fortran version $FVERSION"
+   SPECIALFFLAGS=1
+fi
+
 cmake $SOURCEDIR                                                     \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                          \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                             \
-      -DCMAKE_Fortran_COMPILER=gfortran                              \
       -DROOTSYS="$ROOT_ROOT"                                         \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                      \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}    \
@@ -69,7 +75,8 @@ cmake $SOURCEDIR                                                     \
       ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                   \
       ${ALICE_SHUTTLE:+-DDIMDIR=$HOME/dim -DODIR=linux}              \
       ${ALICE_SHUTTLE:+-DSHUTTLE=ON -DApMon=$ALIEN_RUNTIME_ROOT}     \
-      -DOCDB_INSTALL=PLACEHOLDER
+      -DOCDB_INSTALL=PLACEHOLDER                                     \
+      ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
