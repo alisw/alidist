@@ -24,7 +24,8 @@ jobs:
     - name: Update the branch
       run: |
         set -x
-        git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
+        git fetch origin
+        git checkout -B ${{ steps.decide_release_branch.outputs.branch }} origin/${{ steps.decide_release_branch.outputs.branch }}
         git grep -l v5-09 | xargs perl -p -i -e 's/v5-09-[0-9][0-9][a-z]*/${{ github.event.inputs.tag }}/g'
         git add .
         git diff
