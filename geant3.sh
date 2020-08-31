@@ -12,10 +12,17 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT3_ROOT/include/TGeant3"
 ---
 #!/bin/bash -e
+FVERSION=`gfortran --version | grep -i fortran | sed -e 's/.* //' | cut -d. -f1`
+SPECIALFFLAGS=""
+if [ $FVERSION -ge 10 ]; then
+   echo "Fortran version $FVERSION"
+   SPECIALFFLAGS=1
+fi
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE     \
                  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
-                 -DCMAKE_SKIP_RPATH=TRUE
+                 -DCMAKE_SKIP_RPATH=TRUE \
+		 ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch -fallow-invalid-boz"}
 make ${JOBS:+-j $JOBS} install
 
 [[ ! -d $INSTALLROOT/lib64 ]] && ln -sf lib $INSTALLROOT/lib64

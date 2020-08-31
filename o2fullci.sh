@@ -1,26 +1,11 @@
-package: O2Suite
+package: O2FullCI
 version: "1.0.0"
-tag: "O2Suite-1.0.0"
+tag: "O2FullCI-1.0.0"
 requires:
-  - Common-O2
-  - Monitoring
-  - Configuration
-  - O2
-  - "GCC-Toolchain:(?!osx)"
-  - InfoLogger
-  - ReadoutCard
-  - Readout
-  - qcg
-  - QualityControl
-  - "DataDistribution:(?!osx)"
-  - "ALF:(?!osx|slc8)"
+  - O2Suite
+  - o2checkcode
 valid_defaults:
   - o2
-  - o2-dataflow
-  - o2-dev-fairroot
-  - alo
-  - o2-prod
-  - o2-ninja
 ---
 #!/bin/bash -ex
 
