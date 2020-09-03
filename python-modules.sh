@@ -45,7 +45,7 @@ python3 -m venv --system-site-packages --symlinks $PYTHON_MODULES_INSTALLROOT
 . $PYTHON_MODULES_INSTALLROOT/bin/activate
 
 # Install setuptools upfront, since this seems to create issues now...
-python3 -m pip install --user -IU setuptools
+python3 -m pip install --user -IU setuptools==49.6.0
 python3 -m pip install --user -IU wheel
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
