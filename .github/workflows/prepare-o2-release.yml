@@ -30,7 +30,7 @@ jobs:
         git config --global user.name "ALICE Action Bot"
         git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
         git show
-        git push
+        git push --set-upstream origin ${{ steps.decide_release_branch.outputs.branch }}
         git tag O2-${{ github.event.inputs.tag }}
         git push origin O2-${{ github.event.inputs.tag }}
     - name: Create Release
