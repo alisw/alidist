@@ -23,7 +23,7 @@ jobs:
         ref: "master"
     - name: Update the branch
       run: |
-        python3 -m pip install setuptools==49.6.0
+        python3 -m pip install setuptools==49.6.0 wheel
         python3 -m pip install git+https://github.com/alisw/ali-bot@master
         git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
         DEFAULTS=o2 OVERRIDE_TAGS="O2=${{ github.event.inputs.tag }}" OVERRIDE_VERSIONS="O2=${{ github.event.inputs.tag }}" alidist-override-tags
