@@ -23,6 +23,8 @@ jobs:
         ref: "master"
     - name: Update the branch
       run: |
+        python3 -m venv alibot
+        source alibot/bin/activate
         python3 -m pip install setuptools==49.6.0 wheel
         python3 -m pip install git+https://github.com/alisw/ali-bot@master
         git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
