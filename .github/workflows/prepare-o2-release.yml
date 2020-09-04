@@ -29,8 +29,8 @@ jobs:
         python3 -m pip install setuptools==49.6.0 wheel
         python3 -m pip install git+https://github.com/alisw/ali-bot@master
         git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
-        DEFAULTS=o2 OVERRIDE_TAGS="O2=${{ github.event.inputs.tag }}" OVERRIDE_VERSIONS="O2=${{ github.event.inputs.tag }}" alidist-override-tags
-        DEFAULTS=o2-dataflow OVERRIDE_TAGS="O2=${{ github.event.inputs.tag }}" OVERRIDE_VERSIONS="O2=${{ github.event.inputs.tag }}" alidist-override-tags
+        ALIDIST=. DEFAULTS=o2 OVERRIDE_TAGS="O2=${{ github.event.inputs.tag }}" OVERRIDE_VERSIONS="O2=${{ github.event.inputs.tag }}" alidist-override-tags
+        ALIDIST=. DEFAULTS=o2-dataflow OVERRIDE_TAGS="O2=${{ github.event.inputs.tag }}" OVERRIDE_VERSIONS="O2=${{ github.event.inputs.tag }}" alidist-override-tags
         git config --global user.email "alibuild@cern.ch"
         git config --global user.name "ALICE Action Bot"
         git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
