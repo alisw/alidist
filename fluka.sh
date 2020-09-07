@@ -4,40 +4,37 @@ tag: "2011-3.0-vmc2"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+build_requires:
+  - alibuild-recipe-tools
 env:
   FLUPRO: "$FLUKA_ROOT/lib"
   FC: "gfortran"
 prepend_path:
   PATH: "$FLUKA_ROOT/bin"
 ---
-#!/bin/bash -e
-
 export FLUPRO=$PWD
 export FC=gfortran
 
-rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ "$INSTALLROOT"
-cd "$INSTALLROOT"
-make ${JOBS:+-j$JOBS}
+rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ "$BUILDDIR"
 
-# Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+FVERSION=`gfortran --version | grep -i fortran | sed -e 's/.* //' | cut -d. -f1`
+if [ $FVERSION -ge 10 ]; then
+    echo "Fortran version $FVERSION"
+# Redefine FC to contain the compiler, -fallow-argument-mismatch and the additional FFLAGS from FLUKA/src/config.mk
+    make FC="gfortran -fallow-argument-mismatch -Wall -Waggregate-return -Wcast-align -Wline-truncation -Wno-conversion -Wno-integer-division -Wno-tabs -Wno-unused-dummy-argument -Wno-unused-function -Wno-unused-parameter -Wno-unused-variable -Wsystem-headers -Wuninitialized -Wunused-label -mtune=generic -msse2 -mfpmath=sse -fPIC -fexpensive-optimizations -funroll-loops -fstrength-reduce -fno-automatic -finit-local-zero -ffixed-form -fbackslash -funderscoring -fd-lines-as-code -frecord-marker=4 -fbacktrace -frange-check -fbounds-check -fdump-core -ftrapping-math -ffpe-trap=invalid,zero,overflow" ${JOBS:+-j$JOBS}
+else
+    make ${JOBS:+-j$JOBS}
+fi
+
+mkdir -p $INSTALLROOT
+cp -rf $BUILDDIR/bin $BUILDDIR/lib $BUILDDIR/include $BUILDDIR/data $INSTALLROOT/
+
+#ModuleFile
+mkdir -p $INSTALLROOT/etc/modulefiles
+alibuild-generate-module > $INSTALLROOT/etc/modulefiles/$PKGNAME
+cat >> $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set FLUKA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FLUKA_ROOT \$FLUKA_ROOT
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version/lib
-setenv FC gfortran
-prepend-path PATH \$FLUKA_ROOT
 prepend-path PATH \$FLUKA_ROOT/bin
 EoF
