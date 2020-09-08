@@ -1,7 +1,7 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: shm-options-alt-2
-source: https://github.com/rbx/FairMQ
+tag: 1.4.23
+source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
  - FairLogger
