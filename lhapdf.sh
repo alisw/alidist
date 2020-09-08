@@ -26,7 +26,7 @@ rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
-if python -c 'import sys; exit(0 if sys.version_info.major >=3 else 1)'; then
+if python -c 'import sys; exit(1 if sys.version_info.major >=3 else 0)'; then
         # LHAPDF not yet ready for Python3
         DISABLE_PYTHON=1
 fi
