@@ -9,13 +9,16 @@ env:
   ENABLE_VMC: "ON"
 overrides:
   AliRoot:
-    version: "%(commit_hash)s_O2"
+    version: "%(tag_basename)s_FLUKA"
+    tag: v5-09-55
     requires:
       - ROOT
       - DPMJET
       - fastjet:(?!.*ppc64)
       - GEANT3
       - GEANT4_VMC
+      - FLUKA
+      - FLUKA_VMC
       - Vc
       - ZeroMQ
       - JAliEn-ROOT
@@ -25,7 +28,8 @@ overrides:
       - lhapdf
       - boost
   AliPhysics:
-    version: "%(commit_hash)s_O2"
+    version: "%(tag_basename)s_FLUKA"
+    tag: v5-09-55-01
   cgal:
     version: "4.12.2"
   fastjet:
