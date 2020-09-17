@@ -6,7 +6,7 @@ requires:
   - FreeType
   - libpng
 build_requires:
-  - curl
+  - system-curl
   - Python-modules-list
 prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
