@@ -13,7 +13,8 @@ requires:
   - Monitoring
   - ms_gsl
   - FairMQ
-  - curl
+  - "curl:(?!slc8)"
+  - "system-curl:slc8.*"
   - MCStepLogger
   - AEGIS
   - fmt
