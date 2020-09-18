@@ -81,6 +81,12 @@ module load BASE/1.0 ${XERCESC_REVISION:+xercesc/$XERCESC_REVISION-$XERCESC_REVI
 # Our environment
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
+setenv G4INSTALL \$GEANT4_ROOT
+set osname [uname sysname]
+setenv G4SYSTEM \$osname-g++
+set G4BASE \$GEANT4_ROOT
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include/Geant4
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include
 prepend-path PATH \$GEANT4_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$GEANT4_ROOT/lib
 EoF
