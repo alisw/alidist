@@ -6,7 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - motif
-  - curl
+  - system-curl
 ---
 #!/bin/bash -e
 

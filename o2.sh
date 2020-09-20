@@ -13,7 +13,8 @@ requires:
   - Monitoring
   - ms_gsl
   - FairMQ
-  - curl
+  - "curl:(?!slc8)"
+  - "system-curl:slc8.*"
   - MCStepLogger
   - AEGIS
   - fmt
@@ -21,6 +22,7 @@ requires:
   - JAliEn-ROOT
   - fastjet
   - libuv
+  - libjalienO2
 build_requires:
   - RapidJSON
   - googlebenchmark
@@ -165,6 +167,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
+      ${LIBJALIENO2_ROOT:+-DLIBJALIENO2=$LIBJALIENO2_ROOT}                                                \
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=OFF -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON} \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75} \
       ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF -DENABLE_OPENCL2=OFF}         \
@@ -220,7 +223,8 @@ module load BASE/1.0 \\
             ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
             ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}                                     \\
             ${FMT_REVISION:+fmt/$FMT_VERSION-$FMT_REVISION}                                         \\
-            ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
+            ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
+            ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT

@@ -1,7 +1,7 @@
 package: node
 version: "v13.12.0"
 build_requires:
-  - curl
+  - system-curl
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   node -h &> /dev/null || { echo "node is missing"; exit 1; }
