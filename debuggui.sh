@@ -19,6 +19,7 @@ case $ARCHITECTURE in
       [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=`brew --prefix libuv`
       [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT=`brew --prefix freetype`
       EXTRA_LIBS="-framework CoreFoundation -framework AppKit"
+      DEFINES="-DNO_PARALLEL_SORT"
     ;;
     *) 
       DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR"
