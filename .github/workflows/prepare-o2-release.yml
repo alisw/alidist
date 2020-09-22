@@ -24,8 +24,8 @@ jobs:
     - name: Update the branch
       run: |
         git checkout -B ${{ steps.decide_release_branch.outputs.branch }}
-        perl -p -i -e 's/version:.*/ version: "${{ github.event.inputs.tag }}"/' o2.sh
-        perl -p -i -e 's/tag:.*/ tag: "${{ github.event.inputs.tag }}"/' o2.sh
+        perl -p -i -e 's/version:.*/version: "${{ github.event.inputs.tag }}"/' o2.sh
+        perl -p -i -e 's/tag:.*/tag: "${{ github.event.inputs.tag }}"/' o2.sh
         git config --global user.email "alibuild@cern.ch"
         git config --global user.name "ALICE Action Bot"
         git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
