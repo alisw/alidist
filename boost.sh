@@ -1,6 +1,6 @@
 package: boost
 version: "%(tag_basename)s"
-tag: v1.72.0-alice1
+tag: v1.72.0-alice2
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
