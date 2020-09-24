@@ -17,7 +17,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
-  - openmp
+  - "openmp:(?!osx.*)"
   - DebugGUI
   - JAliEn-ROOT
 build_requires:
