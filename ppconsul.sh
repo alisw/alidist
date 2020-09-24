@@ -5,6 +5,7 @@ source: https://github.com/oliora/ppconsul
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
+  - curl
 build_requires:
   - CMake
 ---
