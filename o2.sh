@@ -18,6 +18,7 @@ requires:
   - MCStepLogger
   - AEGIS
   - fmt
+  - "openmp:(?!osx.*)"
   - DebugGUI
   - JAliEn-ROOT
   - fastjet
