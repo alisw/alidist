@@ -14,7 +14,7 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-54g
+    tag: v5-09-54h
     requires:
       - ROOT
       - DPMJET
@@ -25,7 +25,7 @@ overrides:
       - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-54g-01
+    tag: v5-09-54h-01
   XRootD:
     tag: v3.3.6-alice2
     source: https://github.com/alisw/xrootd.git
