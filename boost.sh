@@ -1,6 +1,6 @@
 package: boost
 version: "%(tag_basename)s"
-tag: v1.73.0
+tag: v1.74.0
 source: https://github.com/boostorg/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
