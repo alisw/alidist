@@ -1,7 +1,7 @@
 package: boost
 version: "%(tag_basename)s"
-tag: v1.72.0-alice2
-source: https://github.com/alisw/boost.git
+tag: v1.73.0
+source: https://github.com/boostorg/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Python-modules:(?!osx)"
