@@ -5,7 +5,8 @@ requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - ApMon-CPP
-  - curl
+  - "system-curl:(slc8)"
+  - "curl:(?!slc8)"
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Monitoring
