@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-20-02-alice7"
+tag: "v6-20-02-alice8"
 source: https://github.com/alisw/root
 requires:
   - arrow
