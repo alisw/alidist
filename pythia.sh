@@ -56,4 +56,5 @@ setenv PYTHIA8DATA \$PYTHIA_ROOT/share/Pythia8/xmldoc
 setenv PYTHIA8 \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$PYTHIA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHIA_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$PYTHIA_ROOT/include
 EoF
