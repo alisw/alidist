@@ -2,8 +2,9 @@ package: CMake
 version: "%(tag_basename)s"
 tag: "v3.18.2"
 source: https://github.com/Kitware/CMake
-build_requires:
+requires:
  - "GCC-Toolchain:(?!osx)"
+build_requires:
  - make
 prefer_system: .*
 prefer_system_check: |
@@ -25,6 +26,7 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
 
 EOF
+
 
 $SOURCEDIR/bootstrap --prefix=$INSTALLROOT \
                      --init=build-flags.cmake \
