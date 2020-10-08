@@ -25,6 +25,8 @@ for RPKG in $BUILD_REQUIRES; do
   rm -f $INSTALLROOT/etc/modulefiles/{$RPKG,$RPKG.unrelocated} || true
 done
 
+rm -f $INSTALLROOT/lib/pkgconfig/zlib.pc
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
