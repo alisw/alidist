@@ -6,7 +6,7 @@ build_requires:
   - GMP
   - MPFR
   - CMake
-  - curl
+  - system-curl
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -33,6 +33,7 @@ export GMP_INC_DIR="${GMP_ROOT}/include"
 
 cmake . \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
+      -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
       -DCMAKE_SKIP_RPATH:BOOL=YES \
       -DWITH_BLAS:BOOL=OFF \
       -DWITH_CGAL_Core:BOOL=ON \

@@ -3,6 +3,7 @@
 
 # Dataflow team
 alf*                @alisw/dataflow-experts
+lla*                @alisw/dataflow-experts
 coconut*            @alisw/dataflow-experts
 common-o2*          @alisw/dataflow-experts
 configuration*      @alisw/dataflow-experts
@@ -61,6 +62,7 @@ defaults-alo*       @alisw/mrrtf
 jdk*                @alisw/alien-experts
 jalien*             @alisw/alien-experts
 defaults-jalien*    @alisw/alien-experts
+xjalienfs*          @alisw/alien-experts
 
 # EPN
 datadistribution*   @alisw/epn-experts

@@ -43,8 +43,9 @@ ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc)' ${O2_C
 cp thinned_compile_commands.json compile_commands.json
 
 # List of explicitely enabled C++ checks (make sure they are all green)
-CHECKS="${O2_CHECKER_CHECKS:--*,\
-aliceO2-member-name\
+CHECKS="${O2_CHECKER_CHECKS:--*\
+,aliceO2-member-name\
+,aliceO2-namespace-naming\
 ,modernize-avoid-bind\
 ,modernize-deprecated-headers\
 ,modernize-make-shared\
@@ -63,7 +64,10 @@ aliceO2-member-name\
 ,modernize-use-uncaught-exceptions}"
 
 # Run C++ checks
-run_O2CodeChecker.py -clang-tidy-binary $(which O2codecheck) -header-filter=.*SOURCES.* ${O2_CHECKER_FIX:+-fix} -checks=${CHECKS} 2>&1 | tee error-log.txt
+run_O2CodeChecker.py ${JOBS+-j $JOBS} \
+	-clang-tidy-binary $(which O2codecheck) \
+	-clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
+	-header-filter=.*SOURCES.* ${O2_CHECKER_FIX:+-fix} -checks=${CHECKS} 2>&1 | tee error-log.txt
 
 # Turn warnings into errors
 sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.txt.0 error-log.txt

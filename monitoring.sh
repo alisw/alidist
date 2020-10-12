@@ -1,10 +1,12 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.0.6
+tag: v3.3.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - ApMon-CPP
+  - "system-curl:(slc8)"
+  - "curl:(?!slc8)"
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/Monitoring

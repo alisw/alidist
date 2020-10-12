@@ -1,6 +1,6 @@
 package: O2
-version: "v1.2.0"
-tag: "v1.2.0"
+version: "v1.3.0"
+tag: "v1.3.0"
 requires:
   - arrow
   - FairRoot
@@ -13,18 +13,22 @@ requires:
   - Monitoring
   - ms_gsl
   - FairMQ
-  - curl
+  - "curl:(?!slc8)"
+  - "system-curl:slc8.*"
   - MCStepLogger
   - AEGIS
   - fmt
+  - "openmp:(?!osx.*)"
   - DebugGUI
   - JAliEn-ROOT
   - fastjet
   - libuv
+  - libjalienO2
 build_requires:
   - RapidJSON
   - googlebenchmark
   - cub
+  - O2-customization
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
@@ -165,11 +169,14 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
+      ${LIBJALIENO2_ROOT:+-DLIBJALIENO2=$LIBJALIENO2_ROOT}                                                \
+      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=OFF -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON} \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75} \
+      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF -DENABLE_OPENCL2=OFF}         \
+      ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
+      ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
-      ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}                                              \
-      ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}                                        \
+      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT} \
       ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=ON}                                                            \
       ${ARROW_ROOT:+-Dgandiva_DIR=$ARROW_ROOT/lib/cmake/arrow}
 
@@ -214,10 +221,12 @@ module load BASE/1.0 \\
             ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
             ${DEBUGGUI_REVISION:+DebugGUI/$DEBUGGUI_VERSION-$DEBUGGUI_REVISION}                     \\
             ${LIBUV_REVISION:+libuv/$LIBUV_VERSION-$LIBUV_REVISION}                                 \\
+            ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}         \\
             ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
             ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}                                     \\
             ${FMT_REVISION:+fmt/$FMT_VERSION-$FMT_REVISION}                                         \\
-            ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}
+            ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
+            ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT

@@ -2,7 +2,8 @@ package: Configuration
 version: "%(tag_basename)s"
 tag:  v2.2.6
 requires:
-  - curl
+  - "curl:(?!slc8)"
+  - "system-curl:slc8.*"
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Ppconsul

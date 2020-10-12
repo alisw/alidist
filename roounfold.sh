@@ -1,6 +1,6 @@
 package: RooUnfold
 version: "%(tag_basename)s"
-tag: V02-00-01-alice4
+tag: V02-00-01-alice5
 source: https://github.com/alisw/RooUnfold
 requires:
  - ROOT
@@ -9,6 +9,7 @@ requires:
 cmake $SOURCEDIR                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}    \
       -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
 #make test

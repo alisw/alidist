@@ -14,6 +14,19 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 env:
   G4INSTALL : $GEANT4_ROOT
+  G4DATASEARCHOPT : "-mindepth 2 -maxdepth 4 -type d -wholename"
+  G4ABLADATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4ABLA*'`"  ## v10.4.px only
+  G4ENSDFSTATEDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4ENSDFSTATE*'`"
+  G4INCLDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4INCL*'`"  ## v10.5.px only
+  G4LEDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4EMLOW*'`"
+  G4LEVELGAMMADATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*PhotonEvaporation*'`"
+  G4NEUTRONHPDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4NDL*'`"
+  G4NEUTRONXSDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4NEUTRONXS*'`"   ## v10.4.px only
+  G4PARTICLEXSDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4PARTICLEXS*'`"   ## v10.5.px only
+  G4PIIDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*G4PII*'`"
+  G4RADIOACTIVEDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*RadioactiveDecay*'`"
+  G4REALSURFACEDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT '*data*RealSurface*'`"
+  G4SAIDXSDATA : "`find ${G4INSTALL} $G4DATASEARCHOPT  '*data*G4SAIDDATA*'`"
 
 ---
 # if this variable is not defined default it to OFF
@@ -73,13 +86,13 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${XERCESC_VERSION:+xercesc/$XERCESC_VERSION-$XERCESC_REVISION}
+module load BASE/1.0 ${XERCESC_REVISION:+xercesc/$XERCESC_REVISION-$XERCESC_REVISION}
 # Our environment
 set osname [uname sysname]
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
 setenv G4INSTALL \$GEANT4_ROOT
-setenv G4INSTALL_DATA \$::env(G4INSTALL)/share/
+setenv G4INSTALL_DATA \$GEANT4_ROOT/share/
 setenv G4SYSTEM \$osname-g++
 
 setenv G4ABLADATA ${G4ABLADATA:-not-defined}
@@ -94,9 +107,9 @@ setenv G4PIIDATA ${G4PIIDATA:-not-defined}
 setenv G4RADIOACTIVEDATA  ${G4RADIOACTIVEDATA:-not-defined}
 setenv G4REALSURFACEDATA ${G4REALSURFACEDATA:-not-defined}
 setenv G4SAIDXSDATA ${G4SAIDXSDATA:-not-defined}
-set G4BASE \$::env(GEANT4_ROOT)
-prepend-path PATH \$G4BASE/bin
-prepend-path ROOT_INCLUDE_PATH \$G4BASE/include/Geant4
-prepend-path ROOT_INCLUDE_PATH \$G4BASE/include
-prepend-path LD_LIBRARY_PATH \$G4BASE/lib
+set G4BASE \$GEANT4_ROOT
+prepend-path PATH \$GEANT4_ROOT/bin
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include/Geant4
+prepend-path ROOT_INCLUDE_PATH \$GEANT4_ROOT/include
+prepend-path LD_LIBRARY_PATH \$GEANT4_ROOT/lib
 EoF

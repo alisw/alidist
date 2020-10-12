@@ -6,7 +6,6 @@ build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - "OpenSSL:(?!osx)"
-  - zlib
 prefer_system: "osx"
 prefer_system_check: |
   printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | c++ -I$(brew --prefix libwebsockets)/include -c -xc++ -std=c++17 - -o /dev/null
@@ -23,11 +22,11 @@ cmake $SOURCEDIR/                                                   \
       -DLWS_WITH_STATIC=ON                                          \
       -DLWS_WITH_SHARED=OFF                                         \
       -DLWS_WITH_IPV6=ON                                            \
+      -DLWS_WITH_ZLIB=OFF                                            \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib}        \
       -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
-      -DZLIB_ROOT=$ZLIB_ROOT                                        \
       -DLWS_WITHOUT_TESTAPPS=ON
 make ${JOBS+-j $JOBS} install
 rm -rf $INSTALLROOT/share

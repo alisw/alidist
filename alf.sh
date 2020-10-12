@@ -1,11 +1,13 @@
 package: ALF
 version: "%(tag_basename)s"
-tag: v0.5.0
+tag: v0.8.0
 requires:
+  - boost
   - Common-O2
   - "dim:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
   - libInfoLogger
+  - LLA
   - ReadoutCard
 build_requires:
   - CMake
@@ -23,10 +25,12 @@ fi
 
 cmake $SOURCEDIR                                                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
       ${COMMON_O2_REVISION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
       ${DIM_REVISION:+-DDIM_ROOT=$DIM_ROOT}                            \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
       ${READOUTCARD_REVISION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}    \
+      ${LLA_REVISION:+-DLLA_ROOT=$LLA_ROOT}    \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -44,11 +48,13 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0                                                          \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}           \\
             Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                  \\
             ${DIM_REVISION:+dim/$DIM_VERSION-$DIM_REVISION}                    \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION      \\
-            ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION
+            ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION          \\
+            LLA/$LLA_VERSION-$LLA_REVISION
 
 # Our environment
 set ALF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

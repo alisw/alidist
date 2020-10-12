@@ -1,12 +1,17 @@
 package: dim
-version: "v20r26"
+version: "%(tag_basename)s"
+tag: v20r26
+source: https://github.com/alisw/dim
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
-  - curl
   - motif
+  - system-curl
 ---
 #!/bin/bash -e
+
+#rsync -a $SOURCEDIR/ $BUILDDIR/
+#cd $BUILDDIR
 
 FILE_NAME="dim_$PKGVERSION"
 ZIP_NAME="$FILE_NAME.zip"

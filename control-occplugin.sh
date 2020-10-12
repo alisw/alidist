@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.14.3"
+tag: "v0.16.0"
 requires:
   - FairMQ
   - FairLogger
@@ -9,6 +9,7 @@ requires:
   - protobuf
   - "GCC-Toolchain:(?!osx)"
   - libInfoLogger
+  - Configuration
 build_requires:
   - RapidJSON
   - CMake
@@ -40,6 +41,7 @@ cmake $SOURCEDIR/occ                                                            
       -DFAIRMQPATH=${FAIRMQ_ROOT}                                                        \
       -DFAIRLOGGERPATH=${FAIRLOGGER_ROOT}                                                \
       ${RAPIDJSON_ROOT:+-DRapidJSON_ROOT=${RAPIDJSON_ROOT}}                              \
+      -DConfiguration_ROOT=$CONFIGURATION_ROOT                                           \
       -DBUILD_SHARED_LIBS=ON
 
 make ${JOBS+-j $JOBS} prefix=$INSTALLROOT
@@ -62,7 +64,8 @@ module load BASE/1.0 \\
             ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION} \\
             ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION} \\
             ${GRPC_REVISION:+grpc/$GRPC_VERSION-$GRPC_REVISION} \\
-            ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION}
+            ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
+            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION
 
 # Our environment
 set CONTROL_OCCPLUGIN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

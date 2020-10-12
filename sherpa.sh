@@ -9,7 +9,7 @@ requires:
   - lhapdf-pdfsets
   - fastjet
 build_requires:
-  - curl
+  - system-curl
   - autotools
   - cgal
   - GMP
