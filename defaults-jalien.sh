@@ -17,12 +17,6 @@ overrides:
   autotools:
     version: "%(tag_basename)s_JALIEN"
     tag: v1.5.0
-  JAliEn-ROOT:
-    version: "%(tag_basename)s"
-    tag: 0.6.1
-  Alice-GRID-Utils:
-    version: "%(tag_basename)s"
-    tag: 0.0.7
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
