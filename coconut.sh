@@ -1,6 +1,6 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.16.0"
+tag: "v0.17.0"
 build_requires:
   - golang
   - protobuf
@@ -17,7 +17,7 @@ mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
   make vendor
-  make WHAT="coconut peanut"
+  make WHAT="coconut peanut walnut"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
 popd
