@@ -31,7 +31,7 @@ case $ARCHITECTURE in
   ubuntu*) DEFAULT_SYSROOT="" ;;
   debian*) DEFAULT_SYSROOT="" ;;
   unknown*) DEFAULT_SYSROOT="" ;;
-  *) DEFAULT_SYSROOT="/usr" ;;
+  *) DEFAULT_SYSROOT="" ;;
 esac
 
 # note that BUILD_SHARED_LIBS=ON IS NEEDED FOR ADDING DYNAMIC PLUGINS
