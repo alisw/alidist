@@ -4,6 +4,8 @@ tag: "v2.1.0-alice1"
 source: https://github.com/alisw/Openloops
 requires:
   - "GCC-Toolchain:(?!osx)"
+build_requires:
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ .
@@ -25,24 +27,17 @@ for inst in ${INSTALL[@]}; do
     cp -r $inst $INSTALLROOT/
 done
 
-# Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 
+#ModuleFile
+mkdir -p etc/modulefiles
+alibuild-generate-module > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set OPENLOOPS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv OPENLOOPS_ROOT \$OPENLOOPS_ROOT
 setenv OpenLoopsPath \$OPENLOOPS_ROOT
 prepend-path PATH \$OPENLOOPS_ROOT
 prepend-path LD_LIBRARY_PATH \$OPENLOOPS_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$OPENLOOPS_ROOT/proclib
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
