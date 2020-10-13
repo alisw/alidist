@@ -61,11 +61,5 @@ cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set DEBUGGUI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$DEBUGGUI_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$DEBUGGUI_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
