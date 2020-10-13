@@ -41,19 +41,19 @@ PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
 mkdir -p $PYTHON_MODULES_INSTALLROOT
 
 # Create the virtualenv
-python3 -m venv --system-site-packages --symlinks $PYTHON_MODULES_INSTALLROOT
+python3 -m venv $PYTHON_MODULES_INSTALLROOT
 . $PYTHON_MODULES_INSTALLROOT/bin/activate
 
 # Install setuptools upfront, since this seems to create issues now...
-python3 -m pip install --user -IU setuptools==49.6.0
-python3 -m pip install --user -IU wheel
+python3 -m pip install -IU setuptools==49.6.0
+python3 -m pip install -IU wheel
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
 grep RootInteractive requirements.txt && python3 -m pip install --user -IU numpy
-python3 -m pip install --user -IU -r requirements.txt
+python3 -m pip install -IU -r requirements.txt
 
 # Major.minor version of Python
 export PYVER=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')
