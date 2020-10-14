@@ -26,9 +26,7 @@ prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
 incremental_recipe: |
   # Limit parallel builds to prevent OOM
-  JOBS=$((${JOBS:-1}*3/5))
-  [[ $JOBS -gt 0 ]] || JOBS=1
-  cmake --build . --target install ${JOBS:+-- -j$JOBS}
+  cmake --build . --target install ${JOBS+-j $JOBS}
   rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
          "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
@@ -186,10 +184,7 @@ for FEATURE in $NO_FEATURES; do
   bin/root-config --has-$FEATURE | grep -q no
 done
 
-# Limit parallel builds to prevent OOM
-JOBS=$((${JOBS:-1}*3/5))
-[[ $JOBS -gt 0 ]] || JOBS=1
-cmake --build . --target install ${JOBS:+-- -j$JOBS}
+cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
