@@ -1,7 +1,7 @@
 package: boost
-version: "%(tag_basename)s"
-tag: v1.72.0-alice2
-source: https://github.com/alisw/boost.git
+version: v1.74.0
+tag: boost-1.74.0
+source: https://github.com/boostorg/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Python-modules:(?!osx)"
@@ -58,6 +58,8 @@ case $ARCHITECTURE in
   osx*) TOOLSET=clang-darwin ;;
   *) TOOLSET=gcc ;;
 esac
+
+( cd $SOURCEDIR && git submodule update --init)
 
 rsync -a $SOURCEDIR/ $BUILDDIR/
 cd $BUILDDIR/tools/build
