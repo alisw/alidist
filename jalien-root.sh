@@ -5,7 +5,6 @@ source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
   - xjalienfs
-  - libjalienws
   - XRootD
 build_requires:
   - libwebsockets
