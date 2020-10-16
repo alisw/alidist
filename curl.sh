@@ -27,7 +27,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
-set CURL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version before defining LD_LIBRARY_PATH
+set CURL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$CURL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$CURL_ROOT/lib
 
