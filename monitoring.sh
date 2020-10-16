@@ -42,12 +42,9 @@ fi
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv MONITORING_ROOT \$MONITORING_ROOT
-prepend-path PATH \$MONITORING_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$MONITORING_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
