@@ -48,6 +48,6 @@ cat >> etc/modulefiles/$PKGNAME <<EoF
 set MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv MONITORING_ROOT \$MONITORING_ROOT
 prepend-path PATH \$MONITORING_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$MONITORING_ROOT/li
+prepend-path LD_LIBRARY_PATH \$MONITORING_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
