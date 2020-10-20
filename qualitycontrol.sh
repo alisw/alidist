@@ -12,6 +12,7 @@ requires:
   - O2
   - arrow
   - Control-OCCPlugin
+  - Python-modules
 build_requires:
   - CMake
   - CodingGuidelines

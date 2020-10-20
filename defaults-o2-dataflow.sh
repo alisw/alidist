@@ -29,6 +29,8 @@ overrides:
     env:
       PIP_REQUIREMENTS: |
         requests==2.21.0
+        dryable==1.0.3
+        responses==0.10.6
   O2:
     version: "%(short_hash)s%(defaults_upper)s"
     tag: dev
