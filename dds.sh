@@ -45,7 +45,7 @@ rm -f "$INSTALLROOT/LICENSE"
 
 # ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > $MODULEFILE
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 setenv DDS_ROOT \$PKG_ROOT
 EoF
