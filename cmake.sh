@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 tag: "v3.18.2"
 source: https://github.com/Kitware/CMake
 requires:
+ - OpenSSL
  - "GCC-Toolchain:(?!osx)"
 build_requires:
  - make
