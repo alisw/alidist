@@ -125,6 +125,6 @@ MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat << EOF >> etc/modulefiles/$PKGNAME
-prepend-path ROOT_INCLUDE_PATH \$BOOST_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
