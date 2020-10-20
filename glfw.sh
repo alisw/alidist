@@ -5,6 +5,7 @@ source: https://github.com/glfw/glfw.git
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 prefer_system: "(?!osx)"
 prefer_system_check: |
   printf "#if ! __has_include(<GLFW/glfw3.h>)\n#error \"GLFW not found, checking if we can build it.\"\n#endif\n" | cc -xc++ -std=c++17 - -c -o /dev/null
