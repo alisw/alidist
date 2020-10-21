@@ -5,6 +5,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 prefer_system: (?!slc5.*)
 prefer_system_check: |
   printf "#include <uv.h>" | c++ -I$(brew --prefix libuv)/include -xc++ - -c -o /dev/null 2>&1
