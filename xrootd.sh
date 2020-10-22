@@ -15,7 +15,7 @@ build_requires:
 ---
 #!/bin/bash -e
 [[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
-PYTHON_EXECUTABLE=$( $(readlink -f $(which python3)) -c 'import sys; print(sys.executable)')
+PYTHON_EXECUTABLE=$( $(readlink $(which python3)) -c 'import sys; print(sys.executable)')
 
 case $ARCHITECTURE in
   osx*)
