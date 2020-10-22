@@ -25,9 +25,7 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 # but cmake is not smart enough to find it. We do not really need ccmake anyway,
 # so just disable it.
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
-
 EOF
-
 
 $SOURCEDIR/bootstrap --prefix=$INSTALLROOT \
                      --init=build-flags.cmake \
