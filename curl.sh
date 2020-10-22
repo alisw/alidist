@@ -24,13 +24,6 @@ make install
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set CURL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version before defining LD_LIBRARY_PATH
-prepend-path PATH \$CURL_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$CURL_ROOT/lib
-
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 

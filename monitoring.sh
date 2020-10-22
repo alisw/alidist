@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.3.5
+tag: v3.4.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -9,6 +9,7 @@ requires:
   - "curl:(?!slc8)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Monitoring
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -38,26 +39,12 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   make test
 fi
 
+
 #ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                                                \\
-            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
-            ${APMON_CPP_REVISION:+ApMon-CPP/$APMON_CPP_VERSION-$APMON_CPP_REVISION}                 \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set MONITORING_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv MONITORING_ROOT \$MONITORING_ROOT
-prepend-path PATH \$MONITORING_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$MONITORING_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
