@@ -8,6 +8,7 @@ requires:
   - boost
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 
 #!/bin/bash -e
@@ -24,21 +25,8 @@ make install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
-# Our environment
-set osname [uname sysname]
-set MCSTEPLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv MCSTEPLOGGER_ROOT \$MCSTEPLOGGER_ROOT
-prepend-path LD_LIBRARY_PATH \$MCSTEPLOGGER_ROOT/lib
-prepend-path PATH \$MCSTEPLOGGER_ROOT/bin
-prepend-path ROOT_INCLUDE_PATH \$MCSTEPLOGGER_ROOT/include
+alibuild-generate-module --bin --lib > $MODULEFILE
+cat >> "$MODULEFILE" <<EoF
+setenv MCSTEPLOGGER_ROOT \$PKG_ROOT
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF

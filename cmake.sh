@@ -7,6 +7,7 @@ requires:
  - "GCC-Toolchain:(?!osx)"
 build_requires:
  - make
+ - alibuild-recipe-tools
 prefer_system: .*
 prefer_system_check: |
   verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
@@ -25,9 +26,7 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 # but cmake is not smart enough to find it. We do not really need ccmake anyway,
 # so just disable it.
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
-
 EOF
-
 
 $SOURCEDIR/bootstrap --prefix=$INSTALLROOT \
                      --init=build-flags.cmake \
@@ -35,21 +34,7 @@ $SOURCEDIR/bootstrap --prefix=$INSTALLROOT \
 make ${JOBS+-j $JOBS}
 make install/strip
 
+
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 \\
-       ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set CMAKE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv CMAKE_ROOT \$CMAKE_ROOT
-prepend-path PATH \$CMAKE_ROOT/bin
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

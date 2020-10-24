@@ -6,6 +6,7 @@ requires:
   - boost
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 incremental_recipe: |
   case $ARCHITECTURE in
     osx*) ;;
@@ -44,21 +45,8 @@ rm -f "$INSTALLROOT/LICENSE"
 
 # ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
-                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set DDS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv DDS_ROOT \$DDS_ROOT
-prepend-path PATH \$DDS_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$DDS_ROOT/lib
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
+setenv DDS_ROOT \$PKG_ROOT
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
