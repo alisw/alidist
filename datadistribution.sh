@@ -17,7 +17,7 @@ build_requires:
 source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
   # reduce number of compile slots if invoked  by Jenkins
-  if [[ -v JENKINS_HOME ]]; then
+  if [ ! "X$JENKINS_HOME" = X ]; then
     JOBS=1
   fi
   make ${JOBS:+-j$JOBS} install
@@ -47,7 +47,7 @@ cmake $SOURCEDIR                                              \
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 # reduce number of compile slots if invoked by Jenkins
-if [[ -v JENKINS_HOME ]]; then
+if [ ! "X$JENKINS_HOME" = X ]; then
   JOBS=1
 fi
 cmake --build . -- ${JOBS+-j $JOBS} install
