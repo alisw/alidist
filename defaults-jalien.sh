@@ -19,7 +19,7 @@ overrides:
     tag: v1.5.0
   XRootD:
     version: "%(tag_basename)s_JALIEN"
-    tag: 4.12.5
+    tag: v4.12.5
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
