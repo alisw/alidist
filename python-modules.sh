@@ -56,9 +56,12 @@ grep RootInteractive requirements.txt && python3 -m pip install --user -IU numpy
 python3 -m pip install -IU -r requirements.txt
 
 # Major.minor version of Python
-export PYVER=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')
+export PYVER="$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')"
 # Find the proper Python lib library and export it
 pushd "$PYTHON_MODULES_INSTALLROOT"
+  # let's remove any pre-existent symlinks to have a clean slate
+  [ -h lib64 ] && unlink lib64
+  [ -h lib ]   && unlink lib
   if [[ -d lib64 ]]; then
     ln -nfs lib64 lib  # creates lib pointing to lib64
   elif [[ -d lib ]]; then
@@ -69,15 +72,9 @@ pushd "$PYTHON_MODULES_INSTALLROOT"
   popd
   pushd bin
     # Fix shebangs: remove hardcoded Python path
-    find . -type f -exec sed -i.deleteme -e "1 s|^#!${PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" \;
+    find . -type f -exec sed -i.deleteme -e "s|${PYTHON_MODULES_INSTALLROOT}|/usr|;s|python3|env python3|" '{}' \;
     find . -name "*.deleteme" -delete
   popd
-popd
-
-# Patch long shebangs (by default max is 128 chars on Linux)
-pushd "$PYTHON_MODULES_INSTALLROOT/bin"
-  find . -type f -exec sed -i.deleteme -e "1 s|^#!${PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" \;
-  find . -name "*.deleteme" -delete
 popd
 
 # Remove useless stuff
