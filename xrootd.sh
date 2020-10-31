@@ -63,7 +63,11 @@ if [[ x"$XROOTD_PYTHON" == x"True" ]];
 then
   pushd $INSTALLROOT
     pushd lib
+    if [ -d ../lib64 ]; then
+      ln -s ../lib64/python* python
+    else
       ln -s python* python
+    fi
     popd
   popd
 fi
