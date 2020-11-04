@@ -13,6 +13,7 @@ requires:
   - arrow
   - Control-OCCPlugin
   - Python-modules
+  - Python
 build_requires:
   - CMake
   - CodingGuidelines
@@ -114,17 +115,19 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0                                                                               \\
+module load BASE/1.0                                                                                \\
             ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                    \\
-            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                           \\
-            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                       \\
+            Monitoring/$MONITORING_VERSION-$MONITORING_REVISION                                     \\
+            Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION                            \\
+            Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION                                        \\
             ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                          \\
-            O2/$O2_VERSION-$O2_REVISION                                                            \\
-            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                \\
-            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION
+            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                           \\
+            O2/$O2_VERSION-$O2_REVISION                                                             \\
+            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
+            Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION                \\
+            ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                             \\
+            ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 
 # Our environment
 set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
