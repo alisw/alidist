@@ -1,11 +1,12 @@
 package: Common-O2
 version: "%(tag_basename)s"
-tag: v1.4.9
+tag: v1.5.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Common
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -29,21 +30,5 @@ make ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-
-# Our environment
-set COMMON_O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv COMMON_O2_ROOT \$COMMON_O2_ROOT
-prepend-path PATH \$COMMON_O2_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$COMMON_O2_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
