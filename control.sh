@@ -11,5 +11,5 @@ build_requires:
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
