@@ -3,12 +3,12 @@ version: "%(tag_basename)s"
 tag: v0.1.0
 requires:
   - boost
-  - "GCC-Toolchain:(?!osx)"
   - Python
   - ReadoutCard
   - LLA
 build_requires:
   - CMake
+  - "GCC-Toolchain:(?!osx)"
 source: https://gitlab+deploy-token-1303:ivjQdcMRX9qpxdv4RCcM@gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils.git
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -41,32 +41,9 @@ cmake $SOURCEDIR                                  \
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
-# Reduce number of jobs if invoked by Jenkins
-if [ ! "X$JENKINS_HOME" = X ]; then
-  JOBS=1
-fi
 make ${JOBS+-j $JOBS} install
 
-#ModuleFile
+# Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                \\
-            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} \\
-            ReadoutCard/$READOUTCARD_VERSION-$READOUTCARD_REVISION  \\
-            ${LLA_REVISION:+LLA/$LLA_VERSION-$LLA_REVISION}
-
-# Our environment
-set TPCFECUTILS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv TPCFECUTILS_ROOT \$TPCFECUTILS_ROOT
-prepend-path PATH \$TPCFECUTILS_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$TPCFECUTILS_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
