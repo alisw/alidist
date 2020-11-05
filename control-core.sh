@@ -26,5 +26,5 @@ popd
 
 #ModuleFile
 mkdir -p etc/modulefiles
-GOLANG_REVISION= alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
