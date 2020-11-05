@@ -6,6 +6,7 @@ build_requires:
   - golang
   - protobuf
   - grpc
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
@@ -23,22 +24,7 @@ pushd $BUILD
   rsync -a --delete bin/ $INSTALLROOT/bin
 popd
 
+#ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 \\
-            ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
-
-# Our environment
-set CONTROL_CORE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$CONTROL_CORE_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$CONTROL_CORE_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
