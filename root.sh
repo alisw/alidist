@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-20-02-alice7"
-source: https://github.com/alisw/root
+tag: "v6-20-08"
+source: https://github.com/root-project/root
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
