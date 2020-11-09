@@ -20,6 +20,8 @@ overrides:
   XRootD:
     version: "%(tag_basename)s_JALIEN"
     tag: v4.12.5
+  JAliEn-ROOT:
+    tag: 0.6.3-rc0
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
