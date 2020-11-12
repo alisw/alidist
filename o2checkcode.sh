@@ -61,7 +61,9 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 ,modernize-use-nullptr\
 ,modernize-use-override\
 ,modernize-use-transparent-functors\
-,modernize-use-uncaught-exceptions}"
+,modernize-use-uncaught-exceptions\
+,readability-braces-around-statements\
+}"
 
 # Run C++ checks
 run_O2CodeChecker.py ${JOBS+-j $JOBS} \
