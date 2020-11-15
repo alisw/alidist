@@ -16,6 +16,8 @@ case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $AUTOTOOLS_ROOT ]] && PATH=$PATH:`brew --prefix gettext`/bin
+    # Do not compile Python2 bindings on Mac
+    DISABLE_PYTHON=1
   ;;
   *)
     EXTRA_LD_FLAGS="-Wl,--no-as-needed"
