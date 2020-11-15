@@ -16,13 +16,37 @@ case $ARCHITECTURE in
   osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl) ;;
 esac
 
-cmake $SOURCEDIR/                                                   \
+rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $BUILDDIR
+
+# NOTE: drop this patch after libwebsockets is updated to 4.x
+cat > xcode12.patch << EoF
+--- private.h	2020-11-13 17:36:22.000000000 +0100
++++ private.h.patched	2020-11-13 17:54:05.000000000 +0100
+@@ -298,8 +298,10 @@
+  * but happily have something equivalent in the SO_NOSIGPIPE flag.
+  */
+ #ifdef __APPLE__
++#ifndef MSG_NOSIGNAL
+ #define MSG_NOSIGNAL SO_NOSIGPIPE
+ #endif
++#endif
+
+ /*
+  * Solaris 11.X only supports POSIX 2001, MSG_NOSIGNAL appears in
+EoF
+
+patch lib/core/private.h xcode12.patch
+
+mkdir build
+pushd build
+
+cmake ..                                                            \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
       -DCMAKE_BUILD_TYPE=RELEASE                                    \
       -DLWS_WITH_STATIC=ON                                          \
       -DLWS_WITH_SHARED=OFF                                         \
       -DLWS_WITH_IPV6=ON                                            \
-      -DLWS_WITH_ZLIB=OFF                                            \
+      -DLWS_WITH_ZLIB=OFF                                           \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib}        \
@@ -30,6 +54,8 @@ cmake $SOURCEDIR/                                                   \
       -DLWS_WITHOUT_TESTAPPS=ON
 make ${JOBS+-j $JOBS} install
 rm -rf $INSTALLROOT/share
+
+popd # build
 
 # Modulefile
 mkdir -p etc/modulefiles
