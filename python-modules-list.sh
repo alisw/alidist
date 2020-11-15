@@ -10,11 +10,10 @@ env:
     metakernel==0.20.14
     mock==2.0.0
     notebook==5.7.8
-    numpy==1.16.2
     PyYAML==5.1
-    scikit-learn==0.20.3
     uproot==3.4.18
   PIP36_REQUIREMENTS: |
+    numpy==1.16.2
     scipy==1.2.1
     Cython==0.29.16
     seaborn==0.9.0
@@ -25,6 +24,7 @@ env:
     dryable==1.0.3
     responses==0.10.6
     pandas==0.24.2
+    scikit-learn==0.20.3
   PIP38_REQUIREMENTS: |
     scipy==1.4.1
     Cython==0.29.21
@@ -33,8 +33,22 @@ env:
     Keras==2.2.4
     tensorflow==2.2.0
     xgboost==0.82
+    numpy==1.16.2
     dryable==1.0.3
-    responses==0.10.6  
+    responses==0.10.6
+    pandas==1.0.5
+    scikit-learn==0.20.3
+  PIP39_REQUIREMENTS: |
+    numpy==1.19.4
+    scipy==1.5.4
+    Cython==0.29.21
+    seaborn==0.9.0
+    scikit-learn==0.23.2
+    sklearn-evaluation==0.5.2
+    Keras==2.2.4
+    xgboost==0.82
+    dryable==1.0.3
+    responses==0.10.6
     pandas==1.0.5
 ---
 # Modulefile

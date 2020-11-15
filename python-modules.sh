@@ -28,7 +28,9 @@ echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
 case $ARCHITECTURE in
   slc6*);;
   *)
-  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
+  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3009 else 1)'; then
+    echo $PIP39_REQUIREMENTS | tr \  \\n >> requirements.txt
+  elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
     echo $PIP38_REQUIREMENTS | tr \  \\n >> requirements.txt
   elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)'; then
     echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
@@ -52,7 +54,7 @@ python3 -m pip install -IU wheel
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep RootInteractive requirements.txt && python3 -m pip install --user -IU numpy
+python3 -m pip install -IU numpy
 python3 -m pip install -IU -r requirements.txt
 
 # Major.minor version of Python
