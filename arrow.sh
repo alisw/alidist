@@ -1,6 +1,6 @@
 package: arrow
 version: "v1.0.0"
-tag: c0ae26ac5f6ece589e830e1b86d543e2b1de7989
+tag: 785e31087
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
