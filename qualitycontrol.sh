@@ -18,6 +18,7 @@ build_requires:
   - CMake
   - CodingGuidelines
   - RapidJSON
+  - alice-recipe-tools
 source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
@@ -109,8 +110,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 
 # Our environment
-cat >> etc/modulefiles/$PKGNAME <<EOF
-EoF
+cat >> etc/modulefiles/$PKGNAME <<EoF
 set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv QUALITYCONTROL_ROOT \$QUALITYCONTROL_ROOT
 prepend-path PATH \$QUALITYCONTROL_ROOT/bin
@@ -141,6 +141,4 @@ fi
 # Add extra RPM dependencies
 cat > $INSTALLROOT/.rpm-extra-deps <<EOF
 glfw # because the build machine some times happen to have glfw installed. Then it is necessary to have it in the destination
-EOF
-
 EOF
