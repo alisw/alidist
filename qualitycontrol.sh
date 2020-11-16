@@ -113,7 +113,6 @@ alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv QUALITYCONTROL_ROOT \$QUALITYCONTROL_ROOT
-prepend-path PATH \$QUALITYCONTROL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$QUALITYCONTROL_ROOT/lib64
 prepend-path ROOT_INCLUDE_PATH \$QUALITYCONTROL_ROOT/include
