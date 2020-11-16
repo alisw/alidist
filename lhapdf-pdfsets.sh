@@ -13,7 +13,7 @@ pushd $INSTALLROOT/share/LHAPDF
   for P in $PDFSETS; do
     PDFPACK=$(printf "%s.tar.gz" $P)
     PDFEXT=$(printf "%s/%s" $REPO $PDFPACK)
-    curl $PDFEXT --output $PDFPACK
+    curl -L $PDFEXT --output $PDFPACK
     tar xzvf $PDFPACK
     rm -rf $PDFPACK
   done
