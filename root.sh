@@ -23,6 +23,7 @@ build_requires:
   - alibuild-recipe-tools
 env:
   ROOTSYS: "$ROOT_ROOT"
+  SYSTEM_VERSION_COMPAT: "1"
 prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
 incremental_recipe: |
@@ -36,7 +37,8 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 unset ROOTSYS
-
+# Get ROOT to work on Big Sur (this will modify the version returned by sw_vers from 11.0 to 10.16)
+export SYSTEM_VERSION_COMPAT=1
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
@@ -219,6 +221,7 @@ cat >> etc/modulefiles/$PKGNAME <<EoF
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
+setenv SYSTEM_VERSION_COMPAT 1
 prepend-path PYTHONPATH \$PKG_ROOT/lib
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
