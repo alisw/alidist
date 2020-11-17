@@ -18,7 +18,7 @@ build_requires:
   - CMake
   - CodingGuidelines
   - RapidJSON
-  - alice-recipe-tools
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
