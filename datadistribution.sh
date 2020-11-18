@@ -1,7 +1,8 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v0.7.10
+tag: v0.8.0
 requires:
+  - "GCC-Toolchain:(?!osx)"
   - boost
   - FairLogger
   - FairMQ
@@ -13,7 +14,6 @@ requires:
   - fmt
 build_requires:
   - CMake
-  - "GCC-Toolchain:(?!osx)"
 source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
   # reduce number of compile slots if invoked  by Jenkins
@@ -36,7 +36,7 @@ esac
 cmake $SOURCEDIR                                              \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                 \
+      ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                 \
       ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}  \
       ${FAIRMQ_ROOT:+-DFairMQ_ROOT=$FAIRMQ_ROOT}              \
       ${PPCONSUL_ROOT:+-Dppconsul_DIR=${PPCONSUL_ROOT}/cmake} \
