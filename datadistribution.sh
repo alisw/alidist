@@ -14,7 +14,6 @@ requires:
   - fmt
 build_requires:
   - CMake
-  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
   # reduce number of compile slots if invoked  by Jenkins
@@ -25,6 +24,7 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
+
 
 case $ARCHITECTURE in
     osx*)
@@ -52,8 +52,36 @@ if [ ! "X$JENKINS_HOME" = X ]; then
 fi
 cmake --build . -- ${JOBS+-j $JOBS} install
 
-
-# Modulefile
+#ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+cat > etc/modulefiles/$PKGNAME <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0                                                                                \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}             \\
+            ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                             \\
+            ${PPCONSUL_REVISION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}                     \\
+            ${GRPC_REVISION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                                     \\
+            ${O2_REVISION:+O2/$O2_VERSION-$O2_REVISION}                                             \\
+            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}
+
+# DataDistribution environment:
+set DATADISTRIBUTION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+
+prepend-path PATH \$DATADISTRIBUTION_ROOT/bin
+
+# Not used for now:
+# prepend-path LD_LIBRARY_PATH \$DATADISTRIBUTION_ROOT/lib
+# prepend-path LD_LIBRARY_PATH \$DATADISTRIBUTION_ROOT/lib64
+# prepend-path ROOT_INCLUDE_PATH \$DATADISTRIBUTION_ROOT/include
+
+EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
