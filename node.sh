@@ -17,6 +17,7 @@ esac
 FILE_NAME="$PKGNAME-$PKGVERSION-$NODEOS-x64"
 URL="https://nodejs.org/dist/$PKGVERSION/$FILE_NAME.tar.gz"
 curl -L $URL | tar xzf - --strip-components=1 -C $INSTALLROOT
+(PATH=$PATH:$INSTALLROOT/bin; npm install -g node-gyp@latest)
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
