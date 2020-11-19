@@ -4,6 +4,8 @@ tag: "@aliceo2/qc@1.10.0"
 requires:
   - node
   - QualityControl
+build_requires:
+  - Python
 source: https://github.com/AliceO2Group/WebUi.git
 valid_defaults:
   - o2
