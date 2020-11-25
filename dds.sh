@@ -1,5 +1,5 @@
 package: DDS
-version: "3.5.1"
+version: "3.5.3"
 tag: "3.5.3"
 source: https://github.com/FairRootGroup/DDS
 requires:
