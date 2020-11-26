@@ -18,8 +18,6 @@ incremental_recipe: |
 
 # Handle submodule business
 pushd $SOURCEDIR
-git config submodule.submodules/gbt-hdlc.url \
-  https://gitlab+deploy-token-1305:2SyHnx1Tk8Rc8dY5AV9s@gitlab.cern.ch/alice-tpc-upgrade/gbt-hdlc-light.git
 git submodule update --init
 popd
 
