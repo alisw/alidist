@@ -1,7 +1,7 @@
 #Online Device Control
 package: ODC
 version: "%(tag_basename)s"
-tag: 0.8
+tag: 0.12
 source: https://github.com/FairRootGroup/ODC.git
 requires:
 - boost
