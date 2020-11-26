@@ -9,7 +9,7 @@ requires:
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
-source: https://gitlab+deploy-token-1303:ivjQdcMRX9qpxdv4RCcM@gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils.git
+source: https://gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils.git
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
