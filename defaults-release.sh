@@ -27,6 +27,9 @@ overrides:
   XRootD:
     tag: v3.3.6-alice2
     source: https://github.com/alisw/xrootd.git
+  Alice-GRID-Utils:
+    version: "%(tag_basename)s"
+    tag: 0.0.6
   # Use ROOT 5
   ROOT:
     tag: v5-34-30-alice10

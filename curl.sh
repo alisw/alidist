@@ -17,20 +17,15 @@ fi
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 
+sed -i.deleteme 's/CPPFLAGS="$CPPFLAGS $SSL_CPPFLAGS"/CPPFLAGS="$SSL_CPPFLAGS $CPPFLAGS"/' configure.ac
+sed -i.deleteme 's/LDFLAGS="$LDFLAGS $SSL_LDFLAGS"/LDFLAGS="$SSL_LDFLAGS $LDFLAGS"/' configure.ac
+
 ./buildconf
-./configure --prefix=$INSTALLROOT ${OPENSSL_ROOT:+--with-ssl=$OPENSSL_ROOT} --disable-static
+./configure --prefix=$INSTALLROOT --disable-ldap ${OPENSSL_ROOT:+--with-ssl=$OPENSSL_ROOT} --disable-static
 make ${JOBS:+-j$JOBS}
 make install
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set CURL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version before defining LD_LIBRARY_PATH
-prepend-path PATH \$CURL_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$CURL_ROOT/lib
-
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-

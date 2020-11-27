@@ -32,4 +32,5 @@ set DELPHESO2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv DELPHESO2_ROOT \$DELPHESO2_ROOT
 prepend-path PATH \$DELPHESO2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$DELPHESO2_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$DELPHESO2_ROOT/include
 EOF

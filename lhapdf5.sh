@@ -24,7 +24,7 @@ pushd $INSTALLROOT/share/lhapdf
   for P in $PDFSETS; do
     PDFFILE=$(printf "%s.LHgrid" $P)
     PDFSOURCE=$(printf "%s/%s" $PDFREPO $PDFFILE)
-    curl $PDFSOURCE --output $PDFFILE
+    curl -L $PDFSOURCE --output $PDFFILE
     ls ${P}*
   done
 popd

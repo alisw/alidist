@@ -28,25 +28,6 @@ make ${JOBS:+-j $JOBS} install
 
 rsync -av "$FLUKA_ROOT"/data "$INSTALLROOT/"
 
-# Test load library
-cat > loadFluka.C <<\EOF
-#include <iostream>
-#include <TSystem.h>
-int loadFluka() {
-  const char *libs[] = { "libVMC", "libPhysics", "libEG", "libflukavmc" };
-  for (auto &lib : libs) {
-    if (gSystem->Load(lib) < 0) {
-      std::cout << "Cannot load library " << lib << std::endl;
-      return 1;
-    }
-  };
-  return 0;
-}
-EOF
-export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
-export ROOT_HIST=0
-root -l -b -q -n loadFluka.C++
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

@@ -28,7 +28,9 @@ echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
 case $ARCHITECTURE in
   slc6*);;
   *)
-  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
+  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3009 else 1)'; then
+    echo $PIP39_REQUIREMENTS | tr \  \\n >> requirements.txt
+  elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
     echo $PIP38_REQUIREMENTS | tr \  \\n >> requirements.txt
   elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3006 else 1)'; then
     echo $PIP36_REQUIREMENTS | tr \  \\n >> requirements.txt
@@ -52,13 +54,16 @@ python3 -m pip install -IU wheel
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-grep RootInteractive requirements.txt && python3 -m pip install --user -IU numpy
+python3 -m pip install -IU numpy
 python3 -m pip install -IU -r requirements.txt
 
 # Major.minor version of Python
-export PYVER=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')
+export PYVER="$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')"
 # Find the proper Python lib library and export it
 pushd "$PYTHON_MODULES_INSTALLROOT"
+  # let's remove any pre-existent symlinks to have a clean slate
+  [ -h lib64 ] && unlink lib64
+  [ -h lib ]   && unlink lib
   if [[ -d lib64 ]]; then
     ln -nfs lib64 lib  # creates lib pointing to lib64
   elif [[ -d lib ]]; then
@@ -69,15 +74,9 @@ pushd "$PYTHON_MODULES_INSTALLROOT"
   popd
   pushd bin
     # Fix shebangs: remove hardcoded Python path
-    find . -type f -exec sed -i.deleteme -e "1 s|^#!${PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" \;
+    find . -type f -exec sed -i.deleteme -e "s|${PYTHON_MODULES_INSTALLROOT}|/usr|;s|python3|env python3|" '{}' \;
     find . -name "*.deleteme" -delete
   popd
-popd
-
-# Patch long shebangs (by default max is 128 chars on Linux)
-pushd "$PYTHON_MODULES_INSTALLROOT/bin"
-  find . -type f -exec sed -i.deleteme -e "1 s|^#!${PYTHON_MODULES_INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" \;
-  find . -name "*.deleteme" -delete
 popd
 
 # Remove useless stuff

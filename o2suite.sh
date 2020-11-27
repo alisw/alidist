@@ -3,6 +3,7 @@ version: "1.0.0"
 tag: "O2Suite-1.0.0"
 requires:
   - Common-O2
+  - Control
   - Monitoring
   - Configuration
   - O2

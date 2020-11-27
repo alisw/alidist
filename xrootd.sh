@@ -1,6 +1,6 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v4.12.1"
+tag: "v4.12.5"
 source: https://github.com/xrootd/xrootd
 requires:
  - "OpenSSL:(?!osx)"
@@ -63,7 +63,11 @@ if [[ x"$XROOTD_PYTHON" == x"True" ]];
 then
   pushd $INSTALLROOT
     pushd lib
+    if [ -d ../lib64 ]; then
+      ln -s ../lib64/python* python
+    else
       ln -s python* python
+    fi
     popd
   popd
 fi
