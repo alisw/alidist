@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v1.5.3
+tag: v1.5.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
