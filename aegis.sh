@@ -1,6 +1,6 @@
 package: AEGIS
 version: "%(tag_basename)s"
-tag: v1.2
+tag: v1.3
 requires:
   - ROOT
   - pythia6
