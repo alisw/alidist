@@ -24,7 +24,7 @@ requires:
   - fastjet
   - libuv
   - libjalienO2
-  - CGAL
+  - cgal
 build_requires:
   - GMP
   - MPFR
