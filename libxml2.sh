@@ -5,7 +5,7 @@ build_requires:
   - autotools
   - zlib
   - "GCC-Toolchain:(?!osx)"
-source: https://gitlab.gnome.org/GNOME/libxml2.git
+source: https://github.com/alisw/libxml2.git
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   xml2-config --version;
