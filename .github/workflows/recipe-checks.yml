@@ -1,0 +1,60 @@
+name: Build Documentation
+# GitHub workflow to check build recipes in pull requests.
+
+on:
+  - pull_request_target
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y bash graphviz python3-pip
+        sudo python3 -m pip install pyyaml alibuild
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Run check
+      # Runs bash -eo pipefail
+      shell: bash
+      run: |
+        aliBuild analytics off
+        err_fnames=()
+
+        git diff --name-only "$(git merge-base HEAD ${{ github.event.pull_request.base.sha }})" |
+          grep '\.sh$' |
+          while read -r fname; do
+            [ -e "$fname" ] || continue
+            echo "Linting $fname"
+            if ! scripts/lint-recipes "$fname" ||
+               # This should really be cleaned up, since macOS cleans any
+               # DYLD_LIBRARY_PATH when launching children processes, making it
+               # completely irrelevant. In any case we correctly handle rpath in
+               # our macOS builds.
+               grep -v 'unset DYLD_LIBRARY_PATH' "$fname" | grep DYLD_LIBRARY_PATH ||
+               # Modules 4 does not allow having colons in prepend-path anymore
+               grep 'prepend-path.*:' "$fname"
+            then
+              err_fnames+=("$fname")
+            fi
+
+            case "$fname" in defaults-*.sh) continue;; esac
+
+            # If a recipe is not a system requirement, it must have a Modulefile
+            if ! grep -q '^system_requirement:' "$fname" &&
+               ! grep -q '\(^#%Module\|alibuild-generate-module\)' "$fname"
+            then
+              echo "ERROR: recipe $fname has no modulefile"
+              err_fnames+=("$fname")
+            fi
+            aliBuild deps --defaults o2 "${fname%.sh}" --outgraph deps.pdf --no-system --neat -c . 2>&1 |
+              if grep -q 'transitive reduction not unique'; then
+                echo "ERROR: recipe $fname has circular dependency"
+                err_fnames+=("$fname")
+              fi
+          done
+        if [ ${#err_fnames[@]} -gt 0 ]; then
+          printf '%s\n' "The following recipes need to be fixed:" "${err_fnames[@]}"
+          exit 1
+        fi
