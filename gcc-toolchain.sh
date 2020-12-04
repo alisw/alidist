@@ -143,8 +143,10 @@ module load BASE/1.0
 # Load Toolchain module for the current platform. Fallback on this one
 regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
 if { "\$mod_name" == "GCC-Toolchain" } {
-  module load Toolchain/GCC-${PKGVERSION//-*}
-  if { [is-loaded Toolchain] } { continue }
+  if { [regexp {^/cvmfs.*} $ModulesCurrentModulefile dummy1 dummy2] } {
+    module load Toolchain/GCC-${PKGVERSION//-*}
+    if { [is-loaded Toolchain] } { continue }
+  }
   set base_path \$::env(BASEDIR)
 } else {
   # Loading Toolchain: autodetect prefix
