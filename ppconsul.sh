@@ -1,6 +1,6 @@
 package: Ppconsul
-version: 0.1.0
-tag: e32cf6f80b598760278c018eed546f88292f1735
+version: "%(tag_basename)s"
+tag: v0.2.1
 source: https://github.com/oliora/ppconsul
 requires:
   - boost
