@@ -36,7 +36,7 @@ cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  make test
+  ctest --output-on-failure
 fi
 
 
