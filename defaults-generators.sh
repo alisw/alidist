@@ -1,21 +1,19 @@
-package: defaults-dev
-version: v1
-env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++14"
-  CFLAGS: "-fPIC -g -O2"
-  CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-
 disable:
-  - arrow
-
+- arrow
+env:
+  CFLAGS: -fPIC -g -O2
+  CMAKE_BUILD_TYPE: RELWITHDEBINFO
+  CXXFLAGS: -fPIC -g -O2 -std=c++14
 overrides:
-  fastjet:
-    version: "v3.3.3_1.042-alice1"
-    tag: "v3.3.3_1.042-alice1"
-
-  # Minimal boost with no Python & co. to avoid YODA asking for cython
+  AliGenerators:
+    tag: rc/vAN-20201207
   boost:
     requires:
-      - "GCC-Toolchain:(?!osx)"
+    - GCC-Toolchain:(?!osx)
+  fastjet:
+    tag: v3.3.3_1.042-alice1
+    version: v3.3.3_1.042-alice1
+package: defaults-dev
+version: v1
 
 ---
