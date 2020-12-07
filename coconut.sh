@@ -21,6 +21,8 @@ pushd $BUILD
   make WHAT="coconut peanut walnut"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
+  # safely clean up vendor directory regardless of permissions
+  go clean -modcache
 popd
 
 #ModuleFile
