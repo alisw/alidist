@@ -11,6 +11,7 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y bash graphviz python3-pip
+        sudo python3 -m pip install setuptools
         sudo python3 -m pip install pyyaml alibuild
     - uses: actions/checkout@v2
       with:
