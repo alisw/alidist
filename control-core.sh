@@ -22,6 +22,8 @@ pushd $BUILD
   make WHAT="o2control-core o2control-executor o2-aliecs-odc-shim"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
+  # safely clean up vendor directory regardless of permissions
+  go clean -modcache
 popd
 
 #ModuleFile
