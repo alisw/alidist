@@ -10,8 +10,6 @@ incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/bash -e
-
 mkdir -p $INSTALLROOT
 cmake $SOURCEDIR                        \
   -DBUILD_TESTING=OFF                   \
