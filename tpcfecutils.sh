@@ -2,24 +2,19 @@ package: TpcFecUtils
 version: "%(tag_basename)s"
 tag: v0.1.0
 requires:
+  - "GCC-Toolchain:(?!osx)"
   - boost
   - Python
   - ReadoutCard
   - LLA
 build_requires:
   - CMake
-  - "GCC-Toolchain:(?!osx)"
 source: https://gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils.git
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
-
-# Handle submodule business
-pushd $SOURCEDIR
-git submodule update --init
-popd
 
 case $ARCHITECTURE in
     osx*) [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost);;
