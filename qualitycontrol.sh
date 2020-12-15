@@ -13,7 +13,6 @@ requires:
   - arrow
   - Control-OCCPlugin
   - Python-modules
-  - Python
 build_requires:
   - CMake
   - CodingGuidelines
@@ -126,7 +125,6 @@ module load BASE/1.0                                                            
             O2/$O2_VERSION-$O2_REVISION                                                             \\
             ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
             Control-OCCPlugin/$CONTROL_OCCPLUGIN_VERSION-$CONTROL_OCCPLUGIN_REVISION                \\
-            ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                             \\
             ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 
 # Our environment
