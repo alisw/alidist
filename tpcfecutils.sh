@@ -5,7 +5,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - boost
   - "Python:(slc.*)"
-  - "Python-sysytem:(?!slc)"
+  - "Python-system:(?!slc)"
   - ReadoutCard
   - LLA
 build_requires:
