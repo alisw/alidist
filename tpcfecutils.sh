@@ -4,7 +4,8 @@ tag: v0.1.1
 requires:
   - "GCC-Toolchain:(?!osx)"
   - boost
-  - Python
+  - "Python:(slc.*)"
+  - "Python-sysytem:(?!slc)"
   - ReadoutCard
   - LLA
 build_requires:
