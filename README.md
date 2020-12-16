@@ -26,7 +26,7 @@ commodo consequat.
 - Keep things simple (but concise).
 - Use 2 spaces to indent them.
 - Try avoid "fix typo" commits and squash history whenever makes sense.
-- Avoid touching $SOURCEDIR. If your recipe needs to compile in source, first copy them to $BUILDIR via:
+- Avoid touching $SOURCEDIR. If your recipe needs to build in-source, first copy them to $BUILDIR via:
 
 ```
 rsync -a $SOURCEDIR ./
@@ -55,6 +55,15 @@ cmake ...                                   \
 This will make sure that if a package was selected to be picked up by the system (i.e. `BOOST_ROOT` is not set), we will look it up in the package specific folder when using homebrew.
 
 You should never set any `SOMETHING_ROOT` variable to `/usr/local` because that is a global folder and it will make it have precendence in the lookup, therefore potentially implicitly bringing in incompatible versions of external packages.
+
+- If you need python use Python-system on non SLC distributions (Ubuntu, macOS) and use Python on SLC. This can be done usually by adding:
+
+```yaml
+- Python:slc.*
+- Python-system:(osx.*)
+```
+
+in your `requires` section. Alternatively, if you also require `Python-modules` simply depend on it, without an explicit dependency on Python, which will be handled internally.
 
 # Guidelines for handling externals sources
 
