@@ -102,4 +102,13 @@ Please open a JIRA issue with your request at:
 
 https://alice.its.cern.ch/jira/secure/CreateIssue!default.jspa
 
-Make sure you select "Dependencies" as component. 
+Make sure you select "Dependencies" as component.
+
+## Private packages
+
+Private packages are highly discouraged and must be avoided as much as possible. Private packages **MUST** still comply to GLPv3 which basically means:
+
+* You cannot have private packages depend on GPLv3 code.
+* You cannot have GPLv3 code which can be considered "derived product" of a private package.
+
+In order to have a private package please open a JIRA ticket and we will create one / mirror in the https://gitlab.cern.ch/AlicePrivateExternals, which is the only place where you are allowed to have a private external.
