@@ -26,9 +26,11 @@ jobs:
         err_fnames=()
 
         git diff --name-only "$(git merge-base HEAD ${{ github.event.pull_request.base.sha }})" |
-          grep '\.sh$' |
           while read -r fname; do
-            [ -e "$fname" ] || continue
+            case "$fname" in
+              *.sh) [ -e "$fname" ] || continue;;
+              *) continue;;
+            esac
             echo "Linting $fname"
             if ! scripts/lint-recipes "$fname" ||
                # This should really be cleaned up, since macOS cleans any
