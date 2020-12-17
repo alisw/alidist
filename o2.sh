@@ -173,6 +173,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
       ${LIBJALIENO2_ROOT:+-DLIBJALIENO2=$LIBJALIENO2_ROOT}                                                \
+      ${XROOTD_REVSION:+-DXROOTD_ROOT=$XROOTD_ROOT}                                                       \
+      ${JALIEN_ROOT_REVSION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT}                                        \
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=OFF -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON} \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET=gfx906 -DCUDA_COMPUTETARGET=75} \
       ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF -DENABLE_OPENCL2=OFF}         \
