@@ -8,6 +8,7 @@ requires:
   - HepMC
   - lhapdf-pdfsets
   - fastjet
+  - pythia
 build_requires:
   - system-curl
   - autotools
@@ -31,8 +32,9 @@ export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib  -L$GMP_ROOT/lib"
               --with-sqlite3=install       \
               --enable-hepmc2=$HEPMC_ROOT  \
               --enable-lhapdf=$LHAPDF_ROOT \
+              --enable-pythia \
               --enable-openloops=$OPENLOOPS_ROOT \
-        	    --enable-fastjet=$FASTJET_ROOT
+        	  --enable-fastjet=$FASTJET_ROOT
 
 make ${JOBS+-j $JOBS}
 make install
