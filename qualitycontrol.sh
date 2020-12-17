@@ -46,11 +46,8 @@ case $ARCHITECTURE in
   ;;
 esac
 
-# For the PR checkers (which sets ALIBUILD_O2_TESTS),
 # we impose -Werror as a compiler flag
-if [[ $ALIBUILD_O2_TESTS ]]; then
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
-fi
+CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 
 # Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
 if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
