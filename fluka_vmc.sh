@@ -15,7 +15,6 @@ prepend_path:
   LD_LIBRARY_PATH: "$FLUKA_VMC_ROOT/lib64"
   ROOT_INCLUDE_PATH: "$FLUKA_VMC_ROOT/include/TFluka"
 ---
-#!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE     \
                  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
