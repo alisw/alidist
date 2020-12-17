@@ -5,9 +5,9 @@ source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - ROOT
-  - FLUKA
 build_requires:
   - CMake
+  - FLUKA
 env:
   FLUVMC: "$FLUKA_VMC_ROOT"
   FLUPRO: "$FLUKA_VMC_ROOT"
