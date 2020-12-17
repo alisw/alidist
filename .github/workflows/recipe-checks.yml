@@ -21,6 +21,7 @@ jobs:
       # Runs bash -eo pipefail
       shell: bash
       run: |
+        set -x
         aliBuild analytics off
         err_fnames=()
 
@@ -50,7 +51,8 @@ jobs:
               echo "ERROR: recipe $fname has no modulefile"
               err_fnames+=("$fname")
             fi
-            aliBuild deps --defaults o2 "${fname%.sh}" --outgraph deps.pdf --no-system --neat -c . 2>&1 |
+            aliBuild deps --defaults o2 --outgraph /dev/null --no-system --neat -c . \
+                     "$(awk '/^package: /{print $2}' "$fname")" 2>&1 |
               if grep -q 'transitive reduction not unique'; then
                 echo "ERROR: recipe $fname has circular dependency"
                 err_fnames+=("$fname")
