@@ -69,7 +69,5 @@ make ${JOBS+-j $JOBS} install
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set READOUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
