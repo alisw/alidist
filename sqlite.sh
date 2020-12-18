@@ -8,7 +8,7 @@ prefer_system_check: |
   if [ $? -ne 0 ]; then printf "SQLite not found.\n * On RHEL-compatible systems you probably need: sqlite sqlite-devel\n * On Ubuntu-compatible systems you probably need: libsqlite3-0 libsqlite3-dev\n"; exit 1; fi
 build_requires:
   - system-curl
-  - autotools
+  - "autotools:(slc6|slc7)"
 ---
 #!/bin/bash -ex
 rsync -av $SOURCEDIR/ ./

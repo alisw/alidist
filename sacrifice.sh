@@ -10,7 +10,7 @@ requires:
   - Python-modules
   - pythia
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
 ---
 #!/bin/bash -e
 

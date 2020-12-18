@@ -3,7 +3,7 @@ version: 3.0.12
 tag: rel-3.0.12
 source: https://github.com/swig/swig
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
   - yacc-like
 env:

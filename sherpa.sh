@@ -11,7 +11,7 @@ requires:
   - pythia
 build_requires:
   - system-curl
-  - autotools
+  - "autotools:(slc6|slc7)"
   - cgal
   - GMP
   - alibuild-recipe-tools

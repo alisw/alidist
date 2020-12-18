@@ -5,7 +5,7 @@ source: https://github.com/kkos/oniguruma/
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
 prefer_system: (?!slc5.*)
 ---
 #!/bin/sh

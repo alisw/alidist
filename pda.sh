@@ -6,7 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - kernel-devel
-  - autotools
+  - "autotools:(slc6|slc7)"
 
 --- 
 #!/bin/sh

@@ -4,7 +4,7 @@ tag: v2.2.8-alice5
 source: https://github.com/alisw/apmon-cpp.git
 build_requires:
  - "libtirpc:(?!osx)"
- - autotools
+ - "autotools:(slc6|slc7)"
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e

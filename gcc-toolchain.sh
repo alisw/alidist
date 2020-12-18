@@ -5,7 +5,7 @@ source: https://github.com/alisw/gcc-toolchain
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
 build_requires:
- - autotools
+ - "autotools:(slc6|slc7)"
  - yacc-like
  - make
 prefer_system: .*

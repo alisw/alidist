@@ -3,7 +3,7 @@ version: v2.10.1
 requires:
  - AliEn-Runtime:(?!.*ppc64)
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - system-curl
 prefer_system: (?!slc5)
 prefer_system_check: |
