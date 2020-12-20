@@ -4,7 +4,6 @@ requires:
   - GEANT4_VMC
   - GEANT4
   - GEANT3
-  - FLUKA_VMC
 ---
 #!/bin/bash -e
 
