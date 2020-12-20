@@ -46,8 +46,10 @@ mkdir -p $PYTHON_MODULES_INSTALLROOT
 python3 -m venv $PYTHON_MODULES_INSTALLROOT
 . $PYTHON_MODULES_INSTALLROOT/bin/activate
 
+# Upgrade pip
+python3 -m pip install -IU pip
 # Install setuptools upfront, since this seems to create issues now...
-python3 -m pip install -IU setuptools==49.6.0
+python3 -m pip install -IU setuptools
 python3 -m pip install -IU wheel
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
