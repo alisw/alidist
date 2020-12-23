@@ -2,7 +2,6 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_REQUIREMENTS: |
-    setuptools==49.6.0
     requests==2.21.0
     ipykernel==5.1.0
     ipython==7.4.0
@@ -42,14 +41,14 @@ env:
     numpy==1.19.4
     scipy==1.5.4
     Cython==0.29.21
-    seaborn==0.9.0
-    scikit-learn==0.23.2
+    seaborn==0.11.0
+    scikit-learn==0.24.0rc1
     sklearn-evaluation==0.5.2
-    Keras==2.2.4
-    xgboost==0.82
-    dryable==1.0.3
+    Keras==2.4.3
+    xgboost==1.2.0
+    dryable==1.0.5
     responses==0.10.6
-    pandas==1.0.5
+    pandas==1.1.5
 ---
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
