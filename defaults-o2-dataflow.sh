@@ -24,6 +24,7 @@ disable:
   - XRootD
   - xjalienfs
   - JAliEn-ROOT
+  - KFParticle
 overrides:
   Python-modules-list:
     env:
