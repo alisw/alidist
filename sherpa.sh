@@ -26,6 +26,24 @@ autoreconf -ivf
 mkdir -p fakewget && [[ -d fakewget ]]
 printf '#!/bin/bash\nexec curl -fO $1' > fakewget/wget && chmod +x fakewget/wget
 
+# Set C++ standard to c++11
+export CXXSTD=11
+OLDCXXFLAGS=$CXXFLAGS
+NEWCXXFLAGS=
+first=1
+for flg in $OLDCXXFLAGS; do
+    if [ "x$(echo $flg | grep std)" != "x" ]; then continue; fi
+    if [ $first -gt 0 ]; then
+        NEWCXXFLAGS=$flg
+        first=0
+    else
+        NEWCXXFLAGS=$(printf "%s %s" "$NEWCXXFLAGS" $flg)
+    fi
+done
+NEWCXXFLAGS=$(printf "%s -std=c++11" "$NEWCXXFLAGS")
+echo Using cxx flags $NEWCXXFLAGS
+export CXXFLAGS=$NEWCXXFLAGS
+
 PATH=$PATH:fakewget 
 export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib  -L$GMP_ROOT/lib"
 ./configure --prefix=$INSTALLROOT        \
