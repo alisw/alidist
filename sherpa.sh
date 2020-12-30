@@ -1,7 +1,7 @@
 package: SHERPA
 version: "%(tag_basename)s"
-tag: "v2.2.8-alice1"
-source: https://github.com/alisw/SHERPA
+tag: "v2.2.10"
+source: https://gitlab.com/sherpa-team/sherpa.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - Openloops
@@ -18,7 +18,16 @@ build_requires:
 ---
 #!/bin/bash -e
 
-rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+# When using the official repo the .git files are needed as Git_Info.C
+# is generated and used during the build process, which fails in case 
+# we would not include the .git directory
+rsync -a $SOURCEDIR/ ./
+
+# Exclude building Manual from Makefile.am
+mv Makefile.am Makefile.am.in
+cat Makefile.am.in | grep -v Manual >> Makefile.am
+rm Makefile.am.in
+
 
 autoreconf -ivf
 
