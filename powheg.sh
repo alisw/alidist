@@ -1,16 +1,19 @@
 package: POWHEG
 version: "%(tag_basename)s"
-tag: "r3693-alice1"
+tag: "r3693-alice2"
 source: https://github.com/alisw/POWHEG
 requires:
   - fastjet
   - "GCC-Toolchain:(?!osx|slc5)"
   - lhapdf
   - lhapdf-pdfsets
+build_requires:
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+basedir=`pwd`
 
 install -d ${INSTALLROOT}/bin
 
@@ -19,28 +22,15 @@ export LIBRARY_PATH="$LD_LIBRARY_PATH"
 PROCESSES="${FASTJET_REVISION:+dijet }hvq W Z"
 for proc in ${PROCESSES}; do
     mkdir ${proc}/{obj,obj-gfortran}
+    ln -s $basedir/include ${proc}/
     make -C ${proc}
     install ${proc}/pwhg_main ${INSTALLROOT}/bin/pwhg_main_${proc}
 done
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 \
-            lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION \
-            lhapdf-pdfsets/$LHAPDF_PDFSETS_VERSION-$LHAPDF_PDFSETS_REVISION \
-            ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \
-            ${FASTJET_VERSION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}
+mkdir -p etc/modulefiles
+alibuild-generate-module > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set POWHEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv POWHEG_ROOT \$POWHEG_ROOT
