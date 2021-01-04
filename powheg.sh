@@ -1,6 +1,6 @@
 package: POWHEG
 version: "%(tag_basename)s"
-tag: "r3693-alice1"
+tag: "r3693-alice2"
 source: https://github.com/alisw/POWHEG
 requires:
   - fastjet
