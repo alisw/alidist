@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: v20.49
+tag: v21.01
 requires:
   - arrow
   - FairRoot
