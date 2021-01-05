@@ -17,6 +17,7 @@ disable:
   - GEANT4
   - GEANT3
   - GEANT4_VMC
+  - libjalienO2
   - pythia
   - pythia6
   - hijing
