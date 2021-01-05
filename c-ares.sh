@@ -1,6 +1,6 @@
 package: c-ares
-version: "v1.15.0"
-tag: cares-1_15_0
+version: "v1.17.1"
+tag: cares-1_17_1
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
