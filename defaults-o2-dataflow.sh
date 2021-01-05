@@ -32,9 +32,6 @@ overrides:
         dryable==1.0.3
         responses==0.10.6
         PyYAML==5.1
-  O2:
-    version: "%(short_hash)s%(defaults_upper)s"
-    tag: dev
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
