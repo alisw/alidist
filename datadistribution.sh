@@ -48,7 +48,7 @@ cmake $SOURCEDIR                                              \
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 # reduce number of compile slots if invoked by Jenkins
 if [ ! "X$JENKINS_HOME" = X ]; then
-  JOBS=1
+  JOBS=4
 fi
 cmake --build . -- ${JOBS+-j $JOBS} install
 
