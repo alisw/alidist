@@ -1,0 +1,34 @@
+name: Check PR with clang-format
+
+on:
+  push:
+    branches:
+      - 'rc/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.push.deleted }}
+
+    steps:
+      - name: Get rc branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.push.ref }}
+
+      - name: Compute base branch
+        id: base
+        env: 
+          rc_branch: ${{ github.event.push.ref }}
+        run: |
+          echo "::set-output name=base::${rc_branch#refs/heads/rc/}"
+
+      - name: Send pull request to regular branch
+        uses: alisw/pull-request@master
+        with:
+          source_branch: ${{ github.event.push.ref }}
+          destination_branch: ${{ steps.base.outputs.base }}
+          pr_title: 'daily tags: auto-update dist definitions'
+          pr_body: |
+            The `daily-tags.sh` script has created a tag release with these changes.
+        continue-on-error: true # We do not create PRs if the branch is not there.
