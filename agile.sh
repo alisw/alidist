@@ -9,7 +9,7 @@ requires:
   - HepMC
   - Python-modules
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - SWIG
 ---
 #!/bin/bash -e

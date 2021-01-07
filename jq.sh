@@ -6,7 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - oniguruma
-  - autotools
+  - "autotools:(slc6|slc7)"
 prefer_system: (?!slc5.*)
 prefer_system_check: |
   type jqfoo

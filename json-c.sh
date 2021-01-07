@@ -3,7 +3,7 @@ version: "v0.13.1"
 tag: "json-c-0.13.1-20180305"
 source: https://github.com/json-c/json-c
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e

@@ -14,7 +14,7 @@ overrides:
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
     tag: v5-09-56-01
-  autotools:
+  "autotools:(slc6|slc7)":
     version: "%(tag_basename)s_JALIEN"
     tag: v1.5.0
 ---

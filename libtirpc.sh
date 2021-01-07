@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "libtirpc-1-1-4"
 source: https://github.com/alisw/libtirpc
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e

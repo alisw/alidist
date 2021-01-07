@@ -7,7 +7,7 @@ requires:
   - "Python:slc.*"
   - "Python-system:(?!slc.*)"
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
 prepend_path:
   PYTHONPATH: $YODA_ROOT/lib64/python2.7/site-packages:$YODA_ROOT/lib/python2.7/site-packages
 ---
