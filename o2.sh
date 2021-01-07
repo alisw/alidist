@@ -25,6 +25,7 @@ requires:
   - libuv
   - libjalienO2
   - cgal
+  - VecGeom
 build_requires:
   - GMP
   - MPFR
