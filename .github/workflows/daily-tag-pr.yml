@@ -29,6 +29,6 @@ jobs:
           source_branch: ${{ github.event.push.ref }}
           destination_branch: ${{ steps.base.outputs.base }}
           pr_title: 'daily tags: auto-update dist definitions'
+          github_token: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
           pr_body: |
             The `daily-tags.sh` script has created a tag release with these changes.
-        continue-on-error: true # We do not create PRs if the branch is not there.
