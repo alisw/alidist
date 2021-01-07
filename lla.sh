@@ -1,6 +1,6 @@
 package: LLA
 version: "%(tag_basename)s"
-tag: v0.1.0
+tag: v0.1.2
 requires:
   - boost
   - Common-O2
