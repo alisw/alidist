@@ -17,6 +17,7 @@ build_requires:
   - CMake
   - CodingGuidelines
   - RapidJSON
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
@@ -109,10 +110,9 @@ alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 
 # Our environment
 cat >> etc/modulefiles/$PKGNAME <<EoF
-set QUALITYCONTROL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv QUALITYCONTROL_ROOT \$QUALITYCONTROL_ROOT
-prepend-path ROOT_INCLUDE_PATH \$QUALITYCONTROL_ROOT/include
-prepend-path ROOT_DYN_PATH \$QUALITYCONTROL_ROOT/lib
+setenv QUALITYCONTROL_ROOT \$PKG_ROOT
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
 
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
