@@ -7,7 +7,6 @@ requires:
   - lz4
   - Clang
   - protobuf
-  - utf8proc
 build_requires:
   - zlib
   - flatbuffers
@@ -28,7 +27,6 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
     [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(dirname $(dirname $(which lz4)))
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(dirname $(dirname $(which protoc)))
-    [[ ! $UTF8PROC_ROOT ]] && UTF8PROC_ROOT=$(brew --prefix utf8proc)
     [[ ! -d $FLATBUFFERS_ROOT ]] && unset FLATBUFFERS_ROOT
     [[ ! -d $BOOST_ROOT ]] && unset BOOST_ROOT
     [[ ! -d $LZ4_ROOT ]] && unset LZ4_ROOT
@@ -91,7 +89,7 @@ cmake ./src_tmp/cpp                                                             
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                      \
       ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                                                       \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
-      ${UTF8PROC_ROOT:+-Dutf8proc_ROOT=${UTF8PROC_ROOT}}                                            \
+      -DARROW_WITH_UTF8PROC=OFF                                                                     \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
