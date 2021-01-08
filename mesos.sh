@@ -3,7 +3,7 @@ version: v0.28.2
 tag: 0.28.2
 source: https://git-wip-us.apache.org/repos/asf/mesos.git
 build_requires:
-- autotools
+- "autotools:(slc6|slc7)"
 - protobuf
 - glog
 - Python-modules

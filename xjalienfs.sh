@@ -11,18 +11,24 @@ requires:
 ---
 #!/bin/bash -e
 
-# env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -r alibuild_requirements.txt
-env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --ignore-installed --user file://${SOURCEDIR}
+PIPOPTION="--user"
+if [ ! "X$VIRTUAL_ENV" = X ]; then
+  PIPOPTION=""
+fi
 
-sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' ${INSTALLROOT}/bin/*
-rm -v ${INSTALLROOT}/bin/*.bak
+env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --ignore-installed $PIPOPTION file://${SOURCEDIR}
 
- # Uniform Python library path
-pushd ${INSTALLROOT}
-  pushd lib
-    ln -nfs python* python
+if [ "X$VIRTUAL_ENV" = X ]; then
+  sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' ${INSTALLROOT}/bin/*
+  rm -v ${INSTALLROOT}/bin/*.bak
+  
+   # Uniform Python library path
+  pushd ${INSTALLROOT}
+    pushd lib
+      ln -nfs python* python
+    popd
   popd
-popd
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -43,6 +49,11 @@ module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}         
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
 	    ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
 set XJALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PYTHONPATH \$XJALIENFS_ROOT/lib/python/site-packages
 prepend-path PATH \$XJALIENFS_ROOT/bin
 EoF
+
+if [ "X$VIRTUAL_ENV" = X ]; then
+  cat >> "$MODULEFILE" << EoF
+  prepend-path PYTHONPATH \$XJALIENFS_ROOT/lib/python/site-packages
+EoF
+fi

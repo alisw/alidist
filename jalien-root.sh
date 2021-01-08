@@ -15,6 +15,7 @@ build_requires:
   - Alice-GRID-Utils
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
+  ROOT_INCLUDE_PATH: "$JALIEN_ROOT_ROOT/include"
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in

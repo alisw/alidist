@@ -4,7 +4,7 @@ tag: 5.1.0
 source: https://github.com/jemalloc/jemalloc
 build_requires:
  - "GCC-Toolchain:(?!osx)"
- - autotools
+ - "autotools:(slc6|slc7)"
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude "**/.git" $SOURCEDIR/ .

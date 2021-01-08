@@ -8,7 +8,7 @@ requires:
  - "osx-system-openssl:(osx.*)"
  - AliEn-Runtime
 build_requires:
- - autotools
+ - "autotools:(slc6|slc7)"
  - SWIG
  - UUID
  - libperl

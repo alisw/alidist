@@ -1,7 +1,7 @@
 package: libffi
 version: v3.2.1
 build_requires:
- - autotools
+ - "autotools:(slc6|slc7)"
 source: https://github.com/libffi/libffi
 prepend_path:
   LD_LIBRARY_PATH: "$LIBFFI_ROOT/lib64"

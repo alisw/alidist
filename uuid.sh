@@ -4,7 +4,7 @@ tag: alice/v2.27.1
 source: https://github.com/alisw/uuid
 build_requires:
  - "GCC-Toolchain:(?!osx)"
- - autotools
+ - "autotools:(slc6|slc7)"
 ---
 rsync -av --delete --exclude "**/.git" $SOURCEDIR/ .
 if [[ $AUTOTOOLS_ROOT == "" ]]  && which brew >/dev/null; then

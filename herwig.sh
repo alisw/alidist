@@ -11,7 +11,7 @@ requires:
   - Openloops
   - madgraph
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e

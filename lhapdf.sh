@@ -7,7 +7,7 @@ requires:
  - "Python-system:(?!slc.*)"
  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - autotools
+ - "autotools:(slc6|slc7)"
 env:
   PYTHONPATH: $LHAPDF_ROOT/lib/python/site-packages
 ---

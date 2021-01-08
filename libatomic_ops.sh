@@ -3,7 +3,7 @@ version: libatomic_ops-7_4_2
 source: https://github.com/ivmai/libatomic_ops/
 tag: master
 build_requires:
-  - autotools:(slc[56].*|ubt.*)
+  - "autotools:(slc6|slc7)"
 ---
 #!/bin/sh
 rsync -a $SOURCEDIR/ ./

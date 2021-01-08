@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "v5.2.3"
 source: https://github.com/alisw/liblzma
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
   - rsync
 prefer_system: "(?!slc5)"

@@ -8,7 +8,7 @@ requires:
   - HepMC
   - boost
 build_requires:
-  - autotools
+  - "autotools:(slc6|slc7)"
   - GMP
 prepend_path:
   LD_LIBRARY_PATH: "$THEPEG_ROOT/lib/ThePEG"
