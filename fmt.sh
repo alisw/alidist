@@ -31,5 +31,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set FMT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FMT_ROOT \$FMT_ROOT
 prepend-path ROOT_INCLUDE_PATH \$FMT_ROOT/include
 EoF
