@@ -25,6 +25,7 @@ requires:
   - libuv
   - libjalienO2
   - cgal
+  - KFParticle
   - VecGeom
 build_requires:
   - GMP
@@ -233,7 +234,8 @@ module load BASE/1.0 \\
             ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}                                     \\
             ${FMT_REVISION:+fmt/$FMT_VERSION-$FMT_REVISION}                                         \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
-            ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}
+            ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}         \\
+            ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT
