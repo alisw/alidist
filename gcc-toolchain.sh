@@ -12,7 +12,8 @@ prefer_system: .*
 prefer_system_check: |
   set -e
   which gfortran || { echo "gfortran missing"; exit 1; }
-  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
+  which $CC || CC=cc
+  which $CC && test -f $(dirname $(which $CC))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | $CC -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
 
