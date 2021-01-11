@@ -26,6 +26,7 @@ env:
   SYSTEM_VERSION_COMPAT: "1"
 prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
+  ROOT_DYN_PATH: "$ROOT_ROOT/lib"
 incremental_recipe: |
   # Limit parallel builds to prevent OOM
   cmake --build . --target install ${JOBS+-j $JOBS}
