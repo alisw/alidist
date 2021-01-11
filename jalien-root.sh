@@ -30,6 +30,7 @@ rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
 
 cmake $BUILDDIR                                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=${CXXSTD}}          \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
