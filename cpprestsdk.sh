@@ -1,5 +1,5 @@
 package: cpprestsdk
-version: "%(tag_basename)s"
+version: v2.10.17
 tag: 2.10.17
 source: https://github.com/Microsoft/cpprestsdk
 requires:
