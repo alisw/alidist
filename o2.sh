@@ -81,6 +81,10 @@ incremental_recipe: |
       export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
     fi
     export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/GPU:$ROOT_INCLUDE_PATH
+    # Set Geant4 data sets environment
+    if [ "$G4INSTALL" != "" ]]; then
+      `$G4INSTALL/bin/geant4-config --datasets | sed 's/[^ ]* //' | sed 's/G4/export G4/' | sed 's/DATA /DATA=/'`
+    fi
     # Clean up old coverage data and tests logs
     find . -name "*.gcov" -o -name "*.gcda" -delete
     # cleanup ROOT files created by tests in build area

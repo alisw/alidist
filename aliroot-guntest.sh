@@ -10,7 +10,12 @@ requires:
 # A simple regression test launching a Geant3 + Geant4 gun simulation + reconstruction.
 # Tests if the processing runs through and yields a reasonable ESD.
 # Note that the test is limited to the default OCDB.
-env
+
+# Set Geant4 data sets environment
+[ "$G4INSTALL" != "" ] && \
+`$G4INSTALL/bin/geant4-config --datasets | sed 's/[^ ]* //' | sed 's/G4/export G4/' | sed 's/DATA /DATA=/'`
+
+env | sort
 rsync -a "$ALIROOT_ROOT"/test/vmctest/gun test
 cd test/gun
 

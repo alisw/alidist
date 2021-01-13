@@ -14,18 +14,6 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 env:
   G4INSTALL : $GEANT4_ROOT
-  G4ABLADATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4ABLADATA | sed 's/[^ ]* [^ ]* //'`"
-  G4ENSDFSTATEDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4ENSDFSTATEDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4INCLDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4INCLDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4LEDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4LEDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4LEVELGAMMADATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4LEVELGAMMADATA | sed 's/[^ ]* [^ ]* //'`"
-  G4NEUTRONHPDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4NEUTRONHPDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4NEUTRONXSDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4NEUTRONXSDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4PARTICLEXSDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4PARTICLEXSDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4PIIDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4PIIDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4RADIOACTIVEDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4RADIOACTIVEDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4REALSURFACEDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4REALSURFACEDATA | sed 's/[^ ]* [^ ]* //'`"
-  G4SAIDXSDATA : "`${G4INSTALL}/bin/geant4-config --datasets | grep G4SAIDXSDATA | sed 's/[^ ]* [^ ]* //'`"
 
 ---
 # If this variable is not defined default it to OFF
