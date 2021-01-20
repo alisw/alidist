@@ -12,6 +12,7 @@ prefer_system_check: |
 ---
 
 cmake -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DCMAKE_INSTALL_LIBDIR=lib          \
       $SOURCEDIR/build/cmake
 make -j ${JOBS+-j $JOBS} install
 
