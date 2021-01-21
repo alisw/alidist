@@ -116,7 +116,7 @@ cat >> "$MODULEFILE" <<EoF
 setenv PYTHONHOME \$PKG_ROOT
 prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
 if { [module-info mode load] } {
-  setenv SSL_CERT_FILE  [exec $PKG_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
+  setenv SSL_CERT_FILE  [exec \$PKG_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
 }
 if { [module-info mode remove] } {
   unsetenv SSL_CERT_FILE
