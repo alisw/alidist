@@ -6,7 +6,6 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-  USE_AUTORECONF: "false"
 overrides:
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
@@ -14,9 +13,6 @@ overrides:
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
     tag: v5-09-56-01
-  "autotools:(slc6|slc7)":
-    version: "%(tag_basename)s_JALIEN"
-    tag: v1.5.0
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
