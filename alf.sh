@@ -6,7 +6,6 @@ requires:
   - Common-O2
   - "dim:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
-  - libInfoLogger
   - LLA
   - ReadoutCard
 build_requires:
@@ -29,7 +28,6 @@ cmake $SOURCEDIR                                                      \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                      \
       ${COMMON_O2_REVISION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
       ${DIM_REVISION:+-DDIM_ROOT=$DIM_ROOT}                            \
-      ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
       ${READOUTCARD_REVISION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}    \
       ${LLA_REVISION:+-DLLA_ROOT=$LLA_ROOT}    \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
