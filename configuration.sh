@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v2.5.0
+tag:  v2.6.0
 requires:
   - "curl:(?!slc8)"
   - "system-curl:slc8.*"
