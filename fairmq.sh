@@ -8,8 +8,8 @@ requires:
  - ZeroMQ
  - "DDS:(?!osx)"
  - asiofi
- - flatbuffers
 build_requires:
+ - flatbuffers
  - CMake
  - "GCC-Toolchain:(?!osx)"
  - googletest
