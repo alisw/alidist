@@ -26,6 +26,7 @@ disable:
   - xjalienfs
   - JAliEn-ROOT
   - KFParticle
+  - MCStepLogger
 overrides:
   Python-modules-list:
     env:
