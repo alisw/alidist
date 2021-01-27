@@ -6,7 +6,7 @@ requires:
   - Control-Core
   - Control-OCCPlugin
   - O2
-  - ReadoutCard
+  - "ReadoutCard:(slc*)"
   - Readout
   - qcg
   - QualityControl
