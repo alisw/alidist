@@ -3,8 +3,6 @@ version: "1.0"
 requires:
   - "Python:slc.*"
   - "Python-system:(?!slc.*)"
-  - FreeType
-  - libpng
 build_requires:
   - system-curl
   - Python-modules-list
