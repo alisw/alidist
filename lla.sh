@@ -1,11 +1,10 @@
 package: LLA
 version: "%(tag_basename)s"
-tag: v0.1.2
+tag: v0.1.3
 requires:
   - boost
   - Common-O2
   - "GCC-Toolchain:(?!osx)"
-  - libInfoLogger
   - ReadoutCard
   - "Python:slc.*"
 build_requires:
@@ -29,7 +28,6 @@ cmake $SOURCEDIR                                                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                              \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                         \
       ${COMMON_O2_REVISION:+-DCommon_ROOT=$COMMON_O2_ROOT}             \
-      ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT} \
       ${READOUTCARD_REVISION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}    \
       ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}            \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
