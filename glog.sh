@@ -1,5 +1,6 @@
 package: glog
 version: v0.3.4
+tag: v0.3.4
 source: https://github.com/google/glog
 build_requires:
  - "autotools:(slc6|slc7)"

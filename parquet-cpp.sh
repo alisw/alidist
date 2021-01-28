@@ -1,5 +1,6 @@
 package: parquet-cpp
 version: release-0.1-rc0
+tag: release-0.1-rc0
 source: https://github.com/apache/parquet-cpp
 build_requires:
 - protobuf

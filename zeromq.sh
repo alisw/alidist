@@ -1,5 +1,6 @@
 package: ZeroMQ
 version: v4.3.3
+tag: v4.3.3
 source: https://github.com/zeromq/libzmq
 requires:
   - "GCC-Toolchain:(?!osx)"

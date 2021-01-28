@@ -1,5 +1,6 @@
 package: Python-modules
 version: "1.0"
+tag: "1.0"
 requires:
   - "Python:slc.*"
   - "Python-system:(?!slc.*)"

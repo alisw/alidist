@@ -1,5 +1,6 @@
 package: double-conversion
 version: v3.1.5
+tag: v3.1.5
 source: https://github.com/google/double-conversion
 build_requires:
   - CMake
