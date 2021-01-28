@@ -9,11 +9,11 @@ requires:
   - Ppconsul
   - grpc
   - Monitoring
-  - protobuf
   - O2
-  - fmt
 build_requires:
   - CMake
+  - protobuf
+  - fmt
 source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
   # reduce number of compile slots if invoked  by Jenkins
