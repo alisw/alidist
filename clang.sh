@@ -8,6 +8,7 @@ build_requires:
  - "Python:slc.*"
  - "Python-system:(?!slc.*)"
  - CMake
+ - system-curl
 ---
 #!/bin/sh
 
