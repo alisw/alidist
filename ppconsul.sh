@@ -9,6 +9,7 @@ requires:
   - "curl:(?!slc8)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
