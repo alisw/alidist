@@ -32,7 +32,6 @@ build_requires:
   - MPFR
   - RapidJSON
   - googlebenchmark
-  - cub
   - O2-customization
 source: https://github.com/AliceO2Group/AliceO2
 env:
