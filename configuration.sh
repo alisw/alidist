@@ -7,6 +7,7 @@ requires:
   - Ppconsul
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Configuration
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
