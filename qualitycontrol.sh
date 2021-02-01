@@ -6,7 +6,6 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - Common-O2
   - libInfoLogger
-  - FairRoot
   - Monitoring
   - Configuration
   - O2
@@ -70,8 +69,6 @@ cmake $SOURCEDIR                                              \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
       -DO2_ROOT=$O2_ROOT                                      \
-      -DFAIRROOTPATH=$FAIRROOT_ROOT                           \
-      -DFairRoot_DIR=$FAIRROOT_ROOT                           \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DARROW_HOME=$ARROW_ROOT                                \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
@@ -125,7 +122,6 @@ if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
   lcov --remove coverage.info '*/usr/*' --output-file coverage.info
   lcov --remove coverage.info '*/boost/*' --output-file coverage.info
   lcov --remove coverage.info '*/ROOT/*' --output-file coverage.info
-  lcov --remove coverage.info '*/FairRoot/*' --output-file coverage.info
   lcov --remove coverage.info '*/G__*Dict*' --output-file coverage.info
   perl -p -i -e "s|$SOURCEDIR||g" coverage.info # Remove the absolute path for sources
   perl -p -i -e "s|$BUILDDIR||g" coverage.info # Remove the absolute path for generated files
