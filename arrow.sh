@@ -71,6 +71,7 @@ cmake ./src_tmp/cpp                                                             
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
       -DARROW_BUILD_BENCHMARKS=OFF                                                                  \
       -DARROW_BUILD_TESTS=OFF                                                                       \
+      -DARROW_ENABLE_TIMING_TESTS=OFF                                                               \
       -DARROW_USE_GLOG=OFF                                                                          \
       -DARROW_JEMALLOC=OFF                                                                          \
       -DARROW_HDFS=OFF                                                                              \
