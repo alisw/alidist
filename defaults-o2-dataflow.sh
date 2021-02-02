@@ -27,7 +27,6 @@ disable:
   - JAliEn-ROOT
   - KFParticle
   - MCStepLogger
-  - yaml-cpp
 overrides:
   Python-modules-list:
     env:
