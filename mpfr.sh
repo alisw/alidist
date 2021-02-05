@@ -5,6 +5,7 @@ source: https://github.com/alisw/MPFR.git
 build_requires:
   - "autotools:(slc6|slc7)"
   - GMP
+  - alibuild-recipe-tools
 ---
 #!/bin/sh
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
@@ -26,16 +27,9 @@ rm -f $INSTALLROOT/lib/*.la
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
+alibuild-generate-module > "$MODULEFILE"
+cat >> "$MODULEFILE" <<EoF
+
 # Our environment
 set MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv MPFR_ROOT \$MPFR_ROOT

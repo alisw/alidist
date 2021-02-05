@@ -5,6 +5,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/abseil/abseil-cpp
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -20,20 +21,13 @@ cmake $SOURCEDIR                        \
 make ${JOBS:+-j$JOBS} install
 
 
+# Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                          \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+alibuild-generate-module > "$MODULEFILE"
+cat >> "$MODULEFILE" <<EoF
+
 # Our environment
 set ABSEIL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ABSEIL_ROOT/bin
