@@ -5,6 +5,7 @@ source: https://github.com/alisw/MPFR.git
 build_requires:
   - "autotools:(slc6|slc7)"
   - GMP
+  - alibuild-recipe-tools
 ---
 #!/bin/sh
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./

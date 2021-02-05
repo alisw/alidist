@@ -5,6 +5,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/abseil/abseil-cpp
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
