@@ -4,6 +4,7 @@ tag: "O2FullCI-1.0.0"
 requires:
   - O2Suite
   - o2checkcode
+  - O2-full-system-test
 valid_defaults:
   - o2
 ---
