@@ -14,12 +14,7 @@ cmake $SOURCEDIR                                                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
       ${DIM_REVISION:+-DDIM_ROOT=$DIM_ROOT}
 
-make ${JOBS+-j $JOBS}
-
-mkdir $INSTALLROOT/include
-mkdir $INSTALLROOT/lib
-rsync -av $SOURCEDIR/include/dimrpcparallel.h $INSTALLROOT/include/dimrpcparallel.h
-rsync -av lib/libDimRpcParallel.so $INSTALLROOT/lib/libDimRpcParallel.so
+make ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
