@@ -1,6 +1,6 @@
 package: GEANT3
 version: "%(tag_basename)s"
-tag: v3-5
+tag: v3-7
 requires:
   - ROOT
 build_requires:
