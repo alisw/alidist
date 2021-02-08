@@ -1,6 +1,6 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v0.19.80"
+tag: "v0.19.90"
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - golang
@@ -19,7 +19,7 @@ mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
   make vendor
-  make WHAT="o2control-core o2control-executor o2-aliecs-odc-shim"
+  make WHAT="o2-aliecs-core o2-aliecs-executor o2-aliecs-odc-shim o2-apricot"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
   # safely clean up vendor directory regardless of permissions
