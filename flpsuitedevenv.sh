@@ -9,7 +9,6 @@ requires:
   - RapidJSON
   - GMP
   - MPFR
-  - cub
   - defaults-release
   - abseil
   - freeglut-devel
