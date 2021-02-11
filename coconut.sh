@@ -5,7 +5,6 @@ build_requires:
   - golang
   - protobuf
   - grpc
-  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
@@ -27,5 +26,20 @@ popd
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+cat > etc/modulefiles/$PKGNAME <<EoF
+ #%Module1.0
+ proc ModulesHelp { } {
+   global version
+   puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+ }
+ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+ # Dependencies
+ module load BASE/1.0
+
+ # Our environment
+ set COCONUT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+ prepend-path PATH \$COCONUT_ROOT/bin
+ prepend-path LD_LIBRARY_PATH \$COCONUT_ROOT/lib
+ EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
