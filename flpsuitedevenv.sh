@@ -10,7 +10,6 @@ requires:
   - GMP
   - MPFR
   - defaults-release
-  - abseil
   - freeglut-devel
   - OpenSSL
   - abseil
