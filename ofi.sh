@@ -8,6 +8,7 @@ prefer_system: ".*"
 prefer_system_check: |
   pkg-config --atleast-version=1.6.0 libfabric 2>&1 && printf "#include \"rdma/fabric.h\"\nint main(){}" | c++ -xc - -o /dev/null
 ---
+# rebuild
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 autoreconf -ivf
 ./configure --prefix="$INSTALLROOT" --enable-mlx=no 
