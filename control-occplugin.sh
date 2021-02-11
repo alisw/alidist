@@ -21,7 +21,7 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-
+# rebuild
 LIBEXT=so
 case $ARCHITECTURE in
     osx*)
