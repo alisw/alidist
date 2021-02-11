@@ -2,8 +2,10 @@ package: coconut
 version: "%(tag_basename)s"
 tag: "v0.19.80"
 build_requires:
+  - abseil
   - golang
   - protobuf
+  - c-ares
   - grpc
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Control
@@ -26,6 +28,7 @@ pushd $BUILD
 popd
 
 #ModuleFile
+export FULL_BUILD_REQUIRES="$FULL_BUILD_REQUIRES $BUILD_REQUIRES"
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
