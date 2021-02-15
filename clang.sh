@@ -3,11 +3,12 @@ version: "v11.0.0"
 tag: "llvmorg-11.0.0"
 source: https://github.com/llvm/llvm-project
 requires:
- - "Python:slc.*"
- - "Python-system:(?!slc.*)"
  - "GCC-Toolchain:(?!osx)"
 build_requires:
+ - "Python:slc.*"
+ - "Python-system:(?!slc.*)"
  - CMake
+ - system-curl
 ---
 #!/bin/sh
 
