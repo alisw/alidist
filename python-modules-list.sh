@@ -11,6 +11,7 @@ env:
     notebook==5.7.8
     PyYAML==5.1
     uproot==3.4.18
+    psutil==5.8.0
   PIP36_REQUIREMENTS: |
     numpy==1.16.2
     scipy==1.2.1
