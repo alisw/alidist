@@ -38,3 +38,4 @@ setenv Powheg_INSTALL_PATH \$::env(POWHEG_ROOT)/lib/Powheg
 prepend-path PATH \$POWHEG_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$POWHEG_ROOT/lib/Powheg
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
