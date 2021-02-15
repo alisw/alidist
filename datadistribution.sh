@@ -1,10 +1,11 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v0.8.0
+tag: v0.9.1
 requires:
   - "GCC-Toolchain:(?!osx)"
   - boost
   - FairLogger
+  - libInfoLogger
   - FairMQ
   - Ppconsul
   - grpc
@@ -29,20 +30,22 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*)
         [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-        [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
+        [[ ! $FMT_ROOT ]] && FMT_ROOT=$(brew --prefix fmt)
+        [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
     ;;
 esac
 
-cmake $SOURCEDIR                                              \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                 \
-      ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}  \
-      ${FAIRMQ_ROOT:+-DFairMQ_ROOT=$FAIRMQ_ROOT}              \
-      ${PPCONSUL_ROOT:+-Dppconsul_DIR=${PPCONSUL_ROOT}/cmake} \
-      ${O2_ROOT:+-DO2_ROOT=$O2_ROOT}                          \
-      ${MONITORING_ROOT:+-DMonitoring_ROOT=$MONITORING_ROOT}  \
-      ${PROTOBUF_ROOT:+-DProtobuf_ROOT=$PROTOBUF_ROOT}        \
+cmake $SOURCEDIR                                                \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                 \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
+      ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                   \
+      ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}    \
+      ${INFOLOGGER_ROOT:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT}    \
+      ${FAIRMQ_ROOT:+-DFairMQ_ROOT=$FAIRMQ_ROOT}                \
+      ${PPCONSUL_ROOT:+-Dppconsul_DIR=${PPCONSUL_ROOT}/cmake}   \
+      ${O2_ROOT:+-DO2_ROOT=$O2_ROOT}                            \
+      ${MONITORING_ROOT:+-DMonitoring_ROOT=$MONITORING_ROOT}    \
+      ${PROTOBUF_ROOT:+-DProtobuf_ROOT=$PROTOBUF_ROOT}          \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -67,11 +70,13 @@ module load BASE/1.0                                                            
             ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}             \\
+            ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
             ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                             \\
             ${PPCONSUL_REVISION:+Ppconsul/$PPCONSUL_VERSION-$PPCONSUL_REVISION}                     \\
             ${GRPC_REVISION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                                     \\
             ${O2_REVISION:+O2/$O2_VERSION-$O2_REVISION}                                             \\
-            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}
+            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}             \\
+            ${PROTOBUF_REVISION:+Protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
 
 # DataDistribution environment:
 set DATADISTRIBUTION_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
