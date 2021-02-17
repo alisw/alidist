@@ -90,8 +90,8 @@ incremental_recipe: |
     find $PWD -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
-    ctest -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
-    ctest -R test_Framework --output-on-failure || TESTERR=$?
+    ctest -C ${CMAKE_BUILD_TYPE} -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+    ctest -C ${CMAKE_BUILD_TYPE} -R test_Framework --output-on-failure || TESTERR=$?
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
     for LOG in test_logs/*.nonfatal; do
@@ -269,8 +269,8 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up ROOT files created by tests in build area
   find $PWD -name "*.root" -delete
   TESTERR=
-  ctest -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
-  ctest -R test_Framework --output-on-failure || TESTERR=$?
+  ctest -C ${CMAKE_BUILD_TYPE} -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+  ctest -C ${CMAKE_BUILD_TYPE} -R test_Framework --output-on-failure || TESTERR=$?
   # Display additional logs for tests that timed out in a non-fatal way
   set +x
   for LOG in test_logs/*.nonfatal; do
