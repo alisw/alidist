@@ -5,10 +5,6 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
-  ENABLE_UPGRADES: "OFF" # Disable detector upgrades in O2
-  BUILD_ANALYSIS: "OFF" # Disable analysis in O2
-  BUILD_EXAMPLES: "OFF" # Disable examples in O2
-  BUILD_TEST_ROOT_MACROS: "OFF" # Disable macro tests in O2
 disable:
   - AEGIS
   - AliEn-Runtime
@@ -39,6 +35,12 @@ overrides:
         dryable==1.0.3
         responses==0.10.6
         PyYAML==5.1
+  o2-customization:
+    env:
+      ENABLE_UPGRADES: "OFF" # Disable detector upgrades in O2
+      BUILD_ANALYSIS: "OFF" # Disable analysis in O2
+      BUILD_EXAMPLES: "OFF" # Disable examples in O2
+      BUILD_TEST_ROOT_MACROS: "OFF" # Disable macro tests in O2
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
