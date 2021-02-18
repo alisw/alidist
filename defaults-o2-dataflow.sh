@@ -27,6 +27,7 @@ disable:
   - JAliEn-ROOT
   - KFParticle
   - MCStepLogger
+  - defaults-release
 overrides:
   Python-modules-list:
     env:
