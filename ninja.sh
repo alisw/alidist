@@ -1,32 +1,21 @@
 package: ninja
-version: "fortran-%(short_hash)s"
-tag: "5cf291ec1439edffa3c93dde56128181bd5f4037"
-source: https://github.com/Kitware/ninja
+version: "v1.10.2"
+tag: "v1.10.2"
+source: https://github.com/ninja-build/ninja
 build_requires:
+ - CMake
+ - alibuild-recipe-tools
  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 
-$SOURCEDIR/configure.py --bootstrap
+cmake -Bbuild-cmake -H$SOURCEDIR
+cmake --build build-cmake
+
 mkdir -p $INSTALLROOT/bin
-cp ./ninja $INSTALLROOT/bin
+cp build-cmake/ninja $INSTALLROOT/bin
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set NINJA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv NINJA_ROOT \$NINJA_ROOT
-prepend-path PATH \$NINJA_ROOT/bin
-EoF
-
+alibuild-generate-module --bin >> etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

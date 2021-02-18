@@ -13,6 +13,7 @@ requires:
   - Control-OCCPlugin
   - Python-modules
 build_requires:
+  - ninja
   - CMake
   - CodingGuidelines
   - RapidJSON
@@ -52,18 +53,9 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
-# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
-if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
-  NINJA_BIN=ninja-build
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
-  unset NINJA_BIN
-fi
-
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
+      -G Ninja                                                \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \

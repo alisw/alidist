@@ -7,6 +7,7 @@ requires:
   - FreeType
   - libuv
 build_requires:
+  - ninja
   - capstone
   - CMake
   - alibuild-recipe-tools
@@ -29,15 +30,6 @@ case $ARCHITECTURE in
     ;;
 esac
 
-# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
-if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
-  NINJA_BIN=ninja-build
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
-  unset NINJA_BIN
-fi
-
 # build the tracy profiler
 rsync -av $SOURCEDIR/tracy/ tracy/
 pushd tracy/profiler/build/unix
@@ -53,6 +45,7 @@ cp tracy/*.{h,hpp,cpp} $INSTALLROOT/include/tracy
 cp -r tracy/{common,client,libbacktrace} $INSTALLROOT/include/tracy/
 
 cmake $SOURCEDIR                          \
+      -G Ninja                            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
