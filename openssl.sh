@@ -37,6 +37,7 @@ make install_sw # no not install man pages
 rm -rf $INSTALLROOT/lib/pkgconfig \
        $INSTALLROOT/lib/*.a
 
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
