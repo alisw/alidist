@@ -22,7 +22,6 @@ autoreconf -f -v -i
 make ${JOBS:+-j$JOBS}
 make ${JOBS:+-j$JOBS} install
 rm -fv $INSTALLROOT/lib/*.la
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
