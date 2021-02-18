@@ -21,7 +21,6 @@ autoreconf -i
 
 make ${JOBS+-j $JOBS}
 make install
-
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF

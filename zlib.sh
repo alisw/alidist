@@ -28,7 +28,6 @@ case $ARCHITECTURE in
 esac
 make ${JOBS+-j $JOBS}
 make install
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

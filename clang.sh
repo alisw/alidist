@@ -34,7 +34,6 @@ case $ARCHITECTURE in
   unknown*) DEFAULT_SYSROOT="" ;;
   *) DEFAULT_SYSROOT="" ;;
 esac
-
 # note that BUILD_SHARED_LIBS=ON IS NEEDED FOR ADDING DYNAMIC PLUGINS
 # to clang-tidy (for instance)
 cmake $SOURCEDIR/llvm \
