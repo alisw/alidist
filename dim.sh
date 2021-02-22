@@ -7,6 +7,7 @@ requires:
 build_requires:
   - motif
   - system-curl
+  - unzip
 ---
 #!/bin/bash -e
 
