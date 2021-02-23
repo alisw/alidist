@@ -8,6 +8,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - LLA
   - ReadoutCard
+  - "DimRpcParallel:(?!osx)"
 build_requires:
   - alibuild-recipe-tools
   - CMake
@@ -30,6 +31,7 @@ cmake $SOURCEDIR                                                      \
       ${DIM_REVISION:+-DDIM_ROOT=$DIM_ROOT}                            \
       ${READOUTCARD_REVISION:+-DReadoutCard_ROOT=$READOUTCARD_ROOT}    \
       ${LLA_REVISION:+-DLLA_ROOT=$LLA_ROOT}    \
+      ${DIM_RPC_PARALLEL_REVISION:+-DDIM_RPC_PARALLEL_ROOT=$DIM_RPC_PARALLEL_ROOT}    \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
