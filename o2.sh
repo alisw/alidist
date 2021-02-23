@@ -186,8 +186,11 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
       ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
-      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT} \
-      ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=ON}                                                            \
+      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                                                             \
+      ${BUILD_ANALYSIS:+-DBUILD_ANALYSIS=$BUILD_ANALYSIS}                                                 \
+      ${BUILD_EXAMPLES:+-DBUILD_EXAMPLES=$BUILD_EXAMPLES}                                                 \
+      ${BUILD_TEST_ROOT_MACROS:+-BUILD_TEST_ROOT_MACROS=$BUILD_TEST_ROOT_MACROS}                          \
+      ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=$ENABLE_UPGRADES}                                              \
       ${ARROW_ROOT:+-Dgandiva_DIR=$ARROW_ROOT/lib/cmake/arrow}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
