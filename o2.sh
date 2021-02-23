@@ -49,6 +49,7 @@ incremental_recipe: |
   # Delete all those which are found twice (i.e. which are in old.txt only)
   # FIXME: this breaks some corner cases, apparently...
   # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
+  
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
