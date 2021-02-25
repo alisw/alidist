@@ -2,17 +2,28 @@ package: FLPSuiteDevEnv
 version: "1.0.0"
 tag: "FLPSuiteDevEnv-1.0.0"
 requires:
-  - CMake
-  - O2-customization
-  - alibuild-recipe-tools
-  - ms_gsl
-  - RapidJSON
-  - GMP
-  - MPFR
-  - defaults-release
-  - freeglut-devel
-  - OpenSSL
   - abseil
+  - alibuild-recipe-tools
+  - autotools
+  - bz2
+  - capstone
+  - CMake
+  - defaults-release
+  - double-conversion
+  - flatbuffers
+  - FreeType
+  - GMP
+  - googlebenchmark
+  - googletest
+  - libffi
+  - MPFR
+  - ms_gsl
+  - O2-customization
+  - OpenSSL
+  - Python-modules-list
+  - RapidJSON
+  - re2
+  - sqlite
 valid_defaults:
   - o2
   - o2-dataflow
