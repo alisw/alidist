@@ -38,9 +38,10 @@ ln -nfs $(which make) buildbin/gmake
   gmake X64=yes )
 
 # Installation
-rsync -av dim/ $INSTALLROOT/dim/                # headers
-rsync -av --exclude "webDi*" WebDID/ $INSTALLROOT/WebDID/ #webdid without executables
-rsync -av --exclude "*.o" linux/ $INSTALLROOT/  # executables and libraries
+rsync -av dim $INSTALLROOT/include                              # headers
+rsync -av --exclude '*.o' --exclude '*.so' --exclude '*.a'  linux/ $INSTALLROOT/bin/  # executables
+rsync -av linux/*.so linux/*.a $INSTALLROOT/lib/                # libraries
+rsync -av --exclude "webDi*" WebDID/ $INSTALLROOT/WebDID/       #webdid without executables
 
 # Modulefile
 mkdir -p etc/modulefiles
