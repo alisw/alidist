@@ -1,6 +1,6 @@
 package: ALF
 version: "%(tag_basename)s"
-tag: v0.12.1
+tag: v0.13.0
 requires:
   - boost
   - Common-O2
