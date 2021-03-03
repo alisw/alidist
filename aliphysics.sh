@@ -1,6 +1,6 @@
 package: AliPhysics
-version: "%(commit_hash)s"
-tag: master
+version: "%(tag_basename)s_JALIEN"
+tag: "vAN-20210303"
 requires:
   - AliRoot
   - RooUnfold
