@@ -24,7 +24,7 @@ O2_SRC=$(python3 -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix(
 # 50 entries long
 if [[ $ALIBUILD_BASE_HASH ]]; then
   pushd "$O2_SRC"
-    ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
+    ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} || true ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
     if [[ $(cat $BUILDDIR/changed | wc -l) -le 50 ]]; then
       O2_CHECKCODE_CHANGEDFILES=$(while read FILE; do [[ -e "$O2_SRC/$FILE" ]] && echo "$FILE" || true; done < <(cat $BUILDDIR/changed) | \
                                   xargs echo | sed -e 's/ /:/g')
