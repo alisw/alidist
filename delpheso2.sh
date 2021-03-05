@@ -13,7 +13,7 @@ build_requires:
   - alibuild-recipe-tools
   - CMake
   - "GCC-Toolchain:(?!osx)"
-source: https://github.com/preghenella/DelphesO2.git
+source: https://github.com/AliceO2Group/DelphesO2.git
 ---
 #!/bin/bash -ex
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
