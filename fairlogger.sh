@@ -1,6 +1,6 @@
 package: FairLogger
 version: "%(tag_basename)s"
-tag: v1.9.0
+tag: v1.9.1
 source: https://github.com/FairRootGroup/FairLogger
 requires:
  - fmt
