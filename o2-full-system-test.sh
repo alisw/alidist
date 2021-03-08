@@ -2,6 +2,8 @@ package: O2-full-system-test
 version: "1.0"
 requires:
   - O2Suite
+  - AEGIS
+  - O2DPG
 force_rebuild: 1
 ---
 #!/bin/bash -e
