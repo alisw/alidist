@@ -27,6 +27,8 @@ disable:
   - JAliEn-ROOT
   - KFParticle
   - MCStepLogger
+  - O2sim
+  - O2-full-system-test
 overrides:
   Python-modules-list:
     env:

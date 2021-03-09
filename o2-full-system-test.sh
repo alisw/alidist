@@ -2,6 +2,7 @@ package: O2-full-system-test
 version: "1.0"
 requires:
   - O2Suite
+  - O2sim
 force_rebuild: 1
 ---
 #!/bin/bash -e
