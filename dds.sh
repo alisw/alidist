@@ -24,6 +24,7 @@ esac
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
+      -DCMAKE_INSTALL_LIBDIR=lib
 
 # Limit the number of build processes to avoid exahusting memory when building
 # on smaller machines.
