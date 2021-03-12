@@ -40,7 +40,7 @@ esac
 
 make -j$JOBS install
 
-find $INSTALLROOT -path "*/lib/libboost_*" -o -path "*/lib64/libboost_*" -delete
+find $INSTALLROOT -path "*/lib/libboost_*" -delete -o -path "*/lib64/libboost_*" -delete
 rm -f "$INSTALLROOT/LICENSE"
 
 # ModuleFile
