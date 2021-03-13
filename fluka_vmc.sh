@@ -48,4 +48,5 @@ setenv FLUVMC \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUKADATA \$::env(BASEDIR)/$PKGNAME/\$version/data
 prepend-path LD_LIBRARY_PATH \$FLUKA_VMC_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$FLUKA_VMC_ROOT/include/TFluka
 EoF
