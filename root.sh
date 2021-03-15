@@ -43,8 +43,21 @@ export SYSTEM_VERSION_COMPAT=1
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
+
+GIT_PKGVERSION="$(git --git-dir=${SOURCEDIR}/.git describe --all | awk -F/ '{print $NF}')"
+PKGVERSION="${GIT_PKGVERSION}"
+echo "###########################################################
+PKGVERSION = ${PKGVERSION} ; from SOURCEDIR = ${SOURCEDIR}
+###########################################################"
+
 case $PKGVERSION in
-  v6-20*) 
+  v6-22*)
+     ENABLE_VMC=1
+     [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
+     [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
+     [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
+  ;;
+  v6-20*)
      ENABLE_VMC=1
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
@@ -89,6 +102,7 @@ fi
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+  [[ "${PKGVERSION}" =~ v6-22* ]] && ROOT_PYTHON_FLAGS="${ROOT_PYTHON_FLAGS} -Dpyroot_legacy=ON"
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 
