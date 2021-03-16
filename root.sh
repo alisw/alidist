@@ -88,7 +88,7 @@ fi
 
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+  ROOT_PYTHON_FLAGS="-Dpyroot=ON -Dpyroot_legacy=ON"
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 
