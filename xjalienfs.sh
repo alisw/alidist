@@ -18,9 +18,11 @@ fi
 
 env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --ignore-installed $PIPOPTION file://${SOURCEDIR}
 
+# Make sure all the tools use the correct python
+sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' ${INSTALLROOT}/bin/*
+rm -v ${INSTALLROOT}/bin/*.bak
+
 if [ "X$VIRTUAL_ENV" = X ]; then
-  sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' ${INSTALLROOT}/bin/*
-  rm -v ${INSTALLROOT}/bin/*.bak
   
    # Uniform Python library path
   pushd ${INSTALLROOT}
