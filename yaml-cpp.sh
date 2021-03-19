@@ -6,7 +6,7 @@ requires:
   - boost
 build_requires:
   - CMake
-prefer_system: (?!slc5)
+prefer_system: (?!slc5|ubuntu2004)
 prefer_system_check: |
   pkg-config --atleast-version=0.6.2 yaml-cpp && printf "#include \"yaml-cpp/yaml.h\"\n" | c++ -std=c++17 -I`brew --prefix yaml-cpp`/include -I`brew --prefix boost`/include -xc++ - -c -o /dev/null
 ---
