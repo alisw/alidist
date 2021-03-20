@@ -5,7 +5,6 @@ requires:
   - arrow
   - FairRoot
   - Vc
-  - hijing
   - HepMC3
   - libInfoLogger
   - Common-O2
