@@ -20,7 +20,7 @@ env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --ignore-ins
 
 # Make sure all the tools use the correct python
 mkdir -p ${INSTALLROOT}/bin 
-find ${INSTALLROOT}/bin -type f -exec sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' \;
+find ${INSTALLROOT}/bin -type f -exec sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' '{}' \;
 rm -fv ${INSTALLROOT}/bin/*.bak
 
 if [ -d ${INSTALLROOT}/lib ]; then
