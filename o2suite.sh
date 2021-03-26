@@ -8,7 +8,6 @@ requires:
   - O2
   - "ReadoutCard:(slc*)"
   - Readout
-  - qcg
   - QualityControl
   - "DataDistribution:(?!osx)"
   - "ALF:(?!osx|slc8)"
