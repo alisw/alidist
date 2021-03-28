@@ -16,7 +16,6 @@ requires:
   - "curl:(?!slc8)"
   - "system-curl:slc8.*"
   - MCStepLogger
-  - AEGIS
   - fmt
   - "openmp:(?!osx.*)"
   - DebugGUI
