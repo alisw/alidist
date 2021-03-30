@@ -1,6 +1,6 @@
 package: libjalienO2
 version: "%(tag_basename)s"
-tag: "0.1.2"
+tag: "0.1.3"
 source: https://gitlab.cern.ch/jalien/libjalieno2.git
 requires:
   - "OpenSSL:(?!osx)"
