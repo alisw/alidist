@@ -41,7 +41,16 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   NINJA_BIN=ninja-build
   type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
   type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
+  # AliPhysics contains Fortran code, which requires at least ninja v1.10
+  # in order to build with ninja, otherwise the build must fall back to make
+  NINJA_VERSION_MAJOR=0
+  NINJA_VERSION_MINOR=0
+  if [ "x$NINJA_BIN" != "x" ]; then
+    NINJA_VERSION_MAJOR=$($NINJA_BIN --version | sed -e 's/.* //' | cut -d. -f1)
+    NINJA_VERSION_MINOR=$($NINJA_BIN --version | sed -e 's/.* //' | cut -d. -f2)
+  fi
+  NINJA_VERSION=$(($NINJA_VERSION_MAJOR * 100 + $NINJA_VERSION_MINOR))
+  [[ $NINJA_BIN && $NINJA_VERSION -ge 110 ]] && CMAKE_GENERATOR=Ninja || true
   unset NINJA_BIN
 fi
 
