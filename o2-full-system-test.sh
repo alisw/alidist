@@ -7,6 +7,10 @@ force_rebuild: 1
 ---
 #!/bin/bash -e
 
+echo TEST ----------- env
+env
+echo END TEST ------- env
+
 rm -Rf $BUILDDIR/full-system-test-sim
 mkdir $BUILDDIR/full-system-test-sim
 pushd $BUILDDIR/full-system-test-sim
