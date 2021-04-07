@@ -20,7 +20,7 @@ overrides:
       - ZeroMQ
       - JAliEn-ROOT
   pythia:
-    tag: "v8302"
+    tag: "v8302-p1"
     requires:
       - lhapdf
       - boost
