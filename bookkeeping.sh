@@ -1,6 +1,6 @@
 package: Bookkeeping
 version: "%(tag_basename)s"
-tag: v0.16.6
+tag: v0.16.7
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
