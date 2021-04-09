@@ -1,6 +1,6 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v0.9.7
+tag: v0.10.3
 requires:
   - "GCC-Toolchain:(?!osx)"
   - boost
