@@ -1,6 +1,8 @@
 package: FairMQ
-version: "%(tag_basename)s"
-tag: v1.4.33
+# version: "%(tag_basename)s"
+# tag: v1.4.35 TODO switch back to version tags once 1.4.36 is released
+version: "v1.4.35.1"
+tag: v1.4.35_hotfix_alice
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
@@ -12,7 +14,6 @@ build_requires:
  - flatbuffers
  - CMake
  - "GCC-Toolchain:(?!osx)"
- - googletest
 incremental_recipe: |
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -40,7 +41,6 @@ cmake $SOURCEDIR                                                 \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}        \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
-      ${GOOGLETEST_ROOT:+-DGTEST_ROOT=$GOOGLETEST_ROOT}          \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
       ${BOOST_ROOT:+-DBoost_NO_BOOST_CMAKE=ON}                   \
       ${FAIRLOGGER_ROOT:+-DFAIRLOGGER_ROOT=$FAIRLOGGER_ROOT}     \
@@ -54,7 +54,6 @@ cmake $SOURCEDIR                                                 \
       ${DDS_ROOT:+-DBUILD_DDS_PLUGIN=ON}                         \
       ${DDS_ROOT:+-DBUILD_SDK_COMMANDS=ON}                       \
       ${DDS_ROOT:+-DBUILD_SDK=ON}                                \
-      -DBUILD_NANOMSG_TRANSPORT=OFF                              \
       ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
       -DBUILD_TESTING=${ALIBUILD_FAIRMQ_TESTS:-OFF}              \
