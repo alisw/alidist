@@ -4,6 +4,8 @@ tag: v3.1.0
 source: https://github.com/Microsoft/GSL.git
 prepend_path:
   ROOT_INCLUDE_PATH: "$MS_GSL_ROOT/include"
+build_requires:
+  - CMake
 ---
 #!/bin/bash -e
 
