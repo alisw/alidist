@@ -37,6 +37,7 @@ overrides:
         dryable==1.0.3
         responses==0.10.6
         PyYAML==5.1
+        python-consul==1.1.0
   O2-customization:
     env:
       ENABLE_UPGRADES: OFF # Disable detector upgrades in O2

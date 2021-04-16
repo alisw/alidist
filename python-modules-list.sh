@@ -25,6 +25,7 @@ env:
     responses==0.10.6
     pandas==0.24.2
     scikit-learn==0.20.3
+    python-consul==1.1.0
   PIP38_REQUIREMENTS: |
     scipy==1.6.1
     Cython==0.29.21
@@ -38,6 +39,7 @@ env:
     responses==0.10.6
     pandas==1.2.3
     scikit-learn==0.24.1
+    python-consul==1.1.0
   PIP39_REQUIREMENTS: |
     numpy==1.19.4
     scipy==1.5.4
@@ -50,6 +52,7 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    python-consul==1.1.0
 ---
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
