@@ -6,7 +6,6 @@ requires:
   - boost
   - lz4
   - Clang
-  - protobuf
 build_requires:
   - zlib
   - flatbuffers
@@ -26,11 +25,9 @@ case $ARCHITECTURE in
     [[ ! $FLATBUFFERS_ROOT ]] && FLATBUFFERS_ROOT=$(dirname $(dirname $(which flatc)))
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
     [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(dirname $(dirname $(which lz4)))
-    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(dirname $(dirname $(which protoc)))
     [[ ! -d $FLATBUFFERS_ROOT ]] && unset FLATBUFFERS_ROOT
     [[ ! -d $BOOST_ROOT ]] && unset BOOST_ROOT
     [[ ! -d $LZ4_ROOT ]] && unset LZ4_ROOT
-    [[ ! -d $PROTOBUF_ROOT ]] && unset PROTOBUF_ROOT
     MACOSX_RPATH=OFF
     SONAME=dylib
     cat >no-llvm-symbols.txt << EOF
@@ -76,6 +73,7 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_JEMALLOC=OFF                                                                          \
       -DARROW_HDFS=OFF                                                                              \
       -DARROW_IPC=ON                                                                                \
+      -DARROW_FLIGHT=OFF                                                                            \
       ${THRIFT_ROOT:+-DARROW_PARQUET=ON}                                                            \
       ${THRIFT_ROOT:+-DThrift_ROOT=${THRIFT_ROOT}}                                                  \
       ${FLATBUFFERS_ROOT:+-DFlatbuffers_ROOT=${FLATBUFFERS_ROOT}}                                   \
@@ -83,11 +81,6 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_WITH_LZ4=ON                                                                           \
       ${RAPIDJSON_ROOT:+-DRapidJSON_ROOT=${RAPIDJSON_ROOT}}                                         \
       ${RE2_ROOT:+-DRE2_ROOT=${RE2_ROOT}}                                                           \
-      ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}                   \
-      ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME}         \
-      ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}              \
-      ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                               \
-      ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                      \
       ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                                                       \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
       -DARROW_WITH_UTF8PROC=OFF                                                                     \
