@@ -1,6 +1,6 @@
 package: dim
 version: "%(tag_basename)s"
-tag: v20r26
+tag: v20r30
 source: https://github.com/alisw/dim
 requires:
   - "GCC-Toolchain:(?!osx)"
