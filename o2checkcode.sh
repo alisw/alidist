@@ -88,7 +88,7 @@ COPYRIGHT="$(cat <<'EOF'
 EOF
 )"
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
-COPYRIGHT_EXCLUDE_REGEXP="/3rdparty/"  # exclude files from the copyright check
+COPYRIGHT_EXCLUDE_REGEXP="/3rdparty/|Utilities/Tools/cpulimit/"  # exclude files from the copyright check
 set +x
 while read FILE; do
   [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}
