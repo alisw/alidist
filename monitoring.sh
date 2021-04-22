@@ -7,6 +7,7 @@ requires:
   - "ApMon-CPP:(?!osx)"
   - "system-curl:(slc8)"
   - "curl:(?!slc8)"
+  - libInfoLogger
 build_requires:
   - CMake
   - alibuild-recipe-tools
