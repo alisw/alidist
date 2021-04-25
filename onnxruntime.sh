@@ -1,4 +1,4 @@
-package: onnxruntime
+package: ONNXRuntime
 version: "1.7.2"
 tag: c073c88ef
 source: https://github.com/saganatt/onnxruntime.git
@@ -43,8 +43,7 @@ cmake "$SOURCEDIR/cmake" \
       -Donnxruntime_USE_PREINSTALLED_NSYNC=OFF \
       ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}
 
-make ${JOBS:+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -54,6 +53,7 @@ alibuild-generate-module > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 
 # Our environment
-set onnxruntime_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+set ${PKGNAME}_DIR \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$onnxruntime_ROOT/lib
 EoF
