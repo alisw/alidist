@@ -20,6 +20,35 @@ echo readlink:
 readlink /proc/self/exe || true
 echo END TEST ------- env
 
+echo TEST trace dlopen
+rm -Rf $BUILDDIR/full-system-test-sim-test
+mkdir $BUILDDIR/full-system-test-sim-test
+pushd $BUILDDIR/full-system-test-sim-test
+
+cat >trace_dlopen.c <<EOF
+#define _GNU_SOURCE
+#include <dlfcn.h>
+#include <stdio.h>
+
+void* dlopen(const char *filename, int flags) {
+  void* (*libc_dlopen)(const char *filename, int flags) = dlsym(RTLD_NEXT, "dlopen");
+  void* res = libc_dlopen(filename, flags);
+  printf("dlopen(\"%s\", %x) = %p\n", filename, flags, res);
+  return res;
+}
+EOF
+gcc -c -g -fpic trace_dlopen.c
+gcc -ldl -shared -o trace_dlopen.so trace_dlopen.o
+LD_PRELOAD=./trace_dlopen.so fairmq-bsampler 2>&1 || true
+
+echo --------------- END TEST fairmq-bsampler -------------------------
+
+LD_PRELOAD=./trace_dlopen.so o2-sim --seed -1 -j 64 -n100 -m PIPE ITS MFT FT0 FV0 FDD -g extgen --configKeyValues "GeneratorExternal.fileName=$O2_ROOT/share/Generators/external/QEDLoader.C;QEDGenParam.yMin=-7;QEDGenParam.yMax=7;QEDGenParam.ptMin=0.001;QEDGenParam.ptMax=1.;Diamond.width[2]=6." 2>&1
+
+popd
+rm -Rf $BUILDDIR/full-system-test-sim-test
+echo END TEST dlopen
+
 rm -Rf $BUILDDIR/full-system-test-sim
 mkdir $BUILDDIR/full-system-test-sim
 pushd $BUILDDIR/full-system-test-sim
