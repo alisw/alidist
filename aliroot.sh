@@ -7,6 +7,8 @@ requires:
   - fastjet:(?!.*ppc64)
   - GEANT3
   - GEANT4_VMC
+  - FLUKA
+  - FLUKA_VMC
   - Vc
   - JAliEn-ROOT
 build_requires:
