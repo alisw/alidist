@@ -25,6 +25,7 @@ requires:
   - cgal
   - KFParticle
   - VecGeom
+  - FLUKA_VMC
 build_requires:
   - GMP
   - MPFR
@@ -240,6 +241,7 @@ module load BASE/1.0 \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
             ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}         \\
             ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}             \\
+            ${FLUKA_VMC_REVISION+FLUKA_VMC/$FLUKA_VMC_VERSION-$FLUKA_VMC_REVISION}                  \\
             ${CURL_REVISION:+curl/$CURL_VERSION-$CURL_REVISION}                                     \\
             ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}
 # Our environment
