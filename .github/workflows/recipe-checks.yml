@@ -2,7 +2,14 @@ name: Build Documentation
 # GitHub workflow to check build recipes in pull requests.
 
 on:
-  - pull_request_target
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+      - ready_for_review
+      - synchronize
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,15 +22,16 @@ jobs:
         sudo python3 -m pip install pyyaml alibuild
     - uses: actions/checkout@v2
       with:
-        ref: ${{ github.event.pull_request.head.sha }}
         fetch-depth: 0
     - name: Run check
-      # Runs bash -eo pipefail
-      shell: bash
+      shell: 'bash -exo pipefail {0}'
       run: |
-        set -x
         aliBuild analytics off
         err_fnames=()
+
+        # Use lint-recipes from PR base, so PRs can't override this script themselves.
+        git checkout -f ${{ github.event.pull_request.base.sha }} -- scripts/lint-recipes ||
+          exit 1
 
         git diff --name-only "$(git merge-base HEAD ${{ github.event.pull_request.base.sha }})" |
           while read -r fname; do
