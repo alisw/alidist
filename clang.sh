@@ -64,7 +64,7 @@ esac
 # Needed to be able to find C++ headers.
 case $ARCHITECTURE in
   osx*)
-    find `xcode-select -p` -type d -path "*MacOSX.sdk/usr/include/c++" -exec ln -sf {} $INSTALLROOT/include/c++ \;
+    ln -sf "$(find `xcode-select -p` -type d -path "*MacOSX.sdk/usr/include/c++" -o -path "*/XcodeDefault.xctoolchain/usr/include/c++" | head -1)" "$INSTALLROOT/include/c++"
   ;;
   *)
   if [ "X$GCC_TOOLCHAIN_ROOT" = X ]; then
