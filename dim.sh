@@ -10,6 +10,7 @@ build_requires:
   - system-curl
   - unzip
 ---
+#!/bin/bash -e
 rsync -av $SOURCEDIR/ $PWD
 
 # using makefile_did results in a linker error
