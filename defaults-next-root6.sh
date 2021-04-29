@@ -1,18 +1,19 @@
+disable:
+- arrow
+env:
+  CFLAGS: -fPIC -g -O2
+  CMAKE_BUILD_TYPE: RELWITHDEBINFO
+  CXXFLAGS: -fPIC -g -O2 -std=c++11
+  CXXSTD: '11'
+  ENABLE_VMC: 'ON'
+overrides:
+  AliPhysics:
+    tag: vAN-20210429
+    version: '%(tag_basename)s_ROOT6'
+  AliRoot:
+    tag: v5-09-57g
+    version: '%(tag_basename)s_ROOT6'
 package: defaults-next-root6
 version: v1
-disable:
-  - arrow
-env:
-  CXXFLAGS: "-fPIC -g -O2 -std=c++11"
-  CFLAGS: "-fPIC -g -O2"
-  CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-  CXXSTD: "11"
-  ENABLE_VMC: "ON"
-overrides:
-  AliRoot:
-    version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-57g
-  AliPhysics:
-    version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-57g-01
+
 ---
