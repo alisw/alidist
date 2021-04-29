@@ -1,6 +1,6 @@
 package: ninja
 version: "fortran-%(short_hash)s"
-tag: "5cf291ec1439edffa3c93dde56128181bd5f4037"
+tag: "v1.8.2.g3bbbe.kitware.dyndep-1.jobserver-1"
 source: https://github.com/Kitware/ninja
 build_requires:
  - "GCC-Toolchain:(?!osx)"
