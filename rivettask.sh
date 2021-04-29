@@ -1,4 +1,4 @@
-package: AliRivetTask
+package: RivetTask
 version: "%{year}s%{month}s%{day}s"
 source: https://gitlab.cern.ch/cholm/alice-rivet-task
 requires:
