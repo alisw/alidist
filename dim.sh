@@ -10,18 +10,12 @@ build_requires:
   - system-curl
   - unzip
 ---
-#!/bin/bash -e
+rsync -av $SOURCEDIR/ $PWD
 
-#rsync -a $SOURCEDIR/ $BUILDDIR/
-#cd $BUILDDIR
-
-FILE_NAME="dim_$PKGVERSION"
-ZIP_NAME="$FILE_NAME.zip"
-URL="https://dim.web.cern.ch/dim/$ZIP_NAME"
-
-curl -L -O $URL
-unzip $ZIP_NAME
-cd $FILE_NAME
+# using makefile_did results in a linker error
+# there is no doc that points to `makefile_did_good`
+# apart from its miraculous appearance on v20r30
+mv makefile_did_good makefile_did
 
 # setup.sh is DOS-encoded
 tr -d '\015' < setup.sh > setup2.sh
