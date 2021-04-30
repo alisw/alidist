@@ -11,7 +11,7 @@ build_requires:
   - unzip
 ---
 #!/bin/bash -e
-rsync -av $SOURCEDIR/ $PWD
+rsync -av $SOURCEDIR/ .
 
 # using makefile_did results in a linker error
 # there is no doc that points to `makefile_did_good`
