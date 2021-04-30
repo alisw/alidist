@@ -29,6 +29,7 @@ disable:
   - MCStepLogger
   - O2sim
   - O2-full-system-test
+  - FLUKA_VMC
 overrides:
   Python-modules-list:
     env:
