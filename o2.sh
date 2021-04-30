@@ -25,7 +25,6 @@ requires:
   - cgal
   - KFParticle
   - VecGeom
-  - FLUKA_VMC
 build_requires:
   - GMP
   - MPFR
