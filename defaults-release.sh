@@ -8,7 +8,9 @@ disable:
   - RooUnfold
   - treelite
 overrides:
-
+  GCC-Toolchain:
+     version: "v7.3.0-alice2"
+     tag: "v7.3.0-alice2"
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"

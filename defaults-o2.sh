@@ -8,9 +8,6 @@ env:
   GEANT4_BUILD_MULTITHREADED: "ON"
   ENABLE_VMC: "ON"
 overrides:
-  GCC-Toolchain:
-     version: "v10.2.0-alice2"
-     tag: "v10.2.0-alice2"
   AliRoot:
     version: "%(commit_hash)s_O2"
     requires:
