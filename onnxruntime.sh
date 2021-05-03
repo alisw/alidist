@@ -1,4 +1,4 @@
-package: ONNXRuntime
+package: onnxruntime
 version: "1.7.2"
 tag: c073c88ef
 source: https://github.com/saganatt/onnxruntime.git
@@ -54,6 +54,5 @@ cat >> "$MODULEFILE" <<EoF
 
 # Our environment
 set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-set ${PKGNAME}_DIR \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$onnxruntime_ROOT/lib
+prepend-path LD_LIBRARY_PATH \$${PKGNAME}_ROOT/lib
 EoF
