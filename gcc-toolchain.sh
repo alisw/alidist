@@ -16,7 +16,7 @@ prefer_system_check: |
     v10*) MIN_GCC_VERSION=100200 ;;
     *) MIN_GCC_VERSION=70300 ;;
   esac
-  which c99 && test -f $(dirname $(which c99))/c++ && printf "#define GCCVER ((__GNUC__ * 10000)+(__GNUC_MINOR__ * 100)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < $MIN_GCC_VERSION)\n#error \"System's GCC cannot be used: we need at least GCC $REQUESTED_VERSION We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
+  which gcc && test -f $(dirname $(which gcc))/c++ && printf "#define GCCVER ((__GNUC__ * 10000)+(__GNUC_MINOR__ * 100)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < $MIN_GCC_VERSION)\n#error \"System's GCC cannot be used: we need at least GCC $REQUESTED_VERSION We are going to compile our own version.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
 
