@@ -38,6 +38,12 @@ overrides:
         responses==0.10.6
         PyYAML==5.1
         python-consul==1.1.0
+      PIP36_REQUIREMENTS: |
+        python-consul==1.1.0
+      PIP38_REQUIREMENTS: |
+        python-consul==1.1.0
+      PIP39_REQUIREMENTS: |
+        python-consul==1.1.0
   O2-customization:
     env:
       ENABLE_UPGRADES: OFF # Disable detector upgrades in O2
