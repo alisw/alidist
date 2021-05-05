@@ -1,6 +1,6 @@
 package: abseil
 version: "%(tag_basename)s"
-tag:  20200225.2
+tag:  "20200225.2"
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
