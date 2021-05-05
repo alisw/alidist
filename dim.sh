@@ -7,8 +7,6 @@ requires:
 build_requires:
   - alibuild-recipe-tools
   - motif
-  - system-curl
-  - unzip
 ---
 #!/bin/bash -e
 rsync -av $SOURCEDIR/ .
