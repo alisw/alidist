@@ -31,6 +31,8 @@ disable:
   - O2-full-system-test
   - FLUKA_VMC
 overrides:
+  protobuf:
+    version: v3.14.0
   Python-modules-list:
     env:
       PIP_REQUIREMENTS: |
