@@ -18,6 +18,7 @@ valid_defaults:
   - alo
   - o2-prod
   - o2-ninja
+  - "TpcFecUtils:(?!osx)"
 ---
 #!/bin/bash -ex
 
