@@ -7,7 +7,7 @@ build_requires:
 ---
 #!/bin/bash -e
 
-$SOURCEDIR/configure.py --bootstrap
+python3 $SOURCEDIR/configure.py --bootstrap
 mkdir -p $INSTALLROOT/bin
 cp ./ninja $INSTALLROOT/bin
 
