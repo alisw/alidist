@@ -8,7 +8,7 @@ env:
   ENABLE_VMC: 'ON'
 overrides:
   AliPhysics:
-    tag: vAN-20210506
+    tag: vAN-20210507
     version: '%(tag_basename)s_ROOT6'
   AliRoot:
     tag: v5-09-57g
