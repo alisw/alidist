@@ -1,8 +1,6 @@
 package: FairMQ
-# version: "%(tag_basename)s"
-# tag: v1.4.35 TODO switch back to version tags once 1.4.36 is released
-version: "v1.4.35.2"
-tag: v1.4.35_hotfix_alice2
+version: "%(tag_basename)s"
+tag: v1.4.37
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
