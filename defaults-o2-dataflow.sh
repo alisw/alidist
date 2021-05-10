@@ -33,6 +33,9 @@ disable:
 overrides:
   protobuf:
     version: v3.14.0
+  GCC-Toolchain:
+    version: "v10.2.0-alice2"
+    tag: "v10.2.0-alice2"
   Python-modules-list:
     env:
       PIP_REQUIREMENTS: |
