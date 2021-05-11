@@ -11,6 +11,7 @@ requires:
   - QualityControl
   - "DataDistribution:(?!osx)"
   - "ALF:(?!osx|slc8)"
+  - "Bookkeeping:(slc*)"
 valid_defaults:
   - o2
   - o2-dataflow
