@@ -7,8 +7,6 @@ requires:
   - fastjet:(?!.*ppc64)
   - GEANT3
   - GEANT4_VMC
-  - FLUKA
-  - FLUKA_VMC
   - Vc
   - JAliEn-ROOT
 build_requires:
@@ -137,7 +135,6 @@ module load BASE/1.0                                                            
             ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}                             \\
             ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                                             \\
             ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}                         \\
-            ${FLUKA_VMC_REVISION:+FLUKA_VMC/$FLUKA_VMC_VERSION-$FLUKA_VMC_REVISION}                                 \\
             ${ALIEN_ROOT_LEGACY_REVISION:+AliEn-ROOT-Legacy/$ALIEN_ROOT_LEGACY_VERSION-$ALIEN_ROOT_LEGACY_REVISION}
 # Our environment
 set ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

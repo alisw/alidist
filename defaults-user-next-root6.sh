@@ -9,8 +9,6 @@ disable:
   - GEANT3
   - GEANT4
   - GEANT4_VMC
-  - FLUKA
-  - FLUKA_VMC
   - arrow
 overrides:
   AliRoot:
