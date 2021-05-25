@@ -1,0 +1,32 @@
+name: Create a PR from pushes to rc/ branches
+
+on:
+  push:
+    branches:
+      - 'rc/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.deleted }}
+
+    steps:
+      - name: Get rc branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.ref }}
+
+      - name: Compute base branch name
+        id: name
+        run: |
+          echo "::set-output name=base::${GITHUB_REF#refs/heads/rc/}"
+
+      - name: Send pull request to regular branch
+        uses: repo-sync/pull-request@v2.5
+        with:
+          destination_branch: ${{ steps.name.outputs.base }}
+          pr_title: 'daily tags: auto-update dist definitions'
+          pr_body: |
+            The daily-tags.sh script has created a tag release with these changes.
+          pr_allow_empty: true
+          github_token: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
