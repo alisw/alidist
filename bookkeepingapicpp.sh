@@ -1,4 +1,4 @@
-package: Bookkeeping
+package: BookkeepingApiCpp
 version: "%(tag_basename)s"
 tag: v0.17.0
 requires:
