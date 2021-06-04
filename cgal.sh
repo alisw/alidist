@@ -24,6 +24,7 @@ cd CGAL-*
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="-L$BOOST_ROOT/lib"
   export LD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
+  export DYLD_LIBRARY_PATH="$BOOST_ROOT/lib:$LD_LIBRARY_PATH"
 fi
 
 export MPFR_LIB_DIR="${MPFR_ROOT}/lib"
