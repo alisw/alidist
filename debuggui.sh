@@ -33,7 +33,7 @@ esac
 # build the tracy profiler
 rsync -av $SOURCEDIR/tracy/ tracy/
 pushd tracy/profiler/build/unix
-  make                                                                                                                          \
+  make ${JOBS+-j $JOBS}                                                                                                         \
       LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
       DEFINES="$DEFINES"                                                                                                        \
       TBB=off                                                                                                                   \
