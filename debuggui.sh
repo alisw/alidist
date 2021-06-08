@@ -1,6 +1,6 @@
 package: DebugGUI
-version: "v0.5.4"
-tag: "v0.5.4"
+version: "v0.5.6"
+tag: "v0.5.6"
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
@@ -23,7 +23,7 @@ case $ARCHITECTURE in
       DEFINES="-DNO_PARALLEL_SORT"
     ;;
     *) 
-      DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR"
+      DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR -DNO_PARALLEL_SORT"
       EXTRA_LIBS="-lGL"
       ! ld -ltbb -o /dev/null 2>/dev/null || EXTRA_LIBS="${EXTRA_LIBS} -ltbb"
       [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
@@ -33,7 +33,7 @@ esac
 # build the tracy profiler
 rsync -av $SOURCEDIR/tracy/ tracy/
 pushd tracy/profiler/build/unix
-  make                                                                                                                          \
+  make ${JOBS+-j $JOBS}                                                                                                         \
       LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
       DEFINES="$DEFINES"                                                                                                        \
       TBB=off                                                                                                                   \
