@@ -13,6 +13,11 @@ overrides:
   fastjet:
     tag: v3.3.3_1.042-alice1
     version: v3.3.3_1.042-alice1
+  pythia:
+    requires:
+    - lhapdf
+    - boost
+    tag: v8304
 package: defaults-dev
 version: v1
 
