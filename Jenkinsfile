@@ -39,7 +39,7 @@ def buildAny(architecture) {
             BUILD_TEST="$BUILD_TEST Rivet-test" ;;
 
           # Packages which only touch O2
-          o2|fairroot|dds|zeromq|nanomsg|sodium|pythia|pythia6|lhapdf)
+          o2|fairroot|dds|zeromq|nanomsg|sodium|pythia|pythia6|lhapdf|fftw3)
             BUILD_TEST="$BUILD_TEST O2 " ;;
 
           # Packages which are only for AliRoot
