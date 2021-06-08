@@ -10,7 +10,7 @@ requires:
   - Readout
   - QualityControl
   - "DataDistribution:(?!osx)"
-  - "ALF:(?!osx|slc8)"
+  - "ALF:(?!osx)"
   - "BookkeepingApiCpp:(slc*)"
   - "mesos:(slc8)"
 valid_defaults:
