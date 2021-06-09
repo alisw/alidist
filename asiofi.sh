@@ -42,12 +42,11 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0                                                                            \\
-            ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
-            ${OFI_ROOT:+ofi/$OFI_VERSION-$OFI_REVISION}
+            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            ${OFI_REVISION:+ofi/$OFI_VERSION-$OFI_REVISION}
 # Our environment
 set ASIOFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv ASIOFI_ROOT \$ASIOFI_ROOT
 prepend-path PATH \$ASIOFI_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ASIOFI_ROOT/lib
 EoF
