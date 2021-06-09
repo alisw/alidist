@@ -10,6 +10,7 @@ cmake $SOURCEDIR                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}    \
+      -DROOT_DIR=$ROOT_ROOT \
       -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
 #make test

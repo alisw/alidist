@@ -1,6 +1,6 @@
 package: FLUKA_VMC
 version: "%(tag_basename)s"
-tag: "2011-3.0-vmc6"
+tag: "4-1.1-vmc1"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -17,6 +17,7 @@ prepend_path:
 ---
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE     \
+                 -DCMAKE_INSTALL_LIBDIR="lib"             \
                  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
                  -DCMAKE_SKIP_RPATH=TRUE                  \
                  -DFLUKA_ROOT=$FLUKA_ROOT                 \
@@ -48,4 +49,5 @@ setenv FLUVMC \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUKADATA \$::env(BASEDIR)/$PKGNAME/\$version/data
 prepend-path LD_LIBRARY_PATH \$FLUKA_VMC_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$FLUKA_VMC_ROOT/include/TFluka
 EoF

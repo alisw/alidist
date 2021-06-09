@@ -1,6 +1,6 @@
 package: ReadoutCard
 version: "%(tag_basename)s"
-tag: v0.29.1
+tag: v0.32.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -57,7 +57,7 @@ mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INS
 
 # External RPM dependencies
 cat > $INSTALLROOT/.rpm-extra-deps <<EoF
-pda-kadapter-dkms >= 1.1.0
+pda-kadapter-dkms >= 2.0.0
 libhugetlbfs
 libhugetlbfs-utils
 EoF

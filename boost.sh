@@ -1,6 +1,6 @@
 package: boost
-version: v1.74.0
-tag: v1.74.0
+version: v1.75.0
+tag: v1.75.0
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -14,7 +14,6 @@ build_requires:
 prepend_path:
   ROOT_INCLUDE_PATH: "$BOOST_ROOT/include"
 ---
-#!/bin/bash -e
 BOOST_PYTHON=
 BOOST_CXXFLAGS=
 if [[ $ARCHITECTURE != osx* && $PYTHON_MODULES_VERSION ]]; then

@@ -12,7 +12,11 @@ prefer_system: .*
 prefer_system_check: |
   set -e
   which gfortran || { echo "gfortran missing"; exit 1; }
-  which cc && test -f $(dirname $(which cc))/c++ && printf "#define GCCVER ((__GNUC__ << 16)+(__GNUC_MINOR__ << 8)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < 0x070300)\n#error \"System's GCC cannot be used: we need at least GCC 7.X. We are going to compile our own version.\"\n#endif\n" | cc -xc++ - -c -o /dev/null
+  case $REQUESTED_VERSION in
+    v10*) MIN_GCC_VERSION=100200 ;;
+    *) MIN_GCC_VERSION=70300 ;;
+  esac
+  which gcc && test -f $(dirname $(which gcc))/c++ && printf "#define GCCVER ((__GNUC__ * 10000)+(__GNUC_MINOR__ * 100)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < $MIN_GCC_VERSION)\n#error \"System's GCC cannot be used: we need at least GCC $REQUESTED_VERSION We are going to compile our own version.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
 ---
 #!/bin/bash -e
 
@@ -37,6 +41,16 @@ esac
 
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 
+if [ -e autoconf-archive ]; then
+  (cd autoconf-archive && autoreconf -ivf )
+  mkdir build-autoconf-archive
+  pushd build-autoconf-archive
+    ../autoconf-archive/configure --prefix="$INSTALLROOT"
+    make install
+  popd
+  export ACLOCAL_PATH=$INSTALLROOT/share/aclocal
+fi
+
 # Binutils
 mkdir build-binutils
 pushd build-binutils
@@ -60,14 +74,18 @@ cat > test.c <<EOF
 int main(void) { printf("The answer is 42.\n"); }
 EOF
 
-# GCC and deps
 pushd gcc
-  for EXT in mpfr gmp mpc isl cloog; do
-    pushd $EXT
-      autoreconf -ivf
-    popd
-  done
+[ -e mpfr ] && (cd mpfr && autoreconf -ivf)
+[ -e mpc ] && (cd mpc && autoreconf -ivf)
+[ -e gmp ] && (cd gmp && autoreconf -ivf)
+[ -e isl ] && (cd isl && autoreconf -ivf)
+[ -e cloog ] && (cd cloog && autoreconf -ivf)
 popd
+[ -e mpfr ] && (cd mpfr && autoreconf -ivf)
+[ -e mpc ] && (cd mpc && autoreconf -ivf)
+[ -e gmp ] && (cd gmp && autoreconf -ivf)
+[ -e isl ] && (cd isl && autoreconf -ivf)
+[ -e cloog ] && (cd cloog && autoreconf -ivf)
 
 mkdir build-gcc
 pushd build-gcc

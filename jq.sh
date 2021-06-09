@@ -2,9 +2,8 @@ package: jq
 version: v1.6
 tag: jq-1.6
 source: https://github.com/stedolan/jq.git
-requires:
-  - "GCC-Toolchain:(?!osx)"
 build_requires:
+  - "GCC-Toolchain:(?!osx)"
   - oniguruma
   - "autotools:(slc6|slc7)"
 prefer_system: (?!slc5.*)

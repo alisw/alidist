@@ -1,6 +1,6 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v0.20.7"
+tag: "v0.23.1"
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - golang
@@ -28,5 +28,21 @@ popd
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+cat > etc/modulefiles/$PKGNAME <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0
+
+# Our environment
+set CONTROL_CORE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$CONTROL_CORE_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$CONTROL_CORE_ROOT/lib
+EoF
+
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -16,9 +16,6 @@ ppconsul*           @alisw/dataflow-experts
 qualitycontrol*     @alisw/dataflow-experts
 readout*            @alisw/dataflow-experts
 readoutcard*        @alisw/dataflow-experts
-node*               @alisw/dataflow-experts
-qcg*                @alisw/dataflow-experts
-ecsg*               @alisw/dataflow-experts
 librdkafka*         @alisw/dataflow-experts
 libinfologger*      @alisw/dataflow-experts
 dim*                @alisw/dataflow-experts
@@ -75,3 +72,4 @@ xjalienfs*          @alisw/alien-experts
 # EPN
 datadistribution*   @alisw/epn-experts
 dds*                @alisw/epn-experts
+odc*                @alisw/epn-experts

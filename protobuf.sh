@@ -1,5 +1,5 @@
 package: protobuf
-version: v3.14.0
+version: v3.15.8
 source: https://github.com/google/protobuf
 build_requires:
  - CMake

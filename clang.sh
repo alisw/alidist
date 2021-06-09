@@ -9,6 +9,7 @@ build_requires:
  - "Python-system:(?!slc.*)"
  - CMake
  - system-curl
+ - ninja
 ---
 #!/bin/sh
 
@@ -37,6 +38,7 @@ esac
 # note that BUILD_SHARED_LIBS=ON IS NEEDED FOR ADDING DYNAMIC PLUGINS
 # to clang-tidy (for instance)
 cmake $SOURCEDIR/llvm \
+  -G Ninja \
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
   -DLLVM_TARGETS_TO_BUILD="X86" \
   -DCMAKE_BUILD_TYPE=Release \
@@ -47,8 +49,7 @@ cmake $SOURCEDIR/llvm \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DBUILD_SHARED_LIBS=OFF
 
-make ${JOBS+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 #add correct rpath to dylibs on mac as long as there is no better way to controll rpath in the LLVM CMake.
 case $ARCHITECTURE in
@@ -63,7 +64,7 @@ esac
 # Needed to be able to find C++ headers.
 case $ARCHITECTURE in
   osx*)
-    find `xcode-select -p` -type d -path "*usr/include/c++" -exec ln -sf {} $INSTALLROOT/include/c++ \;
+    ln -sf "$(find `xcode-select -p` -type d -path "*MacOSX.sdk/usr/include/c++" -o -path "*/XcodeDefault.xctoolchain/usr/include/c++" | head -1)" "$INSTALLROOT/include/c++"
   ;;
   *)
   if [ "X$GCC_TOOLCHAIN_ROOT" = X ]; then

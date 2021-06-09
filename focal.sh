@@ -1,21 +1,17 @@
-package: AliPhysics
+package: FOCAL
 version: "%(commit_hash)s"
 tag: master
 requires:
   - AliRoot
-  - RooUnfold
-  - treelite
-  - KFParticle
 build_requires:
   - "Xcode:(osx.*)"
-source: https://github.com/alisw/AliPhysics
+source: https://gitlab.cern.ch/mvl/FOCAL
 env:
-  ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
+  FOCAL: "$FOCAL_ROOT"
 prepend_path:
-  ROOT_INCLUDE_PATH: "$ALIPHYSICS_ROOT/include"
+  ROOT_INCLUDE_PATH: "$FOCAL_ROOT/include"
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
-  ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
   cp -v compile_commands.json ${INSTALLROOT}
   DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
   if [[ $DEVEL_SOURCES != $SOURCEDIR ]]; then
@@ -41,7 +37,7 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   NINJA_BIN=ninja-build
   type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
   type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  # AliPhysics contains Fortran code, which requires at least ninja v1.10
+  # FOCAL contains Fortran code, which requires at least ninja v1.10
   # in order to build with ninja, otherwise the build must fall back to make
   NINJA_VERSION_MAJOR=0
   NINJA_VERSION_MINOR=0
@@ -54,19 +50,11 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   unset NINJA_BIN
 fi
 
-cmake "$SOURCEDIR"                                                 \
+cmake "$SOURCEDIR/aliroot"                                         \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                        \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                           \
       -DROOTSYS="$ROOT_ROOT"                                       \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                    \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"}  \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
-      ${FASTJET_ROOT:+-DFASTJET="$FASTJET_ROOT"}                   \
-      ${ROOUNFOLD_ROOT:+-DROOUNFOLD="$ROOUNFOLD_ROOT"}             \
-      ${CGAL_ROOT:+-DCGAL="$CGAL_ROOT"}                            \
-      ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"}                            \
-      ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
-      ${TREELITE_ROOT:+-DTREELITE_ROOT="$TREELITE_ROOT"}           \
       -DALIROOT="$ALIROOT_ROOT"
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
@@ -99,13 +87,13 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${ROOUNFOLD_REVISION:+RooUnfold/$ROOUNFOLD_VERSION-$ROOUNFOLD_REVISION} ${TREELITE_REVISION:+treelite/$TREELITE_VERSION-$TREELITE_REVISION} ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}
 # Our environment
-setenv ALIPHYSICS_VERSION \$version
-setenv ALIPHYSICS_RELEASE \$::env(ALIPHYSICS_VERSION)
-set ALICE_PHYSICS \$::env(BASEDIR)/$PKGNAME/\$::env(ALIPHYSICS_RELEASE)
-setenv ALICE_PHYSICS \$ALICE_PHYSICS
-prepend-path PATH \$ALICE_PHYSICS/bin
-prepend-path LD_LIBRARY_PATH \$ALICE_PHYSICS/lib
-prepend-path ROOT_INCLUDE_PATH \$ALICE_PHYSICS/include
-prepend-path ROOT_DYN_PATH \$ALICE_PHYSICS/lib
+setenv FOCAL_VERSION \$version
+setenv FOCAL_RELEASE \$::env(FOCAL_VERSION)
+set FOCAL \$::env(BASEDIR)/$PKGNAME/\$::env(FOCAL_RELEASE)
+setenv FOCAL \$FOCAL
+prepend-path PATH \$FOCAL/bin
+prepend-path LD_LIBRARY_PATH \$FOCAL/lib
+prepend-path ROOT_INCLUDE_PATH \$FOCAL/include
+prepend-path ROOT_DYN_PATH \$FOCAL/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -39,3 +39,8 @@ cat << EOF >> etc/modulefiles/$PKGNAME
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# External RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EoF
+freeglut-devel
+EoF

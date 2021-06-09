@@ -16,7 +16,7 @@ cp "${O2_ROOT}"/compile_commands.json .
 # We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
 # Heuristically guess source directory
-O2_SRC=$(python3 -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix([ x["file"] for x in json.loads(open("compile_commands.json").read()) if not "G__" in x["file"] and x["file"].endswith(".cxx") ]) )')
+O2_SRC=$(python3 -c 'import json, os; print(os.path.commonprefix([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
 [[ -e "$O2_SRC"/CMakeLists.txt && -d "$O2_SRC"/.git ]]
 
 # We have something to compare our working directory to (ALIBUILD_BASE_HASH). We check only the
@@ -24,7 +24,7 @@ O2_SRC=$(python3 -c 'import json,sys,os; sys.stdout.write( os.path.commonprefix(
 # 50 entries long
 if [[ $ALIBUILD_BASE_HASH ]]; then
   pushd "$O2_SRC"
-    ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
+    ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} || true ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
     if [[ $(cat $BUILDDIR/changed | wc -l) -le 50 ]]; then
       O2_CHECKCODE_CHANGEDFILES=$(while read FILE; do [[ -e "$O2_SRC/$FILE" ]] && echo "$FILE" || true; done < <(cat $BUILDDIR/changed) | \
                                   xargs echo | sed -e 's/ /:/g')
@@ -88,7 +88,7 @@ COPYRIGHT="$(cat <<'EOF'
 EOF
 )"
 COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
-COPYRIGHT_EXCLUDE_REGEXP="/3rdparty/"  # exclude files from the copyright check
+COPYRIGHT_EXCLUDE_REGEXP="/3rdparty/|Utilities/Tools/cpulimit/"  # exclude files from the copyright check
 set +x
 while read FILE; do
   [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}

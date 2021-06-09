@@ -8,10 +8,11 @@ requires:
   - O2
   - "ReadoutCard:(slc*)"
   - Readout
-  - qcg
   - QualityControl
   - "DataDistribution:(?!osx)"
-  - "ALF:(?!osx|slc8)"
+  - "ALF:(?!osx)"
+  - "BookkeepingApiCpp:(slc*)"
+  - "mesos:(slc8)"
 valid_defaults:
   - o2
   - o2-dataflow

@@ -27,7 +27,14 @@ disable:
   - JAliEn-ROOT
   - KFParticle
   - MCStepLogger
+  - O2sim
+  - O2-full-system-test
 overrides:
+  protobuf:
+    version: v3.14.0
+  GCC-Toolchain:
+    version: "v10.2.0-alice2"
+    tag: "v10.2.0-alice2"
   Python-modules-list:
     env:
       PIP_REQUIREMENTS: |
@@ -35,6 +42,13 @@ overrides:
         dryable==1.0.3
         responses==0.10.6
         PyYAML==5.1
+        python-consul==1.1.0
+      PIP36_REQUIREMENTS: |
+        python-consul==1.1.0
+      PIP38_REQUIREMENTS: |
+        python-consul==1.1.0
+      PIP39_REQUIREMENTS: |
+        python-consul==1.1.0
   O2-customization:
     env:
       ENABLE_UPGRADES: OFF # Disable detector upgrades in O2

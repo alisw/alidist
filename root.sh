@@ -44,7 +44,7 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
-  v6-20*) 
+  v6-*)
      ENABLE_VMC=1
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
@@ -57,7 +57,7 @@ case $PKGVERSION in
   ;;
 esac
 
-# We do not use global options for ROOT, otherwise the -g will 
+# We do not use global options for ROOT, otherwise the -g will
 # kill compilation on < 8GB machines
 unset CXXFLAGS
 unset CFLAGS
@@ -88,7 +88,7 @@ fi
 
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+  ROOT_PYTHON_FLAGS="-Dpyroot=ON -Dpyroot_legacy=ON"
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 

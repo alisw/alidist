@@ -1,6 +1,6 @@
 package: DebugGUI
-version: "v0.4.0"
-tag: "v0.4.0"
+version: "v0.5.6"
+tag: "v0.5.6"
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
@@ -10,6 +10,7 @@ build_requires:
   - capstone
   - CMake
   - alibuild-recipe-tools
+  - ninja
 source: https://github.com/AliceO2Group/DebugGUI
 ---
 
@@ -22,40 +23,32 @@ case $ARCHITECTURE in
       DEFINES="-DNO_PARALLEL_SORT"
     ;;
     *) 
-      DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR"
+      DEFINES="-DIMGUI_IMPL_OPENGL_LOADER_GL3W -DTRACY_NO_FILESELECTOR -DNO_PARALLEL_SORT"
       EXTRA_LIBS="-lGL"
       ! ld -ltbb -o /dev/null 2>/dev/null || EXTRA_LIBS="${EXTRA_LIBS} -ltbb"
       [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
 esac
 
-# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
-if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
-  NINJA_BIN=ninja-build
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
-  unset NINJA_BIN
-fi
-
 # build the tracy profiler
 rsync -av $SOURCEDIR/tracy/ tracy/
 pushd tracy/profiler/build/unix
-  make                                                                                                                          \
+  make ${JOBS+-j $JOBS}                                                                                                         \
       LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
       DEFINES="$DEFINES"                                                                                                        \
       TBB=off                                                                                                                   \
-      INCLUDES="-I$CAPSTONE_ROOT/include -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w ${FREETYPE_ROOT:+-I$FREETYPE_ROOT/include/freetype2} -I${GLFW_ROOT:+$GLFW_ROOT/include}"
+      TRACY_NO_FILESELECTOR=1                                                                                                   \
+      INCLUDES="-I$CAPSTONE_ROOT/include/capstone -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w ${FREETYPE_ROOT:+-I$FREETYPE_ROOT/include/freetype2} -I${GLFW_ROOT:+$GLFW_ROOT/include}"
 popd
 mkdir -p $INSTALLROOT/{include/tracy,bin}
-cp tracy/profiler/build/unix/Tracy-debug $INSTALLROOT/bin/tracy-profiler
+cp tracy/profiler/build/unix/Tracy-* $INSTALLROOT/bin/tracy-profiler
 cp tracy/*.{h,hpp,cpp} $INSTALLROOT/include/tracy
 cp -r tracy/{common,client,libbacktrace} $INSTALLROOT/include/tracy/
 
 cmake $SOURCEDIR                          \
+      -DCMAKE_GENERATOR=Ninja             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 cmake --build . -- ${JOBS+-j $JOBS} install
 

@@ -3,7 +3,7 @@ version: "1.15.6"
 build_requires:
   - system-curl
 prefer_system_check: |
-  case `go version | sed -e 's/go version go//' | sed -e 's/ .*//'` in 0*|1.[0-9].*) exit 1 ;; esac
+  type go && case `go version | sed -e 's/go version go//' | sed -e 's/ .*//'` in 0*|1.[0-9].*) exit 1 ;; esac
 ---
 #!/bin/bash -e
 

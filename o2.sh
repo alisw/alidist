@@ -1,11 +1,10 @@
 package: O2
 version: "%(tag_basename)s"
-tag: v21.07
+tag: "nightly-20210609"
 requires:
   - arrow
   - FairRoot
   - Vc
-  - hijing
   - HepMC3
   - libInfoLogger
   - Common-O2
@@ -16,7 +15,6 @@ requires:
   - "curl:(?!slc8)"
   - "system-curl:slc8.*"
   - MCStepLogger
-  - AEGIS
   - fmt
   - "openmp:(?!osx.*)"
   - DebugGUI
@@ -81,7 +79,7 @@ incremental_recipe: |
     fi
     export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/GPU:$ROOT_INCLUDE_PATH
     # Set Geant4 data sets environment
-    if [ "$G4INSTALL" != "" ]]; then
+    if [[ "$G4INSTALL" != "" ]]; then
       `$G4INSTALL/bin/geant4-config --datasets | sed 's/[^ ]* //' | sed 's/G4/export G4/' | sed 's/DATA /DATA=/'`
     fi
     # Clean up old coverage data and tests logs
@@ -242,7 +240,8 @@ module load BASE/1.0 \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
             ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}         \\
             ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}             \\
-            ${CURL_REVISION:+curl/$CURL_VERSION-$CURL_REVISION}
+            ${CURL_REVISION:+curl/$CURL_VERSION-$CURL_REVISION}                                     \\
+            ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT
