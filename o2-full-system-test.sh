@@ -20,6 +20,10 @@ echo readlink:
 readlink /proc/self/exe || true
 echo END TEST ------- env
 
+if [[ "$G4INSTALL" != "" ]]; then
+  `$G4INSTALL/bin/geant4-config --datasets | sed 's/[^ ]* //' | sed 's/G4/export G4/' | sed 's/DATA /DATA=/'`
+fi
+
 rm -Rf $BUILDDIR/full-system-test-sim
 mkdir $BUILDDIR/full-system-test-sim
 pushd $BUILDDIR/full-system-test-sim
