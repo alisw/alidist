@@ -19,7 +19,7 @@ mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
   make vendor
-  make WHAT="o2-aliecs-core o2-aliecs-executor o2-aliecs-odc-shim o2-apricot"
+  make WHAT="o2-aliecs-core o2-aliecs-executor o2-apricot"
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
   # safely clean up vendor directory regardless of permissions
