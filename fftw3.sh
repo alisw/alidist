@@ -3,8 +3,9 @@ version: "%(tag_basename)s"
 tag: v3.3.9
 source: https://github.com/alisw/fftw3
 prefer_system: (?!slc5.*)
-requires:
+build_requires:
   - alibuild-recipe-tools
+  - CMake
 ---
 #!/bin/bash -e
 
