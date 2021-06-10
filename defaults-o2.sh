@@ -23,7 +23,7 @@ overrides:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
   O2:
-    tag: nightly-20210609
+    tag: nightly-20210610
     version: '%(tag_basename)s'
   XRootD:
     source: https://github.com/xrootd/xrootd
