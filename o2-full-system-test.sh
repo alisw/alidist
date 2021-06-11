@@ -7,19 +7,6 @@ force_rebuild: 1
 ---
 #!/bin/bash -e
 
-echo TEST ----------- env
-echo df:
-df
-echo -----
-echo ls /tmp
-ls -al /tmp
-echo -----
-echo env:
-env
-echo readlink:
-readlink /proc/self/exe || true
-echo END TEST ------- env
-
 if [[ "$G4INSTALL" != "" ]]; then
   `$G4INSTALL/bin/geant4-config --datasets | sed 's/[^ ]* //' | sed 's/G4/export G4/' | sed 's/DATA /DATA=/'`
 fi
