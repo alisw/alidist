@@ -189,7 +189,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${BUILD_EXAMPLES:+-DBUILD_EXAMPLES=$BUILD_EXAMPLES}                                                 \
       ${BUILD_TEST_ROOT_MACROS:+-BUILD_TEST_ROOT_MACROS=$BUILD_TEST_ROOT_MACROS}                          \
       ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=$ENABLE_UPGRADES}                                              \
-      ${ARROW_ROOT:+-Dgandiva_DIR=$ARROW_ROOT/lib/cmake/arrow}
+      ${ARROW_ROOT:+-Dgandiva_DIR=$ARROW_ROOT/lib/cmake/arrow}                                            \
+      ${ARROW_ROOT:+-Darrow_DIR=$ARROW_ROOT/lib/cmake/arrow}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
