@@ -15,7 +15,7 @@ rm -Rf $BUILDDIR/full-system-test-sim
 mkdir $BUILDDIR/full-system-test-sim
 pushd $BUILDDIR/full-system-test-sim
 export JOBUTILS_PRINT_ON_ERROR=1
-export JOBUTILS_JOB_TIMEOUT=900
+export JOBUTILS_JOB_TIMEOUT=1800
 export NHBPERTF=128
 export SHMSIZE=8000000000
 ALICE_O2SIM_DUMPLOG=1 NEvents=5 NEventsQED=100 O2SIMSEED=12345 $O2_ROOT/prodtests/full_system_test.sh
