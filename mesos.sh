@@ -2,12 +2,16 @@ package: mesos
 version: v1.11.0
 tag: 1.11.0
 source: https://git-wip-us.apache.org/repos/asf/mesos.git
+requires:
+- zlib
+- curl
+- OpenSSL
+- grpc
 build_requires:
 - "autotools:(slc6|slc7|slc8)"
 - protobuf
 - glog
 - Python-modules
-- grpc
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
@@ -50,3 +54,10 @@ prepend-path LD_LIBRARY_PATH \$MESOS_ROOT/lib
 prepend-path PATH \$MESOS_ROOT/bin
 EoF
 
+# External RPM dependencies
+cat > $INSTALLROOT/.rpm-extra-deps <<EoF
+cyrus-sasl
+cyrus-sasl-md5
+apr
+apr-util
+EoF
