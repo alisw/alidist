@@ -4,11 +4,15 @@ tag: 1.11.0
 source: https://git-wip-us.apache.org/repos/asf/mesos.git
 requires:
 - zlib
-- curl
+- "system-curl:(slc8)"
+- "curl:(?!slc8)"
 - OpenSSL
 - grpc
 build_requires:
 - "autotools:(slc6|slc7|slc8)"
+- system-apr
+- system-apr-util
+- system-cyrus-sasl
 - protobuf
 - glog
 - Python-modules
