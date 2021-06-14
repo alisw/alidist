@@ -13,6 +13,7 @@ build_requires:
 - system-apr
 - system-apr-util
 - system-cyrus-sasl
+- system-subversion
 - protobuf
 - glog
 - Python-modules
