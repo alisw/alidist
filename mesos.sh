@@ -8,6 +8,7 @@ requires:
 - "curl:(?!slc8)"
 - OpenSSL
 - grpc
+- RapidJSON
 - system-apr
 - system-apr-util
 - system-cyrus-sasl
@@ -31,7 +32,8 @@ cd build
     --disable-java \
     --with-protobuf=${PROTOBUF_ROOT} \
     --with-grpc=${GRPC_ROOT} \
-    --with-glog=${GLOG_ROOT}
+    --with-glog=${GLOG_ROOT} \
+    --with-rapidjson=${RAPIDJSON_ROOT}
 
 # We build with fewer jobs to avoid OOM errors in GCC
 make -j 4
