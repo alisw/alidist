@@ -6,6 +6,7 @@ requires:
   - c-ares
   - "OpenSSL:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
+  - re2
 build_requires:
   - CMake
   - abseil
@@ -41,6 +42,7 @@ cmake $SOURCEDIR                                    \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
   -DgRPC_BUILD_CSHARP_EXT=OFF                       \
+  -DgRPC_RE2_PROVIDER=package                       \
   ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
   -DgRPC_CARES_PROVIDER=package
 
