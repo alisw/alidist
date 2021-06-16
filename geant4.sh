@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v10.7.1"
+tag: "v10.7.2"
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
