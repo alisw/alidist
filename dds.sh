@@ -1,5 +1,5 @@
 package: DDS
-version: "3.5.12"
+version: "3.5.13"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
