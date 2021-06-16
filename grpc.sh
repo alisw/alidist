@@ -10,6 +10,7 @@ requires:
 build_requires:
   - CMake
   - abseil
+  - alibuild-recipe-tools
 source: https://github.com/alisw/grpc
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -51,24 +52,5 @@ make ${JOBS:+-j$JOBS} install
 
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                          \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${C_ARES_REVISION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
-            ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
-# Our environment
-set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$GRPC_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$GRPC_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > "$MODULEDIR/$PKGNAME"

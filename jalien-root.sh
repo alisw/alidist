@@ -13,6 +13,7 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
   - zlib
   - Alice-GRID-Utils
+  - alibuild-recipe-tools
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
   ROOT_INCLUDE_PATH: "$JALIEN_ROOT_ROOT/include"
@@ -41,25 +42,8 @@ make ${JOBS:+-j $JOBS} install
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                   \\
-                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}                 \\
-                     ${LIBJALIENWS_REVISION:+libjalienws/$LIBJALIENWS_VERSION-$LIBJALIENWS_REVISION}
-
-# Our environment
-set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$JALIEN_ROOT_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$JALIEN_ROOT_ROOT/lib
-append-path ROOT_PLUGIN_PATH \$JALIEN_ROOT_ROOT/etc/plugins
-prepend-path ROOT_INCLUDE_PATH \$JALIEN_ROOT_ROOT/include
+alibuild-generate-module --bin --lib --extra > "etc/modulefiles/$PKGNAME" <<\EoF
+append-path ROOT_PLUGIN_PATH $PKG_ROOT/etc/plugins
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

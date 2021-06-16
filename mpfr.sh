@@ -25,11 +25,8 @@ rm -f $INSTALLROOT/lib/*.la
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
-
+alibuild-generate-module --extra > "$MODULEDIR/$PKGNAME" <<EoF
 # Our environment
 set MPFR_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv MPFR_ROOT \$MPFR_ROOT

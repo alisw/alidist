@@ -18,6 +18,5 @@ make -j ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib --bin > "$MODULEDIR/$PKGNAME"

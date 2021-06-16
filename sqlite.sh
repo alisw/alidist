@@ -9,6 +9,7 @@ prefer_system_check: |
 build_requires:
   - system-curl
   - "autotools:(slc6|slc7)"
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -ex
 rsync -av $SOURCEDIR/ ./
@@ -21,21 +22,5 @@ rm -rf $INSTALLROOT/share
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set SQLITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv SQLITE_ROOT \$SQLITE_ROOT
-prepend-path PATH \$SQLITE_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$SQLITE_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib --root-env > "$MODULEDIR/$PKGNAME"

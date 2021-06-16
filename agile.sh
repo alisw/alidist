@@ -11,6 +11,7 @@ requires:
 build_requires:
   - "autotools:(slc6|slc7)"
   - SWIG
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
@@ -36,22 +37,7 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 HepMC/$HEPMC_VERSION-$HEPMC_REVISION lhapdf5/${LHAPDF5_VERSION}-${LHAPDF5_REVISION} ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}
-# Our environment
-set AGILE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv AGILE_ROOT \$AGILE_ROOT
-prepend-path PYTHONPATH \$AGILE_ROOT/lib/python2.7/site-packages
-prepend-path PATH \$AGILE_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$AGILE_ROOT/lib
+alibuild-generate-module --bin --lib --root-env --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+prepend-path PYTHONPATH $PKG_ROOT/lib/python2.7/site-packages
 EoF

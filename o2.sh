@@ -31,6 +31,7 @@ build_requires:
   - RapidJSON
   - googlebenchmark
   - O2-customization
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
@@ -210,51 +211,14 @@ fi
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                           \\
-            ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                             \\
-            ${HEPMC3_REVISION:+HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION}                             \\
-            ${MONITORING_REVISION:+Monitoring/$MONITORING_VERSION-$MONITORING_REVISION}             \\
-            ${CONFIGURATION_REVISION:+Configuration/$CONFIGURATION_VERSION-$CONFIGURATION_REVISION} \\
-            ${LIBINFOLOGGER_REVISION:+libInfoLogger/$LIBINFOLOGGER_VERSION-$LIBINFOLOGGER_REVISION} \\
-            ${COMMON_O2_REVISION:+Common-O2/$COMMON_O2_VERSION-$COMMON_O2_REVISION}                 \\
-            ms_gsl/$MS_GSL_VERSION-$MS_GSL_REVISION                                                 \\
-            ${ARROW_REVISION:+arrow/$ARROW_VERSION-$ARROW_REVISION}                                 \\
-            ${DEBUGGUI_REVISION:+DebugGUI/$DEBUGGUI_VERSION-$DEBUGGUI_REVISION}                     \\
-            ${LIBUV_REVISION:+libuv/$LIBUV_VERSION-$LIBUV_REVISION}                                 \\
-            ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}         \\
-            ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
-            ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}                                     \\
-            ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}                                     \\
-            ${FMT_REVISION:+fmt/$FMT_VERSION-$FMT_REVISION}                                         \\
-            ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
-            ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}         \\
-            ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}             \\
-            ${CURL_REVISION:+curl/$CURL_VERSION-$CURL_REVISION}                                     \\
-            ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}
+alibuild-generate-module --bin --lib --root-env --extra > "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
-set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv O2_ROOT \$O2_ROOT
-setenv VMCWORKDIR \$O2_ROOT/share
-
-set O2_ROOT \$O2_ROOT
-prepend-path PATH \$O2_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$O2_ROOT/lib
-prepend-path ROOT_DYN_PATH \$O2_ROOT/lib
-$([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
-prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
-prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
+setenv VMCWORKDIR \$PKG_ROOT/share
+prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
+$([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] &&
+  echo "prepend-path ROOT_INCLUDE_PATH $BOOST_ROOT/include")
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/GPU
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 

@@ -8,6 +8,7 @@ prefer_system_check: |
 build_requires:
  - zlib
  - "GCC-Toolchain:(?!osx)"
+ - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
@@ -40,21 +41,5 @@ rm -rf $INSTALLROOT/lib/pkgconfig \
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION} ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set OPENSSL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv OPENSSL_ROOT \$OPENSSL_ROOT
-prepend-path PATH \$OPENSSL_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$OPENSSL_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib --root-env > "$MODULEDIR/$PKGNAME"

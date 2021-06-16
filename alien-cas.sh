@@ -14,9 +14,7 @@ find $SOURCEDIR -type d -maxdepth 1 -mindepth 1 -exec rsync -av {}/ $DEST \;
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > $MODULEFILE
-cat >> "$MODULEFILE" <<EOF
-setenv X509_CERT_DIR \$::env(BASEDIR)/AliEn-CAs/\$version/globus/share/certificates
+alibuild-generate-module --extra > "$MODULEDIR/$PKGNAME" <<\EOF
+setenv X509_CERT_DIR $::env(BASEDIR)/AliEn-CAs/$version/globus/share/certificates
 EOF

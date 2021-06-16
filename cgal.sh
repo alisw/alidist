@@ -7,6 +7,7 @@ build_requires:
   - MPFR
   - CMake
   - system-curl
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -72,21 +73,5 @@ make install VERBOSE=1
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
-# Our environment
-set CGAL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv CGAL_ROOT \$CGAL_ROOT
-prepend-path PATH \$CGAL_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$CGAL_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > "$MODULEDIR/$PKGNAME"

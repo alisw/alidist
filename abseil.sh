@@ -23,11 +23,8 @@ make ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
-
+alibuild-generate-module --extra > "$MODULEDIR/$PKGNAME" <<EoF
 # Our environment
 set ABSEIL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ABSEIL_ROOT/bin

@@ -8,6 +8,7 @@ requires:
   - KFParticle
 build_requires:
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 source: https://github.com/alisw/AliPhysics
 env:
   ALICE_PHYSICS: "$ALIPHYSICS_ROOT"
@@ -88,16 +89,7 @@ fi
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 AliRoot/$ALIROOT_VERSION-$ALIROOT_REVISION ${ROOUNFOLD_REVISION:+RooUnfold/$ROOUNFOLD_VERSION-$ROOUNFOLD_REVISION} ${TREELITE_REVISION:+treelite/$TREELITE_VERSION-$TREELITE_REVISION} ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}
+alibuild-generate-module --extra > "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
 setenv ALIPHYSICS_VERSION \$version
 setenv ALIPHYSICS_RELEASE \$::env(ALIPHYSICS_VERSION)

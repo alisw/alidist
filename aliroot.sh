@@ -12,6 +12,7 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 prepend_path:
@@ -118,24 +119,7 @@ rsync -av $SOURCEDIR/test/ $INSTALLROOT/test
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                                                                \\
-            ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}                                                     \\
-            ${DPMJET_REVISION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION}                                             \\
-            ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                                         \\
-            ${GEANT3_REVISION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                                             \\
-            ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}                             \\
-            ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                                             \\
-            ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}                         \\
-            ${ALIEN_ROOT_LEGACY_REVISION:+AliEn-ROOT-Legacy/$ALIEN_ROOT_LEGACY_VERSION-$ALIEN_ROOT_LEGACY_REVISION}
+alibuild-generate-module --extra > "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
 set ALIROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ALIROOT_VERSION \$version

@@ -5,6 +5,8 @@ source: https://github.com/alisw/RooUnfold
 requires:
  - ROOT
  - boost
+build_requires:
+ - alibuild-recipe-tools
 ---
 cmake $SOURCEDIR                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
@@ -18,16 +20,7 @@ make ${JOBS:+-j$JOBS} install
 rsync -av $SOURCEDIR/include/ $INSTALLROOT/include/
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}
+alibuild-generate-module --extra > "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
 setenv ROOUNFOLD_RELEASE \$version
 setenv ROOUNFOLD_VERSION $PKGVERSION

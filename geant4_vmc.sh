@@ -9,6 +9,7 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT4_VMC_ROOT/include/g4root:$GEANT4_VMC_ROOT/include/geant4vmc:$GEANT4_VMC_ROOT/include/mtroot"
 env:
@@ -29,25 +30,10 @@ ln -nfs "$G4VMC_SHARE/examples" "$INSTALLROOT/share/examples"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} vgm/$VGM_VERSION-$VGM_REVISION
-# Our environment
-set GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv GEANT4_VMC_ROOT \$GEANT4_VMC_ROOT
-setenv G4VMCINSTALL \$GEANT4_VMC_ROOT
-prepend-path PATH \$GEANT4_VMC_ROOT/bin
-prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/mtroot
-prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/geant4vmc
-prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/g4root
-prepend-path LD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib
+alibuild-generate-module --bin --lib --root-env --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+setenv G4VMCINSTALL $PKG_ROOT
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include/mtroot
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include/geant4vmc
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include/g4root
 EoF

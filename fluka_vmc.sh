@@ -8,6 +8,7 @@ requires:
 build_requires:
   - CMake
   - FLUKA
+  - alibuild-recipe-tools
 env:
   FLUVMC: "$FLUKA_VMC_ROOT"
   FLUPRO: "$FLUKA_VMC_ROOT"
@@ -30,24 +31,10 @@ rsync -av "$FLUKA_ROOT"/data "$INSTALLROOT/"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set FLUKA_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FLUKA_VMC_ROOT \$FLUKA_VMC_ROOT
-setenv FLUVMC \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FLUKADATA \$::env(BASEDIR)/$PKGNAME/\$version/data
-prepend-path LD_LIBRARY_PATH \$FLUKA_VMC_ROOT/lib
-prepend-path ROOT_INCLUDE_PATH \$FLUKA_VMC_ROOT/include/TFluka
+alibuild-generate-module --lib --root-env --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+setenv FLUVMC $PKG_ROOT
+setenv FLUPRO $PKG_ROOT
+setenv FLUKADATA $PKG_ROOT/data
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include/TFluka
 EoF

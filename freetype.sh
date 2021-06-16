@@ -5,6 +5,7 @@ requires:
 build_requires:
   - "autotools:(slc6|slc7)"
   - system-curl
+  - alibuild-recipe-tools
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <ft2build.h>\n" | c++ -xc++ - `freetype-config --cflags` -c -M 2>&1;
@@ -25,21 +26,5 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 $([[ "$ALIEN_RUNTIME_VERSION" ]] && echo AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION || echo ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION})
-# Our environment
-set FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FREETYPE_ROOT \$FREETYPE_ROOT
-prepend-path PATH \$FREETYPE_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$FREETYPE_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib --root-env > "$MODULEDIR/$PKGNAME"

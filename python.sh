@@ -109,10 +109,8 @@ find "$INSTALLROOT"/lib/python* \
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
+alibuild-generate-module --bin --lib --extra > "$MODULEDIR/$PKGNAME" <<EoF
 setenv PYTHONHOME \$PKG_ROOT
 prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
 if { [module-info mode load] } {

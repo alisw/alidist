@@ -8,6 +8,8 @@ requires:
  - xjalienfs
  - "curl:(?!slc8)"
  - "system-curl:slc8.*"
+build_requires:
+ - alibuild-recipe-tools
 valid_defaults:
  - jalien
 ---
@@ -21,22 +23,7 @@ rsync -av bin/ $INSTALLROOT/bin/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 JDK/$JDK_VERSION-$JDK_REVISION \\
-            XRootD/$XROOTD_VERSION-$XROOTD_REVISION \\
-            xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION
-# Our environment
-set JALIEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path CLASSPATH \$JALIEN_ROOT/lib/alien-users.jar
-prepend-path PATH \$JALIEN_ROOT/bin
+alibuild-generate-module --bin --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+prepend-path CLASSPATH $PKG_ROOT/lib/alien-users.jar
 EoF

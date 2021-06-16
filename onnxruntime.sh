@@ -7,6 +7,7 @@ requires:
   - re2
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
@@ -47,12 +48,5 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
-
-# Our environment
-set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$${PKGNAME}_ROOT/lib
-EoF
+alibuild-generate-module --lib > "$MODULEDIR/$PKGNAME"

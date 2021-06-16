@@ -5,6 +5,7 @@ requires:
   - o2codechecker
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 force_rebuild: 1
 ---
 #!/bin/bash -e
@@ -114,17 +115,4 @@ grep -v clang-diagnostic-error error-log.txt | grep " error:"   || GRERR=$?
 
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
-cat > $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
-# Our environment
-set O2CHECKCODE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv O2CHECKCODE_ROOT \$O2CHECKCODE_ROOT
-EoF
+alibuild-generate-module --root-env > "$INSTALLROOT/etc/modulefiles/$PKGNAME"

@@ -6,6 +6,8 @@ requires:
   - HepMC
   - lhapdf
   - pythia
+build_requires:
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
@@ -23,14 +25,7 @@ make install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-
-cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set TAUOLA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv TAUOLA_ROOT \$TAUOLA_ROOT
-setenv TAUOLA_INSTALL_PATH \$::env(TAUOLA_ROOT)/lib/TAUOLA
-prepend-path PATH \$TAUOLA_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$TAUOLA_ROOT/lib
+alibuild-generate-module --bin --lib --root-env --extra > "etc/modulefiles/$PKGNAME" <<\EoF
+setenv TAUOLA_INSTALL_PATH $::env(TAUOLA_ROOT)/lib/TAUOLA
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

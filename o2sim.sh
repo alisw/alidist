@@ -4,6 +4,8 @@ requires:
   - O2
   - O2DPG
   - AEGIS
+build_requires:
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -ex
 

@@ -7,6 +7,7 @@ requires:
   - GCC-Toolchain:(?!osx)
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/sh
 
@@ -19,22 +20,7 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set PYTHIA6_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PYTHIA6_ROOT \$PYTHIA6_ROOT
-prepend-path LD_LIBRARY_PATH \$PYTHIA6_ROOT/lib
-prepend-path AGILE_GEN_PATH \$PYTHIA6_ROOT
+alibuild-generate-module --lib --root-env --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+prepend-path AGILE_GEN_PATH $PKG_ROOT
 EoF
-

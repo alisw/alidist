@@ -12,6 +12,7 @@ build_requires:
  - SWIG
  - UUID
  - libperl
+ - alibuild-recipe-tools
 prepend_path:
  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
@@ -48,27 +49,8 @@ make install INSTALLSITEARCH=$INSTALLROOT/lib/perl \
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}   \\
-            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
-
-# Our environment
-set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-
-setenv GSHELL_ROOT \$XALIENFS_ROOT
+alibuild-generate-module --bin --lib --extra > "$MODULEDIR/$PKGNAME" <<\EOF
+setenv GSHELL_ROOT $PKG_ROOT
 setenv GSHELL_NO_GCC 1
-
-prepend-path LD_LIBRARY_PATH \$XALIENFS_ROOT/lib
-prepend-path PATH \$XALIENFS_ROOT/bin
-EoF
+EOF

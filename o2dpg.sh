@@ -11,11 +11,7 @@ rsync -a --exclude='**/.git' --delete --delete-excluded \
 
 # Modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
-alibuild-generate-module > $INSTALLROOT/etc/modulefiles/$PKGNAME
-
-cat << EOF >> $INSTALLROOT/etc/modulefiles/$PKGNAME
-set O2DPG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv O2DPG_ROOT \$O2DPG_ROOT
+alibuild-generate-module --root-env --extra > "$INSTALLROOT/etc/modulefiles/$PKGNAME" << EOF
 setenv O2DPG_RELEASE \$version
 setenv O2DPG_VERSION $PKGVERSION
 EOF

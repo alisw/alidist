@@ -7,6 +7,7 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT4_ROOT/include:$GEANT4_ROOT/include/Geant4"
 incremental_recipe: |
@@ -54,24 +55,8 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${XERCESC_REVISION:+xercesc/$XERCESC_REVISION-$XERCESC_REVISION}
-# Our environment
-set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv GEANT4_ROOT \$GEANT4_ROOT
-prepend-path PATH \$GEANT4_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$GEANT4_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib --root-env > "$MODULEDIR/$PKGNAME"
 
 # Data sets environment
 $INSTALLROOT/bin/geant4-config --datasets |  sed 's/[^ ]* //' | sed 's/G4/setenv G4/' >> "$MODULEFILE"

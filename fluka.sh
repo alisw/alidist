@@ -31,10 +31,6 @@ cp -rf $BUILDDIR/bin $BUILDDIR/lib $BUILDDIR/include $BUILDDIR/data $INSTALLROOT
 
 #ModuleFile
 mkdir -p $INSTALLROOT/etc/modulefiles
-alibuild-generate-module > $INSTALLROOT/etc/modulefiles/$PKGNAME
-cat >> $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set FLUKA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv FLUPRO \$::env(BASEDIR)/$PKGNAME/\$version/lib
-prepend-path PATH \$FLUKA_ROOT/bin
+alibuild-generate-module --bin --extra > "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
+setenv FLUPRO $PKG_ROOT/lib
 EoF

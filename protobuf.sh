@@ -4,6 +4,7 @@ source: https://github.com/google/protobuf
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
+ - alibuild-recipe-tools
 ---
 
 cmake $SOURCEDIR/cmake                  \
@@ -17,21 +18,5 @@ make install
 
 #ModuleFile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set PROTOBUF_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PROTOBUF_ROOT \$PROTOBUF_ROOT
-prepend-path LD_LIBRARY_PATH \$PROTOBUF_ROOT/lib
-prepend-path PATH \$PROTOBUF_ROOT/bin
-EoF
+alibuild-generate-module --bin --lib --root-env > "$MODULEDIR/$PKGNAME"

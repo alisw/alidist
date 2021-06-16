@@ -24,6 +24,5 @@ make ${JOBS:+-j$JOBS} install
 rm -fv $INSTALLROOT/lib/*.la
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
+alibuild-generate-module --bin --lib > "$MODULEDIR/$PKGNAME"

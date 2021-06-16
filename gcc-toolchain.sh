@@ -8,6 +8,7 @@ build_requires:
  - "autotools:(slc6|slc7)"
  - yacc-like
  - make
+ - alibuild-recipe-tools
 prefer_system: .*
 prefer_system_check: |
   set -e
@@ -146,18 +147,8 @@ popd
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
+alibuild-generate-module --extra > "$MODULEDIR/$PKGNAME" <<EoF
 # Load Toolchain module for the current platform. Fallback on this one
 regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
 if { "\$mod_name" == "GCC-Toolchain" } {

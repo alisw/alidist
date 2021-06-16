@@ -10,6 +10,7 @@ requires:
   - LLA
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://gitlab+deploy-token-1303:ivjQdcMRX9qpxdv4RCcM@gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils.git
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install

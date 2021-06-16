@@ -4,6 +4,7 @@ tag: cares-1_17_1
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/c-ares/c-ares
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -17,20 +18,5 @@ make ${JOBS:+-j$JOBS} install
 
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set C_ARES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$C_ARES_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$C_ARES_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > "$MODULEDIR/$PKGNAME"

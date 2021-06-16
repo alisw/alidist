@@ -18,6 +18,7 @@ build_requires:
 - protobuf
 - glog
 - Python-modules
+- alibuild-recipe-tools
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages

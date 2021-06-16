@@ -5,6 +5,7 @@ build_requires:
   - "autotools:(slc6|slc7)"
   - zlib
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 source: https://github.com/alisw/libxml2.git
 prefer_system: "(?!slc5)"
 prefer_system_check: |
@@ -23,21 +24,7 @@ make ${JOBS+-j $JOBS}
 make install
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}
-# Our environment
-setenv LIBXML2_VERSION \$version
-set LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$::env(LIBXML2_VERSION)
-setenv LIBXML2_ROOT \$LIBXML2_ROOT
-prepend-path PATH \$LIBXML2_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$LIBXML2_ROOT/lib
+alibuild-generate-module --bin --lib --root-env --extra > "etc/modulefiles/$PKGNAME" <<\EoF
+setenv LIBXML2_VERSION $version
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

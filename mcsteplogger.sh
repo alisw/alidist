@@ -23,10 +23,8 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
-cat >> "$MODULEFILE" <<EoF
-setenv MCSTEPLOGGER_ROOT \$PKG_ROOT
-prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+alibuild-generate-module --bin --lib --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+setenv MCSTEPLOGGER_ROOT $PKG_ROOT
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include
 EoF

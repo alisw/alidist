@@ -6,6 +6,8 @@ requires:
   - lhapdf
   - HepMC
   - boost
+build_requires:
+  - alibuild-recipe-tools
 env:
   PYTHIA8DATA: "$PYTHIA_ROOT/share/Pythia8/xmldoc"
   PYTHIA8: "$PYTHIA_ROOT"
@@ -37,24 +39,10 @@ chmod a+x $INSTALLROOT/bin/pythia8-config
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${LHAPDF_REVISION:+lhapdf/$LHAPDF_VERSION-$LHAPDF_REVISION} ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION} ${HEPMC_REVISION:+HepMC/$HEPMC_VERSION-$HEPMC_REVISION}
+alibuild-generate-module --bin --lib --root-env --extra > "$MODULEDIR/$PKGNAME" <<EoF
 # Our environment
-set PYTHIA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PYTHIA_ROOT \$PYTHIA_ROOT
-setenv PYTHIA8DATA \$PYTHIA_ROOT/share/Pythia8/xmldoc
+setenv PYTHIA8DATA \$PKG_ROOT/share/Pythia8/xmldoc
 setenv PYTHIA8 \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$PYTHIA_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$PYTHIA_ROOT/lib
-prepend-path ROOT_INCLUDE_PATH \$PYTHIA_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF

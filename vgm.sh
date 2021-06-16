@@ -7,6 +7,7 @@ requires:
   - GEANT4
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 cmake "$SOURCEDIR" \
@@ -25,20 +26,5 @@ find "$INSTALLROOT/lib" -name '*deleteme' -delete || true
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 GEANT4/$GEANT4_VERSION-$GEANT4_REVISION ROOT/$ROOT_VERSION-$ROOT_REVISION
-# Our environment
-set VGM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv VGM_ROOT \$VGM_ROOT
-prepend-path LD_LIBRARY_PATH \$VGM_ROOT/lib
-EoF
+alibuild-generate-module --lib --root-env > "$MODULEDIR/$PKGNAME"

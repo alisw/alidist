@@ -4,6 +4,7 @@ requires:
  - zlib
 build_requires:
  - CMake
+ - alibuild-recipe-tools
 source: https://github.com/alisw/libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
@@ -24,20 +25,5 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 $([[ $ALIEN_RUNTIME_VERSION ]] && echo "AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION" || echo "${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}")
-# Our environment
-set LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$LIBPNG_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$LIBPNG_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib --root-env > "$MODULEDIR/$PKGNAME"

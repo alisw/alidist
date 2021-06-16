@@ -8,6 +8,7 @@ requires:
   - ROOT
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 
 #!/bin/bash -e
@@ -23,22 +24,7 @@ make install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 Vc/$VC_VERSION-$VC_REVISION ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
-# Our environment
-set osname [uname sysname]
-set VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv VC_ROOT \$VC_ROOT
-prepend-path PATH \$VC_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$VC_ROOT/lib
+alibuild-generate-module --bin --lib --extra > "$MODULEDIR/$PKGNAME" <<\EoF
+setenv VC_ROOT $PKG_ROOT
 EoF

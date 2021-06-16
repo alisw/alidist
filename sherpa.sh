@@ -50,15 +50,9 @@ make install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-set SHERPA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv SHERPA_ROOT \$SHERPA_ROOT
-setenv SHERPA_INSTALL_PATH \$::env(SHERPA_ROOT)/lib/SHERPA
-setenv SHERPA_SHARE_PATH \$::env(SHERPA_ROOT)/share/SHERPA-MC
-prepend-path PATH \$SHERPA_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib
-prepend-path LD_LIBRARY_PATH \$SHERPA_ROOT/lib/SHERPA-MC
+alibuild-generate-module --bin --lib --root-env --extra > "etc/modulefiles/$PKGNAME" <<\EoF
+setenv SHERPA_INSTALL_PATH $PKG_ROOT/lib/SHERPA
+setenv SHERPA_SHARE_PATH $PKG_ROOT/share/SHERPA-MC
+prepend-path LD_LIBRARY_PATH $PKG_ROOT/lib/SHERPA-MC
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

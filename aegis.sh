@@ -8,6 +8,7 @@ build_requires:
   - CMake
   - hijing
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/AEGIS.git
 prepend_path:
   LD_LIBRARY_PATH: "$AEGIS_ROOT/lib"
@@ -29,21 +30,7 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION 
-# Our environment
-set AEGIS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv AEGIS_ROOT \$AEGIS_ROOT
-prepend-path LD_LIBRARY_PATH \$AEGIS_ROOT/lib
-prepend-path ROOT_INCLUDE_PATH \$AEGIS_ROOT/include
+alibuild-generate-module --lib --root-env > "$MODULEDIR/$PKGNAME" <<\EoF
+prepend-path ROOT_INCLUDE_PATH $PKG_ROOT/include
 EoF
