@@ -66,6 +66,7 @@ module load BASE/1.0                                                          \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${C_ARES_REVISION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
+            ${RE2_REVISION:+re2/$RE2_VERSION-$RE2_REVISION} \\
             ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
 # Our environment
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
