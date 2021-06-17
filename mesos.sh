@@ -7,6 +7,7 @@ requires:
 - "system-curl:(slc8)"
 - "curl:(?!slc8)"
 - OpenSSL
+- glog
 - grpc
 - RapidJSON
 - system-apr
@@ -16,7 +17,6 @@ requires:
 build_requires:
 - "autotools:(slc6|slc7|slc8)"
 - protobuf
-- glog
 - Python-modules
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
