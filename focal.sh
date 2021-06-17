@@ -5,7 +5,7 @@ requires:
   - AliRoot
 build_requires:
   - "Xcode:(osx.*)"
-source: https://gitlab.cern.ch/mvl/FOCAL
+source: https://gitlab.cern.ch/mvl/FOCAL.git
 env:
   FOCAL: "$FOCAL_ROOT"
 prepend_path:
