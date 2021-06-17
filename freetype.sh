@@ -40,6 +40,5 @@ module load BASE/1.0 $([[ "$ALIEN_RUNTIME_VERSION" ]] && echo AliEn-Runtime/$ALI
 # Our environment
 set FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FREETYPE_ROOT \$FREETYPE_ROOT
-prepend-path PATH \$FREETYPE_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FREETYPE_ROOT/lib
 EoF

@@ -46,7 +46,6 @@ set GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT3_ROOT \$GEANT3_ROOT
 setenv GEANT3DIR \$GEANT3_ROOT
 setenv G3SYS \$GEANT3_ROOT
-prepend-path PATH \$GEANT3_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$GEANT3_ROOT/lib64
 prepend-path ROOT_INCLUDE_PATH \$GEANT3_ROOT/include/TGeant3
 EoF

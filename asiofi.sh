@@ -47,7 +47,6 @@ module load BASE/1.0                                                            
             ${OFI_REVISION:+ofi/$OFI_VERSION-$OFI_REVISION}
 # Our environment
 set ASIOFI_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$ASIOFI_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ASIOFI_ROOT/lib
 EoF
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
