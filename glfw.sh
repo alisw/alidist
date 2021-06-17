@@ -29,5 +29,5 @@ esac
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
