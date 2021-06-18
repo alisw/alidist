@@ -61,7 +61,11 @@ jobs:
               echo "ERROR: recipe $fname has no modulefile"
               err_fnames+=("$fname")
             fi
-            aliBuild deps --defaults o2 --outgraph /dev/null --no-system --neat -c . \
+            case "$fname" in
+              JAliEn) DEFAULT=jalien ;;
+              *) DEFAULT=o2 ;;
+            esac
+            aliBuild deps --defaults $DEFAULT --outgraph /dev/null --no-system --neat -c . \
                      "$(awk '/^package: /{print $2}' "$fname")" 2>&1 |
               if grep -q 'transitive reduction not unique'; then
                 echo "ERROR: recipe $fname has circular dependency"
