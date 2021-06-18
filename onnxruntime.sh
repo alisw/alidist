@@ -1,6 +1,6 @@
-package: onnxruntime
+package: ONNXRuntime
 version: "1.7.2"
-tag: c073c88ef
+tag: 4531d55f6
 source: https://github.com/saganatt/onnxruntime.git
 requires:
   - protobuf
@@ -46,13 +46,12 @@ cmake "$SOURCEDIR/cmake" \
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEFILE"
+mkdir -p $INSTALLROOT/etc/modulefiles
+MODULEFILE=$INSTALLROOT/etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 
 # Our environment
 set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$${PKGNAME}_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include
 EoF
