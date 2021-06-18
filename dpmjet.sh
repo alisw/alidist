@@ -1,6 +1,6 @@
 package: DPMJET
 version: "%(tag_basename)s"
-tag: "v19.1.2-alice1"
+tag: "v19.1.2-alice2"
 source: https://github.com/alisw/DPMJET.git
 requires:
  - "GCC-Toolchain:(?!osx)"
