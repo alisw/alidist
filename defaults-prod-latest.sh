@@ -12,7 +12,7 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-57d
+    tag: v5-09-58-test-hepmc-1
     requires:
       - ROOT
       - DPMJET

@@ -9,7 +9,7 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-56
+    tag: v5-09-58-test-hepmc-1
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
     tag: v5-09-56-01

@@ -13,7 +13,7 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-57d
+    tag: v5-09-58-test-hepmc-1
   AliPhysics:
     version: "%(tag_basename)s"
     tag: v5-09-57d-01
