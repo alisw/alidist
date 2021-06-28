@@ -13,7 +13,6 @@ requires:
   - "ALF:(?!osx)"
   - "BookkeepingApiCpp:(slc*)"
   - "mesos:(slc8)"
-  - "TpcFecUtils:(?!osx)"
 valid_defaults:
   - o2
   - o2-dataflow
