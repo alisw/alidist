@@ -1,7 +1,7 @@
 package: Ppconsul
-version: "%(tag_basename)s"
-tag: v0.2.1
-source: https://github.com/oliora/ppconsul
+version: "v0.2.1-alice1"
+tag: v0.2.1-alice1
+source: https://github.com/alisw/ppconsul
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
