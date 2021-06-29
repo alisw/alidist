@@ -4,6 +4,7 @@ tag: master
 requires:
   - ROOT
   - Delphes
+  - AliRoot
   - O2
 overrides:
   O2:
