@@ -1,7 +1,7 @@
 #Online Device Control
 package: ODC
 version: "%(tag_basename)s"
-tag: "0.26"
+tag: "0.28"
 source: https://github.com/FairRootGroup/ODC.git
 requires:
 - boost
@@ -10,6 +10,7 @@ requires:
 - FairLogger
 - FairMQ
 - grpc
+- InfoLogger
 build_requires:
   - CMake
   - GCC-Toolchain:(?!osx.*)
@@ -39,7 +40,8 @@ cmake  $SOURCEDIR                                                               
        ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                   \
-       -DgRPC_ROOT=$GRPC_ROOT
+       -DgRPC_ROOT=$GRPC_ROOT                                                                \
+       -DBUILD_INFOLOGGER=ON
 
 
 make ${JOBS+-j $JOBS}
