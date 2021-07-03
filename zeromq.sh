@@ -4,22 +4,17 @@ source: https://github.com/zeromq/libzmq
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
-  - "autotools:(slc6|slc7)"
+  - "CMake"
+  - ninja
   - alibuild-recipe-tools
-prefer_system: (?!slc5.*)
-prefer_system_check: |
-  printf "#include <zmq.h>\n#if(ZMQ_VERSION < 40105)\n#error \"zmq version >= 4.1.5 needed\"\n#endif\n int main(){}" | c++ -I$(brew --prefix zeromq)/include -xc++ - -o /dev/null 2>&1
 ---
-#!/bin/sh
-
-# Hack to avoid having to do autogen inside $SOURCEDIR
-rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 cd $BUILDDIR
-./autogen.sh
-./configure --prefix=$INSTALLROOT          \
-            --disable-dependency-tracking
+cmake $SOURCEDIR                          \
+      -G Ninja                            \
+      -DENABLE_WS=OFF                     \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
-make ${JOBS+-j $JOBS} install
+ninja ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
