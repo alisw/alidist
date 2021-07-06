@@ -5,12 +5,25 @@ source: https://github.com/alisw/MadGraph
 requires:
  - "Python:slc.*"
  - "Python-system:(?!slc.*)"
+ - fastjet
+ - GoSam
+ - lhapdf
 build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
-rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ $INSTALLROOT/
+rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+echo "generate e+ e- > u u~" >> test.mg
+echo "output" >> test.mg
+echo "quit()" >> test.mg
+
+bin/mg5_aMC -f test.mg
+rm -rf PROC_sm_0
+rm test.mg
+
+rsync -a --exclude='**/.git' --delete --delete-excluded ./ $INSTALLROOT/
 
 #ModuleFile
 mkdir -p $INSTALLROOT/etc/modulefiles
