@@ -49,6 +49,12 @@ fi
 
 # m4 -- requires: nothing special
 pushd m4*
+  # texinfo uses utf-8 by default, but doc/m4.text is still iso-8859-1.
+  # MacOS sed only understands the command with the linebreaks like this.
+  sed -i.bak '1i\
+@documentencoding ISO-8859-1
+' doc/m4.texi
+  rm -f doc/m4.texi.bak
   $USE_AUTORECONF && autoreconf -ivf
   ./configure --disable-dependency-tracking --prefix $INSTALLROOT
   make ${JOBS+-j $JOBS}
