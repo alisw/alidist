@@ -6,7 +6,7 @@ env:
   CXXFLAGS: -fPIC -g -O2 -std=c++14
 overrides:
   AliGenerators:
-    tag: vAN-20210712
+    tag: vAN-20210715
   boost:
     requires:
     - GCC-Toolchain:(?!osx)
