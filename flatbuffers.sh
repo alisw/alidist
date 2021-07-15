@@ -6,9 +6,6 @@ requires:
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
-prefer_system: "(?!slc5)"
-prefer_system_check: |
-  which flatc && printf "#include \"flatbuffers/flatbuffers.h\"\nint main(){}" | c++ -I$(brew --prefix flatbuffers)/include -xc++ -std=c++11 - -o /dev/null
 ---
 cmake $SOURCEDIR                          \
       -G "Unix Makefiles"                 \
