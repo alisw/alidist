@@ -1,6 +1,6 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag:  v2.6.1
+tag:  v2.6.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
