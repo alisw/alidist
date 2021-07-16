@@ -1,6 +1,6 @@
 package: asio
 version: "%(tag_basename)s"
-tag: v1.18.1
+tag: v1.19.1
 source: https://github.com/FairRootGroup/asio
 build_requires:
   - CMake
