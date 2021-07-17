@@ -1,11 +1,9 @@
-package: asio
+package: FairCMakeModules
 version: "%(tag_basename)s"
-tag: v1.19.1
-source: https://github.com/FairRootGroup/asio
+tag: v0.2.0
+source: https://github.com/FairRootGroup/FairCMakeModules
 build_requires:
   - CMake
-prepend_path:
-  ROOT_INCLUDE_PATH: "$ASIO_ROOT/include"
 ---
 #!/bin/sh
 
@@ -29,7 +27,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0
 # Our environment
-set ASIO_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path ROOT_INCLUDE_PATH \$ASIO_ROOT/include
+set FAIRCMAKEMODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
