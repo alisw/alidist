@@ -25,6 +25,9 @@ overrides:
   O2:
     tag: nightly-20210721
     version: '%(tag_basename)s'
+  O2Physics:
+    tag: nightly-20210721
+    version: '%(tag_basename)s'
   XRootD:
     source: https://github.com/xrootd/xrootd
     tag: v4.11.1
