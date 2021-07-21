@@ -5,7 +5,7 @@ source: https://github.com/alisw/onnxruntime.git
 requires:
   - protobuf
   - re2
-  - Python-modules
+  - Python
 build_requires:
   - CMake
 ---
