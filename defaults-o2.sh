@@ -23,7 +23,7 @@ overrides:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
   O2:
-    tag: nightly-20210721
+    tag: nightly-20210723
     version: '%(tag_basename)s'
   O2Physics:
     tag: nightly-20210722
