@@ -13,8 +13,7 @@ cmake $SOURCEDIR                                   \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
       -DCMAKE_INSTALL_LIBDIR:PATH="lib"            \
       -DENABLE_FLOAT=ON                            \
-      -DENABLE_AVX=ON                              \
-      -DENABLE_AVX2=ON
+      -DENABLE_AVX=ON
 make ${JOBS+-j $JOBS}
 make install
 
