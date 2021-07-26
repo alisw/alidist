@@ -8,6 +8,7 @@ requires:
   - Python
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
@@ -47,8 +48,8 @@ cmake "$SOURCEDIR/cmake" \
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
-mkdir -p $INSTALLROOT/etc/modulefiles
-MODULEFILE=$INSTALLROOT/etc/modulefiles/$PKGNAME
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
 alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 
