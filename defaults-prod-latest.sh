@@ -7,10 +7,10 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-24j
+    tag: v5-09-24k
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-24j-01
+    tag: v5-09-24k-01
   # Use VMC packages compatible with ROOT 5
   GEANT3:
     version: "v2-7-p2"
