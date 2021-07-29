@@ -1,6 +1,6 @@
 package: Delphes
 version: "%(tag_basename)s"
-tag: v20210602
+tag: v20210729
 requires:
   - ROOT
   - HepMC
