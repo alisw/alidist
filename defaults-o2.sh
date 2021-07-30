@@ -30,7 +30,7 @@ overrides:
     version: '%(tag_basename)s'
   XRootD:
     source: https://github.com/xrootd/xrootd
-    tag: v4.11.1
+    tag: v4.12.8
   cgal:
     version: 4.12.2
   fastjet:
