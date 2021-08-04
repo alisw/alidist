@@ -12,7 +12,8 @@ requires:
 #!/bin/bash -e
 
 # env PYTHONUSERBASE="$INSTALLROOT" pip3 install --user -r alibuild_requirements.txt
-env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --user file://${SOURCEDIR}
+PYTHONUSERBASE=$INSTALLROOT python3 -m pip install --user -U 'pip==19.0'
+PYTHONUSERBASE=$INSTALLROOT ALIBUILD=1 python3 -m pip install --user file://${SOURCEDIR}
 
 sed -i".bak" 's/#!.*python.*/#!\/usr\/bin\/env python3/' ${INSTALLROOT}/bin/*
 rm -v ${INSTALLROOT}/bin/*.bak
