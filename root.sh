@@ -37,7 +37,6 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 unset ROOTSYS
-# Get ROOT to work on Big Sur (this will modify the version returned by sw_vers from 11.0 to 10.16)
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
