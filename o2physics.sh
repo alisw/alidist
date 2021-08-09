@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "nightly-20210727"
+tag: "nightly-20210809"
 requires:
   - O2
 build_requires:
