@@ -25,10 +25,14 @@ if [ ! "X$VIRTUAL_ENV" = X ]; then
 fi
 
 # PIP_REQUIREMENTS, PIP36_REQUIREMENTS, PIP38_REQUIREMENTS come from python-modules-list.sh
-echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
 case $ARCHITECTURE in
-  slc6*);;
+  osx_arm64)
+  touch requirements.txt
+  ;;
+  slc6*)
+  echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt;;
   *)
+  echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
   if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3009 else 1)'; then
     echo $PIP39_REQUIREMENTS | tr \  \\n >> requirements.txt
   elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
