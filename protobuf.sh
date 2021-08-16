@@ -1,6 +1,6 @@
 package: protobuf
 version: v3.15.8
-source: https://github.com/google/protobuf
+source: https://github.com/protocolbuffers/protobuf
 build_requires:
  - CMake
  - "GCC-Toolchain:(?!osx)"
