@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "1.3.2"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
- - "OpenSSL:(?!osx)"
+ - "system-openssl:(?!osx)"
  - "osx-system-openssl:(osx.*)"
  - XRootD
  - AliEn-Runtime

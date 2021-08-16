@@ -5,7 +5,7 @@ source: https://github.com/warmcat/libwebsockets
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
-  - "OpenSSL:(?!osx)"
+  - "system-openssl:(?!osx)"
 prefer_system: "osx"
 prefer_system_check: |
   printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | c++ -I$(brew --prefix libwebsockets)/include -c -xc++ -std=c++17 - -o /dev/null

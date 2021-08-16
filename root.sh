@@ -14,7 +14,7 @@ requires:
   - libpng
   - lzma
   - libxml2
-  - "OpenSSL:(?!osx)"
+  - "system-openssl:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - XRootD
 build_requires:

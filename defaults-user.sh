@@ -32,6 +32,9 @@ overrides:
   Alice-GRID-Utils:
     version: "%(tag_basename)s"
     tag: 0.0.6
+  OpenSSL:
+    version: v1.0.2o
+    tag: OpenSSL_1_0_2o
 
   # Use ROOT 5
   ROOT:

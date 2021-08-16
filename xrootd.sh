@@ -3,13 +3,14 @@ version: "%(tag_basename)s"
 tag: "v5.3.1"
 source: https://github.com/xrootd/xrootd
 requires:
- - "OpenSSL:(?!osx)"
+ - "system-openssl:(?!osx)"
  - Python-modules
  - AliEn-Runtime
  - libxml2
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
+ - "system-openssl:(?!osx)"
  - "GCC-Toolchain:(?!osx)"
  - UUID:(?!osx)
 ---
