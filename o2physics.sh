@@ -6,7 +6,7 @@ requires:
   - ONNXRuntime
 build_requires:
   - CMake
-  - Ninja
+  - ninja
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 ---
