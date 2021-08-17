@@ -9,11 +9,22 @@ build_requires:
 ---
 #!/bin/bash -e
 
-cmake $SOURCEDIR                                   \
-      -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
-      -DCMAKE_INSTALL_LIBDIR:PATH="lib"            \
-      -DENABLE_FLOAT=ON                            \
-      -DENABLE_AVX=ON
+case $ARCHITECTURE in
+    osx_arm64)
+	cmake $SOURCEDIR                                   \
+	      -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
+	      -DCMAKE_INSTALL_LIBDIR:PATH="lib"            \
+	      -DENABLE_FLOAT=ON
+	;;
+    *)
+	cmake $SOURCEDIR                                   \
+	      -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
+	      -DCMAKE_INSTALL_LIBDIR:PATH="lib"            \
+	      -DENABLE_FLOAT=ON                            \
+	      -DENABLE_AVX=ON
+	;;
+esac
+
 make ${JOBS+-j $JOBS}
 make install
 
