@@ -6,12 +6,13 @@ requires:
   - ONNXRuntime
 build_requires:
   - CMake
+  - Ninja
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 ---
 #!/bin/sh
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                   \
+      -G Ninja                                                    \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"} \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                   \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}
