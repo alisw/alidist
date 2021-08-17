@@ -1,11 +1,11 @@
 package: arrow
-version: "v1.0.0"
-tag: 785e31087
+version: "v4.0.1-alice1"
+tag: b745a765e22a7f3de7c9ee81a3baa8bd43520b9c
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
   - lz4
-  - Clang
+  - Clang:(?!.*osx)
   - protobuf
 build_requires:
   - zlib
@@ -56,8 +56,11 @@ mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 
 case $ARCHITECTURE in
-  osx*) ;;
+  osx*)
+   CLANG_EXECUTABLE=/usr/bin/clang
+   ;;
   *)
+   CLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
    # this patches version script to hide llvm symbols in gandiva library
    sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
    ;;
@@ -101,8 +104,9 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
       -DARROW_COMPUTE=ON                                                                            \
+      -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
+      -DCLANG_EXECUTABLE=${CLANG_EXECUTABLE}
 
 make ${JOBS:+-j $JOBS}
 make install
