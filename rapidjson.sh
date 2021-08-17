@@ -7,8 +7,19 @@ build_requires:
 ---
 #!/bin/sh
 
-cmake $SOURCEDIR                                                       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
+case $ARCHITECTURE in
+    osx_arm64)
+	cmake $SOURCEDIR                                                       \
+	      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                              \
+	      -DCMAKE_POLICY_DEFAULT_CMP0077=NEW                               \
+	      -DRAPIDJSON_BUILD_TESTS=OFF                                      \
+	      -DRAPIDJSON_BUILD_EXAMPLES=OFF
+	;;
+    *)
+	cmake $SOURCEDIR                                                       \
+	      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     
+	;;
+esac
 
 make ${JOBS:+-j$JOBS} install
 
