@@ -22,5 +22,3 @@ cmake --build . -- ${JOBS+-j $JOBS} install
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
 alibuild-generate-module --bin > "$MODULEFILE"
-set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-EoF
