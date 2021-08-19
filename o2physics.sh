@@ -21,7 +21,7 @@ cmake --build . -- ${JOBS+-j $JOBS} install
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
-alibuild-generate-module --bin > "$MODULEFILE"
+alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 
 # Dependencies
