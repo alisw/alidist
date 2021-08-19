@@ -27,5 +27,5 @@ cat >> "$MODULEFILE" <<EoF
 # Dependencies
 module load ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}
 # Our environment
-set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
