@@ -27,5 +27,5 @@ cat >> "$MODULEFILE" <<EoF
 # Dependencies
 module load ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}
 # Our environment
-setenv ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv O2PHYSICS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
