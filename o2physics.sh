@@ -21,11 +21,11 @@ cmake --build . -- ${JOBS+-j $JOBS} install
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
-alibuild-generate-module --bin > "$MODULEFILE"
+alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 
 # Dependencies
 module load ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}
 # Our environment
-set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv O2PHYSICS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
