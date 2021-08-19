@@ -1,5 +1,6 @@
 package: generators
 version: v1.0
+tag: vAN-20210812
 requires:
   - pythia
   - pythia6
