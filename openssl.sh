@@ -24,7 +24,6 @@ rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
          no-ecdh                                   \
          no-ecdsa                                  \
          no-asm                                    \
-         no-krb5                                   \
          shared                                    \
          -fno-strict-aliasing                      \
          -L"$INSTALLROOT/lib"                      \
