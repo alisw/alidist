@@ -1,6 +1,6 @@
 package: OpenSSL
-version: v1.0.2o
-tag: OpenSSL_1_0_2o
+version: v1.1.1k
+tag: OpenSSL_1_1_1k
 source: https://github.com/openssl/openssl
 prefer_system: (?!slc5|slc6)
 prefer_system_check: |
