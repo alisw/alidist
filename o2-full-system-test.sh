@@ -3,6 +3,7 @@ version: "1.0"
 requires:
   - O2Suite
   - O2sim
+  - O2DataProcessing
 force_rebuild: 1
 ---
 #!/bin/bash -e
