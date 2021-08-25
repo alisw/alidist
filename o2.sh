@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20210824"
+tag: "dataflow-20210825"
 requires:
   - arrow
   - FairRoot
