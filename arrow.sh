@@ -1,12 +1,13 @@
 package: arrow
-version: "v1.0.0"
-tag: 785e31087
+version: "v5.0.0-alice1"
+tag: 453fc01ec151410a19cf681d626b6b601f0d3c13
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
   - lz4
-  - Clang
+  - Clang:(?!.*osx)
   - protobuf
+  - utf8proc
 build_requires:
   - zlib
   - flatbuffers
@@ -27,6 +28,7 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
     [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(dirname $(dirname $(which lz4)))
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(dirname $(dirname $(which protoc)))
+    [[ ! $UTF8PROC_ROOT ]] && UTF8PROC_ROOT=$(brew --prefix utf8proc)
     [[ ! -d $FLATBUFFERS_ROOT ]] && unset FLATBUFFERS_ROOT
     [[ ! -d $BOOST_ROOT ]] && unset BOOST_ROOT
     [[ ! -d $LZ4_ROOT ]] && unset LZ4_ROOT
@@ -56,8 +58,11 @@ mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 
 case $ARCHITECTURE in
-  osx*) ;;
+  osx*)
+   CLANG_EXECUTABLE=/usr/bin/clang
+   ;;
   *)
+   CLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
    # this patches version script to hide llvm symbols in gandiva library
    sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
    ;;
@@ -90,7 +95,7 @@ cmake ./src_tmp/cpp                                                             
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                      \
       ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                                                       \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
-      -DARROW_WITH_UTF8PROC=OFF                                                                     \
+      ${UTF8PROC_ROOT:+-Dutf8proc_ROOT=${UTF8PROC_ROOT}}                                            \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
@@ -101,8 +106,9 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
       -DARROW_COMPUTE=ON                                                                            \
+      -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DCLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
+      -DCLANG_EXECUTABLE=${CLANG_EXECUTABLE}
 
 make ${JOBS:+-j $JOBS}
 make install
