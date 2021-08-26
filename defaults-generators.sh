@@ -5,6 +5,8 @@ env:
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
   CXXFLAGS: -fPIC -g -O2 -std=c++14
 overrides:
+  AliGenerators:
+    tag: vAN-20210826
   boost:
     requires:
     - GCC-Toolchain:(?!osx)
