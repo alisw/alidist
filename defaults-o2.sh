@@ -22,6 +22,9 @@ overrides:
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
+  O2Physics:
+    tag: nightly-20210827
+    version: '%(tag_basename)s'
   XRootD:
     source: https://github.com/xrootd/xrootd
     tag: v5.3.1
