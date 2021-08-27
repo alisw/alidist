@@ -15,5 +15,5 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_SHARED_LIBS=ON
 make ${JOBS+-j $JOBS} install
 
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
