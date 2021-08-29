@@ -29,7 +29,7 @@ incremental_recipe: |
     echo "Run the tests"
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
     PATH=$PATH:$INSTALLROOT/bin
-    ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+    ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual
   fi
 ---
 #!/bin/bash -ex
@@ -87,7 +87,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
   PATH=$PATH:$INSTALLROOT/bin
-  ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual ${JOBS+-j $JOBS}
+  ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual
 fi
 
 DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
