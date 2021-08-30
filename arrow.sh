@@ -8,6 +8,7 @@ requires:
   - Clang:(?!.*osx)
   - protobuf
   - utf8proc
+  - OpenSSL:(?!osx)
 build_requires:
   - zlib
   - flatbuffers
@@ -96,6 +97,7 @@ cmake ./src_tmp/cpp                                                             
       ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                                                       \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
       ${UTF8PROC_ROOT:+-Dutf8proc_ROOT=${UTF8PROC_ROOT}}                                            \
+      ${OPENSSL_ROOT:+-DOpenSSL_ROOT=${OPENSSL_ROOT}}                                               \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
