@@ -1,9 +1,10 @@
 package: O2sim
 version: "v%(year)s%(month)s%(day)s"
 requires:
-  - O2
+  - O2Physics
   - O2DPG
   - AEGIS
+  - EVTGEN
 ---
 #!/bin/bash -ex
 
