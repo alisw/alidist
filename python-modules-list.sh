@@ -10,7 +10,7 @@ env:
     mock==2.0.0
     notebook==5.7.8
     PyYAML==5.1
-    uproot==3.4.18
+    uproot==4.1.0
     psutil==5.8.0
     scons==4.1.0
   PIP36_REQUIREMENTS: |
