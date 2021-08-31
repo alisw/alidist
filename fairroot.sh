@@ -103,9 +103,6 @@ module load BASE/1.0                                                            
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set FAIRROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv VMCWORKDIR \$FAIRROOT_ROOT/share/fairbase/examples
-setenv GEOMPATH \$::env(VMCWORKDIR)/common/geometry
-setenv CONFIG_DIR \$::env(VMCWORKDIR)/common/gconfig
 prepend-path PATH \$FAIRROOT_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FAIRROOT_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FAIRROOT_ROOT/include
