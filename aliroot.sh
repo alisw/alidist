@@ -1,6 +1,6 @@
 package: AliRoot
-version: "%(commit_hash)s"
-tag: master
+version: "%(tag_basename)s"
+tag: "TEST-IGNORE-nightly-20210831"
 requires:
   - ROOT
   - DPMJET

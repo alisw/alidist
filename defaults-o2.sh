@@ -7,7 +7,7 @@ env:
   GEANT4_BUILD_MULTITHREADED: 'ON'
 overrides:
   AliPhysics:
-    version: '%(commit_hash)s_O2'
+    version: '%(tag_basename)s'
   AliRoot:
     requires:
     - ROOT
@@ -18,7 +18,7 @@ overrides:
     - Vc
     - ZeroMQ
     - JAliEn-ROOT
-    version: '%(commit_hash)s_O2'
+    version: '%(tag_basename)s'
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
