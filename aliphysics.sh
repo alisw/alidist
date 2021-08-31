@@ -1,6 +1,6 @@
 package: AliPhysics
-version: "%(commit_hash)s"
-tag: master
+version: "%(tag_basename)s"
+tag: "TEST-IGNORE-nightly-20210831-next-root6"
 requires:
   - AliRoot
   - RooUnfold
