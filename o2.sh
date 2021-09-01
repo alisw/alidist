@@ -176,7 +176,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
-      ${LIBJALIENO2_ROOT:+-DLIBJALIENO2=$LIBJALIENO2_ROOT}                                                \
+      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                                \
       ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \
       ${JALIEN_ROOT_REVISION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT}                                       \
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
