@@ -10,6 +10,9 @@ build_requires:
   - ninja
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
+incremental_recipe: |
+  cmake --build . -- ${JOBS:+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
@@ -21,8 +24,8 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # Modulefile
-mkdir -p "$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
+mkdir -p etc/modulefiles
+MODULEFILE="etc/modulefiles/$PKGNAME"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 
@@ -31,3 +34,4 @@ module load ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIM
 # Our environment
 setenv O2PHYSICS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
