@@ -6,6 +6,8 @@ requires:
   - HepMC
   - lhapdf
   - pythia
+build_requires:
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
