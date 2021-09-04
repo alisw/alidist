@@ -4,7 +4,7 @@ requires:
   - O2Physics
   - O2DPG
   - AEGIS
-  - EVTGEN
+  - EVTGEN:(?!osx)
 ---
 #!/bin/bash -ex
 
