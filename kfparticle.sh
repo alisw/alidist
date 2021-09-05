@@ -1,7 +1,7 @@
 package: KFParticle
 version: "%(tag_basename)s"
-tag: alice/v1.1-3
-source: https://github.com/cbmsw/KFParticle
+tag: alice/v1.1-4
+source: https://github.com/alisw/KFParticle
 requires:
   - ROOT
   - "GCC-Toolchain:(?!osx)"
