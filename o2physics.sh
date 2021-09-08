@@ -34,5 +34,6 @@ cat >> "$MODULEFILE" <<EoF
 module load ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}
 # Our environment
 setenv O2PHYSICS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path ROOT_INCLUDE_PATH \$O2PHYSICS_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
