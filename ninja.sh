@@ -5,14 +5,14 @@ source: https://github.com/Kitware/ninja
 build_requires:
  - "GCC-Toolchain:(?!osx)"
 ---
-#!/bin/bash -e
+python3 $SOURCEDIR/configure.py --bootstrap
 
-$SOURCEDIR/configure.py --bootstrap
 mkdir -p $INSTALLROOT/bin
 cp ./ninja $INSTALLROOT/bin
 
 # Modulefile
 mkdir -p etc/modulefiles
+
 cat > etc/modulefiles/$PKGNAME <<EoF
 #%Module1.0
 proc ModulesHelp { } {
