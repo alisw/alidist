@@ -12,8 +12,7 @@ valid_defaults:
 #!/bin/bash -e
 
 curl http://alimonitor.cern.ch/download/MonaLisa/MonaLisa-${PKGVERSION}.tar.gz | tar xz
-mkdir $INSTALLROOT/$PKGVERSION-$PKGREVISION
-mv MonaLisa-$PKGVERSION $INSTALLROOT/$PKGVERSION-$PKGREVISION
+rsync -av MonaLisa-${PKGVERSION}/ $INSTALLROOT/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
