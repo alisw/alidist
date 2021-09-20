@@ -24,6 +24,14 @@ $O2_ROOT/prodtests/full_system_test_ci_extra_tests.sh
 popd
 rm -Rf $BUILDDIR/full-system-test-sim
 
+# we also run the sim_challeng.sh script to check a basic MC workflow (including AOD)
+rm -Rf $BUILDDIR/sim-challenge
+mkdir $BUILDDIR/sim-challenge
+pushd $BUILDDIR/sim-challenge
+$O2_ROOT/prodtests/sim_challenge.sh
+popd
+rm -Rf $BUILDDIR/sim-challenge
+
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
 cat > $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
