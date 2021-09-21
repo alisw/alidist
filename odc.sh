@@ -10,7 +10,7 @@ requires:
 - FairLogger
 - FairMQ
 - grpc
-- InfoLogger
+- libInfoLogger
 build_requires:
   - CMake
   - GCC-Toolchain:(?!osx.*)
