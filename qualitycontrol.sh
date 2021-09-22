@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.30.1
+tag: v1.31.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -24,8 +24,9 @@ prepend_path:
 incremental_recipe: |
   # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
   if [[ $ALIBUILD_O2_TESTS ]]; then
-    CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+    CXXFLAGS="${CXXFLAGS} -Werror"
   fi
+  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations" # Outside the if to make sure we have it in all cases
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -53,8 +54,9 @@ esac
 
 # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  CXXFLAGS="${CXXFLAGS} -Werror"
 fi
+CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations"  # Outside the if to make sure we have it in all cases
 
 # Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
 if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
