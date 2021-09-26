@@ -7,6 +7,7 @@ requires:
   - QualityControl
   - O2DataProcessing
   - O2sim
+  - ODC
 valid_defaults:
   - o2
   - o2-dataflow
