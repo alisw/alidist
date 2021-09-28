@@ -43,7 +43,7 @@ incremental_recipe: |
 case $ARCHITECTURE in
   osx*) 
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
       [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=$(brew --prefix libuv)
       SONAME=dylib
   ;;

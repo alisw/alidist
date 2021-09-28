@@ -27,7 +27,7 @@ rsync -a --delete --exclude='**/.git' --delete-excluded \
 autoreconf -ivf
 case $ARCHITECTURE in
   osx*)
-    [[ "$OPENSSL_ROOT" != "" ]] || OPENSSL_ROOT=`brew --prefix openssl`
+    [[ "$OPENSSL_ROOT" != "" ]] || OPENSSL_ROOT=`brew --prefix openssl@1.1`
     EXTRA_PERL_CXXFLAGS="-I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
   ;;
 esac
