@@ -12,7 +12,7 @@ build_requires:
 #!/bin/bash -e
 
 if [[ $ARCHITECTURE = osx* ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl)
+  OPENSSL_ROOT=$(brew --prefix openssl@1.1)
 fi
 
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR

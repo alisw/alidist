@@ -20,7 +20,7 @@ PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.exec
 case $ARCHITECTURE in
   osx_x86-64)
     export ARCHFLAGS="-arch x86_64"
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
 
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
@@ -29,7 +29,7 @@ case $ARCHITECTURE in
     unset UUID_ROOT
   ;;
   osx*)
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
 
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
