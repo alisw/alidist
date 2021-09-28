@@ -1,12 +1,13 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "dataflow-20210927"
+tag: "dataflow-20210928"
 requires:
   - O2
   - DataDistribution
   - QualityControl
   - O2DataProcessing
   - O2sim
+  - ODC
 valid_defaults:
   - o2
   - o2-dataflow
