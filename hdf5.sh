@@ -1,6 +1,6 @@
 package: hdf5
 version: "%(tag_basename)s"
-tag: hdf5-1_10_4
+tag: hdf5-1_10_7
 source: https://github.com/HDFGroup/hdf5.git
 requires:
   - "GCC-Toolchain:(?!osx)"
