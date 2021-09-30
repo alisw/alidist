@@ -8,7 +8,7 @@ on:
       checks:
         description: Checks to be cleaned
         required: true
-        default: 'build/O2/alidist-centos8,build/AliGenerators/generators,build/AliRoot/alidist,build/O2/alidist,build/O2/alidist-dataflow,build/alidist/O2Suite/o2/macOS,build/O2/fullCI/alidist'
+        default: 'build/O2/alidist-cs8,build/AliGenerators/generators,build/AliRoot/alidist,build/O2/alidist,build/O2/alidist-dataflow,build/alidist/O2Suite/o2/macOS,build/O2/fullCI/alidist'
       owner:
         description: Organization
         required: true
