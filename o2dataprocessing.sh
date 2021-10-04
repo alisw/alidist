@@ -1,6 +1,6 @@
 package: O2DataProcessing
 version: "%(tag_basename)s"
-tag: v0.11
+tag: v0.12
 source: https://github.com/AliceO2Group/O2DataProcessing.git
 build_requires:
   - alibuild-recipe-tools
