@@ -29,9 +29,6 @@ mkdir -p etc/modulefiles
 MODULEFILE="etc/modulefiles/$PKGNAME"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
-
-# Dependencies
-module load ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}
 # Our environment
 set O2PHYSICS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2PHYSICS_ROOT \$O2PHYSICS_ROOT
