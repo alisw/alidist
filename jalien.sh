@@ -10,6 +10,7 @@ requires:
  - "system-curl:slc8.*"
 valid_defaults:
  - jalien
+ - o2
 ---
 #!/bin/bash -e
 
