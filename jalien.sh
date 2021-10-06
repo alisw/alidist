@@ -1,6 +1,6 @@
 package: JAliEn
 version: "%(tag_basename)s"
-tag: "1.4.1"
+tag: "1.4.2"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
  - JDK
