@@ -14,7 +14,7 @@ jobs:
       - name: Get rc branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.ref }}
+          ref: ${{ github.ref }}
 
       - name: Compute base branch name
         id: name
@@ -22,6 +22,8 @@ jobs:
           echo "::set-output name=base::${GITHUB_REF#refs/heads/rc/}"
 
       - name: Send pull request to regular branch
+        # For pushes to rc/flp-suite-*, DON'T open a PR.
+        if: ${{ !startsWith(github.ref, 'refs/heads/rc/flp-suite-') }}
         uses: repo-sync/pull-request@v2.5
         with:
           destination_branch: ${{ steps.name.outputs.base }}
