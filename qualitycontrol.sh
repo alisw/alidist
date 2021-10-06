@@ -26,7 +26,7 @@ incremental_recipe: |
   if [[ $ALIBUILD_O2_TESTS ]]; then
     CXXFLAGS="${CXXFLAGS} -Werror"
   fi
-  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations" # Outside the if to make sure we have it in all cases
+  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function" # Outside the if to make sure we have it in all cases
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
@@ -56,7 +56,7 @@ esac
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror"
 fi
-CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations"  # Outside the if to make sure we have it in all cases
+CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"  # Outside the if to make sure we have it in all cases
 
 # Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
 if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
