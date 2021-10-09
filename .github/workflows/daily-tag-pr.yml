@@ -20,12 +20,8 @@ jobs:
         id: name
         run: |
           echo "::set-output name=base::${GITHUB_REF#refs/heads/rc/}"
-          # For pushes to rc/flp-suite-*, DON'T open a PR.
-          echo "$GITHUB_REF" | grep -q '^refs/heads/rc/flp-suite-'
-          echo "::set-output name=open_pr::$?"
 
       - name: Send pull request to regular branch
-        if: ${{ steps.name.outputs.open_pr }}
         uses: repo-sync/pull-request@v2.5
         with:
           destination_branch: ${{ steps.name.outputs.base }}
