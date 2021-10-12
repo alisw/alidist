@@ -1,5 +1,5 @@
 package: MonALISA
-version: "20211012"
+version: "20210818"
 requires:
  - JDK
 build_requires:
@@ -7,7 +7,6 @@ build_requires:
 ---
 curl http://alimonitor.cern.ch/download/MonaLisa/MonaLisa-${PKGVERSION}.tar.gz | tar xz --strip-components 1 -C $INSTALLROOT
 
-# Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin --lib > $INSTALLROOT/etc/modulefiles/$PKGNAME
 cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
