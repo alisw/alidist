@@ -81,5 +81,5 @@ mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
 
 cat >> "$MODULEFILE" <<EoF
-prepend-path ROOT_INCLUDE_PATH \$FAIRROOT_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF
