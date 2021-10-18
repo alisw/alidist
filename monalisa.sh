@@ -1,5 +1,5 @@
 package: MonALISA
-version: "20210818"
+version: "20211013"
 requires:
  - JDK
 build_requires:
@@ -9,6 +9,3 @@ curl http://alimonitor.cern.ch/download/MonaLisa/MonaLisa-${PKGVERSION}.tar.gz |
 
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin --lib > $INSTALLROOT/etc/modulefiles/$PKGNAME
-cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
-prepend-path CLASSPATH \$JALIEN_ROOT/lib/alien-users.jar
-EoF
