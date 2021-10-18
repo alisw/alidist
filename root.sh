@@ -134,6 +134,7 @@ cmake $SOURCEDIR                                                                
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
+      -Dpythia8=ON                                                                     \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
       -Droot7=OFF                                                                      \
@@ -154,7 +155,7 @@ cmake $SOURCEDIR                                                                
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
-          pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
+          pythia6 pythia8 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
