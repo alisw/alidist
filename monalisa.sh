@@ -9,5 +9,3 @@ curl http://alimonitor.cern.ch/download/MonaLisa/MonaLisa-${PKGVERSION}.tar.gz |
 
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin --lib > $INSTALLROOT/etc/modulefiles/$PKGNAME
-cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
-EoF
