@@ -8,13 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ !github.event.deleted }}
+    # For pushes to rc/flp-suite-*, DON'T open a PR.
+    if: ${{ !github.event.deleted && !startsWith(github.ref, 'refs/heads/rc/flp-suite-') }}
 
     steps:
       - name: Get rc branch
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.ref }}
+          ref: ${{ github.ref }}
 
       - name: Compute base branch name
         id: name
