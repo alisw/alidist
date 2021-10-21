@@ -7,7 +7,7 @@ env:
   CXXFLAGS: -fPIC -g -O2 -std=c++11
 overrides:
   AliPhysics:
-    tag: vAN-20211020
+    tag: vAN-20211021
     version: '%(tag_basename)s'
   AliRoot:
     requires:
