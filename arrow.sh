@@ -98,7 +98,7 @@ cmake ./src_tmp/cpp                                                             
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                                           \
       ${UTF8PROC_ROOT:+-Dutf8proc_ROOT=${UTF8PROC_ROOT}}                                            \
       ${OPENSSL_ROOT:+-DOpenSSL_ROOT=${OPENSSL_ROOT}}                                               \
-      ${CLANG_ROOT:+-DLLVM_ROOT=${CLANG_ROOT}}                                                      \
+      ${CLANG_ROOT:+-DLLVM_DIR=${CLANG_ROOT}}                                                       \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
