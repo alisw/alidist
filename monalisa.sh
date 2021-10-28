@@ -1,5 +1,5 @@
 package: MonALISA
-version: "20211013"
+version: "20211027"
 requires:
  - JDK
 build_requires:
