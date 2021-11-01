@@ -1,6 +1,6 @@
 package: Clang
-version: "v12.0.1"
-tag: "llvmorg-12.0.1"
+version: "v13.0.0"
+tag: "llvmorg-13.0.0"
 source: https://github.com/llvm/llvm-project
 requires:
  - "GCC-Toolchain:(?!osx)"
