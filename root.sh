@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-20-08-alice1"
-source: https://github.com/alisw/root
+tag: "v6-24-06"
+source: https://github.com/root-project/root.git
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
@@ -23,7 +23,6 @@ build_requires:
   - alibuild-recipe-tools
 env:
   ROOTSYS: "$ROOT_ROOT"
-  SYSTEM_VERSION_COMPAT: "1"
 prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
   ROOT_DYN_PATH: "$ROOT_ROOT/lib"
@@ -38,13 +37,11 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 unset ROOTSYS
-# Get ROOT to work on Big Sur (this will modify the version returned by sw_vers from 11.0 to 10.16)
-export SYSTEM_VERSION_COMPAT=1
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
-  v6-20*) 
+  v6-*)
      ENABLE_VMC=1
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
@@ -57,7 +54,7 @@ case $PKGVERSION in
   ;;
 esac
 
-# We do not use global options for ROOT, otherwise the -g will 
+# We do not use global options for ROOT, otherwise the -g will
 # kill compilation on < 8GB machines
 unset CXXFLAGS
 unset CFLAGS
@@ -73,7 +70,7 @@ case $ARCHITECTURE in
     COMPILER_LD=clang
     SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
-    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl)
+    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@1.1)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
   ;;
 esac
@@ -91,12 +88,8 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   ROOT_PYTHON_FLAGS="-Dpyroot=ON"
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
-  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... -DPYTHON_INCLUDE_DIR=<path_to_Python.h>
-  PYTHON_EXECUTABLE=$(python3-config --exec-prefix)/bin/python3
-  PYTHON_INCLUDE_DIR=$(python3-config --includes | sed -e's/^[ ]*-I//' | cut -f1 -d' ')
-  PYTHON_LIBRARY_DIR=$(python3-config --ldflags | sed -e's/^[ ]*-L//' | cut -f1 -d' ')
-  PYTHON_LIBNAME=$(python3-config --libs | cut -f1 -d' ' | cut -c3-)
-  PYTHON_LIBRARY=${PYTHON_LIBRARY_DIR}/lib${PYTHON_LIBNAME}.${SONAME}
+  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 
+  PYTHON_EXECUTABLE=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"));')/bin/python3
 else
   # Non-ROOT 6 builds: disable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
@@ -158,12 +151,6 @@ cmake $SOURCEDIR                                                                
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
-      ${ROOT_HAS_PYTHON:+-DPython_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
-      ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIR=${PYTHON_INCLUDE_DIR}}                   \
-      ${ROOT_HAS_PYTHON:+-DPython_INCLUDE_DIRS=${PYTHON_INCLUDE_DIR}}                  \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_LIBRARIES=${PYTHON_LIBRARIES}}                       \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
@@ -222,7 +209,6 @@ cat >> etc/modulefiles/$PKGNAME <<EoF
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
 setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
-setenv SYSTEM_VERSION_COMPAT 1
 prepend-path PYTHONPATH \$PKG_ROOT/lib
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
