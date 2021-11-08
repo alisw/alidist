@@ -32,6 +32,7 @@ build_requires:
   - RapidJSON
   - googlebenchmark
   - O2-customization
+  - Clang
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"

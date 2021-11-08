@@ -1,6 +1,6 @@
 package: Clang
-version: "v12.0.1"
-tag: "llvmorg-12.0.1"
+version: "v13.0.0"
+tag: "llvmorg-13.0.0"
 source: https://github.com/llvm/llvm-project
 requires:
  - "GCC-Toolchain:(?!osx)"
@@ -51,6 +51,19 @@ cmake $SOURCEDIR/llvm \
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
+git clone -b $PKGVERSION https://github.com/KhronosGroup/SPIRV-LLVM-Translator
+mkdir SPIRV-LLVM-Translator/build
+pushd SPIRV-LLVM-Translator/build
+cmake ../ \
+  -G Ninja \
+  -DLLVM_DIR="$INSTALLROOT/lib/cmake/llvm" \
+  -DLLVM_BUILD_TOOLS=ON \
+  -DLLVM_INCLUDE_TESTS=OFF \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"
+cmake --build . -- ${JOBS:+-j$JOBS} install
+popd
+
 #add correct rpath to dylibs on mac as long as there is no better way to controll rpath in the LLVM CMake.
 case $ARCHITECTURE in
   osx*)
@@ -78,8 +91,8 @@ esac
 # We **MUST NOT** add bin-safe to the build path. Runtime
 # path is fine.
 mkdir $INSTALLROOT/bin-safe
-mv $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
-sed -i.bak -e "s|bin/clang|bin-safe/clang|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
+mv $INSTALLROOT/bin/llvm-spirv* $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
+sed -i.bak -e "s|bin/clang|bin-safe/clang|g" -e "s|bin/llvm-spirv|bin-safe/llvm-spirv|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
 rm $INSTALLROOT/lib/cmake/clang/*.bak
 
 # Check it actually works

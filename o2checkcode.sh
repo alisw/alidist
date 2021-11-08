@@ -53,7 +53,6 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 ,modernize-redundant-void-arg\
 ,modernize-replace-auto-ptr\
 ,modernize-replace-random-shuffle\
-,modernize-return-braced-init-list\
 ,modernize-shrink-to-fit\
 ,modernize-unary-static-assert\
 ,modernize-use-equals-default\
