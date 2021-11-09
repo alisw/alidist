@@ -8,7 +8,6 @@ requires:
   - O2DataProcessing
   - O2sim
   - ODC
-  - jq
 valid_defaults:
   - o2
   - o2-dataflow
