@@ -22,9 +22,6 @@ overrides:
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
-  XRootD:
-    source: https://github.com/xrootd/xrootd
-    tag: v5.3.1
   cgal:
     version: 4.12.2
   fastjet:
