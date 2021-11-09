@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20211103"
+tag: "dataflow-20211109"
 requires:
   - arrow
   - FairRoot
@@ -32,6 +32,7 @@ build_requires:
   - RapidJSON
   - googlebenchmark
   - O2-customization
+  - Clang
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
