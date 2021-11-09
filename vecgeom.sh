@@ -8,16 +8,20 @@ requires:
   - ROOT
 build_requires:
   - CMake
+  - ninja
 ---
 
 #!/bin/bash -e
-
 case $ARCHITECTURE in
     osx_arm64)
 	cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DROOT=ON  \
 	      -DCMAKE_APPLE_SILICON_PROCESSOR=arm64                     \
 	      -DBACKEND=Scalar                                          \
-	      -DBENCHMARK=ON                                            \
+              -GNinja                                                   \
+              -DBENCHMARK=OFF                                           \
+              -DCTEST=OFF                                               \
+              -DBUILD_TESTING=OFF                                       \
+              -DVALIDATION=OFF                                          \
 	      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                   \
 	      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	;;
@@ -25,14 +29,17 @@ case $ARCHITECTURE in
 	cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DROOT=ON  \
 	      -DBACKEND=Vc                                              \
 	      -DVECGEOM_VECTOR=sse4.2                                   \
-	      -DBENCHMARK=ON                                            \
+              -DBENCHMARK=OFF                                           \
+              -DBUILD_TESTING=OFF                                       \
+              -DCTEST=OFF                                               \
+              -DVALIDATION=OFF                                          \
+              -GNinja                                                   \
 	      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                   \
 	      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	;;
 esac
 
-make ${JOBS+-j $JOBS}
-make install
+cmake --build . -- ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
