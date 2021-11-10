@@ -25,12 +25,18 @@ case $ARCHITECTURE in
   osx_*) DEFAULT_SYSROOT=$(xcrun --show-sdk-path) ;;
   *) DEFAULT_SYSROOT= ;;
 esac
+case $ARCHITECTURE in
+  *_x86-64) LLVM_TARGETS_TO_BUILD=X86 ;;
+  *_arm64) LLVM_TARGETS_TO_BUILD=AArch64 ;;
+  *) echo 'Unknown LLVM target for architecture' >&2; exit 1 ;;
+esac
+
 # note that BUILD_SHARED_LIBS=ON IS NEEDED FOR ADDING DYNAMIC PLUGINS
 # to clang-tidy (for instance)
 cmake $SOURCEDIR/llvm \
   -G Ninja \
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
-  -DLLVM_TARGETS_TO_BUILD="X86" \
+  -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD:?}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
