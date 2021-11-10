@@ -4,6 +4,7 @@ env:
   ENABLE_UPGRADES: "ON"
 valid_defaults:
   - o2
+  - o2system
   - o2-dataflow
   - o2-dev-fairroot
   - alo

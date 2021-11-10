@@ -120,6 +120,7 @@ incremental_recipe: |
   fi
 valid_defaults:
   - o2
+  - o2system
   - o2-dataflow
   - o2-dev-fairroot
   - alo
