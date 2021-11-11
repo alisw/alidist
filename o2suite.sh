@@ -1,6 +1,6 @@
 package: O2Suite
-version: "1.0.0"
-tag: "O2Suite-1.0.0"
+version: "%(tag_basename)s"
+tag: "TEST-IGNORE-daily-20211111-1438"
 requires:
   - coconut
   - Control-Core
