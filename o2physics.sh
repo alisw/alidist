@@ -23,7 +23,9 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}    \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}
 cmake --build . -- ${JOBS+-j $JOBS} install
+
 # export compile_commands.json in (taken from o2.sh)
+DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
