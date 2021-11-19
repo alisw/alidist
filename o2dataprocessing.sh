@@ -1,6 +1,6 @@
 package: O2DataProcessing
 version: "%(tag_basename)s"
-tag: v0.20
+tag: v0.21
 source: https://github.com/AliceO2Group/O2DataProcessing.git
 requires:
   - jq
