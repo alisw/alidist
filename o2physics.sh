@@ -11,6 +11,7 @@ build_requires:
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 incremental_recipe: |
+  [[ $ALIBUILD_O2_TESTS ]] && CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
