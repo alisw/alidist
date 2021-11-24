@@ -11,10 +11,17 @@ build_requires:
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 incremental_recipe: |
+  [[ $ALIBUILD_O2_TESTS ]] && CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
+
+if [[ $ALIBUILD_O2_TESTS ]]; then
+  # Impose extra errors.
+  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+fi
+
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       -G Ninja                                                    \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"} \
