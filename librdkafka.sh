@@ -20,7 +20,5 @@ cmake --build "$SOURCEDIR/_cmake_build" --target install
 mkdir -p etc/modulefiles
 alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
-# Our environment
-setenv RdKafka_DIR \$::env(BASEDIR)/$PKGNAME/\$version/lib/cmake/RdKafka
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
