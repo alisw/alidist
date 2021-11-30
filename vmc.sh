@@ -13,6 +13,7 @@ build_requires:
 cmake "$SOURCEDIR"                             \
   -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
+  -DCMAKE_INSTALL_LIBDIR=lib                   \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
