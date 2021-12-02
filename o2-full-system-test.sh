@@ -26,7 +26,6 @@ rm -Rf $BUILDDIR/full-system-test-sim
 
 # during build, the Python paths are not setup (in contrast to a full module load env)
 # python is needed by the O2DPG scheduler
-export PYTHONPATH=${PYTHONPATH}:${PYTHON_MODULES_ROOT}/share/python-modules/lib/python/site-packages
 
 # we also run the sim_challeng.sh script to check a basic MC workflow (including AOD)
 rm -Rf $BUILDDIR/sim-challenge
