@@ -24,9 +24,6 @@ $O2_ROOT/prodtests/full_system_test_ci_extra_tests.sh
 popd
 rm -Rf $BUILDDIR/full-system-test-sim
 
-# during build, the Python paths are not setup (in contrast to a full module load env)
-# python is needed by the O2DPG scheduler
-
 # we also run the sim_challeng.sh script to check a basic MC workflow (including AOD)
 rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
