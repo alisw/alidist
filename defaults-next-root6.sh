@@ -7,7 +7,6 @@ env:
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "11"
-  ENABLE_VMC: "ON"
 overrides:
   AliRoot:
     version: "%(tag_basename)s_ROOT6"

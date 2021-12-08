@@ -1,8 +1,9 @@
 package: AEGIS
 version: "%(tag_basename)s"
-tag: v1.4
+tag: v1.4-alice1
 requires:
   - ROOT
+  - VMC
   - pythia6
 build_requires:
   - CMake
