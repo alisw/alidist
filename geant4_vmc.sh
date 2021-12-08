@@ -1,9 +1,10 @@
 package: GEANT4_VMC
 version: "%(tag_basename)s"
-tag: "v5-3"
+tag: "v5-4"
 source: https://github.com/vmc-project/geant4_vmc
 requires:
   - ROOT
+  - VMC
   - GEANT4
   - vgm
 build_requires:
@@ -40,7 +41,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} vgm/$VGM_VERSION-$VGM_REVISION
+module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${VMC_REVISION:+VMC/$VMC_VERSION-$VMC_REVISION} vgm/$VGM_VERSION-$VGM_REVISION
 # Our environment
 set GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_VMC_ROOT \$GEANT4_VMC_ROOT

@@ -1,6 +1,7 @@
 package: simulation
 version: v1.0
 requires:
+  - VMC
   - GEANT4_VMC
   - GEANT4
   - GEANT3

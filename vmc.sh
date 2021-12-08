@@ -25,4 +25,5 @@ mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
 cat >> "$MODULEFILE" <<EoF
 setenv VMC_ROOT \$PKG_ROOT
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/vmc
 EoF
