@@ -7,6 +7,7 @@ env:
 disable:
   - RooUnfold
   - treelite
+  - VMC
 overrides:
 
   # Pinpoint AliRoot/AliPhysics

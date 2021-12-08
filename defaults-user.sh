@@ -11,6 +11,7 @@ disable:
   - GEANT4_VMC
   - RooUnfold
   - treelite
+  - VMC
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
