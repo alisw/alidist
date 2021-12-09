@@ -17,6 +17,7 @@ cmake "$SOURCEDIR"                             \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
+ln -s $INSTALLROOT/lib/libVMCLibrary.so $INSTALLROOT/lib/libVMC.so
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
