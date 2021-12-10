@@ -5,7 +5,6 @@ source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
   - simulation
-  - ROOT
   - boost
   - protobuf
   - FairLogger

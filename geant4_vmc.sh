@@ -3,7 +3,6 @@ version: "%(tag_basename)s"
 tag: "v5-4"
 source: https://github.com/vmc-project/geant4_vmc
 requires:
-  - ROOT
   - VMC
   - GEANT4
   - vgm

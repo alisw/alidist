@@ -2,7 +2,6 @@ package: GEANT3
 version: "%(tag_basename)s"
 tag: v3-9
 requires:
-  - ROOT
   - VMC
 build_requires:
   - CMake
