@@ -56,4 +56,4 @@ alibuild-generate-module --lib --bin > "$MODULEFILE"
 cat << EOF >> "$MODULEFILE"
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete  "$MODULEDIR"/ $INSTALLROOT/etc/modulefiles
