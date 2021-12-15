@@ -12,6 +12,10 @@ build_requires:
 #!/bin/bash -e
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
+case ${PKG_VERSION} in
+  v1.1*) OPTS="" ;;
+  *) OPTS="no-krb5" ;;
+esac
 
 ./config --prefix="$INSTALLROOT"                   \
          --openssldir="$INSTALLROOT/etc/ssl"       \
@@ -24,7 +28,7 @@ rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
          no-ecdh                                   \
          no-ecdsa                                  \
          no-asm                                    \
-         no-krb5                                   \
+         ${OPTS}                                   \
          shared                                    \
          -fno-strict-aliasing                      \
          -L"$INSTALLROOT/lib"                      \
