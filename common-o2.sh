@@ -31,4 +31,7 @@ make ${JOBS+-j $JOBS} install
 #ModuleFile
 mkdir -p etc/modulefiles
 alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+cat << EOF >> etc/modulefiles/$PKGNAME
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+EOF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
