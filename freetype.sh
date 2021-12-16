@@ -6,6 +6,7 @@ requires:
   - zlib
 build_requires:
   - "autotools:(slc6|slc7)"
+  - alibuild-recipe-tools
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <ft2build.h>\n" | c++ -xc++ - `freetype-config --cflags 2>/dev/null` `pkg-config freetype2 --cflags 2>/dev/null` -c -M 2>&1;
