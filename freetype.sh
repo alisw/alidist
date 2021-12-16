@@ -1,6 +1,6 @@
 package: FreeType
 version: v2.11.1
-tag: v2-11-1
+tag: VER-2-11-1
 source: https://github.com/freetype/freetype
 requires:
   - zlib
