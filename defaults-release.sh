@@ -27,6 +27,9 @@ overrides:
   XRootD:
     tag: v3.3.6-alice2
     source: https://github.com/alisw/xrootd.git
+  OpenSSL:
+    version: v1.0.2o
+    tag: OpenSSL_1_0_2o
   Alice-GRID-Utils:
     version: "%(tag_basename)s"
     tag: 0.0.6
