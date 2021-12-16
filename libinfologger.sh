@@ -26,7 +26,6 @@ cmake $SOURCEDIR                                              \
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 make ${JOBS+-j $JOBS} install
 
-
 #ModuleFile
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
