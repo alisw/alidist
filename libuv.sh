@@ -8,7 +8,7 @@ build_requires:
   - alibuild-recipe-tools
 prefer_system: (?!slc5.*)
 prefer_system_check: |
-  printf "#include <uv.h>" | c++ -I$(brew --prefix libuv)/include -xc++ - -c -o /dev/null 2>&1
+  printf "#include <uv/version.h>\n#if UV_VERSION_HEX < 0x12a00\n#error libuv >=1.40.0 required\n#endif\n" | c++ -I$(brew --prefix libuv)/include -xc++ - -c -o /dev/null 2>&1
 ---
 #!/bin/sh
 cmake $SOURCEDIR                                             \
