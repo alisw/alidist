@@ -1,5 +1,5 @@
 package: AliGenerators
-tag: "vAN-20220108"
+tag: "vAN-20220109"
 version: "v%(year)s%(month)s%(day)s"
 source: https://github.com/alisw/AliGenerators
 requires:
