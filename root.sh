@@ -85,7 +85,7 @@ fi
 
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON -Dpyroot_legacy=ON"
+  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
   ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
   # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 
@@ -97,6 +97,15 @@ else
   ROOT_HAS_NO_PYTHON=1
 fi
 
+if [ -n "$XROOTD_ROOT" ]; then
+  ROOT_XROOTD_FLAGS="-Dxrootd=ON -DXROOTD_ROOT_DIR=$XROOTD_ROOT"
+else
+  # If we didn't build XRootD (e.g. if it was disabled by a default), explicitly
+  # disable support for it -- otherwise, ROOT will download and compile against
+  # its own XRootD version.
+  ROOT_XROOTD_FLAGS='-Dxrootd=OFF'
+fi
+
 unset DYLD_LIBRARY_PATH
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
@@ -105,7 +114,6 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
       ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
-      ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       ${CXX11:+-Dcxx11=ON}                                                             \
       ${CXX14:+-Dcxx14=ON}                                                             \
@@ -115,6 +123,7 @@ cmake $SOURCEDIR                                                                
       -Dpcre=OFF                                                                       \
       -Dbuiltin_pcre=ON                                                                \
       -Dsqlite=OFF                                                                     \
+      $ROOT_XROOTD_FLAGS                                                               \
       $ROOT_PYTHON_FLAGS                                                               \
       ${ARROW_ROOT:+-Darrow=ON}                                                        \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                          \

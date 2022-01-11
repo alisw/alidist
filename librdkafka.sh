@@ -1,10 +1,10 @@
 package: librdkafka
 version: "%(tag_basename)s"
-tag: v1.2.1-RC1
+tag: v1.8.2
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - lz4
 build_requires:
+  - alibuild-recipe-tools
   - CMake
 source: https://github.com/edenhill/librdkafka
 ---
@@ -12,24 +12,13 @@ source: https://github.com/edenhill/librdkafka
 cmake -H"$SOURCEDIR"                        \
       -B"$SOURCEDIR/_cmake_build"           \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DCMAKE_INSTALL_LIBDIR=lib
+      -DCMAKE_INSTALL_LIBDIR=lib            \
+      -DENABLE_LZ4_EXT=OFF
 cmake --build "$SOURCEDIR/_cmake_build" --target install
 
-# ModuleFile
+#ModuleFile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-
-# Our environment
-set BASEDIR \$::env(BASEDIR)
-prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

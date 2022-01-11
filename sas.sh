@@ -3,7 +3,7 @@ version: "0.1.3"
 source: https://github.com/ktf/SAS.git
 tag: master
 requires:
-  - Clang
+  - Clang:(?!osx*)
 ---
 #!/bin/sh
 cmake $SOURCEDIR \

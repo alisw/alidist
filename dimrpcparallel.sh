@@ -1,6 +1,6 @@
 package: DimRpcParallel
 version: "%(tag_basename)s"
-tag: v0.1.1
+tag: v0.1.2
 requires:
   - "dim:(?!osx)"
   - "GCC-Toolchain:(?!osx)"

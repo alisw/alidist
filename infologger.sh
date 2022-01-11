@@ -53,5 +53,6 @@ set INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv INFOLOGGER_ROOT \$INFOLOGGER_ROOT
 prepend-path PATH \$INFOLOGGER_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$INFOLOGGER_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$INFOLOGGER_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

@@ -3,7 +3,7 @@ version: "1.0"
 requires:
   - O2Suite
   - O2sim
-  - O2DataProcessing
+  - O2DPG
 force_rebuild: 1
 ---
 #!/bin/bash -e
@@ -28,7 +28,8 @@ rm -Rf $BUILDDIR/full-system-test-sim
 rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
 pushd $BUILDDIR/sim-challenge
-$O2_ROOT/prodtests/sim_challenge.sh
+SIM_CHALLENGE_ANATESTING=ON $O2_ROOT/prodtests/sim_challenge.sh &> sim-challenge.log
+grep "Return status" sim-challenge.log | grep -v ": 0" && false
 popd
 rm -Rf $BUILDDIR/sim-challenge
 
