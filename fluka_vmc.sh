@@ -4,6 +4,7 @@ tag: "4-1.1-vmc2"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - ROOT
   - VMC
 build_requires:
   - CMake
