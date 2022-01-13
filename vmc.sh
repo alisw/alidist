@@ -7,6 +7,7 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$VMC_ROOT/include/vmc"
 ---
@@ -16,18 +17,7 @@ prepend_path:
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
-# Our environment
-EoF
+alibuild-generate-module > $MODULEFILE
 
 # Only really build for ROOT version 6, for ROOT5 we always use builtin VMC
 case ${ROOT_VERSION} in
