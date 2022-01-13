@@ -7,7 +7,6 @@ requires:
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
-  - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$VMC_ROOT/include/vmc"
 ---
