@@ -3,6 +3,7 @@ env:
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
   CXXFLAGS: -fPIC -O2 -std=c++17
   CXXSTD: '17'
+  ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'ON'
 overrides:
   AliPhysics:
