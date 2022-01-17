@@ -6,7 +6,6 @@ requires:
   - generators
   - simulation
   - ROOT
-  - VMC
   - boost
   - protobuf
   - FairLogger
