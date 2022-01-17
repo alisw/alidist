@@ -1,11 +1,10 @@
 package: FLUKA_VMC
 version: "%(tag_basename)s"
-tag: "4-1.1-vmc2"
+tag: "4-1.1-vmc1"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - ROOT
-  - VMC
 build_requires:
   - CMake
   - FLUKA
@@ -42,7 +41,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${VMC_REVISION:+VMC/$VMC_VERSION-$VMC_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+module load BASE/1.0 ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 # Our environment
 set FLUKA_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FLUKA_VMC_ROOT \$FLUKA_VMC_ROOT

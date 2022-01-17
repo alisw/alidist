@@ -5,7 +5,6 @@ source: https://github.com/AliceO2Group/VMCStepLogger.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - ROOT
-  - VMC
   - boost
 build_requires:
   - CMake
