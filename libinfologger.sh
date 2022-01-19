@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
