@@ -30,6 +30,7 @@ mkdir -p $INSTALLROOT
 cmake "$SOURCEDIR/cmake" \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
+      -DCMAKE_INSTALL_LIBDIR=lib \
       -Donnxruntime_DEV_MODE=OFF \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF \
       -Donnxruntime_ENABLE_PYTHON=ON \
