@@ -4,6 +4,7 @@ tag: "v1.7.1"
 source: https://github.com/ofiwg/libfabric
 build_requires:
   - autotools
+  - "GCC-Toolchain:(?!osx)"
 prefer_system: ".*"
 prefer_system_check: |
   pkg-config --atleast-version=1.6.0 libfabric 2>&1 && printf "#include \"rdma/fabric.h\"\nint main(){}" | c++ -xc - -o /dev/null
