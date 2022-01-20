@@ -17,6 +17,7 @@ requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - XRootD
+  - TBB
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -183,7 +184,6 @@ done
 for FEATURE in $NO_FEATURES; do
   bin/root-config --has-$FEATURE | grep -q no
 done
-
 cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths

@@ -1,0 +1,25 @@
+package: TBB
+version: "v2021.5.0"
+tag: v2021.5.0
+source: https://github.com/oneapi-src/oneTBB/
+build_requires:
+ - "GCC-Toolchain:(?!osx)"
+ - CMake
+prefer_system: .*
+prefer_system_check: |
+  printf "#include <tbb/concurrent_unordered_map.h>\n static_assert(TBB_INTERFACE_VERSION >= 11009, \"min version check failed\");\n" | c++ -std=c++11 -xc++ - -c -o /dev/null
+---
+#!/bin/bash -e
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
+          ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
+          -DCMAKE_INSTALL_LIBDIR=lib -DTBB_TEST=OFF
+
+# Build and install
+cmake --build . -- ${JOBS:+-j$JOBS} install
+
+# Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+alibuild-generate-module --bin --lib > $MODULEFILE
+
