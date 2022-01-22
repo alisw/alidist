@@ -9,6 +9,7 @@ prefer_system_check: |
 build_requires:
   - system-curl
   - "autotools:(slc6|slc7)"
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -ex
 rsync -av $SOURCEDIR/ ./
