@@ -30,7 +30,15 @@ cmake "$SOURCEDIR"                                 \
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Make backward compatible in case a depending (older) package still needs libVMC.so
-ln -s $INSTALLROOT/lib/libVMCLibrary.so $INSTALLROOT/lib/libVMC.so
+cd $INSTALLROOT/lib
+case $ARCHITECTURE in
+  osx*)
+      ln -s libVMCLibrary.dylib libVMC.dylib
+  ;;
+  *)
+      ln -s libVMCLibrary.so libVMC.so
+  ;;
+esac
 # update modulefile
 cat >> "$MODULEFILE" <<EoF
 # Our environment
