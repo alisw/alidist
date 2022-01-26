@@ -9,6 +9,7 @@ requires:
   - GEANT4_VMC
   - Vc
   - JAliEn-ROOT
+  - ZeroMQ:(osx.*)
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

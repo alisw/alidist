@@ -6,6 +6,8 @@ requires:
   - RooUnfold
   - treelite
   - KFParticle
+  - boost:(osx.*)
+  - ZeroMQ:(osx.*)
 build_requires:
   - "Xcode:(osx.*)"
 source: https://github.com/alisw/AliPhysics
@@ -67,6 +69,8 @@ cmake "$SOURCEDIR"                                                 \
       ${MPFR_ROOT:+-DMPFR="$MPFR_ROOT"}                            \
       ${GMP_ROOT:+-DGMP="$GMP_ROOT"}                               \
       ${TREELITE_ROOT:+-DTREELITE_ROOT="$TREELITE_ROOT"}           \
+      ${ZEROMQ_ROOT:+-DZEROMQ="$ZEROMQ_ROOT"}                      \
+      ${BOOST_ROOT:+-DBOOST_ROOT="$BOOST_ROOT"}                    \
       -DALIROOT="$ALIROOT_ROOT"
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
