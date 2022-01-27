@@ -4,9 +4,9 @@ tag: 8.0.1
 source: https://github.com/fmtlib/fmt
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - alibuild-recipe-tools
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$FMT_ROOT/include"
 ---
