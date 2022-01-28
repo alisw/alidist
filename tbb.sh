@@ -23,4 +23,9 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
+cat >> "$MODULEFILE" <<EOF
+# extra environment
+set TBB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path ROOT_INCLUDE_PATH \$TBB_ROOT/include
+EOF
 
