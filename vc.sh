@@ -20,6 +20,8 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib > $MODULEFILE
-cat >> "$MODULEFILE" <<EoF		
+cat >> "$MODULEFILE" <<EoF
+# VC_ROOT needed by GPU standalone test
+setenv VC_ROOT \$PKG_ROOT
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include		
 EoF
