@@ -46,6 +46,8 @@ module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION}
 set GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_VMC_ROOT \$GEANT4_VMC_ROOT
 setenv G4VMCINSTALL \$GEANT4_VMC_ROOT
+setenv GEANT4VMC_MACRO_DIR \$GEANT4_VMC_ROOT/share/examples/macro
+setenv USE_VGM 1
 prepend-path PATH \$GEANT4_VMC_ROOT/bin
 prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/mtroot
 prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/geant4vmc
