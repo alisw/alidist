@@ -11,6 +11,7 @@ requires:
 valid_defaults:
   - o2
   - o2-dataflow
+  - o2-epn
 ---
 #!/bin/bash -ex
 
