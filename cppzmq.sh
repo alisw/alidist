@@ -28,3 +28,9 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib > $MODULEFILE
+cat >> "$MODULEFILE" <<EoF
+# Our environment
+set CPPZMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv CPPZMQ_ROOT \$CPPZMQ_ROOT
+prepend-path AGILE_GEN_PATH \$CPPZMQ_ROOT
+EoF
