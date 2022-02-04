@@ -22,3 +22,9 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib > $MODULEFILE
+cat >> "$MODULEFILE" <<EoF
+# Our environment
+set ZEROMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ZEROMQ_ROOT \$ZEROMQ_ROOT
+prepend-path AGILE_GEN_PATH \$ZEROMQ_ROOT
+EoF
