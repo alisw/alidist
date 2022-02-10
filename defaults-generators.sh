@@ -9,8 +9,8 @@ overrides:
     requires:
     - GCC-Toolchain:(?!osx)
   fastjet:
-    tag: v3.3.3_1.042-alice1
-    version: v3.3.3_1.042-alice1
+    tag: v3.4.0_1.045-alice1
+    version: v3.4.0_1.045-alice1
   pythia:
     requires:
     - lhapdf
