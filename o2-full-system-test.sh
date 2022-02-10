@@ -31,7 +31,7 @@ pushd $BUILDDIR/sim-challenge
 SIM_CHALLENGE_ANATESTING=ON $O2_ROOT/prodtests/sim_challenge.sh &> sim-challenge.log
 result=$(grep "Return status" sim-challenge.log | grep -v ": 0" || true)
 if [ "${result}" ]; then
-  # if we get a match here; then something is wrong
+  # something is wrong if we get a match here
   echo "error detected in sim_challenge"
   find ./ -type f \( -name "*.log" -and ! -name "pipel*" \) -exec awk ' { print FILENAME $0 } ' {} ';' || true
   # make the recipe fail
