@@ -29,7 +29,16 @@ rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
 pushd $BUILDDIR/sim-challenge
 SIM_CHALLENGE_ANATESTING=ON $O2_ROOT/prodtests/sim_challenge.sh &> sim-challenge.log
-grep "Return status" sim-challenge.log | grep -v ": 0" && false
+result=$(grep "Return status" sim-challenge.log | grep -v ": 0" || true)
+if [ "${result}" ]; then
+  # something is wrong if we get a match here
+  echo "error detected in sim_challenge"
+  find ./ -type f \( -name "*.log" -and ! -name "pipel*" \) -exec awk ' { print FILENAME $0 } ' {} ';' || true
+  # make the recipe fail
+  false
+else
+  echo "sim_challenge passed"
+fi
 popd
 rm -Rf $BUILDDIR/sim-challenge
 
