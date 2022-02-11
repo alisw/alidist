@@ -51,7 +51,8 @@ pushd fastjet
                 ${GMP_ROOT:+--with-cgal-gmpdir=$GMP_ROOT}  \
                 ${MPFR_ROOT:+--with-cgal-mpfrdir=$MPFR_ROOT}}  \
                 --prefix=$INSTALLROOT   \
-                --enable-allcxxplugins
+                --enable-allcxxplugins  \
+		--disable-auto-ptr
   fi
   make ${JOBS:+-j$JOBS}
   make install
