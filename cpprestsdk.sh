@@ -33,7 +33,7 @@ make install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

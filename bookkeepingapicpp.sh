@@ -1,6 +1,6 @@
 package: BookkeepingApiCpp
-version: v0.20.1
-tag: "@aliceo2/bookkeeping@0.20.1"
+version: v0.21.0
+tag: "@aliceo2/bookkeeping@0.21.0"
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
