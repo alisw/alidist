@@ -1,6 +1,6 @@
 package: cpprestsdk
-version: v2.10.17
-tag: 2.10.17
+version: v2.10.18
+tag: 2.10.18
 source: https://github.com/Microsoft/cpprestsdk
 requires:
 - boost
@@ -24,28 +24,18 @@ cmake "$SOURCEDIR/Release"                              \
       -DCMAKE_BUILD_TYPE=Debug                          \
       -DCMAKE_CXX_FLAGS=-Wno-error=conversion           \
       -DCPPREST_EXCLUDE_WEBSOCKETS=ON                   \
-      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}        \
+      -DCMAKE_INSTALL_LIBDIR=lib                        \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}       \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}
 
 make ${JOBS:+-j $JOBS}
 make install
 
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                          \\
-            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}            \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
+#ModuleFile
+mkdir -p etc/modulefiles
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set CPPRESTSDK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$CPPRESTSDK_ROOT/lib64
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
