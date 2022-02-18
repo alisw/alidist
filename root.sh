@@ -17,6 +17,7 @@ requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - XRootD
+  - TBB
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -42,7 +43,7 @@ COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
   v6-*)
-     ENABLE_VMC=1
+     [ "0${ENABLE_VMC}" == "0" ] && BUILD_VMC_INTERNAL=1 || true
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
      [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
@@ -97,6 +98,15 @@ else
   ROOT_HAS_NO_PYTHON=1
 fi
 
+if [ -n "$XROOTD_ROOT" ]; then
+  ROOT_XROOTD_FLAGS="-Dxrootd=ON -DXROOTD_ROOT_DIR=$XROOTD_ROOT"
+else
+  # If we didn't build XRootD (e.g. if it was disabled by a default), explicitly
+  # disable support for it -- otherwise, ROOT will download and compile against
+  # its own XRootD version.
+  ROOT_XROOTD_FLAGS='-Dxrootd=OFF'
+fi
+
 unset DYLD_LIBRARY_PATH
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
@@ -105,7 +115,6 @@ cmake $SOURCEDIR                                                                
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
       ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
-      ${XROOTD_ROOT:+-DXROOTD_ROOT_DIR=$XROOTD_ROOT}                                   \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       ${CXX11:+-Dcxx11=ON}                                                             \
       ${CXX14:+-Dcxx14=ON}                                                             \
@@ -115,6 +124,7 @@ cmake $SOURCEDIR                                                                
       -Dpcre=OFF                                                                       \
       -Dbuiltin_pcre=ON                                                                \
       -Dsqlite=OFF                                                                     \
+      $ROOT_XROOTD_FLAGS                                                               \
       $ROOT_PYTHON_FLAGS                                                               \
       ${ARROW_ROOT:+-Darrow=ON}                                                        \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                          \
@@ -148,7 +158,10 @@ cmake $SOURCEDIR                                                                
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
-      ${ENABLE_VMC:+-Dvmc=ON}                                                          \
+      -Dbuiltin_fftw3=${FFTW3_BUILTIN-OFF}                                             \
+      ${FFTW3_ROOT:+-DFFTW_INCLUDE_DIR=$FFTW3_ROOT/include}                            \
+      ${FFTW3_ROOT:+-DFFTW_LIBRARY=$FFTW3_ROOT/lib}                                    \
+      ${BUILD_VMC_INTERNAL:+-Dvmc=ON}                                                  \
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
@@ -168,6 +181,12 @@ elif [[ $FREETYPE_ROOT ]]; then
   NO_FEATURES="$NO_FEATURES builtin_freetype"
 fi
 
+if [[ $FFTW3_BUILTIN == "ON" ]]; then
+  FEATURES="$FEATURES builtin_fftw3"
+else
+  NO_FEATURES="$NO_FEATURES builtin_fftw3"
+fi
+
 # Check if all important features are enabled/disabled as requested
 bin/root-config --features
 for FEATURE in $FEATURES; do
@@ -176,7 +195,6 @@ done
 for FEATURE in $NO_FEATURES; do
   bin/root-config --has-$FEATURE | grep -q no
 done
-
 cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
