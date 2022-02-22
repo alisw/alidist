@@ -6,12 +6,11 @@ env:
   CXXFLAGS: "-fPIC -g -O2 -std=c++11"
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-  CXXSTD: "11"
 overrides:
   AliRoot:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-57h
+    tag: v5-09-59a
   AliPhysics:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-57h-01
+    tag: v5-09-59a-01
 ---
