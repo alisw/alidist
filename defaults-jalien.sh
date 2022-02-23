@@ -17,7 +17,7 @@ overrides:
     tag: v3.4.0_1.045-alice1
   XRootD:
     source: https://github.com/xrootd/xrootd
-    tag: v5.4.0
+    tag: v5.4.1
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
