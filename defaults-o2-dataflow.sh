@@ -29,6 +29,7 @@ disable:
   - O2sim
   - O2-full-system-test
   - O2Physics
+  - ONNXRuntime
 overrides:
   protobuf:
     version: v3.14.0

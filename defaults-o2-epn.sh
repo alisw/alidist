@@ -8,6 +8,7 @@ env:
   GEANT4_BUILD_MULTITHREADED: 'ON'
 disable:
   - O2Physics
+  - ONNXRuntime
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
