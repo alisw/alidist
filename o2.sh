@@ -26,6 +26,7 @@ requires:
   - KFParticle
   - VecGeom
   - FFTW3
+  - ONNXRuntime
 build_requires:
   - GMP
   - MPFR
