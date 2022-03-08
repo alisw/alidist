@@ -40,6 +40,7 @@ env:
     pandas==1.2.3
     scikit-learn==0.24.1
   PIP39_REQUIREMENTS: |
+    setuptools<=60.8.2
     numpy==1.21.4
     scipy==1.7.3
     Cython==0.29.21
