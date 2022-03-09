@@ -6,6 +6,7 @@ requires:
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
 source: https://github.com/openucx/ucx
 ---
 #!/bin/bash -e

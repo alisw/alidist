@@ -6,6 +6,7 @@ prefer_system: (?!slc5.*)
 build_requires:
   - alibuild-recipe-tools
   - CMake
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 export FFTW3_WITH_AVX # use AVX with float or double. Unset automatically for long double and quad

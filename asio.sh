@@ -4,6 +4,7 @@ tag: v1.19.1
 source: https://github.com/FairRootGroup/asio
 build_requires:
   - CMake
+  - "GCC-Toolchain:(?!osx)"
 prepend_path:
   ROOT_INCLUDE_PATH: "$ASIO_ROOT/include"
 ---
