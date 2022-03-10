@@ -66,7 +66,8 @@ cmake "$BUILDDIR"                                                     \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
-cmake --build . -- ${JOBS:+-j$JOBS} install
+unset PYTHONPATH
+cmake --build . -v -- ${JOBS:+-j$JOBS} install
 popd
 
 if [[ x"$XROOTD_PYTHON" == x"True" ]];
