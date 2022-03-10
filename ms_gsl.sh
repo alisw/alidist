@@ -6,6 +6,7 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$MS_GSL_ROOT/include"
 build_requires:
   - CMake
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 
