@@ -51,7 +51,7 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
-  "PIP39_REQUIREMENTS_ubuntu2110_x86-64": |
+  "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
     setuptools<=60.8.2
     numpy==1.21.4
     scipy==1.7.3
