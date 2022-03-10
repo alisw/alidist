@@ -67,7 +67,7 @@ cmake "$BUILDDIR"                                                     \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 unset PYTHONPATH
-cmake --build . -v -- ${JOBS:+-j$JOBS} install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 popd
 
 if [[ x"$XROOTD_PYTHON" == x"True" ]];
