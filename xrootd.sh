@@ -14,8 +14,9 @@ build_requires:
  - UUID:(?!osx)
 ---
 #!/bin/bash -e
-[[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
-PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
+[[ -e $SOURCEDIR/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
+PYTHON_EXECUTABLE=$( $(realpath $(command which python3)) -c 'import sys; print(sys.executable)' )
+PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
 case $ARCHITECTURE in
   osx_x86-64)
@@ -41,8 +42,10 @@ esac
 
 rsync -a --delete $SOURCEDIR/ $BUILDDIR
 
-[ x"$XROOTD_V4" = x"True" ] && sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
-
+if [ x"$XROOTD_V4" = x"True" ]; then
+    sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
+    sed -i.bak '/^\s*--force-reinstall \\/s/--force-reinstall/--force-reinstall --ignore-installed/' "${BUILDDIR}/bindings/python/CMakeLists.txt"
+fi
 
 mkdir build
 pushd build
@@ -74,9 +77,9 @@ then
   pushd $INSTALLROOT
     pushd lib
     if [ -d ../lib64 ]; then
-      ln -s ../lib64/python* python
+      ln -s ../lib64/python${PYTHON_VER} python
     else
-      ln -s python* python
+      ln -s python${PYTHON_VER} python
     fi
     popd
   popd
