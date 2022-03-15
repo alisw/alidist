@@ -40,7 +40,6 @@ rsync -a --delete --exclude "**/.git" ${SOURCEDIR}/ .
 make ${JOBS+-j$JOBS} || make -j1
 make install
 
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
