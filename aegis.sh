@@ -28,6 +28,14 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
 		 ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
+# Add an extra RPATH for the local libraries on macOS
+
+case ${ARCHITECTURE} in
+  osx*)
+    install_name_tool -add_rpath $INSTALLROOT/lib $INSTALLROOT/lib/libTEPEMGEN.dylib
+    ;;
+esac
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
