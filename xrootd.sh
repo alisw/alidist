@@ -85,7 +85,11 @@ then
   popd
 fi
 
-find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+case $ARCHITECTURE in
+  osx*)
+    find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+  ;;
+esac
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
