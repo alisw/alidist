@@ -41,6 +41,7 @@ mkdir build
 pushd build
 
 cmake ..                                                            \
+      -DCMAKE_C_FLAGS_RELEASE="-Wno-error"                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
       -DCMAKE_BUILD_TYPE=RELEASE                                    \
       -DLWS_WITH_STATIC=ON                                          \
