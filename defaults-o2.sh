@@ -21,8 +21,9 @@ overrides:
     - JAliEn-ROOT
     version: '%(commit_hash)s_O2'
   GCC-Toolchain:
-    tag: v10.2.0-alice2
-    version: v10.2.0-alice2
+#    tag: v11.2.0-alice1
+    tag: alice/v11
+    version: v11.2.0-alice1
   cgal:
     version: 4.12.2
   fastjet:
