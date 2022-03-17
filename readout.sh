@@ -35,6 +35,7 @@ case $ARCHITECTURE in
 esac
 
 cmake $SOURCEDIR                                                         \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                         \
       ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
