@@ -101,7 +101,7 @@ alibuild-generate-module --bin --lib > "$MODULEFILE"
 
 cat >> "$MODULEFILE" <<EoF
 if { $XROOTD_PYTHON } {
-  prepend-path PYTHONPATH \$PKGROOT/lib/python/site-packages
+  prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
   # This is probably redundant, but should not harm.
   module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
               ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
