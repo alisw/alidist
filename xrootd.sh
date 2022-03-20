@@ -89,6 +89,7 @@ fi
 case $ARCHITECTURE in
   osx*)
     find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+    find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
   ;;
 esac
 
