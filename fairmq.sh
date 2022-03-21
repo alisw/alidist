@@ -1,12 +1,11 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.4.49
+tag: v1.4.50
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
  - FairLogger
  - ZeroMQ
- - "DDS:(?!osx)"
  - asiofi
  - asio
 build_requires:
@@ -42,9 +41,8 @@ cmake $SOURCEDIR                                                 \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                    \
-      ${FAIRLOGGER_ROOT:+-DFAIRLOGGER_ROOT=$FAIRLOGGER_ROOT}     \
+      ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}     \
       ${ZEROMQ_ROOT:+-DZeroMQ_ROOT=$ZEROMQ_ROOT}                 \
-      ${DDS_ROOT:+-DDDS_ROOT=$DDS_ROOT}                          \
       ${FLATBUFFERS_ROOT:+-DFlatbuffers_ROOT=$FLATBUFFERS_ROOT}  \
       ${ASIOFI_ROOT:+-Dasiofi_ROOT=$ASIOFI_ROOT}                 \
       ${ASIO_ROOT:+-Dasio_ROOT=$ASIO_ROOT}                       \
@@ -52,9 +50,6 @@ cmake $SOURCEDIR                                                 \
       ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
       ${OFI_ROOT:--DBUILD_OFI_TRANSPORT=OFF}                     \
       -DDISABLE_COLOR=ON                                         \
-      ${DDS_ROOT:+-DBUILD_DDS_PLUGIN=ON}                         \
-      ${DDS_ROOT:+-DBUILD_SDK_COMMANDS=ON}                       \
-      ${DDS_ROOT:+-DBUILD_SDK=ON}                                \
       ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
       -DBUILD_EXAMPLES=ON                                        \
       -DBUILD_TESTING=${ALIBUILD_FAIRMQ_TESTS:-OFF}              \
@@ -87,8 +82,7 @@ module load BASE/1.0                                                            
             ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
             ${ZEROMQ_REVISION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
             ${ASIOFI_REVISION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
-            ${ASIO_REVISION:+asio/$ASIO_VERSION-$ASIO_REVISION}                          \\
-            ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}
+            ${ASIO_REVISION:+asio/$ASIO_VERSION-$ASIO_REVISION}
 # Our environment
 set FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$FAIRMQ_ROOT/bin
