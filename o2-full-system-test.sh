@@ -30,7 +30,7 @@ rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
 pushd $BUILDDIR/sim-challenge
 # SIM_CHALLENGE_ANATESTING=ON --> reenable when we want analysis testing be part of the tests 
-$O2_ROOT/prodtests/sim_challenge.sh &> sim-challenge.log
+"$O2_ROOT/prodtests/sim_challenge.sh" &> sim-challenge.log || true  # don't quit immediately on error
 result=$(grep "Return status" sim-challenge.log | grep -v ": 0" || true)
 if [ "${result}" ]; then
   # something is wrong if we get a match here
