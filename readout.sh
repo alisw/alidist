@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v2.8.7
+tag: v2.9.0.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -15,6 +15,7 @@ requires:
   - Control-OCCPlugin
   - ZeroMQ
   - fmt
+  - MySQL
 build_requires:
   - CMake
   - alibuild-recipe-tools
