@@ -1,6 +1,6 @@
 package: ucx
 version: "%(tag_basename)s"
-tag: v1.12.1-rc2
+tag: v1.12.1
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
