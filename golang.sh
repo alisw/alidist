@@ -1,5 +1,5 @@
 package: golang
-version: "1.15.6"
+version: "1.18"
 build_requires:
   - system-curl
 prefer_system_check: |
