@@ -116,6 +116,7 @@ alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 setenv QUALITYCONTROL_ROOT \$PKG_ROOT
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/QualityControl
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
 
