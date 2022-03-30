@@ -2,6 +2,9 @@ package: lhapdf-pdfsets
 version: "v%(year)s"
 build_requires:
  - lhapdf
+ # We indirectly depend on OpenSSL, so we have to build our own curl on slc8.
+ - "curl:(slc8)"
+ - "system-curl:(?!slc8)"
 ---
 #!/bin/bash -ex
 
