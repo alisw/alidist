@@ -10,7 +10,7 @@ requires:
  - "GCC-Toolchain:(?!osx)"
  - libffi
 build_requires:
- - system-curl
+ - curl
  - alibuild-recipe-tools
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"

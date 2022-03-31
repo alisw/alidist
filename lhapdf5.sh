@@ -7,6 +7,8 @@ env:
 requires:
   - "GCC-Toolchain:(?!osx)"
   - Python-modules
+build_requires:
+  - curl
 ---
 #!/bin/bash -ex
 

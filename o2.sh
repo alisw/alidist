@@ -12,8 +12,7 @@ requires:
   - Monitoring
   - ms_gsl
   - FairMQ
-  - "curl:(?!slc8)"
-  - "system-curl:slc8.*"
+  - curl
   - MCStepLogger
   - fmt
   - "openmp:(?!osx.*)"

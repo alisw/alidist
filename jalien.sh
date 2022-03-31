@@ -6,8 +6,7 @@ requires:
  - JDK
  - XRootD
  - xjalienfs
- - "curl:(?!slc8)"
- - "system-curl:slc8.*"
+ - curl
 valid_defaults:
  - jalien
  - o2

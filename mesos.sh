@@ -4,8 +4,7 @@ tag: 1.11.0
 source: https://gitbox.apache.org/repos/asf/mesos.git
 requires:
 - zlib
-- "system-curl:(slc8)"
-- "curl:(?!slc8)"
+- curl
 - OpenSSL
 - glog
 - grpc

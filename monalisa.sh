@@ -3,6 +3,7 @@ version: "20211027"
 requires:
  - JDK
 build_requires:
+ - curl
  - alibuild-recipe-tools
 ---
 curl http://alimonitor.cern.ch/download/MonaLisa/MonaLisa-${PKGVERSION}.tar.gz | tar xz --strip-components 1 -C $INSTALLROOT
