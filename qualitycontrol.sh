@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.51.1
+tag: "nightly-20220331"
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
