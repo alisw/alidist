@@ -1,13 +1,12 @@
 package: cgal
-tag: releases/CGAL-4.6.3
 version: "4.6.3"
-source: https://github.com/CGAL/cgal
 requires:
   - boost
 build_requires:
   - GMP
   - MPFR
   - CMake
+  - curl
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -16,6 +15,11 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
+URL="https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
+
+curl -kLo cgal.tar.xz "$URL"
+tar xJf cgal.tar.xz
+cd CGAL-*
 
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="-L$BOOST_ROOT/lib"
@@ -28,7 +32,7 @@ export MPFR_INC_DIR="${MPFR_ROOT}/include"
 export GMP_LIB_DIR="${GMP_ROOT}/lib"
 export GMP_INC_DIR="${GMP_ROOT}/include"
 
-cmake "$SOURCEDIR" \
+cmake . \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
       -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
       -DCMAKE_SKIP_RPATH:BOOL=YES \
