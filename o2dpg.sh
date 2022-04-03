@@ -1,6 +1,6 @@
 package: O2DPG
 version: "%(tag_basename)s"
-tag: "nightly-20220331"
+tag: "epn-20220403-DD-1.3.4-flpsuite-v0.52"
 source: https://github.com/AliceO2Group/O2DPG.git
 build_requires:
   - alibuild-recipe-tools

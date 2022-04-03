@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20220331"
+tag: "epn-20220403-DD-1.3.4-flpsuite-v0.52"
 requires:
   - arrow
   - FairRoot
