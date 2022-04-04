@@ -1,7 +1,7 @@
 package: mesos
 version: v1.11.0
 tag: 1.11.0
-source: https://git-wip-us.apache.org/repos/asf/mesos.git
+source: https://gitbox.apache.org/repos/asf/mesos.git
 requires:
 - zlib
 - "system-curl:(slc8)"
