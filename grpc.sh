@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.34.0-alice2
+tag:  v1.45.1
 requires:
   - protobuf
   - c-ares
@@ -10,7 +10,7 @@ requires:
 build_requires:
   - CMake
   - abseil
-source: https://github.com/alisw/grpc
+source: https://github.com/grpc/grpc
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -30,13 +30,14 @@ case $ARCHITECTURE in
 esac
 
 cmake $SOURCEDIR                                    \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}           \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
   -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG"             \
   -DgRPC_BUILD_TESTS=OFF                            \
   -DBUILD_SHARED_LIBS=ON                            \
   -DgRPC_SSL_PROVIDER=package                       \
   -DgRPC_ZLIB_PROVIDER=package                      \
-  -DgRPC_GFLAGS_PROVIDER=packet                     \
+  -DgRPC_GFLAGS_PROVIDER=package                    \
   -DgRPC_PROTOBUF_PROVIDER=package                  \
   -DgRPC_ABSL_PROVIDER=package                      \
   -DgRPC_BENCHMARK_PROVIDER=packet                  \
@@ -67,6 +68,7 @@ module load BASE/1.0                                                          \\
             ${C_ARES_REVISION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
             ${RE2_REVISION:+re2/$RE2_VERSION-$RE2_REVISION} \\
+            ${ABSEIL_REVISION:+abseil/$ABSEIL_VERSION-$ABSEIL_REVISION} \\
             ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
 # Our environment
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
