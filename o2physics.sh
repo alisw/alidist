@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "nightly-20220331"
+tag: "nightly-20220404"
 requires:
   - O2
   - ONNXRuntime
