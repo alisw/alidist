@@ -1,6 +1,6 @@
 package: abseil
 version: "%(tag_basename)s"
-tag:  "20211102.0"
+tag:  "20200225.2"
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
@@ -14,9 +14,8 @@ incremental_recipe: |
 #!/bin/bash -e
 
 mkdir -p $INSTALLROOT
-cmake $SOURCEDIR                             \
-  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
-  -DBUILD_TESTING=OFF                        \
+cmake $SOURCEDIR                        \
+  -DBUILD_TESTING=OFF                   \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 make ${JOBS:+-j$JOBS} install
@@ -33,5 +32,4 @@ cat >> "$MODULEFILE" <<EoF
 set ABSEIL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ABSEIL_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$ABSEIL_ROOT/lib
-prepend-path LD_LIBRARY_PATH \$ABSEIL_ROOT/lib64
 EoF
