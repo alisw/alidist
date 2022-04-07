@@ -3,7 +3,7 @@ version: "1.0.0"
 tag: "O2Suite-1.0.0"
 requires:
   - coconut
-  - Control-Core
+  - "Control-Core:(?!osx)"
   - Control-OCCPlugin
   - O2
   - O2Physics
