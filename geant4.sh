@@ -27,6 +27,7 @@ env:
 cmake $SOURCEDIR                                                \
   -DGEANT4_INSTALL_DATA_TIMEOUT=2000                            \
   -DCMAKE_CXX_FLAGS="-fPIC"                                     \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD="$CXXSTD"}                     \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"                    \
   -DCMAKE_INSTALL_LIBDIR="lib"                                  \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo                             \
@@ -43,7 +44,6 @@ cmake $SOURCEDIR                                                \
   ${GEANT4_DATADIR:+-DGEANT4_INSTALL_DATADIR="$GEANT4_DATADIR"} \
   -DGEANT4_USE_SYSTEM_EXPAT=OFF                                 \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}             \
-  ${CXXSTD:+-DGEANT4_BUILD_CXXSTD=$CXXSTD}                      \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 make ${JOBS+-j $JOBS}
