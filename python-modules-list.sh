@@ -2,7 +2,7 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_REQUIREMENTS: |
-    requests==2.21.0
+    requests==2.27.1
     ipykernel==5.1.0
     ipython==7.4.0
     ipywidgets==7.4.2
