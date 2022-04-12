@@ -7,6 +7,7 @@ requires:
   - O2-full-system-test
 valid_defaults:
   - o2
+  - o2-epn
 ---
 #!/bin/bash -ex
 
