@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # For pushes to rc/flp-suite-*, DON'T open a PR.
-    if: ${{ !github.event.deleted && !startsWith(github.ref, 'refs/heads/rc/flp-suite-') }}
+    if: ${{ !github.deleted && !startsWith(github.ref, 'refs/heads/rc/flp-suite-') }}
 
     steps:
       - name: Get rc branch
