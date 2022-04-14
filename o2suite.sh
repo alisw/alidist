@@ -2,9 +2,6 @@ package: O2Suite
 version: "1.0.0"
 tag: "O2Suite-1.0.0"
 requires:
-  - coconut
-  - "Control-Core:(?!osx)"
-  - Control-OCCPlugin
   - O2
   - O2Physics
   - "ReadoutCard:(slc*)"
@@ -15,6 +12,9 @@ requires:
   - "BookkeepingApiCpp:(slc*)"
   - "mesos:(slc8)"
   - "TpcFecUtils:(?!osx)"
+  - coconut
+  - "Control-Core:(?!osx)"
+  - Control-OCCPlugin
 valid_defaults:
   - o2
   - o2-dataflow
