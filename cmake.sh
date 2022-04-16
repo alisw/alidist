@@ -28,6 +28,8 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
 EOF
 
+export OPENSSL_ROOT_DIR=$OPENSSL_ROOT
+
 $SOURCEDIR/bootstrap --prefix=$INSTALLROOT \
                      --init=build-flags.cmake \
                      ${JOBS:+--parallel=$JOBS}
