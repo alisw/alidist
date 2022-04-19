@@ -30,8 +30,9 @@ case $ARCHITECTURE in
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
   ;;
-  osx*)
+  osx_arm64)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks
 
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
@@ -57,6 +58,7 @@ pushd build
 cmake "$BUILDDIR"                                                     \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
@@ -88,14 +90,14 @@ then
     fi
     popd
   popd
+  case $ARCHITECTURE in
+    osx*)
+      find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+      find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+    ;;
+  esac
 fi
 
-case $ARCHITECTURE in
-  osx*)
-    find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-    find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-  ;;
-esac
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
