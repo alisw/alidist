@@ -38,7 +38,7 @@ jobs:
           github_token: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
 
       - name: Enable auto-merge for newly-created pull request
-        uses: peter-evans/enable-pull-request-automerge@v2
+        uses: alisw/enable-pull-request-automerge@v2
         with:
           pull-request-number: ${{ steps.open_pr.outputs.pr_number }}
           merge-method: squash
