@@ -18,11 +18,16 @@ build_requires:
 - "autotools:(slc6|slc7|slc8)"
 - protobuf
 - Python-modules
+- abseil
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
 ---
 export CXXFLAGS="-fPIC -O2 -std=c++14 -w"
+# Needed for mesos grpc configure checks
+export CPPFLAGS="-I${ABSEIL_ROOT}/include"
+export CFLAGS="-I${ABSEIL_ROOT}/include"
+
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 ./bootstrap
 mkdir build
@@ -36,7 +41,7 @@ cd build
     --with-rapidjson=${RAPIDJSON_ROOT}
 
 # We build with fewer jobs to avoid OOM errors in GCC
-make -j 4
+make -j 6
 make install
 
 
