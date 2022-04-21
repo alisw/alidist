@@ -23,6 +23,10 @@ pushd $SOURCEDIR
   git submodule update --init -- cmake/external/SafeInt
   git submodule update --init -- cmake/external/json
 popd
+BUILD_PYTHON=ON
+case $ARCHITECTURE in
+  osx_arm64*) BUILD_PYTHON=OFF ;;
+esac
 
 mkdir -p $INSTALLROOT
 
@@ -33,7 +37,7 @@ cmake "$SOURCEDIR/cmake" \
       -DCMAKE_INSTALL_LIBDIR=lib \
       -Donnxruntime_DEV_MODE=OFF \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF \
-      -Donnxruntime_ENABLE_PYTHON=ON \
+      -Donnxruntime_ENABLE_PYTHON=${BUILD_PYTHON:-ON} \
       -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)") \
       -Donnxruntime_PREFER_SYSTEM_LIB=ON \
       -Donnxruntime_BUILD_SHARED_LIB=ON \
