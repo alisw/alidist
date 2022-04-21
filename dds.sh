@@ -1,5 +1,6 @@
 package: DDS
-version: "3.7.10"
+version: "%(tag_basename)s"
+tag: "3.7.10"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
