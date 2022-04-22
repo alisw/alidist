@@ -31,6 +31,16 @@ disable:
   - O2Physics
   - ONNXRuntime
 overrides:
+  Monitoring:
+    requires:
+      - boost
+      - "GCC-Toolchain:(?!osx)"
+      - "ApMon-CPP:(?!osx)"
+      - "system-curl:(slc8)"
+      - "curl:(?!slc8)"
+      - libInfoLogger
+      - protobuf
+      - librdkafka
   protobuf:
     version: v3.14.0
   GCC-Toolchain:
