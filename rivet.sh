@@ -76,6 +76,7 @@ done
 cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
 mv $INSTALLROOT/bin/rivet-config.0 $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
+PYVER="$(basename $(find $INSTALLROOT/lib -type d -name 'python*'))"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -94,8 +95,8 @@ module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} ${CGAL_REVI
 # Our environment
 set RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv RIVET_ROOT \$RIVET_ROOT
-prepend-path PYTHONPATH \$RIVET_ROOT/lib/python3.6/site-packages
-prepend-path PYTHONPATH \$RIVET_ROOT/lib64/python3.6/site-packages
+prepend-path PYTHONPATH \$RIVET_ROOT/lib/$PYVER/site-packages
+prepend-path PYTHONPATH \$RIVET_ROOT/lib64/$PYVER/site-packages
 prepend-path PATH \$RIVET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$RIVET_ROOT/lib
 
