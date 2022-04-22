@@ -68,7 +68,6 @@ module load BASE/1.0                                                          \\
             ${C_ARES_REVISION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
             ${RE2_REVISION:+re2/$RE2_VERSION-$RE2_REVISION} \\
-            ${ABSEIL_REVISION:+abseil/$ABSEIL_VERSION-$ABSEIL_REVISION} \\
             ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
 # Our environment
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
