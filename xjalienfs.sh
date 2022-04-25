@@ -8,6 +8,8 @@ requires:
  - XRootD
  - AliEn-Runtime
  - Python-modules
+prepend_path:
+  PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
 ---
 #!/bin/bash -e
 
