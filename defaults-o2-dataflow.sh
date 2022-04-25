@@ -30,6 +30,9 @@ disable:
   - O2-full-system-test
   - O2Physics
   - ONNXRuntime
+  # Fall back to the system OpenSSL and curl.
+  - OpenSSL
+  - curl
 overrides:
   protobuf:
     version: v3.14.0

@@ -1,7 +1,7 @@
 package: golang
 version: "1.18"
 build_requires:
-  - system-curl
+  - curl
 prefer_system_check: |
   type go && case `go version | sed -e 's/go version go//' | sed -e 's/ .*//'` in 0*|1.[0-9].*) exit 1 ;; esac
 ---

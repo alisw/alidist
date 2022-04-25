@@ -5,8 +5,7 @@ requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - "ApMon-CPP:(?!osx)"
-  - "system-curl:(slc8)"
-  - "curl:(?!slc8)"
+  - curl
   - libInfoLogger
 build_requires:
   - CMake

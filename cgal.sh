@@ -6,7 +6,7 @@ build_requires:
   - GMP
   - MPFR
   - CMake
-  - system-curl
+  - curl
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
