@@ -16,7 +16,7 @@ overrides:
     - lhapdf
     - boost
     tag: v8304
-package: defaults-dev
+package: defaults-generators
 version: v1
 
 ---
