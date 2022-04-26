@@ -7,10 +7,6 @@ requires:
 - glog
 - grpc
 - RapidJSON
-- system-apr
-- system-apr-util
-- system-cyrus-sasl
-- system-subversion
 # We specifically CANNOT build against our own curl and OpenSSL on slc8, as
 # those conflict with system-cyrus-sasl.
 # - curl
@@ -20,6 +16,10 @@ build_requires:
 - protobuf
 - Python-modules
 - abseil
+- system-apr
+- system-apr-util
+- system-cyrus-sasl
+- system-subversion
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
