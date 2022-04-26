@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "alice/v11.0.1-patches"
+tag: "v11.0.1-alice1"
 source: https://github.com/alisw/geant4.git
 #source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
