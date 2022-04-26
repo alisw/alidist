@@ -20,7 +20,6 @@ build_requires:
 - system-apr-util
 - system-cyrus-sasl
 - system-subversion
-- system-curl
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
