@@ -6,6 +6,8 @@ env:
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'ON'
   MACOSX_DEPLOYMENT_TARGET: '10.15'
+disable:
+  - mesos
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
