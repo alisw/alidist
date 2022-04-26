@@ -11,6 +11,7 @@ requires:
 - system-apr-util
 - system-cyrus-sasl
 - system-subversion
+- system-curl
 # We specifically CANNOT build against our own curl and OpenSSL on slc8, as
 # those conflict with system-cyrus-sasl.
 # - curl
