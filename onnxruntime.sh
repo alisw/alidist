@@ -5,7 +5,7 @@ source: https://github.com/alisw/onnxruntime.git
 requires:
   - protobuf
   - re2
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
 build_requires:
   - CMake
   - alibuild-recipe-tools

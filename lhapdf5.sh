@@ -6,7 +6,7 @@ env:
   LHAPATH: "$LHAPDF5_ROOT/share/lhapdf"
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
 build_requires:
   - curl
 ---

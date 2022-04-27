@@ -18,7 +18,7 @@ requires:
 build_requires:
 - "autotools:(slc6|slc7|slc8)"
 - protobuf
-- Python-modules
+- Python-modules:(?!osx_arm64)
 - abseil
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"

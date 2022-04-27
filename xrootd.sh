@@ -4,7 +4,7 @@ tag: "v5.4.2-alice1"
 source: https://github.com/alisw/xrootd
 requires:
  - "OpenSSL:(?!osx)"
- - Python-modules
+ - Python-modules:(?!osx_arm64)
  - AliEn-Runtime
  - libxml2
 build_requires:
@@ -38,6 +38,10 @@ case $ARCHITECTURE in
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
+    SETUPTOOLS_VER=$(python3 -m pip show setuptools | grep Version | sed -e 's/[^0-9]*//')
+    if [ x"$SETUPTOOLS_VER" != x"60.8.2" ]; then
+	printf "Please install setuptools==60.8.2"; exit 1
+    fi
   ;;
 esac
 

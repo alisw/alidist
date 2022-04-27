@@ -11,7 +11,7 @@ requires:
   - O2
   - arrow
   - Control-OCCPlugin
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
   - libjalienO2
 build_requires:
   - CMake
