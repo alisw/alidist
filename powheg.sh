@@ -1,7 +1,7 @@
 package: POWHEG
 version: "%(tag_basename)s"
 tag: "r3964-alice1"
-source: https://github.com/mfasDa/POWHEG
+source: https://github.com/alisw/POWHEG
 requires:
   - fastjet
   - "GCC-Toolchain:(?!osx|slc5)"
