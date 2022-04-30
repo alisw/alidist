@@ -43,7 +43,7 @@ incremental_recipe: |
 case $ARCHITECTURE in
   osx*) 
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
       [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=$(brew --prefix libuv)
       SONAME=dylib
   ;;
@@ -79,7 +79,7 @@ cmake $SOURCEDIR                                              \
       -DARROW_HOME=$ARROW_ROOT                                \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
-      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}          \
       ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}             \
       ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}       \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}          \
