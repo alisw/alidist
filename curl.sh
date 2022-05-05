@@ -11,7 +11,7 @@ build_requires:
 
 case $ARCHITECTURE in
   os*) OPENSSL_ROOT=$(brew --prefix openssl@1.1) ;;
-fi
+esac
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 
