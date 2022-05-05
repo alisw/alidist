@@ -9,16 +9,11 @@ build_requires:
 ---
 #!/bin/bash -e
 
-if [[ $ARCHITECTURE = osx* ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl@1.1)
-else
-  ${OPENSSL_ROOT:+env LDFLAGS=-Wl,-R$OPENSSL_ROOT/lib}
+case $ARCHITECTURE in
+  os*) OPENSSL_ROOT=$(brew --prefix openssl@1.1) ;;
 fi
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
-
-sed -i.deleteme 's/CPPFLAGS="$CPPFLAGS $SSL_CPPFLAGS"/CPPFLAGS="$SSL_CPPFLAGS $CPPFLAGS"/' configure.ac
-sed -i.deleteme 's/LDFLAGS="$LDFLAGS $SSL_LDFLAGS"/LDFLAGS="$SSL_LDFLAGS $LDFLAGS"/' configure.ac
 
 ./buildconf
 ./configure --prefix=$INSTALLROOT --disable-ldap ${OPENSSL_ROOT:+--with-ssl=$OPENSSL_ROOT} --disable-static
