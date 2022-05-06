@@ -1,6 +1,6 @@
 package: Python
 version: "%(tag_basename)s"
-tag: v3.6.10
+tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
  - AliEn-Runtime:(?!.*ppc64)
@@ -60,6 +60,7 @@ EOF
 fi
 
 ./configure --prefix="$INSTALLROOT"  \
+            ${OPENSSL_ROOT:+--with-openssl=$OPENSSL_ROOT} ${OPENSSL_ROOT:+--with-openssl-rpath=no} \
             --enable-shared          \
             --with-system-expat      \
             --with-ensurepip=install
