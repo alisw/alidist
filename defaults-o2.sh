@@ -8,7 +8,6 @@ env:
   MACOSX_DEPLOYMENT_TARGET: '10.15'
 disable:
   - mesos
-  - ODC
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
