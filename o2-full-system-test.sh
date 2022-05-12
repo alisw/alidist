@@ -32,11 +32,14 @@ rm -Rf $BUILDDIR/full-system-test-sim
 rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
 pushd $BUILDDIR/sim-challenge
+SIMEXITCODE=0
 # SIM_CHALLENGE_ANATESTING=ON --> reenable when we want analysis testing be part of the tests 
-"$O2_ROOT/prodtests/sim_challenge.sh" &> sim-challenge.log || true  # don't quit immediately on error
+{ "$O2_ROOT/prodtests/sim_challenge.sh" &> sim-challenge.log; SIMEXITCODE=$?; } || true  # don't quit immediately on error
 result=$(grep "Return status" sim-challenge.log | grep -v ": 0" || true)
-if [ "${result}" ]; then
+if [ ${SIMEXITCODE} != "0" ] || [ "${result}" ]; then
   # something is wrong if we get a match here
+  # it matches if either the return code itself was != 0 or if a reported status
+  # in the log is not ok
   echo "error detected in sim_challenge"
   find ./ -type f \( -name "*.log" -and ! -name "pipel*" \) -exec awk ' { print FILENAME $0 } ' {} ';' || true
   # make the recipe fail
