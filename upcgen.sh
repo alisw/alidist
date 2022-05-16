@@ -1,7 +1,7 @@
 package: Upcgen
 version: "%(tag_basename)s"
 tag: tag-15-05-22-3
-source: https://github.com/nburmaso/upcgen
+source: https://github.com/alisw/upcgen
 requires:
   - ROOT
   - HepMC3
