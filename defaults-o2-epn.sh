@@ -8,7 +8,6 @@ env:
   GEANT4_BUILD_MULTITHREADED: 'ON'
 disable:
   - O2Physics
-  - ONNXRuntime
   - OpenSSL
   - curl
   - mesos
