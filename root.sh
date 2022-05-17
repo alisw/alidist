@@ -93,7 +93,7 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   PYTHON_EXECUTABLE=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"));')/bin/python3
 else
   # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
+  ROOT_PYTHON_FLAGS="-Dpython=OFF -Dpyroot=OFF"
   ROOT_PYTHON_FEATURES=
   ROOT_HAS_NO_PYTHON=1
 fi
