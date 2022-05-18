@@ -7,7 +7,7 @@ requires:
   - boost
   - lhapdf5
   - HepMC
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
 build_requires:
   - "autotools:(slc6|slc7)"
   - SWIG
