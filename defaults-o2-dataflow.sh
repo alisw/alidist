@@ -5,7 +5,6 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
-  O2_BUILD_FOR_FLP: "ON"
 disable:
   - AEGIS
   - AliEn-Runtime
@@ -62,6 +61,7 @@ overrides:
       ENABLE_UPGRADES: OFF # Disable detector upgrades in O2
       BUILD_ANALYSIS: OFF # Disable analysis in O2
       BUILD_EXAMPLES: OFF # Disable examples in O2
+      O2_BUILD_FOR_FLP: ON
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
