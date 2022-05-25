@@ -5,6 +5,7 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
+  O2_BUILD_FOR_FLP: "ON"
 disable:
   - AEGIS
   - AliEn-Runtime
