@@ -24,6 +24,7 @@ esac
 
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}          \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
       -DCMAKE_INSTALL_LIBDIR=lib
 
