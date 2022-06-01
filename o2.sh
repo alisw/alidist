@@ -263,21 +263,6 @@ $([[ ${ARCHITECTURE:0:3} == osx && ! $BOOST_VERSION ]] && echo "prepend-path ROO
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include/GPU
 prepend-path ROOT_INCLUDE_PATH \$O2_ROOT/include
 EoF
-
-case $ARCHITECTURE in
-  osx*);;
-  *)
-cat >> etc/modulefiles/$PKGNAME <<EoF
-# ALICE specific adjustments to speedup ROOT launches
-set searchpath [exec env LD_DEBUG=libs LD_PRELOAD=DOESNOTEXIST /bin/true |& sed -rn {/system search path/{s/.*search path=(.*)[[:space:]]+\(system search path\)$/\1/p; q}}]
-set includepath [exec env LC_ALL=C c++ -xc++ -E -v /dev/null |& sed -rn {/^.include/,\$s/^ (\/.*\+\+.*)/\1/p}]
-set includepath [string map {"\n" :} \$includepath]
-setenv ROOT_LDSYSPATH \$searchpath
-setenv ROOT_CPPSYSINCL \$includepath
-EoF
-    ;;
-esac
-
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 if [[ $ALIBUILD_O2_TESTS ]]; then
