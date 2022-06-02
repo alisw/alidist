@@ -23,6 +23,8 @@ incremental_recipe: |
     JOBS=4
   fi
   make ${JOBS:+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 ---
 #!/bin/bash -ex
 
@@ -56,9 +58,7 @@ if [ ! "X$JENKINS_HOME" = X ]; then
 fi
 cmake --build . -- ${JOBS+-j $JOBS} install
 
-
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin > $MODULEFILE
+mkdir -p etc/modulefiles
+alibuild-generate-module --bin > etc/modulefiles/$PKGNAME
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
