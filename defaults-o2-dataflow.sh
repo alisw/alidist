@@ -5,6 +5,7 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
+  MACOSX_DEPLOYMENT_TARGET: '10.15'
 disable:
   - AEGIS
   - AliEn-Runtime
@@ -31,7 +32,8 @@ disable:
   - O2Physics
   # Fall back to the system OpenSSL and curl.
   - OpenSSL
-  - curl
+  - curl:(?!osx.*)
+  - ONNXRuntime
 overrides:
   protobuf:
     version: v3.14.0
