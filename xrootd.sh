@@ -1,7 +1,7 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v5.4.2-alice1"
-source: https://github.com/alisw/xrootd
+tag: "v5.4.3"
+source: https://github.com/xrootd/xrootd
 requires:
  - "OpenSSL:(?!osx)"
  - Python-modules:(?!osx_arm64)
@@ -16,7 +16,7 @@ build_requires:
 ---
 #!/bin/bash -e
 [[ -e $SOURCEDIR/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
-PYTHON_EXECUTABLE=$( $(realpath $(command which python3)) -c 'import sys; print(sys.executable)' )
+PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
 case $ARCHITECTURE in
@@ -48,11 +48,6 @@ esac
 
 rsync -a --delete $SOURCEDIR/ $BUILDDIR
 
-if [ x"$XROOTD_V4" = x"True" ]; then
-    sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
-    sed -i.bak '/^\s*--force-reinstall \\/s/--force-reinstall/--force-reinstall --ignore-installed/' "${BUILDDIR}/bindings/python/CMakeLists.txt"
-fi
-
 mkdir build
 pushd build
 cmake "$BUILDDIR"                                                     \
@@ -74,6 +69,8 @@ cmake "$BUILDDIR"                                                     \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
+      -DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'             \
+      -DPIP_OPTIONS='--force-reinstall --ignore-installed'            \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
