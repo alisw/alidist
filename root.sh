@@ -152,7 +152,6 @@ cmake $SOURCEDIR                                                                
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
       ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
-      -Dkrb5=OFF                                                                       \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
@@ -164,10 +163,10 @@ cmake $SOURCEDIR                                                                
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
-          pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
+          pythia6 roofit soversion vdt ${CXX17:+cxx17}
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
-NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
+NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} gviz
              ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix alien"
 
 if [[ $ENABLE_COCOA ]]; then
