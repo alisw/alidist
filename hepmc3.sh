@@ -7,6 +7,8 @@ requires:
   - ROOT
 build_requires:
   - CMake
+prepend_path:
+  ROOT_INCLUDE_PATH: "$HEPMC3_ROOT/include"
 ---
 #!/bin/bash -e
 
