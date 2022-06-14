@@ -18,6 +18,7 @@ requires:
   - "osx-system-openssl:(osx.*)"
   - XRootD
   - TBB
+  - protobuf
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -159,7 +160,7 @@ cmake $SOURCEDIR                                                                
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX17:+cxx17}
