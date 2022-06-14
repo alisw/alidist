@@ -43,7 +43,6 @@ COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
   v6-*)
-     [ "0${ENABLE_VMC}" == "0" ] && BUILD_VMC_INTERNAL=1 || true
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
      [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
@@ -155,7 +154,7 @@ cmake $SOURCEDIR                                                                
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
-      ${BUILD_VMC_INTERNAL:+-Dvmc=ON}                                                  \
+      -Dtmva-sofie=ON                                                                  \
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
