@@ -1,6 +1,6 @@
 package: vgm
 version: "%(tag_basename)s"
-tag: "v5-0"
+tag: "v4-9"
 source: https://github.com/vmc-project/vgm
 requires:
   - ROOT
