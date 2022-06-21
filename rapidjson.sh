@@ -4,7 +4,7 @@ tag: 091de040edb3355dcf2f4a18c425aec51b906f08
 source: https://github.com/Tencent/rapidjson.git
 build_requires:
   - CMake
-  - Ninja
+  - ninja
   - "GCC-Toolchain:(?!osx)"
   - alibuild-recipe-tools
 ---
