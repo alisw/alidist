@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20220625"
+tag: "nightly-20220626"
 requires:
   - O2
   - DataDistribution
