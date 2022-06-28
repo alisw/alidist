@@ -39,6 +39,9 @@ jobs:
 
       - name: Enable auto-merge for newly-created pull request
         uses: alisw/enable-pull-request-automerge@v2
+        # If the PR already exists, we won't get the number
+        # (and we probably shouldn't toggle auto-merge anyway).
+        if: steps.open_pr.outputs.pr_number
         with:
           pull-request-number: ${{ steps.open_pr.outputs.pr_number }}
           merge-method: squash
