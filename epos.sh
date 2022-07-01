@@ -21,7 +21,14 @@ export OBJ=$EPO/Unu/Lib/
 rsync -a --exclude='**/.git' --delete ${SOURCEDIR}/ .
 mkdir $OBJ
 
-export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+case $ARCHITECTURE in
+  osx*)
+      export LDFLAGS="-L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+   ;;
+  *)
+      export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+   ;;
+esac
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 make LFLAGS="$LDFLAGS"
 
