@@ -1,10 +1,16 @@
 env:
-  CFLAGS: -fPIC -O2
+  CFLAGS: -fPIC -O3 -march=znver2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
-  CXXFLAGS: -fPIC -O2 -std=c++17
+  CXXFLAGS: -fPIC -O3 -march=znver2 -std=c++17
+  O2_CXXFLAGS_OVERRIDE: -O3
   CXXSTD: '17'
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'ON'
+disable:
+  - O2Physics
+  - OpenSSL
+  - curl
+  - mesos
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
@@ -25,7 +31,7 @@ overrides:
   cgal:
     version: 4.12.2
   fastjet:
-    tag: v3.3.3_1.042-alice1
+    tag: v3.4.0_1.045-alice1
   pythia:
     requires:
     - lhapdf

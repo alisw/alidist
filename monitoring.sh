@@ -1,12 +1,11 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.10.1
+tag: v3.12.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - "ApMon-CPP:(?!osx)"
-  - "system-curl:(slc8)"
-  - "curl:(?!slc8)"
+  - curl
   - libInfoLogger
 build_requires:
   - CMake

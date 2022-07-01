@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20220111"
+tag: "nightly-20220630"
 requires:
   - arrow
   - FairRoot
@@ -12,8 +12,7 @@ requires:
   - Monitoring
   - ms_gsl
   - FairMQ
-  - "curl:(?!slc8)"
-  - "system-curl:slc8.*"
+  - curl
   - MCStepLogger
   - fmt
   - "openmp:(?!osx.*)"
@@ -26,6 +25,8 @@ requires:
   - KFParticle
   - VecGeom
   - FFTW3
+  - ONNXRuntime
+  - MLModels
 build_requires:
   - GMP
   - MPFR
@@ -121,6 +122,7 @@ incremental_recipe: |
 valid_defaults:
   - o2
   - o2-dataflow
+  - o2-epn
   - o2-dev-fairroot
   - alo
   - o2-prod
@@ -245,7 +247,9 @@ module load BASE/1.0 \\
             ${KFPARTICLE_REVISION:+KFParticle/$KFPARTICLE_VERSION-$KFPARTICLE_REVISION}             \\
             ${CURL_REVISION:+curl/$CURL_VERSION-$CURL_REVISION}                                     \\
             ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                             \\
-            ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}
+            ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}                                 \\
+            ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}         \\
+            ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT

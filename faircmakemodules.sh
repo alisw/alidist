@@ -1,9 +1,10 @@
 package: FairCMakeModules
 version: "%(tag_basename)s"
-tag: v0.2.0
+tag: v1.0.0
 source: https://github.com/FairRootGroup/FairCMakeModules
 build_requires:
   - CMake
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 

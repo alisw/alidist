@@ -7,7 +7,7 @@ requires:
   - boost
   - lhapdf5
   - HepMC
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
 build_requires:
   - "autotools:(slc6|slc7)"
   - SWIG
@@ -34,6 +34,8 @@ autoreconf -ifv
 make -j$JOBS
 make install
 
+PYVER="$(basename $(find $INSTALLROOT/lib -type d -name 'python*'))"
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -51,7 +53,7 @@ module load BASE/1.0 HepMC/$HEPMC_VERSION-$HEPMC_REVISION lhapdf5/${LHAPDF5_VERS
 # Our environment
 set AGILE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv AGILE_ROOT \$AGILE_ROOT
-prepend-path PYTHONPATH \$AGILE_ROOT/lib/python2.7/site-packages
+prepend-path PYTHONPATH \$AGILE_ROOT/lib/$PYVER/site-packages
 prepend-path PATH \$AGILE_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$AGILE_ROOT/lib
 EoF

@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-24-06"
-source: https://github.com/root-project/root.git
+tag: "v6-26-04-patches-alice1"
+source: https://github.com/alisw/root.git
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
@@ -9,7 +9,7 @@ requires:
   - opengl:(?!osx)
   - Xdevel:(?!osx)
   - FreeType:(?!osx)
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
   - "GCC-Toolchain:(?!osx)"
   - libpng
   - lzma
@@ -17,6 +17,8 @@ requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - XRootD
+  - TBB
+  - protobuf
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -42,7 +44,6 @@ COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
   v6-*)
-     ENABLE_VMC=1
      [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
      [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
      [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
@@ -151,22 +152,21 @@ cmake $SOURCEDIR                                                                
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
       ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
-      -Dkrb5=OFF                                                                       \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
-      ${ENABLE_VMC:+-Dvmc=ON}                                                          \
+      -Dtmva-sofie=ON                                                                  \
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT"
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
-          pythia6 roofit soversion vdt ${CXX11:+cxx11} ${CXX14:+cxx14} ${CXX17:+cxx17}
+          pythia6 roofit soversion vdt ${CXX17:+cxx17}
           ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
-NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} ${LIBPNG_REVISION:+builtin_png} krb5 gviz
+NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} gviz
              ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix alien"
 
 if [[ $ENABLE_COCOA ]]; then
@@ -183,7 +183,6 @@ done
 for FEATURE in $NO_FEATURES; do
   bin/root-config --has-$FEATURE | grep -q no
 done
-
 cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths

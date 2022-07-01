@@ -1,12 +1,12 @@
 package: Python-modules
 version: "1.0"
 requires:
-  - "Python:slc.*"
-  - "Python-system:(?!slc.*)"
+  - "Python:(slc|ubuntu)"
+  - "Python-system:(?!slc.*|ubuntu)"
   - FreeType
   - libpng
 build_requires:
-  - system-curl
+  - curl
   - Python-modules-list
   - alibuild-recipe-tools
 prepend_path:
@@ -54,7 +54,7 @@ python3 -m venv $PYTHON_MODULES_INSTALLROOT
 # Upgrade pip
 python3 -m pip install -IU pip
 # Install setuptools upfront, since this seems to create issues now...
-python3 -m pip install -IU setuptools
+python3 -m pip install -IU "setuptools<=60.8.2"
 python3 -m pip install -IU wheel
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires

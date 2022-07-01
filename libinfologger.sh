@@ -1,11 +1,12 @@
 package: libInfoLogger
 version: "%(tag_basename)s"
-tag: v2.4.1
+tag: v2.5.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install

@@ -26,9 +26,16 @@ rsync -a --delete --exclude='**/.git' --delete-excluded \
 ./bootstrap.sh
 autoreconf -ivf
 case $ARCHITECTURE in
-  osx*)
+  osx_x86-64)
     [[ "$OPENSSL_ROOT" != "" ]] || OPENSSL_ROOT=`brew --prefix openssl@1.1`
     EXTRA_PERL_CXXFLAGS="-I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
+  ;;
+  osx_arm64)
+    [[ "$OPENSSL_ROOT" != "" ]] || OPENSSL_ROOT=`brew --prefix openssl@1.1`
+    EXTRA_PERL_CXXFLAGS="-I$(perl -MConfig -e 'print $Config{archlib}')/CORE"
+    export LDFLAGS="-L$(brew --prefix readline)/lib"
+    export CPPFLAGS="-I$(brew --prefix readline)/include"
+    export PKG_CONFIG_PATH="$(brew --prefix readline)/lib/pkgconfig"
   ;;
 esac
 export CXXFLAGS="$CXXFLAGS -I$XROOTD_ROOT/include -I$XROOTD_ROOT/include/xrootd/private \

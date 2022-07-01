@@ -57,8 +57,8 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 Vc/$VC_VERSION-$VC_REVISION ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 # Our environment
 set osname [uname sysname]
-set VC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv VC_ROOT \$VC_ROOT
-prepend-path PATH \$VC_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$VC_ROOT/lib
+set VECGEOM_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv VECGEOM_ROOT \$VECGEOM_ROOT
+prepend-path PATH \$VECGEOM_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$VECGEOM_ROOT/lib
 EoF

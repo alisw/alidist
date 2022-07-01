@@ -13,7 +13,9 @@ cmake -H"$SOURCEDIR"                        \
       -B"$SOURCEDIR/_cmake_build"           \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
       -DCMAKE_INSTALL_LIBDIR=lib            \
-      -DENABLE_LZ4_EXT=OFF
+      -DENABLE_LZ4_EXT=OFF                  \
+      -DRDKAFKA_BUILD_TESTS=OFF             \
+      -DRDKAFKA_BUILD_EXAMPLES=OFF
 cmake --build "$SOURCEDIR/_cmake_build" --target install
 
 #ModuleFile

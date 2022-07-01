@@ -3,6 +3,7 @@ version: v3.1.5
 source: https://github.com/google/double-conversion
 build_requires:
   - CMake
+  - "GCC-Toolchain:(?!osx)"
 ---
 
 mkdir -p $INSTALLROOT

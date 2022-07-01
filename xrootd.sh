@@ -1,10 +1,10 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v5.3.3"
+tag: "v5.4.3"
 source: https://github.com/xrootd/xrootd
 requires:
  - "OpenSSL:(?!osx)"
- - Python-modules
+ - Python-modules:(?!osx_arm64)
  - AliEn-Runtime
  - libxml2
 build_requires:
@@ -12,10 +12,12 @@ build_requires:
  - "osx-system-openssl:(osx.*)"
  - "GCC-Toolchain:(?!osx)"
  - UUID:(?!osx)
+ - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-[[ -e $SOURCEDIR/bindings ]] && XROOTD_V4=True && XROOTD_PYTHON=True || XROOTD_PYTHON=False
-PYTHON_EXECUTABLE=$( $(realpath $(which python3)) -c 'import sys; print(sys.executable)')
+[[ -e $SOURCEDIR/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
+PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
+PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
 case $ARCHITECTURE in
   osx_x86-64)
@@ -28,27 +30,30 @@ case $ARCHITECTURE in
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
   ;;
-  osx*)
+  osx_arm64)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks
 
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
+    SETUPTOOLS_VER=$(python3 -m pip show setuptools | grep Version | sed -e 's/[^0-9]*//')
+    if [ x"$SETUPTOOLS_VER" != x"60.8.2" ]; then
+	printf "Please install setuptools==60.8.2"; exit 1
+    fi
   ;;
 esac
 
 rsync -a --delete $SOURCEDIR/ $BUILDDIR
-
-[ x"$XROOTD_V4" = x"True" ] && sed -i.bak 's/"uuid.h"/"uuid\/uuid.h"/' $(find . -name "*Macaroon*Handler*.cc")
-
 
 mkdir build
 pushd build
 cmake "$BUILDDIR"                                                     \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
@@ -64,6 +69,8 @@ cmake "$BUILDDIR"                                                     \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
+      -DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'             \
+      -DPIP_OPTIONS='--force-reinstall --ignore-installed'            \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
@@ -74,39 +81,32 @@ then
   pushd $INSTALLROOT
     pushd lib
     if [ -d ../lib64 ]; then
-      ln -s ../lib64/python* python
+      ln -s ../lib64/python${PYTHON_VER} python
     else
-      ln -s python* python
+      ln -s python${PYTHON_VER} python
     fi
     popd
   popd
+  case $ARCHITECTURE in
+    osx*)
+      find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+      find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+    ;;
+  esac
 fi
+
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 \
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}     \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
-            ${LIBXML2_REVISION:+libxml2/$LIBXML2_VERSION-$LIBXML2_REVISION}                             \\
-            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 
-# Our environment
-set XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$XROOTD_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$XROOTD_ROOT/lib
+alibuild-generate-module --bin --lib > "$MODULEFILE"
+
+cat >> "$MODULEFILE" <<EoF
 if { $XROOTD_PYTHON } {
-  prepend-path PYTHONPATH \${XROOTD_ROOT}/lib/python/site-packages
+  prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
+  # This is probably redundant, but should not harm.
   module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
               ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 }

@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v2.8.0
+tag: v2.11.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -15,6 +15,7 @@ requires:
   - Control-OCCPlugin
   - ZeroMQ
   - fmt
+  - MySQL
 build_requires:
   - CMake
   - alibuild-recipe-tools
@@ -35,6 +36,7 @@ case $ARCHITECTURE in
 esac
 
 cmake $SOURCEDIR                                                         \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"                      \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                         \
       ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \

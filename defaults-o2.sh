@@ -5,6 +5,9 @@ env:
   CXXSTD: '17'
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'ON'
+  MACOSX_DEPLOYMENT_TARGET: '10.15'
+disable:
+  - mesos
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
@@ -25,7 +28,7 @@ overrides:
   cgal:
     version: 4.12.2
   fastjet:
-    tag: v3.3.3_1.042-alice1
+    tag: v3.4.0_1.045-alice1
   pythia:
     requires:
     - lhapdf

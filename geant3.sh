@@ -1,8 +1,9 @@
 package: GEANT3
 version: "%(tag_basename)s"
-tag: v3-7
+tag: v3-9
 requires:
   - ROOT
+  - VMC
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -40,7 +41,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION
+module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION VMC/$VMC_VERSION-$VMC_REVISION
 # Our environment
 set GEANT3_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT3_ROOT \$GEANT3_ROOT

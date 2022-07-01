@@ -2,6 +2,7 @@ package: lhapdf-pdfsets
 version: "v%(year)s"
 build_requires:
  - lhapdf
+ - curl
 ---
 #!/bin/bash -ex
 

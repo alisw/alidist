@@ -1,11 +1,12 @@
 package: FairRoot
 version: "%(short_hash)s"
-tag: "v18.4.2"
+tag: "v18.4.8"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
   - simulation
   - ROOT
+  - VMC
   - boost
   - protobuf
   - FairLogger

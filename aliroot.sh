@@ -9,6 +9,7 @@ requires:
   - GEANT4_VMC
   - Vc
   - JAliEn-ROOT
+  - ZeroMQ:(osx.*)
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -74,6 +75,7 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
 fi
 
 cmake $SOURCEDIR                                                     \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"                  \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                          \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                             \
       -DCMAKE_Fortran_COMPILER=gfortran                              \
@@ -132,6 +134,7 @@ module load BASE/1.0                                                            
             ${DPMJET_REVISION:+DPMJET/$DPMJET_VERSION-$DPMJET_REVISION}                                             \\
             ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                                         \\
             ${GEANT3_REVISION:+GEANT3/$GEANT3_VERSION-$GEANT3_REVISION}                                             \\
+            ${ZEROMQ_REVISION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                                             \\
             ${GEANT4_VMC_REVISION:+GEANT4_VMC/$GEANT4_VMC_VERSION-$GEANT4_VMC_REVISION}                             \\
             ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                                             \\
             ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}                         \\

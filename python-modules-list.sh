@@ -2,7 +2,7 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_REQUIREMENTS: |
-    requests==2.21.0
+    requests==2.27.1
     ipykernel==5.1.0
     ipython==7.4.0
     ipywidgets==7.4.2
@@ -40,6 +40,7 @@ env:
     pandas==1.2.3
     scikit-learn==0.24.1
   PIP39_REQUIREMENTS: |
+    setuptools<=60.8.2
     numpy==1.21.4
     scipy==1.7.3
     Cython==0.29.21

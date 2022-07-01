@@ -1,8 +1,10 @@
 package: DDS
-version: "3.5.21"
+version: "%(tag_basename)s"
+tag: "3.7.20"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
+  - protobuf
 build_requires:
   - CMake
   - alibuild-recipe-tools
@@ -16,14 +18,18 @@ incremental_recipe: |
 ---
 case $ARCHITECTURE in
   osx*)
-    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost` ;;
+    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
+  ;;
 esac
 
 [[ $GCC_TOOLCHAIN_ROOT ]] && export DDS_LD_LIBRARY_PATH="$GCC_TOOLCHAIN_ROOT/lib64"
 
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}          \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
+      -DProtobuf_ROOT=${PROTOBUF_ROOT}                                   \
       -DCMAKE_INSTALL_LIBDIR=lib
 
 # Limit the number of build processes to avoid exahusting memory when building

@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.43.0
+tag: v1.64.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -11,7 +11,7 @@ requires:
   - O2
   - arrow
   - Control-OCCPlugin
-  - Python-modules
+  - Python-modules:(?!osx_arm64)
   - libjalienO2
 build_requires:
   - CMake
@@ -116,6 +116,7 @@ alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 setenv QUALITYCONTROL_ROOT \$PKG_ROOT
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/QualityControl
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
 
