@@ -27,7 +27,7 @@ export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib -L$GMP_ROOT/lib $LDZLIB -L${
     --with-thepeg="${THEPEG_ROOT}" \
     --with-openloops=${OPENLOOPS_ROOT} \
     --with-madgraph=${MADGRAPH_ROOT} \
-    --with-gsl="${GSL_ROOT}"
+     ${GSL_ROOT:+--with-gsl="${GSL_ROOT}"}
 
 make ${JOBS:+-j $JOBS}
 make install
