@@ -1,6 +1,6 @@
 package: AliPhysics
 version: "%(commit_hash)s"
-tag: "vAN-20220701"
+tag: "vAN-20220702"
 requires:
   - AliRoot
   - RooUnfold
