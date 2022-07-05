@@ -1,7 +1,8 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v10.7.2-alice1"
-source: https://github.com/alisw/geant4.git
+tag: "v11.0.2"
+#source: https://github.com/alisw/geant4.git
+source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
