@@ -15,9 +15,6 @@ overrides:
     tag: v5-09-57h-01
   fastjet:
     tag: v3.4.0_1.045-alice1
-  XRootD:
-    source: https://github.com/xrootd/xrootd
-    tag: v5.4.3
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
