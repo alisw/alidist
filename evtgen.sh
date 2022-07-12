@@ -17,8 +17,8 @@ env:
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
 
 # adjust the configure scripts
-sed -i -e "s/FLIBS=.*$/FLIBS=\"-lgfortran\"/" configure
-sed -i -e "s/PYTHIALIBLIST=.*$/PYTHIALIBLIST=\"-lpythia8 -lpythia8lhapdf6\"/" configure
+sed -i.bak 's/FLIBS=.*$/FLIBS="-lgfortran"/; s/PYTHIALIBLIST=.*$/PYTHIALIBLIST="-lpythia8 -lpythia8lhapdf6"/' configure
+rm -f configure.bak
 
 export HEPMCLOCATION="$HEPMC_ROOT"
 ./configure --prefix=$INSTALLROOT \

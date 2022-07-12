@@ -28,7 +28,8 @@ esac
 if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
     ln -s LHAPDF5.h include/Pythia8Plugins/LHAPDF5.cc
     ln -s LHAPDF6.h include/Pythia8Plugins/LHAPDF6.cc
-    sed -i -e 's#\$(CXX) -x c++ \$< -o \$@ -c -MD -w -I\$(LHAPDF\$\*_INCLUDE) \$(CXX_COMMON)#\$(CXX) -x c++ \$(<:.h=.cc) -o \$@ -c -MD -w -I\$(LHAPDF\$\*_INCLUDE) \$(CXX_COMMON)#' Makefile
+    sed -i.bak -e 's#\$(CXX) -x c++ \$< -o \$@ -c -MD -w -I\$(LHAPDF\$\*_INCLUDE) \$(CXX_COMMON)#\$(CXX) -x c++ \$(<:.h=.cc) -o \$@ -c -MD -w -I\$(LHAPDF\$\*_INCLUDE) \$(CXX_COMMON)#' Makefile
+    rm -f Makefile.bak
 fi
 
 make ${JOBS+-j $JOBS}

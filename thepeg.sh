@@ -47,9 +47,10 @@ export PATH="$PWD/fakeperl/bin:$PATH"
 
 # special treatment for ThePEG version used for DIPSY
 if [[ "$PKGVERSION" =~ "v2015-08-11" ]]; then
-    sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
-    sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
-    sed -i -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
+    sed -i.bak -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/Config/interfaces.pl.in
+    sed -i.bak -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.am
+    sed -i.bak -e 's#@PYTHIA8_DIR@/xmldoc#@PYTHIA8_DIR@/share/Pythia8/xmldoc#' TheP8I/src/Makefile.in
+    rm -f TheP8I/Config/interfaces.pl.in.bak TheP8I/src/Makefile.*.bak
 fi
 
 autoreconf -ivf
