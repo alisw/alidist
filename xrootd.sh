@@ -13,6 +13,8 @@ build_requires:
  - "GCC-Toolchain:(?!osx)"
  - UUID:(?!osx)
  - alibuild-recipe-tools
+prepend_path:
+  PYTHONPATH: "$XROOTD_ROOT/lib/python/site-packages"
 ---
 #!/bin/bash -e
 [[ -e $SOURCEDIR/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
