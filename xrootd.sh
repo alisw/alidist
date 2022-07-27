@@ -5,8 +5,8 @@ source: https://github.com/xrootd/xrootd
 requires:
  - "OpenSSL:(?!osx)"
  - Python-modules:(?!osx_arm64)
- - AliEn-Runtime
  - libxml2
+ - AliEn-Runtime
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
@@ -14,10 +14,16 @@ build_requires:
  - UUID:(?!osx)
  - alibuild-recipe-tools
 prepend_path:
-  PYTHONPATH: "$XROOTD_ROOT/lib/python/site-packages"
+  PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---
 #!/bin/bash -e
-[[ -e $SOURCEDIR/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
+
+if [[ $ALIEN_RUNTIME_VERSION ]]; then
+  # AliEn-Runtime: we take libxml2 from there, in case they were not taken from the system
+  LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
+fi
+
+[[ -e ${SOURCEDIR}/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
@@ -43,18 +49,18 @@ case $ARCHITECTURE in
     unset UUID_ROOT
     SETUPTOOLS_VER=$(python3 -m pip show setuptools | grep Version | sed -e 's/[^0-9]*//')
     if [ x"$SETUPTOOLS_VER" != x"60.8.2" ]; then
-	printf "Please install setuptools==60.8.2"; exit 1
+    printf "Please install setuptools==60.8.2"; exit 1
     fi
   ;;
 esac
 
-rsync -a --delete $SOURCEDIR/ $BUILDDIR
+rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
 
 mkdir build
 pushd build
-cmake "$BUILDDIR"                                                     \
+cmake "${BUILDDIR}"                                                   \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DENABLE_CRYPTO=ON                                              \
@@ -66,13 +72,17 @@ cmake "$BUILDDIR"                                                     \
       ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIR=$UUID_ROOT/include}             \
+      ${LIBXML2_ROOT:+-DLIBXML2_INCLUDE_DIR=$LIBXML2_ROOT/include/libxml2}    \
+      ${LIBXML2_ROOT:+-DLIBXML2_LIBRARY=$LIBXML2_ROOT/lib/libxml2.so}         \
+      ${LIBXML2_ROOT:+-DLIBXML2_XMLLINT_EXECUTABLE=$LIBXML2_ROOT/bin/xmllint} \
       -DENABLE_KRB5=OFF                                               \
       -DENABLE_READLINE=OFF                                           \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
+      -DXRDCL_ONLY=ON                                                 \
       -DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'             \
-      -DPIP_OPTIONS='--force-reinstall --ignore-installed'            \
+      -DPIP_OPTIONS='--force-reinstall --ignore-installed -v'         \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
@@ -81,12 +91,22 @@ popd
 if [[ x"$XROOTD_PYTHON" == x"True" ]];
 then
   pushd $INSTALLROOT
+
+    # there are cases where python bindings are installed as relative to INSTALLROOT
+    if [[ -d local/lib64 ]]; then
+        [[ -d local/lib64/python${PYTHON_VER} ]] && mv -f local/lib64/python${PYTHON_VER} lib/
+    fi
+    if [[ -d local/lib ]]; then
+        [[ -d local/lib/python${PYTHON_VER} ]] && mv -f local/lib/python${PYTHON_VER} lib/
+    fi
+
     pushd lib
-    if [ -d ../lib64 ]; then
+    if [[ -d ../lib64/python${PYTHON_VER} ]]; then
       ln -s ../lib64/python${PYTHON_VER} python
-    else
+    elif [[ -d python${PYTHON_VER} ]]; then
       ln -s python${PYTHON_VER} python
     fi
+    [[ ! -e python ]] && echo "NO PYTHON DIRECTORY FOUND in $(pwd -P)"
     popd
   popd
   case $ARCHITECTURE in
@@ -97,6 +117,15 @@ then
   esac
 fi
 
+# Print found XRootD python bindings
+if [[ -d ${INSTALLROOT}/lib/python${PYTHON_VER} ]]; then
+    echo "Printing found XRootD python bindings"
+    PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");' 2> /dev/null
+    echo "END of printing XRootD python bindings info"
+else
+    echo "NO PYTHON BINDINGS DIRECTORY FOUND!!!"
+    exit 1
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
