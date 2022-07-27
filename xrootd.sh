@@ -88,9 +88,8 @@ cmake "${BUILDDIR}"                                                   \
 cmake --build . -- ${JOBS:+-j$JOBS} install
 popd
 
-if [[ x"$XROOTD_PYTHON" == x"True" ]];
-then
-  pushd $INSTALLROOT
+if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
+    pushd $INSTALLROOT
 
     # there are cases where python bindings are installed as relative to INSTALLROOT
     if [[ -d local/lib64 ]]; then
@@ -108,23 +107,25 @@ then
     fi
     [[ ! -e python ]] && echo "NO PYTHON DIRECTORY FOUND in $(pwd -P)"
     popd
-  popd
+
+    popd
+
   case $ARCHITECTURE in
     osx*)
       find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
       find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
     ;;
   esac
-fi
 
-# Print found XRootD python bindings
-if [[ -d ${INSTALLROOT}/lib/python${PYTHON_VER} ]]; then
-    echo "Printing found XRootD python bindings"
-    PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");' 2> /dev/null
-    echo "END of printing XRootD python bindings info"
-else
-    echo "NO PYTHON BINDINGS DIRECTORY FOUND!!!"
-    exit 1
+    # Print found XRootD python bindings
+    if [[ -d ${INSTALLROOT}/lib/python${PYTHON_VER} ]]; then
+        echo "Printing found XRootD python bindings"
+        PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");' 2> /dev/null
+        echo "END of printing XRootD python bindings info"
+    else
+        echo "NO PYTHON BINDINGS DIRECTORY FOUND!!!"
+        exit 1
+    fi
 fi
 
 # Modulefile
