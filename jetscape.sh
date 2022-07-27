@@ -1,7 +1,7 @@
 package: JETSCAPE
 version: "%(tag_basename)s"
-tag: "v3.0.2"
-source: https://github.com/jetscape/jetscape
+tag: "v3.1.1-alice1"
+source: https://github.com/alisw/JETSCAPE
 requires:
   - boost
   - hdf5

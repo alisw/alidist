@@ -18,7 +18,7 @@ esac
 
 cmake $SOURCEDIR                               \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}  \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_Fortran_FLAGS="-std=legacy"
 make ${JOBS+-j $JOBS} all
 make install
 

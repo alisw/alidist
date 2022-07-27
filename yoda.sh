@@ -4,12 +4,13 @@ tag: "v1.9.5"
 source: https://github.com/alisw/yoda
 requires:
   - boost
-  - "Python:slc.*"
-  - "Python-system:(?!slc.*)"
+  - "Python:(?!osx)"
+  - "Python-modules:(?!osx)"
+  - "Python-system:(osx.*)"
 build_requires:
   - "autotools:(slc6|slc7)"
 prepend_path:
-  PYTHONPATH: $YODA_ROOT/lib64/python2.7/site-packages:$YODA_ROOT/lib/python2.7/site-packages
+  PYTHONPATH: $YODA_ROOT/lib/python3.9/site-packages
 ---
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
@@ -17,7 +18,14 @@ rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
 (
 unset PYTHON_VERSION
-./configure --prefix="$INSTALLROOT"
+case $ARCHITECTURE in
+  osx*)
+      ./configure --prefix="$INSTALLROOT"
+  ;;
+  *)
+      ./configure --prefix="$INSTALLROOT" CYTHON="$PYTHON_MODULES_ROOT/share/python-modules/bin/cython"
+  ;;
+esac
 make -j$JOBS
 make install
 )
