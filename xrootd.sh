@@ -23,7 +23,8 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
 fi
 
-[[ -e ${SOURCEDIR}/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
+XROOTD_PYTHON=""
+[[ -e ${SOURCEDIR}/bindings ]] && XROOTD_PYTHON=True;
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
