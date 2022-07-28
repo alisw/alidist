@@ -121,7 +121,7 @@ if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
     # Print found XRootD python bindings
     if [[ -d ${INSTALLROOT}/lib/python${PYTHON_VER} ]]; then
         echo "Printing found XRootD python bindings"
-        PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");' 2> /dev/null
+        LD_LIBRARY_PATH="$INSTALLROOT/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");'
         echo "END of printing XRootD python bindings info"
     else
         echo "NO PYTHON BINDINGS DIRECTORY FOUND!!!"
