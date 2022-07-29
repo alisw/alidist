@@ -9,6 +9,7 @@ requires:
   - LLA
   - ReadoutCard
   - "DimRpcParallel:(?!osx)"
+  - "Python:slc.*"
 build_requires:
   - alibuild-recipe-tools
   - CMake
