@@ -15,6 +15,12 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
+  ;;
+esac
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 export LHAPDF_DATA_PATH="$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
@@ -27,7 +33,7 @@ export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib -L$GMP_ROOT/lib $LDZLIB -L${
     --with-thepeg="${THEPEG_ROOT}" \
     --with-openloops=${OPENLOOPS_ROOT} \
     --with-madgraph=${MADGRAPH_ROOT} \
-     ${GSL_ROOT:+--with-gsl="${GSL_ROOT}"}
+     ${GSL_ROOT:+--with-gsl="${GSL_ROOT}"} FCFLAGS="$FCFLAGS -fno-range-check"
 
 make ${JOBS:+-j $JOBS}
 make install

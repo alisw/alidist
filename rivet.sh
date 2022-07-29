@@ -3,22 +3,21 @@ version: "%(tag_basename)s"
 tag: "3.1.6-alice1"
 source: https://github.com/alisw/rivet
 requires:
-  - GSL
   - YODA
   - fastjet
   - HepMC
-  - boost
+  - "Python:(?!osx)"
+  - "Python-modules:(?!osx)"
+  - "Python-system:(osx.*)"
 build_requires:
   - GCC-Toolchain:(?!osx)
 prepend_path:
-  PYTHONPATH: $RIVET_ROOT/lib64/python3.6/site-packages:$RIVET_ROOT/lib/python3.6/site-packages
+  PYTHONPATH: $RIVET_ROOT/lib/python3.9/site-packages
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
-    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
-    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
   *)
     ARCH_LDFLAGS="-Wl,--no-as-needed"
@@ -27,37 +26,31 @@ esac
 
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
-# MPFR and GMP are compiled statically, however in some cases there might be
-# some "-lgmp" left somewhere and we have to deal with it with the correct path.
-# Boost flags are also necessary
-export LDFLAGS="$ARCH_LDFLAGS -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib -lCGAL"
+export LDFLAGS="$ARCH_LDFLAGS"
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-export CXXFLAGS="$CXXFLAGS -I${MPFR_ROOT}/include -I${GMP_ROOT}/include -I${CGAL_ROOT}/include -DCGAL_DO_NOT_USE_MPZF"
-
-if [[ "$BOOST_ROOT" != '' ]]; then
-  export LDFLAGS="$LDFLAGS -L$BOOST_ROOT/lib"
-  export CXXFLAGS="$CXXFLAGS -I$BOOST_ROOT/include"
-fi
-if printf "int main(){}" | c++ $LDFLAGS -lboost_thread -lboost_system -xc++ - -o /dev/null; then
-  export LDFLAGS="$LDFLAGS -lboost_thread -lboost_system"
-else
-  export LDFLAGS="$LDFLAGS -lboost_thread-mt -lboost_system-mt"
-fi
-
-[[ "$CXXFLAGS" != *'-std=c++11'* ]] || CXX11=1
 
 (
 unset PYTHON_VERSION
 autoreconf -ivf
-./configure                                 \
-  --prefix="$INSTALLROOT"                   \
-  --disable-doxygen                         \
-  --with-yoda="$YODA_ROOT"                  \
-  ${GSL_ROOT:+--with-gsl="$GSL_ROOT"}       \
-  --with-hepmc="$HEPMC_ROOT"                \
-  --with-fastjet="$FASTJET_ROOT"            \
-  ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"} \
-  ${CXX11:+--enable-stdcxx11}
+case $ARCHITECTURE in
+  osx*)
+      ./configure                                 \
+	  --prefix="$INSTALLROOT"                   \
+	  --disable-doxygen                         \
+	  --with-yoda="$YODA_ROOT"                  \
+	  --with-hepmc="$HEPMC_ROOT"                \
+	  --with-fastjet="$FASTJET_ROOT"
+  ;;
+  *)
+      ./configure                                 \
+	  --prefix="$INSTALLROOT"                   \
+	  --disable-doxygen                         \
+	  --with-yoda="$YODA_ROOT"                  \
+	  --with-hepmc="$HEPMC_ROOT"                \
+	  --with-fastjet="$FASTJET_ROOT"            \
+	  CYTHON="$PYTHON_MODULES_ROOT/share/python-modules/bin/cython"
+  ;;
+esac
 make -j$JOBS
 make install
 )
@@ -91,7 +84,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION} ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION} ${GMP_REVISION:+GMP/$GMP_VERSION-$GMP_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
+module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION} ${GMP_REVISION:+GMP/$GMP_VERSION-$GMP_REVISION} YODA/$YODA_VERSION-$YODA_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION
 # Our environment
 set RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv RIVET_ROOT \$RIVET_ROOT

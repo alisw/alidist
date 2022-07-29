@@ -12,12 +12,24 @@ case $ARCHITECTURE in
   *) MARCH= ;;
 esac
 
-$SOURCEDIR/configure --prefix=$INSTALLROOT \
-                     --enable-cxx \
-                     --enable-static \
-                     --disable-shared \
-                     ${MARCH:+--build=$MARCH --host=$MARCH} \
-                     --with-pic
+case $ARCHITECTURE in
+  osx*)
+      $SOURCEDIR/configure --prefix=$INSTALLROOT \
+			   --enable-cxx \
+			   --disable-static \
+			   --enable-shared \
+			   ${MARCH:+--build=$MARCH --host=$MARCH} \
+			   --with-pic
+  ;;
+  *)
+      $SOURCEDIR/configure --prefix=$INSTALLROOT \
+			   --enable-cxx \
+			   --enable-static \
+			   --disable-shared \
+			   ${MARCH:+--build=$MARCH --host=$MARCH} \
+			   --with-pic
+  ;;
+esac
 
 make ${JOBS+-j $JOBS}
 make install

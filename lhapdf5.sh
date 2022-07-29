@@ -14,7 +14,7 @@ build_requires:
 
 rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
-./configure --prefix=$INSTALLROOT
+./configure --prefix=$INSTALLROOT FCFLAGS="$FCFLAGS -std=legacy"
 
 make ${JOBS+-j $JOBS} all
 make install
