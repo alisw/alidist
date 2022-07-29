@@ -67,8 +67,6 @@ cmake "${BUILDDIR}"                                                   \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
       -DVOMSXRD_SUBMODULE=OFF                                         \
-      ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
-      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
       ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
@@ -81,8 +79,10 @@ cmake "${BUILDDIR}"                                                   \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
-      -DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'             \
-      -DPIP_OPTIONS='--force-reinstall --ignore-installed -v'         \
+      ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                                        \
+      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}                    \
+      ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'}       \
+      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed -v'}   \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
