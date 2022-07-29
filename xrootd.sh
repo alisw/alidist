@@ -81,7 +81,6 @@ cmake "${BUILDDIR}"                                                   \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
-      -DXRDCL_ONLY=ON                                                 \
       -DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'             \
       -DPIP_OPTIONS='--force-reinstall --ignore-installed -v'         \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
