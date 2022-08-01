@@ -31,8 +31,8 @@ case $ARCHITECTURE in
   *) echo 'Unknown LLVM target for architecture' >&2; exit 1 ;;
 esac
 
-# note that BUILD_SHARED_LIBS=ON IS NEEDED FOR ADDING DYNAMIC PLUGINS
-# to clang-tidy (for instance)
+# BUILD_SHARED_LIBS=ON is needed for e.g. adding dynamic plugins to clang-tidy.
+# Arrow v9 needs LLVM_ENABLE_RTTI=ON.
 cmake $SOURCEDIR/llvm \
   -G Ninja \
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
@@ -43,6 +43,7 @@ cmake $SOURCEDIR/llvm \
   -DPYTHON_EXECUTABLE=$(which python3) \
   -DDEFAULT_SYSROOT="$DEFAULT_SYSROOT" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
+  -DLLVM_ENABLE_RTTI=ON \
   -DBUILD_SHARED_LIBS=OFF
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
