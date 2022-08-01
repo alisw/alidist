@@ -64,6 +64,7 @@ cmake "${BUILDDIR}"                                                   \
       -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
+      -DXRDCL_ONLY=ON                                                 \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
       -DVOMSXRD_SUBMODULE=OFF                                         \
