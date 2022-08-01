@@ -7,6 +7,7 @@ requires:
   - pythia
   - HepMC
   - boost
+  - GSL
 build_requires:
   - "autotools:(slc6|slc7)"
   - GMP
