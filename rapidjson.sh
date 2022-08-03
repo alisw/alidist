@@ -20,7 +20,7 @@ ninja ${JOBS:+-j$JOBS} install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > $MODULEFILE
+alibuild-generate-module --lib > $MODULEFILE
 cat << EOF >> $MODULEFILE
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF
