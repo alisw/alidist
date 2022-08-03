@@ -116,6 +116,7 @@ cmake ./src_tmp/cpp                                                             
 
 make ${JOBS:+-j $JOBS}
 make install
+find $INSTALLROOT/share -name '*-gdb.py' -exec mv {} $INSTALLROOT/lib \;
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
