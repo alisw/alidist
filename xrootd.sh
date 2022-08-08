@@ -114,6 +114,7 @@ if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
     # just run the the command as this is under "bash -e"
     echo -ne ">>>>>>   Found XRootD python bindings: "
     LD_LIBRARY_PATH="$INSTALLROOT/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");'
+    echo
 
 fi  # end of PYTHON part
 
