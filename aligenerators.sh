@@ -1,6 +1,6 @@
 package: AliGenerators
 version: "v%(year)s%(month)s%(day)s"
-tag: "vAN-20220806"
+tag: "vAN-20220809"
 source: https://github.com/alisw/AliGenerators
 requires:
   - AMPT
