@@ -47,7 +47,6 @@ cmake $SOURCEDIR                                                         \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}    \
       ${FAIRMQ_REVISION:+-DFairMQ_DIR=$FAIRMQ_ROOT}                       \
       ${FAIRLOGGER_REVISION:+-DFairLogger_DIR=$FAIRLOGGER_ROOT}           \
-      ${PYTHON_REVISION:+-DPython3_ROOT_DIR="$PYTHON_ROOT"}               \
       ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
       ${ZEROMQ_ROOT:+-DZMQ_ROOT=$ZEROMQ_ROOT}                             \
