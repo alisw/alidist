@@ -1,11 +1,12 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.7.2-alice1
+tag: v1.12.1-alice1
 source: https://github.com/alisw/onnxruntime.git
 requires:
   - protobuf
   - re2
-  - Python-modules:(?!osx_arm64)
+  - flatbuffers
+  - boost
 build_requires:
   - CMake
   - alibuild-recipe-tools
@@ -14,31 +15,21 @@ build_requires:
 
 pushd $SOURCEDIR
   git submodule update --init -- cmake/external/date
-  git submodule update --init -- cmake/external/mp11
   git submodule update --init -- cmake/external/onnx
-  git submodule update --init -- cmake/external/optional-lite
   git submodule update --init -- cmake/external/eigen
   git submodule update --init -- cmake/external/nsync
-  git submodule update --init -- cmake/external/flatbuffers
   git submodule update --init -- cmake/external/SafeInt
   git submodule update --init -- cmake/external/json
+  git submodule update --init -- cmake/external/pytorch_cpuinfo
 popd
-BUILD_PYTHON=ON
-case $ARCHITECTURE in
-  osx_arm64*) BUILD_PYTHON=OFF ;;
-esac
 
 mkdir -p $INSTALLROOT
 
-# NOTE: It builds its own flatbuffers, eigen, nsync, pybind11
 cmake "$SOURCEDIR/cmake" \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
       -DCMAKE_INSTALL_LIBDIR=lib \
-      -Donnxruntime_DEV_MODE=OFF \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF \
-      -Donnxruntime_ENABLE_PYTHON=${BUILD_PYTHON:-ON} \
-      -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)") \
       -Donnxruntime_PREFER_SYSTEM_LIB=ON \
       -Donnxruntime_BUILD_SHARED_LIB=ON \
       -DProtobuf_USE_STATIC_LIBS=ON \
@@ -47,8 +38,9 @@ cmake "$SOURCEDIR/cmake" \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.a} \
       ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include} \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc} \
-      -Donnxruntime_USE_PREINSTALLED_NSYNC=OFF \
-      ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}
+      ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include} \
+      ${FLATBUFFERS_ROOT:+-DFLATBUFFERS_INCLUDE_DIR=${FLATBUFFERS_ROOT}/include} \
+      ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
