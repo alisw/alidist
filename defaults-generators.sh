@@ -5,6 +5,9 @@ env:
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
   CXXFLAGS: -fPIC -g -O2 -std=c++14
 overrides:
+  GCC-Toolchain:
+    tag: v10.2.0-alice2
+    version: v10.2.0-alice2
   boost:
     requires:
     - GCC-Toolchain:(?!osx)
