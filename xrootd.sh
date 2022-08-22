@@ -14,10 +14,12 @@ build_requires:
  - UUID:(?!osx)
  - alibuild-recipe-tools
 prepend_path:
-  PYTHONPATH: "$XROOTD_ROOT/lib/python/site-packages"
+  PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---
 #!/bin/bash -e
-[[ -e $SOURCEDIR/bindings ]] && { XROOTD_V4=True; XROOTD_PYTHON=True; } || XROOTD_PYTHON=False
+
+XROOTD_PYTHON=""
+[[ -e ${SOURCEDIR}/bindings ]] && XROOTD_PYTHON=True;
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
@@ -48,21 +50,19 @@ case $ARCHITECTURE in
   ;;
 esac
 
-rsync -a --delete $SOURCEDIR/ $BUILDDIR
+rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
 
 mkdir build
 pushd build
-cmake "$BUILDDIR"                                                     \
+cmake "${BUILDDIR}"                                                   \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                             \
+      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DXRDCL_ONLY=ON                                                 \
       -DENABLE_CRYPTO=ON                                              \
       -DENABLE_PERL=OFF                                               \
       -DVOMSXRD_SUBMODULE=OFF                                         \
-      ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
-      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
       ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
@@ -72,32 +72,51 @@ cmake "$BUILDDIR"                                                     \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
-      -DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'             \
-      -DPIP_OPTIONS='--force-reinstall --ignore-installed'            \
+      ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
+      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
+      ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'}       \
+      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed -v'}   \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 popd
 
-if [[ x"$XROOTD_PYTHON" == x"True" ]];
-then
-  pushd $INSTALLROOT
+if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
+    pushd ${INSTALLROOT}
+
+    # there are cases where python bindings are installed as relative to INSTALLROOT
+    if [[ -d local/lib64 ]]; then
+        [[ -d local/lib64/python${PYTHON_VER} ]] && mv -f local/lib64/python${PYTHON_VER} lib/
+    fi
+    if [[ -d local/lib ]]; then
+        [[ -d local/lib/python${PYTHON_VER} ]] && mv -f local/lib/python${PYTHON_VER} lib/
+    fi
+
     pushd lib
-    if [ -d ../lib64 ]; then
+    if [ -d ../lib64/python${PYTHON_VER} ]; then
       ln -s ../lib64/python${PYTHON_VER} python
-    else
+    elif [[ -d python${PYTHON_VER} ]]; then
       ln -s python${PYTHON_VER} python
     fi
-    popd
-  popd
-  case $ARCHITECTURE in
-    osx*)
-      find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-      find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-    ;;
-  esac
-fi
+    [[ ! -e python ]] && echo "NO PYTHON SYMLINK CREATED in: $(pwd -P)"
+    popd  # get back from lib
 
+    popd  # get back from INSTALLROOT
+
+  case $ARCHITECTURE in
+      osx*)
+        find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+      ;;
+  esac
+
+    # Print found XRootD python bindings
+    # just run the the command as this is under "bash -e"
+    echo -ne ">>>>>>   Found XRootD python bindings: "
+    LD_LIBRARY_PATH="$INSTALLROOT/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH" PYTHONPATH="$INSTALLROOT/lib/python/site-packages${PYTHONPATH:+:}$PYTHONPATH" ${PYTHON_EXECUTABLE} -c 'from XRootD import client as xrd_client;print(f"{xrd_client.__version__}\n{xrd_client.__file__}");'
+    echo
+
+fi  # end of PYTHON part
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
