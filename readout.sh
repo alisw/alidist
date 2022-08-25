@@ -15,7 +15,7 @@ requires:
   - Control-OCCPlugin
   - ZeroMQ
   - fmt
-  - MySQL
+  - "MySQL:(slc.*)"
 build_requires:
   - CMake
   - alibuild-recipe-tools
