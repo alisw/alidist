@@ -10,6 +10,8 @@ requires:
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - "Python:(slc|ubuntu)" # onnx which is builded by the package requires Python
+  - "Python-system:(?!slc.*|ubuntu)"
 ---
 #!/bin/bash -e
 
@@ -29,6 +31,7 @@ cmake "$SOURCEDIR/cmake" \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE \
       -DCMAKE_INSTALL_LIBDIR=lib \
+      -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)") \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF \
       -Donnxruntime_PREFER_SYSTEM_LIB=ON \
       -Donnxruntime_BUILD_SHARED_LIB=ON \
