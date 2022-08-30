@@ -1,6 +1,6 @@
 package: FairMQ
 version: "%(tag_basename)s"
-tag: v1.4.52
+tag: v1.4.53
 source: https://github.com/FairRootGroup/FairMQ
 requires:
  - boost
