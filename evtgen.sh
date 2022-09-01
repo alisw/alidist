@@ -1,7 +1,7 @@
 package: EVTGEN
 version: "%(tag_basename)s"
-tag: "R01-06-00"
-source: https://github.com/PMunkes/evtgen.git
+tag: "R02-02-00"
+source:  https://phab.hepforge.org/source/evtgen
 requires:
   - HepMC
   - pythia
@@ -16,18 +16,16 @@ env:
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
 
-# adjust the configure scripts
-sed -i -e "s/FLIBS=.*$/FLIBS=\"-lgfortran\"/" configure
-sed -i -e "s/PYTHIALIBLIST=.*$/PYTHIALIBLIST=\"-lpythia8 -lpythia8lhapdf6\"/" configure
-
-export HEPMCLOCATION="$HEPMC_ROOT"
-./configure --prefix=$INSTALLROOT \
-	    --hepmcdir=$HEPMC_ROOT \
-	    --pythiadir=$PYTHIA_ROOT \
-	    --tauoladir=$TAUOLA_ROOT \
-	    --photosdir=$PHOTOS_ROOT 
-make
-make install
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DEVTGEN_HEPMC3=OFF \
+      -DHEPMC2_ROOT_DIR=$HEPMC_ROOT \
+      -DEVTGEN_PYTHIA=ON \
+      -DPYTHIA8_ROOT_DIR=$PYTHIA_ROOT \
+      -DEVTGEN_PHOTOS=ON \
+      -DPHOTOSPP_ROOT_DIR=$PHOTOS_ROOT \
+      -DEVTGEN_TAUOLA=ON \
+      -DTAUOLAPP_ROOT_DIR=$TAUOLA_ROOT
+make ${JOBS:+-j$JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
