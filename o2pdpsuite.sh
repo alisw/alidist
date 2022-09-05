@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20220902"
+tag: "epn-20220902-DDv1.4.11-flp-suite-v0.70.0-FairMQv1.4.52"
 requires:
   - O2
   - DataDistribution
