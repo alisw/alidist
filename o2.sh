@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20220906"
+tag: "async-9d6ad9e180c0502f08df04b03af186ec30a79098-alidist-master"
 requires:
   - arrow
   - FairRoot
