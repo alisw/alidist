@@ -9,7 +9,9 @@ env:
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
+    tag: v5-09-59c-01
   AliRoot:
+    tag: v5-09-59c
     requires:
     - ROOT
     - DPMJET
