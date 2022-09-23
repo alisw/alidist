@@ -8,7 +8,7 @@ env:
   MACOSX_DEPLOYMENT_TARGET: '10.15'
 overrides:
   AliPhysics:
-    version: '%(commit_hash)s_O2'
+    version: '%(tag_basename)s_ROOT6'
   AliRoot:
     requires:
     - ROOT
