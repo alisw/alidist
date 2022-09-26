@@ -9,7 +9,7 @@ overrides:
     tag: vAN-20220925
     version: '%(tag_basename)s_ROOT6'
   AliRoot:
-    tag: v5-09-59b
+    tag: v5-09-59d
     version: '%(tag_basename)s_ROOT6'
 package: defaults-next-root6
 version: v1
