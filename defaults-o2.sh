@@ -3,7 +3,7 @@ env:
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
   CXXFLAGS: -fPIC -O2 -std=c++17
   CXXSTD: '17'
-  ENABLE_VMC: 'ON'
+  # ENABLE_VMC: 'ON'   # disabled to hopefully fix problem loading libVMC in trains
   GEANT4_BUILD_MULTITHREADED: 'ON'
   MACOSX_DEPLOYMENT_TARGET: '10.15'
 overrides:
