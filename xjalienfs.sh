@@ -3,25 +3,29 @@ version: "%(tag_basename)s"
 tag: "1.4.2"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
- - XRootD
- - AliEn-Runtime
- - Python-modules:(?!osx_arm64)
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - XRootD
+  - AliEn-Runtime
+  - Python-modules:(?!osx_arm64)
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
 ---
 #!/bin/bash -e
 
-PIPOPTION="--user"
-if [ ! "X$VIRTUAL_ENV" = X ]; then
-  PIPOPTION=""
-fi
-
-env PYTHONUSERBASE="$INSTALLROOT" ALIBUILD=1 python3 -m pip install --ignore-installed $PIPOPTION file://${SOURCEDIR}
+# Use pip's --target to install under $INSTALLROOT without weird hacks. This
+# works inside and outside a virtualenv, but unset VIRTUAL_ENV to make sure we
+# only depend on stuff we installed using our Python and Python-modules.
+env -u VIRTUAL_ENV ALIBUILD=1 \
+    python3 -m pip install --force-reinstall \
+    --target="$INSTALLROOT/lib/python/site-packages" \
+    "file://$SOURCEDIR"
 
 # Make sure all the tools use the correct python
-mkdir -p "$INSTALLROOT/bin"
+# By default, pip install --target installs binaries inside the given target dir
+# as well, but we want them directly under $INSTALLROOT/bin instead.
+rm -rf "${INSTALLROOT:?}/bin"
+mv "$INSTALLROOT/lib/python/site-packages/bin" "$INSTALLROOT/bin"
 for binfile in "$INSTALLROOT"/bin/*; do
   [ -f "$binfile" ] || continue
   if grep -q "^'''exec' .*python.*" "$binfile"; then
@@ -34,12 +38,6 @@ for binfile in "$INSTALLROOT"/bin/*; do
   fi
 done
 rm -fv "$INSTALLROOT"/bin/*.bak
-
-if [ -d ${INSTALLROOT}/lib ]; then
-  pushd ${INSTALLROOT}/lib
-      ln -nfs python* python
-  popd
-fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -61,10 +59,5 @@ module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}         
 	    ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
 set XJALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$XJALIENFS_ROOT/bin
+prepend-path PYTHONPATH \$XJALIENFS_ROOT/lib/python/site-packages
 EoF
-
-if [ "X$VIRTUAL_ENV" = X ]; then
-  cat >> "$MODULEFILE" << EoF
-  prepend-path PYTHONPATH \$XJALIENFS_ROOT/lib/python/site-packages
-EoF
-fi
