@@ -3,16 +3,13 @@ env:
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
   CXXFLAGS: -fPIC -O2 -std=c++17
   CXXSTD: '17'
-  # ENABLE_VMC: 'ON'   # disabled to hopefully fix problem loading libVMC in trains
   GEANT4_BUILD_MULTITHREADED: 'ON'
   MACOSX_DEPLOYMENT_TARGET: '10.15'
 overrides:
   AliPhysics:
-    version: '%(commit_hash)s_O2'
-    tag: v5-09-59d-01
+    tag: vAN-20220926
+    version: '%(tag_basename)s_O2'
   AliRoot:
-    version: '%(commit_hash)s_O2'
-    tag: v5-09-59d
     requires:
     - ROOT
     - DPMJET
@@ -22,6 +19,8 @@ overrides:
     - Vc
     - ZeroMQ
     - JAliEn-ROOT
+    tag: v5-09-59d
+    version: '%(commit_hash)s_O2'
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
