@@ -1,6 +1,5 @@
 package: FairRoot
-version: "v18.4.8-alice1"
-tag: "9f38a9fa8fa9235e1b3037d4fecee1c7cd64edaa"
+version: "v18.4.9"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
