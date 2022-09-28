@@ -1,5 +1,5 @@
 package: FairRoot
-version: "%(short_hash)s"
+version: "v18.4.8-alice1"
 tag: "v18.4.8"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
