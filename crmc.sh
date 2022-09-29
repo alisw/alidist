@@ -13,12 +13,14 @@ case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
+    LINKER_FLAGS="-Wl,-undefined dynamic_lookup"
   ;;
 esac
 
 cmake $SOURCEDIR                               \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}  \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_Fortran_FLAGS="-std=legacy"
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_Fortran_FLAGS="-std=legacy" \
+      ${LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS="$LINKER_FLAGS"}
 make ${JOBS+-j $JOBS} all
 make install
 
