@@ -6,7 +6,7 @@ requires:
   - AMPT
   - CRMC
   - DPMJET
-  - EPOS:(?!osx)
+  - EPOS
   - Herwig:(?!osx)
   - JEWEL
   - POWHEG
