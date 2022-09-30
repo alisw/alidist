@@ -23,7 +23,7 @@ mkdir $OBJ
 
 case $ARCHITECTURE in
   osx*)
-      export LDFLAGS="-L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
+      export LDFLAGS="-Wl,-undefined dynamic_lookup -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
    ;;
   *)
       export LDFLAGS="-Wl,--no-as-needed -L${MPFR_ROOT}/lib -L${GMP_ROOT}/lib -L${CGAL_ROOT}/lib"
