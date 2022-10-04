@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "async-20221003.1-alidist-master"
+tag: "nightly-20221004-gpu"
 requires:
   - O2
   - DataDistribution
