@@ -15,9 +15,7 @@ if [[ $ARCHITECTURE = osx* ]]; then
   OPENSSL_ROOT=$(brew --prefix openssl@1.1)
 fi
 
-rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
-
-cmake $BUILDDIR                                                    \
+cmake $SOURCEDIR                                                   \
       -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT                             \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
 make ${JOBS:+-j $JOBS} install
