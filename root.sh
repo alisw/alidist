@@ -87,14 +87,25 @@ fi
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=ON"
-  ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
-  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 
-  PYTHON_EXECUTABLE=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"));')/bin/python3
+  python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
+  if [ "$python_exec" = "$(which python3)" ]; then
+    # By default, if there's nothing funny going on, use the first Python 3 in
+    # the PATH, which is the one built by us (unless disabled, in which case it
+    # is the system one). This is substituted into ROOT's Python scripts'
+    # shebang lines, so we cannot use an absolute path because the path to our
+    # Python will differ between build time and runtime, e.g. on the Grid.
+    PYTHON_EXECUTABLE=python3
+  else
+    # If Python's exec_prefix doesn't point to the same place as $PATH, then we
+    # have a shim script in between. This is used by things like pyenv and asdf.
+    # This doesn't happen when building things to be published, only in local
+    # usage, so hardcoding an absolute path into the shebangs is fine.
+    PYTHON_EXECUTABLE=$python_exec
+  fi
 else
   # Non-ROOT 6 builds: disable Python
   ROOT_PYTHON_FLAGS="-Dpython=OFF -Dpyroot=OFF"
-  ROOT_PYTHON_FEATURES=
   ROOT_HAS_NO_PYTHON=1
 fi
 
@@ -159,7 +170,7 @@ cmake $SOURCEDIR                                                                
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
+      ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
