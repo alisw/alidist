@@ -90,12 +90,12 @@ if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   ROOT_HAS_PYTHON=1
   python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
   if [ "$python_exec" = "$(which python3)" ]; then
-    # By default, if there's nothing funny going on, use the first Python 3 in
+    # By default, if there's nothing funny going on, let ROOT pick the Python in
     # the PATH, which is the one built by us (unless disabled, in which case it
     # is the system one). This is substituted into ROOT's Python scripts'
     # shebang lines, so we cannot use an absolute path because the path to our
     # Python will differ between build time and runtime, e.g. on the Grid.
-    PYTHON_EXECUTABLE=python3
+    PYTHON_EXECUTABLE=
   else
     # If Python's exec_prefix doesn't point to the same place as $PATH, then we
     # have a shim script in between. This is used by things like pyenv and asdf.
