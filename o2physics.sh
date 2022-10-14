@@ -5,6 +5,7 @@ requires:
   - O2
   - ONNXRuntime
   - libjalienO2
+  - KFParticle
 build_requires:
   - CMake
   - ninja
