@@ -10,7 +10,7 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s_ROOT6"
-    tag: v5-09-59c
+    tag: TEST-fix-lego_train.C-1
   AliPhysics:
     version: "%(tag_basename)s_ROOT6"
     tag: v5-09-59c-02

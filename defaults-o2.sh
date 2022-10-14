@@ -15,7 +15,7 @@ overrides:
     tag: v5-09-59c-02
   AliRoot:
     version: '%(commit_hash)s_O2'
-    tag: v5-09-59c
+    tag: TEST-fix-lego_train.C-1
     requires:
     - ROOT
     - DPMJET

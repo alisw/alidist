@@ -14,7 +14,7 @@ disable:
 overrides:
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-59c
+    tag: TEST-fix-lego_train.C-1
     requires:
       - ROOT
       - DPMJET
