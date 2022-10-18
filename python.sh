@@ -1,6 +1,6 @@
 package: Python
 version: "%(tag_basename)s"
-tag: v3.6.10
+tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
  - AliEn-Runtime:(?!.*ppc64)
@@ -11,13 +11,14 @@ requires:
  - libffi
 build_requires:
  - curl
+ - alibuild-recipe-tools
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
-prefer_system: "(?!slc5)"
+prefer_system: "(?!slc5|ubuntu)"
 prefer_system_check:
-  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && pip3 --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
+  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 ---
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
@@ -59,6 +60,8 @@ EOF
 fi
 
 ./configure --prefix="$INSTALLROOT"  \
+            ${OPENSSL_ROOT:+--with-openssl="$OPENSSL_ROOT"} \
+            ${OPENSSL_ROOT:+--with-openssl-rpath=no} \
             --enable-shared          \
             --with-system-expat      \
             --with-ensurepip=install
@@ -80,11 +83,17 @@ pushd "$INSTALLROOT/bin"
   [[ -x python3-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python3-config
 popd
 
+# Make sure we have the latest pip
+env PATH="$INSTALLROOT/bin:$PATH"                       \
+    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
+    PYTHONHOME="$INSTALLROOT"                           \
+    python3 -m pip install --upgrade pip
+
 # Install Python SSL certificates right away
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
     PYTHONHOME="$INSTALLROOT" \
-    pip3 install 'certifi==2019.3.9'
+    python3 -m pip install 'certifi==2019.3.9'
 
 # Uniform Python library path
 pushd "$INSTALLROOT/lib"
@@ -104,28 +113,14 @@ find "$INSTALLROOT"/lib/python* \
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+alibuild-generate-module --bin --lib > "$MODULEFILE"
+cat >> "$MODULEFILE" <<EoF
+setenv PYTHONHOME \$PKG_ROOT
+prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
+if { [module-info mode load] } {
+  setenv SSL_CERT_FILE  [exec \$PKG_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
 }
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} \\
-                     ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}                                     \\
-                     ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                         \\
-                     ${LIBPNG_REVISION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                             \\
-                     ${LIBFFI_REVISION:+libffi/$LIBFFI_VERSION-$LIBFFI_REVISION}                             \\
-                     ${FREETYPE_REVISION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                     \\
-                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv PYTHON_ROOT \$PYTHON_ROOT
-setenv PYTHONHOME \$PYTHON_ROOT
-prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
-prepend-path PATH \$PYTHON_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib
-setenv SSL_CERT_FILE  [exec python3 -c "import certifi; print(certifi.where())"]
+if { [module-info mode remove] } {
+  unsetenv SSL_CERT_FILE
+}
 EoF
