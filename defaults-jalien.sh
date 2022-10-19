@@ -7,12 +7,6 @@ env:
   CFLAGS: "-fPIC -g -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
 overrides:
-  AliRoot:
-    version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-57h
-  AliPhysics:
-    version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-57h-01
   fastjet:
     tag: v3.4.0_1.045-alice1
 ---

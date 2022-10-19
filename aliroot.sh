@@ -1,6 +1,6 @@
 package: AliRoot
-version: "%(commit_hash)s"
-tag: master
+version: "%(commit_hash)s%(defaults_upper)s"
+tag: v5-09-59e
 requires:
   - ROOT
   - DPMJET
