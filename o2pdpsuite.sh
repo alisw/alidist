@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20221020"
+tag: "async-O2-daily-20221019-1500.1-alidist-master"
 requires:
   - O2
   - DataDistribution
