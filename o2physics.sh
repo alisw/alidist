@@ -4,6 +4,7 @@ tag: "daily-20221019-1500"
 requires:
   - O2
   - ONNXRuntime
+  - fastjet
   - libjalienO2
   - KFParticle
 build_requires:
@@ -29,6 +30,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                          \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}    \
+      ${FASTJET_ROOT:+-Dfjcontrib_ROOT="$FASTJET_ROOT"}           \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}
 cmake --build . -- ${JOBS+-j $JOBS} install
 
