@@ -4,7 +4,7 @@ tag: v1.6.3
 source: https://github.com/alisw/autotools
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
-  export PATH=$PATH:$(brew --prefix gettext || true)/bin;
+  export PATH=$PATH:$(brew --prefix gettext || true)/bin:$(brew --prefix texinfo || true)/bin;
   which autoconf && which m4 && which automake && which makeinfo && which aclocal && which pkg-config && which autopoint && which libtool;
   if [ $? -ne 0 ]; then printf "One or more autotools packages are missing on your system.\n * On a RHEL-compatible system you probably need: autoconf automake texinfo gettext gettext-devel libtool\n * On an Ubuntu-like system you probably need: autoconf automake autopoint texinfo gettext libtool libtool-bin pkg-config\n * On macOS you need: brew install autoconf automake gettext pkg-config"; exit 1; fi
 prepend_path:
