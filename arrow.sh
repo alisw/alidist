@@ -1,6 +1,6 @@
 package: arrow
-version: "v9.0.0-alice1"
-tag: 6747e03df249b3bbeef4cc935202173390a03217
+version: "v10.0.0-alice1"
+tag: 69f1afc0b85ae4f66d379d5a4a7606ffc6e844d8
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
