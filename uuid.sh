@@ -5,7 +5,7 @@ source: https://github.com/alisw/uuid
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - "autotools:(slc6|slc7)"
-append_path:
+prepend_path:
   PKG_CONFIG_PATH: "$UUID_ROOT/share/pkgconfig"
 ---
 rsync -av --delete --exclude '**/.git' "$SOURCEDIR/" .
