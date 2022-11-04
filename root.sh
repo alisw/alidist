@@ -220,6 +220,20 @@ rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"     \
        "$INSTALLROOT/LICENSE"
 
+# Make sure all the tools use the correct python
+for binfile in "$INSTALLROOT"/bin/*; do
+  [ -f "$binfile" ] || continue
+  if grep -q "^'''exec' .*python.*" "$binfile"; then
+    # This file uses a hack to get around shebang size limits. As we're
+    # replacing the shebang with the system python, the limit doesn't apply and
+    # we can just use a normal shebang.
+    sed -i.bak '1d; 2d; 3d; 4s,^,#!/usr/bin/env python3\n,' "$binfile"
+  else
+    sed -i.bak '1s,^#!.*python.*,#!/usr/bin/env python3,' "$binfile"
+  fi
+done
+rm -fv "$INSTALLROOT"/bin/*.bak
+
 # Modulefile
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
