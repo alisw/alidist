@@ -71,6 +71,7 @@ case $ARCHITECTURE in
 esac
 
 cmake ./src_tmp/cpp                                                                                 \
+      ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                             \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS=${CMAKE_SHARED_LINKER_FLAGS}}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
