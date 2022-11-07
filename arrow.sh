@@ -1,6 +1,6 @@
 package: arrow
 version: "v10.0.0-alice1"
-tag: alice/apache-arrow-10.0.0
+tag: apache-arrow-10.0.0-alice1
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
