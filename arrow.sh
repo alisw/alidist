@@ -64,6 +64,7 @@ case $ARCHITECTURE in
    CLANG_EXECUTABLE=/usr/bin/clang
    ;;
   *)
+   CXXFLAGS=$CXXFLAGS" -std=gnu++17"
    CLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
    # this patches version script to hide llvm symbols in gandiva library
    sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
