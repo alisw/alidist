@@ -1,7 +1,7 @@
 package: arrow
-version: "v9.0.0-alice1"
-tag: 6747e03df249b3bbeef4cc935202173390a03217
-source: https://github.com/alisw/arrow.git
+version: "v10.0.0-alice1"
+tag: 8dc51a7b3da1a7d9688b76efbdf525b2170e5b73
+source: https://github.com/aalkin/arrow.git
 requires:
   - boost
   - lz4
