@@ -1,6 +1,6 @@
 package: Sacrifice
 version: "%(tag_basename)s"
-tag: "v1.1.1-alice2"
+tag: "v1.1.1-alice3"
 source: https://github.com/alisw/Sacrifice.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -28,7 +28,6 @@ rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
 
 autoreconf -ivf
 ./configure                                 \
-  ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"} \
   --with-HepMC="$HEPMC_ROOT"                \
   --with-LHAPDF="$LHAPDF_ROOT"              \
   --with-pythia="$PYTHIA_ROOT"              \

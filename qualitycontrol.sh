@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.64.0
+tag: v1.81.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -35,7 +35,13 @@ incremental_recipe: |
     echo "Run the tests"
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
     PATH=$PATH:$INSTALLROOT/bin
-    ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual
+    echo "PR_REPO : $PR_REPO"
+    if [[ $PR_REPO == "AliceO2Group/QualityControl" ]]; then
+      TESTS_LABELS_EXCLUSION="manual"
+    else
+      TESTS_LABELS_EXCLUSION="(CCDB)|(manual)"
+    fi
+    ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE $TESTS_LABELS_EXCLUSION
   fi
 ---
 #!/bin/bash -ex
@@ -94,7 +100,13 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   echo "Run the tests"
   LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALLROOT/lib
   PATH=$PATH:$INSTALLROOT/bin
-  ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE manual
+  echo "PR_REPO : $PR_REPO"
+  if [[ $PR_REPO == "AliceO2Group/QualityControl" ]]; then
+    TESTS_LABELS_EXCLUSION="manual"
+  else
+    TESTS_LABELS_EXCLUSION="(CCDB)|(manual)"
+  fi
+  ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE $TESTS_LABELS_EXCLUSION
 fi
 
 DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"

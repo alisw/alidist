@@ -1,6 +1,6 @@
 package: STARlight
 version: "%(tag_basename)s"
-tag: master
+tag: r313-a
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

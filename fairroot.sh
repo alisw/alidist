@@ -1,6 +1,5 @@
 package: FairRoot
-version: "%(short_hash)s"
-tag: "v18.4.8"
+version: "v18.4.9"
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
@@ -48,6 +47,7 @@ cmake $SOURCEDIR                                                                
       -DROOT_CONFIG_SEARCHPATH=$ROOT_ROOT/bin                                               \
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                                               \
       -DGeant3_DIR=$GEANT3_ROOT                                                             \
+      -DBUILD_MBS=OFF                                                                       \
       -DDISABLE_GO=ON                                                                       \
       -DBUILD_EXAMPLES=OFF                                                                  \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \

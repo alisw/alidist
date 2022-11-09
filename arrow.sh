@@ -1,6 +1,6 @@
 package: arrow
-version: "v5.0.0-alice3"
-tag: 61660be0e61d2466e160ce6e9e9bbe8865ed8156
+version: "v9.0.0-alice1"
+tag: 6747e03df249b3bbeef4cc935202173390a03217
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
@@ -9,6 +9,7 @@ requires:
   - protobuf
   - utf8proc
   - OpenSSL:(?!osx)
+  - xsimd
 build_requires:
   - zlib
   - flatbuffers
@@ -115,6 +116,7 @@ cmake ./src_tmp/cpp                                                             
 
 make ${JOBS:+-j $JOBS}
 make install
+find $INSTALLROOT/share -name '*-gdb.py' -exec mv {} $INSTALLROOT/lib \;
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

@@ -6,13 +6,12 @@ name: Create a PR from pushes to rc/branches
     branches:
       # All branches listed here must have a branch protection rule restricting
       # who can push to them, as PRs will be created with auto-merge enabled!
-      - 'rc/**'
+      - rc/master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # For pushes to rc/flp-suite-*, DON'T open a PR.
-    if: ${{ !github.deleted && !startsWith(github.ref, 'refs/heads/rc/flp-suite-') }}
+    if: ${{ !github.event.deleted }}
 
     steps:
       - name: Get rc branch

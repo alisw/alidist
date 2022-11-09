@@ -1,6 +1,6 @@
 package: GEANT4_VMC
 version: "%(tag_basename)s"
-tag: "v5-4"
+tag: "v6-1-p2"
 source: https://github.com/vmc-project/geant4_vmc
 requires:
   - ROOT
@@ -11,7 +11,7 @@ build_requires:
   - CMake
   - "Xcode:(osx.*)"
 prepend_path:
-  ROOT_INCLUDE_PATH: "$GEANT4_VMC_ROOT/include/g4root:$GEANT4_VMC_ROOT/include/geant4vmc:$GEANT4_VMC_ROOT/include/mtroot"
+  ROOT_INCLUDE_PATH: "$GEANT4_VMC_ROOT/include/g4root:$GEANT4_VMC_ROOT/include/geant4vmc"
 env:
   G4VMCINSTALL: "$GEANT4_VMC_ROOT"
 ---
@@ -49,7 +49,6 @@ setenv G4VMCINSTALL \$GEANT4_VMC_ROOT
 setenv GEANT4VMC_MACRO_DIR \$GEANT4_VMC_ROOT/share/examples/macro
 setenv USE_VGM 1
 prepend-path PATH \$GEANT4_VMC_ROOT/bin
-prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/mtroot
 prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/geant4vmc
 prepend-path ROOT_INCLUDE_PATH \$GEANT4_VMC_ROOT/include/g4root
 prepend-path LD_LIBRARY_PATH \$GEANT4_VMC_ROOT/lib

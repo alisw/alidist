@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-26-04-patches-alice1"
+tag: "v6-26-04-patches-alice2"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -87,14 +87,25 @@ fi
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
   # ROOT 6+: enable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=ON"
-  ROOT_PYTHON_FEATURES="pyroot"
   ROOT_HAS_PYTHON=1
-  # One can explicitly pick a Python version with -DPYTHON_EXECUTABLE=... 
-  PYTHON_EXECUTABLE=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"));')/bin/python3
+  python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
+  if [ "$python_exec" = "$(which python3)" ]; then
+    # By default, if there's nothing funny going on, let ROOT pick the Python in
+    # the PATH, which is the one built by us (unless disabled, in which case it
+    # is the system one). This is substituted into ROOT's Python scripts'
+    # shebang lines, so we cannot use an absolute path because the path to our
+    # Python will differ between build time and runtime, e.g. on the Grid.
+    PYTHON_EXECUTABLE=
+  else
+    # If Python's exec_prefix doesn't point to the same place as $PATH, then we
+    # have a shim script in between. This is used by things like pyenv and asdf.
+    # This doesn't happen when building things to be published, only in local
+    # usage, so hardcoding an absolute path into the shebangs is fine.
+    PYTHON_EXECUTABLE=$python_exec
+  fi
 else
   # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=OFF"
-  ROOT_PYTHON_FEATURES=
+  ROOT_PYTHON_FLAGS="-Dpython=OFF -Dpyroot=OFF"
   ROOT_HAS_NO_PYTHON=1
 fi
 
@@ -159,7 +170,7 @@ cmake $SOURCEDIR                                                                
       -Ddavix=OFF                                                                      \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
-      ${ROOT_HAS_PYTHON:+-DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}}                     \
+      ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT"
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
@@ -208,6 +219,20 @@ rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
        "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"     \
        "$INSTALLROOT/LICENSE"
+
+# Make sure all the tools use the correct python
+for binfile in "$INSTALLROOT"/bin/*; do
+  [ -f "$binfile" ] || continue
+  if grep -q "^'''exec' .*python.*" "$binfile"; then
+    # This file uses a hack to get around shebang size limits. As we're
+    # replacing the shebang with the system python, the limit doesn't apply and
+    # we can just use a normal shebang.
+    sed -i.bak '1d; 2d; 3d; 4s,^,#!/usr/bin/env python3\n,' "$binfile"
+  else
+    sed -i.bak '1s,^#!.*python.*,#!/usr/bin/env python3,' "$binfile"
+  fi
+done
+rm -fv "$INSTALLROOT"/bin/*.bak
 
 # Modulefile
 mkdir -p etc/modulefiles

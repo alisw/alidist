@@ -1,12 +1,13 @@
 package: ThePEG
 version: "%(tag_basename)s"
-tag: "v2.2.2"
+tag: "v2.2.2-alice1"
 source: https://github.com/alisw/thepeg
 requires:
   - Rivet
   - pythia
   - HepMC
   - boost
+  - GSL
 build_requires:
   - "autotools:(slc6|slc7)"
   - GMP
