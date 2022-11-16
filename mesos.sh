@@ -1,7 +1,7 @@
 package: mesos
 version: v1.11.0
-tag: 1.11.0
-source: https://gitbox.apache.org/repos/asf/mesos.git
+tag: 1.11.0-alice1
+source: https://github.com/AliceO2Group/mesos.git
 requires:
 - zlib
 - glog

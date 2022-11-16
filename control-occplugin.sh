@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.54.3"
+tag: "v0.55.1"
 requires:
   - FairMQ
   - FairLogger
