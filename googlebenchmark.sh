@@ -5,32 +5,20 @@ source: https://github.com/google/benchmark
 build_requires:
  - "GCC-Toolchain:(?!osx)"
  - CMake
+ - ninja
+ - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR                           \
+      -G Ninja                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
-      -DBENCHMARK_ENABLE_GTEST_TESTS=OFF \
+      -DBENCHMARK_ENABLE_TESTING=OFF       \
+      -DBENCHMARK_ENABLE_GTEST_TESTS=OFF   \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
-make ${JOBS+-j $JOBS}
-make install
+
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set GOOGLEBENCHMARK_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv GOOGLEBENCHMARK_ROOT \$GOOGLEBENCHMARK_ROOT
-prepend-path LD_LIBRARY_PATH \$GOOGLEBENCHMARK_ROOT/lib
-EoF
-
+mkdir -p etc/modulefiles
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
