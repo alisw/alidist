@@ -21,7 +21,6 @@ libinfologger*      @alisw/dataflow-experts
 dim*                @alisw/dataflow-experts
 defaults-o2-dataflow* @alisw/dataflow-experts
 tpcfecutils*        @alisw/dataflow-experts
-bookkeeping*        @alisw/dataflow-experts
 golang*             @alisw/dataflow-experts
 
 # PWGMM
