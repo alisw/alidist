@@ -9,11 +9,11 @@ env:
     metakernel==0.20.14
     mock==2.0.0
     notebook==5.7.8
-    PyYAML==5.1
-    uproot==4.1.0
-    psutil==5.8.0
     scons==4.1.0
   PIP36_REQUIREMENTS: |
+    PyYAML==5.1
+    psutil==5.8.0
+    uproot==4.1.0
     numpy==1.16.2
     scipy==1.2.1
     Cython==0.29.16
@@ -27,6 +27,9 @@ env:
     pandas==0.24.2
     scikit-learn==0.20.3
   PIP38_REQUIREMENTS: |
+    PyYAML==5.1
+    psutil==5.8.0
+    uproot==4.1.0
     scipy==1.6.1
     Cython==0.29.21
     seaborn==0.9.0
@@ -40,6 +43,9 @@ env:
     pandas==1.2.3
     scikit-learn==0.24.1
   PIP39_REQUIREMENTS: |
+    PyYAML==5.1
+    psutil==5.8.0
+    uproot==4.1.0
     numpy==1.21.4
     scipy==1.7.3
     Cython==0.29.21
@@ -52,6 +58,9 @@ env:
     responses==0.10.6
     pandas==1.1.5
   "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
+    PyYAML==5.1
+    psutil==5.8.0
+    uproot==4.1.0
     setuptools<=60.8.2
     numpy==1.21.4
     scipy==1.7.3
@@ -59,6 +68,21 @@ env:
     seaborn==0.11.0
     scikit-learn==0.24.0rc1
     sklearn-evaluation==0.5.2
+    Keras==2.4.3
+    xgboost==1.2.0
+    dryable==1.0.5
+    responses==0.10.6
+    pandas==1.1.5
+  PIP310_REQUIREMENTS: |
+    PyYAML==5.4
+    psutil==5.9.0
+    uproot==4.1.0
+    numpy==1.23.4
+    scipy==1.9.3
+    Cython==0.29.21
+    seaborn==0.11.0
+    scikit-learn==0.24.0rc1
+    sklearn-evaluation==0.8.1
     Keras==2.4.3
     xgboost==1.2.0
     dryable==1.0.5
