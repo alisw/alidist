@@ -12,7 +12,6 @@ requires:
   - QualityControl
   - "DataDistribution:(?!osx)"
   - "ALF:(?!osx)"
-  - "BookkeepingApiCpp:(slc*)"
   - "mesos:(slc8)"
   - "TpcFecUtils:(?!osx)"
 valid_defaults:
