@@ -26,6 +26,7 @@ env:
     responses==0.10.6
     pandas==0.24.2
     scikit-learn==0.20.3
+    setuptools==65.5.1
   PIP38_REQUIREMENTS: |
     PyYAML==5.1
     psutil==5.8.0
@@ -42,6 +43,7 @@ env:
     responses==0.10.6
     pandas==1.2.3
     scikit-learn==0.24.1
+    setuptools==65.5.1
   PIP39_REQUIREMENTS: |
     PyYAML==5.1
     psutil==5.8.0
@@ -57,6 +59,7 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    setuptools==65.5.1
   "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
     PyYAML==5.1
     psutil==5.8.0
@@ -88,6 +91,7 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    setuptools==65.5.1
 ---
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
