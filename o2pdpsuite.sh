@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20221122"
+tag: "nightly-20221123-gpu"
 requires:
   - O2
   - DataDistribution
