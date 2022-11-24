@@ -1,5 +1,5 @@
 package: FOCAL
-version: "%(commit_hash)s"
+version: v1.4
 tag: master
 requires:
   - AliRoot
