@@ -1,15 +1,13 @@
 package: FairRoot
-version: "v18.4.9"
+version: "v18.8.0-beta"
+tag: v18.8_patches
 source: https://github.com/FairRootGroup/FairRoot
 requires:
   - generators
   - simulation
   - ROOT
   - VMC
-  - boost
-  - protobuf
   - FairLogger
-  - FairMQ
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
@@ -27,16 +25,12 @@ unset SIMPATH
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
-    [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
-    [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     MACOSX_RPATH=OFF
     SONAME=dylib
   ;;
   *) SONAME=so ;;
 esac
-
-[[ $BOOST_ROOT ]] && BOOST_NO_SYSTEM_PATHS=ON || BOOST_NO_SYSTEM_PATHS=OFF
 
 cmake $SOURCEDIR                                                                            \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                             \
@@ -48,19 +42,11 @@ cmake $SOURCEDIR                                                                
       -DPythia6_LIBRARY_DIR=$PYTHIA6_ROOT/lib                                               \
       -DGeant3_DIR=$GEANT3_ROOT                                                             \
       -DBUILD_MBS=OFF                                                                       \
-      -DDISABLE_GO=ON                                                                       \
       -DBUILD_EXAMPLES=OFF                                                                  \
+      -DBUILD_BASEMQ=OFF                                                                    \
+      -DBUILD_PROOF_SUPPORT=OFF                                                             \
       ${GEANT4_ROOT:+-DGeant4_DIR=$GEANT4_ROOT}                                             \
-      -DFAIRROOT_MODULAR_BUILD=ON                                                           \
-      ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                                     \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                               \
-      -DBoost_NO_SYSTEM_PATHS=${BOOST_NO_SYSTEM_PATHS}                                      \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                      \
-      ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.$SONAME}           \
-      ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.$SONAME} \
-      ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.$SONAME}      \
-      ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                       \
-      ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       -DCMAKE_DISABLE_FIND_PACKAGE_yaml-cpp=ON                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
