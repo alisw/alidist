@@ -47,7 +47,7 @@ overrides:
         PyYAML==5.1
         python-consul==1.1.0
         psutil==5.8.0
-        setuptools==65.5.1
+        setuptools<=65.5.1
   O2-customization:
     env:
       ENABLE_UPGRADES: OFF # Disable detector upgrades in O2
