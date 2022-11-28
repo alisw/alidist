@@ -1,6 +1,6 @@
 package: DebugGUI
-version: "v0.6.5"
-tag: "v0.6.5"
+version: "v0.6.6"
+tag: "v0.6.6"
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
