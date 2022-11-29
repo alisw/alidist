@@ -25,6 +25,17 @@ case $ARCHITECTURE in
 	      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                   \
 	      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	;;
+    *_aarch64)
+	cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DROOT=ON  \
+	      -DBACKEND=Scalar                                          \
+              -GNinja                                                   \
+              -DBENCHMARK=OFF                                           \
+              -DCTEST=OFF                                               \
+              -DBUILD_TESTING=OFF                                       \
+              -DVALIDATION=OFF                                          \
+	      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                   \
+	      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	;;
     *)
 	cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DROOT=ON  \
 	      -DBACKEND=Vc                                              \

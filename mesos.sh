@@ -1,12 +1,9 @@
 package: mesos
 version: v1.11.0
-tag: 1.11.0
-source: https://gitbox.apache.org/repos/asf/mesos.git
+tag: 1.11.0-alice1
+source: https://github.com/AliceO2Group/mesos.git
 requires:
 - zlib
-- "system-curl:(slc8)"
-- "curl:(?!slc8)"
-- OpenSSL
 - glog
 - grpc
 - RapidJSON
@@ -14,10 +11,14 @@ requires:
 - system-apr-util
 - system-cyrus-sasl
 - system-subversion
+# We specifically CANNOT build against our own curl and OpenSSL on slc8, as
+# those conflict with system-cyrus-sasl.
+# - curl
+# - OpenSSL
 build_requires:
 - "autotools:(slc6|slc7|slc8)"
 - protobuf
-- Python-modules
+- Python-modules:(?!osx_arm64)
 - abseil
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"

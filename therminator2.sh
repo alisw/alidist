@@ -1,6 +1,6 @@
 package: Therminator2
 version: "%(tag_basename)s"
-tag: "v2.0.3-alice2"
+tag: "v2.0.3-alice3"
 source: https://github.com/alisw/therminator
 requires:
  - "GCC-Toolchain:(?!osx)"
@@ -17,10 +17,10 @@ rsync -a $SOURCEDIR/share ${INSTALLROOT}/
 make ${JOBS+-j $JOBS}
 
 install -d ${INSTALLROOT}/bin
-install -t ${INSTALLROOT}/bin therm2_events
-install -t ${INSTALLROOT}/bin therm2_hbtfit
-install -t ${INSTALLROOT}/bin therm2_femto
-install -t ${INSTALLROOT}/bin therm2_parser 
+install therm2_events ${INSTALLROOT}/bin
+install therm2_hbtfit ${INSTALLROOT}/bin
+install therm2_femto ${INSTALLROOT}/bin
+install therm2_parser ${INSTALLROOT}/bin 
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

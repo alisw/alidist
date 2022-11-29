@@ -1,12 +1,12 @@
 package: Python-modules
 version: "1.0"
 requires:
-  - "Python:slc.*"
-  - "Python-system:(?!slc.*)"
+  - "Python:(slc|ubuntu)"
+  - "Python-system:(?!slc.*|ubuntu)"
   - FreeType
   - libpng
 build_requires:
-  - system-curl
+  - curl
   - Python-modules-list
   - alibuild-recipe-tools
 prepend_path:
@@ -24,6 +24,10 @@ if [ ! "X$VIRTUAL_ENV" = X ]; then
   deactivate
 fi
 
+# Special lists for different platforms
+PIP39_REQUIREMENTS=$(eval echo \${PIP39_REQUIREMENTS_${ARCHITECTURE/-/_}:-$PIP39_REQUIREMENTS})
+PIP310_REQUIREMENTS=$(eval echo \${PIP310_REQUIREMENTS_${ARCHITECTURE/-/_}:-$PIP310_REQUIREMENTS})
+
 # PIP_REQUIREMENTS, PIP36_REQUIREMENTS, PIP38_REQUIREMENTS come from python-modules-list.sh
 case $ARCHITECTURE in
   osx_arm64)
@@ -33,7 +37,9 @@ case $ARCHITECTURE in
   echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt;;
   *)
   echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
-  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3009 else 1)'; then
+  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3010 else 1)'; then
+    echo $PIP310_REQUIREMENTS | tr \  \\n >> requirements.txt
+  elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3009 else 1)'; then
     echo $PIP39_REQUIREMENTS | tr \  \\n >> requirements.txt
   elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3008 else 1)'; then
     echo $PIP38_REQUIREMENTS | tr \  \\n >> requirements.txt

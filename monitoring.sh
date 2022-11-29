@@ -1,12 +1,10 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.12.0
+tag: v3.14.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
-  - "ApMon-CPP:(?!osx)"
-  - "system-curl:(slc8)"
-  - "curl:(?!slc8)"
+  - curl
   - libInfoLogger
 build_requires:
   - CMake
@@ -29,7 +27,6 @@ fi
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      ${APMON_CPP_REVISION:+-DAPMON_ROOT=$APMON_CPP_ROOT}         \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}

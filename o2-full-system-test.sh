@@ -6,6 +6,7 @@ requires:
   - QualityControl
   - O2sim
   - O2Physics
+  - jq
 force_rebuild: 1
 ---
 #!/bin/bash -e
@@ -22,7 +23,7 @@ export JOBUTILS_JOB_TIMEOUT=1800
 export PRINT_WORKFLOW=1
 export NHBPERTF=128
 export SHMSIZE=8000000000
-ALICE_O2SIM_DUMPLOG=1 NEvents=5 NEventsQED=100 O2SIMSEED=12345 $O2_ROOT/prodtests/full_system_test.sh
+FST_SYNC_EXTRA_WORKFLOW_PARAMETERS=QC,CALIB_LOCAL_AGGREGATOR,CALIB_LOCAL_INTEGRATED_AGGREGATOR QC_REDIRECT_MERGER_TO_LOCALHOST=1 GEN_TOPO_WORKDIR=`pwd` ALICE_O2SIM_DUMPLOG=1 NEvents=5 NEventsQED=100 O2SIMSEED=12345 $O2_ROOT/prodtests/full_system_test.sh
 $O2_ROOT/prodtests/full_system_test_ci_extra_tests.sh
 popd
 rm -Rf $BUILDDIR/full-system-test-sim
@@ -31,11 +32,14 @@ rm -Rf $BUILDDIR/full-system-test-sim
 rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
 pushd $BUILDDIR/sim-challenge
+SIMEXITCODE=0
 # SIM_CHALLENGE_ANATESTING=ON --> reenable when we want analysis testing be part of the tests 
-"$O2_ROOT/prodtests/sim_challenge.sh" &> sim-challenge.log || true  # don't quit immediately on error
+{ "$O2_ROOT/prodtests/sim_challenge.sh" &> sim-challenge.log; SIMEXITCODE=$?; } || true  # don't quit immediately on error
 result=$(grep "Return status" sim-challenge.log | grep -v ": 0" || true)
-if [ "${result}" ]; then
+if [ ${SIMEXITCODE} != "0" ] || [ "${result}" ]; then
   # something is wrong if we get a match here
+  # it matches if either the return code itself was != 0 or if a reported status
+  # in the log is not ok
   echo "error detected in sim_challenge"
   find ./ -type f \( -name "*.log" -and ! -name "pipel*" \) -exec awk ' { print FILENAME $0 } ' {} ';' || true
   # make the recipe fail

@@ -1,13 +1,12 @@
 package: JAliEn
 version: "%(tag_basename)s"
-tag: "1.4.8"
+tag: "1.6.3"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
  - JDK
  - XRootD
  - xjalienfs
- - "curl:(?!slc8)"
- - "system-curl:slc8.*"
+ - curl
 valid_defaults:
  - jalien
  - o2

@@ -7,6 +7,7 @@ requires:
 ---
 #!/bin/bash -e
 
+export ALICE_PHYSICS=$ALIPHYSICS_ROOT
 # A simple regression test launching a Geant3 + Geant4 gun simulation + reconstruction.
 # Tests if the processing runs through and yields a reasonable ESD.
 # Note that the test is limited to the default OCDB.

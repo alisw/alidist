@@ -7,7 +7,7 @@ prefer_system_check: |
   printf '#include <sqlite3.h>\nint main(){}\n' | cc -xc - -lsqlite3 -o /dev/null;
   if [ $? -ne 0 ]; then printf "SQLite not found.\n * On RHEL-compatible systems you probably need: sqlite sqlite-devel\n * On Ubuntu-compatible systems you probably need: libsqlite3-0 libsqlite3-dev\n"; exit 1; fi
 build_requires:
-  - system-curl
+  - curl
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
 ---

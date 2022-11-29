@@ -1,6 +1,6 @@
 package: SHERPA
 version: "%(tag_basename)s"
-tag: "v2.2.10"
+tag: "v2.2.12"
 source: https://gitlab.com/sherpa-team/sherpa.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -10,11 +10,11 @@ requires:
   - fastjet
   - pythia
 build_requires:
-  - system-curl
   - "autotools:(slc6|slc7)"
   - cgal
   - GMP
   - alibuild-recipe-tools
+  - curl
 ---
 #!/bin/bash -e
 
@@ -24,18 +24,18 @@ build_requires:
 rsync -a $SOURCEDIR/ ./
 
 # Exclude building Manual from Makefile.am
-mv Makefile.am Makefile.am.in
-cat Makefile.am.in | grep -v Manual >> Makefile.am
-rm Makefile.am.in
-
+sed -i.bak /Manual/d Makefile.am
+rm -f Makefile.am.bak
 
 autoreconf -ivf
 
 # SHERPA's configure uses wget which might not be there
-mkdir -p fakewget && [[ -d fakewget ]]
-printf '#!/bin/bash\nexec curl -fO $1' > fakewget/wget && chmod +x fakewget/wget
+mkdir -p fakewget
+printf '#!/bin/sh\nexec curl -fO "$1"\n' > fakewget/wget
+chmod +x fakewget/wget
+# Prepend fakewget to PATH so we always use it, to avoid OpenSSL conflicts.
+export PATH="$PWD/fakewget:$PATH"
 
-PATH=$PATH:fakewget 
 export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib  -L$GMP_ROOT/lib"
 ./configure --prefix=$INSTALLROOT        \
               --with-sqlite3=install       \

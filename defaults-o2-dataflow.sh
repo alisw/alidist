@@ -5,6 +5,8 @@ env:
   CFLAGS: "-fPIC -O2"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
+  ENABLE_VMC: 'ON'
+  MACOSX_DEPLOYMENT_TARGET: '10.15'
 disable:
   - AEGIS
   - AliEn-Runtime
@@ -29,10 +31,10 @@ disable:
   - O2sim
   - O2-full-system-test
   - O2Physics
-  - ONNXRuntime
+  # Fall back to the system OpenSSL and curl.
+  - OpenSSL
+  - curl:(?!osx.*)
 overrides:
-  protobuf:
-    version: v3.14.0
   GCC-Toolchain:
     version: "v10.2.0-alice2"
     tag: "v10.2.0-alice2"
@@ -45,20 +47,13 @@ overrides:
         PyYAML==5.1
         python-consul==1.1.0
         psutil==5.8.0
-      PIP36_REQUIREMENTS: |
-        python-consul==1.1.0
-        psutil==5.8.0
-      PIP38_REQUIREMENTS: |
-        python-consul==1.1.0
-        psutil==5.8.0
-      PIP39_REQUIREMENTS: |
-        python-consul==1.1.0
-        psutil==5.8.0
+        setuptools<=65.5.1
   O2-customization:
     env:
       ENABLE_UPGRADES: OFF # Disable detector upgrades in O2
       BUILD_ANALYSIS: OFF # Disable analysis in O2
       BUILD_EXAMPLES: OFF # Disable examples in O2
+      O2_BUILD_FOR_FLP: ON
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

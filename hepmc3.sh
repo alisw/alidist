@@ -1,12 +1,14 @@
 package: HepMC3
 version: "%(tag_basename)s"
-tag: 3.2.2
+tag: 3.2.5
 source: https://gitlab.cern.ch/hepmc/HepMC3.git
 requires:
   - GCC-Toolchain:(?!osx.*)
   - ROOT
 build_requires:
   - CMake
+prepend_path:
+  ROOT_INCLUDE_PATH: "$HEPMC3_ROOT/include"
 ---
 #!/bin/bash -e
 

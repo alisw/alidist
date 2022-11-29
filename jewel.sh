@@ -15,9 +15,9 @@ make ${JOBS:+-j$JOBS}
 VERSION=${PKGVERSION%%_*}
 VERSION=2.2.0
 install -d ${INSTALLROOT}/bin
-install -t ${INSTALLROOT}/bin \
-	jewel-${VERSION#v}-vac \
-	jewel-${VERSION#v}-simple
+install jewel-${VERSION#v}-vac \
+	jewel-${VERSION#v}-simple \
+	${INSTALLROOT}/bin
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

@@ -1,6 +1,6 @@
 package: Python
 version: "%(tag_basename)s"
-tag: v3.6.10
+tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
  - AliEn-Runtime:(?!.*ppc64)
@@ -10,15 +10,15 @@ requires:
  - "GCC-Toolchain:(?!osx)"
  - libffi
 build_requires:
- - system-curl
+ - curl
  - alibuild-recipe-tools
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
-prefer_system: "(?!slc5)"
+prefer_system: "(?!slc5|ubuntu)"
 prefer_system_check:
-  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && pip3 --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
+  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 ---
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
@@ -60,6 +60,7 @@ EOF
 fi
 
 ./configure --prefix="$INSTALLROOT"  \
+            ${OPENSSL_ROOT:+--with-openssl=$OPENSSL_ROOT} ${OPENSSL_ROOT:+--with-openssl-rpath=no} \
             --enable-shared          \
             --with-system-expat      \
             --with-ensurepip=install
@@ -85,13 +86,13 @@ popd
 env PATH="$INSTALLROOT/bin:$PATH"                       \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
     PYTHONHOME="$INSTALLROOT"                           \
-    pip3 install --upgrade pip
+    python3 -m pip install --upgrade pip
 
 # Install Python SSL certificates right away
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
     PYTHONHOME="$INSTALLROOT" \
-    pip3 install 'certifi==2019.3.9'
+    python3 -m pip install 'certifi==2019.3.9'
 
 # Uniform Python library path
 pushd "$INSTALLROOT/lib"

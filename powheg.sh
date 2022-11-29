@@ -1,12 +1,13 @@
 package: POWHEG
 version: "%(tag_basename)s"
-tag: "r3693-alice2"
+tag: "r3964-alice1"
 source: https://github.com/alisw/POWHEG
 requires:
   - fastjet
   - "GCC-Toolchain:(?!osx|slc5)"
   - lhapdf
   - lhapdf-pdfsets
+  - looptools
 build_requires:
   - alibuild-recipe-tools
 ---
@@ -19,7 +20,7 @@ install -d ${INSTALLROOT}/bin
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
-PROCESSES="${FASTJET_REVISION:+dijet }hvq W Z"
+PROCESSES="${FASTJET_REVISION:+dijet }hvq W Z directphoton"
 for proc in ${PROCESSES}; do
     mkdir ${proc}/{obj,obj-gfortran}
     ln -s $basedir/include ${proc}/

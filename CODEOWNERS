@@ -21,7 +21,7 @@ libinfologger*      @alisw/dataflow-experts
 dim*                @alisw/dataflow-experts
 defaults-o2-dataflow* @alisw/dataflow-experts
 tpcfecutils*        @alisw/dataflow-experts
-bookkeeping*        @alisw/dataflow-experts
+golang*             @alisw/dataflow-experts
 
 # PWGMM
 aligenerators*      @alisw/pagmc
@@ -53,6 +53,7 @@ vgm*                @alisw/simulation-experts
 vecgeom*            @alisw/simulation-experts
 mcsteplogger*       @alisw/simulation-experts
 fluka*              @alisw/simulation-experts
+evtgen*             @alisw/simulation-experts
 
 # General PDP stuff
 o2*                 @alisw/pdp-experts
@@ -73,3 +74,6 @@ xjalienfs*          @alisw/alien-experts
 datadistribution*   @alisw/epn-experts
 dds*                @alisw/epn-experts
 odc*                @alisw/epn-experts
+
+# ML
+mlmodels*           @fcatalan92
