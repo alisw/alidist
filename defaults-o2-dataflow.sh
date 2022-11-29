@@ -47,6 +47,9 @@ overrides:
         PyYAML==5.1
         python-consul==1.1.0
         psutil==5.8.0
+      PIP36_REQUIREMENTS: |
+        setuptools==59.6.0
+      PIP39_REQUIREMENTS: |
         setuptools==65.5.1
   O2-customization:
     env:
