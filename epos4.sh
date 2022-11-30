@@ -5,13 +5,6 @@ source: https://github.com/alisw/EPOS4.git
 requires:
   - ROOT
   - fastjet
-env:
-  EPOVSN: "4.0.0"
-  EPO: "${EPOS_ROOT}/epos4/"
-  LIBDIR: "${EPO}bin"
-  OPT: "./"
-  HTO: "./"
-  CHK: "./"
 ---
 #!/bin/bash -ex
 
