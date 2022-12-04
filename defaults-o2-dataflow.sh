@@ -44,7 +44,7 @@ overrides:
         requests==2.21.0
         dryable==1.0.3
         responses==0.10.6
-        PyYAML==5.1
+        PyYAML
         python-consul==1.1.0
         psutil==5.8.0
       PIP36_REQUIREMENTS: |
