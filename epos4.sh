@@ -8,11 +8,11 @@ requires:
 ---
 #!/bin/bash -ex
 
-export EPOVSN=${PKGVERSION}
+export EPO4VSN=${PKGVERSION}
 
 # The following two variables *must* have a trailing slash! EPOS installation
 # will make a mess otherwise.
-export EPO=$PWD/
+export EPO4=$PWD/
 export LIBDIR=${EPO}bin
 export CC=gcc
 export CXX=g++
@@ -57,13 +57,13 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0 ROOT/$ROOT_VERSION-$ROOT_REVISION fastjet/$FASTJET_VERSION-$FASTJET_REVISION
 # Our environment
-set EPOS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv EPOS_ROOT \$EPOS_ROOT
-setenv EPOVSN 4.0.0
+set EPOS4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv EPOS4_ROOT \$EPOS4_ROOT
+setenv EPO4VSN 4.0.0
 # Final slash is required by EPOS, please leave it be
-setenv EPO \$::env(EPOS_ROOT)/epos4/
-prepend-path PATH \$::env(EPO)bin
-setenv LIBDIR \$::env(EPO)bin
+setenv EPO4 \$::env(EPOS4_ROOT)/epos4/
+prepend-path PATH \$::env(EPO4)bin
+setenv LIBDIR \$::env(EPO4)bin
 setenv OPT ./
 setenv HTO ./
 setenv CHK ./
