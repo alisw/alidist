@@ -40,13 +40,6 @@ overrides:
     tag: "v10.2.0-alice2"
   Python-modules-list:
     env:
-      PIP_REQUIREMENTS: |
-        requests==2.21.0
-        dryable==1.0.3
-        responses==0.10.6
-        PyYAML
-        python-consul==1.1.0
-        psutil==5.8.0
       PIP36_REQUIREMENTS: |
         setuptools==59.6.0
       PIP39_REQUIREMENTS: |
