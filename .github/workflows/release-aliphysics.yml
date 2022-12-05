@@ -16,7 +16,7 @@ jobs:
       - name: Strip trailing letters from tag
         id: strip_tag
         run: |
-          echo "::set-output name=version::$(echo ${{ github.event.inputs.tag }} | sed 's/[a-z]*$//')"
+          echo "version=$(echo ${{ github.event.inputs.tag }} | sed 's/[a-z]*$//')" >> "$GITHUB_OUTPUT"
       - name: Checkout alidist
         uses: actions/checkout@v2
         with:

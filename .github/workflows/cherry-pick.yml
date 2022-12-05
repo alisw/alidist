@@ -18,8 +18,8 @@ jobs:
     steps:
     - name: Decide which branch to use
       run: |
-        cat << EOF
-        ::set-output name=branch::$(echo AliPhysics-${{ github.event.inputs.tag }}-01-patches | sed -e's/[a-z][a-z]*-01-patches$/-01-patches/')
+        cat << EOF >> "$GITHUB_OUTPUT"
+        branch=$(echo AliPhysics-${{ github.event.inputs.tag }}-01-patches | sed -e's/[a-z][a-z]*-01-patches$/-01-patches/')
         EOF
       id: decide_release_branch
     - uses: actions/checkout@v2
