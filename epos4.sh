@@ -13,7 +13,7 @@ export EPO4VSN=${PKGVERSION}
 # The following two variables *must* have a trailing slash! EPOS installation
 # will make a mess otherwise.
 export EPO4=$PWD/
-export LIBDIR=${EPO}bin
+export LIBDIR=${EPO4}bin
 export CC=gcc
 export CXX=g++
 export FC=gfortran
