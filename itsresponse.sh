@@ -7,8 +7,8 @@ build_requires:
 ---
 #!/bin/bash -e
 
-mkdir -p ${INSTALLROOT}/response
-cp -r ${SOURCEDIR}/* $INSTALLROOT/response
+mkdir -p "$INSTALLROOT/response"
+cp -r "$SOURCEDIR"/* "$INSTALLROOT/response"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
