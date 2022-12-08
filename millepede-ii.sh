@@ -1,7 +1,7 @@
 package: Millepede-II
 version: "%(tag_basename)s"
-tag: "V04-09-00"
-source: https://github.com/alisw/MillepedeII.git
+tag: "V04-12-01"
+source: https://gitlab.desy.de/claus.kleinwort/millepede-ii.git
 requires:
  - zlib
  - openmp
