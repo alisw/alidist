@@ -1,6 +1,6 @@
 package: libjalienws
 version: "%(tag_basename)s"
-tag: "0.1.4"
+tag: "0.1.5"
 source: https://gitlab.cern.ch/jalien/libjalienws.git
 requires:
   - libjalienO2
