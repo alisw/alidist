@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "nightly-20221209"
+tag: "async-20221209.1-alidist-master"
 requires:
   - O2
   - ONNXRuntime
