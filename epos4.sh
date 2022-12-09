@@ -1,6 +1,6 @@
 package: EPOS4
 version: "%(tag_basename)s"
-tag: "v4.0.0-alice1"
+tag: "v4.0.0-alice2"
 source: https://github.com/alisw/EPOS4.git
 requires:
   - ROOT
