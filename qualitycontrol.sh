@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.85.0
+tag: "async-20221212.1-alidist-master"
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
