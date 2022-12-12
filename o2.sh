@@ -26,6 +26,7 @@ requires:
   - FFTW3
   - ONNXRuntime
   - MLModels
+  - ITSResponse
 build_requires:
   - GMP
   - MPFR
