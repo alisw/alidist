@@ -50,6 +50,9 @@ overrides:
       BUILD_ANALYSIS: OFF # Disable analysis in O2
       BUILD_EXAMPLES: OFF # Disable examples in O2
       O2_BUILD_FOR_FLP: ON
+  ROOT:
+    version: "v6-26-04-patches-alice2"
+    tag: "v6-26-04-patches-alice2"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
