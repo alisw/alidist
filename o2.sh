@@ -26,7 +26,6 @@ requires:
   - FFTW3
   - ONNXRuntime
   - MLModels
-  - ITSResponse
 build_requires:
   - GMP
   - MPFR
@@ -34,6 +33,7 @@ build_requires:
   - googlebenchmark
   - O2-customization
   - Clang:(?!osx*)
+  - ITSResponse
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
