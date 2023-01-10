@@ -1,7 +1,5 @@
----
 name: Clean PR checks
-
-'on':
+on:
   workflow_dispatch:
     inputs:
       pr:
@@ -10,16 +8,7 @@ name: Clean PR checks
       checks:
         description: Checks to be cleaned
         required: true
-        default: >-
-          build/alidist/O2Suite/o2/macOS-arm
-          build/O2/alidist-dataflow-cs8
-          build/O2/alidist-cs8
-          build/AliGenerators/generators
-          build/AliRoot/alidist
-          build/O2/alidist
-          build/O2/alidist-dataflow
-          build/alidist/O2Suite/o2/macOS
-          build/O2/fullCI/alidist
+        default: 'build/alidist/O2Suite/o2/macOS-arm,build/O2/alidist-dataflow-cs8,build/O2/alidist-cs8,build/AliGenerators/generators,build/AliRoot/alidist,build/O2/alidist,build/O2/alidist-dataflow,build/alidist/O2Suite/o2/macOS,build/O2/fullCI/alidist'
       owner:
         description: Organization
         required: true
@@ -32,50 +21,47 @@ name: Clean PR checks
 jobs:
   cleanup_pr_checks:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Set up Python 3
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
         with:
-          python-version: 3.x
-
+          python-version: 3.7
       - name: Install ali-bot
         run: |
           sudo apt-get update
           sudo apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev
-          python3 -m pip install git+https://github.com/alisw/ali-bot@master
-
+          python -m pip install --upgrade pip
+          pip install git+https://github.com/alisw/ali-bot@master
       - uses: octokit/graphql-action@v2.x
-        id: last_commit
+        id: get_last_commit_for_pr
         with:
           query: |
-            query latest_commit($owner: String!, $repo: String!, $pull: Int!) {
-              repository(owner: $owner, name: $repo) {
-                pullRequest(number: $pull) {
-                  commits(last: 1) {
-                    nodes {
-                      commit {
-                        oid
+              {
+                repository(owner: "${{ github.event.inputs.owner }}", name: "${{ github.event.inputs.repo }}") {
+                  url
+                  pullRequest(number:${{ github.event.inputs.pr }}) {
+                    commits(last: 1) {
+                      nodes {
+                        commit {
+                          oid
+                        }
                       }
                     }
                   }
                 }
               }
-            }
-          owner: ${{ github.event.inputs.owner }}
-          repo: ${{ github.event.inputs.repo }}
-          pull: ${{ github.event.inputs.pr }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Cleanup tests
-        run: |
+        run: |-
           set -x
-          for check in ${CHECKS//,/ }; do
-            set-github-status -c "$REPO@$COMMIT" -s "$check/pending"
+          cat <<\EOF > results.json
+          ${{ steps.get_last_commit_for_pr.outputs.data }}
+          EOF
+          COMMIT=$(jq -r '.repository.pullRequest.commits.nodes[].commit.oid' results.json)
+          echo $COMMIT
+          for check in `echo ${{ github.event.inputs.checks }} | tr , \\\\n`; do
+            set-github-status -c ${{ github.event.inputs.owner }}/${{ github.event.inputs.repo }}@$COMMIT -s $check/pending
           done
         env:
-          CHECKS: ${{ github.event.inputs.checks }}
-          REPO: ${{ github.event.inputs.owner }}/${{ github.event.inputs.repo }}
-          COMMIT: ${{ fromJSON(steps.last_commit.outputs.data).repository.pullRequest.commits.nodes[0].commit.oid }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
