@@ -21,14 +21,14 @@ case $ARCHITECTURE in
   *) SONAME=so ;;
 esac
 
-cmake $SOURCEDIR/cxx-client               \
+cmake $SOURCEDIR/cxx-client                  \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                 \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE} \
       -DCMAKE_INSTALL_LIBDIR=lib          \
       -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
-cmake --build . -- ${JOBS+-j $JOBS} install
+VERBOSE=1 cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
