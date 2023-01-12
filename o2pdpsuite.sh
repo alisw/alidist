@@ -8,7 +8,6 @@ requires:
   - O2DPG
   - O2sim
   - ODC
-  - "IgProf:slc8.*"
 valid_defaults:
   - o2
   - o2-dataflow
