@@ -1,8 +1,7 @@
 package: libunwind
-version: 1.1-%(short_hash)s
-source: https://github.com/igprof/libunwind
-tag: master
-requires:
+version: v1.6.2
+source: http://github.com/libunwind/libunwind
+build_requires:
   - libatomic_ops
 ---
 #!/bin/sh
