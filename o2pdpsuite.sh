@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20230112"
+tag: "nightly-20230113"
 requires:
   - O2
   - DataDistribution
@@ -8,7 +8,6 @@ requires:
   - O2DPG
   - O2sim
   - ODC
-  - "IgProf:slc8.*"
 valid_defaults:
   - o2
   - o2-dataflow
