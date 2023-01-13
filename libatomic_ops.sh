@@ -4,6 +4,7 @@ source: https://github.com/ivmai/libatomic_ops/
 tag: master
 build_requires:
   - "autotools:(slc6|slc7)"
+  - GCC-Toolchain
 ---
 #!/bin/sh
 rsync -a $SOURCEDIR/ ./
