@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20230114"
+tag: "gpu-nightly-20230115"
 requires:
   - arrow
   - FairRoot
