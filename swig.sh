@@ -14,7 +14,7 @@ prefer_system_check: |
       [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
   }
   # Check for swig 3.0.12 or later
-  which swig && verge 3.0.12 $(swig -version | grep Version | sed -e 's/[^0-9]*//') 
+  which swig && verge 3.0.12 $(swig -version | grep Version | sed -e 's/[^0-9]*//')
 ---
 #!/bin/sh
 rsync -av --delete --exclude '**/.git' $SOURCEDIR/ .

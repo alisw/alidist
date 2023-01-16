@@ -1,7 +1,7 @@
 package: GEANT4
 version: "%(tag_basename)s"
 tag: "v11.0.3"
-#source: https://github.com/alisw/geant4.git
+# source: https://github.com/alisw/geant4.git
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -14,8 +14,7 @@ incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 env:
-  G4INSTALL : $GEANT4_ROOT
-
+  G4INSTALL: $GEANT4_ROOT
 ---
 # If this variable is not defined default it to OFF
 : ${GEANT4_BUILD_MULTITHREADED:=OFF}

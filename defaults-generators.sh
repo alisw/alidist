@@ -1,5 +1,5 @@
 disable:
-- arrow
+  - arrow
 env:
   CFLAGS: -fPIC -g -O2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
@@ -10,15 +10,15 @@ overrides:
     version: v10.2.0-alice2
   boost:
     requires:
-    - GCC-Toolchain:(?!osx)
+      - GCC-Toolchain:(?!osx)
   fastjet:
     tag: v3.4.0_1.045-alice1
     version: v3.4.0_1.045-alice1
   pythia:
-    requires:
-    - lhapdf
-    - boost
     tag: v8304
+    requires:
+      - lhapdf
+      - boost
 package: defaults-generators
 version: v1
 

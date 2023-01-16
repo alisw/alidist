@@ -3,7 +3,7 @@ version: "%{year}s%{month}s%{day}s"
 source: https://gitlab.cern.ch/cholm/alice-rivet-task
 requires:
   - Rivet
-  - AliRoot 
+  - AliRoot
 build_requires:
   - GCC-Toolchain:(?!osx)
   - alibuild-recipe-tools
