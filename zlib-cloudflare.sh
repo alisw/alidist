@@ -3,11 +3,11 @@ version: "%(tag_basename)s"
 tag: gcc.amd64
 source: https://github.com/cloudflare/zlib/
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - CMake
- - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - alibuild-recipe-tools
 ---
-#!/bin/sh
+#!/bin/bash -e
 
 echo "Building optimized zlib"
 
@@ -18,7 +18,5 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --lib > $MODULEFILE
-cat >> "$MODULEFILE" <<EOF
+alibuild-generate-module --lib > "$MODULEDIR/$PKGNAME"

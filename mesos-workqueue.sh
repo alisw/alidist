@@ -3,13 +3,14 @@ version: 0.0.2-%(short_hash)s
 tag: master
 source: https://github.com/alisw/mesos-workqueue
 requires:
-- mesos
-- protobuf
-- boost
-- glog
+  - mesos
+  - protobuf
+  - boost
+  - glog
 build_requires:
-- CMake
---- 
+  - CMake
+---
+#!/bin/bash -e
 case $ARCHITECTURE in 
   osx*)
     [[ -z "$BOOST_ROOT" ]] && BOOST_ROOT=$(brew --prefix boost)

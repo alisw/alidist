@@ -2,9 +2,10 @@ package: glog
 version: v0.4.0
 source: https://github.com/google/glog
 build_requires:
- - "autotools:(slc6|slc7)"
- - "GCC-Toolchain:(?!osx)"
---- 
+  - "autotools:(slc6|slc7)"
+  - "GCC-Toolchain:(?!osx)"
+---
+#!/bin/bash -e
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 autoreconf -ivf
 ./configure --prefix="$INSTALLROOT"

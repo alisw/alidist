@@ -7,9 +7,8 @@ requires:
 build_requires:
   - kernel-devel
   - "autotools:(slc6|slc7)"
-
---- 
-#!/bin/sh
+---
+#!/bin/bash -e
 
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 ./configure --debug=false --numa=true --modprobe=true --prefix=$INSTALLROOT
