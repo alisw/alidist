@@ -8,6 +8,9 @@ build_requires:
   - CMake
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/Bookkeeping
+incremental_recipe: |
+  cmake --build . -- ${JOBS+-j $JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 
 case $ARCHITECTURE in
