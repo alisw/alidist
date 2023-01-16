@@ -25,6 +25,5 @@ setenv LOOPTOOLS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$::env(LOOPTOOLS_ROOT)/bin
 prepend-path LD_LIBRARY_PATH \$::env(LOOPTOOLS_ROOT)/lib
 prepend-path LD_LIBRARY_PATH \$::env(LOOPTOOLS_ROOT)/lib64
-$([[ ${ARCHITECTURE:0:3} == osx ]] && echo "prepend-path DYLD_LIBRARY_PATH \$::env(LOOPTOOLS_ROOT)/lib: \$::env(LOOPTOOLS_ROOT)/lib64")
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
