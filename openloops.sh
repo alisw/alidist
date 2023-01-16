@@ -23,13 +23,11 @@ sed -i -e 's/max_string_length\ =\ 255/max_string_length\ =\ 1000/g' pyol/config
 JOBS=$((${JOBS:-1}*1/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
 
-PROCESSES=(ppjj ppjj_ew ppjjj ppjjj_ew ppjjj_nf5 ppjjjj)
-for proc in ${PROCESSES[@]}; do
+for proc in ppjj ppjj_ew ppjjj ppjjj_ew ppjjj_nf5 ppjjjj; do
     ./scons --jobs=$JOBS auto="$proc"  
 done
 
-INSTALL=(examples include lib openloops proclib pyol)
-for inst in ${INSTALL[@]}; do
+for inst in examples include lib openloops proclib pyol; do
     cp -r $inst $INSTALLROOT/
 done
 
