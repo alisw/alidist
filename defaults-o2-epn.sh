@@ -1,3 +1,5 @@
+package: defaults-o2-epn
+version: v1
 env:
   CFLAGS: -fPIC -O3 -march=znver2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
@@ -26,8 +28,8 @@ overrides:
       - ZeroMQ
       - JAliEn-ROOT
   GCC-Toolchain:
-    tag: v10.2.0-alice2
     version: v10.2.0-alice2
+    tag: v10.2.0-alice2
   cgal:
     version: 4.12.2
   fastjet:
@@ -37,9 +39,6 @@ overrides:
     requires:
       - lhapdf
       - boost
-package: defaults-o2
-version: v1
-
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

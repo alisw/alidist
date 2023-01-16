@@ -12,7 +12,6 @@ build_requires:
   - flatbuffers
   - ms_gsl
 source: https://github.com/mrrtf/alo
-common_recipe: |
 incremental_recipe: |
   cmake --build . -- ${JOBS+-j $JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
