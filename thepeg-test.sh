@@ -1,6 +1,6 @@
 package: ThePEG-test
 version: v1
-force_rebuild: 1
+force_rebuild: true
 requires:
   - ThePEG
 ---

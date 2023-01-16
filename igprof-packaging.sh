@@ -1,7 +1,7 @@
 package: IgProf-packaging
 version: master
 source: https://github.com/alisw/ali-bot
-force_rebuild: 1
+force_rebuild: true
 requires:
   - IgProf
 ---
