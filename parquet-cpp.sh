@@ -2,13 +2,12 @@ package: parquet-cpp
 version: release-0.1-rc0
 source: https://github.com/apache/parquet-cpp
 build_requires:
-- protobuf
-- snappy
-- zlib
-- thrift
-build_requires:
-- CMake
-- googletest
+  - protobuf
+  - snappy
+  - zlib
+  - thrift
+  - CMake
+  - googletest
 ---
 
 export THRIFT_HOME=$(brew --prefix thrift)

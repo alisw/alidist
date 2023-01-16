@@ -46,10 +46,10 @@ overrides:
         setuptools==65.5.1
   O2-customization:
     env:
-      ENABLE_UPGRADES: OFF # Disable detector upgrades in O2
-      BUILD_ANALYSIS: OFF # Disable analysis in O2
-      BUILD_EXAMPLES: OFF # Disable examples in O2
-      O2_BUILD_FOR_FLP: ON
+      ENABLE_UPGRADES: 'OFF'  # Disable detector upgrades in O2
+      BUILD_ANALYSIS: 'OFF'   # Disable analysis in O2
+      BUILD_EXAMPLES: 'OFF'   # Disable examples in O2
+      O2_BUILD_FOR_FLP: 'ON'
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

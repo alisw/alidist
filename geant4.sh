@@ -9,7 +9,9 @@ build_requires:
   - CMake
   - "Xcode:(osx.*)"
 prepend_path:
-  ROOT_INCLUDE_PATH: "$GEANT4_ROOT/include:$GEANT4_ROOT/include/Geant4"
+  ROOT_INCLUDE_PATH:
+    - "$GEANT4_ROOT/include"
+    - "$GEANT4_ROOT/include/Geant4"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
