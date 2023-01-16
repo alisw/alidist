@@ -5,7 +5,7 @@ requires:
   - o2codechecker
 build_requires:
   - CMake
-force_rebuild: 1
+force_rebuild: true
 ---
 #!/bin/bash -e
 

@@ -1,6 +1,6 @@
 package: GEANT-VMC-test
 version: "%(year)s%(month)s%(day)s"
-force_rebuild: 1
+force_rebuild: true
 requires:
   - GEANT4_VMC
   - geant3_vmc-examples
