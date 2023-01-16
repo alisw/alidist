@@ -13,16 +13,16 @@ overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
   AliRoot:
-    requires:
-    - ROOT
-    - DPMJET
-    - fastjet:(?!.*ppc64)
-    - GEANT3
-    - GEANT4_VMC
-    - Vc
-    - ZeroMQ
-    - JAliEn-ROOT
     version: '%(commit_hash)s_O2'
+    requires:
+      - ROOT
+      - DPMJET
+      - fastjet:(?!.*ppc64)
+      - GEANT3
+      - GEANT4_VMC
+      - Vc
+      - ZeroMQ
+      - JAliEn-ROOT
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
@@ -31,10 +31,10 @@ overrides:
   fastjet:
     tag: v3.4.0_1.045-alice1
   pythia:
-    requires:
-    - lhapdf
-    - boost
     tag: v8304
+    requires:
+      - lhapdf
+      - boost
 package: defaults-o2
 version: v1
 
