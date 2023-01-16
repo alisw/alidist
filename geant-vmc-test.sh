@@ -5,7 +5,7 @@ requires:
   - GEANT4_VMC
   - geant3_vmc-examples
 ---
-#!/bin/sh
+#!/bin/bash -e
 
 g3vmc_testE01
 g3vmc_testE02
