@@ -12,7 +12,10 @@ disable:
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
+    tag: v5-09-59k-01
   AliRoot:
+    version: '%(commit_hash)s_O2'
+    tag: v5-09-59k
     requires:
     - ROOT
     - DPMJET
@@ -22,7 +25,6 @@ overrides:
     - Vc
     - ZeroMQ
     - JAliEn-ROOT
-    version: '%(commit_hash)s_O2'
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
