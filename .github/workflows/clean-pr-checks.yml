@@ -45,8 +45,8 @@ jobs:
         id: last_commit
         with:
           query: |
-            query last_commit($owner: String!, $repo: String!, $pr: Int!) {
-              repository(owner: $owner, name: $repo) {
+            query last_commit($owner: String!, $name: String!, $pr: Int!) {
+              repository(owner: $owner, name: $name) {
                 pullRequest(number: $pr) {
                   commits(last: 1) {
                     nodes {
