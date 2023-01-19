@@ -8,12 +8,9 @@ name: Clean PR checks
         description: PR number in this repo to be cleaned
         type: string   # can't use number here
         required: true
-      message:
-        description: Human-readable message displayed on the new pending status
-        type: string
-        required: false
-        default: ''
 
+      # Warning: GitHub limits the total number of inputs to 10, so a maximum of
+      # 9 checks is allowed here!
       # Warning: the check_* keys are magic and must consist of the string
       # "check_" followed by the applicable check name exactly. The
       # "description" field is only the human-readable label for the input.
