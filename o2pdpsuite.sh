@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20230119"
+tag: "epn-20230119-DDv1.5.2-flp-suite-v0.83.0"
 requires:
   - O2
   - DataDistribution
