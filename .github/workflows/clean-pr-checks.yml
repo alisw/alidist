@@ -58,10 +58,9 @@ jobs:
     name: Clean PR checks
     uses: alisw/ali-bot/.github/workflows/clean-pr-checks.yml@master
     with:
-      owner: ${{ github.event.repository.owner }}
+      owner: ${{ github.event.repository.owner.login }}
       repo: ${{ github.event.repository.name }}
       pr: ${{ github.event.inputs.pr }}
-      message: ${{ github.event.inputs.message }}
       checks: ${{ toJSON(github.event.inputs) }}
     permissions:
       pull-requests: read  # to get last commit for pr (octokit/graphql-action)
