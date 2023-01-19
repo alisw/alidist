@@ -40,8 +40,6 @@ overrides:
     tag: "v10.2.0-alice2"
   Python-modules-list:
     env:
-      PIP36_REQUIREMENTS: |
-        setuptools==59.6.0
       PIP39_REQUIREMENTS: |
         setuptools==65.5.1
   O2-customization:
