@@ -1,4 +1,4 @@
-package: MyGenerator
+package: Template-Recipe    # e.g. MyGenerator
 version: "v1.0.0"
 source: https://github.com/alisw/MyGenerator
 requires:
