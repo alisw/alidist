@@ -2,6 +2,8 @@ package: bookkeeping-api
 version: "%(tag_basename)s"
 tag: "technical/O2B-677/grpc-poc"
 requires:
+  - Configuration
+  - InfoLogger
   - grpc
 build_requires:
   - "GCC-Toolchain:(?!osx)"
@@ -27,6 +29,8 @@ esac
 cmake $SOURCEDIR/cxx-client                  \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                 \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE} \
+      ${CONFIGURATION_REVISION:+-DConfiguration_ROOT=$CONFIGURATION_ROOT} \
+      ${INFOLOGGER_REVISION:+-DInfoLogger_ROOT=$INFOLOGGER_ROOT} \
       -DCMAKE_INSTALL_LIBDIR=lib          \
       -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
