@@ -16,7 +16,6 @@ requires:
   - ZeroMQ
   - fmt
   - "MySQL:(slc.*)"
-  - bookkeeping-api
 build_requires:
   - CMake
   - alibuild-recipe-tools

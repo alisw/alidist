@@ -13,7 +13,6 @@ requires:
   - Control-OCCPlugin
   - Python-modules:(?!osx_arm64)
   - libjalienO2
-  - bookkeeping-api
 build_requires:
   - CMake
   - CodingGuidelines
@@ -90,7 +89,6 @@ cmake $SOURCEDIR                                              \
       ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}             \
       ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}       \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}          \
-      -DBookkeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
