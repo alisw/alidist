@@ -57,4 +57,9 @@ make ${JOBS:+-j$JOBS} install
 #ModuleFile
 mkdir -p etc/modulefiles
 alibuild-generate-module > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
+set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path PATH \$GRPC_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$GRPC_ROOT/lib
+EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
