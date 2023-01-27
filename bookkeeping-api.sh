@@ -2,8 +2,6 @@ package: bookkeeping-api
 version: "%(tag_basename)s"
 tag: "technical/O2B-677/grpc-poc"
 requires:
-  - Configuration
-  - InfoLogger
   - grpc
 build_requires:
   - "GCC-Toolchain:(?!osx)"
