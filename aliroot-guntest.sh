@@ -1,6 +1,6 @@
 package: AliRoot-guntest
 version: v1
-force_rebuild: 1
+force_rebuild: true
 requires:
   - AliRoot
   - AliRoot-OCDB

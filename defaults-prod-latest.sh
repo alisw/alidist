@@ -76,5 +76,4 @@ overrides:
   boost:
     requires:
       - "GCC-Toolchain:(?!osx)"
-
 ---

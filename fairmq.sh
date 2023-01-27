@@ -3,16 +3,16 @@ version: "%(tag_basename)s"
 tag: v1.4.56
 source: https://github.com/FairRootGroup/FairMQ
 requires:
- - boost
- - FairLogger
- - ZeroMQ
- - asiofi
- - asio
+  - boost
+  - FairLogger
+  - ZeroMQ
+  - asiofi
+  - asio
 build_requires:
- - flatbuffers
- - CMake
- - "GCC-Toolchain:(?!osx)"
- - FairCMakeModules
+  - flatbuffers
+  - CMake
+  - "GCC-Toolchain:(?!osx)"
+  - FairCMakeModules
 incremental_recipe: |
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

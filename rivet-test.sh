@@ -1,11 +1,11 @@
 package: Rivet-test
 version: v1
-force_rebuild: 1
+force_rebuild: true
 requires:
   - ThePEG
   - Rivet
 ---
-#!/bin/bash
+#!/bin/bash -e
 cat > DIPSYpp_HepMC.in <<\EOF
 read Tune27.in
 cd /DIPSY
