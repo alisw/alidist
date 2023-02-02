@@ -1,4 +1,6 @@
 package: Clang
+# Keep the version synced with the one run by the formatting CI,
+# (see https://github.com/alisw/ali-bot/blob/master/.github/workflows/c%2B%2B-code-formatting.yml).
 version: "v13.0.0"
 tag: "llvmorg-13.0.0"
 source: https://github.com/llvm/llvm-project
