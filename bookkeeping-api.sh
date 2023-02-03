@@ -1,6 +1,6 @@
 package: bookkeeping-api
 version: "%(tag_basename)s"
-tag: "technical/O2B-677/grpc-poc"
+tag: "@aliceo2/bookkeeping@0.49.1"
 requires:
   - grpc
 build_requires:
