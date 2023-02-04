@@ -26,6 +26,7 @@ env:
     responses==0.10.6
     pandas==0.24.2
     scikit-learn==0.20.3
+    setuptools==65.5.1
   PIP38_REQUIREMENTS: |
     PyYAML==5.1
     psutil==5.8.0
@@ -42,6 +43,7 @@ env:
     responses==0.10.6
     pandas==1.2.3
     scikit-learn==0.24.1
+    setuptools==65.5.1
   PIP39_REQUIREMENTS: |
     PyYAML==5.1
     psutil==5.8.0
@@ -50,13 +52,14 @@ env:
     scipy==1.7.3
     Cython==0.29.21
     seaborn==0.11.0
-    scikit-learn==0.24.0rc1
+    scikit-learn==0.24.1
     sklearn-evaluation==0.5.2
     Keras==2.4.3
     xgboost==1.2.0
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    setuptools==65.5.1
   "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
     PyYAML==5.1
     psutil==5.8.0
@@ -66,7 +69,7 @@ env:
     scipy==1.7.3
     Cython==0.29.21
     seaborn==0.11.0
-    scikit-learn==0.24.0rc1
+    scikit-learn==0.24.1
     sklearn-evaluation==0.5.2
     Keras==2.4.3
     xgboost==1.2.0
@@ -81,13 +84,14 @@ env:
     scipy==1.9.3
     Cython==0.29.21
     seaborn==0.11.0
-    scikit-learn==0.24.0rc1
+    scikit-learn==0.24.1
     sklearn-evaluation==0.8.1
     Keras==2.4.3
     xgboost==1.2.0
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    setuptools==65.5.1
 ---
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

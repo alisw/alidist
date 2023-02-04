@@ -1,10 +1,10 @@
 package: EPOS-test
 version: v1
-force_rebuild: 1
+force_rebuild: true
 requires:
   - EPOS
 ---
-#!/bin/bash -ex
+#!/bin/bash -e
 export OPT=$PWD
 export CHK=$PWD
 cp "$EPO"/test/bp5nohnoc10n10f.optns .

@@ -1,7 +1,7 @@
 package: IgProf
-version: 5.9.16
-source: https://github.com/igprof/igprof
-tag: v5.9.16
+version: 5.9.18
+source: http://github.com/igprof/igprof.git
+tag: v5.9.18
 requires:
   - libunwind
 build_requires:
@@ -16,7 +16,7 @@ cmake $SOURCEDIR \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
       -DUNWIND_INCLUDE_DIR=$LIBUNWIND_ROOT/include \
       -DUNWIND_LIBRARY=$LIBUNWIND_ROOT/lib/libunwind.so \
-      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-g -O3 -U_FORTIFY_SOURCE -Wno-attributes"
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-g -O3 -U_FORTIFY_SOURCE -Wno-attributes -Wno-pedantic"
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile

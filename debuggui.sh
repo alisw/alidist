@@ -1,6 +1,6 @@
 package: DebugGUI
-version: "v0.6.4"
-tag: "v0.6.4"
+version: "v0.7.0"
+tag: "v0.7.0"
 requires:
   - "GCC-Toolchain:(?!osx)"
   - GLFW
@@ -12,6 +12,18 @@ build_requires:
   - alibuild-recipe-tools
   - ninja
 source: https://github.com/AliceO2Group/DebugGUI
+incremental_recipe: |
+  cmake $SOURCEDIR                          \
+        -DCMAKE_GENERATOR=Ninja             \
+        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  cmake --build . -- ${JOBS+-j $JOBS} install
+
+  #ModuleFile
+  mkdir -p etc/modulefiles
+  alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 
 case $ARCHITECTURE in

@@ -13,8 +13,9 @@ build_requires:
 
 cmake $SOURCEDIR                                 \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT        \
-      -DDYNAMIC_ARCH=ON                           \
-      -DBUILD_WITHOUT_LAPACK=OFF                  \
+      -DDYNAMIC_ARCH=ON                          \
+      -DBUILD_WITHOUT_LAPACK=OFF                 \
+      -DCMAKE_INSTALL_LIBDIR=lib                 \
       -DBUILD_SHARED_LIBS=ON                     
 make ${JOBS:+-j$JOBS}
 make install 

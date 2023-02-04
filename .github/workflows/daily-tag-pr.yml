@@ -22,7 +22,7 @@ jobs:
       - name: Compute base branch name
         id: name
         run: |
-          echo "::set-output name=base::${GITHUB_REF#refs/heads/rc/}"
+          echo "base=${GITHUB_REF#refs/heads/rc/}" >> "$GITHUB_OUTPUT"
 
       - name: Send pull request to regular branch
         uses: repo-sync/pull-request@v2

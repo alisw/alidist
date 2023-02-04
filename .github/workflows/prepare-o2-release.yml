@@ -14,8 +14,8 @@ jobs:
     steps:
     - name: Decide which branch to use
       run: |
-        cat << EOF
-        ::set-output name=branch::$(echo O2-${{ github.event.inputs.tag }}-patches | tr . -)
+        cat << EOF >> "$GITHUB_OUTPUT"
+        branch=$(echo O2-${{ github.event.inputs.tag }}-patches | tr . -)
         EOF
       id: decide_release_branch
     - uses: actions/checkout@v2

@@ -22,6 +22,7 @@ requires:
   - Rivet
   - lhapdf-pdfsets
   - JETSCAPE
+  - EPOS4
 build_requires:
   - EPOS-test:(?!osx)
   - alibuild-recipe-tools
