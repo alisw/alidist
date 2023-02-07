@@ -66,7 +66,7 @@ CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-funct
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
+      -G  Ninja                                               \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
