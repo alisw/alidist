@@ -36,8 +36,8 @@ disable:
   - curl:(?!osx.*)
 overrides:
   GCC-Toolchain:
-    version: "v10.2.0-alice2"
-    tag: "v10.2.0-alice2"
+    version: "v12.2.0-alice1"
+    tag: "v12.2.0-alice1"
   Python-modules-list:
     env:
       PIP39_REQUIREMENTS: |

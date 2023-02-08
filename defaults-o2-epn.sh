@@ -28,8 +28,8 @@ overrides:
       - ZeroMQ
       - JAliEn-ROOT
   GCC-Toolchain:
-    version: v10.2.0-alice2
-    tag: v10.2.0-alice2
+    tag: v12.2.0-alice1
+    version: v12.2.0-alice1
   cgal:
     version: 4.12.2
   fastjet:
