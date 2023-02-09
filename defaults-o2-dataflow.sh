@@ -1,8 +1,8 @@
 package: defaults-o2-dataflow
 version: v1
 env:
-  CXXFLAGS: "-fPIC -O2 -std=c++17"
   CFLAGS: "-fPIC -O2"
+  CXXFLAGS: "-fPIC -O2 -std=c++17"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "17"
   ENABLE_VMC: 'ON'
