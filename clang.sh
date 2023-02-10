@@ -96,9 +96,6 @@ cat << \EOF > test.cc
 EOF
 $INSTALLROOT/bin-safe/clang++ -v -c test.cc
 
-curl -o $INSTALLROOT/bin-safe/git-clang-format https://raw.githubusercontent.com/llvm/llvm-project/main/clang/tools/clang-format/git-clang-format
-chmod u+x $INSTALLROOT/bin-safe/git-clang-format
-
 # Modulefile
 mkdir -p etc/modulefiles
 cat > etc/modulefiles/$PKGNAME <<EoF
