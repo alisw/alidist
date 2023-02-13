@@ -1,6 +1,6 @@
 package: Clang
-version: "v13.0.0"
-tag: "llvmorg-13.0.0"
+version: "v15.0.7"
+tag: "llvmorg-15.0.7"
 source: https://github.com/llvm/llvm-project
 requires:
  - "GCC-Toolchain:(?!osx)"
@@ -93,9 +93,6 @@ cat << \EOF > test.cc
 #include <iostream>
 EOF
 $INSTALLROOT/bin-safe/clang++ -v -c test.cc
-
-curl -o $INSTALLROOT/bin-safe/git-clang-format https://raw.githubusercontent.com/llvm/llvm-project/main/clang/tools/clang-format/git-clang-format
-chmod u+x $INSTALLROOT/bin-safe/git-clang-format
 
 # Modulefile
 mkdir -p etc/modulefiles
