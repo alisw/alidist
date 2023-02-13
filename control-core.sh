@@ -1,6 +1,6 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v0.60.4"
+tag: "v0.61.0"
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - golang
