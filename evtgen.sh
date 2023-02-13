@@ -1,7 +1,7 @@
 package: EVTGEN
 version: "%(tag_basename)s"
 tag: "R02-02-00"
-source:  https://github.com/alisw/EVTGEN
+source: https://github.com/alisw/EVTGEN
 requires:
   - HepMC
   - pythia
@@ -11,7 +11,7 @@ build_requires:
   - alibuild-recipe-tools
   - "GCC-Toolchain:(?!osx)"
 env:
-   EVTGENDATA: "$EVTGEN_ROOT/share"
+  EVTGENDATA: "$EVTGEN_ROOT/share"
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./

@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag:  v1.50.1
+tag: v1.50.1
 requires:
   - protobuf
   - c-ares

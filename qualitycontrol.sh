@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.86.0
+tag: v1.89.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -27,7 +27,7 @@ incremental_recipe: |
     CXXFLAGS="${CXXFLAGS} -Werror"
   fi
   CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function" # Outside the if to make sure we have it in all cases
-  cmake --build . -- ${JOBS:+-j$JOBS} install
+  cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
   # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
@@ -64,18 +64,9 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
 fi
 CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"  # Outside the if to make sure we have it in all cases
 
-# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
-if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
-  NINJA_BIN=ninja-build
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
-  unset NINJA_BIN
-fi
-
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
+      -G  Ninja                                               \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
@@ -93,7 +84,7 @@ cmake $SOURCEDIR                                              \
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
-cmake --build . -- ${JOBS:+-j$JOBS} install
+cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
 
 # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
 if [[ $ALIBUILD_O2_TESTS ]]; then

@@ -5,9 +5,9 @@ source: https://github.com/alisw/gcc-toolchain
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
 build_requires:
- - "autotools:(slc6|slc7)"
- - yacc-like
- - make
+  - "autotools:(slc6|slc7)"
+  - yacc-like
+  - make
 prefer_system: .*
 prefer_system_check: |
   set -e
@@ -16,7 +16,14 @@ prefer_system_check: |
     v10*) MIN_GCC_VERSION=100200 ;;
     *) MIN_GCC_VERSION=70300 ;;
   esac
-  which gcc && test -f $(dirname $(which gcc))/c++ && printf "#define GCCVER ((__GNUC__ * 10000)+(__GNUC_MINOR__ * 100)+(__GNUC_PATCHLEVEL__))\n#if (GCCVER < $MIN_GCC_VERSION)\n#error \"System's GCC cannot be used: we need at least GCC $REQUESTED_VERSION We are going to compile our own version.\"\n#endif\n" | gcc -xc++ - -c -o /dev/null
+  which gcc
+  test -f "$(dirname "$(which gcc)")/c++"
+  gcc -xc++ - -c -o /dev/null << EOF
+  #define GCCVER ((__GNUC__ * 10000)+(__GNUC_MINOR__ * 100)+(__GNUC_PATCHLEVEL__))
+  #if (GCCVER < $MIN_GCC_VERSION)
+  #error "System's GCC cannot be used: we need at least GCC $REQUESTED_VERSION. We'll compile our own version."
+  #endif
+  EOF
 ---
 #!/bin/bash -e
 
@@ -99,6 +106,7 @@ pushd build-gcc
                    --disable-nls
   make ${JOBS+-j $JOBS} bootstrap-lean MAKEINFO=":"
   make install MAKEINFO=":"
+  (if cd gmp || cd ../gmp; then make install MAKEINFO=":"; fi)
   hash -r
 
   # GCC creates c++, but not cc
@@ -111,8 +119,8 @@ pushd build-gcc
   #perl -pe '++$x and next if /^\*link:/; $x-- and s/^(.*)$/\1 -rpath-link \/lib64:\/lib/ if $x' $SPEC > $SPEC.0
   #mv $SPEC.0 $SPEC
 
-  rm -f $INSTALLROOT/lib/*.la \
-        $INSTALLROOT/lib64/*.la
+  rm -f "$INSTALLROOT"/lib/*.la \
+        "$INSTALLROOT"/lib64/*.la
 popd
 
 # From now on, use own linker and GCC
@@ -137,7 +145,7 @@ pushd build-gdb
   make ${JOBS:+-j$JOBS} MAKEINFO=":"
   make install MAKEINFO=":"
   hash -r
-  rm -f $INSTALLROOT/lib/*.la
+  rm -f "$INSTALLROOT"/lib/*.la
 popd
 
 # If fixincludes is not desired, see:
@@ -161,7 +169,7 @@ module load BASE/1.0
 # Load Toolchain module for the current platform. Fallback on this one
 regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
 if { "\$mod_name" == "GCC-Toolchain" } {
-  if { [regexp {^/cvmfs.*} $ModulesCurrentModulefile dummy1 dummy2] } {
+  if { [regexp {^/cvmfs.*} \$ModulesCurrentModulefile dummy1 dummy2] } {
     module load Toolchain/GCC-${PKGVERSION//-*}
     if { [is-loaded Toolchain] } { continue }
   }

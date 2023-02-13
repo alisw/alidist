@@ -3,9 +3,9 @@ version: "%(tag_basename)s"
 tag: v2.16-alice1
 source: https://github.com/alisw/LoopTools
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - alibuild-recipe-tools
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 rsync -a $SOURCEDIR/ ./

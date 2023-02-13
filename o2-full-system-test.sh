@@ -7,7 +7,7 @@ requires:
   - O2sim
   - O2Physics
   - jq
-force_rebuild: 1
+force_rebuild: true
 ---
 #!/bin/bash -e
 

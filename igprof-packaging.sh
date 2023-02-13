@@ -1,11 +1,11 @@
 package: IgProf-packaging
 version: master
 source: https://github.com/alisw/ali-bot
-force_rebuild: 1
+force_rebuild: true
 requires:
   - IgProf
 ---
-#!/bin/sh
+#!/bin/bash -e
 mkdir -p igprof/usr libunwind/usr libatomic_ops/usr
 tar xzf /sw/TARS/$ARCHITECTURE/IgProf/IgProf-$IGPROF_VERSION-$IGPROF_REVISION.$ARCHITECTURE.tar.gz --strip-components=4 -C igprof/usr
 tar xzf /sw/TARS/$ARCHITECTURE/libunwind/libunwind-$LIBUNWIND_VERSION-$LIBUNWIND_REVISION.$ARCHITECTURE.tar.gz --strip-components=4 -C libunwind/usr

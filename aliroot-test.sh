@@ -1,13 +1,13 @@
 package: AliRoot-test
 version: "%(year)s%(month)s%(day)s"
-force_rebuild: 1
+force_rebuild: true
 requires:
   - AliPhysics
   - GEANT3
   - OCDB-test
   - "IgProf:slc7.*"
 ---
-#!/bin/sh
+#!/bin/bash -e
 export ALICE_ROOT=$ALIROOT_ROOT
 echo "`date +%s`:aliroot-test: $x STARTED"
 WORKSPACE=${WORKSPACE:-$BUILDDIR}
