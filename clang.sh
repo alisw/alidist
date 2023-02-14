@@ -50,19 +50,6 @@ cmake $SOURCEDIR/llvm \
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-git clone -b $PKGVERSION https://github.com/KhronosGroup/SPIRV-LLVM-Translator
-mkdir SPIRV-LLVM-Translator/build
-pushd SPIRV-LLVM-Translator/build
-cmake ../ \
-  -G Ninja \
-  -DLLVM_DIR="$INSTALLROOT/lib/cmake/llvm" \
-  -DLLVM_BUILD_TOOLS=ON \
-  -DLLVM_INCLUDE_TESTS=OFF \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"
-cmake --build . -- ${JOBS:+-j$JOBS} install
-popd
-
 case $ARCHITECTURE in
   osx*)
     # Add correct rpath to dylibs on Mac as long as there is no better way to
