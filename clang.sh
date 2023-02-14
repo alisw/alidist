@@ -72,8 +72,8 @@ esac
 # We **MUST NOT** add bin-safe to the build path. Runtime
 # path is fine.
 mkdir $INSTALLROOT/bin-safe
-mv $INSTALLROOT/bin/llvm-spirv* $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
-sed -i.bak -e "s|bin/clang|bin-safe/clang|g" -e "s|bin/llvm-spirv|bin-safe/llvm-spirv|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
+mv $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
+sed -i.bak -e "s|bin/clang|bin-safe/clang|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
 rm $INSTALLROOT/lib/cmake/clang/*.bak
 
 # Check it actually works
