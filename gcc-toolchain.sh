@@ -13,6 +13,7 @@ prefer_system_check: |
   set -e
   which gfortran || { echo "gfortran missing"; exit 1; }
   case $REQUESTED_VERSION in
+    v12*) MIN_GCC_VERSION=120100 ;;
     v10*) MIN_GCC_VERSION=100200 ;;
     *) MIN_GCC_VERSION=70300 ;;
   esac
