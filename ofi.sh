@@ -12,7 +12,7 @@ prefer_system_check: |
 ---
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 autoreconf -ivf
-./configure --prefix="$INSTALLROOT" --enable-mlx=no
+./configure --prefix="$INSTALLROOT" --enable-mlx=no --enable-verbs=no --enable-efa=no --enable-usnic=no --enable-psm2=no --enable-psm3=no
 make ${JOBS:+-j $JOBS} install
 
 # Modulefile
