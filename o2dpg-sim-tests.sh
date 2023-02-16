@@ -17,7 +17,7 @@ pushd $BUILDDIR/o2dpg-sim_tests
 LOGFILE="o2dpg-sim-tests.log"
 
 O2DPG_TEST_EXITCODE=0
-{ O2DPG_TEST_REPO_DIR=${SOURCEDIR} "${O2DPG_ROOT}/test/run_tests.sh" &> ${LOGFILE} ; O2DPG_TEST_EXITCODE=$?; } || true  # don't quit immediately on error
+{ O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_tests.sh" &> ${LOGFILE} ; O2DPG_TEST_EXITCODE=$?; } || true  # don't quit immediately on error
 if [ ${O2DPG_TEST_EXITCODE} != "0" ] ; then
   # something is wrong
   echo "error detected in ${PKGNAME}"
