@@ -18,6 +18,9 @@ LOGFILE="o2dpg-sim-tests.log"
 
 O2DPG_TEST_EXITCODE=0
 { O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_tests.sh" &> ${LOGFILE} ; O2DPG_TEST_EXITCODE=$?; } || true  # don't quit immediately on error
+# keep only logs, remove everything else for now
+# if we needed/possible in the future, we might keep some of the other files
+find . -type f ! -name '*.log' -and ! -name "*serverlog*" -and ! -name "*mergerlog*" -delete
 if [ ${O2DPG_TEST_EXITCODE} != "0" ] ; then
   # something is wrong
   echo "error detected in ${PKGNAME}"
@@ -28,8 +31,9 @@ else
   echo "${PKGNAME} passed"
 fi
 
+
 popd
-rm -Rf $BUILDDIR/o2dpg-sim_tests
+
 
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
