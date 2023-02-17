@@ -26,6 +26,10 @@ case $ARCHITECTURE in
   osx*)
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
+    # to avoid issues with rpath on mac
+    extra_cmake_variables="-DCMAKE_INSTALL_RPATH=$INSTALLROOT/lib \
+    -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
+    "
   ;;
 esac
 
@@ -45,32 +49,17 @@ cmake $SOURCEDIR                                    \
   -DgRPC_BUILD_CSHARP_EXT=OFF                       \
   -DgRPC_RE2_PROVIDER=package                       \
   ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
-  -DgRPC_CARES_PROVIDER=package
+  -DgRPC_CARES_PROVIDER=package \
+  $extra_cmake_variables
 
 make ${JOBS:+-j$JOBS} install
 
-
-
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                          \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-            ${C_ARES_REVISION:+c-ares/$C_ARES_VERSION-$C_ARES_REVISION}        \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION} \\
-            ${RE2_REVISION:+re2/$RE2_VERSION-$RE2_REVISION} \\
-            ${PROTOBUF_REVISION:+protobuf/$PROTOBUF_VERSION-$PROTOBUF_REVISION}
-# Our environment
+#ModuleFile
+mkdir -p etc/modulefiles
+alibuild-generate-module > etc/modulefiles/$PKGNAME
+cat >> etc/modulefiles/$PKGNAME <<EoF
 set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$GRPC_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$GRPC_ROOT/lib
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
