@@ -5,8 +5,9 @@ source: https://github.com/xrootd/xrootd
 requires:
  - "OpenSSL:(?!osx)"
  - Python-modules:(?!osx_arm64)
- - AliEn-Runtime
+ - AliEn-Runtime:(?!.*ppc64)
  - libxml2
+ - zlib
 build_requires:
  - CMake
  - "osx-system-openssl:(osx.*)"
@@ -50,28 +51,45 @@ case $ARCHITECTURE in
   ;;
 esac
 
+if [[ $ALIEN_RUNTIME_VERSION ]]; then
+  # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
+  # were not taken from the system
+  OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
+  LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
+fi
+[[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
+
 rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
 
 mkdir build
 pushd build
 cmake "${BUILDDIR}"                                                   \
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
+      -DENABLE_READLINE=OFF                                           \
+      -DENABLE_KRB5=OFF                                               \
+      -DENABLE_PERL=OFF                                               \
+      -DENABLE_FUSE=OFF                                               \
+      -DENABLE_MACAROONS=OFF                                          \
+      -DENABLE_SCITOKENS=OFF                                          \
+      -DENABLE_VOMS=OFF                                               \
+      -DENABLE_XRDEC=OFF                                              \
+      -DVOMSXRD_SUBMODULE=OFF                                         \
       -DXRDCL_ONLY=ON                                                 \
       -DENABLE_CRYPTO=ON                                              \
-      -DENABLE_PERL=OFF                                               \
-      -DVOMSXRD_SUBMODULE=OFF                                         \
       ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
       ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIR=$UUID_ROOT/include}             \
-      -DENABLE_KRB5=OFF                                               \
-      -DENABLE_READLINE=OFF                                           \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo                               \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
-      ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
+      ${ZLIB_ROOT:+-DZLIB_INCLUDE_DIR=$ZLIB_ROOT/include}             \
+      ${ZLIB_ROOT:+-DZLIB_LIBRARY_RELEASE=$ZLIB_ROOT/lib/libz.so}     \
+      ${LIBXML2_ROOT:+-DLIBXML2_INCLUDE_DIR=$LIBXML2_ROOT/include/libxml2}     \
+      ${LIBXML2_ROOT:+-DLIBXML2_LIBRARY=$LIBXML2_ROOT/lib/libxml2.so}          \
+      ${LIBXML2_ROOT:+-DLIBXML2_XMLLINT_EXECUTABLE=$LIBXML2_ROOT/bin/xmllint}  \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'}       \
