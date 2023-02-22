@@ -3,17 +3,17 @@ version: "%(tag_basename)s"
 tag: "v5.5.3"
 source: https://github.com/xrootd/xrootd
 requires:
- - "OpenSSL:(?!osx)"
- - Python-modules:(?!osx_arm64)
- - AliEn-Runtime:(?!.*ppc64)
- - libxml2
- - zlib
+  - AliEn-Runtime:(?!.*ppc64)
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - "GCC-Toolchain:(?!osx)"
+  - libxml2
+  - zlib
+  - UUID:(?!osx)
 build_requires:
- - CMake
- - "osx-system-openssl:(osx.*)"
- - "GCC-Toolchain:(?!osx)"
- - UUID:(?!osx)
- - alibuild-recipe-tools
+  - CMake
+  - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---
@@ -52,12 +52,9 @@ case $ARCHITECTURE in
 esac
 
 if [[ $ALIEN_RUNTIME_VERSION ]]; then
-  # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
-  # were not taken from the system
-  OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
+  # AliEn-Runtime: we take libxml2 from there, in case they were not taken from the system
   LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
 fi
-[[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 
 rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
 
