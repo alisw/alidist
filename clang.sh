@@ -38,6 +38,7 @@ esac
 cmake $SOURCEDIR/llvm \
   -G Ninja \
   -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
+  -DLLVM_ENABLE_RUNTIMES='libcxx;libcxxabi' \
   -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD:?}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
