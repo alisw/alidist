@@ -1,18 +1,17 @@
 package: Clang
 version: "v15.0.7"
 tag: "llvmorg-15.0.7"
-
 source: https://github.com/llvm/llvm-project
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - "Python:slc.*"
- - "Python-system:(?!slc.*)"
- - CMake
- - curl
- - ninja
+  - "Python:slc.*"
+  - "Python-system:(?!slc.*)"
+  - CMake
+  - curl
+  - ninja
 ---
-#!/bin/sh
+#!/bin/bash -e
 
 # Unsetting default compiler flags in order to make sure that no debug
 # information is compiled into the objects which make the build artifacts very
@@ -35,15 +34,15 @@ esac
 
 # BUILD_SHARED_LIBS=ON is needed for e.g. adding dynamic plugins to clang-tidy.
 # Arrow v9 needs LLVM_ENABLE_RTTI=ON.
-cmake $SOURCEDIR/llvm \
+cmake "$SOURCEDIR/llvm" \
   -G Ninja \
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
+  -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;compiler-rt' \
   -DLLVM_ENABLE_RUNTIMES='libcxx;libcxxabi' \
   -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD:?}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
-  -DPYTHON_EXECUTABLE=$(which python3) \
+  -DPYTHON_EXECUTABLE="$(which python3)" \
   -DDEFAULT_SYSROOT="$DEFAULT_SYSROOT" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
@@ -72,20 +71,20 @@ esac
 # to avoid issues with system clang on macOS.
 # We **MUST NOT** add bin-safe to the build path. Runtime
 # path is fine.
-mkdir $INSTALLROOT/bin-safe
-mv $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
-sed -i.bak -e "s|bin/clang|bin-safe/clang|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
-rm $INSTALLROOT/lib/cmake/clang/*.bak
+mkdir "$INSTALLROOT/bin-safe"
+mv "$INSTALLROOT"/bin/clang* "$INSTALLROOT/bin-safe/"
+sed -i.bak -e "s|bin/clang|bin-safe/clang|g" "$INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake"
+rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 
 # Check it actually works
 cat << \EOF > test.cc
 #include <iostream>
 EOF
-$INSTALLROOT/bin-safe/clang++ -v -c test.cc
+"$INSTALLROOT/bin-safe/clang++" -v -c test.cc
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
+cat > "etc/modulefiles/$PKGNAME" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -101,4 +100,5 @@ set CLANG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$CLANG_ROOT/bin-safe
 prepend-path LD_LIBRARY_PATH \$CLANG_ROOT/lib
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
