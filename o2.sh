@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "nightly-20230224"
+tag: "nightly-20230226"
 requires:
   - arrow
   - FairRoot
