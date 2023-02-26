@@ -39,7 +39,7 @@ fi
 # Call a tool to filter out unwanted sources (ROOT dicts, etc) from the compilations database.
 # Further, also optionally restrict the checks on a specific set of files, which can be passed here via means of the
 # environment variable O2_CHECKCODE_CHANGEDFILES. The environment variable is supposed to hold a colon separated list of files.
-ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc|.*_amalgamated\.cxx)' ${O2_CHECKCODE_CHANGEDFILES:+-use-files ${O2_CHECKCODE_CHANGEDFILES}}
+ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc|.*\_amalgamated\.cxx)' ${O2_CHECKCODE_CHANGEDFILES:+-use-files ${O2_CHECKCODE_CHANGEDFILES}}
 cp thinned_compile_commands.json compile_commands.json
 
 # List of explicitely enabled C++ checks (make sure they are all green)
