@@ -15,7 +15,7 @@ build_requires:
 
 # Unsetting default compiler flags in order to make sure that no debug
 # information is compiled into the objects which make the build artifacts very
-# big
+# big.
 unset CXXFLAGS
 unset CFLAGS
 unset LDFLAGS
