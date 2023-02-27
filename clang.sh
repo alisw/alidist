@@ -33,7 +33,7 @@ case $ARCHITECTURE in
 esac
 
 # BUILD_SHARED_LIBS=ON is needed for e.g. adding dynamic plugins to clang-tidy.
-# Arrow v9 needs LLVM_ENABLE_RTTI=ON.
+# Apache Arrow needs LLVM_ENABLE_RTTI=ON.
 cmake "$SOURCEDIR/llvm" \
   -G Ninja \
   -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;compiler-rt' \
