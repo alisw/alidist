@@ -68,7 +68,8 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 run_O2CodeChecker.py ${JOBS+-j $JOBS} \
 	-clang-tidy-binary $(which O2codecheck) \
 	-clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
-	-header-filter=.*SOURCES.* ${O2_CHECKER_FIX:+-fix} -checks=${CHECKS} 2>&1 | tee error-log.txt
+	-header-filter='.*SOURCES(?!.*/3rdparty/).*' \
+        ${O2_CHECKER_FIX:+-fix} -checks="$CHECKS" 2>&1 | tee error-log.txt
 
 # Turn warnings into errors
 sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.txt.0 error-log.txt
