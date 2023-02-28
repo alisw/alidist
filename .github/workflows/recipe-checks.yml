@@ -19,7 +19,9 @@ name: Check recipes
 
 jobs:
   lint:
+    name: alidistlint
     runs-on: ubuntu-latest
+
     steps:
       - name: Install dependencies
         run: |
