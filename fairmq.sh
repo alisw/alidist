@@ -17,8 +17,9 @@ incremental_recipe: |
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 prepend_path:
-  ROOT_INCLUDE_PATH: "$FAIRMQ_ROOT/include"
-  ROOT_INCLUDE_PATH: "$FAIRMQ_ROOT/include/fairmq"
+  ROOT_INCLUDE_PATH:
+    - "$FAIRMQ_ROOT/include"
+    - "$FAIRMQ_ROOT/include/fairmq"
 ---
 mkdir -p $INSTALLROOT
 
