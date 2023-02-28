@@ -38,12 +38,11 @@ export PATH=$INSTALLROOT/bin:$PATH
 export LD_LIBRARY_PATH=$INSTALLROOT/lib:$LD_LIBRARY_PATH
 
 # help2man
-if [ -d help2man* ]; then
-  pushd help2man*
-    ./configure --disable-dependency-tracking --prefix $INSTALLROOT
-    make ${JOBS+-j $JOBS}
-    make install
-    hash -r
+if pushd help2man*; then
+  ./configure --disable-dependency-tracking --prefix $INSTALLROOT
+  make ${JOBS+-j $JOBS}
+  make install
+  hash -r
   popd
 fi
 

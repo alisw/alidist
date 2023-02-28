@@ -21,4 +21,3 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib > $MODULEFILE
-cat >> "$MODULEFILE" <<EOF
