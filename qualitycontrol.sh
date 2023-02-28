@@ -15,6 +15,7 @@ requires:
   - libjalienO2
 build_requires:
   - CMake
+  - Clang   # for Gandiva
   - CodingGuidelines
   - RapidJSON
   - alibuild-recipe-tools
@@ -74,6 +75,7 @@ cmake $SOURCEDIR                                              \
       -DO2_ROOT=$O2_ROOT                                      \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
       -DARROW_HOME=$ARROW_ROOT                                \
+      ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
       ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
