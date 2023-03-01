@@ -8,7 +8,7 @@ requires:
   - libjalienO2
   - KFParticle
 build_requires:
-  - Clang
+  - "Clang:(?!osx)"
   - CMake
   - ninja
   - alibuild-recipe-tools

@@ -15,7 +15,7 @@ requires:
   - libjalienO2
 build_requires:
   - CMake
-  - Clang   # for Gandiva
+  - "Clang:(?!osx)"   # for Gandiva
   - CodingGuidelines
   - RapidJSON
   - alibuild-recipe-tools
