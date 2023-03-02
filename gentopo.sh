@@ -7,7 +7,7 @@ build_requires:
 ---
 #!/bin/bash -e
 mkdir $INSTALLROOT/bin
-cp $SOURCEDIR/DATA/tools/epn/gen_topo*.sh $INSTALLROOT/bin
+cp $SOURCEDIR/DATA/tools/epn/gen_topo*.sh $SOURCEDIR/DATA/tools/epn/apptainer*.sh $INSTALLROOT/bin
 
 # Modulefile
 mkdir -p etc/modulefiles
