@@ -16,7 +16,6 @@ requires:
   - ZeroMQ
   - fmt
   - "MySQL:(slc.*)"
-  - bookkeeping-api
 build_requires:
   - CMake
   - alibuild-recipe-tools
@@ -51,7 +50,6 @@ cmake $SOURCEDIR                                                         \
       ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
       ${ZEROMQ_ROOT:+-DZMQ_ROOT=$ZEROMQ_ROOT}                             \
-      ${BOOKKEEPINGAPI_REVISION:+-DBookeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT} \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                  \
       -DBUILD_SHARED_LIBS=ON
 
