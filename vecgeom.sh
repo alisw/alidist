@@ -10,7 +10,6 @@ build_requires:
   - CMake
   - ninja
 ---
-
 #!/bin/bash -e
 case $ARCHITECTURE in
     osx_arm64)

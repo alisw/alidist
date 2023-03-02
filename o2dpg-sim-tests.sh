@@ -2,7 +2,7 @@ package: O2DPG-sim-tests
 version: "1.0"
 requires:
   - O2sim
-force_rebuild: 1
+force_rebuild: true
 ---
 #!/bin/bash -e
 

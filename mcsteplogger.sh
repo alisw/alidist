@@ -11,7 +11,6 @@ build_requires:
   - CMake
   - alibuild-recipe-tools
 ---
-
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
           ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
