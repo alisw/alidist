@@ -6,8 +6,6 @@ requires:
   - boost
   - FairLogger
   - ZeroMQ
-  - asiofi
-  - asio
 build_requires:
   - flatbuffers
   - CMake
@@ -44,14 +42,9 @@ cmake $SOURCEDIR                                                 \
       ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}     \
       ${ZEROMQ_ROOT:+-DZeroMQ_ROOT=$ZEROMQ_ROOT}                 \
       ${FLATBUFFERS_ROOT:+-DFlatbuffers_ROOT=$FLATBUFFERS_ROOT}  \
-      ${ASIOFI_ROOT:+-Dasiofi_ROOT=$ASIOFI_ROOT}                 \
-      ${ASIO_ROOT:+-Dasio_ROOT=$ASIO_ROOT}                       \
       ${FAIRCMAKEMODULES_ROOT:+-DFairCMakeModules_ROOT=$FAIRCMAKEMODULES_ROOT} \
-      ${OFI_ROOT:+-DOFI_ROOT=$OFI_ROOT}                          \
-      ${OFI_ROOT:--DBUILD_OFI_TRANSPORT=OFF}                     \
       -DDISABLE_COLOR=ON                                         \
-      ${BUILD_OFI:+-DBUILD_OFI_TRANSPORT=ON}                     \
-      -DBUILD_EXAMPLES=ON                                        \
+      -DBUILD_EXAMPLES=OFF                                       \
       -DBUILD_TESTING=${ALIBUILD_FAIRMQ_TESTS:-OFF}              \
       -DCMAKE_INSTALL_LIBDIR=lib                                 \
       -DCMAKE_INSTALL_BINDIR=bin
@@ -81,8 +74,6 @@ module load BASE/1.0                                                            
             ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                      \\
             ${FAIRLOGGER_REVISION:+FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION}  \\
             ${ZEROMQ_REVISION:+ZeroMQ/$ZEROMQ_VERSION-$ZEROMQ_REVISION}                  \\
-            ${ASIOFI_REVISION:+asiofi/$ASIOFI_VERSION-$ASIOFI_REVISION}                  \\
-            ${ASIO_REVISION:+asio/$ASIO_VERSION-$ASIO_REVISION}
 # Our environment
 set FAIRMQ_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$FAIRMQ_ROOT/bin
