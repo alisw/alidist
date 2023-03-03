@@ -73,6 +73,7 @@ esac
 # path is fine.
 mkdir "$INSTALLROOT/bin-safe"
 mv "$INSTALLROOT"/bin/clang* "$INSTALLROOT/bin-safe/"
+mv "$INSTALLROOT"/bin/git-clang* "$INSTALLROOT/bin-safe/"  # we also need git-clang-format in runtime
 sed -i.bak -e "s|bin/clang|bin-safe/clang|g" "$INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake"
 rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 
