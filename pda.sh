@@ -7,6 +7,7 @@ requires:
 build_requires:
   - kernel-devel
   - "autotools:(slc6|slc7)"
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
