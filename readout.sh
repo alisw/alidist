@@ -51,7 +51,7 @@ cmake $SOURCEDIR                                                         \
       ${LZ4_ROOT:+-DLZ4_DIR=$LZ4_ROOT}                                   \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}   \
       ${ZEROMQ_ROOT:+-DZMQ_ROOT=$ZEROMQ_ROOT}                             \
-      ${BOOKKEEPINGAPI_REVISION:+-DBookkeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT} \
+      ${BOOKKEEPING_API_REVISION:+-DBookkeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT} \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                  \
       -DBUILD_SHARED_LIBS=ON
 
