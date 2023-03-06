@@ -7,7 +7,7 @@ source: https://gitlab.cern.ch/jalien/alice-grid-utils.git
 
 DST="$INSTALLROOT/include"
 mkdir -p "$DST"
-cp -v $SOURCEDIR/*.h "$DST/"
+cp -v "$SOURCEDIR"/*.h "$DST/"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -21,3 +21,4 @@ proc ModulesHelp { } {
 }
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+EoF
