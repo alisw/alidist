@@ -1,5 +1,5 @@
 package: bookkeeping-api
-version: "%(tag_basename)s"
+version: "v0.49.1"
 tag: "@aliceo2/bookkeeping@0.49.1"
 requires:
   - grpc
