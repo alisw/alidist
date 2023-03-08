@@ -8,10 +8,10 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-38l
+    tag: v5-09-38m
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-38l-01
+    tag: v5-09-38m-01
   # Use VMC packages compatible with ROOT 5
   GEANT3:
     version: "v2-7-p2"

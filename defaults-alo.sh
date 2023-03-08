@@ -62,7 +62,7 @@ overrides:
       - "Xcode:(osx.*)"
       - ninja
   AliRoot:
-    tag: v5-09-38l
+    tag: v5-09-38m
     requires:
       - ROOT
       - Vc
