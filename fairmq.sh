@@ -22,7 +22,7 @@ incremental_recipe: |
   cmake --install . --prefix "${INSTALLROOT}"
   MODULEDIR="etc/modulefiles"
   mkdir -p "${INSTALLROOT}/${MODULEDIR}"
-  rsync -a --delete "${MODULEDIR}" "${INSTALLROOT}/${MODULEDIR}"
+  rsync -a --delete "${MODULEDIR}/" "${INSTALLROOT}/${MODULEDIR}"
 ---
 #!/bin/bash -e
 
@@ -64,4 +64,4 @@ prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/fairmq
 EOF
 mkdir -p "${INSTALLROOT}/${MODULEDIR}"
-rsync -a --delete ${MODULEDIR} "${INSTALLROOT}/${MODULEDIR}"
+rsync -a --delete "${MODULEDIR}/" "${INSTALLROOT}/${MODULEDIR}"
