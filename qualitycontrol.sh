@@ -24,11 +24,13 @@ source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
+  #!/bin/bash -e
   # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
   if [[ $ALIBUILD_O2_TESTS ]]; then
     CXXFLAGS="${CXXFLAGS} -Werror"
   fi
-  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function" # Outside the if to make sure we have it in all cases
+  # Outside the if to make sure we have it in all cases:
+  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"
   cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles 
   rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
