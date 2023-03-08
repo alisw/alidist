@@ -42,6 +42,7 @@ overrides:
       - lzma
   AliRoot:
     version: "%(commit_hash)s_O2"
+    tag: "v5-09-02p"
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
@@ -66,6 +67,7 @@ overrides:
       - boost
   AliPhysics:
     version: "%(commit_hash)s_O2"
+    tag: "v5-09-02p-01"
   GEANT4:
     tag: v10.3.3
     source: https://gitlab.cern.ch/geant4/geant4.git
