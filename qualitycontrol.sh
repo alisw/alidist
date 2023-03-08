@@ -30,7 +30,8 @@ incremental_recipe: |
   fi
   CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function" # Outside the if to make sure we have it in all cases
   cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  mkdir -p $INSTALLROOT/etc/modulefiles 
+  rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
   # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
   if [[ $ALIBUILD_O2_TESTS ]]; then
@@ -46,7 +47,7 @@ incremental_recipe: |
     ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE $TESTS_LABELS_EXCLUSION
   fi
 ---
-#!/bin/bash -ex
+#!/bin/bash -e
 
 case $ARCHITECTURE in
   osx*) 
@@ -127,7 +128,8 @@ prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/QualityControl
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
 
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p $INSTALLROOT/etc/modulefiles 
+rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 # Create code coverage information to be uploaded
 # by the calling driver to codecov.io or similar service
