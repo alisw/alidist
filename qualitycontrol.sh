@@ -32,9 +32,9 @@ incremental_recipe: |
   # Outside the if to make sure we have it in all cases:
   CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"
   cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles 
-  rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  mkdir -p $INSTALLROOT/etc/modulefiles
+  rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
+  cp ${BUILDDIR}/compile_commands.json "${INSTALLROOT}"
   # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
   if [[ $ALIBUILD_O2_TESTS ]]; then
     echo "Run the tests"
