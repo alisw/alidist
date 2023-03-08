@@ -12,14 +12,14 @@ overrides:
       which cmake && case `cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3 | head -n1` in [0-2]*|3.[0-9].*|3.10.*) exit 1 ;; esac
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-38l
+    tag: v5-09-38m
     requires:
       - ROOT
       - fastjet:(?!.*ppc64)
       - Vc
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-38l-01
+    tag: v5-09-38m-01
   GCC-Toolchain:
     tag: v7.3.0-alice1
     prefer_system_check: |
