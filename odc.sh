@@ -4,14 +4,15 @@ version: "%(tag_basename)s"
 tag: "0.77.0"
 source: https://github.com/FairRootGroup/ODC.git
 requires:
-- boost
-- protobuf
-- DDS
-- FairLogger
-- FairMQ
-- grpc
-- libInfoLogger
+  - boost
+  - protobuf
+  - DDS
+  - FairLogger
+  - FairMQ
+  - grpc
+  - libInfoLogger
 build_requires:
+  - flatbuffers
   - CMake
   - GCC-Toolchain:(?!osx.*)
 ---
