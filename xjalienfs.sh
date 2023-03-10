@@ -3,10 +3,17 @@ version: "%(tag_basename)s"
 tag: "1.4.5"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
+  - zlib
+  - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
+  - AliEn-CAs
+  - ApMon-CPP
+  - UUID
+  - alibuild-recipe-tools
   - XRootD
-  - AliEn-Runtime
   - Python-modules:(?!osx_arm64)
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
@@ -54,7 +61,6 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
             ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
-            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
             ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
 	    ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
 set XJALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

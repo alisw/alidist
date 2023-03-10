@@ -38,18 +38,24 @@ overrides:
     tag: v5-34-30-alice10
     source: https://github.com/alisw/root
     requires:
-      - AliEn-Runtime:(?!.*ppc64)
+      - "GCC-Toolchain:(?!osx)"
+      - "Xcode:(osx.*)"
+      - zlib
+      - libxml2
+      - "OpenSSL:(?!osx)"
+      - "osx-system-openssl:(osx.*)"
+      - AliEn-CAs
+      - ApMon-CPP
+      - UUID
+      - alibuild-recipe-tools
       - GSL
       - opengl:(?!osx)
       - Xdevel:(?!osx)
       - FreeType:(?!osx)
       - "MySQL:slc7.*"
-      - GCC-Toolchain:(?!osx)
       - XRootD
     build_requires:
       - CMake
-      - "Xcode:(osx.*)"
-
   # Use VMC packages compatible with ROOT 5
   GEANT3:
     version: "v2-7-p2"

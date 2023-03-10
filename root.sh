@@ -3,26 +3,29 @@ version: "%(tag_basename)s"
 tag: "v6-26-10-alice5"
 source: https://github.com/alisw/root.git
 requires:
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
+  - zlib
+  - libxml2
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - AliEn-CAs
+  - ApMon-CPP
+  - UUID
+  - alibuild-recipe-tools
   - arrow
-  - AliEn-Runtime:(?!.*ppc64)
   - GSL
   - opengl:(?!osx)
   - Xdevel:(?!osx)
   - FreeType:(?!osx)
   - Python-modules:(?!osx_arm64)
-  - "GCC-Toolchain:(?!osx)"
   - libpng
   - lzma
-  - libxml2
-  - "OpenSSL:(?!osx)"
-  - "osx-system-openssl:(osx.*)"
   - XRootD
   - TBB
   - protobuf
 build_requires:
   - CMake
-  - "Xcode:(osx.*)"
-  - alibuild-recipe-tools
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
@@ -76,12 +79,6 @@ case $ARCHITECTURE in
   ;;
 esac
 
-if [[ $ALIEN_RUNTIME_VERSION ]]; then
-  # AliEn-Runtime: we take OpenSSL and libxml2 from there, in case they
-  # were not taken from the system
-  OPENSSL_ROOT=${OPENSSL_ROOT:+$ALIEN_RUNTIME_ROOT}
-  LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
-fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 
 if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
@@ -206,11 +203,6 @@ Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins:
 Unix.*.Root.DynamicPath: .:\$(ROOT_DYN_PATH):
 EOF
 mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
-
-if [[ $ALIEN_RUNTIME_VERSION ]]; then
-  # Get them from AliEn-Runtime in the Modulefile
-  unset OPENSSL_VERSION LIBXML2_VERSION OPENSSL_REVISION LIBXML2_REVISION
-fi
 
 # Make some CMake files used by other projects relocatable
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true

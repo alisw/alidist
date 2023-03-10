@@ -3,14 +3,20 @@ version: "%(tag_basename)s"
 tag: v1.0.14r1-alice3
 source: https://github.com/alisw/xalienfs.git
 requires:
- - XRootD
+ - "GCC-Toolchain:(?!osx)"
+ - "Xcode:(osx.*)"
+ - zlib
+ - libxml2
  - "OpenSSL:(?!osx)"
  - "osx-system-openssl:(osx.*)"
- - AliEn-Runtime
+ - AliEn-CAs
+ - ApMon-CPP
+ - UUID
+ - alibuild-recipe-tools
+ - XRootD
 build_requires:
  - "autotools:(slc6|slc7)"
  - SWIG
- - UUID
  - libperl
 prepend_path:
  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
@@ -67,8 +73,7 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}   \\
-            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
+            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
 
 # Our environment
 set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

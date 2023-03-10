@@ -9,7 +9,6 @@ env:
   MACOSX_DEPLOYMENT_TARGET: '10.15'
 disable:
   - AEGIS
-  - AliEn-Runtime
   - AliRoot
   - ApMon-CPP
   - cgal

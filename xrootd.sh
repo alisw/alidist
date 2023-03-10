@@ -3,16 +3,19 @@ version: "%(tag_basename)s"
 tag: "v5.5.3"
 source: https://github.com/xrootd/xrootd
 requires:
- - "OpenSSL:(?!osx)"
- - Python-modules:(?!osx_arm64)
- - AliEn-Runtime
- - libxml2
-build_requires:
- - CMake
- - "osx-system-openssl:(osx.*)"
  - "GCC-Toolchain:(?!osx)"
+ - "Xcode:(osx.*)"
+ - zlib
+ - libxml2
+ - "OpenSSL:(?!osx)"
+ - "osx-system-openssl:(osx.*)"
+ - AliEn-CAs
+ - ApMon-CPP
  - UUID:(?!osx)
  - alibuild-recipe-tools
+ - Python-modules:(?!osx_arm64)
+build_requires:
+ - CMake
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---

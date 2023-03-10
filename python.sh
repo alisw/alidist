@@ -3,13 +3,19 @@ version: "%(tag_basename)s"
 tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
- - AliEn-Runtime:(?!.*ppc64)
+ - "GCC-Toolchain:(?!osx)"
+ - "Xcode:(osx.*)"
+ - zlib
+ - libxml2
+ - "OpenSSL:(?!osx)"
+ - "osx-system-openssl:(osx.*)"
+ - AliEn-CAs
+ - ApMon-CPP
+ - UUID
  - FreeType
  - libpng
  - sqlite
- - "GCC-Toolchain:(?!osx)"
  - libffi
-build_requires:
  - curl
  - alibuild-recipe-tools
 env:
@@ -104,9 +110,6 @@ rm -rvf "$INSTALLROOT"/share "$INSTALLROOT"/lib/python*/test
 find "$INSTALLROOT"/lib/python* \
      -mindepth 2 -maxdepth 2 -type d -and \( -name test -or -name tests \) \
      -exec rm -rvf '{}' \;
-
-# Get OpenSSL and zlib at runtime from AliEn-Runtime if appropriate
-[[ $ALIEN_RUNTIME_REVISION ]] && unset OPENSSL_REVISION ZLIB_REVISION
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

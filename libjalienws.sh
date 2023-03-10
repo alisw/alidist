@@ -3,12 +3,20 @@ version: "%(tag_basename)s"
 tag: "0.1.5"
 source: https://gitlab.cern.ch/jalien/libjalienws.git
 requires:
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
+  - zlib
+  - libxml2
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - AliEn-CAs
+  - ApMon-CPP
+  - UUID
+  - alibuild-recipe-tools
   - libjalienO2
-  - AliEn-Runtime
 build_requires:
   - libwebsockets
   - CMake
-  - "GCC-Toolchain:(?!osx)"
 ---
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 

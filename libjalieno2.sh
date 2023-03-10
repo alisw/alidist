@@ -3,11 +3,18 @@ version: "%(tag_basename)s"
 tag: "0.1.4"
 source: https://gitlab.cern.ch/jalien/libjalieno2.git
 requires:
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
+  - zlib
+  - libxml2
   - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - AliEn-CAs
+  - ApMon-CPP
+  - UUID
+  - alibuild-recipe-tools
 build_requires:
   - CMake
-  - "GCC-Toolchain:(?!osx)"
-  - AliEn-Runtime:(?!.*ppc64)
 ---
 #!/bin/bash -e
 
@@ -31,8 +38,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}  \\
-                     ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
+module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
 
 # Our environment
 set LIBJALIENO2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

@@ -55,7 +55,7 @@ def buildAny(architecture) {
             BUILD_TEST="$BUILD_TEST AliRoot-test" ;; # FIXME: For the moment we test only AliRoot
 
           # Packages which are (will be) common for all of them
-          gcc-toolchain|root|cmake|zlib|alien-runtime|gsl|boost|cgal|fastjet)
+          gcc-toolchain|root|cmake|zlib|gsl|boost|cgal|fastjet)
             BUILD_TEST="$BUILD_TEST AliRoot-test Rivet-test" ;;
 
           # Packages which are standalone

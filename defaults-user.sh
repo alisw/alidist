@@ -41,7 +41,16 @@ overrides:
     tag: v5-34-30-alice10
     source: https://github.com/alisw/root
     requires:
-      - AliEn-Runtime:(?!.*ppc64)
+      - "GCC-Toolchain:(?!osx)"
+      - "Xcode:(osx.*)"
+      - zlib
+      - libxml2
+      - "OpenSSL:(?!osx)"
+      - "osx-system-openssl:(osx.*)"
+      - AliEn-CAs
+      - ApMon-CPP
+      - UUID
+      - alibuild-recipe-tools
       - GSL
       - opengl:(?!osx)
       - Xdevel:(?!osx)
@@ -51,7 +60,6 @@ overrides:
       - XRootD
     build_requires:
       - CMake
-      - "Xcode:(osx.*)"
 
   # ROOT 5 requires GSL < 2
   GSL:
