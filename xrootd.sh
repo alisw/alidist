@@ -3,19 +3,19 @@ version: "%(tag_basename)s"
 tag: "v5.5.3"
 source: https://github.com/xrootd/xrootd
 requires:
- - "GCC-Toolchain:(?!osx)"
- - "Xcode:(osx.*)"
- - zlib
- - libxml2
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
- - AliEn-CAs
- - ApMon-CPP
- - UUID:(?!osx)
- - Python-modules:(?!osx_arm64)
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
+  - zlib
+  - libxml2
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - AliEn-CAs
+  - ApMon-CPP
+  - UUID:(?!osx)
+  - Python-modules:(?!osx_arm64)
 build_requires:
- - CMake
- - alibuild-recipe-tools
+  - CMake
+  - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---
@@ -29,22 +29,24 @@ PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.maj
 case $ARCHITECTURE in
   osx_x86-64)
     export ARCHFLAGS="-arch x86_64"
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ -z "${OPENSSL_ROOT}" ]] && OPENSSL_ROOT="$(brew --prefix openssl@1.1)"
 
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
-    export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
+    CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
+    export CFLAGS
     unset UUID_ROOT
   ;;
   osx_arm64)
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
-    CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks
+    [[ -z "${OPENSSL_ROOT}" ]] && OPENSSL_ROOT="$(brew --prefix openssl@1.1)"
+    CMAKE_FRAMEWORK_PATH="$(brew --prefix)/Frameworks"
 
     # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
-    export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
+    CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
+    export CFLAGS
     unset UUID_ROOT
     if [ "$(python3 -c 'import setuptools; print(setuptools.__version__)')" != "60.8.2" ]; then
       echo 'Please install setuptools==60.8.2'
@@ -53,13 +55,13 @@ case $ARCHITECTURE in
   ;;
 esac
 
-rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
+rsync -a --delete "${SOURCEDIR}/" "${BUILDDIR}"
 
 mkdir build
 pushd build
 cmake "${BUILDDIR}"                                                   \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
-      -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
+      -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DXRDCL_ONLY=ON                                                 \
@@ -84,22 +86,22 @@ cmake "${BUILDDIR}"                                                   \
 cmake --build . -- ${JOBS:+-j$JOBS} install
 popd
 
-if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
-    pushd ${INSTALLROOT}
+if [[ "${XROOTD_PYTHON}" == "True" ]]; then
+    pushd "${INSTALLROOT}"
 
     # there are cases where python bindings are installed as relative to INSTALLROOT
     if [[ -d local/lib64 ]]; then
-        [[ -d local/lib64/python${PYTHON_VER} ]] && mv -f local/lib64/python${PYTHON_VER} lib/
+        [[ -d "local/lib64/python${PYTHON_VER}" ]] && mv -f "local/lib64/python${PYTHON_VER}" lib/
     fi
     if [[ -d local/lib ]]; then
-        [[ -d local/lib/python${PYTHON_VER} ]] && mv -f local/lib/python${PYTHON_VER} lib/
+        [[ -d "local/lib/python${PYTHON_VER}" ]] && mv -f "local/lib/python${PYTHON_VER}" lib/
     fi
 
     pushd lib
-    if [ -d ../lib64/python${PYTHON_VER} ]; then
-      ln -s ../lib64/python${PYTHON_VER} python
-    elif [[ -d python${PYTHON_VER} ]]; then
-      ln -s python${PYTHON_VER} python
+    if [ -d "../lib64/python${PYTHON_VER}" ]; then
+      ln -s "../lib64/python${PYTHON_VER}" python
+    elif [[ -d "python${PYTHON_VER}" ]]; then
+      ln -s "python${PYTHON_VER}" python
     fi
     [[ ! -e python ]] && echo "NO PYTHON SYMLINK CREATED in: $(pwd -P)"
     popd  # get back from lib
@@ -108,8 +110,8 @@ if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
 
   case $ARCHITECTURE in
       osx*)
-        find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-        find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find "$INSTALLROOT/lib/python/" -name "*.so" -exec install_name_tool -add_rpath "${INSTALLROOT}/lib" {} \;
+        find "$INSTALLROOT/lib/" -name "*.dylib" -exec install_name_tool -add_rpath "${INSTALLROOT}/lib" {} \;
       ;;
   esac
 
