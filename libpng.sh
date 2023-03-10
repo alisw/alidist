@@ -1,19 +1,21 @@
 package: libpng
 version: v1.6.34
 requires:
- - zlib
+  - zlib
 build_requires:
- - CMake
+  - CMake
 source: https://github.com/alisw/libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include <png.h>\n" | c++ -xc++ - `libpng-config --cflags` -c -M 2>&1
+  # shellcheck disable=SC2046
+  printf "#include <png.h>\n" | c++ -xc++ - $(libpng-config --cflags) -c -M 2>&1
   if [ $? -ne 0 ]; then printf "libpng was not found.\n * On RHEL-compatible systems you probably need: libpng libpng-devel\n * On Ubuntu-compatible systems you probably need: libpng12-0 libpng12-dev"; exit 1; fi
 ---
-#!/bin/bash -ex
-rsync -a $SOURCEDIR/ .
+#!/bin/bash -e
+
+rsync -a "${SOURCEDIR}/" .
 cmake .                                        \
-    -DCMAKE_INSTALL_PREFIX:PATH=$INSTALLROOT   \
+    -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
     -DBUILD_SHARED_LIBS=YES                    \
     ${ZLIB_ROOT:+-DZLIB_ROOT:PATH=$ZLIB_ROOT}  \
     -DCMAKE_SKIP_RPATH=YES                     \
@@ -35,7 +37,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 $(echo "${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}")
+module load BASE/1.0 "${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}"
 # Our environment
 set LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$LIBPNG_ROOT/bin
