@@ -17,10 +17,11 @@ build_requires:
   - alibuild-recipe-tools
 prefer_system: (?!slc5)
 prefer_system_check: |
-  printf "#include <ft2build.h>\n" | c++ -xc++ - `freetype-config --cflags 2>/dev/null` `pkg-config freetype2 --cflags 2>/dev/null` -c -M 2>&1;
+  # shellcheck disable=SC2046
+  printf "#include <ft2build.h>\n" | c++ -xc++ - $(freetype-config --cflags 2>/dev/null) $(pkg-config freetype2 --cflags 2>/dev/null) -c -M 2>&1;
   if [ $? -ne 0 ]; then printf "FreeType is missing on your system.\n * On RHEL-compatible systems you probably need: freetype freetype-devel\n * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev\n"; exit 1; fi
 ---
-#!/bin/bash -ex
+#!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 sh autogen.sh
 ./configure --prefix="$INSTALLROOT"              \
@@ -31,9 +32,10 @@ make ${JOBS:+-j$JOBS}
 make install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
+MODULEDIR="${INSTALLROOT}/etc/modulefiles"
+MODULEFILE="${MODULEDIR}/${PKGNAME}"
 
 mkdir -p etc/modulefiles
-alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+alibuild-generate-module --lib > "etc/modulefiles/${PKGNAME}"
+mkdir -p "${MODULEDIR}"
+rsync -a --delete etc/modulefiles/ "${MODULEDIR}/"
