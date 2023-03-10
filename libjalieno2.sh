@@ -22,14 +22,14 @@ if [[ $ARCHITECTURE = osx* ]]; then
   OPENSSL_ROOT=$(brew --prefix openssl@1.1)
 fi
 
-cmake $SOURCEDIR                                                   \
-      -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT                             \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
+cmake "${SOURCEDIR}"                                                   \
+      -DOPENSSL_ROOT_DIR="${OPENSSL_ROOT}"                             \
+      -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"
 make ${JOBS:+-j $JOBS} install
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
+cat > "etc/modulefiles/${PKGNAME}" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -45,4 +45,5 @@ set LIBJALIENO2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$LIBJALIENO2_ROOT/lib
 EoF
 
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
