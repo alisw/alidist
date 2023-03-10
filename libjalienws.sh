@@ -18,15 +18,17 @@ build_requires:
   - CMake
   - alibuild-recipe-tools
 ---
-rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+#!/bin/bash -e
 
-cmake $BUILDDIR                                          	\
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
+rsync -a --exclude '**/.git' --delete "${SOURCEDIR}/" "${BUILDDIR}"
+
+cmake "${BUILDDIR}"                                          \
+      -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"
 make ${JOBS:+-j $JOBS} VERBOSE=1 install
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
+cat > "etc/modulefiles/${PKGNAME}" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -43,4 +45,6 @@ set LIBJALIENWS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$LIBJALIENWS_ROOT/lib
 EoF
 
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
+
