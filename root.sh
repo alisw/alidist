@@ -38,22 +38,30 @@ incremental_recipe: |
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
          "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
 
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  mkdir -p "${INSTALLROOT}/etc/modulefiles"
+  rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
 ---
 #!/bin/bash -e
+
 unset ROOTSYS
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 case $PKGVERSION in
   v6-*)
-     [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
-     [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
-     [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
+    # shellcheck disable=SC2015
+    [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
+    # shellcheck disable=SC2015
+    [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
+    # shellcheck disable=SC2015
+    [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
   ;;
   *)
+    # shellcheck disable=SC2015
     [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CXX11=1 || true
+    # shellcheck disable=SC2015
     [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CXX14=1 || true
+    # shellcheck disable=SC2015
     [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CXX17=1 || true
   ;;
 esac
@@ -73,15 +81,15 @@ case $ARCHITECTURE in
     COMPILER_CXX=clang++
     COMPILER_LD=clang
     SONAME=dylib
-    [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
-    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@1.1)
-    [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
+    [[ -z "${GSL_ROOT}" ]] && GSL_ROOT="$(brew --prefix gsl)"
+    [[ -z "${OPENSSL_ROOT}" ]] && SYS_OPENSSL_ROOT="$(brew --prefix openssl@1.1)"
+    [[ -z "${LIBPNG_ROOT}" ]] && LIBPNG_ROOT="$(brew --prefix libpng)"
   ;;
 esac
 
-[[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
+[[ -n "${SYS_OPENSSL_ROOT}" ]] && OPENSSL_ROOT="${SYS_OPENSSL_ROOT}"
 
-if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
+if [[ -d "${SOURCEDIR}/interpreter/llvm" ]]; then
   # ROOT 6+: enable Python
   ROOT_PYTHON_FLAGS="-Dpyroot=ON"
   ROOT_HAS_PYTHON=1
@@ -117,10 +125,10 @@ fi
 
 unset DYLD_LIBRARY_PATH
 # Standard ROOT build
-cmake $SOURCEDIR                                                                       \
+cmake "${SOURCEDIR}"                                                                   \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
-      -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+      -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"                                         \
+      -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"                                          \
       -Dalien=OFF                                                                      \
       ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
@@ -172,29 +180,29 @@ cmake $SOURCEDIR                                                                
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX17:+cxx17}
-          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
+          ${XROOTD_ROOT:+xrootd} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} gviz
              ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix"
 
-if [[ $ENABLE_COCOA ]]; then
-  FEATURES="$FEATURES builtin_freetype"
-elif [[ $FREETYPE_ROOT ]]; then
-  NO_FEATURES="$NO_FEATURES builtin_freetype"
+if [[ -n "${ENABLE_COCOA}" ]]; then
+  FEATURES="${FEATURES} builtin_freetype"
+elif [[ -n "${FREETYPE_ROOT}" ]]; then
+  NO_FEATURES="${NO_FEATURES} builtin_freetype"
 fi
 
 # Check if all important features are enabled/disabled as requested
 bin/root-config --features
-for FEATURE in $FEATURES; do
-  bin/root-config --has-$FEATURE | grep -q yes
+for FEATURE in ${FEATURES}; do
+  bin/root-config "--has-${FEATURE}" | grep -q yes
 done
-for FEATURE in $NO_FEATURES; do
-  bin/root-config --has-$FEATURE | grep -q no
+for FEATURE in ${NO_FEATURES}; do
+  bin/root-config "--has-${FEATURE}" | grep -q no
 done
 cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
-grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
+grep -v '^Unix.*.Root.PluginPath' "${INSTALLROOT}/etc/system.rootrc" > system.rootrc.0
 cat >> system.rootrc.0 <<EOF
 
 # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
@@ -202,7 +210,7 @@ cat >> system.rootrc.0 <<EOF
 Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins:
 Unix.*.Root.DynamicPath: .:\$(ROOT_DYN_PATH):
 EOF
-mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
+mv system.rootrc.0 "${INSTALLROOT}/etc/system.rootrc"
 
 # Make some CMake files used by other projects relocatable
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
@@ -228,8 +236,8 @@ rm -fv "$INSTALLROOT"/bin/*.bak
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
+alibuild-generate-module --bin --lib > "etc/modulefiles/${PKGNAME}"
+cat >> "etc/modulefiles/${PKGNAME}" <<EoF
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
@@ -237,9 +245,11 @@ setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
 prepend-path PYTHONPATH \$PKG_ROOT/lib
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
 
 # External RPM dependencies
-cat > $INSTALLROOT/.rpm-extra-deps <<EoF
+cat > "${INSTALLROOT}/.rpm-extra-deps" <<EoF
 glibc-headers
 EoF
