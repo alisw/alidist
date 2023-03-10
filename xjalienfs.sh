@@ -2,7 +2,6 @@ package: xjalienfs
 version: "%(tag_basename)s"
 tag: "1.4.5"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
-requires:
   - "GCC-Toolchain:(?!osx)"
   - "Xcode:(osx.*)"
   - zlib
@@ -12,9 +11,11 @@ requires:
   - AliEn-CAs
   - ApMon-CPP
   - UUID
-  - alibuild-recipe-tools
   - XRootD
   - Python-modules:(?!osx_arm64)
+build_requires:
+  - alibuild-recipe-tools
+
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
 ---

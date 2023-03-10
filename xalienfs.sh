@@ -12,12 +12,12 @@ requires:
  - AliEn-CAs
  - ApMon-CPP
  - UUID
- - alibuild-recipe-tools
  - XRootD
 build_requires:
  - "autotools:(slc6|slc7)"
  - SWIG
  - libperl
+ - alibuild-recipe-tools
 prepend_path:
  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:

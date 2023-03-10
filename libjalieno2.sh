@@ -12,9 +12,9 @@ requires:
   - AliEn-CAs
   - ApMon-CPP
   - UUID
-  - alibuild-recipe-tools
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 

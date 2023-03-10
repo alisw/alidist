@@ -47,7 +47,6 @@ overrides:
       - AliEn-CAs
       - ApMon-CPP
       - UUID
-      - alibuild-recipe-tools
       - GSL
       - opengl:(?!osx)
       - Xdevel:(?!osx)
@@ -56,6 +55,7 @@ overrides:
       - XRootD
     build_requires:
       - CMake
+      - alibuild-recipe-tools
   # Use VMC packages compatible with ROOT 5
   GEANT3:
     version: "v2-7-p2"

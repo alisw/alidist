@@ -12,11 +12,11 @@ requires:
   - AliEn-CAs
   - ApMon-CPP
   - UUID
-  - alibuild-recipe-tools
   - libjalienO2
 build_requires:
   - libwebsockets
   - CMake
+  - alibuild-recipe-tools
 ---
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
 

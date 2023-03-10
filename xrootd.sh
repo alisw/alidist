@@ -12,10 +12,10 @@ requires:
  - AliEn-CAs
  - ApMon-CPP
  - UUID:(?!osx)
- - alibuild-recipe-tools
  - Python-modules:(?!osx_arm64)
 build_requires:
  - CMake
+ - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---

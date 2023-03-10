@@ -50,7 +50,6 @@ overrides:
       - AliEn-CAs
       - ApMon-CPP
       - UUID
-      - alibuild-recipe-tools
       - GSL
       - opengl:(?!osx)
       - Xdevel:(?!osx)
@@ -60,7 +59,7 @@ overrides:
       - XRootD
     build_requires:
       - CMake
-
+      - alibuild-recipe-tools
   # ROOT 5 requires GSL < 2
   GSL:
     prefer_system_check: |

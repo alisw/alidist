@@ -12,7 +12,6 @@ requires:
   - AliEn-CAs
   - ApMon-CPP
   - UUID
-  - alibuild-recipe-tools
   - arrow
   - GSL
   - opengl:(?!osx)
@@ -26,6 +25,7 @@ requires:
   - protobuf
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
