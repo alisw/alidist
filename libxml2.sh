@@ -9,22 +9,22 @@ build_requires:
 source: https://github.com/alisw/libxml2.git
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  xml2-config --version;
-  if [ $? -ne 0 ]; then printf "libxml2 not found.\n * On RHEL-compatible systems you probably need: libxml2 libxml2-devel\n * On Ubuntu-compatible systems you probably need: libxml2 libxml2-dev"; exit 1; fi
+  xml2-config --version || { printf "libxml2 not found.\n * On RHEL-compatible systems you probably need: libxml2 libxml2-devel\n * On Ubuntu-compatible systems you probably need: libxml2 libxml2-dev"; exit 1; }
 ---
-#!/bin/sh
+#!/bin/bash -e
+
 echo "Building ALICE libxml. To avoid this install libxml development package."
-rsync -a $SOURCEDIR/ ./
+rsync -a "${SOURCEDIR}/" ./
 autoreconf -i
 ./configure --disable-static \
-            --prefix=$INSTALLROOT \
+            --prefix="${INSTALLROOT}" \
             --with-zlib="${ZLIB_ROOT}" --with-lzma="${LZMA_ROOT}" --without-python
 
 make ${JOBS+-j $JOBS}
 make install
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
+cat > "etc/modulefiles/${PKGNAME}" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -41,4 +41,5 @@ setenv LIBXML2_ROOT \$LIBXML2_ROOT
 prepend-path PATH \$LIBXML2_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$LIBXML2_ROOT/lib
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
