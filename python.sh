@@ -16,7 +16,6 @@ requires:
   - libpng
   - sqlite
   - libffi
-  - curl
 build_requires:
   - alibuild-recipe-tools
 env:
