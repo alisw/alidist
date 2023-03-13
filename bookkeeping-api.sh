@@ -11,14 +11,16 @@ build_requires:
 source: https://github.com/AliceO2Group/Bookkeeping
 incremental_recipe: |
   cmake --build . -- ${JOBS+-j $JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  mkdir -p "$INSTALLROOT/etc/modulefiles"
+  rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
 ---
+#!/bin/bash -e
 
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
-    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
-    [[ ! $GRPC_ROOT ]] && GRPC_ROOT=`brew --prefix grpc`
+    [ -n "$OPENSSL_ROOT" ] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
+    [ -n "$GRPC_ROOT" ] && GRPC_ROOT=$(brew --prefix grpc)
   ;;
 esac
 
@@ -36,4 +38,5 @@ VERBOSE=1 cmake --build . -- ${JOBS+-j $JOBS} install
 #ModuleFile
 mkdir -p etc/modulefiles
 alibuild-generate-module > etc/modulefiles/$PKGNAME
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p $INSTALLROOT/etc/modulefiles
+rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
