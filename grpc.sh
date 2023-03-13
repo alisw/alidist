@@ -33,6 +33,10 @@ case $ARCHITECTURE in
   ;;
 esac
 
+echo "OPENSSL_ROOT_DIR : $OPENSSL_ROOT_DIR"
+echo "OPENSSL_ROOT : $OPENSSL_ROOT"
+echo "OPENSSL_REVISION: $OPENSSL_REVISION"
+
 cmake $SOURCEDIR                                    \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}           \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
@@ -48,7 +52,9 @@ cmake $SOURCEDIR                                    \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
   -DgRPC_BUILD_CSHARP_EXT=OFF                       \
   -DgRPC_RE2_PROVIDER=package                       \
-  ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
+  ${OPENSSL_REVISION:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR} \
+  ${OPENSSL_REVISION:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+  ${OPENSSL_REVISION:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}   \
   -DgRPC_CARES_PROVIDER=package \
   $extra_cmake_variables
 
