@@ -4,6 +4,7 @@ tag: v2.9.3
 build_requires:
   - "autotools:(slc6|slc7)"
   - zlib
+  - lzma
   - "GCC-Toolchain:(?!osx)"
 source: https://github.com/alisw/libxml2.git
 prefer_system: "(?!slc5)"
@@ -17,7 +18,7 @@ rsync -a $SOURCEDIR/ ./
 autoreconf -i
 ./configure --disable-static \
             --prefix=$INSTALLROOT \
-            --with-zlib="${ZLIB_ROOT}" --without-python
+            --with-zlib="${ZLIB_ROOT}" --with-lzma="${LZMA_ROOT}" --without-python
 
 make ${JOBS+-j $JOBS}
 make install
