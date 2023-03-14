@@ -3,14 +3,11 @@ version: "%(tag_basename)s"
 tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
-  - "GCC-Toolchain:(?!osx)"
-  - "Xcode:(osx.*)"
   - zlib
   - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-CAs
-  - ApMon-CPP
   - UUID
   - FreeType
   - libpng
@@ -18,6 +15,8 @@ requires:
   - libffi
 build_requires:
   - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
@@ -107,11 +106,11 @@ find "$INSTALLROOT"/lib/python* \
      -exec rm -rvf '{}' \;
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
+mkdir -p etc/modulefiles
+alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
+
+cat >> "etc/modulefiles/${PKGNAME}" <<EoF
+setenv PYTHON_ROOT \$PKG_ROOT
 setenv PYTHONHOME \$PKG_ROOT
 prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
 if { [module-info mode load] } {
@@ -121,3 +120,6 @@ if { [module-info mode remove] } {
   unsetenv SSL_CERT_FILE
 }
 EoF
+
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
