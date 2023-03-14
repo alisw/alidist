@@ -7,6 +7,8 @@ build_requires:
 source: https://github.com/alisw/libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
+  #!/bin/bash -e
+  # shellcheck disable=SC2046
   c++ -xc++ - $(libpng-config --cflags) -c -M <<< "#include <png.h>" 2>&1 || { printf "libpng was not found.
   * On RHEL-compatible systems you probably need: libpng libpng-devel
   * On Ubuntu-compatible systems you probably need: libpng12-0 libpng12-dev"; exit 1; }
