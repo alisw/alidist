@@ -31,7 +31,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv LIBXML2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv LIBXML2_ROOT \$PKG_ROOT
 EoF
 
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
