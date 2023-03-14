@@ -3,8 +3,6 @@ version: "%(tag_basename)s"
 tag: v1.0.14r1-alice3
 source: https://github.com/alisw/xalienfs.git
 requires:
-  - "GCC-Toolchain:(?!osx)"
-  - "Xcode:(osx.*)"
   - zlib
   - libxml2
   - "OpenSSL:(?!osx)"
@@ -18,6 +16,8 @@ build_requires:
   - SWIG
   - libperl
   - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
 prepend_path:
   PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
@@ -62,27 +62,14 @@ make install INSTALLSITEARCH="${INSTALLROOT}/lib/perl" \
              INSTALLARCHLIB="${INSTALLROOT}/lib/perl"
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 XRootD/${XROOTD_VERSION}-${XROOTD_REVISION}             \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
+mkdir -p etc/modulefiles
+alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
-# Our environment
-set XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-
+cat >> "etc/modulefiles/${PKGNAME}" <<EoF
+setenv XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GSHELL_ROOT \$XALIENFS_ROOT
 setenv GSHELL_NO_GCC 1
-
-prepend-path LD_LIBRARY_PATH \$XALIENFS_ROOT/lib
-prepend-path PATH \$XALIENFS_ROOT/bin
 EoF
+
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
