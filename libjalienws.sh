@@ -24,7 +24,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv LIBJALIENWS_ROOT \$PKG_ROOT
+setenv LIBJALIENWS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
 
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
