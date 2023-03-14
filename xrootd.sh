@@ -3,19 +3,18 @@ version: "%(tag_basename)s"
 tag: "v5.5.3"
 source: https://github.com/xrootd/xrootd
 requires:
-  - "GCC-Toolchain:(?!osx)"
-  - "Xcode:(osx.*)"
-  - zlib
-  - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
+  - zlib
+  - libxml2
   - AliEn-CAs
-  - ApMon-CPP
   - UUID:(?!osx)
   - Python-modules:(?!osx_arm64)
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---
@@ -124,17 +123,15 @@ if [[ "${XROOTD_PYTHON}" == "True" ]]; then
 fi  # end of PYTHON part
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
+mkdir -p etc/modulefiles
+alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
-alibuild-generate-module --bin --lib > "$MODULEFILE"
-
-cat >> "$MODULEFILE" <<EoF
+cat >> "etc/modulefiles/${PKGNAME}" <<EoF
+setenv XROOTD_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 if { $XROOTD_PYTHON } {
   prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
-  # This is probably redundant, but should not harm.
-  module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-              ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
 }
 EoF
+
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
