@@ -18,12 +18,20 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
   - "Xcode:(osx.*)"
 env:
-  SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
+  SSL_CERT_FILE: "$(PATH=$PYTHON_ROOT/bin:$PATH \
+                    LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH \
+                    python3 -c 'import certifi; print(certifi.where())')"
   PYTHONHOME: "$PYTHON_ROOT"
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
 prefer_system: "(?!slc5|ubuntu)"
-prefer_system_check:
-  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
+prefer_system_check: |
+  #!/bin/bash -e
+  # shellcheck disable=SC2046
+  python3 -c 'import sys; sys.exit(sys.version_info < (3, 6))';
+  python3 -m pip --help >/dev/null;
+  cc -c $(python3-config --includes) -xc -o /dev/null &>/dev/null <<< '#include "pyconfig.h"' || { printf \
+  "Python, the Python development packages, and pip must be installed on your system.
+  Usually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; }
 ---
 #!/bin/bash -e
 
@@ -36,8 +44,12 @@ export LIBFFI_ROOT
 LDFLAGS=
 CPPFLAGS=
 for ext in "${ZLIB_ROOT}" "${FREETYPE_ROOT}" "${LIBPNG_ROOT}" "${SQLITE_ROOT}" "${LIBFFI_ROOT}"; do
-  LDFLAGS="$(find $ext -type d \( -name lib -o -name lib64 \) -exec echo -L\{\} \; | tr '\n' ' ' ) ${LDFLAGS}"
-  CPPFLAGS="$(find $ext -type d -name include -exec echo -I\{\} \;  | tr '\n' ' ' ) ${CPPFLAGS}"
+    unset LDFLAGS_LIST
+    LDFLAGS_LIST=$(find "${ext}" -type d \( -name lib -o -name lib64 \) -exec echo -L\{\} \; | tr '\n' ' ')
+    LDFLAGS="${LDFLAGS_LIST} ${LDFLAGS}"
+    unset CPPFLAGS_LIST
+    CPPFLAGS_LIST=$(find "${ext}" -type d -name include -exec echo -I\{\} \; | tr '\n' ' ')
+    CPPFLAGS="${CPPFLAGS_LIST} ${CPPFLAGS}"
 done
 
 case ${ARCHITECTURE} in
@@ -110,7 +122,6 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv PYTHON_ROOT \$PKG_ROOT
 setenv PYTHONHOME \$PKG_ROOT
 prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
 if { [module-info mode load] } {
