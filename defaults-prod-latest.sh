@@ -38,8 +38,6 @@ overrides:
     tag: v5-34-30-alice10
     source: https://github.com/alisw/root
     requires:
-      - "GCC-Toolchain:(?!osx)"
-      - "Xcode:(osx.*)"
       - zlib
       - libxml2
       - "OpenSSL:(?!osx)"
@@ -56,6 +54,8 @@ overrides:
     build_requires:
       - CMake
       - alibuild-recipe-tools
+      - "GCC-Toolchain:(?!osx)"
+      - "Xcode:(osx.*)"
   # Use VMC packages compatible with ROOT 5
   GEANT3:
     version: "v2-7-p2"
