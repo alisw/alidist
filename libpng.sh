@@ -29,7 +29,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv LIBPNG_ROOT \$PKG_ROOT
+setenv LIBPNG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
 
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
