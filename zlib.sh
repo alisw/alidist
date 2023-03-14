@@ -28,21 +28,16 @@ case $ARCHITECTURE in
 esac
 make ${JOBS+-j $JOBS}
 make install
-# Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_ROOT:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set BASEDIR \$::env(BASEDIR)
-prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
+
+#ModuleFile
+mkdir -p etc/modulefiles
+alibuild-generate-module --bin --lib > "etc/modulefiles/${PKGNAME}"
+
+cat >> "etc/modulefiles/${PKGNAME}" <<EoF
+setenv ZLIB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+prepend-path LD_LIBRARY_PATH \$::env(ZLIB_ROOT)/lib
 EoF
+
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
+
