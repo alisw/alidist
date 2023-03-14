@@ -11,6 +11,8 @@ name: Check recipes
     paths:
       - '*.sh'
 
+permissions: {}
+
 jobs:
   lint:
     name: alidistlint
@@ -18,8 +20,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: |
-          python3 -m pip install -U --user alidistlint
+        run: python3 -m pip install -U --user alidistlint
 
       - uses: actions/checkout@v3
         with:
@@ -30,14 +31,15 @@ jobs:
           if [ -n "$BASE_SHA" ]; then
             # For pull requests, only check files that have changed relative to
             # the base commit.
-            git diff -z --diff-filter d --name-only --merge-base "$BASE_SHA" -- '*.sh' |
-              xargs -0r alidistlint -f github
+            git diff -z --diff-filter d --name-only "$BASE_SHA...$HEAD_SHA" -- '*.sh' |
+              xargs -0tr alidistlint -f github
           else
             # On push, check every file.
             alidistlint -f github ./*.sh
           fi
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.head_commit.sha }}
 
   circular:
     name: circular dependencies
