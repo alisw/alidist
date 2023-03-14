@@ -41,8 +41,6 @@ overrides:
     tag: v5-34-30-alice10
     source: https://github.com/alisw/root
     requires:
-      - "GCC-Toolchain:(?!osx)"
-      - "Xcode:(osx.*)"
       - zlib
       - libxml2
       - "OpenSSL:(?!osx)"
@@ -60,6 +58,8 @@ overrides:
     build_requires:
       - CMake
       - alibuild-recipe-tools
+      - "GCC-Toolchain:(?!osx)"
+      - "Xcode:(osx.*)"
   # ROOT 5 requires GSL < 2
   GSL:
     prefer_system_check: |
