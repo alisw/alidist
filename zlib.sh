@@ -34,7 +34,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv ZLIB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ZLIB_ROOT \$PKG_ROOT
 EoF
 
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
