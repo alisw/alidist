@@ -30,9 +30,6 @@ esac
          no-idea                                   \
          no-mdc2                                   \
          no-rc5                                    \
-         no-ec                                     \
-         no-ecdh                                   \
-         no-ecdsa                                  \
          no-asm                                    \
          ${OPTS}                                   \
          shared                                    \
