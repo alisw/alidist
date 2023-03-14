@@ -37,10 +37,5 @@ make install
 mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
-cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-EoF
-
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
 rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
-
