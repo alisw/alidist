@@ -3,39 +3,41 @@ version: v2.10.1
 tag: VER-2-10-1
 source: https://github.com/freetype/freetype
 requires:
-  - "GCC-Toolchain:(?!osx)"
-  - "Xcode:(osx.*)"
   - zlib
-  - libxml2
-  - "OpenSSL:(?!osx)"
-  - "osx-system-openssl:(osx.*)"
-  - AliEn-CAs
-  - ApMon-CPP
-  - UUID
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
 prefer_system: (?!slc5)
 prefer_system_check: |
+  #!/bin/bash -e
   # shellcheck disable=SC2046
-  printf "#include <ft2build.h>\n" | c++ -xc++ - $(freetype-config --cflags 2>/dev/null) $(pkg-config freetype2 --cflags 2>/dev/null) -c -M 2>&1;
-  if [ $? -ne 0 ]; then printf "FreeType is missing on your system.\n * On RHEL-compatible systems you probably need: freetype freetype-devel\n * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev\n"; exit 1; fi
+  c++ -xc++ - $(freetype-config --cflags 2>/dev/null) $(pkg-config freetype2 --cflags 2>/dev/null) -c -M <<< "#include <ft2build.h>" 2>&1 || { printf "FreeType is missing on your system.
+  * On RHEL-compatible systems you probably need: freetype freetype-devel
+  * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev\n"; exit 1; }
 ---
 #!/bin/bash -e
-rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
+
+rsync -a --exclude='**/.git' --delete --delete-excluded "${SOURCEDIR}/" ./
 sh autogen.sh
-./configure --prefix="$INSTALLROOT"              \
+./configure --prefix="${INSTALLROOT}"            \
             --with-png=no                        \
+            --with-bzip2=no                      \
+            --with-harfbuzz=no                   \
             ${ZLIB_ROOT:+--with-zlib="$ZLIB_ROOT"}
 
 make ${JOBS:+-j$JOBS}
 make install
 
 # Modulefile
-MODULEDIR="${INSTALLROOT}/etc/modulefiles"
-MODULEFILE="${MODULEDIR}/${PKGNAME}"
-
 mkdir -p etc/modulefiles
-alibuild-generate-module --lib > "etc/modulefiles/${PKGNAME}"
-mkdir -p "${MODULEDIR}"
-rsync -a --delete etc/modulefiles/ "${MODULEDIR}/"
+alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
+
+cat >> "etc/modulefiles/${PKGNAME}" <<EoF
+setenv FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+EoF
+
+mkdir -p "${INSTALLROOT}/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
+
