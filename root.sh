@@ -3,8 +3,6 @@ version: "%(tag_basename)s"
 tag: "v6-26-10-alice5"
 source: https://github.com/alisw/root.git
 requires:
-  - "GCC-Toolchain:(?!osx)"
-  - "Xcode:(osx.*)"
   - zlib
   - libxml2
   - "OpenSSL:(?!osx)"
@@ -26,12 +24,15 @@ requires:
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
   ROOT_DYN_PATH: "$ROOT_ROOT/lib"
 incremental_recipe: |
+  #!/bin/bash -e
   # Limit parallel builds to prevent OOM
   cmake --build . --target install ${JOBS+-j $JOBS}
   rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
@@ -91,7 +92,7 @@ esac
 
 if [[ -d "${SOURCEDIR}/interpreter/llvm" ]]; then
   # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+  ROOT_PYTHON_FLAGS=(-Dpyroot=ON)
   ROOT_HAS_PYTHON=1
   python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
   if [ "$python_exec" = "$(which python3)" ]; then
@@ -110,17 +111,17 @@ if [[ -d "${SOURCEDIR}/interpreter/llvm" ]]; then
   fi
 else
   # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpython=OFF -Dpyroot=OFF"
+  ROOT_PYTHON_FLAGS=(-Dpython=OFF -Dpyroot=OFF)
   ROOT_HAS_NO_PYTHON=1
 fi
 
-if [ -n "$XROOTD_ROOT" ]; then
-  ROOT_XROOTD_FLAGS="-Dxrootd=ON -DXROOTD_ROOT_DIR=$XROOTD_ROOT"
+if [ -n "${XROOTD_ROOT}" ]; then
+  ROOT_XROOTD_FLAGS=(-Dxrootd=ON -DXROOTD_ROOT_DIR="${XROOTD_ROOT}")
 else
   # If we didn't build XRootD (e.g. if it was disabled by a default), explicitly
   # disable support for it -- otherwise, ROOT will download and compile against
   # its own XRootD version.
-  ROOT_XROOTD_FLAGS='-Dxrootd=OFF'
+  ROOT_XROOTD_FLAGS=(-Dxrootd=OFF)
 fi
 
 unset DYLD_LIBRARY_PATH
@@ -140,8 +141,8 @@ cmake "${SOURCEDIR}"                                                            
       -Dpcre=OFF                                                                       \
       -Dbuiltin_pcre=ON                                                                \
       -Dsqlite=OFF                                                                     \
-      $ROOT_XROOTD_FLAGS                                                               \
-      $ROOT_PYTHON_FLAGS                                                               \
+      "${ROOT_XROOTD_FLAGS[@]}"                                                        \
+      "${ROOT_PYTHON_FLAGS[@]}"                                                        \
       ${ARROW_ROOT:+-Darrow=ON}                                                        \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                          \
       ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
@@ -213,6 +214,7 @@ EOF
 mv system.rootrc.0 "${INSTALLROOT}/etc/system.rootrc"
 
 # Make some CMake files used by other projects relocatable
+# shellcheck disable=SC2046
 sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
@@ -237,6 +239,7 @@ rm -fv "$INSTALLROOT"/bin/*.bak
 # Modulefile
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > "etc/modulefiles/${PKGNAME}"
+
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
 # Our environment
 setenv ROOT_RELEASE \$version
@@ -253,3 +256,4 @@ rsync -a --delete etc/modulefiles/ "${INSTALLROOT}/etc/modulefiles"
 cat > "${INSTALLROOT}/.rpm-extra-deps" <<EoF
 glibc-headers
 EoF
+
