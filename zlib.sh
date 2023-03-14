@@ -31,11 +31,10 @@ make install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > "etc/modulefiles/${PKGNAME}"
+alibuild-generate-module --lib > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
 setenv ZLIB_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$::env(ZLIB_ROOT)/lib
 EoF
 
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
