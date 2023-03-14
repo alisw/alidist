@@ -13,9 +13,12 @@ prefer_system: (?!slc5)
 prefer_system_check: |
   #!/bin/bash -e
   # shellcheck disable=SC2046
-  c++ -xc++ - $(freetype-config --cflags 2>/dev/null) $(pkg-config freetype2 --cflags 2>/dev/null) -c -M <<< "#include <ft2build.h>" 2>&1 || { printf "FreeType is missing on your system.
+  c++ -xc++ - $(freetype-config --cflags 2>/dev/null) $(pkg-config freetype2 --cflags 2>/dev/null) \
+      -c -M <<< "#include <ft2build.h>" 2>&1 || { cat << EOF; exit 1; }
+  FreeType is missing on your system.
   * On RHEL-compatible systems you probably need: freetype freetype-devel
-  * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev\n"; exit 1; }
+  * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev
+  EOF
 ---
 #!/bin/bash -e
 
