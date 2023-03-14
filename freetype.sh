@@ -38,7 +38,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv FREETYPE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv FREETYPE_ROOT \$PKG_ROOT
 EoF
 
 mkdir -p "${INSTALLROOT}/etc/modulefiles"
