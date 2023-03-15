@@ -49,6 +49,7 @@ for ext in "${ZLIB_ROOT}" "${FREETYPE_ROOT}" "${LIBPNG_ROOT}" "${SQLITE_ROOT}" "
     CPPFLAGS_LIST=$(find "${ext}" -type d -name include -exec echo -I\{\} \; | tr '\n' ' ')
     CPPFLAGS="${CPPFLAGS_LIST} ${CPPFLAGS}"
 done
+export LDFLAGS CPPFLAGS
 
 case ${ARCHITECTURE} in
   osx*) [[ -z "${OPENSSL_ROOT}" ]] && OPENSSL_ROOT="$(brew --prefix openssl@1.1)" ;;
