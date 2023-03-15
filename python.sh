@@ -7,7 +7,6 @@ requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-CAs
-  - UUID
   - FreeType
   - libpng
   - sqlite
