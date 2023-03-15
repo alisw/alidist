@@ -3,9 +3,9 @@ version: "v2.6.1"
 tag: v2.6.1
 source: https://github.com/JuliaStrings/utf8proc
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - alibuild-recipe-tools
- - CMake
+  - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
+  - CMake
 prefer_system: "(?!osx)"
 prefer_system_check: |
   printf "#include <utf8proc.h>\n" | c++ -c -I$(brew --prefix utf8proc)/include -xc++ - -o /dev/null 2>&1;

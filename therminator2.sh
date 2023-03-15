@@ -3,9 +3,9 @@ version: "%(tag_basename)s"
 tag: "v2.0.3-alice3"
 source: https://github.com/alisw/therminator
 requires:
- - "GCC-Toolchain:(?!osx)"
- - HepMC
- - ROOT
+  - "GCC-Toolchain:(?!osx)"
+  - HepMC
+  - ROOT
 ---
 #!/bin/bash -e
 

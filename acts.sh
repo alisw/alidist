@@ -1,14 +1,14 @@
 package: ACTS
 version: v23.4.0
 requires:
-    - ROOT
-    - pythia
+  - ROOT
+  - pythia
 build_requires:
-    - "GCC-Toolchain:(?!osx)"
-    - CMake
-    - boost
-    - Eigen3
-    - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - boost
+  - Eigen3
+  - alibuild-recipe-tools
 source: https://github.com/acts-project/acts.git
 ---
 #!/bin/bash -ex

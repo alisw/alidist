@@ -4,8 +4,8 @@ source: https://github.com/google/flatbuffers
 requires:
   - zlib
 build_requires:
- - CMake
- - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - "GCC-Toolchain:(?!osx)"
 ---
 cmake $SOURCEDIR                          \
       -G "Unix Makefiles"                 \

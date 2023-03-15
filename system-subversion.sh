@@ -1,7 +1,7 @@
 package: system-subversion
 version: "1.0"
 build_requires:
-- system-apr
+  - system-apr
 system_requirement_missing: |
   apr and its development package are missing from your system.
    * RHEL-compatible systems: you will probably need the "subversion" and "subversion-devel" packages.

@@ -3,8 +3,8 @@ version: v3.1.1
 tag: cpp-3.1.1
 source: https://github.com/msgpack/msgpack-c
 build_requires:
- - CMake
- - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <msgpack/version.hpp>\n#define VERSION (MSGPACK_VERSION_MAJOR * 10000) + (MSGPACK_VERSION_MINOR * 100) + MSGPACK_VERSION_REVISION\n#if(VERSION < 20105)\n#error \"msgpack version >= 2.1.5 needed\"\n#endif\nint main(){}" | c++ -I$(brew --prefix msgpack)/include -xc++ -std=c++11 - -o /dev/null

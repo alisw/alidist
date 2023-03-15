@@ -3,7 +3,7 @@ version: v6.2.1
 tag: v6.2.1
 source: https://github.com/alisw/GMP.git
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/sh
 case $ARCHITECTURE in

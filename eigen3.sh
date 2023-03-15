@@ -1,8 +1,8 @@
 package: Eigen3
 version: 3.4.0
 build_requires:
-    - "GCC-Toolchain:(?!osx)"
-    - CMake
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
 source: https://gitlab.com/libeigen/eigen.git
 ---
 #!/bin/bash -ex

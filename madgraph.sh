@@ -3,8 +3,8 @@ version: "%(tag_basename)s"
 tag: "v2.8.1"
 source: https://github.com/alisw/MadGraph
 requires:
- - "Python:slc.*"
- - "Python-system:(?!slc.*)"
+  - "Python:slc.*"
+  - "Python-system:(?!slc.*)"
 build_requires:
   - alibuild-recipe-tools
 ---
