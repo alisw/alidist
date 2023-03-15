@@ -2,6 +2,7 @@ package: xjalienfs
 version: "%(tag_basename)s"
 tag: "1.4.5"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
+requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-CAs
