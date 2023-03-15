@@ -3,12 +3,9 @@ version: "%(tag_basename)s"
 tag: v1.0.14r1-alice3
 source: https://github.com/alisw/xalienfs.git
 requires:
-  - zlib
-  - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-CAs
-  - ApMon-CPP
   - UUID
   - XRootD
 build_requires:
