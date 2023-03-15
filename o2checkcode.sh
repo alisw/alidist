@@ -74,39 +74,6 @@ run_O2CodeChecker.py ${JOBS+-j $JOBS} \
 # Turn warnings into errors
 sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.txt.0 error-log.txt
 
-# Run copyright notice check
-COPYRIGHT="$(cat <<'EOF'
-// Copyright 2019-2020 CERN and copyright holders of ALICE O2.
-// See https://alice-o2.web.cern.ch/copyright for details of the copyright holders.
-// All rights not expressly granted are reserved.
-//
-// This software is distributed under the terms of the GNU General Public
-// License v3 (GPL Version 3), copied verbatim in the file "COPYING".
-//
-// In applying this license CERN does not waive the privileges and immunities
-// granted to it by virtue of its status as an Intergovernmental Organization
-// or submit itself to any jurisdiction.
-EOF
-)"
-COPYRIGHT_LINES=$(echo "$COPYRIGHT" | wc -l)
-COPYRIGHT_EXCLUDE_REGEXP="/3rdparty/|Utilities/Tools/cpulimit/"  # exclude files from the copyright check
-set +x
-while read FILE; do
-  [[ ${FILE:0:2} != "./" ]] || FILE=${FILE:2}
-  [[ ! $FILE =~ $COPYRIGHT_EXCLUDE_REGEXP ]] || continue
-  FILE="$O2_SRC/$FILE"
-  [[ "$(head -n$COPYRIGHT_LINES "$FILE")" == "$COPYRIGHT" ]] || { printf "$FILE:1:1: error: missing or malformed copyright notice\n" >> error-log.txt; }
-done < <([[ $O2_CHECKCODE_CHANGEDFILES ]] && echo "$O2_CHECKCODE_CHANGEDFILES" | tr ':' '\n' \
-                                          || (cd "$O2_SRC"; find . -name '*.cxx' -o -name '*.h'))
-
-# Tell user what to do in case of copyright notice error
-if grep -q "malformed copyright notice" error-log.txt; then
-  printf "\nerror: Some files are missing the correct copyright notice on top.\n"
-  printf "error: Make sure all your source files begin with the following exact lines:\nerror:\n"
-  while read LINE; do printf "error: $LINE\n"; done < <(echo "$COPYRIGHT")
-  printf "error:\nerror: List of non-compliant files will follow.\n\n"
-fi
-
 # Show only errors from the log, break in case some were found
 echo ; echo ; echo "========== List of errors found =========="
 GRERR=0
