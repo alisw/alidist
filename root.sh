@@ -214,8 +214,7 @@ EOF
 mv system.rootrc.0 "${INSTALLROOT}/etc/system.rootrc"
 
 # Make some CMake files used by other projects relocatable
-# shellcheck disable=SC2046
-sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" $(find "$INSTALLROOT" -name '*.cmake') || true
+find "${INSTALLROOT}" -name '*.cmake' -execdir sed -i.deleteme -e "s!$BUILDDIR!$INSTALLROOT!g" '{}' +
 
 rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
