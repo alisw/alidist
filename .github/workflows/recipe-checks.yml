@@ -36,7 +36,7 @@ jobs:
           else
             # On push, check every file.
             alidistlint -f github ./*.sh
-          fi | grep '^::error '
+          fi | ! grep '^::error '
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.head_commit.sha }}
