@@ -4,7 +4,6 @@ tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
   - zlib
-  - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-CAs
