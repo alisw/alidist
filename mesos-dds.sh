@@ -1,5 +1,6 @@
 package: mesos-dds
 version: master
+tag: master
 source: https://github.com/alisw/mesos-dds
 requires:
   - mesos
@@ -10,7 +11,6 @@ requires:
   - DDS
 build_requires:
   - CMake
-tag: master
 ---
 #!/bin/sh
 

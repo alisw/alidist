@@ -1,7 +1,7 @@
 package: valgrind
-source: git://sourceware.org/git/valgrind.git
 version: "3.18.1"
 tag: VALGRIND_3_18_1
+source: git://sourceware.org/git/valgrind.git
 build_requires:
   - autotools
   - GCC-Toolchain
