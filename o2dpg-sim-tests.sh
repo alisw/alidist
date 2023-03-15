@@ -27,9 +27,13 @@ O2DPG_TEST_WORKFLOW_EXITCODE=0
 { O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_workflow_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_WORKFLOW_EXITCODE=$?; } || true  # don't quit immediately on error
 # only log/test files created, nothing to delete here
 
+O2DPG_TEST_ANALYSISQC_EXITCODE=0
+{ O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_analysisqc_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_ANALYSISQC_EXITCODE=$?; } || true  # don't quit immediately on error
+# only log/test files created, nothing to delete here
+
 cat ${LOGFILE}
 
-if [ "${O2DPG_TEST_GENERATOR_EXITCODE}" != "0" -o "${O2DPG_TEST_WORKFLOW_EXITCODE}" != "0" ] ; then
+if [ "${O2DPG_TEST_GENERATOR_EXITCODE}" != "0" -o "${O2DPG_TEST_WORKFLOW_EXITCODE}" != "0"  -o "${O2DPG_TEST_ANALYSISQC_EXITCODE}" != "0" ] ; then
   # something is wrong
   echo "error detected in ${PKGNAME}, see above"
   # make the recipe fail
