@@ -28,7 +28,7 @@ jobs:
 
       - name: Run linter
         run: |
-          if [ -n "$BASE_SHA" ]; then
+          ! if [ -n "$BASE_SHA" ]; then
             # For pull requests, only check files that have changed relative to
             # the base commit.
             git diff -z --diff-filter d --name-only "$BASE_SHA...$HEAD_SHA" -- '*.sh' |
@@ -36,7 +36,7 @@ jobs:
           else
             # On push, check every file.
             alidistlint -f github ./*.sh
-          fi | ! grep '^::error '
+          fi | grep '^::error '
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.head_commit.sha }}
