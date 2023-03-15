@@ -66,7 +66,6 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv XALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GSHELL_ROOT \$XALIENFS_ROOT
 setenv GSHELL_NO_GCC 1
 EoF
