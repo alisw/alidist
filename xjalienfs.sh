@@ -46,7 +46,6 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib --bin > "etc/modulefiles/${PKGNAME}"
 
 cat >> "etc/modulefiles/${PKGNAME}" <<EoF
-setenv XJALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PYTHONPATH $PKG_ROOT/lib/python/site-packages
 EoF
 
