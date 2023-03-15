@@ -130,8 +130,6 @@ cmake "${SOURCEDIR}"                                                            
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"                                         \
       -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"                                          \
-      -Dalien=OFF                                                                      \
-      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       ${CXX11:+-Dcxx11=ON}                                                             \
       ${CXX14:+-Dcxx14=ON}                                                             \
@@ -158,6 +156,7 @@ cmake "${SOURCEDIR}"                                                            
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
+      -Dalien=OFF                                                                      \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
@@ -168,12 +167,13 @@ cmake "${SOURCEDIR}"                                                            
       -Dshadowpw=OFF                                                                   \
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
-      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
       -Dtmva-sofie=ON                                                                  \
       -Ddavix=OFF                                                                      \
+      ${APMON_CPP_ROOT:+-Dmonalisa=ON}                                                 \
+      ${APMON_CPP_ROOT:+-DMONALISA_DIR=$APMON_CPP_ROOT}                                \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
@@ -181,7 +181,7 @@ cmake "${SOURCEDIR}"                                                            
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX17:+cxx17}
-          ${XROOTD_ROOT:+xrootd} ${ROOT_HAS_PYTHON:+pyroot}
+          ${XROOTD_ROOT:+xrootd} ${APMON_CPP_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} gviz
              ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix"
