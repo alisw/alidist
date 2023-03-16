@@ -28,8 +28,8 @@ incremental_recipe: |
 
 case ${ARCHITECTURE} in
   osx*)
-    [[ -n ${BOOST_ROOT}  ]] &&  BOOST_ROOT=$(brew --prefix boost)
-    [[ -n ${ZEROMQ_ROOT} ]] && ZEROMQ_ROOT=$(brew --prefix zeromq)
+    [[ -n ${BOOST_ROOT}  ]] ||  BOOST_ROOT=$(brew --prefix boost)
+    [[ -n ${ZEROMQ_ROOT} ]] || ZEROMQ_ROOT=$(brew --prefix zeromq)
   ;;
 esac
 
