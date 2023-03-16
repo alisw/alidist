@@ -4,6 +4,7 @@ requires:
   - zlib
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 source: https://github.com/alisw/libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
