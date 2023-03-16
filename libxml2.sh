@@ -7,6 +7,7 @@ requires:
 build_requires:
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 source: https://github.com/alisw/libxml2.git
 prefer_system: "(?!slc5)"
 prefer_system_check: |
