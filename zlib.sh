@@ -4,6 +4,7 @@ tag: v1.2.8
 source: https://github.com/star-externals/zlib
 build_requires:
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <zlib.h>\n" | cc -xc++ - -c -M 2>&1
