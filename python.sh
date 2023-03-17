@@ -18,7 +18,7 @@ build_requires:
 env:
   SSL_CERT_FILE: "$(PATH=$PYTHON_ROOT/bin:$PATH \
                     LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH \
-                    python3 -c 'import certifi; print(certifi.where())')"
+                    python3 -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
 prefer_system: "(?!slc5|ubuntu)"
