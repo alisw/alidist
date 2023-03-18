@@ -26,6 +26,7 @@ requires:
   - FFTW3
   - ONNXRuntime
   - MLModels
+  - KFParticle
 build_requires:
   - GMP
   - MPFR
