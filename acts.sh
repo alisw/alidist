@@ -9,7 +9,7 @@ build_requires:
     - boost
     - Eigen3
     - alibuild-recipe-tools
-source: https://github.com/acts-project/acts.git
+source: https://github.com/AliceO2Group/acts.git
 ---
 #!/bin/bash -ex
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
