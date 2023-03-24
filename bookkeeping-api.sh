@@ -37,6 +37,6 @@ VERBOSE=1 cmake --build . -- ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --libs > etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
