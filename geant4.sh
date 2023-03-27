@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v11.0.3"
+tag: "v11.0.4"
 # source: https://github.com/alisw/geant4.git
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
