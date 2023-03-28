@@ -4,11 +4,11 @@ requires:
   - ROOT
   - pythia
 build_requires:
-    - "GCC-Toolchain:(?!osx)"
-    - CMake
-    - boost
-    - Eigen3
-    - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - boost
+  - Eigen3
+  - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/acts.git
 ---
 #!/bin/bash -ex
