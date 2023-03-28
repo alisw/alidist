@@ -3,9 +3,9 @@ version: "%(tag_basename)s"
 tag: v1.9.3
 source: https://github.com/lz4/lz4
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - CMake
- - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - alibuild-recipe-tools
 prefer_system: ".*"
 prefer_system_check: |
   printf "#include <lz4.h>\n" | cc -xc -I$(brew --prefix lz4)/include - -c -M 2>&1

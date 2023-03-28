@@ -8,8 +8,8 @@ env:
   CXXFLAGS: -fPIC -g -O2 -std=c++14
 overrides:
   GCC-Toolchain:
-    tag: v12.2.0-alice1
     version: v12.2.0-alice1
+    tag: v12.2.0-alice1
   boost:
     requires:
       - GCC-Toolchain:(?!osx)

@@ -1,7 +1,7 @@
 package: IgProf
 version: 5.9.18
-source: http://github.com/igprof/igprof.git
 tag: v5.9.18
+source: http://github.com/igprof/igprof.git
 requires:
   - libunwind
 build_requires:

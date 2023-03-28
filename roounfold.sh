@@ -3,8 +3,8 @@ version: "%(tag_basename)s"
 tag: V02-00-01-alice5
 source: https://github.com/alisw/RooUnfold
 requires:
- - ROOT
- - boost
+  - ROOT
+  - boost
 ---
 cmake $SOURCEDIR                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \

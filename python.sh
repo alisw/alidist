@@ -3,15 +3,15 @@ version: "%(tag_basename)s"
 tag: v3.9.12
 source: https://github.com/python/cpython
 requires:
- - AliEn-Runtime:(?!.*ppc64)
- - FreeType
- - libpng
- - sqlite
- - "GCC-Toolchain:(?!osx)"
- - libffi
+  - AliEn-Runtime:(?!.*ppc64)
+  - FreeType
+  - libpng
+  - sqlite
+  - "GCC-Toolchain:(?!osx)"
+  - libffi
 build_requires:
- - curl
- - alibuild-recipe-tools
+  - curl
+  - alibuild-recipe-tools
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
