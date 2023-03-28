@@ -3,9 +3,9 @@ version: "7.70.0"
 tag: curl-7_70_0
 source: https://github.com/curl/curl.git
 build_requires:
- - "OpenSSL:(?!osx)"
- - CMake
- - alibuild-recipe-tools
+  - "OpenSSL:(?!osx)"
+  - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 

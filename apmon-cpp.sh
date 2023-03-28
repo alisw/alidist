@@ -3,9 +3,9 @@ version: "%(tag_basename)s"
 tag: v2.2.8-alice5
 source: https://github.com/alisw/apmon-cpp.git
 build_requires:
- - "libtirpc:(?!osx)"
- - "autotools:(slc6|slc7)"
- - "GCC-Toolchain:(?!osx)"
+  - "libtirpc:(?!osx)"
+  - "autotools:(slc6|slc7)"
+  - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded \

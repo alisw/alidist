@@ -1,8 +1,8 @@
 package: ACTS
 version: v23.4.0
 requires:
-    - ROOT
-    - pythia
+  - ROOT
+  - pythia
 build_requires:
     - "GCC-Toolchain:(?!osx)"
     - CMake

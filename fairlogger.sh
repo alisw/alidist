@@ -3,10 +3,10 @@ version: "%(tag_basename)s"
 tag: v1.11.1
 source: https://github.com/FairRootGroup/FairLogger
 requires:
- - fmt
+  - fmt
 build_requires:
- - CMake
- - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - "GCC-Toolchain:(?!osx)"
 incremental_recipe: |
   cmake --build . --target install ${JOBS:+-- -j$JOBS}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

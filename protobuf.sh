@@ -2,8 +2,8 @@ package: protobuf
 version: v21.9
 source: https://github.com/protocolbuffers/protobuf
 build_requires:
- - CMake
- - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - "GCC-Toolchain:(?!osx)"
 ---
 
 cmake $SOURCEDIR/cmake                  \

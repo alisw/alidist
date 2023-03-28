@@ -3,13 +3,13 @@ version: "%(tag_basename)s"
 tag: "1.7.0"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
- - JDK
- - XRootD
- - xjalienfs
- - curl
+  - JDK
+  - XRootD
+  - xjalienfs
+  - curl
 valid_defaults:
- - jalien
- - o2
+  - jalien
+  - o2
 ---
 #!/bin/bash -e
 

@@ -3,17 +3,17 @@ version: "%(tag_basename)s"
 tag: v1.0.14r1-alice3
 source: https://github.com/alisw/xalienfs.git
 requires:
- - XRootD
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
- - AliEn-Runtime
+  - XRootD
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - AliEn-Runtime
 build_requires:
- - "autotools:(slc6|slc7)"
- - SWIG
- - UUID
- - libperl
+  - "autotools:(slc6|slc7)"
+  - SWIG
+  - UUID
+  - libperl
 prepend_path:
- PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
+  PERLLIB: "$ALIEN_RUNTIME_ROOT/lib/perl"
 env:
   GSHELL_ROOT: "$XALIENFS_ROOT"
   GSHELL_NO_GCC: "1"
