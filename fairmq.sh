@@ -1,6 +1,5 @@
 package: FairMQ
-version: "1.5.0-beta1"
-tag: 1076fbf82491bb02912a24e9f3a568a03567d0fb
+version: "1.5.0"
 source: https://github.com/FairRootGroup/FairMQ
 requires:
   - boost
