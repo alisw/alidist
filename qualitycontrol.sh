@@ -24,14 +24,17 @@ source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
+  #!/bin/bash -e
   # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
   if [[ $ALIBUILD_O2_TESTS ]]; then
     CXXFLAGS="${CXXFLAGS} -Werror"
   fi
-  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function" # Outside the if to make sure we have it in all cases
+  # Outside the if to make sure we have it in all cases:
+  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"
   cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  mkdir -p $INSTALLROOT/etc/modulefiles
+  rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
+  cp ${BUILDDIR}/compile_commands.json "${INSTALLROOT}"
   # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
   if [[ $ALIBUILD_O2_TESTS ]]; then
     echo "Run the tests"
@@ -46,7 +49,7 @@ incremental_recipe: |
     ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE $TESTS_LABELS_EXCLUSION
   fi
 ---
-#!/bin/bash -ex
+#!/bin/bash -e
 
 case $ARCHITECTURE in
   osx*) 
@@ -127,7 +130,8 @@ prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/QualityControl
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
 
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p $INSTALLROOT/etc/modulefiles 
+rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 # Create code coverage information to be uploaded
 # by the calling driver to codecov.io or similar service
