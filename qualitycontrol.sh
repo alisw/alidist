@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.95.1
+tag: v1.96.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -62,6 +62,7 @@ case $ARCHITECTURE in
       SONAME=so
   ;;
 esac
+
 
 # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
