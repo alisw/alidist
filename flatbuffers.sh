@@ -10,7 +10,9 @@ build_requires:
 cmake $SOURCEDIR                          \
       -G "Unix Makefiles"                 \
       -DFLATBUFFERS_BUILD_TESTS=OFF       \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-error=unused-but-set-variable"
+
 make ${JOBS:+-j $JOBS}
 make install
 
