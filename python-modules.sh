@@ -37,7 +37,9 @@ case $ARCHITECTURE in
   echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt;;
   *)
   echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
-  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3010 else 1)'; then
+  if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3011 else 1)'; then
+    echo $PIP311_REQUIREMENTS | tr \  \\n >> requirements.txt
+  elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3010 else 1)'; then
     echo $PIP310_REQUIREMENTS | tr \  \\n >> requirements.txt
   elif python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3009 else 1)'; then
     echo $PIP39_REQUIREMENTS | tr \  \\n >> requirements.txt
