@@ -1,5 +1,5 @@
 package: ACTS
-version: "main"
+version: "v23.5.0-alice"
 requires:
   - ROOT
   - pythia
