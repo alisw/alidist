@@ -79,7 +79,9 @@ cmake $SOURCEDIR                                              \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
       -DO2_ROOT=$O2_ROOT                                      \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
-      -DARROW_HOME=$ARROW_ROOT                                \
+      ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
+      ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
+      ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                               \
       ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
