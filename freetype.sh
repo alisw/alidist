@@ -11,7 +11,7 @@ prefer_system_check: |
   if [ $? -ne 0 ]; then printf "FreeType is missing on your system.\n * On RHEL-compatible systems you probably need: freetype freetype-devel\n * On Ubuntu-compatible systems you probably need: libfreetype6 libfreetype6-dev\n"; exit 1; fi
 ---
 #!/bin/bash -ex
-URL="http://download.savannah.gnu.org/releases/freetype/freetype-${PKGVERSION:1}.tar.gz"
+URL="http://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-${PKGVERSION:1}.tar.gz"
 curl -L -o freetype.tgz $URL
 tar xzf freetype.tgz
 rm -f freetype.tgz
