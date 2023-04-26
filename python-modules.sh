@@ -60,10 +60,8 @@ python3 -m venv $PYTHON_MODULES_INSTALLROOT
 . $PYTHON_MODULES_INSTALLROOT/bin/activate
 
 # Upgrade pip
-python3 -m pip install -IU pip
 # Install setuptools upfront, since this seems to create issues now...
-python3 -m pip install -IU "setuptools<=60.8.2"
-python3 -m pip install -IU wheel
+python3 -m pip install -IU pip setuptools wheel
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
