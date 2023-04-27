@@ -56,7 +56,7 @@ case $ARCHITECTURE in
     echo "$PIP_REQUIREMENTS"
     # Handle special lists for different platforms, e.g. $PIP39_REQUIREMENTS_osx_arm64.
     this_pyver_requirements_var=PIP${pyver/.}_REQUIREMENTS
-    this_pyver_arch_requirements_var=PIP${pyver/.}_REQUIREMENTS_$ARCHITECTURE
+    this_pyver_arch_requirements_var=PIP${pyver/.}_REQUIREMENTS_${ARCHITECTURE//-/_}
     # Use $PIPxy_REQUIREMENTS_arch if set, falling back to $PIPxy_REQUIREMENTS.
     echo "${!this_pyver_arch_requirements_var:-${!this_pyver_requirements_var}}" ;;
 esac | tr -s '[:space:]' '\n' > requirements.txt
