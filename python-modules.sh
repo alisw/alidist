@@ -31,7 +31,7 @@ PIP311_REQUIREMENTS=$(eval echo \${PIP311_REQUIREMENTS_${ARCHITECTURE/-/_}:-$PIP
 
 # These are the basic requirements needed for all installation and platform
 # and it should represent the common denominator (working) for all packages/platforms
-echo $PIP_BASE_REQUIREMENTS | tr \  \\n > base_requirements.txt;;
+echo $PIP_BASE_REQUIREMENTS | tr \  \\n > base_requirements.txt
 
 # PIP_REQUIREMENTS, PIP36_REQUIREMENTS, PIP38_REQUIREMENTS come from python-modules-list.sh
 case $ARCHITECTURE in
@@ -39,7 +39,8 @@ case $ARCHITECTURE in
   touch requirements.txt
   ;;
   slc6*)
-  echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt;;
+  echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
+  ;;
   *)
   echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
   if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3011 else 1)'; then
