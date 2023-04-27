@@ -7,7 +7,7 @@ requires:
   - "osx-system-openssl:(osx.*)"
   - XRootD
   - AliEn-Runtime
-  - Python-modules:(?!osx_arm64)
+  - Python-modules
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
 ---

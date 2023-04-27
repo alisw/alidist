@@ -11,7 +11,7 @@ requires:
   - O2
   - arrow
   - Control-OCCPlugin
-  - Python-modules:(?!osx_arm64)
+  - Python-modules
   - libjalienO2
   - bookkeeping-api
 build_requires:

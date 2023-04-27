@@ -4,7 +4,7 @@ tag: "v5.5.3"
 source: https://github.com/xrootd/xrootd
 requires:
   - "OpenSSL:(?!osx)"
-  - Python-modules:(?!osx_arm64)
+  - Python-modules
   - AliEn-Runtime
   - libxml2
 build_requires:
