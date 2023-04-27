@@ -23,6 +23,14 @@ XROOTD_PYTHON=""
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
+# Report versions of pip and setuptools
+echo "###################
+pip version:
+$(python3 -m pip -V)
+setuptools version:
+$(python3 -m pip show setuptools | grep 'Version\|Location')
+###################"
+
 case $ARCHITECTURE in
   osx_x86-64)
     export ARCHFLAGS="-arch x86_64"
