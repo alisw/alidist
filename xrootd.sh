@@ -43,7 +43,6 @@ case $ARCHITECTURE in
     unset UUID_ROOT
   ;;
   osx_arm64)
-    export SYSTEM_VERSION_COMPAT=0
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
     CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks
 
