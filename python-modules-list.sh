@@ -5,8 +5,8 @@ env:
     pip==23.0.1
     setuptools==65.5.1
     wheel==0.40.0
-    requests==2.27.1
   PIP_REQUIREMENTS: |
+    requests==2.27.1
     ipykernel==5.1.0
     ipython==7.4.0
     ipywidgets==7.4.2
