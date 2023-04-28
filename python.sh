@@ -82,18 +82,11 @@ pushd "$INSTALLROOT/bin"
   [[ -x python3-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python3-config
 popd
 
-## Disable this for now as xrootd python bindings works only with pip==23.0.1 setuptools==65.5.1
-# Make sure we have the latest pip
-#env PATH="$INSTALLROOT/bin:$PATH"                       \
-#    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
-#    PYTHONHOME="$INSTALLROOT"                           \
-#    python3 -m pip install --upgrade pip
-
 # Install Python SSL certificates right away
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
     PYTHONHOME="$INSTALLROOT" \
-    python3 -m pip install certifi
+    python3 -m pip install 'certifi==2022.12.7'
 
 # Uniform Python library path
 pushd "$INSTALLROOT/lib"
