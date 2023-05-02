@@ -27,6 +27,11 @@ fi
 # Special lists for different platforms
 PIP39_REQUIREMENTS=$(eval echo \${PIP39_REQUIREMENTS_${ARCHITECTURE/-/_}:-$PIP39_REQUIREMENTS})
 PIP310_REQUIREMENTS=$(eval echo \${PIP310_REQUIREMENTS_${ARCHITECTURE/-/_}:-$PIP310_REQUIREMENTS})
+PIP311_REQUIREMENTS=$(eval echo \${PIP311_REQUIREMENTS_${ARCHITECTURE/-/_}:-$PIP311_REQUIREMENTS})
+
+# These are the basic requirements needed for all installation and platform
+# and it should represent the common denominator (working) for all packages/platforms
+echo $PIP_BASE_REQUIREMENTS | tr \  \\n > base_requirements.txt
 
 # PIP_REQUIREMENTS, PIP36_REQUIREMENTS, PIP38_REQUIREMENTS come from python-modules-list.sh
 case $ARCHITECTURE in
@@ -34,7 +39,8 @@ case $ARCHITECTURE in
   touch requirements.txt
   ;;
   slc6*)
-  echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt;;
+  echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
+  ;;
   *)
   echo $PIP_REQUIREMENTS | tr \  \\n > requirements.txt
   if python3 -c 'import sys; exit(0 if 1000*sys.version_info.major + sys.version_info.minor >= 3011 else 1)'; then
@@ -59,11 +65,8 @@ mkdir -p $PYTHON_MODULES_INSTALLROOT
 python3 -m venv $PYTHON_MODULES_INSTALLROOT
 . $PYTHON_MODULES_INSTALLROOT/bin/activate
 
-# Upgrade pip
-python3 -m pip install -IU pip
-# Install setuptools upfront, since this seems to create issues now...
-python3 -m pip install -IU "setuptools<=60.8.2"
-python3 -m pip install -IU wheel
+## Install pinned basic requirements for python infrastructure
+python3 -m pip install -IU -r base_requirements.txt
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately

@@ -23,6 +23,14 @@ XROOTD_PYTHON=""
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
 
+# Report versions of pip and setuptools
+echo "###################
+pip version:
+$(python3 -m pip -V)
+setuptools version:
+$(python3 -m pip show setuptools | grep 'Version\|Location')
+###################"
+
 case $ARCHITECTURE in
   osx_x86-64)
     export ARCHFLAGS="-arch x86_64"
@@ -43,10 +51,6 @@ case $ARCHITECTURE in
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
-    if [ "$(python3 -c 'import setuptools; print(setuptools.__version__)')" != "60.8.2" ]; then
-      echo 'Please install setuptools==60.8.2'
-      exit 1
-    fi
   ;;
 esac
 
@@ -75,7 +79,7 @@ cmake "${BUILDDIR}"                                                   \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'}       \
-      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed -v'}   \
+      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed --verbose --no-use-pep517'}   \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
