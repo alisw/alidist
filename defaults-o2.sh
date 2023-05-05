@@ -11,6 +11,7 @@ env:
 disable:
   - mesos
   - MySQL
+  - ApMon-CPP
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
