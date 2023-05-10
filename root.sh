@@ -9,7 +9,7 @@ requires:
   - opengl:(?!osx)
   - Xdevel:(?!osx)
   - FreeType:(?!osx)
-  - Python-modules:(?!osx_arm64)
+  - Python-modules
   - "GCC-Toolchain:(?!osx)"
   - libpng
   - lzma
