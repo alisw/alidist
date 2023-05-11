@@ -162,7 +162,7 @@ cmake $SOURCEDIR                                                                
       -Dshadowpw=OFF                                                                   \
       -Dvdt=ON                                                                         \
       -Dbuiltin_vdt=ON                                                                 \
-      ${APMON_CPP_REVISION:+-Dmonalisa=ON}                                             \
+      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
@@ -175,7 +175,7 @@ cmake $SOURCEDIR                                                                
 
 FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
           pythia6 roofit soversion vdt ${CXX17:+cxx17}
-          ${XROOTD_ROOT:+xrootd} ${APMON_CPP_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
+          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
           ${ARROW_REVISION:+arrow}"
 NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} gviz
              ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix"
