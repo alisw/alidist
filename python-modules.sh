@@ -8,7 +8,6 @@ requires:
 build_requires:
   - curl
   - Python-modules-list
-  - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: $PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
 ---
@@ -101,8 +100,17 @@ find "$PYTHON_MODULES_INSTALLROOT"/lib/python* \
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEDIR/$PKGNAME"
 cat >> "$MODULEDIR/$PKGNAME" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION} \\
+            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}
 # Our environment
 set PYTHON_MODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$PYTHON_MODULES_ROOT/share/python-modules/bin

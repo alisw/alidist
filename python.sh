@@ -11,7 +11,6 @@ requires:
  - libffi
 build_requires:
  - curl
- - alibuild-recipe-tools
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
@@ -113,10 +112,29 @@ find "$INSTALLROOT"/lib/python* \
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
+#%Module1.0
+proc ModulesHelp { } {
+  global version
+  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+}
+set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
+module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
+# Dependencies
+module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION} \\
+                     ${ZLIB_REVISION:+zlib/$ZLIB_VERSION-$ZLIB_REVISION}                                     \\
+                     ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                         \\
+                     ${LIBPNG_REVISION:+libpng/$LIBPNG_VERSION-$LIBPNG_REVISION}                             \\
+                     ${LIBFFI_REVISION:+libffi/$LIBFFI_VERSION-$LIBFFI_REVISION}                             \\
+                     ${FREETYPE_REVISION:+FreeType/$FREETYPE_VERSION-$FREETYPE_REVISION}                     \\
+                     ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
+# Our environment
+set PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv PYTHON_ROOT \$PYTHON_ROOT
 setenv PYTHONHOME \$PKG_ROOT
 prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
+prepend-path PATH \$PYTHON_ROOT/bin
+prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib
 if { [module-info mode load] } {
   setenv SSL_CERT_FILE  [exec \$PKG_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
 }
