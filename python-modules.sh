@@ -6,7 +6,7 @@ requires:
   - FreeType
   - libpng
 build_requires:
-  - system-curl
+  - curl
   - Python-modules-list
   - alibuild-recipe-tools
 prepend_path:
