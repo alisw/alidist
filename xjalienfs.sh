@@ -1,13 +1,13 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "1.4.5"
+tag: "1.5.0"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - XRootD
   - AliEn-Runtime
-  - Python-modules:(?!osx_arm64)
+  - Python-modules
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
 ---

@@ -1,0 +1,44 @@
+---
+# Check commits and incoming PRs that change workflows under .github/workflows/.
+name: Check GitHub workflows
+
+'on':
+  push:
+    paths:
+      - '.github/workflows/*.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/*.yml'
+    types:
+      - opened
+      - reopened
+      - edited
+      - ready_for_review
+      - synchronize
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install prerequisites
+        run: |
+          sudo apt update -y
+          sudo apt install -y shellcheck pyflakes3
+          # Install actionlint separately. It's not packaged, unfortunately.
+          mkdir ~/bin
+          curl -fSsL "$ACTIONLINT_URL" | tar -xvvzC ~/bin actionlint
+          echo ~/bin >> "$GITHUB_PATH"
+        env:
+          ACTIONLINT_URL: |-
+            https://github.com/rhysd/actionlint/releases/download/v1.6.22/actionlint_1.6.22_linux_amd64.tar.gz
+
+      - name: Check GitHub workflows
+        run: |
+          actionlint -pyflakes="$(command -v pyflakes3)" \
+                     -format "$GITHUB_FORMAT" .github/workflows/*.yml
+        env:
+          GITHUB_FORMAT: >-
+            {{range $e := .}}::error file={{$e.Filepath}},line={{$e.Line}},col={{$e.Column}}::{{$e.Message}}%0A```%0A{{replace $e.Snippet "\\n" "%0A"}}%0A```\n{{end}}

@@ -1,78 +1,75 @@
-name: Build Documentation
-# GitHub workflow to check build recipes in pull requests.
+---
+# GitHub workflow to check pull requests and commits for pitfalls and formatting
+# mistakes in build recipes.
+name: Check recipes
 
-on:
+'on':
+  push:
+    paths:
+      - '*.sh'
   pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
-      - ready_for_review
-      - synchronize
+    paths:
+      - '*.sh'
+
+permissions: {}
 
 jobs:
-  build:
+  lint:
+    name: alidistlint
     runs-on: ubuntu-latest
+
     steps:
-    - name: Install dependencies
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y bash graphviz python3-pip
-        sudo python3 -m pip install setuptools
-        sudo python3 -m pip install pyyaml alibuild
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Run check
-      shell: 'bash -exo pipefail {0}'
-      run: |
-        aliBuild analytics off
-        err_fnames=()
+      - name: Install dependencies
+        run: python3 -m pip install -U --user alidistlint
 
-        # Use lint-recipes from PR base, so PRs can't override this script themselves.
-        git checkout -f ${{ github.event.pull_request.base.sha }} -- scripts/lint-recipes ||
-          exit 1
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-        git diff --name-only "$(git merge-base HEAD ${{ github.event.pull_request.base.sha }})" |
-          while read -r fname; do
+      - name: Run linter
+        run: |
+          ! if [ -n "$BASE_SHA" ]; then
+            # For pull requests, only check files that have changed relative to
+            # the base commit.
+            git diff -z --diff-filter d --name-only "$BASE_SHA...$HEAD_SHA" -- '*.sh' |
+              xargs -0tr alidistlint -f github
+          else
+            # On push, check every file.
+            alidistlint -f github ./*.sh
+          fi | grep '^::error '
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.head_commit.sha }}
+
+  circular:
+    name: circular dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update -y
+          sudo apt install -y graphviz
+          python3 -m pip install -U --user pyyaml alibuild
+          aliBuild analytics off
+
+      - uses: actions/checkout@v3
+
+      - name: Run check
+        run: |
+          for fname in *.sh; do
             case "$fname" in
-              *.sh) [ -e "$fname" ] || continue;;
-              *) continue;;
+              jalien*) default=jalien ;;
+              *) default=o2 ;;
             esac
-            echo "Linting $fname"
-            if ! scripts/lint-recipes "$fname" ||
-               # This should really be cleaned up, since macOS cleans any
-               # DYLD_LIBRARY_PATH when launching children processes, making it
-               # completely irrelevant. In any case we correctly handle rpath in
-               # our macOS builds.
-               grep -v 'unset DYLD_LIBRARY_PATH' "$fname" | grep DYLD_LIBRARY_PATH ||
-               # Modules 4 does not allow having colons in prepend-path anymore
-               grep 'prepend-path.*:' "$fname"
+            echo "Checking $fname with --defaults $default"
+            if aliBuild deps --defaults "$default" --outgraph /dev/null --no-system --neat -c . \
+                        "$(awk '/^package: /{print $2}' "$fname")" 2>&1 |
+               grep -q 'transitive reduction not unique'
             then
-              err_fnames+=("$fname")
+              echo -n "::error title=circular dependency,file=$fname,line=1"
+              echo '::recipe has circular dependency'
+              err=1
             fi
-
-            case "$fname" in defaults-*.sh) continue;; esac
-
-            # If a recipe is not a system requirement, it must have a Modulefile
-            if ! grep -q '^system_requirement:' "$fname" &&
-               ! grep -q '\(^#%Module\|alibuild-generate-module\)' "$fname"
-            then
-              echo "ERROR: recipe $fname has no modulefile"
-              err_fnames+=("$fname")
-            fi
-            case "$fname" in
-              JAliEn) DEFAULT=jalien ;;
-              *) DEFAULT=o2 ;;
-            esac
-            aliBuild deps --defaults $DEFAULT --outgraph /dev/null --no-system --neat -c . \
-                     "$(awk '/^package: /{print $2}' "$fname")" 2>&1 |
-              if grep -q 'transitive reduction not unique'; then
-                echo "ERROR: recipe $fname has circular dependency"
-                err_fnames+=("$fname")
-              fi
           done
-        if [ ${#err_fnames[@]} -gt 0 ]; then
-          printf '%s\n' "The following recipes need to be fixed:" "${err_fnames[@]}"
-          exit 1
-        fi
+          exit "${err:-0}"

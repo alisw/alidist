@@ -1,13 +1,13 @@
 package: AliRoot-csa
 version: "%(short_hash)s"
+tag: master
 requires:
   - ROOT
   - SAS
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot
-write_repo: https://git.cern.ch/reps/AliRoot 
-tag: master
+write_repo: https://git.cern.ch/reps/AliRoot
 ---
 #!/bin/sh
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \

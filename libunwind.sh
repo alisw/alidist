@@ -1,9 +1,9 @@
 package: libunwind
-version: 1.1-%(short_hash)s
-source: https://github.com/igprof/libunwind
-tag: master
-requires:
+version: v1.6.2
+source: http://github.com/libunwind/libunwind
+build_requires:
   - libatomic_ops
+  - alibuild-recipe-tools
 ---
 #!/bin/sh
 (cd $SOURCEDIR && autoreconf -i)
@@ -15,3 +15,8 @@ $SOURCEDIR/configure \
 
 make ${JOBS+-j $JOBS}
 make install
+
+# Modulefile
+mkdir -p etc/modulefiles
+alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

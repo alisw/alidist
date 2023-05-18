@@ -3,10 +3,10 @@ version: v2.10.18
 tag: 2.10.18
 source: https://github.com/Microsoft/cpprestsdk
 requires:
-- boost
-- OpenSSL:(?!osx)
+  - boost
+  - OpenSSL:(?!osx)
 build_requires:
-- CMake
+  - CMake
 ---
 #!/bin/sh
 

@@ -3,8 +3,8 @@ version: "%(tag_basename)s"
 tag: "v1.26t7b-v2.26t7b-alice1"
 source: https://github.com/alisw/ampt
 requires:
- - "GCC-Toolchain:(?!osx)"
- - HepMC
+  - "GCC-Toolchain:(?!osx)"
+  - HepMC
 ---
 #!/bin/bash -e
 

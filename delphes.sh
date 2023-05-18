@@ -9,9 +9,9 @@ build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
 source: https://github.com/alisw/delphes.git
-#prepend_path:
-#  LD_LIBRARY_PATH: "$O2_ROOT/lib"
-#  ROOT_INCLUDE_PATH: "$O2_ROOT/include"
+# prepend_path:
+#   LD_LIBRARY_PATH: "$DELPHES_ROOT/lib"
+#   ROOT_INCLUDE_PATH: "$DELPHES_ROOT/include"
 ---
 #!/bin/bash -ex
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \

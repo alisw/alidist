@@ -15,7 +15,7 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-  
+
   DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
   # This really means we are in development mode. We need to make sure we
   # use the real path for sources in this case. We also copy the

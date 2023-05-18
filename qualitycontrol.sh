@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.85.0
+tag: "daily-20230518-0200"
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -11,10 +11,12 @@ requires:
   - O2
   - arrow
   - Control-OCCPlugin
-  - Python-modules:(?!osx_arm64)
+  - Python-modules
   - libjalienO2
+  - bookkeeping-api
 build_requires:
   - CMake
+  - "Clang:(?!osx)"   # for Gandiva
   - CodingGuidelines
   - RapidJSON
   - alibuild-recipe-tools
@@ -22,14 +24,17 @@ source: https://github.com/AliceO2Group/QualityControl
 prepend_path:
   ROOT_INCLUDE_PATH: "$QUALITYCONTROL_ROOT/include"
 incremental_recipe: |
+  #!/bin/bash -e
   # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
   if [[ $ALIBUILD_O2_TESTS ]]; then
     CXXFLAGS="${CXXFLAGS} -Werror"
   fi
-  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function" # Outside the if to make sure we have it in all cases
-  cmake --build . -- ${JOBS:+-j$JOBS} install
-  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  # Outside the if to make sure we have it in all cases:
+  CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"
+  cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
+  mkdir -p $INSTALLROOT/etc/modulefiles
+  rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
+  cp ${BUILDDIR}/compile_commands.json "${INSTALLROOT}"
   # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set )
   if [[ $ALIBUILD_O2_TESTS ]]; then
     echo "Run the tests"
@@ -44,7 +49,7 @@ incremental_recipe: |
     ROOT_DYN_PATH=$ROOT_DYN_PATH:$INSTALLROOT/lib ctest --output-on-failure -LE $TESTS_LABELS_EXCLUSION
   fi
 ---
-#!/bin/bash -ex
+#!/bin/bash -e
 
 case $ARCHITECTURE in
   osx*) 
@@ -58,42 +63,38 @@ case $ARCHITECTURE in
   ;;
 esac
 
+
 # For the PR checkers (which sets ALIBUILD_O2_TESTS), we impose -Werror as a compiler flag
 if [[ $ALIBUILD_O2_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror"
 fi
 CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"  # Outside the if to make sure we have it in all cases
 
-# Use ninja if in devel mode, ninja is found and DISABLE_NINJA is not 1
-if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
-  NINJA_BIN=ninja-build
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=ninja
-  type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
-  [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
-  unset NINJA_BIN
-fi
-
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}               \
+      -G  Ninja                                               \
       -DBOOST_ROOT=$BOOST_ROOT                                \
       -DCommon_ROOT=$COMMON_O2_ROOT                           \
       -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
       -DO2_ROOT=$O2_ROOT                                      \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
-      -DARROW_HOME=$ARROW_ROOT                                \
+      ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
+      ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
+      ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                               \
+      ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                \
       ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
       ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
       ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}             \
       ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}       \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}          \
+      ${BOOKKEEPING_API_REVISION:+-DBookkeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT}                 \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 
-cmake --build . -- ${JOBS:+-j$JOBS} install
+cmake --build . -- -k 0 ${JOBS:+-j$JOBS} install
 
 # Tests (but not the ones with label "manual" and only if ALIBUILD_O2_TESTS is set)
 if [[ $ALIBUILD_O2_TESTS ]]; then
@@ -132,7 +133,8 @@ prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/QualityControl
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
 
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p $INSTALLROOT/etc/modulefiles 
+rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 # Create code coverage information to be uploaded
 # by the calling driver to codecov.io or similar service

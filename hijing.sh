@@ -7,7 +7,6 @@ requires:
   - GCC-Toolchain:(?!osx)
 build_requires:
   - CMake
-
 ---
 #!/bin/sh
 cmake ${SOURCEDIR}                           \

@@ -1,9 +1,9 @@
 package: libpng
 version: v1.6.34
 requires:
- - zlib
+  - zlib
 build_requires:
- - CMake
+  - CMake
 source: https://github.com/alisw/libpng
 prefer_system: (?!slc5)
 prefer_system_check: |

@@ -3,11 +3,11 @@ version: "%(tag_basename)s"
 tag: "v0.3.13"
 source: https://github.com/xianyi/OpenBLAS.git
 requires:
- - openmp
- - "GCC-Toolchain:(?!osx)"
+  - openmp
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - CMake
- - alibuild-recipe-tools
+  - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 

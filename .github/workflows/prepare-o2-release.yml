@@ -18,7 +18,7 @@ jobs:
         branch=$(echo O2-${{ github.event.inputs.tag }}-patches | tr . -)
         EOF
       id: decide_release_branch
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: "master"
     - name: Update the branch

@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "nightly-20221210"
+tag: "daily-20230518-0200"
 requires:
   - O2
   - ONNXRuntime
@@ -8,6 +8,7 @@ requires:
   - libjalienO2
   - KFParticle
 build_requires:
+  - "Clang:(?!osx)"
   - CMake
   - ninja
   - alibuild-recipe-tools
@@ -24,11 +25,15 @@ if [[ $ALIBUILD_O2PHYSICS_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
+# When O2 is built against Gandiva (from Arrow), then we need to use
+# -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
+# -CMake, which requires it.
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       -G Ninja                                                    \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"} \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                          \
+      ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                    \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}    \
       ${FASTJET_ROOT:+-Dfjcontrib_ROOT="$FASTJET_ROOT"}           \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}
