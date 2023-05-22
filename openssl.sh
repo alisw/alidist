@@ -4,7 +4,19 @@ tag: OpenSSL_1_1_1m
 source: https://github.com/openssl/openssl
 prefer_system: (?!slc5|slc6)
 prefer_system_check: |
-  if [ `uname` = Darwin ]; then test -d `brew --prefix openssl@1.1 || echo /dev/nope` || exit 1; fi; echo '#include <openssl/bio.h>' | cc -x c - -I`brew --prefix openssl@1.1`/include -c -o /dev/null || exit 1; echo -e "#include <openssl/opensslv.h>\n#if OPENSSL_VERSION_NUMBER < 0x1000000L\n#error \"System's OpenSSL cannot be used: we need OpenSSL >1 to build our own XrootD. We are going to compile our own version.\"\n#endif\nint main() { }" | cc -x c - -I`brew --prefix openssl@1.1`/include -c -o /dev/null || exit 1
+  #!/bin/bash -e
+  case $(uname) in
+    Darwin) prefix=$(brew --prefix openssl@1.1); [ -d "$prefix" ] ;;
+    *) prefix= ;;
+  esac
+  cc -x c - ${prefix:+"-I$prefix/include"} -c -o /dev/null <<\EOF
+  #include <openssl/bio.h>
+  #include <openssl/opensslv.h>
+  #if OPENSSL_VERSION_NUMBER < 0x1010100L
+  #error "System's OpenSSL cannot be used: we need OpenSSL >= 1.1.1 for the Python ssl module. We are going to compile our own version."
+  #endif
+  int main() { }
+  EOF
 build_requires:
   - zlib
   - alibuild-recipe-tools
