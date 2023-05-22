@@ -12,7 +12,7 @@ prefer_system_check: |
   cc -x c - ${prefix:+"-I$prefix/include"} -c -o /dev/null <<\EOF
   #include <openssl/bio.h>
   #include <openssl/opensslv.h>
-  #if OPENSSL_VERSION_NUMBER < 0x1010100L
+  #if OPENSSL_VERSION_NUMBER < 0x10101000L
   #error "System's OpenSSL cannot be used: we need OpenSSL >= 1.1.1 for the Python ssl module. We are going to compile our own version."
   #endif
   int main() { }
