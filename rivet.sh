@@ -74,6 +74,7 @@ PYVER="$(basename $(find $INSTALLROOT/lib -type d -name 'python*'))"
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
+OLDTEX=$(which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS)
 mkdir -p "$MODULEDIR"
 cat > "$MODULEFILE" <<EoF
 #%Module1.0
@@ -100,7 +101,7 @@ prepend-path LD_LIBRARY_PATH \$RIVET_ROOT/lib
 # (TEXMFHOME, HOMETEXMF, TEXMFCNF, TEXINPUTS, LATEXINPUTS)
 # Here trying to keep the env variable changes to their minimum, i.e touch only TEXINPUTS, LATEXINPUTS
 # Manual prepend-path for TEX variables
-set Old_TEXINPUTS [exec which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS]
+set Old_TEXINPUTS $OLDTEX
 set Extra_RivetTEXINPUTS \$RIVET_ROOT/share/Rivet/texmf/tex//
 setenv TEXINPUTS  \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 setenv LATEXINPUTS \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
