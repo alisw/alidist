@@ -61,6 +61,9 @@ aliroot*            @alisw/pdp-experts
 aliphysics*         @alisw/pdp-experts
 acts*               @alisw/pdp-experts
 
+# PWG Related
+fastjet*            @alisw/pwgje
+
 # Muon Run3 Reconstruction Task Force
 alo*                @alisw/mrrtf
 defaults-alo*       @alisw/mrrtf
