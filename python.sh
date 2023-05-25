@@ -131,12 +131,12 @@ module load BASE/1.0 ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERS
 # Our environment
 set PYTHON_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv PYTHON_ROOT \$PYTHON_ROOT
-setenv PYTHONHOME \$PKG_ROOT
-prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
+setenv PYTHONHOME \$PYTHON_ROOT
+prepend-path PYTHONPATH \$PYTHON_ROOT/lib/python/site-packages
 prepend-path PATH \$PYTHON_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$PYTHON_ROOT/lib
 if { [module-info mode load] } {
-  setenv SSL_CERT_FILE  [exec \$PKG_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
+  setenv SSL_CERT_FILE  [exec \$PYTHON_ROOT/bin/python3 -c "import certifi; print(certifi.where())"]
 }
 if { [module-info mode remove] } {
   unsetenv SSL_CERT_FILE
