@@ -82,6 +82,14 @@ pushd "$INSTALLROOT/bin"
   [[ -x python3-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python3-config
 popd
 
+if [ "$(uname)" = Linux ]; then
+  # We want to use el7-built Pythons on el7, e.g. on the Grid. On el7,
+  # we compile against libcrypto.so.1, which is not available on el9
+  # (it's libcrypt.so.2 instead). However, Python still works when
+  # loaded with libcrypt.so.2, so just replace the library reference.
+  patchelf --replace-needed libcrypt.so.1 libcrypt.so "$INSTALLROOT/bin/python"
+fi
+
 # Install Python SSL certificates right away
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
