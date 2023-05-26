@@ -83,7 +83,7 @@ pushd "$INSTALLROOT/bin"
 popd
 
 if [ "$(uname)" = Linux ]; then
-  # We want to use el7-built Pythons on el7, e.g. on the Grid. On el7,
+  # We want to use el7-built Pythons on el9, e.g. on the Grid. On el7,
   # we compile against libcrypto.so.1, which is not available on el9
   # (it's libcrypt.so.2 instead). However, Python still works when
   # loaded with libcrypt.so.2, so just replace the library reference.
