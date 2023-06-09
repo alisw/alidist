@@ -35,14 +35,14 @@ incremental_recipe: |
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
          "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
   # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
-  grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
+  grep -v '^Unix.*.Root.PluginPath' "$INSTALLROOT/etc/system.rootrc" > system.rootrc.0
   cat >> system.rootrc.0 <<\EOF
   # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
   # Plugins in \$ROOT_PLUGIN_PATH have priority.
   Unix.*.Root.PluginPath: $(ROOT_PLUGIN_PATH):$(ROOTSYS)/etc/plugins:
   Unix.*.Root.DynamicPath: .:$(ROOT_DYN_PATH):
   EOF
-  mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
+  mv system.rootrc.0 "$INSTALLROOT/etc/system.rootrc"
 
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
