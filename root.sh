@@ -132,10 +132,6 @@ cmake $SOURCEDIR                                                                
       -Dalien=OFF                                                                      \
       ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
-      ${CXX11:+-Dcxx11=ON}                                                             \
-      ${CXX14:+-Dcxx14=ON}                                                             \
-      ${CXX17:+-Dcxx17=ON}                                                             \
-      ${CXX17:+-Dcxx20=ON}                                                             \
       -Dfreetype=ON                                                                    \
       -Dbuiltin_freetype=OFF                                                           \
       -Dpcre=OFF                                                                       \
