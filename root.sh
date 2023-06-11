@@ -34,26 +34,31 @@ incremental_recipe: |
   rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
          "$INSTALLROOT/etc/plugins/TSystem/P030_TAlienSystem.C" \
          "$INSTALLROOT/etc/plugins/TFile/P070_TAlienFile.C"
+  # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
+  grep -v '^Unix.*.Root.PluginPath' "$INSTALLROOT/etc/system.rootrc" > system.rootrc.0
+  cat >> system.rootrc.0 <<\EOF
+  # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
+  # Plugins in \$ROOT_PLUGIN_PATH have priority.
+  Unix.*.Root.PluginPath: $(ROOT_PLUGIN_PATH):$(ROOTSYS)/etc/plugins:
+  Unix.*.Root.DynamicPath: .:$(ROOT_DYN_PATH):
+  EOF
+  mv system.rootrc.0 "$INSTALLROOT/etc/system.rootrc"
 
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
+# Fix the syntax highlighing when your editor is not smart enough to 
+# understand yaml.
+cat >/dev/null <<EOF
+EOF
 unset ROOTSYS
 COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
-case $PKGVERSION in
-  v6-*)
-     [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
-     [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
-     [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
-  ;;
-  *)
-    [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CXX11=1 || true
-    [[ "$CXXFLAGS" == *'-std=c++14'* ]] && CXX14=1 || true
-    [[ "$CXXFLAGS" == *'-std=c++17'* ]] && CXX17=1 || true
-  ;;
-esac
+[[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
+[[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
+[[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
+[[ "$CXXFLAGS" == *'-std=c++20'* ]] && CMAKE_CXX_STANDARD=20 || true
 
 # We do not use global options for ROOT, otherwise the -g will
 # kill compilation on < 8GB machines
@@ -127,9 +132,6 @@ cmake $SOURCEDIR                                                                
       -Dalien=OFF                                                                      \
       ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
-      ${CXX11:+-Dcxx11=ON}                                                             \
-      ${CXX14:+-Dcxx14=ON}                                                             \
-      ${CXX17:+-Dcxx17=ON}                                                             \
       -Dfreetype=ON                                                                    \
       -Dbuiltin_freetype=OFF                                                           \
       -Dpcre=OFF                                                                       \
@@ -173,37 +175,15 @@ cmake $SOURCEDIR                                                                
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT"
 
-FEATURES="builtin_pcre mathmore xml ssl opengl minuit2 http
-          pythia6 roofit soversion vdt ${CXX17:+cxx17}
-          ${XROOTD_ROOT:+xrootd} ${ALIEN_RUNTIME_ROOT:+monalisa} ${ROOT_HAS_PYTHON:+pyroot}
-          ${ARROW_REVISION:+arrow}"
-NO_FEATURES="root7 ${LZMA_REVISION:+builtin_lzma} gviz
-             ${ROOT_HAS_NO_PYTHON:+pyroot} builtin_davix davix"
-
-if [[ $ENABLE_COCOA ]]; then
-  FEATURES="$FEATURES builtin_freetype"
-elif [[ $FREETYPE_ROOT ]]; then
-  NO_FEATURES="$NO_FEATURES builtin_freetype"
-fi
-
-# Check if all important features are enabled/disabled as requested
-bin/root-config --features
-for FEATURE in $FEATURES; do
-  bin/root-config --has-$FEATURE | grep -q yes
-done
-for FEATURE in $NO_FEATURES; do
-  bin/root-config --has-$FEATURE | grep -q no
-done
 cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
-cat >> system.rootrc.0 <<EOF
-
+cat >> system.rootrc.0 <<\EOF
 # Specify additional plugin search paths via the environment variable ROOT_PLUGIN_PATH.
-# Plugins in \$ROOT_PLUGIN_PATH have priority.
-Unix.*.Root.PluginPath: \$(ROOT_PLUGIN_PATH):\$(ROOTSYS)/etc/plugins:
-Unix.*.Root.DynamicPath: .:\$(ROOT_DYN_PATH):
+# Plugins in $ROOT_PLUGIN_PATH have priority.
+Unix.*.Root.PluginPath: $(ROOT_PLUGIN_PATH):$(ROOTSYS)/etc/plugins:
+Unix.*.Root.DynamicPath: .:$(ROOT_DYN_PATH):
 EOF
 mv system.rootrc.0 $INSTALLROOT/etc/system.rootrc
 
