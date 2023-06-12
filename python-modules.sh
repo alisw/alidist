@@ -10,6 +10,8 @@ build_requires:
   - Python-modules-list
   - alibuild-recipe-tools
 prepend_path:
+  PATH: "$PYTHON_MODULES_ROOT/share/python-modules/bin"
+  LD_LIBRARY_PATH: "$PYTHON_MODULES_ROOT/share/python-modules/lib"
   # If we need tensorflow to work on Mac, we must use lib/python$pyver, not lib/python here.
   PYTHONPATH: $PYTHON_MODULES_ROOT/share/python-modules/lib/python/site-packages
 ---
