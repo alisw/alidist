@@ -5,9 +5,11 @@ tag: "v11.0.4"
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - xercesc
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
+  - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT4_ROOT/include:$GEANT4_ROOT/include/Geant4"
 incremental_recipe: |
@@ -43,7 +45,9 @@ cmake $SOURCEDIR                                                \
   -DGEANT4_USE_SYSTEM_EXPAT=OFF                                 \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}             \
   ${CXXSTD:+-DGEANT4_BUILD_CXXSTD=$CXXSTD}                      \
+  -DG4_USE_GDML=ON                                              \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
 
 make ${JOBS+-j $JOBS}
 make install
@@ -56,22 +60,12 @@ make install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${XERCESC_REVISION:+xercesc/$XERCESC_REVISION-$XERCESC_REVISION}
-# Our environment
+alibuild-generate-module --bin --lib > $MODULEFILE
+cat >> "$MODULEFILE" <<EOF
+# extra environment
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
-prepend-path PATH \$GEANT4_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$GEANT4_ROOT/lib
-EoF
+EOF
 
 # Data sets environment
 $INSTALLROOT/bin/geant4-config --datasets |  sed 's/[^ ]* //' | sed 's/G4/setenv G4/' >> "$MODULEFILE"
