@@ -27,10 +27,10 @@ requires:
   - ONNXRuntime
   - MLModels
   - KFParticle
+  - RapidJSON
 build_requires:
   - GMP
   - MPFR
-  - RapidJSON
   - googlebenchmark
   - O2-customization
   - Clang:(?!osx*)
@@ -253,6 +253,7 @@ module load BASE/1.0 \\
             ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                             \\
             ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}                                 \\
             ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}         \\
+            ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
             ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
