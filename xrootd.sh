@@ -78,7 +78,7 @@ cmake "${BUILDDIR}"                                                   \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
-      ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV="CC=c++ CFLAGS=\"$CFLAGS -std=c++17\""} \
+      ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV="CC=c++ CFLAGS='$CFLAGS -std=c++17'"} \
       ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed --verbose --no-use-pep517'}   \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
