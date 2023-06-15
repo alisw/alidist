@@ -1,6 +1,6 @@
 package: jq
 version: v1.6
-tag: jq-1.6
+tag: 52d5988
 source: https://github.com/stedolan/jq.git
 build_requires:
   - "GCC-Toolchain:(?!osx)"
