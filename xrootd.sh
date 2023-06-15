@@ -31,6 +31,10 @@ setuptools version:
 $(python3 -m pip show setuptools | grep 'Version\|Location')
 ###################"
 
+COMPILER_CC=cc
+COMPILER_CXX=c++
+COMPILER_LD=c++
+
 case $ARCHITECTURE in
   osx_x86-64)
     export ARCHFLAGS="-arch x86_64"
@@ -41,6 +45,9 @@ case $ARCHITECTURE in
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
+    COMPILER_CC=clang
+    COMPILER_CXX=clang++
+    COMPILER_LD=clang
   ;;
   osx_arm64)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
@@ -51,6 +58,9 @@ case $ARCHITECTURE in
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
+    COMPILER_CC=clang
+    COMPILER_CXX=clang++
+    COMPILER_LD=clang
   ;;
 esac
 
@@ -60,6 +70,9 @@ mkdir build
 pushd build
 cmake "${BUILDDIR}"                                                   \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
+      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                              \
+      -DCMAKE_C_COMPILER=$COMPILER_CC                                 \
+      -DCMAKE_LINKER=$COMPILER_LD                                     \
       -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
