@@ -1,6 +1,6 @@
 package: FairRoot
-version: "v18.4.9"
-source: https://github.com/FairRootGroup/FairRoot
+version: "v18.4.9-alice1"
+source: https://github.com/alisw/FairRoot
 requires:
   - generators
   - simulation
