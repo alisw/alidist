@@ -10,7 +10,10 @@ on:
         description: 'Branch to cherry pick to'
         required: true
         default: 'v5-09-XX'
-      
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
