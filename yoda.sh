@@ -11,7 +11,8 @@ requires:
 build_requires:
   - "autotools:(slc6|slc7)"
 prepend_path:
-  PYTHONPATH: $YODA_ROOT/lib/python/site-packages # See below at built time the management towards generic path .../lib/python/site-packages
+  # See below at build time the management towards generic path .../lib/python/site-packages
+  PYTHONPATH: $YODA_ROOT/lib/python/site-packages
 ---
 #!/bin/bash
 

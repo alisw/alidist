@@ -1,6 +1,6 @@
 package: FairRoot
-version: "v18.4.9"
-source: https://github.com/FairRootGroup/FairRoot
+version: "v18.4.9-alice1"
+source: https://github.com/alisw/FairRoot
 requires:
   - generators
   - simulation
@@ -13,7 +13,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
-  GEOMPATH:   "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
+  GEOMPATH: "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
   CONFIG_DIR: "$FAIRROOT_ROOT/share/fairbase/examples/common/gconfig"
 prepend_path:
   ROOT_INCLUDE_PATH: "$FAIRROOT_ROOT/include"

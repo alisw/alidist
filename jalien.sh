@@ -1,15 +1,15 @@
 package: JAliEn
 version: "%(tag_basename)s"
-tag: "1.6.8"
+tag: "1.7.4"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
- - JDK
- - XRootD
- - xjalienfs
- - curl
+  - JDK
+  - XRootD
+  - xjalienfs
+  - curl
 valid_defaults:
- - jalien
- - o2
+  - jalien
+  - o2
 ---
 #!/bin/bash -e
 

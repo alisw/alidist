@@ -10,7 +10,7 @@ requires:
 build_requires:
   - CMake
   - alibuild-recipe-tools
-  - "Python:(slc|ubuntu)" # onnx which is builded by the package requires Python
+  - "Python:(slc|ubuntu)"  # this package builds ONNX, which requires Python
   - "Python-system:(?!slc.*|ubuntu)"
 ---
 #!/bin/bash -e

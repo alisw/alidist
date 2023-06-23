@@ -3,16 +3,16 @@ version: "%(tag_basename)s"
 tag: "v5.5.3"
 source: https://github.com/xrootd/xrootd
 requires:
- - "OpenSSL:(?!osx)"
- - Python-modules:(?!osx_arm64)
- - AliEn-Runtime
- - libxml2
+  - "OpenSSL:(?!osx)"
+  - Python-modules
+  - AliEn-Runtime
+  - libxml2
 build_requires:
- - CMake
- - "osx-system-openssl:(osx.*)"
- - "GCC-Toolchain:(?!osx)"
- - UUID:(?!osx)
- - alibuild-recipe-tools
+  - CMake
+  - "osx-system-openssl:(osx.*)"
+  - "GCC-Toolchain:(?!osx)"
+  - UUID:(?!osx)
+  - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
 ---
@@ -22,6 +22,18 @@ XROOTD_PYTHON=""
 [[ -e ${SOURCEDIR}/bindings ]] && XROOTD_PYTHON=True;
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
+
+# Report versions of pip and setuptools
+echo "###################
+pip version:
+$(python3 -m pip -V)
+setuptools version:
+$(python3 -m pip show setuptools | grep 'Version\|Location')
+###################"
+
+COMPILER_CC=cc
+COMPILER_CXX=c++
+COMPILER_LD=c++
 
 case $ARCHITECTURE in
   osx_x86-64)
@@ -33,6 +45,9 @@ case $ARCHITECTURE in
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
+    COMPILER_CC=clang
+    COMPILER_CXX=clang++
+    COMPILER_LD=clang
   ;;
   osx_arm64)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@1.1)
@@ -43,10 +58,9 @@ case $ARCHITECTURE in
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     unset UUID_ROOT
-    if [ "$(python3 -c 'import setuptools; print(setuptools.__version__)')" != "60.8.2" ]; then
-      echo 'Please install setuptools==60.8.2'
-      exit 1
-    fi
+    COMPILER_CC=clang
+    COMPILER_CXX=clang++
+    COMPILER_LD=clang
   ;;
 esac
 
@@ -56,6 +70,9 @@ mkdir build
 pushd build
 cmake "${BUILDDIR}"                                                   \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
+      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                              \
+      -DCMAKE_C_COMPILER=$COMPILER_CC                                 \
+      -DCMAKE_LINKER=$COMPILER_LD                                     \
       -DCMAKE_INSTALL_PREFIX=${INSTALLROOT}                           \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
@@ -75,7 +92,7 @@ cmake "${BUILDDIR}"                                                   \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'}       \
-      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed -v'}   \
+      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed --verbose --no-use-pep517'}   \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install

@@ -1,23 +1,21 @@
 package: Clang
-# Keep the version synced with the one run by the formatting CI,
-# (see https://github.com/alisw/ali-bot/blob/master/.github/workflows/c%2B%2B-code-formatting.yml).
-version: "v13.0.0"
-tag: "llvmorg-13.0.0"
+version: "v15.0.7"
+tag: "llvmorg-15.0.7"
 source: https://github.com/llvm/llvm-project
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - "Python:slc.*"
- - "Python-system:(?!slc.*)"
- - CMake
- - curl
- - ninja
+  - "Python:slc.*"
+  - "Python-system:(?!slc.*)"
+  - CMake
+  - curl
+  - ninja
 ---
-#!/bin/sh
+#!/bin/bash -e
 
 # Unsetting default compiler flags in order to make sure that no debug
 # information is compiled into the objects which make the build artifacts very
-# big
+# big.
 unset CXXFLAGS
 unset CFLAGS
 unset LDFLAGS
@@ -35,34 +33,22 @@ case $ARCHITECTURE in
 esac
 
 # BUILD_SHARED_LIBS=ON is needed for e.g. adding dynamic plugins to clang-tidy.
-# Arrow v9 needs LLVM_ENABLE_RTTI=ON.
-cmake $SOURCEDIR/llvm \
+# Apache Arrow needs LLVM_ENABLE_RTTI=ON.
+cmake "$SOURCEDIR/llvm" \
   -G Ninja \
-  -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt" \
+  -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;compiler-rt' \
+  -DLLVM_ENABLE_RUNTIMES='libcxx;libcxxabi' \
   -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD:?}" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
-  -DPYTHON_EXECUTABLE=$(which python3) \
+  -DPYTHON_EXECUTABLE="$(which python3)" \
   -DDEFAULT_SYSROOT="$DEFAULT_SYSROOT" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
   -DBUILD_SHARED_LIBS=OFF
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
-
-git clone -b $PKGVERSION https://github.com/KhronosGroup/SPIRV-LLVM-Translator
-mkdir SPIRV-LLVM-Translator/build
-pushd SPIRV-LLVM-Translator/build
-cmake ../ \
-  -G Ninja \
-  -DLLVM_DIR="$INSTALLROOT/lib/cmake/llvm" \
-  -DLLVM_BUILD_TOOLS=ON \
-  -DLLVM_INCLUDE_TESTS=OFF \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"
-cmake --build . -- ${JOBS:+-j$JOBS} install
-popd
 
 case $ARCHITECTURE in
   osx*)
@@ -85,23 +71,21 @@ esac
 # to avoid issues with system clang on macOS.
 # We **MUST NOT** add bin-safe to the build path. Runtime
 # path is fine.
-mkdir $INSTALLROOT/bin-safe
-mv $INSTALLROOT/bin/llvm-spirv* $INSTALLROOT/bin/clang* $INSTALLROOT/bin-safe/
-sed -i.bak -e "s|bin/clang|bin-safe/clang|g" -e "s|bin/llvm-spirv|bin-safe/llvm-spirv|g" $INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake
-rm $INSTALLROOT/lib/cmake/clang/*.bak
+mkdir "$INSTALLROOT/bin-safe"
+mv "$INSTALLROOT"/bin/clang* "$INSTALLROOT/bin-safe/"
+mv "$INSTALLROOT"/bin/git-clang* "$INSTALLROOT/bin-safe/"  # we also need git-clang-format in runtime
+sed -i.bak -e "s|bin/clang|bin-safe/clang|g" "$INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake"
+rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 
 # Check it actually works
 cat << \EOF > test.cc
 #include <iostream>
 EOF
-$INSTALLROOT/bin-safe/clang++ -v -c test.cc
-
-curl -o $INSTALLROOT/bin-safe/git-clang-format https://raw.githubusercontent.com/llvm/llvm-project/main/clang/tools/clang-format/git-clang-format
-chmod u+x $INSTALLROOT/bin-safe/git-clang-format
+"$INSTALLROOT/bin-safe/clang++" -v -c test.cc
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
+cat > "etc/modulefiles/$PKGNAME" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -117,4 +101,5 @@ set CLANG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$CLANG_ROOT/bin-safe
 prepend-path LD_LIBRARY_PATH \$CLANG_ROOT/lib
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"

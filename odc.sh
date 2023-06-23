@@ -1,17 +1,18 @@
-#Online Device Control
+# Online Device Control
 package: ODC
 version: "%(tag_basename)s"
-tag: "0.77.0"
+tag: "0.78.1"
 source: https://github.com/FairRootGroup/ODC.git
 requires:
-- boost
-- protobuf
-- DDS
-- FairLogger
-- FairMQ
-- grpc
-- libInfoLogger
+  - boost
+  - protobuf
+  - DDS
+  - FairLogger
+  - FairMQ
+  - grpc
+  - libInfoLogger
 build_requires:
+  - flatbuffers
   - CMake
   - GCC-Toolchain:(?!osx.*)
 ---
@@ -70,7 +71,7 @@ module load BASE/1.0                                                            
             ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
             ${GRPC_REVISION:+grpc/$GRPC_VERSION-$GRPC_REVISION}                                     \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-            
+
 # Our environment
 set ODC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$ODC_ROOT/bin

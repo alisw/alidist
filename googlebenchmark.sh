@@ -3,10 +3,10 @@ version: "1.6.1"
 tag: v1.6.1
 source: https://github.com/google/benchmark
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - CMake
- - ninja
- - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - ninja
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR                           \

@@ -1,6 +1,6 @@
 package: POWHEG
 version: "%(tag_basename)s"
-tag: "r3964-alice1"
+tag: "r3964-alice2"
 source: https://github.com/alisw/POWHEG
 requires:
   - fastjet
@@ -20,6 +20,7 @@ install -d ${INSTALLROOT}/bin
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
+# Executables for each porcess separate
 PROCESSES="${FASTJET_REVISION:+dijet }hvq W Z directphoton"
 for proc in ${PROCESSES}; do
     mkdir ${proc}/{obj,obj-gfortran}
