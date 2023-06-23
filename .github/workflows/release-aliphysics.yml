@@ -1,12 +1,17 @@
+---
 name: Prepare AliRoot and AliPhysics tags
 
-on:
+'on':
   workflow_dispatch:
     inputs:
       tag:
         description: 'Tag to prepare'
         required: true
         default: 'v5-09-XXy'
+
+# We use a manually-specified token for creating releases, but not for pushing.
+permissions:
+  contents: write
 
 jobs:
   build:
