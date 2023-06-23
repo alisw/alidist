@@ -198,8 +198,10 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
       ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                               \
-      ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}
-# LLVM_ROOT is required for Gandiva.
+      ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}                                              \
+      -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=True
+# LLVM_ROOT is required for Gandiva
+# FIND_PACKAGE_PREFER_CONFIG used so that Geant4 finds XercesC better internally
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
