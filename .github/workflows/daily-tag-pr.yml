@@ -8,6 +8,10 @@ name: Create a PR from pushes to rc/branches
       # who can push to them, as PRs will be created with auto-merge enabled!
       - rc/master
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,7 +38,7 @@ jobs:
             The daily-tags.sh script has created a tag release with these
             changes.
           pr_allow_empty: true
-          github_token: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Enable auto-merge for newly-created pull request
         uses: alisw/enable-pull-request-automerge@v2
@@ -44,4 +48,4 @@ jobs:
         with:
           pull-request-number: ${{ steps.open_pr.outputs.pr_number }}
           merge-method: squash
-          token: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}

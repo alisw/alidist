@@ -1,12 +1,17 @@
+---
 name: Prepare O2 tag
 
-on:
+'on':
   workflow_dispatch:
     inputs:
       tag:
         description: 'Tag to prepare'
         required: true
         default: 'vX.Y.Z'
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,10 +42,10 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        # Use default token; requires "contents: write" permission.
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: O2-${{ github.event.inputs.tag }}
         release_name: O2-${{ github.event.inputs.tag }}
         draft: false
         prerelease: false
-
