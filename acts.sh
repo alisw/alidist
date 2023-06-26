@@ -10,10 +10,12 @@ build_requires:
   - Eigen3
   - alibuild-recipe-tools
   - GEANT4
+  - ninja
 source: https://github.com/AliceO2Group/acts.git
 ---
 #!/bin/bash -ex
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
+                 -G Ninja \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DCMAKE_SKIP_RPATH=TRUE                   \
                  -DACTS_BUILD_FATRAS=ON                    \
