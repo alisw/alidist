@@ -38,6 +38,7 @@ cmake "${SOURCEDIR}"                                              \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=${CXX_COMPILER}}       \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}} \
       -DCMAKE_INSTALL_LIBDIR=lib                                  \
+      -DFAIRMQ_CHANNEL_DEFAULT_AUTOBIND=OFF                       \
       -DDISABLE_COLOR=ON                                          \
       -DBUILD_EXAMPLES=ON                                         \
       -DBUILD_TESTING=ON
