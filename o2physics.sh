@@ -36,7 +36,8 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                    \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}    \
       ${FASTJET_ROOT:+-Dfjcontrib_ROOT="$FASTJET_ROOT"}           \
-      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}
+      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}   \
+      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
