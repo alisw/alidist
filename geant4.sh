@@ -60,8 +60,8 @@ make install
 # wrong if we pack it into a tarball and unpack it elsewhere. Delete this
 # cached likely-wrong information.
 sed -i.bak '/^geant4_set_and_check_package_variable[(]/d' \
-    "$INSTALLROOT/lib/Geant4-$PKGVERSION/Geant4PackageCache.cmake"
-rm -f "$INSTALLROOT/lib/Geant4-$PKGVERSION/Geant4PackageCache.cmake.bak"
+    "$INSTALLROOT/lib/Geant4-${PKGVERSION#v}/Geant4PackageCache.cmake"
+rm -f "$INSTALLROOT/lib/Geant4-${PKGVERSION#v}/Geant4PackageCache.cmake.bak"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
