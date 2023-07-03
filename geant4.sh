@@ -56,6 +56,13 @@ make install
 # Can be done after Geant4 installation, if installed with -DGEANT4_INSTALL_DATA=OFF
 # ./geant4-config --install-datasets
 
+# GEANT4 caches the locations of its build-time dependencies, which will be
+# wrong if we pack it into a tarball and unpack it elsewhere. Delete this
+# cached likely-wrong information.
+sed -i.bak '/^geant4_set_and_check_package_variable[(]/d' \
+    "$INSTALLROOT/lib/Geant4-$PKGVERSION/Geant4PackageCache.cmake"
+rm -f "$INSTALLROOT/lib/Geant4-$PKGVERSION/Geant4PackageCache.cmake.bak"
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
