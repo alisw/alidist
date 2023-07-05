@@ -25,8 +25,7 @@ LDFLAGS="$LDFLAGS -L$GEANT4_ROOT/lib"            \
     -DCMAKE_INSTALL_LIBDIR=lib                   \
     -DGeant4VMC_BUILD_EXAMPLES=OFF               \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
-    ${XERCESC_ROOT:+-DXercesC_LIBRARY="$XERCESC_ROOT/lib/libxerces-c.so"} \
-    ${XERCESC_ROOT:+-DXercesC_INCLUDE_DIR="$XERCESC_ROOT/include"} \
+    ${XERCESC_ROOT:+-DXercesC_ROOT="$XERCESC_ROOT"} \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
