@@ -7,9 +7,10 @@ requires:
   - GEANT4
 build_requires:
   - CMake
+  - ninja
 ---
 #!/bin/bash -e
-cmake "$SOURCEDIR" \
+cmake "$SOURCEDIR" -G Ninja \
   -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
   -DCMAKE_INSTALL_LIBDIR="lib"                 \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
