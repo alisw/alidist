@@ -11,6 +11,8 @@ prefer_system_check: |
 prepend_path:
   ROOT_INCLUDE_PATH: "$XERCESC_ROOT/include"
   LD_LIBRARY_PATH: "$XERCESC_ROOT/lib"
+env:
+  CMAKE_PREFIX_PATH: "$CMAKE_PREFIX_PATH:$XERCESC_ROOT"
 ---
 
 cmake $SOURCEDIR                                         \
