@@ -52,6 +52,10 @@ cmake $SOURCEDIR                                                \
 make ${JOBS+-j $JOBS}
 make install
 
+# we should not use cached package links
+packagecachefile=$(find ${INSTALLROOT} -name "Geant4PackageCache.cmake")
+echo "#" > $packagecachefile
+
 # Install data sets
 # Can be done after Geant4 installation, if installed with -DGEANT4_INSTALL_DATA=OFF
 # ./geant4-config --install-datasets

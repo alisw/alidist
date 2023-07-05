@@ -10,7 +10,7 @@ prefer_system_check: |
   pkg-config --atleast-version=3.2.0 xerces-c 2>&1 && printf "#include \"<xercesc/util/PlatformUtils.hpp>\"\nint main(){}" | c++ -xc - -o /dev/null
 prepend_path:
   ROOT_INCLUDE_PATH: "$XERCESC_ROOT/include"
-  LD_LIBRARY_PATH: "$XERCESC_ROOT/lib"
+  CMAKE_PREFIX_PATH: "$XERCESC_ROOT"
 ---
 
 cmake $SOURCEDIR                                         \
