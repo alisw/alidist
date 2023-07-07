@@ -11,7 +11,7 @@ build_requires:
   - CMake
   - "osx-system-openssl:(osx.*)"
   - "GCC-Toolchain:(?!osx)"
-  - UUID:(?!osx)
+  - UUID
   - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
@@ -44,7 +44,6 @@ case $ARCHITECTURE in
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
-    unset UUID_ROOT
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
@@ -57,7 +56,6 @@ case $ARCHITECTURE in
     # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
-    unset UUID_ROOT
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
