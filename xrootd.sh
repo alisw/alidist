@@ -90,7 +90,7 @@ cmake "${BUILDDIR}"                                                   \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
       ${XROOTD_PYTHON:+-DPython_EXECUTABLE=$PYTHON_EXECUTABLE}        \
       ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed --verbose'}   \
-      -DCMAKE_CXX_FLAGS="-Wno-error"
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 popd
