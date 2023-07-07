@@ -1,6 +1,6 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v5.5.3"
+tag: "v5.6.0"
 source: https://github.com/xrootd/xrootd
 requires:
   - "OpenSSL:(?!osx)"
@@ -77,9 +77,6 @@ cmake "${BUILDDIR}"                                                   \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DXRDCL_ONLY=ON                                                 \
-      -DENABLE_CRYPTO=ON                                              \
-      -DENABLE_PERL=OFF                                               \
-      -DVOMSXRD_SUBMODULE=OFF                                         \
       ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
       ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
       ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
@@ -90,10 +87,9 @@ cmake "${BUILDDIR}"                                                   \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}               \
       ${ZLIB_ROOT:+-DZLIB_ROOT=$ZLIB_ROOT}                            \
       ${XROOTD_PYTHON:+-DENABLE_PYTHON=ON}                            \
-      ${XROOTD_PYTHON:+-DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE}        \
-      ${XROOTD_PYTHON:+-DXROOTD_PYBUILD_ENV='CC=c++ CFLAGS=\"-std=c++17\"'}       \
-      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed --verbose --no-use-pep517'}   \
-      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
+      ${XROOTD_PYTHON:+-DPython_EXECUTABLE=$PYTHON_EXECUTABLE}        \
+      ${XROOTD_PYTHON:+-DPIP_OPTIONS='--force-reinstall --ignore-installed --verbose'}   \
+      -DCMAKE_CXX_FLAGS="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 popd
