@@ -21,12 +21,14 @@ case $ARCHITECTURE in
 esac
 
 autoreconf -ivf
+# --disable-nls so we don't depend on gettext/libintl at runtime on Intel Macs.
 ./configure ${disable_shared:+--disable-shared}   \
             "--libdir=$INSTALLROOT/lib"           \
             "--prefix=$INSTALLROOT"               \
             --disable-all-programs                \
             --disable-silent-rules                \
             --disable-tls                         \
+            --disable-nls                         \
             --disable-rpath                       \
             --without-ncurses                     \
             --enable-libuuid
