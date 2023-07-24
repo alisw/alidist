@@ -10,7 +10,7 @@ env:
 overrides:
   AliRoot:
     version: "%(commit_hash)s_O2"
-    tag: v5-09-56s
+    tag: v5-09-56t
     requires:
       - ROOT
       - DPMJET
@@ -27,7 +27,7 @@ overrides:
       - boost
   AliPhysics:
     version: "%(commit_hash)s_O2"
-    tag: v5-09-56s-01
+    tag: v5-09-56t-01
   cgal:
     version: "4.12.2"
   fastjet:
