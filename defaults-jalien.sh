@@ -10,10 +10,10 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-56s
+    tag: v5-09-56t
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-56s-01
+    tag: v5-09-56t-01
   autotools:
     version: "%(tag_basename)s_JALIEN"
     tag: v1.5.0
