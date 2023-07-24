@@ -1,6 +1,6 @@
 package: GEANT4_VMC
 version: "%(tag_basename)s"
-tag: "v5-0-p5"
+tag: "v5-0-p6"
 source: https://github.com/vmc-project/geant4_vmc
 requires:
   - ROOT
