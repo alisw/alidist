@@ -15,7 +15,7 @@ env:
     notebook==5.7.8
     scons==4.1.0
   PIP36_REQUIREMENTS: |
-    PyYAML==5.1
+    PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
     numpy==1.16.2
@@ -31,7 +31,7 @@ env:
     pandas==0.24.2
     scikit-learn==0.20.3
   PIP38_REQUIREMENTS: |
-    PyYAML==5.1
+    PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
     scipy==1.6.1
@@ -47,7 +47,7 @@ env:
     pandas==1.2.3
     scikit-learn==0.24.1
   PIP39_REQUIREMENTS: |
-    PyYAML==5.1
+    PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
     numpy==1.21.4
@@ -62,7 +62,7 @@ env:
     responses==0.10.6
     pandas==1.1.5
   "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
-    PyYAML==5.1
+    PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
     numpy==1.21.4
@@ -82,7 +82,7 @@ env:
   PIP39_REQUIREMENTS_osx_arm64: |
     tensorflow-macos==2.12.0
     tensorflow-metal==0.8.0
-    PyYAML==5.4.1
+    PyYAML==6.0.1
     psutil==5.9.5
     uproot==4.1.0
     numpy==1.23.5
@@ -97,7 +97,7 @@ env:
     responses==0.10.6
     pandas==1.5.3
   PIP310_REQUIREMENTS: |
-    PyYAML==5.4
+    PyYAML==6.0.1
     psutil==5.9.0
     uproot==4.1.0
     numpy==1.23.4
@@ -112,7 +112,7 @@ env:
     responses==0.10.6
     pandas==1.1.5
   PIP311_REQUIREMENTS: |
-    PyYAML==5.4
+    PyYAML==6.0.1
     psutil==5.9.4
     uproot==4.1.0
     numpy==1.23.4
