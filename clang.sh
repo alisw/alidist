@@ -10,6 +10,8 @@ build_requires:
   - CMake
   - curl
   - ninja
+env:
+  LLVM_ROOT: "$CLANG_ROOT" # needed by LLVMAlt
 ---
 #!/bin/bash -e
 
