@@ -64,14 +64,16 @@ case $ARCHITECTURE in
 esac | tr -s '[:space:]' '\n' > requirements.txt
 
 # Install pinned basic requirements for python infrastructure
-python3 -m pip install -IU -r base-requirements.txt
+# Use the requirements also as a constraints file to pin versions of dependencies
+# (https://pip.pypa.io/en/stable/user_guide/#constraints-files).
+python3 -m pip install -IU -c base-requirements.txt -r base-requirements.txt
 
 # FIXME: required because of the newly introduced dependency on scikit-garden requires
 # a numpy to be installed separately
 # See also:
 #   https://github.com/scikit-garden/scikit-garden/issues/23
-python3 -m pip install -IU numpy
-python3 -m pip install -IU -r requirements.txt
+python3 -m pip install -IU -c requirements.txt numpy
+python3 -m pip install -IU -c requirements.txt -r requirements.txt
 
 # Find the proper Python lib library and export it
 pushd "$PYTHON_MODULES_INSTALLROOT"
