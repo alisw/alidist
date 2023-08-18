@@ -1,6 +1,6 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v0.78.0"
+tag: "v0.78.80"
 build_requires:
   - golang
   - protobuf
@@ -18,8 +18,20 @@ rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
   make vendor
   make WHAT="coconut peanut walnut"
+  make docs
+
+  # binaries
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
+
+  # man pages
+  mkdir -p $INSTALLROOT/local
+  rsync -a --delete local/ $INSTALLROOT/local
+
+  # bash and zsh completions
+  mkdir -p $INSTALLROOT/share
+  rsync -a --delete share/ $INSTALLROOT/share
+
   # safely clean up vendor directory regardless of permissions
   go clean -modcache
 popd
