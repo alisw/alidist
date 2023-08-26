@@ -29,6 +29,7 @@ requires:
   - KFParticle
   - RapidJSON
 build_requires:
+  - abseil
   - GMP
   - MPFR
   - googlebenchmark
