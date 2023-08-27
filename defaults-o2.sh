@@ -1,3 +1,6 @@
+disable:
+- mesos
+- MySQL
 env:
   CFLAGS: -fPIC -O2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
@@ -6,16 +9,11 @@ env:
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'ON'
   MACOSX_DEPLOYMENT_TARGET: '10.15'
-disable:
-  - mesos
-  - MySQL
 overrides:
   AliPhysics:
-    version: '%(commit_hash)s_O2'
-    tag: v5-09-59f-01
+    tag: vAN-20230827
+    version: '%(tag_basename)s_O2'
   AliRoot:
-    version: '%(commit_hash)s_O2'
-    tag: v5-09-59f
     requires:
     - ROOT
     - DPMJET
@@ -25,6 +23,8 @@ overrides:
     - Vc
     - ZeroMQ
     - JAliEn-ROOT
+    tag: v5-09-59f
+    version: '%(commit_hash)s_O2'
   GCC-Toolchain:
     tag: v10.2.0-alice2
     version: v10.2.0-alice2
