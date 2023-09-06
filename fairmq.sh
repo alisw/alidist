@@ -1,5 +1,5 @@
 package: FairMQ
-version: "v1.6.0"
+version: "v1.8.0"
 source: https://github.com/FairRootGroup/FairMQ
 requires:
   - boost
@@ -18,7 +18,7 @@ prepend_path:
 incremental_recipe: |
   #!/bin/bash -e
   cmake --build . ${JOBS:+-j$JOBS}
-  cmake --install . --prefix "${INSTALLROOT}"
+  cmake --install .
   MODULEDIR="etc/modulefiles"
   mkdir -p "${INSTALLROOT}/${MODULEDIR}"
   rsync -a --delete "${MODULEDIR}/" "${INSTALLROOT}/${MODULEDIR}"
@@ -32,7 +32,7 @@ case ${ARCHITECTURE} in
   ;;
 esac
 
-cmake "${SOURCEDIR}"                                              \
+cmake "${SOURCEDIR}" -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"      \
       -GNinja                                                     \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=${CXXSTD}}                   \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=${CXX_COMPILER}}       \
@@ -51,7 +51,7 @@ if [[ -n ${ALIBUILD_FAIRMQ_TESTS} ]]; then
   ctest --output-on-failure --schedule-random ${JOBS:+-j${JOBS}}
 fi
 
-cmake --install . --prefix "${INSTALLROOT}"
+cmake --install .
 
 # ModuleFile
 MODULEDIR="etc/modulefiles"
