@@ -18,25 +18,6 @@ esac
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $BUILDDIR
 
-# NOTE: drop this patch after libwebsockets is updated to 4.x
-cat > xcode12.patch << EoF
---- private.h	2020-11-13 17:36:22.000000000 +0100
-+++ private.h.patched	2020-11-13 17:54:05.000000000 +0100
-@@ -298,8 +298,10 @@
-  * but happily have something equivalent in the SO_NOSIGPIPE flag.
-  */
- #ifdef __APPLE__
-+#ifndef MSG_NOSIGNAL
- #define MSG_NOSIGNAL SO_NOSIGPIPE
- #endif
-+#endif
-
- /*
-  * Solaris 11.X only supports POSIX 2001, MSG_NOSIGNAL appears in
-EoF
-
-patch lib/core/private.h xcode12.patch
-
 mkdir build
 pushd build
 
