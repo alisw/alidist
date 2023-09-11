@@ -11,6 +11,7 @@ build_requires:
   - CMake
   - abseil
   - ninja
+  - alibuild-generate-module
 source: https://github.com/grpc/grpc
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
