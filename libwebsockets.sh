@@ -13,7 +13,7 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
-  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1) ;;
+  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3) ;;
 esac
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $BUILDDIR
