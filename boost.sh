@@ -1,6 +1,6 @@
 package: boost
-version: v1.75.0
-tag: v1.75.0
+version: v1.83.0
+tag: v1.83.0
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
