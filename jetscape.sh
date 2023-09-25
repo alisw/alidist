@@ -1,6 +1,6 @@
 package: JETSCAPE
 version: "%(tag_basename)s"
-tag: "v3.1.1-alice1"
+tag: "v3.1.1-alice2"
 source: https://github.com/alisw/JETSCAPE
 requires:
   - boost
