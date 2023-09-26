@@ -1,6 +1,6 @@
 package: JAliEn-ROOT
 version: "%(tag_basename)s"
-tag: "0.7.1"
+tag: "0.7.4"
 source: https://gitlab.cern.ch/jalien/jalien-root.git
 requires:
   - ROOT
@@ -20,9 +20,11 @@ append_path:
 #!/bin/bash -e
 case $ARCHITECTURE in
   osx*) 
-	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
-	[[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3) 
+    [[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+    SONAME=dylib
   ;;
+  *) SONAME=so ;;
 esac
 
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
@@ -33,7 +35,9 @@ cmake $BUILDDIR                                          \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=${CXXSTD}}          \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
-       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}        \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
       -DXROOTD_ROOT_DIR="$XROOTD_ROOT"                   \
       -DLWS="$LIBWEBSOCKETS_ROOT"
