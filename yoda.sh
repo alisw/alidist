@@ -22,8 +22,10 @@ rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 
 (
 
-PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
-
+PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
+PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' )
+echo "PYTHON_EXECUTABLE='$PYTHON_EXECUTABLE'"
+echo "PYTHON_VER='$PYTHON_VER'" 
 
 unset PYTHON_VERSION
 
