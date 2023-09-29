@@ -1,7 +1,7 @@
 package: YODA
 version: "%(tag_basename)s"
 tag: "yoda-1.9.7"
-source: https://gitlab.com/hepcedar/yoda
+source: https://gitlab.com/hepcedar/yoda.git
 requires:
   - boost
   - "Python:(?!osx)"
