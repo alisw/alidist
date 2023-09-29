@@ -1,11 +1,11 @@
 package: Rivet
 version: "%(tag_basename)s"
-tag: "3.1.6-alice1"
-source: https://github.com/alisw/rivet
+tag: "3.1.8"
+source: https://gitlab.com/hepcedar/rivet
 requires:
   - YODA
   - fastjet
-  - HepMC
+  - HepMC3
   - "Python:(?!osx)"
   - "Python-modules:(?!osx)"
   - "Python-system:(osx.*)"
@@ -58,7 +58,9 @@ make install
 # Remove libRivet.la
 rm $INSTALLROOT/lib/libRivet.la
 
-# Dependencies relocation: rely on runtime environment
+# Dependencies relocation: rely on runtime environment.  That is,
+# specific paths in the generated script are replaced by expansions of
+# the relevant environment variables.
 SED_EXPR="s!x!x!"  # noop
 for P in $REQUIRES $BUILD_REQUIRES; do
   UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
@@ -70,6 +72,13 @@ cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-
 mv $INSTALLROOT/bin/rivet-config.0 $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
 PYVER="$(basename $(find $INSTALLROOT/lib -type d -name 'python*'))"
+
+# We do a similar thing for the `rivet-build` script so that we again
+# refer to specific installations by environment variable.  We also
+# add in the LDFLAGS set at compile time so that when building Rivet
+# plugins we use the same flags as when Rivet is built.
+cat $INSTALLROOT/bin/rivet-build | sed -e 's,^myldflags="\([^"]*\)",myldflags="\1 $LDFLAGS",' -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
+mv $INSTALLROOT/bin/rivet-build.0 $INSTALLROOT/bin/rivet-build
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
