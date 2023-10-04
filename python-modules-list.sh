@@ -2,9 +2,9 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_BASE_REQUIREMENTS: |
-    pip==23.0.1
-    setuptools==65.5.1
-    wheel==0.40.0
+    pip==21.3.1
+    setuptools==59.6.0
+    wheel==0.37.1
   PIP_REQUIREMENTS: |
     requests==2.27.1
     ipykernel==5.1.0
