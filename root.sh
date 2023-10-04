@@ -72,6 +72,7 @@ case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
     DISABLE_MYSQL=1
+    USE_BUILTIN_GLEW=1
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
@@ -174,6 +175,7 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_fftw3=OFF                                                              \
       -Dtmva-sofie=ON                                                                  \
       -Ddavix=OFF                                                                      \
+      ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
