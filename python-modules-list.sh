@@ -91,7 +91,7 @@ env:
     seaborn==0.11.0
     scikit-learn==1.2.2
     sklearn-evaluation==0.12.0
-    Keras==2.12.0
+    Keras==2.13.1
     xgboost==1.7.5
     dryable==1.0.5
     responses==0.10.6
@@ -121,7 +121,7 @@ env:
     seaborn==0.11.0
     scikit-learn==1.3.0
     sklearn-evaluation==0.12.0
-    Keras==2.12.0
+    Keras==2.13.1
     xgboost==1.7.5
     dryable==1.0.5
     responses==0.10.6
