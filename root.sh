@@ -77,7 +77,7 @@ case $ARCHITECTURE in
     COMPILER_LD=clang
     SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
-    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
   ;;
 esac
