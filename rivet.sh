@@ -41,9 +41,7 @@ rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 (
 unset PYTHON_VERSION
 autoreconf -ivf
-echo =====================================
-printenv | sort -u
-echo =====================================
+
 CGAL_LDFLAGS="-L${CGAL_ROOT}/lib"
 case $ARCHITECTURE in
   osx*)

@@ -100,10 +100,6 @@ else
     PYTHON_FULL_VERSION=$( echo $PYTHON_EXECUTABLE | sed -e 's|.*/Python/||' -e 's|/bin/.*||') 
 fi
 
-echo "=================================================" 
-printenv | sort -u
-echo "=================================================" 
-
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -113,9 +109,6 @@ mkdir -p "$MODULEDIR"
 # cat >> "$MODULEFILE"0 <<EoF
 # prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
 # EoF
-
-# Temporary hack, just to see that things work
-TGTDIR=${WORK_DIR}/${PKGPATH}
 
 cat > "$MODULEFILE" <<EoF
 #%Module1.0
@@ -132,7 +125,6 @@ module load BASE/1.0					\\
 
 # Our environment
 set YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-set YODA_ROOT ${TGTDIR}
 
 prepend-path PATH \$YODA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib
