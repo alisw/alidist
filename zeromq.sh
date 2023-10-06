@@ -12,6 +12,7 @@ cd $BUILDDIR
 cmake $SOURCEDIR                          \
       -G Ninja                            \
       -DENABLE_WS=OFF                     \
+      -DBUILD_TESTS=OFF                   \
       -DCMAKE_INSTALL_LIBDIR=lib          \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
