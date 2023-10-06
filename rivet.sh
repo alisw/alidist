@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 tag: "rivet-3.1.8"
 source: https://gitlab.com/hepcedar/rivet.git
 requires:
+  - HepMC3
   - YODA
   - fastjet
   - "Python:(?!osx)"
