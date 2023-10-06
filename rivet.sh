@@ -6,6 +6,7 @@ requires:
   - HepMC3
   - YODA
   - fastjet
+  - GMP
   - "Python:(?!osx)"
   - "Python-modules:(?!osx)"
   - "Python-system:(osx.*)"
@@ -44,29 +45,34 @@ unset PYTHON_VERSION
 autoreconf -ivf
 
 CGAL_LDFLAGS="-L${CGAL_ROOT}/lib"
+GMP_LDFLAGS="-L${GMP_ROOT}/lib"
+LOCAL_LDFLAGS="${GCAL_LDFAGS} ${GMP_LDFLAGS}"
 case $ARCHITECTURE in
-  osx*)
-	./configure --prefix="$INSTALLROOT"    \
-	    --disable-doxygen                  \
-	    --with-yoda="$YODA_ROOT"           \
-	    --with-hepmc3="$HEPMC3_ROOT"       \
-	    --with-fastjet="$FASTJET_ROOT"     \
-	    LDFLAGS="${CGAL_LDFLAGS}"
-  ;;
-  *) 
-	./configure --prefix="$INSTALLROOT"    			\
-	    --disable-doxygen                  			\
-	    --with-yoda="$YODA_ROOT"           			\
-	    --with-hepmc3="$HEPMC3_ROOT"       			\
-	    --with-fastjet="$FASTJET_ROOT"     			\
-	    LDFLAGS="${CGAL_LDFLAGS} -Wl,--no-as-needed"        \
-	    CYTHON="$PYTHON_MODULES_ROOT/share/python-modules/bin/cython"
+    osx*)
+	./configure --prefix="$INSTALLROOT"            \
+		    --disable-silent-rules             \
+		    --disable-doxygen                  \
+		    --with-yoda="$YODA_ROOT"           \
+		    --with-hepmc3="$HEPMC3_ROOT"       \
+		    --with-fastjet="$FASTJET_ROOT"     \
+		    LDFLAGS="${LOCAL_LDFLAGS}"
+	;;
+    *)
+	LOCAL_LDFLAGS="${LOCAL_LDFLAGS} -Wl,--no-as-needed"
+	./configure --prefix="$INSTALLROOT"    	                        \
+		    --disable-silent-rules                              \
+		    --disable-doxygen                  			\
+		    --with-yoda="$YODA_ROOT"           			\
+		    --with-hepmc3="$HEPMC3_ROOT"       			\
+		    --with-fastjet="$FASTJET_ROOT"     			\
+		    LDFLAGS="${LOCAL_LDFLAGS}"                          \
+		    CYTHON="$PYTHON_MODULES_ROOT/share/python-modules/bin/cython"
   ;;
 esac
 
 # Fix-up rivet-build to include LDFLAGS - needed _before_ bulding 
 # After 3.1.9 this will not be needed. 
-SED_EXPR="s|^myldflags=\"\(.*\)\"|myldflags=\"\1 ${CGAL_LDFLAGS}\"|"
+SED_EXPR="s|^myldflags=\"\(.*\)\"|myldflags=\"\1 ${LOCAL_LDFLAGS}\"|"
 cat bin/rivet-build | sed -e "${SED_EXPR}" > bin/rivet-build.0
 mv bin/rivet-build bin/rivet-build.orig
 mv bin/rivet-build.0 bin/rivet-build
