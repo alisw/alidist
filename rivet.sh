@@ -46,7 +46,7 @@ autoreconf -ivf
 
 CGAL_LDFLAGS="-L${CGAL_ROOT}/lib"
 GMP_LDFLAGS="-L${GMP_ROOT}/lib"
-LOCAL_LDFLAGS="${CGAL_LDFAGS} ${GMP_LDFLAGS}"
+LOCAL_LDFLAGS="${CGAL_LDFLAGS} ${GMP_LDFLAGS}"
 case $ARCHITECTURE in
     osx*)
 	./configure --prefix="$INSTALLROOT"            \
