@@ -12,11 +12,20 @@ build_requires:
   - CMake
   - ninja
   - alibuild-recipe-tools
+  - alibuild-variant-support
 source: https://github.com/AliceO2Group/O2Physics
 incremental_recipe: |
   [[ $ALIBUILD_O2PHYSICS_TESTS ]] && CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
-  cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+  case $ALIBUILD_BUILD_VARIANT in
+    tutorial) TARGET=Tutorials ;;
+    *) TARGET=$ALIBUILD_BUILD_VARIANT ;;
+  esac
+  # In case a variant is passed, we invoke the build with the variant as target
+  alibuild-variant-command ${ALIBUILD_BUILD_VARIANT:-none} cmake --build . -- ${JOBS:+-j$JOBS} $ALIBUILD_BUILD_VARIANT/install
+  # No need to continue in case we are using a variant
+  alibuild-variant-done ${ALIBUILD_BUILD_VARIANT:-none}
+  cmake --build . -- ${JOBS:+-j$JOBS} install
 ---
 #!/bin/sh
 
@@ -38,7 +47,6 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       ${FASTJET_ROOT:+-Dfjcontrib_ROOT="$FASTJET_ROOT"}           \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}   \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}
-cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
 DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
@@ -58,3 +66,16 @@ setenv O2PHYSICS_ROOT \$O2PHYSICS_ROOT
 prepend-path ROOT_INCLUDE_PATH \$O2PHYSICS_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+
+# Better naming for some of the the targets
+case $ALIBUILD_BUILD_VARIANT in
+  tutorial) TARGET=Tutorials ;;
+  *) TARGET=$ALIBUILD_BUILD_VARIANT ;;
+esac
+
+source $ALIBUILD_VARIANT_SUPPORT
+# In case a variant is passed, we invoke the build with the variant as target
+alibuild-variant-command ${ALIBUILD_BUILD_VARIANT:-none} cmake --build . -- ${JOBS:+-j$JOBS} $TARGET/install
+# No need to continue in case we are using a variant
+alibuild-variant-done ${ALIBUILD_BUILD_VARIANT:-none}
+cmake --build . -- ${JOBS+-j $JOBS} install
