@@ -29,7 +29,7 @@ env:
     commonmark==0.9.1
     pygments==2.14.0
     dataclasses==0.8
-    rich=12.6.0
+    rich==12.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -60,7 +60,7 @@ env:
     markdown-it-py==3.0.0
     pygments==2.16.1
     mdurl==0.1.2
-    rich=13.6.0
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -91,7 +91,7 @@ env:
     markdown-it-py==3.0.0
     pygments==2.16.1
     mdurl==0.1.2
-    rich=13.6.0
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -121,7 +121,7 @@ env:
     markdown-it-py==3.0.0
     pygments==2.16.1
     mdurl==0.1.2
-    rich=13.6.0
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -154,7 +154,7 @@ env:
     markdown-it-py==3.0.0
     pygments==2.16.1
     mdurl==0.1.2
-    rich=13.6.0
+    rich==13.6.0
     tensorflow-macos==2.12.0
     tensorflow-metal==0.8.0
     PyYAML==6.0.1
@@ -186,7 +186,7 @@ env:
     markdown-it-py==3.0.0
     pygments==2.16.1
     mdurl==0.1.2
-    rich=13.6.0
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.9.0
     uproot==4.1.0
@@ -216,7 +216,7 @@ env:
     markdown-it-py==3.0.0
     pygments==2.16.1
     mdurl==0.1.2
-    rich=13.6.0
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.9.4
     uproot==4.1.0
