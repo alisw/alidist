@@ -45,6 +45,8 @@ cmake  $SOURCEDIR                                                               
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                   \
        -DgRPC_ROOT=$GRPC_ROOT                                                                \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR="$OPENSSL_ROOT"}                                   \
+       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                         \
+       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
        -DBUILD_INFOLOGGER=ON
 
 

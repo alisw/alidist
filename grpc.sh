@@ -23,8 +23,10 @@ git checkout "$GIT_TAG"
 git submodule update --init
 popd
 
+SONAME=so
 case $ARCHITECTURE in
   osx*)
+    SONAME=dylib
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
     # to avoid issues with rpath on mac
@@ -58,6 +60,8 @@ cmake $SOURCEDIR                                    \
   -DgRPC_RE2_PROVIDER=package                       \
   ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
   ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}   \
+  ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+  ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
   -DgRPC_CARES_PROVIDER=package \
   $extra_cmake_variables
 
