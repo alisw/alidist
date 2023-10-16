@@ -19,7 +19,7 @@ incremental_recipe: |
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
-    [[ -z "$OPENSSL_ROOT" ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
+    [[ -z "$OPENSSL_ROOT" ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)
     [[ -z "$GRPC_ROOT" ]] && GRPC_ROOT=$(brew --prefix grpc)
   ;;
 esac

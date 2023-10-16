@@ -29,7 +29,7 @@ incremental_recipe: |
 case $ARCHITECTURE in
     osx*) 
         [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-        [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
+        [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)
         [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
         [[ ! $ZEROMQ_ROOT ]] && ZEROMQ_ROOT=$(brew --prefix zeromq)
         [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`

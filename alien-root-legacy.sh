@@ -18,7 +18,7 @@ prepend_path:
 #!/bin/bash -e
 
 if [[ $ARCHITECTURE == osx* && ! $OPENSSL_ROOT ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+  OPENSSL_ROOT=$(brew --prefix openssl@3)
 fi
 
 # Determine whether we are building for ROOT 5 or ROOT 6+

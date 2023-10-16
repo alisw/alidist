@@ -25,7 +25,7 @@ case $ARCHITECTURE in
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     [[ ! $GRPC_ROOT ]] && GRPC_ROOT=`brew --prefix grpc`
     # grpc needs OpenSSL and doesn't find it by default.
-    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
 
     SONAME=dylib
   ;;

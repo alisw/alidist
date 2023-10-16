@@ -12,7 +12,7 @@ build_requires:
 #!/bin/bash -e
 
 if [[ $ARCHITECTURE = osx* ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+  OPENSSL_ROOT=$(brew --prefix openssl@3)
 fi
 
 cmake $SOURCEDIR                                                   \

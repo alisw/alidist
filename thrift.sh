@@ -16,7 +16,7 @@ prefer_system_check: |
 case $ARCHITECTURE in
   osx*) 
     export PATH=$(brew --prefix bison)/bin:$PATH
-    OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    OPENSSL_ROOT=$(brew --prefix openssl@3)
   ;;
 esac
 rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./

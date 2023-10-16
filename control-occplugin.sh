@@ -28,7 +28,7 @@ case $ARCHITECTURE in
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
       [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
       [[ ! $GRPC_ROOT ]] && GRPC_ROOT=$(brew --prefix grpc)
-      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)
       LIBEXT=dylib
     ;;
 esac

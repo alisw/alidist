@@ -25,7 +25,7 @@ popd
 
 case $ARCHITECTURE in
   osx*)
-    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
     # to avoid issues with rpath on mac
     extra_cmake_variables="-DCMAKE_INSTALL_RPATH=$INSTALLROOT/lib \
