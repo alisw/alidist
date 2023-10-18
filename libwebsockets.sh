@@ -12,8 +12,11 @@ prefer_system_check: |
   printf '#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 2004000 || LWS_LIBRARY_VERSION_NUMBER >= 3001000\n#error \"JAliEn-ROOT requires libwebsockets 3.0.x but other version was detected\"\n#endif\n' | c++ -c -x c++ -I$(brew --prefix libwebsockets)/include -std=c++17 - -o /dev/null || exit 1
 ---
 #!/bin/bash -e
+SONAME=so
 case $ARCHITECTURE in
-  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1) ;;
+  osx*)
+    SONAME=dylib
+    : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}" ;;
 esac
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $BUILDDIR
@@ -50,7 +53,7 @@ cmake ..                                                            \
       -DLWS_WITH_ZLIB=OFF                                           \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
-      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib}        \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
       -DLWS_WITHOUT_TESTAPPS=ON
 make ${JOBS+-j $JOBS} install

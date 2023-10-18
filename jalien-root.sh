@@ -18,9 +18,11 @@ append_path:
   ROOT_INCLUDE_PATH: "$JALIEN_ROOT_ROOT/include"
 ---
 #!/bin/bash -e
+SONAME=so
 case $ARCHITECTURE in
-  osx*) 
-	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+  osx*)
+        SONAME=dylib
+	[[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
 	[[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
   ;;
 esac
@@ -34,6 +36,8 @@ cmake $BUILDDIR                                          \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
       -DXROOTD_ROOT_DIR="$XROOTD_ROOT"                   \
       -DLWS="$LIBWEBSOCKETS_ROOT"

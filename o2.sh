@@ -82,6 +82,9 @@ incremental_recipe: |
     if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
       export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
     fi
+    if [[ -z $OPENSSL_REVISION && $ARCHITECTURE == osx* ]]; then
+      export ROOT_INCLUDE_PATH=$(brew --prefix openssl@3)/include:$ROOT_INCLUDE_PATH
+    fi
     export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/GPU:$ROOT_INCLUDE_PATH
     # Set Geant4 data sets environment
     if [[ "$G4INSTALL" != "" ]]; then
@@ -148,9 +151,7 @@ case $ARCHITECTURE in
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
     [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
-    SONAME=dylib
   ;;
-  *) SONAME=so ;;
 esac
 
 # This affects only PR checkers
@@ -277,6 +278,9 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
   if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
     export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
+  fi
+  if [[ -z $OPENSSL_REVISION && $ARCHITECTURE == osx* ]]; then
+    export ROOT_INCLUDE_PATH=$(brew --prefix openssl@3)/include:$ROOT_INCLUDE_PATH
   fi
   export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/GPU:$ROOT_INCLUDE_PATH
   # Clean up old coverage data and tests logs

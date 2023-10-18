@@ -25,7 +25,7 @@ case $ARCHITECTURE in
     [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
     [[ ! $GRPC_ROOT ]] && GRPC_ROOT=`brew --prefix grpc`
     # grpc needs OpenSSL and doesn't find it by default.
-    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
 
     SONAME=dylib
   ;;
@@ -45,6 +45,8 @@ cmake  $SOURCEDIR                                                               
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                   \
        -DgRPC_ROOT=$GRPC_ROOT                                                                \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR="$OPENSSL_ROOT"}                                   \
+       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                         \
+       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
        -DBUILD_INFOLOGGER=ON
 
 

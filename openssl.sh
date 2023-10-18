@@ -6,7 +6,7 @@ prefer_system: (?!slc5|slc6)
 prefer_system_check: |
   #!/bin/bash -e
   case $(uname) in
-    Darwin) prefix=$(brew --prefix openssl@1.1); [ -d "$prefix" ] ;;
+    Darwin) prefix=$(brew --prefix openssl@3); [ -d "$prefix" ] ;;
     *) prefix= ;;
   esac
   cc -x c - ${prefix:+"-I$prefix/include"} -c -o /dev/null <<\EOF
