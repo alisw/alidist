@@ -1,6 +1,6 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v3.0.1"
+tag: "v4.3.2"
 source: https://github.com/warmcat/libwebsockets
 build_requires:
   - CMake
@@ -8,8 +8,8 @@ build_requires:
   - "OpenSSL:(?!osx)"
 prefer_system: "osx"
 prefer_system_check: |
-  printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | c++ -I$(brew --prefix libwebsockets)/include -c -xc++ -std=c++17 - -o /dev/null
-  printf '#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 2004000 || LWS_LIBRARY_VERSION_NUMBER >= 3001000\n#error \"JAliEn-ROOT requires libwebsockets 3.0.x but other version was detected\"\n#endif\n' | c++ -c -x c++ -I$(brew --prefix libwebsockets)/include -std=c++17 - -o /dev/null || exit 1
+  printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | cc -I$(brew --prefix libwebsockets)/include -c -xc - -o /dev/null
+  printf '#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 4000000 \n#error \"JAliEn-ROOT requires libwebsockets >= 4.0 but lesser version was detected\"\n#endif\n' | cc -c -x c -I$(brew --prefix libwebsockets)/include - -o /dev/null || exit 1
 ---
 #!/bin/bash -e
 SONAME=so
@@ -20,25 +20,6 @@ case $ARCHITECTURE in
 esac
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $BUILDDIR
-
-# NOTE: drop this patch after libwebsockets is updated to 4.x
-cat > xcode12.patch << EoF
---- private.h	2020-11-13 17:36:22.000000000 +0100
-+++ private.h.patched	2020-11-13 17:54:05.000000000 +0100
-@@ -298,8 +298,10 @@
-  * but happily have something equivalent in the SO_NOSIGPIPE flag.
-  */
- #ifdef __APPLE__
-+#ifndef MSG_NOSIGNAL
- #define MSG_NOSIGNAL SO_NOSIGPIPE
- #endif
-+#endif
-
- /*
-  * Solaris 11.X only supports POSIX 2001, MSG_NOSIGNAL appears in
-EoF
-
-patch lib/core/private.h xcode12.patch
 
 mkdir build
 pushd build
