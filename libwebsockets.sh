@@ -30,9 +30,12 @@ cmake $SOURCEDIR                                                    \
       -DLWS_WITH_SHARED=OFF                                         \
       -DLWS_WITH_IPV6=ON                                            \
       -DLWS_WITH_ZLIB=OFF                                           \
+      ${OPENSSL_ROOT:+-DOPENSSL_EXECUTABLE=$OPENSSL_ROOT/bin/openssl} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
-      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}     \
+      ${OPENSSL_ROOT:+-DLWS_OPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
+      ${OPENSSL_ROOT:+-DLWS_OPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
       -DLWS_WITHOUT_TESTAPPS=ON
 cmake --build . --target install ${JOBS+-j $JOBS}
