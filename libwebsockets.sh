@@ -6,6 +6,7 @@ build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - "OpenSSL:(?!osx)"
+  - ninja
 prefer_system: "osx"
 prefer_system_check: |
   printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | cc -I$(brew --prefix libwebsockets)/include -c -xc - -o /dev/null
@@ -19,12 +20,8 @@ case $ARCHITECTURE in
     : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}" ;;
 esac
 
-rsync -av --delete --exclude="**/.git" $SOURCEDIR/ $BUILDDIR
-
-mkdir build
-pushd build
-
-cmake ..                                                            \
+cmake $SOURCEDIR                                                    \
+      -GNinja                                                       \
       -DCMAKE_C_FLAGS_RELEASE="-Wno-error"                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
       -DCMAKE_BUILD_TYPE=RELEASE                                    \
@@ -37,10 +34,8 @@ cmake ..                                                            \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
       -DLWS_WITHOUT_TESTAPPS=ON
-make ${JOBS+-j $JOBS} install
+cmake --build . --target install ${JOBS+-j $JOBS}
 rm -rf $INSTALLROOT/share
-
-popd # build
 
 # Modulefile
 mkdir -p etc/modulefiles
