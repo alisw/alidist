@@ -17,6 +17,17 @@ env:
   CONFIG_DIR: "$FAIRROOT_ROOT/share/fairbase/examples/common/gconfig"
 prepend_path:
   ROOT_INCLUDE_PATH: "$FAIRROOT_ROOT/include"
+incremental_recipe: |
+  cmake $SOURCEDIR                          \
+        -DCMAKE_GENERATOR=Ninja             \
+        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  cmake --build . -- ${JOBS+-j $JOBS} install
+
+  #ModuleFile
+  mkdir -p etc/modulefiles
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
