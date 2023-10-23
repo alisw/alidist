@@ -7,6 +7,7 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
   - "OpenSSL:(?!osx)"
   - ninja
+  - alibuild-recipe-tools
 prefer_system: "osx"
 prefer_system_check: |
   printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | cc -I$(brew --prefix libwebsockets)/include -c -xc - -o /dev/null
@@ -39,21 +40,5 @@ rm -rf $INSTALLROOT/share
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-                     ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}
-# Our environment
-set LIBWEBSOCKETS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv LIBWEBSOCKETS_ROOT \$LIBWEBSOCKETS_ROOT
-prepend-path PATH \$LIBWEBSOCKETS_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$LIBWEBSOCKETS_ROOT/lib
-EoF
+alibuild-generate-module --lib --bin > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
