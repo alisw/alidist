@@ -6,7 +6,6 @@ env:
     setuptools==59.6.0
     wheel==0.37.1
   PIP_REQUIREMENTS: |
-    requests==2.27.1
     ipykernel==5.1.0
     ipython==7.4.0
     ipywidgets==7.4.2
@@ -15,6 +14,22 @@ env:
     notebook==5.7.8
     scons==4.1.0
   PIP36_REQUIREMENTS: |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==2.0.12
+    urllib3==1.26.17
+    requests==2.27.1
+    pycparser==2.21
+    cffi==1.15.1
+    cryptography==40.0.2
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==9.1
+    typing-extensions==4.1.1
+    commonmark==0.9.1
+    pygments==2.14.0
+    dataclasses==0.8
+    rich==12.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -31,6 +46,21 @@ env:
     pandas==0.24.2
     scikit-learn==0.20.3
   PIP38_REQUIREMENTS: |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==3.3.0
+    urllib3==2.0.6
+    requests==2.31.0
+    pycparser==2.21
+    cffi==1.16.0
+    cryptography==41.0.4
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==11.0.3
+    markdown-it-py==3.0.0
+    pygments==2.16.1
+    mdurl==0.1.2
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -47,6 +77,21 @@ env:
     pandas==1.2.3
     scikit-learn==0.24.1
   PIP39_REQUIREMENTS: |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==3.3.0
+    urllib3==2.0.6
+    requests==2.31.0
+    pycparser==2.21
+    cffi==1.16.0
+    cryptography==41.0.4
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==11.0.3
+    markdown-it-py==3.0.0
+    pygments==2.16.1
+    mdurl==0.1.2
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -62,6 +107,21 @@ env:
     responses==0.10.6
     pandas==1.1.5
   "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==3.3.0
+    urllib3==2.0.6
+    requests==2.31.0
+    pycparser==2.21
+    cffi==1.16.0
+    cryptography==41.0.4
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==11.0.3
+    markdown-it-py==3.0.0
+    pygments==2.16.1
+    mdurl==0.1.2
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.8.0
     uproot==4.1.0
@@ -80,6 +140,21 @@ env:
   # Everything but the first two lines copied from PIP39_REQUIREMENTS, but with versions
   # adjusted such that wheels are available and for compatibility with tensorflow.
   PIP39_REQUIREMENTS_osx_arm64: |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==3.3.0
+    urllib3==2.0.6
+    requests==2.31.0
+    pycparser==2.21
+    cffi==1.16.0
+    cryptography==41.0.4
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==11.0.3
+    markdown-it-py==3.0.0
+    pygments==2.16.1
+    mdurl==0.1.2
+    rich==13.6.0
     tensorflow-macos==2.12.0
     tensorflow-metal==0.8.0
     PyYAML==6.0.1
@@ -97,6 +172,21 @@ env:
     responses==0.10.6
     pandas==1.5.3
   PIP310_REQUIREMENTS: |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==3.3.0
+    urllib3==2.0.6
+    requests==2.31.0
+    pycparser==2.21
+    cffi==1.16.0
+    cryptography==41.0.4
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==11.0.3
+    markdown-it-py==3.0.0
+    pygments==2.16.1
+    mdurl==0.1.2
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.9.0
     uproot==4.1.0
@@ -112,6 +202,21 @@ env:
     responses==0.10.6
     pandas==1.1.5
   PIP311_REQUIREMENTS: |
+    certifi==2023.7.22
+    idna==3.4
+    charset-normalizer==3.3.0
+    urllib3==2.0.6
+    requests==2.31.0
+    pycparser==2.21
+    cffi==1.16.0
+    cryptography==41.0.4
+    pyOpenSSL==23.2.0
+    async-stagger==0.3.1
+    websockets==11.0.3
+    markdown-it-py==3.0.0
+    pygments==2.16.1
+    mdurl==0.1.2
+    rich==13.6.0
     PyYAML==6.0.1
     psutil==5.9.4
     uproot==4.1.0
