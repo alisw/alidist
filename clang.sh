@@ -52,6 +52,19 @@ cmake "$SOURCEDIR/llvm" \
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
+git clone -b "${PKGVERSION%%.*}.0.0" https://github.com/KhronosGroup/SPIRV-LLVM-Translator
+mkdir SPIRV-LLVM-Translator/build
+pushd SPIRV-LLVM-Translator/build
+cmake ../ \
+  -G Ninja \
+  -DLLVM_DIR="$INSTALLROOT/lib/cmake/llvm" \
+  -DLLVM_BUILD_TOOLS=ON \
+  -DLLVM_INCLUDE_TESTS=OFF \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"
+cmake --build . -- ${JOBS:+-j$JOBS} install
+popd
+
 case $ARCHITECTURE in
   osx*)
     # Add correct rpath to dylibs on Mac as long as there is no better way to
@@ -75,6 +88,7 @@ esac
 # path is fine.
 mkdir "$INSTALLROOT/bin-safe"
 mv "$INSTALLROOT"/bin/clang* "$INSTALLROOT/bin-safe/"
+mv "$INSTALLROOT"/bin/llvm-spirv* "$INSTALLROOT/bin-safe/" # Install llvm-spirv tool
 mv "$INSTALLROOT"/bin/git-clang* "$INSTALLROOT/bin-safe/"  # we also need git-clang-format in runtime
 sed -i.bak -e "s|bin/clang|bin-safe/clang|g" "$INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake"
 rm "$INSTALLROOT"/lib/cmake/clang/*.bak
