@@ -22,6 +22,3 @@ make install
 
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin --lib > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
-cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
-setenv PROTOBUF_ROOT \$PKG_ROOT
-EoF
