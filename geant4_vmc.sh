@@ -4,7 +4,6 @@ tag: "v6-1-p8"
 source: https://github.com/vmc-project/geant4_vmc
 requires:
   - ROOT
-  - VMC
   - GEANT4
   - vgm
 build_requires:
