@@ -8,7 +8,7 @@ build_requires:
   - "autotools:(slc6|slc7)"
 prefer_system: (?!slc5.*)
 prefer_system_check: |
-  type jqfoo
+  type jq
 ---
 # Hack to avoid having to do autogen inside $SOURCEDIR
 rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
