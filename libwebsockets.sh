@@ -8,7 +8,7 @@ build_requires:
   - "OpenSSL:(?!osx)"
   - ninja
   - alibuild-recipe-tools
-prefer_system: "osx"
+prefer_system: .*
 prefer_system_check: |
   printf '#if !__has_include(<lws_config.h>)\n#error \"Cannot find libwebsocket\"\n#endif\n' | cc -I$(brew --prefix libwebsockets)/include -c -xc - -o /dev/null
   printf '#include <lws_config.h>\n#if LWS_LIBRARY_VERSION_NUMBER < 4000000 \n#error \"JAliEn-ROOT requires libwebsockets >= 4.0 but lesser version was detected\"\n#endif\n' | cc -c -x c -I$(brew --prefix libwebsockets)/include - -o /dev/null || exit 1
