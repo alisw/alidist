@@ -21,7 +21,8 @@ if [ $FVERSION -ge 10 ]; then
    echo "Fortran version $FVERSION"
    SPECIALFFLAGS=1
 fi
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
+cmake $SOURCEDIR -DCMAKE_CXX_FLAGS=-isystem\ "/opt/homebrew/include" \
+                 -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DCMAKE_SKIP_RPATH=TRUE \
