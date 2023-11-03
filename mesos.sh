@@ -16,7 +16,7 @@ requires:
   # - curl
   # - OpenSSL
 build_requires:
-  - "autotools:(slc6|slc7|slc8)"
+  - "autotools:(slc6|slc7|slc8|slc9)"
   - protobuf
   - Python-modules
   - abseil
