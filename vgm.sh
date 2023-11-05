@@ -9,10 +9,16 @@ build_requires:
   - CMake
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in
+  osx*) SONAME=dylib ;;
+  *) SONAME=so ;;
+esac
 cmake "$SOURCEDIR" \
   -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
   -DCMAKE_INSTALL_LIBDIR="lib"                 \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
+  -DVDT_INCLUDE_DIR="$ROOT_ROOT/include"       \
+  -DVDT_LIBRARY="$ROOT_ROOT/lib/libvdt.$SONAME"      \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 make ${JOBS+-j $JOBS} install

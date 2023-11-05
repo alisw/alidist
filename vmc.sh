@@ -20,25 +20,22 @@ mkdir -p "$MODULEDIR"
 alibuild-generate-module > $MODULEFILE
 
 [ "0$ENABLE_VMC" == "0" ] && exit 0 || true
+case $ARCHITECTURE in
+  osx*) SONAME=dylib ;;
+  *) SONAME=so ;;
+esac
 
 cmake "$SOURCEDIR"                                 \
       -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
       -DCMAKE_INSTALL_LIBDIR=lib                   \
+      -DVDT_INCLUDE_DIR="$ROOT_ROOT/include"       \
+      -DVDT_LIBRARY="$ROOT_ROOT/lib/libvdt.$SONAME"      \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-# Make backward compatible in case a depending (older) package still needs libVMC.so
-cd $INSTALLROOT/lib
-case $ARCHITECTURE in
-  osx*)
-      ln -s libVMCLibrary.dylib libVMC.dylib
-  ;;
-  *)
-      ln -s libVMCLibrary.so libVMC.so
-  ;;
-esac
+ln -s libVMCLibrary.$SONAME $INSTALLROOT/lib/libVMC.$SONAME
 # update modulefile
 cat >> "$MODULEFILE" <<EoF
 # Our environment

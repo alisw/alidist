@@ -19,9 +19,16 @@ if [ $FVERSION -ge 10 ]; then
    echo "Fortran version $FVERSION"
    SPECIALFFLAGS=1
 fi
+case $ARCHITECTURE in
+  osx*) SONAME=dylib ;;
+  *) SONAME=so ;;
+esac
+
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE     \
                  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
+                 -DVDT_INCLUDE_DIR="$ROOT_ROOT/include"       \
+                 -DVDT_LIBRARY="$ROOT_ROOT/lib/libvdt.$SONAME"      \
                  -DCMAKE_SKIP_RPATH=TRUE \
                  ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch -fallow-invalid-boz -fno-tree-loop-distribute-patterns"}
 make ${JOBS:+-j $JOBS} install
