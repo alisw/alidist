@@ -12,7 +12,7 @@ requires:
   - QualityControl
   - "DataDistribution:(?!osx)"
   - "ALF:(?!osx)"
-  - "mesos:(slc8|slc9)"
+  - "mesos:(slc.*)"
   - "TpcFecUtils:(?!osx)"
 valid_defaults:
   - o2
