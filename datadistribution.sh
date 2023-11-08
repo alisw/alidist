@@ -13,7 +13,7 @@ requires:
   - protobuf
   - O2
   - fmt
-  - "ucx:(slc.*)"
+  - "ucx:(slc8|slc9)"
 build_requires:
   - CMake
 source: https://github.com/AliceO2Group/DataDistribution
