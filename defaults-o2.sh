@@ -31,7 +31,7 @@ overrides:
   cgal:
     version: 4.12.2
   fastjet:
-    tag: v3.4.1_1.052-alice1
+    tag: v3.4.1_1.052-alice2
   pythia:
     tag: v8304
     requires:
