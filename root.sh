@@ -166,7 +166,7 @@ cmake $SOURCEDIR                                                                
       -Dpythia6_nolink=ON                                                              \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
-      -Droot7=OFF                                                                      \
+      -Droot7=ON                                                                       \
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
       -Dvdt=ON                                                                         \
