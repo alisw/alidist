@@ -1,6 +1,6 @@
 package: boost
-version: v1.75.0
-tag: v1.75.0
+version: v1.83.0
+tag: v1.83.0
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -54,7 +54,7 @@ fi
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
-  osx*) TOOLSET=clang-darwin ;;
+  osx*) TOOLSET=clang ;;
   *) TOOLSET=gcc ;;
 esac
 
