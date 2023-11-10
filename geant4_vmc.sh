@@ -17,12 +17,18 @@ env:
   G4VMCINSTALL: "$GEANT4_VMC_ROOT"
 ---
 #!/bin/bash -e
+case $ARCHITECTURE in
+  osx*) SONAME=dylib ;;
+  *) SONAME=so ;;
+esac
 LDFLAGS="$LDFLAGS -L$GEANT4_ROOT/lib"            \
   cmake "$SOURCEDIR"                             \
     -GNinja                                      \
     -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DGeant4VMC_USE_VGM=ON                       \
     -DCMAKE_INSTALL_LIBDIR=lib                   \
+    -DVDT_INCLUDE_DIR="$ROOT_ROOT/include"       \
+    -DVDT_LIBRARY="$ROOT_ROOT/lib/libvdt.$SONAME"      \
     -DGeant4VMC_BUILD_EXAMPLES=OFF               \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
