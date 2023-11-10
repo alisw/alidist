@@ -39,8 +39,8 @@ cmake "${SOURCEDIR}" -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"      \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}} \
       -DCMAKE_INSTALL_LIBDIR=lib                                  \
       -DDISABLE_COLOR=ON                                          \
-      -DBUILD_EXAMPLES=ON                                         \
-      -DBUILD_TESTING=ON
+      -DBUILD_EXAMPLES=OFF                                        \
+      -DBUILD_TESTING=OFF
 # NOTE: FairMQ examples must always be built in RPMs as they are
 #       used for AliECS integration testing. Please do not disable
 #       them.
