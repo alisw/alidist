@@ -17,12 +17,6 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-
-pushd $SOURCEDIR
-git checkout "$GIT_TAG"
-git submodule update --init
-popd
-
 SONAME=so
 case $ARCHITECTURE in
   osx*)
@@ -54,7 +48,7 @@ cmake $SOURCEDIR                                    \
   -DgRPC_BENCHMARK_PROVIDER=package                 \
   -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF               \
   -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF          \
-  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF 		              \
+  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF 		    \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
   -DgRPC_BUILD_CSHARP_EXT=OFF                       \
   -DgRPC_RE2_PROVIDER=package                       \
@@ -69,10 +63,5 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-set GRPC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$GRPC_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$GRPC_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
