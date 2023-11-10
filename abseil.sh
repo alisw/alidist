@@ -1,37 +1,28 @@
 package: abseil
 version: "%(tag_basename)s"
-tag: "20220623.1"
+tag: "20230802.1"
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - ninja
   - alibuild-recipe-tools
 source: https://github.com/abseil/abseil-cpp
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  cmake --build . --target install -- -j$JOBS
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/bash -e
-
-mkdir -p $INSTALLROOT
 cmake $SOURCEDIR                             \
+  -GNinja                                    \
+  -DCMAKE_INSTALL_LIBDIR=lib                 \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
   -DBUILD_TESTING=OFF                        \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
-make ${JOBS:+-j$JOBS} install
-
+cmake --build . --target install -- -j$JOBS
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
-
-# Our environment
-set ABSEIL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$ABSEIL_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$ABSEIL_ROOT/lib
-prepend-path LD_LIBRARY_PATH \$ABSEIL_ROOT/lib64
-EoF
+alibuild-generate-module --bin --lib > "$MODULEFILE"
