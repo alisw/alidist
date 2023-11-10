@@ -82,6 +82,8 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_JEMALLOC=OFF                                                                          \
       -DARROW_HDFS=OFF                                                                              \
       -DARROW_IPC=ON                                                                                \
+      -DARROW_DATASET=ON                                                                            \
+      -DARROW_FILESYSTEM=ON                                                                         \
       ${THRIFT_ROOT:+-DARROW_PARQUET=ON}                                                            \
       ${THRIFT_ROOT:+-DThrift_ROOT="$THRIFT_ROOT"}                                                  \
       ${FLATBUFFERS_ROOT:+-DFlatbuffers_ROOT="$FLATBUFFERS_ROOT"}                                   \
