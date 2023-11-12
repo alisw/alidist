@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "epn-20231111.1"
+tag: "epn-20231110.1"
 requires:
   - O2
   - ONNXRuntime
