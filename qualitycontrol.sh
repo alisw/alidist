@@ -70,28 +70,30 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
 fi
 CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations -Wno-error=unused-function"  # Outside the if to make sure we have it in all cases
 
-cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      -G  Ninja                                               \
-      -DBOOST_ROOT=$BOOST_ROOT                                \
-      -DCommon_ROOT=$COMMON_O2_ROOT                           \
-      -DConfiguration_ROOT=$CONFIGURATION_ROOT                \
-      ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                       \
-      -DO2_ROOT=$O2_ROOT                                      \
-      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include               \
-      ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
-      ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
-      ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                               \
-      ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                \
-      ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                      \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                 \
-      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}          \
-      ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}      \
+cmake $SOURCEDIR                                                                                                \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                       \
+      -G  Ninja                                                                                                 \
+      -DBOOST_ROOT=$BOOST_ROOT                                                                                  \
+      -DCommon_ROOT=$COMMON_O2_ROOT                                                                             \
+      -DConfiguration_ROOT=$CONFIGURATION_ROOT                                                                  \
+      ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                                          \
+      -DO2_ROOT=$O2_ROOT                                                                                        \
+      -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                                                 \
+      ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                                \
+      ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                                    \
+      ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                                     \
+      ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                                                                  \
+      ${CONTROL_OCCPLUGIN_REVISION:+-DOcc_ROOT=$CONTROL_OCCPLUGIN_ROOT}                                         \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                                   \
+      ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}                                                 \
+      ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
-      ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}             \
-      ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}       \
-      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}          \
-      ${BOOKKEEPING_API_REVISION:+-DBookkeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT}                 \
+      ${LIBUV_ROOT:+-DLibUV_INCLUDE_DIR=$LIBUV_ROOT/include}                                                    \
+      ${LIBUV_ROOT:+-DLibUV_LIBRARY=$LIBUV_ROOT/lib/libuv.$SONAME}                                              \
+      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                                 \
+      ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                        \
+      ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                                     \
+      ${BOOKKEEPING_API_REVISION:+-DBookkeepingApi_ROOT=$BOOKKEEPINGAPI_ROOT}                                   \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
