@@ -1,6 +1,6 @@
 package: lhapdf
 version: "%(tag_basename)s"
-tag: v6.2.1-alice2
+tag: v6.5.2
 source: https://github.com/alisw/LHAPDF
 requires:
   - "Python:slc.*"
