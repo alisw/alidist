@@ -121,11 +121,11 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 # Dependencies
 module load BASE/1.0					\\
             ${PYTHON_FULL_VERSION:+Python/$PYTHON_FULL_VERSION}	\\
-            ROOT/$ROOT_RELEASE
+            ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION}
 
 # Our environment
 set YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-
+ 
 prepend-path PATH \$YODA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib64
