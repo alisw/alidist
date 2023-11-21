@@ -7,6 +7,7 @@ requires:
   - Openloops
   - HepMC
   - HepMC3
+  - lhapdf
   - lhapdf-pdfsets
   - fastjet
   - pythia
