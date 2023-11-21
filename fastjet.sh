@@ -90,6 +90,7 @@ module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}
 # Our environment
 set FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FASTJET \$FASTJET_ROOT
+setenv FASTJET_ROOT \$FASTJET_ROOT
 prepend-path PATH \$FASTJET_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$FASTJET_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$FASTJET_ROOT/include

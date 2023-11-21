@@ -13,6 +13,7 @@ requires:
 build_requires:
   - GCC-Toolchain:(?!osx)
   - YODA
+  - cgal
   - Python
 prepend_path:
   PYTHONPATH: $RIVET_ROOT/lib/python/site-packages
