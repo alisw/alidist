@@ -26,6 +26,7 @@ esac
     -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     -DPYTHIA8=$PYTHIA_ROOT                       \
+    -Dunittests=OFF                              \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
