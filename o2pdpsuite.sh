@@ -6,11 +6,11 @@ requires:
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
   - O2
   - O2Physics
-  - DataDistribution
+  - "DataDistribution:(?!osx)"
   - QualityControl
   - O2DPG
   - O2sim
-  - ODC
+  - "ODC:(?!osx)"
 valid_defaults:
   - o2
   - o2-dataflow
