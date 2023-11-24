@@ -10,7 +10,7 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s_FLUKA"
-    tag: v5-09-56w
+    tag: v5-09-56x
     requires:
       - ROOT
       - DPMJET
@@ -29,7 +29,7 @@ overrides:
       - boost
   AliPhysics:
     version: "%(tag_basename)s_FLUKA"
-    tag: v5-09-56w-01
+    tag: v5-09-56x-01
   cgal:
     version: "4.12.2"
   fastjet:
