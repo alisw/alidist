@@ -8,10 +8,10 @@ build_requires:
   - "OpenSSL:(?!osx)"
   - ninja
   - alibuild-recipe-tools
-prefer_system: .*
+# On Mac, Brew's libwebsockets loads Brew's Python, which confuses ROOT.
+prefer_system: "(?!osx_)"
 prefer_system_check: |
   #!/bin/bash -e
-  [ "$(uname)" != Darwin ]   # On Mac, Brew's libwebsockets loads Brew's Python, which confuses ROOT.
   cc -c -xc - -o /dev/null <<\EOF
   #if !__has_include(<lws_config.h>)
   #error "Cannot find libwebsocket"
