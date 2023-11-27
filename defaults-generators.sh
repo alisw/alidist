@@ -17,7 +17,7 @@ overrides:
     version: v3.4.1_1.052-alice2
     tag: v3.4.1_1.052-alice2
   pythia:
-    tag: v8304
+    tag: v8304-alice1
     requires:
       - lhapdf
       - boost
