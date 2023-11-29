@@ -35,12 +35,15 @@ jobs:
       - name: Tag AliRoot and AliPhysics in alidist
         run: |
           set -x
-          git grep -zl v5-09 | xargs -rt0 sed -ri "s/v5-09-[0-9][0-9][a-z]*/$TAG/g"
+          sed -ri "s/v5-09-[0-9][0-9][a-z]*/$TAG/g" ./*.sh
           git config --global user.email "alibuild@cern.ch"
           git config --global user.name "ALICE Action Bot"
           git commit -a -m "Bump to $TAG" || echo "No changes to commit"
+          git show
           git tag "AliPhysics-$TAG-01"
-          git push origin "AliPhysics-$TAG-01" "$BRANCH"
+          git push origin "AliPhysics-$TAG-01"
+          # We only want to update -patches branches with new tags, not master.
+          [ "$BRANCH" = master ] || git push origin "$BRANCH"
         env:
           TAG: ${{ github.event.inputs.tag }}
           BRANCH: ${{ steps.decide_release_branch.outputs.branch }}
