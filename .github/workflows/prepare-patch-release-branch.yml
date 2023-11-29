@@ -51,7 +51,8 @@ jobs:
       - name: Create release
         uses: alisw/release-action@v1
         with:
-          tag_name: AliPhysics-${{ github.event.inputs.tag }}-01
-          release_name: AliPhysics-${{ github.event.inputs.tag }}-01
+          name: AliPhysics-${{ github.event.inputs.tag }}-01
+          tag: AliPhysics-${{ github.event.inputs.tag }}-01
+          commit: AliPhysics-${{ github.event.inputs.tag }}-01
           draft: false
           prerelease: false
