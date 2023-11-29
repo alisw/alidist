@@ -12,6 +12,7 @@ requires:
   - "Python-system:(osx.*)"
 build_requires:
   - GCC-Toolchain:(?!osx)
+  - GMP
   - YODA
   - Python
 prepend_path:
@@ -90,6 +91,16 @@ make install
 # Remove libRivet.la
 rm $INSTALLROOT/lib/libRivet.la
 
+# Create shell-script fragment to set-up variables 
+cat <<EOF > $INSTALLROOT/etc/3rdparty.sh
+# Define locations of 3rd party software
+HEPMC3_ROOT=\`HepMC3-config --prefix\` 
+YODA_ROOT=\`yoda-config --prefix\` 
+FASTJET_ROOT=\`fastjet-config --prefix\` 
+CGAL_ROOT=\$(dirname \$(dirname \`which cgal_create_CMakeLists\`))
+GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\`)
+EOF
+
 # Dependencies relocation: rely on runtime environment.  That is,
 # specific paths in the generated script are replaced by expansions of
 # the relevant environment variables.
@@ -101,9 +112,15 @@ for P in $REQUIRES $BUILD_REQUIRES; do
   SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
 done
 
+# Create line to source 3rdparty.sh 
+cat << EOF > source3rd
+test -f \$prefix/etc/3rdparty.sh && source \$prefix/etc/3rdparty.sh
+EOF
+
 # Modify rivet-config script to use environment 
 cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
-mv $INSTALLROOT/bin/rivet-config.0 $INSTALLROOT/bin/rivet-config
+csplit $INSTALLROOT/bin/rivet-config.0 '/^datarootdir=/+1'
+cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
 
 # Modify rivet-build script to use environment.  We also
@@ -111,7 +128,8 @@ chmod 0755 $INSTALLROOT/bin/rivet-config
 # plugins we use the same flags as when Rivet is built.
 # Modify rivet-build script to use environment  
 cat $INSTALLROOT/bin/rivet-build | sed -e  "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
-mv $INSTALLROOT/bin/rivet-build.0 $INSTALLROOT/bin/rivet-build
+csplit $INSTALLROOT/bin/rivet-build.0 '/^datarootdir=/+1'
+cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-build
 chmod 0755 $INSTALLROOT/bin/rivet-build
 
 # Make symlink in library dir for Python
@@ -158,7 +176,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 YODA/$YODA_NEEDED fastjet/$FASTJET_NEEDED HepMC3/$HEPMC3_NEEDED
 # Our environment 
 set RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv RIVET_ROOT \$RIVET_ROOT
+# setenv RIVET_ROOT \$RIVET_ROOT
 prepend-path PYTHONPATH \$RIVET_ROOT/lib/$PYVER/site-packages
 prepend-path PYTHONPATH \$RIVET_ROOT/lib64/$PYVER/site-packages
 prepend-path PATH \$RIVET_ROOT/bin
