@@ -12,7 +12,7 @@ overrides:
   # Pinpoint AliRoot/AliPhysics
   AliRoot:
     version: "%(tag_basename)s"
-    tag: v5-09-57h
+    tag: v5-09-59s
     requires:
       - ROOT
       - DPMJET
@@ -23,7 +23,7 @@ overrides:
       - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-57h-01
+    tag: v5-09-59s-01
   XRootD:
     tag: v3.3.6-alice2
     source: https://github.com/alisw/xrootd.git
