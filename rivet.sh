@@ -47,9 +47,10 @@ autoreconf -ivf
 
 # Write script to set-up variables to point to third-party tools
 cat <<EOF > rivet_3rdparty.sh
-err() {
+ret=true
+env_err() {
     echo "\${@}" > /dev/stderr
-    exit 1
+    ret=false
 }
 
 if hash HepMC3-config 2>/dev/null && test x\$HEPMC3_ROOT = x ; then
@@ -65,18 +66,19 @@ if hash cgal_create_CMakeLists 2>/dev/null && test x\$CGAL_ROOT = x ; then
    CGAL_ROOT=\$(dirname \$(dirname \`command -v cgal_create_CMakeLists\`))
 fi
 if test x\$GMP_ROOT = x ; then
-   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\` 2>/d\
-ev/null)
+   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\` 2>/dev/null)
    if test x\$GMP_ROOT = x ; then
       GMP_ROOT=/usr
    fi
 fi
 
-test x\$HEPMC3_ROOT = x && err HepMC3 not found
-test x\$YODA_ROOT = x && err Yoda not found
-test x\$FASTJET_ROOT = x && err FastJet not found
-test x\$CGAL_ROOT = x && err CGal not found
-test x\$GMP_ROOT = x && err GMP not found
+test x\$HEPMC3_ROOT = x  && env_err HepMC3 not found
+test x\$YODA_ROOT = x    && env_err Yoda not found
+test x\$FASTJET_ROOT = x && env_err FastJet not found
+test x\$CGAL_ROOT = x    && env_err CGal not found
+test x\$GMP_ROOT = x     && env_err GMP not found
+
+\$ret
 EOF
 
 # source our newly created script 
