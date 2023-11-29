@@ -45,6 +45,43 @@ rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 unset PYTHON_VERSION
 autoreconf -ivf
 
+# Write script to set-up variables to point to third-party tools
+cat <<EOF > rivet_3rdparty.sh
+err() {
+    echo "\${@}" > /dev/stderr
+    exit 1
+}
+
+if hash HepMC3-config 2>/dev/null && test x\$HEPMC3_ROOT = x ; then
+   HEPMC3_ROOT=\`HepMC3-config --prefix\`
+fi
+if hash yoda-config 2>/dev/null && test x\$YODA_ROOT = x ; then
+   YODA_ROOT=\`yoda-config --prefix\`
+fi
+if hash fastjet-config 2> /dev/null && test x\$FASTJET_ROOT = x ; then
+   FASTJET_ROOT=\`fastjet-config --prefix\`
+fi
+if hash cgal_create_CMakeLists 2>/dev/null && test x\$CGAL_ROOT = x ; then
+   CGAL_ROOT=\$(dirname \$(dirname \`command -v cgal_create_CMakeLists\`))
+fi
+if test x\$GMP_ROOT = x ; then
+   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\` 2>/d\
+ev/null)
+   if test x\$GMP_ROOT = x ; then
+      GMP_ROOT=/usr
+   fi
+fi
+
+test x\$HEPMC3_ROOT = x && err HepMC3 not found
+test x\$YODA_ROOT = x && err Yoda not found
+test x\$FASTJET_ROOT = x && err FastJet not found
+test x\$CGAL_ROOT = x && err CGal not found
+test x\$GMP_ROOT = x && err GMP not found
+EOF
+
+# source our newly created script 
+source rivet_3rdparty.sh 
+
 CGAL_LDFLAGS="-L${CGAL_ROOT}/lib"
 GMP_LDFLAGS="-L${GMP_ROOT}/lib"
 LOCAL_LDFLAGS="${CGAL_LDFLAGS} ${GMP_LDFLAGS}"
@@ -89,17 +126,10 @@ make install
 )
 
 # Remove libRivet.la
-rm $INSTALLROOT/lib/libRivet.la
+rm -f $INSTALLROOT/lib/libRivet.la
 
-# Create shell-script fragment to set-up variables 
-cat <<EOF > $INSTALLROOT/etc/3rdparty.sh
-# Define locations of 3rd party software
-HEPMC3_ROOT=\`HepMC3-config --prefix\` 
-YODA_ROOT=\`yoda-config --prefix\` 
-FASTJET_ROOT=\`fastjet-config --prefix\` 
-CGAL_ROOT=\$(dirname \$(dirname \`which cgal_create_CMakeLists\`))
-GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep GMP\`)
-EOF
+# Install shell-script fragment to set-up variables 
+cp rivet_3rdparty.sh $INSTALLROOT/etc/rivet_3rdparty.sh
 
 # Dependencies relocation: rely on runtime environment.  That is,
 # specific paths in the generated script are replaced by expansions of
@@ -112,21 +142,19 @@ for P in $REQUIRES $BUILD_REQUIRES; do
   SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
 done
 
-# Create line to source 3rdparty.sh 
+# Create line to source 3rdparty.sh to be inserted into 
+# rivet-config and rivet-build 
 cat << EOF > source3rd
-test -f \$prefix/etc/3rdparty.sh && source \$prefix/etc/3rdparty.sh
+test -f \$prefix/etc/rivet_3rdparty.sh && source \$prefix/etc/rivet_3rdparty.sh
 EOF
 
-# Modify rivet-config script to use environment 
+# Modify rivet-config script to use environment from rivet_3rdparty.sh
 cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
 csplit $INSTALLROOT/bin/rivet-config.0 '/^datarootdir=/+1'
 cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
 
-# Modify rivet-build script to use environment.  We also
-# add in the LDFLAGS set at compile time so that when building Rivet
-# plugins we use the same flags as when Rivet is built.
-# Modify rivet-build script to use environment  
+# Modify rivet-build script to use environment from rivet_3rdparty.sh.  
 cat $INSTALLROOT/bin/rivet-build | sed -e  "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
 csplit $INSTALLROOT/bin/rivet-build.0 '/^datarootdir=/+1'
 cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-build
