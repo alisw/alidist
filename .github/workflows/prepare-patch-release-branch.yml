@@ -53,6 +53,5 @@ jobs:
         with:
           name: AliPhysics-${{ github.event.inputs.tag }}-01
           tag: AliPhysics-${{ github.event.inputs.tag }}-01
-          commit: AliPhysics-${{ github.event.inputs.tag }}-01
           draft: false
           prerelease: false
