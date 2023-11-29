@@ -98,7 +98,7 @@ HEPMC3_ROOT=\`HepMC3-config --prefix\`
 YODA_ROOT=\`yoda-config --prefix\` 
 FASTJET_ROOT=\`fastjet-config --prefix\` 
 CGAL_ROOT=\$(dirname \$(dirname \`which cgal_create_CMakeLists\`))
-GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\`)
+GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep GMP\`)
 EOF
 
 # Dependencies relocation: rely on runtime environment.  That is,
