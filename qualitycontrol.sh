@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.123.1
+tag: "gpu-nightly-20231130"
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
