@@ -21,15 +21,17 @@ build_requires:
   - zlib
   - alibuild-recipe-tools
   - "GCC-Toolchain:(?!osx)"
+prepend_path:
+  PKG_CONFIG_PATH: "$OPENSSL_ROOT/lib/pkgconfig"
 ---
 #!/bin/bash -e
 
-rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
+rsync -av --delete --exclude="**/.git" "$SOURCEDIR/" .
 case ${PKG_VERSION} in
-  v1.1*) 
+  v1.1*)
     OPTS=""
     OPENSSLDIRPREFIX="" ;;
-  *) 
+  *)
     OPTS="no-krb5"
     OPENSSLDIRPREFIX="etc/ssl"
   ;;
@@ -53,8 +55,7 @@ make  # don't ever try to build in multicore
 make install_sw # no not install man pages
 
 # Remove static libraries and pkgconfig
-rm -rf $INSTALLROOT/lib/pkgconfig \
-       $INSTALLROOT/lib/*.a
+rm -rf "$INSTALLROOT"/lib/*.a
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
@@ -65,4 +66,5 @@ alibuild-generate-module --lib --bin > "$MODULEFILE"
 cat << EOF >> "$MODULEFILE"
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete  "$MODULEDIR"/ $INSTALLROOT/etc/modulefiles
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+rsync -a --delete  "$MODULEDIR/" "$INSTALLROOT/etc/modulefiles"
