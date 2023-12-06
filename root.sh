@@ -24,6 +24,7 @@ build_requires:
   - CMake
   - "Xcode:(osx.*)"
   - alibuild-recipe-tools
+  - ninja
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
@@ -126,6 +127,7 @@ else
 fi
 
 unset DYLD_LIBRARY_PATH
+CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
