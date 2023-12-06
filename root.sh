@@ -168,8 +168,8 @@ cmake $SOURCEDIR                                                                
       -Droot7=OFF                                                                      \
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
-      -Dvdt=ON                                                                         \
-      -Dbuiltin_vdt=ON                                                                 \
+      -Dvdt=OFF                                                                        \
+      -Dbuiltin_vdt=OFF                                                                \
       ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
