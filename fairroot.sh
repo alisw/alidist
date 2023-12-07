@@ -1,5 +1,5 @@
 package: FairRoot
-version: "v18.4.9-alice2"
+version: "v18.4.9-alice3"
 source: https://github.com/alisw/FairRoot
 requires:
   - generators

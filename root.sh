@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-28-04-alice3"
+tag: "v6-28-08-alice1"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -24,6 +24,7 @@ build_requires:
   - CMake
   - "Xcode:(osx.*)"
   - alibuild-recipe-tools
+  - ninja
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
@@ -126,6 +127,7 @@ else
 fi
 
 unset DYLD_LIBRARY_PATH
+CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
@@ -166,8 +168,8 @@ cmake $SOURCEDIR                                                                
       -Droot7=OFF                                                                      \
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
-      -Dvdt=ON                                                                         \
-      -Dbuiltin_vdt=ON                                                                 \
+      -Dvdt=OFF                                                                        \
+      -Dbuiltin_vdt=OFF                                                                \
       ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
