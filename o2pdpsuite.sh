@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "nightly-20230515"
+tag: "async-async-2022-apass4-pp-mc.1-slc7-alidist-O2PDPSuite-nightly-20230515"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
