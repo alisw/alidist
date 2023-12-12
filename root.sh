@@ -162,6 +162,7 @@ cmake $SOURCEDIR                                                                
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
+      -Dpythia6=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
