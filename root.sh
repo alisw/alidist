@@ -171,7 +171,6 @@ cmake $SOURCEDIR                                                                
       -Dshadowpw=OFF                                                                   \
       -Dvdt=OFF                                                                        \
       -Dbuiltin_vdt=OFF                                                                \
-      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
