@@ -153,6 +153,7 @@ cmake $SOURCEDIR                                                                
       ${GCC_TOOLCHAIN_REVISION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}  \
       ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
