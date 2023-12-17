@@ -22,8 +22,8 @@ case $ARCHITECTURE in
   ;;
   *) ;;
 esac
-
 mkdir -p $INSTALLROOT
+
 
 cmake $SOURCEDIR                                                 \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=$CXX_COMPILER}        \
