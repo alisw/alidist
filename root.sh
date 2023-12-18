@@ -181,6 +181,7 @@ cmake $SOURCEDIR                                                                
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
+      -Dunfold=ON                                                                      \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
