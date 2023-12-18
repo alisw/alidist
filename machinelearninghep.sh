@@ -4,6 +4,8 @@ tag: "run3"
 source: https://github.com/alisw/MachineLearningHEP
 requires:
   - Python-modules
+build_requires:
+  - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: ${MACHINELEARNINGHEP_ROOT}/lib/python/site-packages
 ---
@@ -23,22 +25,12 @@ env -u VIRTUAL_ENV ALIBUILD=1 \
 mv "$INSTALLROOT/lib/python/site-packages/bin" "$INSTALLROOT/bin"
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-            ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION}
+mkdir -p etc/modulefiles
+MODULEFILE="etc/modulefiles/$PKGNAME"
+alibuild-generate-module --bin > "$MODULEFILE"
+cat >> "$MODULEFILE" <<EoF
 # Our environment
 set MLHEP_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$MLHEP_ROOT/bin
 prepend-path PYTHONPATH \$MLHEP_ROOT/lib/python/site-packages
 EoF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
