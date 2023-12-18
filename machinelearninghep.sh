@@ -8,6 +8,8 @@ build_requires:
   - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: ${MACHINELEARNINGHEP_ROOT}/lib/python/site-packages
+incremental_recipe: |
+  pip install -e .
 ---
 #!/bin/bash -e
 
