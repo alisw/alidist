@@ -1,10 +1,11 @@
 package: Configuration
 version: "%(tag_basename)s"
-tag: v2.6.3
+tag: v2.7.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - Ppconsul
+  - curl
 build_requires:
   - CMake
   - alibuild-recipe-tools
