@@ -93,29 +93,23 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 
-if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
-  # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
-  ROOT_HAS_PYTHON=1
-  python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
-  if [ "$python_exec" = "$(which python3)" ]; then
-    # By default, if there's nothing funny going on, let ROOT pick the Python in
-    # the PATH, which is the one built by us (unless disabled, in which case it
-    # is the system one). This is substituted into ROOT's Python scripts'
-    # shebang lines, so we cannot use an absolute path because the path to our
-    # Python will differ between build time and runtime, e.g. on the Grid.
-    PYTHON_EXECUTABLE=
-  else
-    # If Python's exec_prefix doesn't point to the same place as $PATH, then we
-    # have a shim script in between. This is used by things like pyenv and asdf.
-    # This doesn't happen when building things to be published, only in local
-    # usage, so hardcoding an absolute path into the shebangs is fine.
-    PYTHON_EXECUTABLE=$python_exec
-  fi
+# ROOT 6+: enable Python
+ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+ROOT_HAS_PYTHON=1
+python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
+if [ "$python_exec" = "$(which python3)" ]; then
+  # By default, if there's nothing funny going on, let ROOT pick the Python in
+  # the PATH, which is the one built by us (unless disabled, in which case it
+  # is the system one). This is substituted into ROOT's Python scripts'
+  # shebang lines, so we cannot use an absolute path because the path to our
+  # Python will differ between build time and runtime, e.g. on the Grid.
+  PYTHON_EXECUTABLE=
 else
-  # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpython=OFF -Dpyroot=OFF"
-  ROOT_HAS_NO_PYTHON=1
+  # If Python's exec_prefix doesn't point to the same place as $PATH, then we
+  # have a shim script in between. This is used by things like pyenv and asdf.
+  # This doesn't happen when building things to be published, only in local
+  # usage, so hardcoding an absolute path into the shebangs is fine.
+  PYTHON_EXECUTABLE=$python_exec
 fi
 
 if [ -n "$XROOTD_ROOT" ]; then
