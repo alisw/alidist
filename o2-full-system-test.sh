@@ -32,16 +32,17 @@ rm -Rf $BUILDDIR/full-system-test-sim
 rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
 pushd $BUILDDIR/sim-challenge
-SIMEXITCODE=0
-# SIM_CHALLENGE_ANATESTING=ON --> reenable when we want analysis testing be part of the tests 
-{ "$O2_ROOT/prodtests/sim_challenge.sh" &> sim-challenge.log; SIMEXITCODE=$?; } || true  # don't quit immediately on error
+# SIM_CHALLENGE_ANATESTING=ON --> reenable when we want analysis testing be part of the tests
+set +o pipefail   # don't exit immediately if sim_challenge.sh fails
+"$O2_ROOT/prodtests/sim_challenge.sh" 2>&1 | tee sim-challenge.log
+SIMEXITCODE=${PIPESTATUS[0]}
 result=$(grep "Return status" sim-challenge.log | grep -v ": 0" || true)
-if [ ${SIMEXITCODE} != "0" ] || [ "${result}" ]; then
+if [ "${SIMEXITCODE}" -ne 0 ] || [ -n "${result}" ]; then
   # something is wrong if we get a match here
   # it matches if either the return code itself was != 0 or if a reported status
   # in the log is not ok
   echo "error detected in sim_challenge"
-  find ./ -type f \( -name "*.log" -and ! -name "pipel*" \) -exec awk ' { print FILENAME $0 } ' {} ';' || true
+  find ./ -type f \( -name "*.log" -and ! -name "pipel*" \) -exec awk '{ print FILENAME, $0 }' {} ';'
   # make the recipe fail
   false
 else
