@@ -61,6 +61,8 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    dask[array,dataframe,distributed]==2023.2.0
+    dask_jobqueue==0.8.2
   "PIP39_REQUIREMENTS_ubuntu2110_x86_64": |
     PyYAML==6.0.1
     psutil==5.8.0
@@ -76,6 +78,8 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    dask[array,dataframe,distributed]==2023.2.0
+    dask_jobqueue==0.8.2
   # Keep the PIPxy version in sync with the Conda env we install in Python-modules!
   # Everything but the first two lines copied from PIP39_REQUIREMENTS, but with versions
   # adjusted such that wheels are available and for compatibility with tensorflow.
@@ -96,6 +100,8 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.5.3
+    dask[array,dataframe,distributed]==2023.2.0
+    dask_jobqueue==0.8.2
   PIP310_REQUIREMENTS: |
     PyYAML==6.0.1
     psutil==5.9.0
@@ -111,6 +117,8 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.1.5
+    dask[array,dataframe,distributed]==2023.2.0
+    dask_jobqueue==0.8.2
   PIP311_REQUIREMENTS: |
     PyYAML==6.0.1
     psutil==5.9.5
@@ -126,6 +134,8 @@ env:
     dryable==1.0.5
     responses==0.10.6
     pandas==1.5.3
+    dask[array,dataframe,distributed]==2023.12.1
+    dask_jobqueue==0.8.2
 build_requires:
   - alibuild-recipe-tools
 ---
