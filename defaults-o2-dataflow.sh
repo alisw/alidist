@@ -2,9 +2,9 @@ package: defaults-o2-dataflow
 version: v1
 env:
   CFLAGS: "-fPIC -O2"
-  CXXFLAGS: "-fPIC -O2 -std=c++17"
+  CXXFLAGS: "-fPIC -O2 -std=c++20"
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
-  CXXSTD: "17"
+  CXXSTD: "20"
   ENABLE_VMC: 'ON'
   MACOSX_DEPLOYMENT_TARGET: '10.15'
 disable:
