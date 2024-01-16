@@ -1,6 +1,6 @@
 package: GEANT3
 version: "%(tag_basename)s"
-tag: v4-2
+tag: v4-3
 requires:
   - ROOT
   - VMC
