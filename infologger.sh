@@ -27,11 +27,12 @@ fi
 
 cmake $SOURCEDIR                                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}              \
+      -G Ninja                                                \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-make ${JOBS+-j $JOBS} install
+ninja ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles

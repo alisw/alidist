@@ -1,5 +1,5 @@
 ---
-name: Prepare AliPhysics tag
+name: Prepare AliRoot/AliPhysics tag
 
 'on':
   workflow_dispatch:
@@ -17,37 +17,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Decide which branch to use
-      run: |
-        sed -r 's/[a-z]+-01-patches$/-01-patches/' <<\EOF >> "$GITHUB_OUTPUT"
-        branch=AliPhysics-${{ github.event.inputs.tag }}-01-patches
-        EOF
-      id: decide_release_branch
-    - uses: actions/checkout@v3
-      with:
-        ref: "master"
-    - name: Update the branch
-      run: |
-        set -x
-        git fetch origin
-        git checkout -B ${{ steps.decide_release_branch.outputs.branch }} origin/${{ steps.decide_release_branch.outputs.branch }}
-        git grep -l v5-09 | xargs perl -p -i -e 's/v5-09-[0-9][0-9][a-z]*/${{ github.event.inputs.tag }}/g'
-        git add .
-        git diff
-        git config --global user.email "alibuild@cern.ch"
-        git config --global user.name "ALICE Action Bot"
-        git commit -m "Bump to ${{ github.event.inputs.tag }}" -a || echo "No changes to commit"
-        git push --set-upstream origin ${{ steps.decide_release_branch.outputs.branch }}
-        git tag AliPhysics-${{ github.event.inputs.tag }}-01
-        git push --set-upstream origin AliPhysics-${{ github.event.inputs.tag }}-01
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        # Use default token; requires "contents: write" permission.
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: AliPhysics-${{ github.event.inputs.tag }}-01
-        release_name: AliPhysics-${{ github.event.inputs.tag }}-01
-        draft: false
-        prerelease: false
+      - name: Decide which branch to use
+        id: decide_release_branch
+        run: |
+          case "$TAG" in
+            v5-09-59*) echo branch=master ;;
+            *) echo "branch=$(echo "AliPhysics-$TAG-01-patches" | sed -r 's/[a-z]+-01-patches$/-01-patches/')" ;;
+          esac >> "$GITHUB_OUTPUT"
+        env:
+          TAG: ${{ github.event.inputs.tag }}
+
+      - name: Checkout alidist
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.decide_release_branch.outputs.branch }}
+
+      - name: Tag AliRoot and AliPhysics in alidist
+        run: |
+          set -x
+          sed -ri "s/v5-09-[0-9][0-9][a-z]*/$TAG/g" ./*.sh
+          git config --global user.email "alibuild@cern.ch"
+          git config --global user.name "ALICE Action Bot"
+          git commit -a -m "Bump to $TAG" || echo "No changes to commit"
+          git show
+          git tag "AliPhysics-$TAG-01"
+          git push origin "AliPhysics-$TAG-01"
+          # We only want to update -patches branches with new tags, not master.
+          [ "$BRANCH" = master ] || git push origin "$BRANCH"
+        env:
+          TAG: ${{ github.event.inputs.tag }}
+          BRANCH: ${{ steps.decide_release_branch.outputs.branch }}
+
+      - name: Create release
+        uses: alisw/release-action@v1
+        with:
+          name: AliPhysics-${{ github.event.inputs.tag }}-01
+          tag: AliPhysics-${{ github.event.inputs.tag }}-01
+          draft: false
+          prerelease: false
