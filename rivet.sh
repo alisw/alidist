@@ -141,12 +141,18 @@ SED_EXPR="s!x!x!"  # noop
 for P in $REQUIRES $BUILD_REQUIRES; do
   UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
   EXPAND=$(eval echo \$${UPPER}_ROOT)
-  echo "Environment variable ${UPPER}_ROOT not set"
+  if test "x$EXPAND" = "x" ; then
+      echo "Environment variable ${UPPER}_ROOT not set"
+  fi
   [[ $EXPAND ]] || continue
   echo "Environment says ${UPPER} is at ${EXPAND}"
   SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
 done
 # Special handling for broken FastJet configuration script
+#
+# This seems to have been fixed in fastjet.sh (same PR), but I leave
+# it in for now - case something _is_ broken or we built against an
+# older fastjet
 FJ_CGAL_ROOT=$(fastjet-config --libs| \
                    tr ' ' '\n' | \
                    grep cgal | \
@@ -175,8 +181,10 @@ cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-
 csplit $INSTALLROOT/bin/rivet-config.0 '/^datarootdir=/+1'
 cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
-# Show the script on standard output - For debugging 
-cat $INSTALLROOT/bin/rivet-config 
+# Show the script on standard output - For debugging
+# echo "=== Configuration script is ===="
+# cat $INSTALLROOT/bin/rivet-config 
+# echo "=== End of configuration script ===="
 
 # Modify rivet-build script to use environment from rivet_3rdparty.sh.  
 cat $INSTALLROOT/bin/rivet-build | sed -e  "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
@@ -253,8 +261,6 @@ setenv TEXINPUTS  \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 setenv LATEXINPUTS \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 EoF
 
-# EXPLICITLY FAIL!!!! This is for testing
-exit 1
 
 #
 # EOF
