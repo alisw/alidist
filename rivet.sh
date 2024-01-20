@@ -150,6 +150,9 @@ for P in $REQUIRES $BUILD_REQUIRES; do
 done
 # Special handling for broken FastJet configuration script
 #
+# Doesn't seem like fastjet-config reports GMP directly, so we will
+# need to keep the GMP part. 
+#
 # This seems to have been fixed in fastjet.sh (same PR), but I leave
 # it in for now - case something _is_ broken or we built against an
 # older fastjet
