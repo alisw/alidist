@@ -102,7 +102,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}
+module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION} ${GMP_REVISION:+GMP/$GMP_VERSION-$GMP_REVISION}
 # Our environment
 set FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FASTJET \$FASTJET_ROOT

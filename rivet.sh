@@ -66,7 +66,7 @@ if hash cgal_create_CMakeLists 2>/dev/null && test x\$CGAL_ROOT = x ; then
    CGAL_ROOT=\$(dirname \$(dirname \`command -v cgal_create_CMakeLists\`))
 fi
 if test x\$GMP_ROOT = x ; then
-   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\` 2>/dev/null)
+   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep GMP\` 2>/dev/null)
    if test x\$GMP_ROOT = x ; then
       GMP_ROOT=/usr
    fi
