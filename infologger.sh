@@ -11,7 +11,7 @@ build_requires:
   - SWIG
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  ninja ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
