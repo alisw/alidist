@@ -38,12 +38,11 @@ SONAME=so
 libuuid_soname=$SONAME
 
 case $ARCHITECTURE in
-  osx_x86-64)
-    export ARCHFLAGS="-arch x86_64"
+  osx_*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
-
-    # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
-    # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
+    # Python from Homebrew will have a hardcoded sysroot pointing to the
+    # Xcode.app directory, which might not exist. This seems to be a robust
+    # way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     COMPILER_CC=clang
@@ -51,21 +50,12 @@ case $ARCHITECTURE in
     COMPILER_LD=clang
     SONAME=dylib
     libuuid_soname=a   # on Mac, no .dylib is produced
-  ;;
-  osx_arm64)
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
-    CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks
+    ;;
+esac
 
-    # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
-    # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
-    # This fix is needed only on MacOS when building XRootD Python bindings.
-    export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
-    COMPILER_CC=clang
-    COMPILER_CXX=clang++
-    COMPILER_LD=clang
-    SONAME=dylib
-    libuuid_soname=a   # on Mac, no .dylib is produced
-  ;;
+case $ARCHITECTURE in
+  osx_x86-64) export ARCHFLAGS="-arch x86_64" ;;
+  osx_arm64) CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks ;;
 esac
 
 rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
