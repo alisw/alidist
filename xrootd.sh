@@ -70,6 +70,7 @@ rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
 mkdir build
 pushd build
 cmake "${BUILDDIR}"                                                   \
+      --log-level DEBUG                                               \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_CXX_COMPILER=$COMPILER_CXX                              \
       -DCMAKE_C_COMPILER=$COMPILER_CC                                 \
