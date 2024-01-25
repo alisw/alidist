@@ -166,11 +166,11 @@ FJ_GMP_ROOT=$(fastjet-config --libs| \
                    sed -n -e 's!-L\(.*\)/GMP.*!\1!p')
 if test x$FJ_CGAL_ROOT != x ; then
     echo "FastJet reports CGal to be at ${FJ_CGAL_ROOT}"
-    SED_EXR="$SED_EXPR; s!$FJ_CGAL_ROOT!\$CGAL_ROOT!g"
+    SED_EXPR="$SED_EXPR; s!$FJ_CGAL_ROOT!\$CGAL_ROOT!g"
 fi
 if test x$FJ_GMP_ROOT != x ; then
     echo "FastJet reports GMP to be at ${FJ_GMP_ROOT}"
-    SED_EXR="$SED_EXPR; s!$FJ_GMP_ROOT!\$GMP_ROOT!g"
+    SED_EXPR="$SED_EXPR; s!$FJ_GMP_ROOT!\$GMP_ROOT!g"
 fi
 
 # Create line to source 3rdparty.sh to be inserted into 
