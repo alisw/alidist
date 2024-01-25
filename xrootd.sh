@@ -35,6 +35,7 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 SONAME=so
+libuuid_soname=$SONAME
 
 case $ARCHITECTURE in
   osx_x86-64)
@@ -49,6 +50,7 @@ case $ARCHITECTURE in
     COMPILER_CXX=clang++
     COMPILER_LD=clang
     SONAME=dylib
+    libuuid_soname=a   # on Mac, no .dylib is produced
   ;;
   osx_arm64)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
@@ -62,6 +64,7 @@ case $ARCHITECTURE in
     COMPILER_CXX=clang++
     COMPILER_LD=clang
     SONAME=dylib
+    libuuid_soname=a   # on Mac, no .dylib is produced
   ;;
 esac
 
@@ -79,10 +82,8 @@ cmake "${BUILDDIR}"                                                   \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DXRDCL_ONLY=ON                                                 \
-      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
-      ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
-      ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
-      ${UUID_ROOT:+-DUUID_INCLUDE_DIR=$UUID_ROOT/include}             \
+      ${UUID_ROOT:+-DUUID_LIBRARY="$UUID_ROOT/lib/libuuid.$libuuid_soname"} \
+      ${UUID_ROOT:+-DUUID_INCLUDE_DIR="$UUID_ROOT/include"}           \
       -DENABLE_KRB5=OFF                                               \
       -DENABLE_FUSE=OFF                                               \
       -DENABLE_VOMS=OFF                                               \
