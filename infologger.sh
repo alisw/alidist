@@ -1,6 +1,6 @@
 package: InfoLogger
 version: "%(tag_basename)s"
-tag: v2.5.3
+tag: v2.6.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -11,7 +11,7 @@ build_requires:
   - SWIG
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  ninja ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
