@@ -8,6 +8,7 @@ build_requires:
   - "OpenSSL:(?!osx)"
   - ninja
   - alibuild-recipe-tools
+  - libuv
 # On Mac, Brew's libwebsockets loads Brew's Python, which confuses ROOT.
 prefer_system: "(?!osx_)"
 prefer_system_check: |
@@ -47,6 +48,9 @@ cmake $SOURCEDIR                                                    \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}     \
       ${OPENSSL_ROOT:+-DLWS_OPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
       ${OPENSSL_ROOT:+-DLWS_OPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
+      -DLWS_WITH_LIBUV=ON                                           \
+      ${LIBUV_REVISION:+-DLIBUV_INCLUDE_DIRS=$LIBUV_ROOT/include}   \
+      ${LIBUV_REVISION:+-DLIBUV_LIBRARIES=$LIBUV_ROOT/lib/libuv.$SONAME} \
       -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
       -DLWS_WITHOUT_TESTAPPS=ON
 cmake --build . --target install ${JOBS+-j $JOBS}
