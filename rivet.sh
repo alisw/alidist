@@ -22,23 +22,8 @@ prepend_path:
 #
 # For testing 
 #
-#   alienv enter ./module 
-#   export ALIBUILD_ARCH_PREFIX=el7-x86_64/Packages
-#   export WORK_DIR=/cvmfs/alice.cern.ch
-#   . ${PYTHONHOME}/etc/profile.d/init.sh
-#   . ${HEPMC3_ROOT}/etc/profile.d/init.sh
-#   . ${FASTJET}/etc/profile.d/init.sh
-#   export WORK_DIR=`pwd`/sw
-#   export ALIBUILD_ARCH_PREFIX=
-#   module load `pwd`/sw/slc7_x86-64/YODA/latest/etc/modulefiles/YODA 
-#   . `pwd`/sw/slc7_x86-64/YODA/latest/etc/profile.d/init.sh
-#   export WORK_DIR=
-#   aliBuild build \
-#     --disable Python-modules,boost,defaults-release,CMake,HepMC3,ROOT,YODA,cgal,fastjet \
-#     --always-prefer-system \
-#     --debug \
-#     Rivet
-# 
+#   aliBuild  -a slc7_x86-64 --docker-image registry.cern.ch/alisw/slc7-builder:latest. Rivet
+#
 rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
  
 (
@@ -159,11 +144,11 @@ done
 FJ_CGAL_ROOT=$(fastjet-config --libs| \
                    tr ' ' '\n' | \
                    grep cgal | \
-                   sed -n -e 's!-L\(.*\)/cgal.*!\1!p')
+                   sed -n -e 's!-L\(.*\)/lib!\1!p')
 FJ_GMP_ROOT=$(fastjet-config --libs| \
                    tr ' ' '\n' | \
                    grep GMP | \
-                   sed -n -e 's!-L\(.*\)/GMP.*!\1!p')
+                   sed -n -e 's!-L\(.*\)/lib!\1!p')
 if test x$FJ_CGAL_ROOT != x ; then
     echo "FastJet reports CGal to be at ${FJ_CGAL_ROOT}"
     SED_EXPR="$SED_EXPR; s!$FJ_CGAL_ROOT!\$CGAL_ROOT!g"
@@ -179,16 +164,18 @@ cat << EOF > source3rd
 test -f \$prefix/etc/rivet_3rdparty.sh && source \$prefix/etc/rivet_3rdparty.sh
 EOF
 
+# Make back-up of original for debugging - disable execute bit
+cp $INSTALLROOT/bin/rivet-config $INSTALLROOT/bin/rivet-config.orig
+chmod 644 $INSTALLROOT/bin/rivet-config.orig
 # Modify rivet-config script to use environment from rivet_3rdparty.sh
 cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
 csplit $INSTALLROOT/bin/rivet-config.0 '/^datarootdir=/+1'
 cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
-# Show the script on standard output - For debugging
-# echo "=== Configuration script is ===="
-# cat $INSTALLROOT/bin/rivet-config 
-# echo "=== End of configuration script ===="
 
+# Make back-up of original for debugging - disable execute bit
+cp $INSTALLROOT/bin/rivet-build $INSTALLROOT/bin/rivet-build.orig
+chmod 644 $INSTALLROOT/bin/rivet-build.orig
 # Modify rivet-build script to use environment from rivet_3rdparty.sh.  
 cat $INSTALLROOT/bin/rivet-build | sed -e  "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
 csplit $INSTALLROOT/bin/rivet-build.0 '/^datarootdir=/+1'
