@@ -66,7 +66,7 @@ if hash cgal_create_CMakeLists 2>/dev/null && test x\$CGAL_ROOT = x ; then
    CGAL_ROOT=\$(dirname \$(dirname \`command -v cgal_create_CMakeLists\`))
 fi
 if test x\$GMP_ROOT = x ; then
-   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep cgal\` 2>/dev/null)
+   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep GMP\` 2>/dev/null)
    if test x\$GMP_ROOT = x ; then
       GMP_ROOT=/usr
    fi
@@ -121,6 +121,7 @@ chmod 0755 bin/rivet-build
 cat pyext/build.py | sed -e 's,-L/usr/lib[^ /"]*,,g' > pyext/build.py.0
 mv pyext/build.py pyext/build.py.orig
 mv pyext/build.py.0 pyext/build.py
+# Make pyext/build.py executable
 chmod 0755 pyext/build.py
 # Now build 
 make -j$JOBS
@@ -140,9 +141,37 @@ SED_EXPR="s!x!x!"  # noop
 for P in $REQUIRES $BUILD_REQUIRES; do
   UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
   EXPAND=$(eval echo \$${UPPER}_ROOT)
+  if test "x$EXPAND" = "x" ; then
+      echo "Environment variable ${UPPER}_ROOT not set"
+  fi
   [[ $EXPAND ]] || continue
+  echo "Environment says ${UPPER} is at ${EXPAND}"
   SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
 done
+# Special handling for broken FastJet configuration script
+#
+# Doesn't seem like fastjet-config reports GMP directly, so we will
+# need to keep the GMP part. 
+#
+# This seems to have been fixed in fastjet.sh (same PR), but I leave
+# it in for now - case something _is_ broken or we built against an
+# older fastjet
+FJ_CGAL_ROOT=$(fastjet-config --libs| \
+                   tr ' ' '\n' | \
+                   grep cgal | \
+                   sed -n -e 's!-L\(.*\)/cgal.*!\1!p')
+FJ_GMP_ROOT=$(fastjet-config --libs| \
+                   tr ' ' '\n' | \
+                   grep GMP | \
+                   sed -n -e 's!-L\(.*\)/GMP.*!\1!p')
+if test x$FJ_CGAL_ROOT != x ; then
+    echo "FastJet reports CGal to be at ${FJ_CGAL_ROOT}"
+    SED_EXPR="$SED_EXPR; s!$FJ_CGAL_ROOT!\$CGAL_ROOT!g"
+fi
+if test x$FJ_GMP_ROOT != x ; then
+    echo "FastJet reports GMP to be at ${FJ_GMP_ROOT}"
+    SED_EXPR="$SED_EXPR; s!$FJ_GMP_ROOT!\$GMP_ROOT!g"
+fi
 
 # Create line to source 3rdparty.sh to be inserted into 
 # rivet-config and rivet-build 
@@ -155,6 +184,10 @@ cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-
 csplit $INSTALLROOT/bin/rivet-config.0 '/^datarootdir=/+1'
 cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-config
 chmod 0755 $INSTALLROOT/bin/rivet-config
+# Show the script on standard output - For debugging
+# echo "=== Configuration script is ===="
+# cat $INSTALLROOT/bin/rivet-config 
+# echo "=== End of configuration script ===="
 
 # Modify rivet-build script to use environment from rivet_3rdparty.sh.  
 cat $INSTALLROOT/bin/rivet-build | sed -e  "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
@@ -230,3 +263,9 @@ set Extra_RivetTEXINPUTS \$RIVET_ROOT/share/Rivet/texmf/tex//
 setenv TEXINPUTS  \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 setenv LATEXINPUTS \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 EoF
+
+
+#
+# EOF
+#
+
