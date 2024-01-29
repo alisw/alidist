@@ -1,6 +1,6 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v5.6.0"
+tag: "v5.6.6"
 source: https://github.com/xrootd/xrootd
 requires:
   - "OpenSSL:(?!osx)"
@@ -35,34 +35,27 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 SONAME=so
+libuuid_soname=$SONAME
 
 case $ARCHITECTURE in
-  osx_x86-64)
-    export ARCHFLAGS="-arch x86_64"
+  osx_*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
-
-    # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
-    # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
+    # Python from Homebrew will have a hardcoded sysroot pointing to the
+    # Xcode.app directory, which might not exist. This seems to be a robust
+    # way to discover a working SDK path and present it to Python setuptools.
     # This fix is needed only on MacOS when building XRootD Python bindings.
     export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
     SONAME=dylib
-  ;;
-  osx_arm64)
-    [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
-    CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks
+    libuuid_soname=a   # on Mac, no .dylib is produced
+    ;;
+esac
 
-    # NOTE: Python from Homebrew will have a hardcoded sysroot pointing to Xcode.app directory wchich might not exist.
-    # This seems to be a robust way to discover a working SDK path and present it to Python setuptools.
-    # This fix is needed only on MacOS when building XRootD Python bindings.
-    export CFLAGS="${CFLAGS} -isysroot $(xcrun --show-sdk-path)"
-    COMPILER_CC=clang
-    COMPILER_CXX=clang++
-    COMPILER_LD=clang
-    SONAME=dylib
-  ;;
+case $ARCHITECTURE in
+  osx_x86-64) export ARCHFLAGS="-arch x86_64" ;;
+  osx_arm64) CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks ;;
 esac
 
 rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
@@ -70,6 +63,7 @@ rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
 mkdir build
 pushd build
 cmake "${BUILDDIR}"                                                   \
+      --log-level DEBUG                                               \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_CXX_COMPILER=$COMPILER_CXX                              \
       -DCMAKE_C_COMPILER=$COMPILER_CC                                 \
@@ -78,10 +72,8 @@ cmake "${BUILDDIR}"                                                   \
       ${CMAKE_FRAMEWORK_PATH+-DCMAKE_FRAMEWORK_PATH=$CMAKE_FRAMEWORK_PATH} \
       -DCMAKE_INSTALL_LIBDIR=lib                                      \
       -DXRDCL_ONLY=ON                                                 \
-      ${UUID_ROOT:+-DUUID_LIBRARIES=$UUID_ROOT/lib/libuuid.so}        \
-      ${UUID_ROOT:+-DUUID_LIBRARY=$UUID_ROOT/lib/libuuid.so}          \
-      ${UUID_ROOT:+-DUUID_INCLUDE_DIRS=$UUID_ROOT/include}            \
-      ${UUID_ROOT:+-DUUID_INCLUDE_DIR=$UUID_ROOT/include}             \
+      ${UUID_ROOT:+-DUUID_LIBRARY="$UUID_ROOT/lib/libuuid.$libuuid_soname"} \
+      ${UUID_ROOT:+-DUUID_INCLUDE_DIR="$UUID_ROOT/include"}           \
       -DENABLE_KRB5=OFF                                               \
       -DENABLE_FUSE=OFF                                               \
       -DENABLE_VOMS=OFF                                               \
