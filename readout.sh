@@ -59,6 +59,7 @@ cmake $SOURCEDIR                                                         \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                  \
       -DBUILD_SHARED_LIBS=ON
 
+#build
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile
