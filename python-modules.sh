@@ -9,14 +9,14 @@ build_requires:
   - Python-modules-list
   - alibuild-recipe-tools
 prepend_path:
-  PYTHONPATH: "$PYTHON_MODULES_ROOT/share/python-modules"
+  PYTHONPATH: "$PYTHON_MODULES_ROOT/lib/python/site-packages"
 ---
 #!/bin/bash -e
 unset VIRTUAL_ENV
 
-# We use a different INSTALLROOT, so that we can build updatable RPMS which
-# do not conflict with the underlying Python installation.
-PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/share/python-modules
+# Install Python packages in a semi-standard location.
+PYTHON_MODULES_INSTALLROOT=$INSTALLROOT/lib/python/site-packages
+# Make sure we pick up the pip we install through base-requirements.txt directly.
 export PYTHONPATH="$PYTHON_MODULES_INSTALLROOT:${PYTHONPATH:+:$PYTHONPATH}"
 
 # Install pinned basic requirements for python infrastructure
@@ -46,5 +46,5 @@ rm -f "$INSTALLROOT"/bin/*.deleteme
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
 cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EOF
-prepend-path PYTHONPATH \$PKG_ROOT/share/python-modules
+prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
 EOF
