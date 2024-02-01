@@ -33,9 +33,11 @@ rm -rvf "$PYTHON_MODULES_INSTALLROOT/share"
 find "$PYTHON_MODULES_INSTALLROOT" -mindepth 2 -maxdepth 2 \
      -type d -and \( -name test -or -name tests \) -exec rm -rvf '{}' \;
 
-# Fix shebangs: remove hardcoded Python path
-find "$PYTHON_MODULES_INSTALLROOT/bin" -type f -exec sed -i.deleteme -e "s|${PYTHON_MODULES_INSTALLROOT}|/usr|;s|python3|env python3|" '{}' \;
-find "$PYTHON_MODULES_INSTALLROOT/bin" -name '*.deleteme' -delete
+# Fix shebangs: remove hardcoded Python path. Most scripts will have a shebang
+# like "#!<PYTHON_ROOT>/bin/python3" by default, which we must change.
+sed -r -i.deleteme -e "1s,^#!(${PYTHON_ROOT:+$PYTHON_ROOT|}$PYTHON_MODULES_INSTALLROOT)/bin/(.+),#!/usr/bin/env \2," \
+    "$PYTHON_MODULES_INSTALLROOT"/bin/*
+rm -f "$PYTHON_MODULES_INSTALLROOT"/bin/*.deleteme
 
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
