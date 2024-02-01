@@ -3,9 +3,9 @@ version: v1
 env:
   CFLAGS: -fPIC -O3 -march=znver2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
-  CXXFLAGS: -fPIC -O3 -march=znver2 -std=c++17
+  CXXFLAGS: -fPIC -O3 -march=znver2 -std=c++20
   O2_CXXFLAGS_OVERRIDE: -O3
-  CXXSTD: '17'
+  CXXSTD: '20'
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'OFF'
 disable:
