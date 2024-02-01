@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v2.21.9
+tag: v2.22.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -59,6 +59,7 @@ cmake $SOURCEDIR                                                         \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                  \
       -DBUILD_SHARED_LIBS=ON
 
+#build
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile
