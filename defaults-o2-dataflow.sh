@@ -40,8 +40,11 @@ overrides:
     tag: "v12.2.0-alice1"
   Python-modules-list:
     env:
-      PIP39_REQUIREMENTS: |
+      PIP_BASE_REQUIREMENTS: |
+        pip==21.3.1
         setuptools==65.5.1
+        wheel==0.37.1
+      PIP_REQUIREMENTS: ""
   O2-customization:
     env:
       ENABLE_UPGRADES: "OFF"  # Disable detector upgrades in O2
