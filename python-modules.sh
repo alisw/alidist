@@ -9,8 +9,6 @@ build_requires:
   - Python-modules-list
   - alibuild-recipe-tools
 prepend_path:
-  PATH: "$PYTHON_MODULES_ROOT/share/python-modules/bin"
-  LD_LIBRARY_PATH: "$PYTHON_MODULES_ROOT/share/python-modules/lib"
   PYTHONPATH: "$PYTHON_MODULES_ROOT/share/python-modules"
 ---
 #!/bin/bash -e
@@ -33,19 +31,20 @@ rm -rvf "$PYTHON_MODULES_INSTALLROOT/share"
 find "$PYTHON_MODULES_INSTALLROOT" -mindepth 2 -maxdepth 2 \
      -type d -and \( -name test -or -name tests \) -exec rm -rvf '{}' \;
 
+# By default, "pip install --target" installs binaries inside the given target
+# dir as well, but we want them directly under $INSTALLROOT/bin instead.
+rm -rf "${INSTALLROOT:?}/bin"
+mv "$PYTHON_MODULES_INSTALLROOT/bin" "$INSTALLROOT/bin"
+
 # Fix shebangs: remove hardcoded Python path. Most scripts will have a shebang
 # like "#!<PYTHON_ROOT>/bin/python3" by default, which we must change.
 sed -r -i.deleteme -e "1s,^#!(${PYTHON_ROOT:+$PYTHON_ROOT|}$PYTHON_MODULES_INSTALLROOT)/bin/(.+),#!/usr/bin/env \2," \
-    "$PYTHON_MODULES_INSTALLROOT"/bin/*
-rm -f "$PYTHON_MODULES_INSTALLROOT"/bin/*.deleteme
+    "$INSTALLROOT"/bin/*
+rm -f "$INSTALLROOT"/bin/*.deleteme
 
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
-alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+alibuild-generate-module --bin > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
 cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EOF
-# Binaries are installed into non-standard paths.
-set PKG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$PKG_ROOT/share/python-modules/bin
-prepend-path LD_LIBRARY_PATH \$PKG_ROOT/share/python-modules/lib
 prepend-path PYTHONPATH \$PKG_ROOT/share/python-modules
 EOF
