@@ -4,6 +4,7 @@ tag: "v3.2.1_1.024-alice3"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
+  - GMP
 env:
   FASTJET: "$FASTJET_ROOT"
 ---
