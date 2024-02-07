@@ -11,17 +11,27 @@ env:
     # For valid environment markers (after the ';'), see:
     # https://peps.python.org/pep-0508/#environment-markers
 
-    requests == 2.27.1
-    ipykernel == 5.1.0
-    ipython == 7.4.0
-    ipywidgets == 7.4.2
-    metakernel == 0.20.14
-    mock == 2.0.0
-    notebook == 5.7.8
-    scons == 4.1.0
+    ipykernel == 5.1.0; python_version < '3.11'
+    ipykernel == 6.29.1; python_version >= '3.11'
+    ipython == 7.4.0; python_version < '3.11'
+    ipython == 8.21.0; python_version >= '3.11'
+    ipywidgets == 7.4.2; python_version < '3.11'
+    ipywidgets == 8.1.1; python_version >= '3.11'
+    metakernel == 0.20.14; python_version < '3.11'
+    metakernel == 0.30.1; python_version >= '3.11'
+    notebook == 5.7.8; python_version < '3.11'
+    notebook == 7.0.7; python_version >= '3.11'
+    scons == 4.1.0; python_version < '3.11'
+    scons == 4.6.0.post1; python_version >= '3.11'
 
+    requests == 2.27.1; python_version < '3.11'
+    requests == 2.31.0; python_version >= '3.11'
     PyYAML == 6.0.1
     uproot == 4.1.0
+
+    # Mock is included in the Python standard library as unittest.mock from
+    # 3.3 onwards.
+    mock == 2.0.0; python_version < '3.3'
     responses == 0.10.6
 
     psutil == 5.8.0; python_version < '3.10'
