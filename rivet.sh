@@ -91,7 +91,7 @@ case $ARCHITECTURE in
 		    --with-hepmc3="$HEPMC3_ROOT"       			\
 		    --with-fastjet="$FASTJET_ROOT"     			\
 		    LDFLAGS="${LOCAL_LDFLAGS}"                          \
-		    CYTHON="$PYTHON_MODULES_ROOT/share/python-modules/bin/cython"
+		    CYTHON="$PYTHON_MODULES_ROOT/bin/cython"
   ;;
 esac
 
