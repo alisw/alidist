@@ -74,7 +74,7 @@ env:
     tensorflow == 2.13.1; python_version >= '3.11'
 
     # See version compatibility table at https://pypi.org/project/tensorflow-metal/
-    tensorflow-metal == 1.0.1; sys_platform == 'darwin' and python_version >= '3.11'
+    tensorflow-metal == 1.0.0; sys_platform == 'darwin' and python_version >= '3.11'
 
     xgboost == 0.82; python_version < '3.8'
     xgboost == 1.3.3; python_version == '3.8'
