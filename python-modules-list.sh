@@ -88,6 +88,11 @@ env:
     pandas == 1.2.3; python_version == '3.8'
     pandas == 1.1.5; python_version >= '3.9' and python_version < '3.11'
     pandas == 1.5.3; python_version >= '3.11'
+
+    dask[array,dataframe,distributed] == 2023.2.0; python_version < '3.11'
+    dask[array,dataframe,distributed] == 2023.12.1; python_version >= '3.11'
+    dask_jobqueue == 0.8.2
+
 build_requires:
   - alibuild-recipe-tools
 ---
