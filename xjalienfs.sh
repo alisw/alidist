@@ -8,6 +8,8 @@ requires:
   - XRootD
   - AliEn-Runtime
   - Python-modules
+build_requires:
+  - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
 ---
@@ -40,24 +42,8 @@ done
 rm -fv "$INSTALLROOT"/bin/*.bak
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}                                 \\
-            ${PYTHON_MODULES_REVISION:+Python-modules/$PYTHON_MODULES_VERSION-$PYTHON_MODULES_REVISION} \\
-            ${ALIEN_RUNTIME_REVISION:+AliEn-Runtime/$ALIEN_RUNTIME_VERSION-$ALIEN_RUNTIME_REVISION}     \\
-            ${OPENSSL_REVISION:+OpenSSL/$OPENSSL_VERSION-$OPENSSL_REVISION}                             \\
-	    ${XROOTD_REVISION:+XRootD/$XROOTD_VERSION-$XROOTD_REVISION}
-set XJALIENFS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$XJALIENFS_ROOT/bin
-prepend-path PYTHONPATH \$XJALIENFS_ROOT/lib/python/site-packages
-EoF
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+alibuild-generate-module --bin > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+cat <<\EOF >> "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+prepend-path PYTHONPATH $PKG_ROOT/lib/python/site-packages
+EOF

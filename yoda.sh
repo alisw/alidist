@@ -61,7 +61,7 @@ if test "x$PYTHON_MODULES_ROOT" = "x" ; then
         CYTHON=`which cython`
     fi
 else
-    CYTHON=$PYTHON_MODULES_ROOT/share/python-modules/bin/cython
+    CYTHON=$PYTHON_MODULES_ROOT/bin/cython
 fi
 
 case $ARCHITECTURE in
