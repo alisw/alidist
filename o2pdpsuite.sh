@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "daily-20240208-0100"
+tag: "daily-20240209-0100"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
