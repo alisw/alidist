@@ -30,7 +30,7 @@ python3 -m venv --copies "$INSTALLROOT"
 # install packages into the venv.
 
 # Major.minor version of Python, needed for PYTHONPATH.
-pyver=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_python_version())')
+pyver="$(python3 -c 'import sys; print(str(sys.version_info[0]) + "." + str(sys.version_info[1]))')"
 
 # Install pinned basic requirements for python infrastructure
 echo "$PIP_BASE_REQUIREMENTS" > base-requirements.txt
