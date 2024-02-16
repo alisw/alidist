@@ -41,6 +41,12 @@ for binfile in "$INSTALLROOT"/bin/*; do
 done
 rm -fv "$INSTALLROOT"/bin/*.bak
 
+# Now that alien.py is installed, we can run its tests. They need a JAliEn
+# token though, so skip them if we have none.
+if [ -n "$JALIEN_TOKEN_CERT" ] && [ -n "$JALIEN_TOKEN_KEY" ]; then
+  PATH="$INSTALLROOT/bin:$PATH" "$SOURCEDIR/tests/run_tests"
+fi
+
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
