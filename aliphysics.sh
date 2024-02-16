@@ -1,6 +1,6 @@
 package: AliPhysics
-version: "%(commit_hash)s"
-tag: master
+version: "%(tag_basename)s_O2"
+tag: "slc9-vAN-20240216"
 requires:
   - AliRoot
   - RooUnfold
