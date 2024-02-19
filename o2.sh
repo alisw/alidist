@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20231208-0100"
+tag: "async-20240219.1"
 requires:
   - arrow
   - FairRoot

@@ -1,5 +1,5 @@
 package: O2sim
-version: "v%(year)s%(month)s%(day)s"
+version: "async-2023-pp-apass3-20240219.1"
 requires:
   - O2Physics
   - O2DPG
