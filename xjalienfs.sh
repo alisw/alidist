@@ -45,7 +45,9 @@ rm -fv "$INSTALLROOT"/bin/*.bak
 # token though, so skip them if we have none.
 set +x   # avoid echoing tokens
 if [ -n "$JALIEN_TOKEN_CERT" ] && [ -n "$JALIEN_TOKEN_KEY" ]; then
-  PATH="$INSTALLROOT/bin:$PATH" "$SOURCEDIR/tests/run_tests" ci-tests
+  PATH="$INSTALLROOT/bin:$PATH" \
+  PYTHONPATH="$INSTALLROOT/lib/python/site-packages:$PYTHONPATH" \
+  "$SOURCEDIR/tests/run_tests" ci-tests
 fi
 set -x
 
