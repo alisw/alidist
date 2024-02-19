@@ -41,10 +41,13 @@ for binfile in "$INSTALLROOT"/bin/*; do
 done
 rm -fv "$INSTALLROOT"/bin/*.bak
 
-# Now that alien.py is installed, we can run its tests. They need a JAliEn
-# token though, so skip them if we have none.
+# Now that alien.py is installed, we can run its tests.
 set +x   # avoid echoing tokens
-if [ -n "$JALIEN_TOKEN_CERT" ] && [ -n "$JALIEN_TOKEN_KEY" ]; then
+# Make sure we don't accidentally run read-write tests with users' JAliEn keys.
+if [ -n "$ALIBUILD_XJALIENFS_TESTS" ] &&
+     # Tests need a JAliEn token, so skip them if we have none.
+     [ -n "$JALIEN_TOKEN_CERT" ] && [ -n "$JALIEN_TOKEN_KEY" ]
+then
   PATH="$INSTALLROOT/bin:$PATH" \
   PYTHONPATH="$INSTALLROOT/lib/python/site-packages:$PYTHONPATH" \
   "$SOURCEDIR/tests/run_tests" ci-tests
