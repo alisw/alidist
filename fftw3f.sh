@@ -1,4 +1,4 @@
-package: FFTW3
+package: FFTW3F
 version: "%(tag_basename)s"
 tag: v3.3.9
 source: https://github.com/alisw/fftw3
@@ -11,7 +11,8 @@ build_requires:
 #!/bin/bash -e
 cmake "$SOURCEDIR"                                      \
       -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"        \
-      -DCMAKE_INSTALL_LIBDIR:PATH=lib
+      -DCMAKE_INSTALL_LIBDIR:PATH=lib                   \
+      -DENABLE_FLOAT=ON
 
 make ${JOBS+-j $JOBS}
 make install

@@ -184,6 +184,10 @@ cmake $SOURCEDIR                                                                
 
 cmake --build . --target install ${JOBS+-j $JOBS}
 
+# Make sure ROOT actually found its build dependencies and didn't disable
+# features we requested. "-Dfail-on-missing=ON" would probably be better.
+[ "$("$INSTALLROOT/bin/root-config" --has-fftw3)" = yes ]
+
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
 cat >> system.rootrc.0 <<\EOF
