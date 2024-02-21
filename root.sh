@@ -74,7 +74,6 @@ case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
     DISABLE_MYSQL=1
-    USE_BUILTIN_GLEW=1
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
@@ -134,6 +133,8 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_gl2ps=ON                                                               \
       -Dbuiltin_cfitsio=ON                                                             \
       -Dbuiltin_ftgl=ON                                                                \
+      -Dbuiltin_zstd=ON                                                                \
+      -Dbuiltin_glew=ON                                                                \
       -Dalien=OFF                                                                      \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       -Dfreetype=ON                                                                    \
@@ -182,7 +183,6 @@ cmake $SOURCEDIR                                                                
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
-      ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
