@@ -18,30 +18,23 @@ elif [[ $FFTW3_LONG_DOUBLE == "ON" ]]; then
   unset FFTW3_WITH_AVX
   FFTW3_FLOAT="OFF"
   FFTW3_DOUBLE="OFF"
-else # keep FLOAT default option as it was
-  FFTW3_FLOAT="ON"
-  FFTW3_DOUBLE="OFF"
+else
+  # Install libfftw3.so by default, not libfftw3{f,l}.so. ROOT only looks for the former.
+  FFTW3_FLOAT="OFF"
+  FFTW3_DOUBLE="ON"
   FFTW3_LONG_DOUBLE="OFF"
 fi
 
 case $ARCHITECTURE in
-    osx_arm64)
-  cmake $SOURCEDIR                                          \
-        -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"        \
-        -DCMAKE_INSTALL_LIBDIR:PATH="lib"                   \
-        -DENABLE_LONG_DOUBLE=${FFTW3_LONG_DOUBLE-OFF}       \
-        -DENABLE_FLOAT=${FFTW3_FLOAT-OFF}
-  ;;
-    *)
-  cmake $SOURCEDIR                                          \
-        -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"        \
-        -DCMAKE_INSTALL_LIBDIR:PATH="lib"                   \
-        -DENABLE_LONG_DOUBLE=${FFTW3_LONG_DOUBLE-OFF}       \
-        -DENABLE_FLOAT=${FFTW3_FLOAT-OFF}                   \
-        ${FFTW3_WITH_AVX:+-DENABLE_AVX=ON}
-  ;;
+  osx_arm64) unset FFTW3_WITH_AVX ;;
 esac
 
+cmake "$SOURCEDIR"                                        \
+      -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}"        \
+      -DCMAKE_INSTALL_LIBDIR:PATH="lib"                   \
+      -DENABLE_LONG_DOUBLE=${FFTW3_LONG_DOUBLE-OFF}       \
+      -DENABLE_FLOAT=${FFTW3_FLOAT-OFF}                   \
+      ${FFTW3_WITH_AVX:+-DENABLE_AVX=ON}
 make ${JOBS+-j $JOBS}
 make install
 
@@ -49,4 +42,4 @@ make install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
+alibuild-generate-module --bin --lib > "$MODULEFILE"
