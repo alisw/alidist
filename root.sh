@@ -128,6 +128,12 @@ cmake $SOURCEDIR                                                                
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
+      -Dfail-on-missing=ON                                                             \
+      -Dbuiltin_nlohmannjson=ON                                                        \
+      -Dbuiltin_xxhash=ON                                                              \
+      -Dbuiltin_gl2ps=ON                                                               \
+      -Dbuiltin_cfitsio=ON                                                             \
+      -Dbuiltin_ftgl=ON                                                                \
       -Dalien=OFF                                                                      \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       -Dfreetype=ON                                                                    \
