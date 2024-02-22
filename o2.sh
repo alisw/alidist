@@ -23,7 +23,7 @@ requires:
   - libjalienO2
   - cgal
   - VecGeom
-  - FFTW3F
+  - FFTW3
   - ONNXRuntime
   - MLModels
   - KFParticle
@@ -256,7 +256,7 @@ module load BASE/1.0 \\
             ${LIBJALIENO2_REVISION:+libjalienO2/$LIBJALIENO2_VERSION-$LIBJALIENO2_REVISION}         \\
             ${CURL_REVISION:+curl/$CURL_VERSION-$CURL_REVISION}                                     \\
             ${FAIRMQ_REVISION:+FairMQ/$FAIRMQ_VERSION-$FAIRMQ_REVISION}                             \\
-            ${FFTW3F_REVISION:+FFTW3F/$FFTW3F_VERSION-$FFTW3F_REVISION}                             \\
+            ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}                                 \\
             ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}         \\
             ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
             ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}
