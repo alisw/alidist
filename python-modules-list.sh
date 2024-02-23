@@ -2,9 +2,12 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_BASE_REQUIREMENTS: |
-    pip==24.0
-    setuptools==69.1.0
-    wheel==0.42.0
+    pip == 21.3.1; python_version < '3.12'
+    pip == 24.0; python_version >= '3.12'
+    setuptools == 59.6.0; python_version < '3.12'
+    setuptools == 69.1.0; python_version >= '3.12'
+    wheel == 0.37.1; python_version < '3.12'
+    wheel == 0.42.0; python_version >= '3.12'
   PIP_REQUIREMENTS: |
     # This is a pip requirements file. For documentation see:
     # https://pip.pypa.io/en/stable/reference/requirements-file-format/
