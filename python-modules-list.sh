@@ -2,9 +2,9 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_BASE_REQUIREMENTS: |
-    pip==21.3.1
-    setuptools==59.6.0
-    wheel==0.37.1
+    pip==24.0
+    setuptools==69.1.0
+    wheel==0.42.0
   PIP_REQUIREMENTS: |
     # This is a pip requirements file. For documentation see:
     # https://pip.pypa.io/en/stable/reference/requirements-file-format/
@@ -42,13 +42,15 @@ env:
     numpy == 1.19.5; python_version == '3.8'
     numpy == 1.21.4; python_version == '3.9'
     numpy == 1.23.4; python_version == '3.10'
-    numpy == 1.23.5; python_version >= '3.11'
+    numpy == 1.23.5; python_version == '3.11'
+    numpy == 1.26.4; python_version >= '3.12'
 
     scipy == 1.2.1; python_version < '3.8'
     scipy == 1.6.1; python_version == '3.8'
     scipy == 1.7.3; python_version == '3.9'
     scipy == 1.9.3; python_version == '3.10'
-    scipy == 1.10.1; python_version >= '3.11'
+    scipy == 1.10.1; python_version == '3.11'
+    scipy == 1.12.0; python_version >= '3.12'
 
     Cython == 0.29.16; python_version < '3.8'
     Cython == 0.29.21; python_version >= '3.8'
