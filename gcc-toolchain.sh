@@ -181,6 +181,13 @@ if { "\$mod_name" == "GCC-Toolchain" } {
   set base_path [string map "/Modules/modulefiles/ /" \$base_path]
   regexp -- "^(.*)/.*/.*\$" \$base_path dummy base_path
   set base_path \$base_path/Packages
+  # Load any fundamental packages we need in the runtime environment, if
+  # loading off CVMFS (because there we have a grid-base-packages/default
+  # symlink). Don't depend on that package directly here, so that we don't
+  # rebuild our entire stack when changing what we use in grid-base-packages.
+  if { [regexp {^/cvmfs.*} \$ModulesCurrentModulefile dummy1 dummy2] } {
+    module load grid-base-packages/default
+  }
 }
 # Our environment
 set GCC_TOOLCHAIN_ROOT \$base_path/GCC-Toolchain/\$version
