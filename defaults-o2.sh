@@ -14,7 +14,7 @@ disable:
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
-    tag: v5-09-59t-01
+    tag: v5-09-59t-02
   AliRoot:
     version: '%(commit_hash)s_O2'
     tag: v5-09-59t
