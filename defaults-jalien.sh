@@ -12,7 +12,7 @@ overrides:
     tag: v5-09-59t
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-59t-03
+    tag: v5-09-59t-04
   fastjet:
     tag: v3.4.0_1.045-alice1
 ---
