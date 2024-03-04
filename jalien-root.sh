@@ -6,8 +6,8 @@ requires:
   - ROOT
   - xjalienfs
   - XRootD
-build_requires:
   - libwebsockets
+build_requires:
   - json-c
   - CMake
   - "GCC-Toolchain:(?!osx)"

@@ -2,13 +2,14 @@ package: libwebsockets
 version: "%(tag_basename)s"
 tag: "v4.3.2"
 source: https://github.com/warmcat/libwebsockets
+requires:
+  - libuv
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - "OpenSSL:(?!osx)"
   - ninja
   - alibuild-recipe-tools
-  - libuv
 # On Mac, Brew's libwebsockets loads Brew's Python, which confuses ROOT.
 prefer_system: "(?!osx_)"
 prefer_system_check: |
