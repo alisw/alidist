@@ -57,6 +57,7 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
                      ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                   \\
                      ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}                 \\
+                     ${LIBWEBSOCKETS_REVISION:+libwebsockets/$LIBWEBSOCKETS_VERSION-$LIBWEBSOCKETS_REVISION} \\
                      ${LIBJALIENWS_REVISION:+libjalienws/$LIBJALIENWS_VERSION-$LIBJALIENWS_REVISION}
 
 # Our environment
