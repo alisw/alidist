@@ -23,7 +23,7 @@ overrides:
       - AliEn-ROOT-Legacy
   AliPhysics:
     version: "%(tag_basename)s"
-    tag: v5-09-59t-02
+    tag: v5-09-59t-03
   XRootD:
     tag: v3.3.6-alice2
     source: https://github.com/alisw/xrootd.git
