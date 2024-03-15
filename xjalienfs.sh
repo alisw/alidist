@@ -24,7 +24,7 @@ prepend_path:
 [[ "$ARCHITECTURE" ==  osx_* ]] && { env -u VIRTUAL_ENV ALIBUILD=1 \
     python3 -m pip install --force-reinstall \
     --target="$INSTALLROOT/lib/python/site-packages" \
-    gnureadline || : }
+    gnureadline || : ; }
 
 env -u VIRTUAL_ENV ALIBUILD=1 \
     python3 -m pip install --force-reinstall \
