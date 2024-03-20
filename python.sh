@@ -17,9 +17,32 @@ env:
   PYTHONHOME: "$PYTHON_ROOT"
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
 prefer_system: "(?!slc5|ubuntu)"
-prefer_system_check:
-  python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 5) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
+prefer_system_replacement_specs:
+  "Python36+":
+    version: "3.6.0"
+  "Python311+":
+    version: "3.11.0"
+prefer_system_check: |
+  python3 - <<EOF
+  import sys; import sqlite3
+  if sys.version_info < (3, 5):
+    exit(1)
+  elif sys.version_info < (3, 10):
+    print("alibuild_system_replace:Python36+")
+  else:
+    print("alibuild_system_replace:Python311+")
+  EOF
+  python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -;
+  if [ $? -ne 0 ]; then 
+    cat <<EOF
+  Python, the Python development packages, and pip must be installed on your system.
+  Usually those packages are called python, python-devel (or python-dev) and python-pip.
+  EOF
+    exit 1;
+  fi
 ---
+echo >/dev/null <<EOF
+EOF
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
 # According to cmsdist, this is required to pick up our own version
