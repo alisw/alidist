@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "1.5.9"
+tag: "1.6.0"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
   - "OpenSSL:(?!osx)"
@@ -18,6 +18,14 @@ prepend_path:
 # Use pip's --target to install under $INSTALLROOT without weird hacks. This
 # works inside and outside a virtualenv, but unset VIRTUAL_ENV to make sure we
 # only depend on stuff we installed using our Python and Python-modules.
+
+# on macos try to install gnureadline and just skip if fails (alienpy can work without it)
+# macos python readline implementation is build on libedit which does not work
+[[ "$ARCHITECTURE" ==  osx_* ]] && { env -u VIRTUAL_ENV ALIBUILD=1 \
+    python3 -m pip install --force-reinstall \
+    --target="$INSTALLROOT/lib/python/site-packages" \
+    gnureadline || : ; }
+
 env -u VIRTUAL_ENV ALIBUILD=1 \
     python3 -m pip install --force-reinstall \
     --target="$INSTALLROOT/lib/python/site-packages" \
