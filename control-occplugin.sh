@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v0.69.1"
+tag: "v1.7.0"
 requires:
   - FairMQ
   - FairLogger
@@ -22,14 +22,14 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 
-LIBEXT=so
+SONAME=so
 case $ARCHITECTURE in
     osx*)
       [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
       [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
       [[ ! $GRPC_ROOT ]] && GRPC_ROOT=$(brew --prefix grpc)
-      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@1.1)
-      LIBEXT=dylib
+      [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT_DIR=$(brew --prefix openssl@3)
+      SONAME=dylib
     ;;
 esac
 
@@ -37,6 +37,8 @@ cmake $SOURCEDIR/occ                                                            
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                \
       ${BOOST_ROOT:+-DBOOSTPATH=$BOOST_ROOT}                                             \
       ${OPENSSL_ROOT_DIR:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR}                          \
+      ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                      \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DGRPCPATH=${GRPC_ROOT}                                                            \
       -DPROTOBUFPATH=${PROTOBUF_ROOT}                                                    \
       -DFAIRMQPATH=${FAIRMQ_ROOT}                                                        \

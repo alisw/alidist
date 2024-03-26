@@ -4,6 +4,7 @@ tag: "v3.2.1_1.024-alice3"
 source: https://github.com/alisw/fastjet
 requires:
   - cgal
+  - GMP
 env:
   FASTJET: "$FASTJET_ROOT"
 ---
@@ -73,6 +74,22 @@ popd
 
 rm -f $INSTALLROOT/lib/*.la
 
+# Dependencies relocation: rely on runtime environment.  That is,
+# specific paths in the generated script are replaced by expansions of
+# the relevant environment variables.
+SED_EXPR="s!x!x!"  # noop
+for P in $REQUIRES $BUILD_REQUIRES; do
+  UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
+  EXPAND=$(eval echo \$${UPPER}_ROOT)
+  [[ $EXPAND ]] || continue
+  SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
+done
+
+# Modify fastjet-config to use environment
+cat $INSTALLROOT/bin/fastjet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/fastjet-config.0
+mv $INSTALLROOT/bin/fastjet-config.0 $INSTALLROOT/bin/fastjet-config
+chmod 0755 $INSTALLROOT/bin/fastjet-config
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
@@ -86,7 +103,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}
+module load BASE/1.0 ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION} ${GMP_REVISION:+GMP/$GMP_VERSION-$GMP_REVISION}
 # Our environment
 set FASTJET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv FASTJET \$FASTJET_ROOT

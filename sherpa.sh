@@ -6,6 +6,8 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - Openloops
   - HepMC
+  - HepMC3
+  - lhapdf
   - lhapdf-pdfsets
   - fastjet
   - pythia
@@ -40,6 +42,7 @@ export LDFLAGS="$LDFLAGS -L$CGAL_ROOT/lib  -L$GMP_ROOT/lib"
 ./configure --prefix=$INSTALLROOT        \
               --with-sqlite3=install       \
               --enable-hepmc2=$HEPMC_ROOT  \
+              --enable-hepmc3=$HEPMC3_ROOT \
               --enable-lhapdf=$LHAPDF_ROOT \
               --enable-pythia \
               --enable-openloops=$OPENLOOPS_ROOT \

@@ -4,9 +4,9 @@ tag: v20r30
 source: https://github.com/alisw/dim
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - motif
 build_requires:
   - alibuild-recipe-tools
-  - motif
 ---
 #!/bin/bash -e
 rsync -av $SOURCEDIR/ .

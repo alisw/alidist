@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20230623-0200"
+tag: "daily-20240326-0100"
 requires:
   - arrow
   - FairRoot
@@ -29,6 +29,7 @@ requires:
   - KFParticle
   - RapidJSON
 build_requires:
+  - abseil
   - GMP
   - MPFR
   - googlebenchmark
@@ -81,6 +82,9 @@ incremental_recipe: |
     if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
       export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
     fi
+    if [[ -z $OPENSSL_REVISION && $ARCHITECTURE == osx* ]]; then
+      export ROOT_INCLUDE_PATH=$(brew --prefix openssl@3)/include:$ROOT_INCLUDE_PATH
+    fi
     export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/GPU:$ROOT_INCLUDE_PATH
     # Set Geant4 data sets environment
     if [[ "$G4INSTALL" != "" ]]; then
@@ -92,7 +96,7 @@ incremental_recipe: |
     find $PWD -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
-    ctest -C ${CMAKE_BUILD_TYPE} -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+    ctest -C ${CMAKE_BUILD_TYPE} -E "test_Framework" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
     ctest -C ${CMAKE_BUILD_TYPE} -R test_Framework --output-on-failure || TESTERR=$?
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
@@ -147,9 +151,7 @@ case $ARCHITECTURE in
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
     [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
-    SONAME=dylib
   ;;
-  *) SONAME=so ;;
 esac
 
 # This affects only PR checkers
@@ -189,6 +191,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF -DENABLE_OPENCL2=OFF}         \
       ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
       ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
+      ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}             \
+      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:+-DCUDA_COMPUTETARGET=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}         \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                                                             \
       ${BUILD_ANALYSIS:+-DBUILD_ANALYSIS=$BUILD_ANALYSIS}                                                 \
@@ -197,9 +201,10 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=$ENABLE_UPGRADES}                                              \
       ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
-      ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                               \
+      ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
+      ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
       ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}
-# LLVM_ROOT is required for Gandiva.
+# LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
@@ -276,6 +281,9 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$O2_ROOT/lib
   if [[ ! $BOOST_VERSION && $ARCHITECTURE == osx* ]]; then
     export ROOT_INCLUDE_PATH=$(brew --prefix boost)/include:$ROOT_INCLUDE_PATH
+  fi
+  if [[ -z $OPENSSL_REVISION && $ARCHITECTURE == osx* ]]; then
+    export ROOT_INCLUDE_PATH=$(brew --prefix openssl@3)/include:$ROOT_INCLUDE_PATH
   fi
   export ROOT_INCLUDE_PATH=$INSTALLROOT/include:$INSTALLROOT/include/GPU:$ROOT_INCLUDE_PATH
   # Clean up old coverage data and tests logs

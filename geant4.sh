@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v11.0.4"
+tag: "v11.2.0"
 # source: https://github.com/alisw/geant4.git
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
@@ -51,6 +51,10 @@ cmake $SOURCEDIR                                                \
 
 make ${JOBS+-j $JOBS}
 make install
+
+# we should not use cached package links
+packagecachefile=$(find ${INSTALLROOT} -name "Geant4PackageCache.cmake")
+echo "#" > $packagecachefile
 
 # Install data sets
 # Can be done after Geant4 installation, if installed with -DGEANT4_INSTALL_DATA=OFF

@@ -18,6 +18,9 @@ unset HTTP_PROXY # unset this to build on slc6 system
 # Due to typical long install dir paths used by aliBuild, the string lengths must be increased
 sed -i -e 's/max_string_length\ =\ 255/max_string_length\ =\ 1000/g' pyol/config/default.cfg
 
+# Make scons script work with python3 
+sed -i -e 's/#!\ \/usr\/bin\/env\ python/#!\ \/usr\/bin\/env\ python3/g' scons-local/scons.py
+
 ./scons
 
 JOBS=$((${JOBS:-1}*1/5))

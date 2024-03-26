@@ -1,6 +1,6 @@
 package: JETSCAPE
 version: "%(tag_basename)s"
-tag: "v3.1.1-alice1"
+tag: "v3.1.1-alice5"
 source: https://github.com/alisw/JETSCAPE
 requires:
   - boost
@@ -26,6 +26,7 @@ esac
     -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     -DPYTHIA8=$PYTHIA_ROOT                       \
+    -Dunittests=OFF                              \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install

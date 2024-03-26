@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-28-04"
-source: https://github.com/root-project/root.git
+tag: "v6-30-01-alice4"
+source: https://github.com/alisw/root.git
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
@@ -19,10 +19,12 @@ requires:
   - XRootD
   - TBB
   - protobuf
+  - FFTW3
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
   - alibuild-recipe-tools
+  - ninja
 env:
   ROOTSYS: "$ROOT_ROOT"
 prepend_path:
@@ -51,6 +53,7 @@ incremental_recipe: |
 # understand yaml.
 cat >/dev/null <<EOF
 EOF
+
 unset ROOTSYS
 COMPILER_CC=cc
 COMPILER_CXX=c++
@@ -71,12 +74,13 @@ case $ARCHITECTURE in
   osx*)
     ENABLE_COCOA=1
     DISABLE_MYSQL=1
+    USE_BUILTIN_GLEW=1
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
     SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
-    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
   ;;
 esac
@@ -89,29 +93,23 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
 
-if [[ -d $SOURCEDIR/interpreter/llvm ]]; then
-  # ROOT 6+: enable Python
-  ROOT_PYTHON_FLAGS="-Dpyroot=ON"
-  ROOT_HAS_PYTHON=1
-  python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
-  if [ "$python_exec" = "$(which python3)" ]; then
-    # By default, if there's nothing funny going on, let ROOT pick the Python in
-    # the PATH, which is the one built by us (unless disabled, in which case it
-    # is the system one). This is substituted into ROOT's Python scripts'
-    # shebang lines, so we cannot use an absolute path because the path to our
-    # Python will differ between build time and runtime, e.g. on the Grid.
-    PYTHON_EXECUTABLE=
-  else
-    # If Python's exec_prefix doesn't point to the same place as $PATH, then we
-    # have a shim script in between. This is used by things like pyenv and asdf.
-    # This doesn't happen when building things to be published, only in local
-    # usage, so hardcoding an absolute path into the shebangs is fine.
-    PYTHON_EXECUTABLE=$python_exec
-  fi
+# ROOT 6+: enable Python
+ROOT_PYTHON_FLAGS="-Dpyroot=ON"
+ROOT_HAS_PYTHON=1
+python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
+if [ "$python_exec" = "$(which python3)" ]; then
+  # By default, if there's nothing funny going on, let ROOT pick the Python in
+  # the PATH, which is the one built by us (unless disabled, in which case it
+  # is the system one). This is substituted into ROOT's Python scripts'
+  # shebang lines, so we cannot use an absolute path because the path to our
+  # Python will differ between build time and runtime, e.g. on the Grid.
+  PYTHON_EXECUTABLE=
 else
-  # Non-ROOT 6 builds: disable Python
-  ROOT_PYTHON_FLAGS="-Dpython=OFF -Dpyroot=OFF"
-  ROOT_HAS_NO_PYTHON=1
+  # If Python's exec_prefix doesn't point to the same place as $PATH, then we
+  # have a shim script in between. This is used by things like pyenv and asdf.
+  # This doesn't happen when building things to be published, only in local
+  # usage, so hardcoding an absolute path into the shebangs is fine.
+  PYTHON_EXECUTABLE=$python_exec
 fi
 
 if [ -n "$XROOTD_ROOT" ]; then
@@ -124,13 +122,13 @@ else
 fi
 
 unset DYLD_LIBRARY_PATH
+CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
-      ${ALIEN_RUNTIME_REVISION:+-DMONALISA_DIR=$ALIEN_RUNTIME_ROOT}                    \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
       -Dfreetype=ON                                                                    \
       -Dbuiltin_freetype=OFF                                                           \
@@ -149,33 +147,46 @@ cmake $SOURCEDIR                                                                
       ${GCC_TOOLCHAIN_REVISION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}  \
       ${LIBXML2_ROOT:+-DLIBXML2_ROOT=$LIBXML2_ROOT}                                    \
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
+      ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
+      -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
       -Dminuit2=ON                                                                     \
+      -Dpythia6=ON                                                                     \
       -Dpythia6_nolink=ON                                                              \
+      -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
       -Droot7=OFF                                                                      \
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
-      -Dvdt=ON                                                                         \
-      -Dbuiltin_vdt=ON                                                                 \
-      ${ALIEN_RUNTIME_REVISION:+-Dmonalisa=ON}                                         \
+      -Dvdt=OFF                                                                        \
+      -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_afterimage=ON                                                          \
+      -Dbuiltin_fftw3=OFF                                                              \
       -Dtmva-sofie=ON                                                                  \
+      -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
+      -Dunfold=ON                                                                      \
+      ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT"
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT"
 
 cmake --build . --target install ${JOBS+-j $JOBS}
+
+# Make sure ROOT actually found its build dependencies and didn't disable
+# features we requested. "-Dfail-on-missing=ON" would probably be better.
+[ "$("$INSTALLROOT/bin/root-config" --has-fftw3)" = yes ]
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0

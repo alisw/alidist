@@ -17,8 +17,10 @@ prepend_path:
 ---
 #!/bin/bash -e
 
-if [[ $ARCHITECTURE == osx* && ! $OPENSSL_ROOT ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+SONAME=so
+if [[ $ARCHITECTURE == osx* ]]; then
+  SONAME=dylib
+  : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}"
 fi
 
 # Determine whether we are building for ROOT 5 or ROOT 6+
@@ -32,6 +34,8 @@ cmake $BUILDDIR                                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       -DROOTSYS="$ROOTSYS"                               \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DALIEN_DIR="$XALIENFS_ROOT"                       \
       -DROOT_VERSION="$ROOT_MAJOR"
 

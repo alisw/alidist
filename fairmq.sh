@@ -1,5 +1,6 @@
 package: FairMQ
-version: "v1.5.0"
+version: "%(tag_basename)s"
+tag: "v1.8.4"
 source: https://github.com/FairRootGroup/FairMQ
 requires:
   - boost
@@ -18,7 +19,7 @@ prepend_path:
 incremental_recipe: |
   #!/bin/bash -e
   cmake --build . ${JOBS:+-j$JOBS}
-  cmake --install . --prefix "${INSTALLROOT}"
+  cmake --install .
   MODULEDIR="etc/modulefiles"
   mkdir -p "${INSTALLROOT}/${MODULEDIR}"
   rsync -a --delete "${MODULEDIR}/" "${INSTALLROOT}/${MODULEDIR}"
@@ -32,15 +33,15 @@ case ${ARCHITECTURE} in
   ;;
 esac
 
-cmake "${SOURCEDIR}"                                              \
+cmake "${SOURCEDIR}" -DCMAKE_INSTALL_PREFIX="${INSTALLROOT}"      \
       -GNinja                                                     \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=${CXXSTD}}                   \
       ${CXX_COMPILER:+-DCMAKE_CXX_COMPILER=${CXX_COMPILER}}       \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}} \
       -DCMAKE_INSTALL_LIBDIR=lib                                  \
       -DDISABLE_COLOR=ON                                          \
-      -DBUILD_EXAMPLES=ON                                         \
-      -DBUILD_TESTING=ON
+      -DBUILD_EXAMPLES=OFF                                        \
+      -DBUILD_TESTING=OFF
 # NOTE: FairMQ examples must always be built in RPMs as they are
 #       used for AliECS integration testing. Please do not disable
 #       them.
@@ -51,7 +52,7 @@ if [[ -n ${ALIBUILD_FAIRMQ_TESTS} ]]; then
   ctest --output-on-failure --schedule-random ${JOBS:+-j${JOBS}}
 fi
 
-cmake --install . --prefix "${INSTALLROOT}"
+cmake --install .
 
 # ModuleFile
 MODULEDIR="etc/modulefiles"
