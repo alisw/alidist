@@ -38,7 +38,7 @@ overrides:
       - lhapdf
       - boost
   ROOT:
-    tag: v6-30-05-alice1    
+    tag: v6-30-05-alice1
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
