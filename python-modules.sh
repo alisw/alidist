@@ -24,7 +24,7 @@ unset VIRTUAL_ENV
 # NOTE: If you get an error saying "Error: This build of python cannot create
 # venvs without using symlinks", then you are using the MacOS Python. You
 # should be using the Homebrew Python instead, so run "brew install python".
-python3 -m venv --copies "$INSTALLROOT"
+python3 -m venv "$INSTALLROOT"
 . "$INSTALLROOT/bin/activate"
 # From now on, we use the python3 binary copied into the venv. This makes pip
 # install packages into the venv.
@@ -46,7 +46,7 @@ find "$INSTALLROOT" -mindepth 2 -maxdepth 2 \
 
 # Fix shebangs: remove hardcoded Python path. Scripts' shebangs will point at
 # the venv's python using an absolute path by default, which we must change.
-sed -r -i.deleteme -e "1s,^#!$INSTALLROOT/bin/,#!/usr/bin/env ," "$INSTALLROOT"/bin/*
+find "$INSTALLROOT"/bin -type f -exec sed -r -i.deleteme -e "1s,^#!$INSTALLROOT/bin/,#!/usr/bin/env ," {} \;
 rm -f "$INSTALLROOT"/bin/*.deleteme
 
 # Link python -> python$pyver, so we can refer to it in PYTHONPATH without knowing pyver.
