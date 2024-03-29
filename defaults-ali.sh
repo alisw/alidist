@@ -15,7 +15,7 @@ overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
   AliRoot:
-    version: '%(commit_hash)s_O2'
+    tag: 'v5-09-59u'
     requires:
       - ROOT
       - DPMJET
