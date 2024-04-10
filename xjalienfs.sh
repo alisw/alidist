@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "preload_gcc"
+tag: "1.6.1"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
   - "OpenSSL:(?!osx)"
