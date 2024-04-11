@@ -1,10 +1,11 @@
 package: xercesc
-version: Xerces-C_3_2_4
-tag: v3.2.4
+version: Xerces-C_3_2_5
+tag: v3.2.5
 source: https://github.com/apache/xerces-c
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - ninja
 prefer_system: ".*"
 prefer_system_check: |
   pkg-config --atleast-version=3.2.0 xerces-c 2>&1 && printf "#include \"<xercesc/util/PlatformUtils.hpp>\"\nint main(){}" | c++ -xc - -o /dev/null
@@ -14,6 +15,7 @@ prepend_path:
 ---
 
 cmake $SOURCEDIR                                         \
+      -G Ninja                                           \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
       -DBUILD_SHARED_LIBS=ON                             \
       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}             \
@@ -21,8 +23,7 @@ cmake $SOURCEDIR                                         \
       -Dnetwork:BOOL=OFF                                 \
       -DCMAKE_INSTALL_LIBDIR=lib
 
-make ${JOBS:+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
