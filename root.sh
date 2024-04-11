@@ -182,6 +182,9 @@ cmake $SOURCEDIR                                                                
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT"
 
+# Workaround issue with cmake 3.29.0
+sed -i.removeme '/deps = gcc/d' build.ninja
+rm *.removeme
 cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Make sure ROOT actually found its build dependencies and didn't disable
