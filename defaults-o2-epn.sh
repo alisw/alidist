@@ -35,11 +35,6 @@ overrides:
     version: 4.12.2
   fastjet:
     tag: v3.4.0_1.045-alice1
-  pythia:
-    tag: v8304-alice1
-    requires:
-      - lhapdf
-      - boost
   DataDistribution:
     requires:
       - "GCC-Toolchain:(?!osx)"
