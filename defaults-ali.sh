@@ -13,9 +13,11 @@ disable:
   - MySQL
 overrides:
   AliPhysics:
-    version: '%(commit_hash)s_O2'
+    version: '%(tag_basename)s_O2'
+    tag: 'v5-9-59v'
   AliRoot:
     version: '%(commit_hash)s_O2'
+    tag: 'v5-9-59v'
     requires:
       - ROOT
       - DPMJET
