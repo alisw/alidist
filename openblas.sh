@@ -1,6 +1,6 @@
 package: OpenBLAS
 version: "%(tag_basename)s"
-tag: "v0.3.13"
+tag: "v0.3.27"
 source: https://github.com/xianyi/OpenBLAS.git
 requires:
   - openmp
