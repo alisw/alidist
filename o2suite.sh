@@ -22,6 +22,7 @@ valid_defaults:
   - alo
   - o2-prod
   - o2-ninja
+  - ali
 ---
 #!/bin/bash -ex
 
