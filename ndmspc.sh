@@ -5,6 +5,7 @@ requires:
   - ROOT
 build_requires:
   - CMake
+  - ninja
   - alibuild-recipe-tools
 source: https://gitlab.com/ndmspc/ndmspc.git
 incremental_recipe: |
