@@ -43,7 +43,6 @@ MODULEFILE="etc/modulefiles/$PKGNAME"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
-setenv NDMSPC_ROOT \$PKG_ROOT
 setenv NDMSPC_MACRO_DIR \$PKG_ROOT/macros
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF
