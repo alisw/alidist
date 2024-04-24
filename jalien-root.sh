@@ -11,9 +11,11 @@ requires:
 build_requires:
   - json-c
   - CMake
+  - ninja
   - "GCC-Toolchain:(?!osx)"
   - zlib
   - Alice-GRID-Utils
+  - alibuild-recipe-tools
 append_path:
   ROOT_PLUGIN_PATH: "$JALIEN_ROOT_ROOT/etc/plugins"
   ROOT_INCLUDE_PATH: "$JALIEN_ROOT_ROOT/include"
@@ -28,43 +30,36 @@ case $ARCHITECTURE in
   ;;
 esac
 
-rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
-rsync -a $ALICE_GRID_UTILS_ROOT/include/ $BUILDDIR/inc
+# This is needed to support old version which did not have FindAliceGridUtils.cmake
+ALIBUILD_CMAKE_BUILD_DIR=$SOURCEDIR
+if [ ! -f "$JALIEN_ROOT_ROOT/cmake/modules/FindAliceGridUtils.cmake" ]; then
+  ALIBUILD_CMAKE_BUILD_DIR="$BUILDDIR"
+  rsync -a --exclude '**/.git' --delete "$SOURCEDIR/" "$BUILDDIR"
+  rsync -a "$ALICE_GRID_UTILS_ROOT/include/" "$BUILDDIR/inc"
+fi
 
-cmake $BUILDDIR                                          \
+cmake "$ALIBUILD_CMAKE_BUILD_DIR"                        \
+      -G Ninja                                           \
+      -DCMAKE_BUILD_TYPE=Debug                           \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=${CXXSTD}}          \
       -DROOTSYS="$ROOTSYS"                               \
       -DJSONC="$JSON_C_ROOT"                             \
+      -DALICE_GRID_UTILS_ROOT="$ALICE_GRID_UTILS_ROOT"   \
        ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
        ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
        ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DZLIB_ROOT="$ZLIB_ROOT"                           \
       -DXROOTD_ROOT_DIR="$XROOTD_ROOT"                   \
       -DLWS="$LIBWEBSOCKETS_ROOT"
-make ${JOBS:+-j $JOBS} install
+cmake --build . -- ${JOBS:+-j $JOBS} install
 
 # Modulefile
 mkdir -p etc/modulefiles
-cat > etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
-                     ROOT/${ROOT_VERSION}-${ROOT_REVISION}                                                   \\
-                     ${XJALIENFS_REVISION:+xjalienfs/$XJALIENFS_VERSION-$XJALIENFS_REVISION}                 \\
-                     ${LIBUV_REVISION:+libuv/$LIBUV_VERSION-$LIBUV_REVISION}                                 \\
-		     ${LIBJALIENWS_REVISION:+libjalienws/$LIBJALIENWS_VERSION-$LIBJALIENWS_REVISION}
-
+alibuild-generate-module --lib > "etc/modulefiles/$PKGNAME"
+cat >> "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
-set JALIEN_ROOT_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path LD_LIBRARY_PATH \$JALIEN_ROOT_ROOT/lib
-append-path ROOT_PLUGIN_PATH \$JALIEN_ROOT_ROOT/etc/plugins
-prepend-path ROOT_INCLUDE_PATH \$JALIEN_ROOT_ROOT/include
+append-path ROOT_PLUGIN_PATH \$PKGROOT/etc/plugins
+prepend-path ROOT_INCLUDE_PATH \$PKGROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
