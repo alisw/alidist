@@ -59,7 +59,7 @@ mkdir -p etc/modulefiles
 alibuild-generate-module --lib > "etc/modulefiles/$PKGNAME"
 cat >> "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
-append-path ROOT_PLUGIN_PATH \$PKGROOT/etc/plugins
-prepend-path ROOT_INCLUDE_PATH \$PKGROOT/include
+append-path ROOT_PLUGIN_PATH \$PKG_ROOT/etc/plugins
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
