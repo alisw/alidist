@@ -39,7 +39,7 @@ overrides:
     tag: v8304-alice1
     requires:
       - lhapdf
-      - boost  
+      - boost
   DataDistribution:
     requires:
       - "GCC-Toolchain:(?!osx)"
