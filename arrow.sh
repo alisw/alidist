@@ -73,7 +73,7 @@ cmake ./src_tmp/cpp                                                             
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS="$CMAKE_SHARED_LINKER_FLAGS"}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
-      -DCMAKE_CXX_STANDARD=17                                                                       \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                       \
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
       -DARROW_BUILD_BENCHMARKS=OFF                                                                  \
       -DARROW_BUILD_TESTS=OFF                                                                       \
