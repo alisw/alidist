@@ -1,6 +1,6 @@
 package: EVTGEN
 version: "%(tag_basename)s"
-tag: "R02-02-00"
+tag: "R02-02-00-alice1"
 source: https://github.com/alisw/EVTGEN
 requires:
   - HepMC
