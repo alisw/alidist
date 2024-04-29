@@ -35,9 +35,6 @@ disable:
   - OpenSSL
   - curl:(?!osx.*)
 overrides:
-  GCC-Toolchain:
-    version: "v12.2.0-alice1"
-    tag: "v12.2.0-alice1"
   Python-modules-list:
     env:
       PIP_BASE_REQUIREMENTS: |
