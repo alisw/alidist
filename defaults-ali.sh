@@ -7,7 +7,6 @@ env:
   CXXSTD: '20'
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'OFF'
-  MACOSX_DEPLOYMENT_TARGET: '10.15'
 disable:
   - mesos
   - MySQL
