@@ -40,19 +40,7 @@ overrides:
     tag: "v12.2.0-alice1"
   Python-modules-list:
     env:
-      PIP_BASE_REQUIREMENTS: |
-        pip == 21.3.1; python_version < '3.12'
-        pip == 24.0; python_version >= '3.12'
-        setuptools == 59.6.0; python_version < '3.12'
-        setuptools == 69.1.0; python_version >= '3.12'
-        wheel == 0.37.1; python_version < '3.12'
-        wheel == 0.42.0; python_version >= '3.12'
-      PIP_REQUIREMENTS: |
-        requests == 2.27.1; python_version < '3.11'
-        requests == 2.31.0; python_version >= '3.11'
-        responses == 0.10.6
-        dryable == 1.0.3; python_version < '3.9'
-        dryable == 1.0.5; python_version >= '3.9'
+      PIP_REQUIREMENTS: ""
   O2-customization:
     env:
       ENABLE_UPGRADES: "OFF"  # Disable detector upgrades in O2
