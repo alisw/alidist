@@ -38,9 +38,6 @@ overrides:
   GCC-Toolchain:
     version: "v12.2.0-alice1"
     tag: "v12.2.0-alice1"
-  Python-modules-list:
-    env:
-      PIP_REQUIREMENTS: ""
   O2-customization:
     env:
       ENABLE_UPGRADES: "OFF"  # Disable detector upgrades in O2
