@@ -44,6 +44,13 @@ overrides:
       BUILD_ANALYSIS: "OFF"   # Disable analysis in O2
       BUILD_EXAMPLES: "OFF"   # Disable examples in O2
       O2_BUILD_FOR_FLP: "ON"
+  Python-modules-list:
+    env:
+      PIP_BASE_REQUIREMENTS: |
+        pip==21.3.1
+        setuptools==65.5.1
+        wheel==0.37.1
+      PIP_REQUIREMENTS: ""
   DataDistribution:
     requires:
       - "GCC-Toolchain:(?!osx)"
