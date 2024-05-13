@@ -7,7 +7,6 @@ requires:
   - FreeType
   - libuv
 build_requires:
-  - capstone
   - CMake
   - alibuild-recipe-tools
   - ninja
@@ -41,21 +40,6 @@ case $ARCHITECTURE in
       [[ ! $FREETYPE_ROOT ]] && FREETYPE_ROOT="/usr"       
     ;;
 esac
-
-# build the tracy profiler
-rsync -av $SOURCEDIR/tracy/ tracy/
-pushd tracy/profiler/build/unix
-  make ${JOBS+-j $JOBS}                                                                                                         \
-      LIBS="-L$CAPSTONE_ROOT/lib -L$GLFW_ROOT/lib -L$FREETYPE_ROOT/lib -lglfw -lfreetype -lcapstone -lpthread -ldl $EXTRA_LIBS" \
-      DEFINES="$DEFINES"                                                                                                        \
-      TBB=off                                                                                                                   \
-      TRACY_NO_FILESELECTOR=1                                                                                                   \
-      INCLUDES="-I$CAPSTONE_ROOT/include/capstone -I$SOURCEDIR/tracy/imgui -I$SOURCEDIR/tracy -I$SOURCEDIR/tracy/profiler/libs/gl3w ${FREETYPE_ROOT:+-I$FREETYPE_ROOT/include/freetype2} -I${GLFW_ROOT:+$GLFW_ROOT/include}"
-popd
-mkdir -p $INSTALLROOT/{include/tracy,bin}
-cp tracy/profiler/build/unix/Tracy-* $INSTALLROOT/bin/tracy-profiler
-cp tracy/*.{h,hpp,cpp} $INSTALLROOT/include/tracy
-cp -r tracy/{common,client,libbacktrace} $INSTALLROOT/include/tracy/
 
 cmake $SOURCEDIR                          \
       -DCMAKE_GENERATOR=Ninja             \

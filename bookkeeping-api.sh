@@ -1,6 +1,6 @@
 package: bookkeeping-api
-version: "v0.82.0"
-tag: "@aliceo2/bookkeeping@0.82.0"
+version: "v0.87.0"
+tag: "@aliceo2/bookkeeping@0.87.0"
 requires:
   - grpc
   - protobuf

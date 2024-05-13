@@ -10,6 +10,7 @@ requires:
 valid_defaults:
   - o2
   - o2-epn
+  - ali
 ---
 #!/bin/bash -ex
 
