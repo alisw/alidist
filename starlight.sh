@@ -1,6 +1,6 @@
 package: STARlight
-version: "%(tag_basename)s"
-tag: main
+version: "20240714"
+tag: 9980f5d
 requires:
   - HepMC3
 build_requires:
