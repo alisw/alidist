@@ -14,7 +14,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DCMAKE_SKIP_RPATH=TRUE                   \
                  -DENABLE_HEPMC3=ON                        \
-                 -DHepMC2_DIR=$HEPMC3_ROOT
+                 -DHepMC3_DIR="$HEPMC3_ROOT"
 cmake --build . -- ${JOBS:+-j$JOBS}
 mkdir -p $INSTALLROOT/bin
 cp ./starlight $INSTALLROOT/bin/.
