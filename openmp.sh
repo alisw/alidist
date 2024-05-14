@@ -1,5 +1,5 @@
 package: openmp
-version: 1.0
+version: "1.0"
 system_requirement_missing: |
   Please install openmp (libomp) on your system:
     * On MacOS systems: brew install libomp

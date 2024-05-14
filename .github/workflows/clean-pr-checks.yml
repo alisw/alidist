@@ -22,12 +22,12 @@ name: Clean PR checks
         description: build/O2/alidist-cs8
         type: boolean
         default: true
-      'check_build/O2/alidist-dataflow':
-        description: build/O2/alidist-dataflow
-        type: boolean
-        default: true
       'check_build/O2/alidist-dataflow-cs8':
         description: build/O2/alidist-dataflow-cs8
+        type: boolean
+        default: true
+      'check_build/O2/alidist-ubuntu2204':
+        description: build/O2/alidist-ubuntu2204
         type: boolean
         default: true
       'check_build/O2/fullCI/alidist':

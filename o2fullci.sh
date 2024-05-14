@@ -5,9 +5,12 @@ requires:
   - O2Suite
   - o2checkcode
   - O2-full-system-test
+  - O2-sim-challenge-test
+  - O2-RTC-test
 valid_defaults:
   - o2
   - o2-epn
+  - ali
 ---
 #!/bin/bash -ex
 

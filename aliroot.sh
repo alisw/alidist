@@ -75,7 +75,7 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
 fi
 
 cmake $SOURCEDIR                                                     \
-      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"                  \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error -g"               \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                          \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                             \
       -DCMAKE_Fortran_COMPILER=gfortran                              \

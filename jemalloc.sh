@@ -3,8 +3,8 @@ version: "v%(commit_hash)s"
 tag: 5.1.0
 source: https://github.com/jemalloc/jemalloc
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - "autotools:(slc6|slc7)"
+  - "GCC-Toolchain:(?!osx)"
+  - "autotools:(slc6|slc7)"
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude "**/.git" $SOURCEDIR/ .

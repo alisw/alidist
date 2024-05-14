@@ -2,10 +2,10 @@ package: cctools
 version: v5.4.17-alice2
 source: https://github.com/alisw/cctools
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - zlib
- - SWIG
+  - zlib
+  - SWIG
 ---
 #!/bin/bash
 rsync -a --delete --exclude "**/.git" $SOURCEDIR/ .

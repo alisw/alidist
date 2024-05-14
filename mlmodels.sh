@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "20220530"
 source: https://github.com/alisw/MLModels.git
 build_requires:
- - alibuild-recipe-tools
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 

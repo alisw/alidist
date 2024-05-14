@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "v19.1.2-alice3"
 source: https://github.com/alisw/DPMJET.git
 requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

@@ -3,17 +3,19 @@ version: v2.10.18
 tag: 2.10.18
 source: https://github.com/Microsoft/cpprestsdk
 requires:
-- boost
-- OpenSSL:(?!osx)
+  - boost
+  - OpenSSL:(?!osx)
 build_requires:
-- CMake
+  - CMake
 ---
 #!/bin/sh
 
+SONAME=so
 case $ARCHITECTURE in
-  osx*) 
+  osx*)
+    SONAME=dylib
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=$(brew --prefix boost)
-    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+    [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
   ;;
 esac
 
@@ -26,7 +28,9 @@ cmake "$SOURCEDIR/Release"                              \
       -DCPPREST_EXCLUDE_WEBSOCKETS=ON                   \
       -DCMAKE_INSTALL_LIBDIR=lib                        \
       ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}       \
-      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}
+      ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
+      ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+      ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}
 
 make ${JOBS:+-j $JOBS}
 make install

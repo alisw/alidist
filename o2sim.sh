@@ -6,6 +6,7 @@ requires:
   - QualityControl
   - AEGIS
   - EVTGEN:(?!osx)
+  - jq
 ---
 #!/bin/bash -ex
 

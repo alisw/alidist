@@ -1,10 +1,10 @@
 package: MonALISA
 version: "20221109"
 requires:
- - JDK
+  - JDK
 build_requires:
- - curl
- - alibuild-recipe-tools
+  - curl
+  - alibuild-recipe-tools
 ---
 curl http://alimonitor.cern.ch/download/MonaLisa/MonaLisa-${PKGVERSION}.tar.gz | tar xz --strip-components 1 -C $INSTALLROOT
 

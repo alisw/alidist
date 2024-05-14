@@ -35,7 +35,6 @@ export GMP_INC_DIR="${GMP_ROOT}/include"
 cmake . \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
       -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
-      -DCMAKE_SKIP_RPATH:BOOL=YES \
       -DCMAKE_BUILD_TYPE=Release \
       -DWITH_BLAS:BOOL=OFF \
       -DWITH_CGAL_Core:BOOL=ON \
@@ -70,6 +69,10 @@ cmake . \
 
 make VERBOSE=1 ${JOBS:+-j$JOBS}
 make install VERBOSE=1
+
+find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath @loader_path/../lib {} \;
+find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -id {} {} \;
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

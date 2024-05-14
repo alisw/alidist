@@ -1,6 +1,6 @@
 package: FairRoot
-version: "v18.4.9"
-source: https://github.com/FairRootGroup/FairRoot
+version: "v18.4.9-alice3"
+source: https://github.com/alisw/FairRoot
 requires:
   - generators
   - simulation
@@ -13,10 +13,21 @@ requires:
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
-  GEOMPATH:   "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
+  GEOMPATH: "$FAIRROOT_ROOT/share/fairbase/examples/common/geometry"
   CONFIG_DIR: "$FAIRROOT_ROOT/share/fairbase/examples/common/gconfig"
 prepend_path:
   ROOT_INCLUDE_PATH: "$FAIRROOT_ROOT/include"
+incremental_recipe: |
+  cmake $SOURCEDIR                          \
+        -DCMAKE_GENERATOR=Ninja             \
+        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+  cmake --build . -- ${JOBS+-j $JOBS} install
+
+  #ModuleFile
+  mkdir -p etc/modulefiles
+  mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in

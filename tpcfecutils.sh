@@ -1,6 +1,6 @@
 package: TpcFecUtils
 version: "%(tag_basename)s"
-tag: v0.2.1
+tag: v0.4.1
 requires:
   - "GCC-Toolchain:(?!osx)"
   - boost

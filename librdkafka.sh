@@ -1,6 +1,6 @@
 package: librdkafka
 version: "%(tag_basename)s"
-tag: v1.9.2
+tag: v2.3.0
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:

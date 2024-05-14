@@ -12,7 +12,7 @@ requires:
   - QualityControl
   - "DataDistribution:(?!osx)"
   - "ALF:(?!osx)"
-  - "mesos:(slc8)"
+  - "mesos:(slc.*)"
   - "TpcFecUtils:(?!osx)"
 valid_defaults:
   - o2
@@ -22,6 +22,7 @@ valid_defaults:
   - alo
   - o2-prod
   - o2-ninja
+  - ali
 ---
 #!/bin/bash -ex
 

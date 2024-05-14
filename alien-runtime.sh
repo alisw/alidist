@@ -1,17 +1,17 @@
 package: AliEn-Runtime
 version: "v2-19-le"
 requires:
- - "GCC-Toolchain:(?!osx)"
- - "Xcode:(osx.*)"
+  - "GCC-Toolchain:(?!osx)"
+  - "Xcode:(osx.*)"
 build_requires:
- - zlib
- - libxml2
- - "OpenSSL:(?!osx)"
- - "osx-system-openssl:(osx.*)"
- - AliEn-CAs
- - ApMon-CPP
- - UUID
- - alibuild-recipe-tools
+  - zlib
+  - libxml2
+  - "OpenSSL:(?!osx)"
+  - "osx-system-openssl:(osx.*)"
+  - AliEn-CAs
+  - ApMon-CPP
+  - UUID
+  - alibuild-recipe-tools
 env:
   X509_CERT_DIR: "$ALIEN_RUNTIME_ROOT/globus/share/certificates"
 ---

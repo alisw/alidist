@@ -3,23 +3,23 @@ version: v1.11.0
 tag: 1.11.0-alice1
 source: https://github.com/AliceO2Group/mesos.git
 requires:
-- zlib
-- glog
-- grpc
-- RapidJSON
-- system-apr
-- system-apr-util
-- system-cyrus-sasl
-- system-subversion
-# We specifically CANNOT build against our own curl and OpenSSL on slc8, as
-# those conflict with system-cyrus-sasl.
-# - curl
-# - OpenSSL
+  - zlib
+  - glog
+  - grpc
+  - RapidJSON
+  - system-apr
+  - system-apr-util
+  - system-cyrus-sasl
+  - system-subversion
+  # We specifically CANNOT build against our own curl and OpenSSL on slc8, as
+  # those conflict with system-cyrus-sasl.
+  # - curl
+  # - OpenSSL
 build_requires:
-- "autotools:(slc6|slc7|slc8)"
-- protobuf
-- Python-modules:(?!osx_arm64)
-- abseil
+  - "autotools:(slc.*)"
+  - protobuf
+  - Python-modules
+  - abseil
 prepend_path:
   PATH: "$MESOS_ROOT/sbin"
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages

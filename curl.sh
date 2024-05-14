@@ -3,14 +3,14 @@ version: "7.70.0"
 tag: curl-7_70_0
 source: https://github.com/curl/curl.git
 build_requires:
- - "OpenSSL:(?!osx)"
- - CMake
- - alibuild-recipe-tools
+  - "OpenSSL:(?!osx)"
+  - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
 if [[ $ARCHITECTURE = osx* ]]; then
-  OPENSSL_ROOT=$(brew --prefix openssl@1.1)
+  OPENSSL_ROOT=$(brew --prefix openssl@3)
 else
   ${OPENSSL_ROOT:+env LDFLAGS=-Wl,-R$OPENSSL_ROOT/lib}
 fi

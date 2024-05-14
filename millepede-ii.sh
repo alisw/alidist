@@ -1,14 +1,14 @@
 package: Millepede-II
 version: "%(tag_basename)s"
-tag: "V04-12-01"
+tag: "V04-16-00"
 source: https://gitlab.desy.de/claus.kleinwort/millepede-ii.git
 requires:
- - zlib
- - openmp
- - OpenBLAS
- - "GCC-Toolchain:(?!osx)"
+  - zlib
+  - openmp
+  - OpenBLAS
+  - "GCC-Toolchain:(?!osx)"
 build_requires:
- - alibuild-recipe-tools
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 

@@ -7,6 +7,8 @@ build_requires:
   - ninja
   - "GCC-Toolchain:(?!osx)"
   - alibuild-recipe-tools
+prepend_path:
+  ROOT_INCLUDE_PATH: "$RAPIDJSON_ROOT/include"
 ---
 cmake $SOURCEDIR                                                       \
       -G Ninja                                                         \

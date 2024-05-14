@@ -9,6 +9,7 @@ valid_defaults:
   - o2-dev-fairroot
   - alo
   - o2-prod
+  - ali
 ---
 # No contents. The only goal of this recipe is to provide customizations to
 # enable / disable features of the O2 builds. This cannot be done in the O2

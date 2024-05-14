@@ -2,8 +2,8 @@ package: re2
 version: "2019-09-01"
 source: https://github.com/google/re2
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - CMake
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
 ---
 #!/bin/sh
 cmake $SOURCEDIR                           \

@@ -3,9 +3,9 @@ version: "%(tag_basename)s"
 tag: gcc.amd64
 source: https://github.com/cloudflare/zlib/
 build_requires:
- - "GCC-Toolchain:(?!osx)"
- - CMake
- - alibuild-recipe-tools
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - alibuild-recipe-tools
 ---
 #!/bin/sh
 

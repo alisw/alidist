@@ -1,17 +1,17 @@
 package: Python
 version: "%(tag_basename)s"
-tag: v3.9.12
+tag: v3.9.16
 source: https://github.com/python/cpython
 requires:
- - AliEn-Runtime:(?!.*ppc64)
- - FreeType
- - libpng
- - sqlite
- - "GCC-Toolchain:(?!osx)"
- - libffi
+  - AliEn-Runtime:(?!.*ppc64)
+  - FreeType
+  - libpng
+  - sqlite
+  - "GCC-Toolchain:(?!osx)"
+  - libffi
 build_requires:
- - curl
- - alibuild-recipe-tools
+  - curl
+  - alibuild-recipe-tools
 env:
   SSL_CERT_FILE: "$(export PATH=$PYTHON_ROOT/bin:$PATH; export LD_LIBRARY_PATH=$PYTHON_ROOT/lib:$LD_LIBRARY_PATH; python -c \"import certifi; print(certifi.where())\")"
   PYTHONHOME: "$PYTHON_ROOT"
@@ -41,7 +41,7 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   ZLIB_ROOT=${ZLIB_ROOT:+$ALIEN_RUNTIME_ROOT}
 fi
 case $ARCHITECTURE in
-  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1) ;;
+  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3) ;;
 esac
 
 # Set own OpenSSL if appropriate
@@ -82,17 +82,11 @@ pushd "$INSTALLROOT/bin"
   [[ -x python3-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python3-config
 popd
 
-# Make sure we have the latest pip
-env PATH="$INSTALLROOT/bin:$PATH"                       \
-    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
-    PYTHONHOME="$INSTALLROOT"                           \
-    python3 -m pip install --upgrade pip
-
 # Install Python SSL certificates right away
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
     PYTHONHOME="$INSTALLROOT" \
-    python3 -m pip install 'certifi==2019.3.9'
+    python3 -m pip install 'certifi==2022.12.7'
 
 # Uniform Python library path
 pushd "$INSTALLROOT/lib"

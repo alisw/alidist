@@ -3,7 +3,7 @@ version: "fortran-%(short_hash)s"
 tag: "v1.8.2.g3bbbe.kitware.dyndep-1.jobserver-1"
 source: https://github.com/Kitware/ninja
 build_requires:
- - "GCC-Toolchain:(?!osx)"
+  - "GCC-Toolchain:(?!osx)"
 ---
 python3 $SOURCEDIR/configure.py --bootstrap
 
