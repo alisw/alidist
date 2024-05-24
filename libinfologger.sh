@@ -31,7 +31,7 @@ ninja ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib --cmake > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
