@@ -2,6 +2,7 @@ package: golang
 version: "1.22.2"
 build_requires:
   - curl
+prefer_system: ".*"
 prefer_system_check: |
   type go && case `go version | sed -e 's/go version go//' | sed -e 's/ .*//'` in 0*|1.[0-9].*) exit 1 ;; esac
 ---
