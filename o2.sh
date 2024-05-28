@@ -2,6 +2,7 @@ package: O2
 version: "%(tag_basename)s"
 tag: "daily-20240528-0200"
 requires:
+  - abseil
   - arrow
   - FairRoot
   - Vc
