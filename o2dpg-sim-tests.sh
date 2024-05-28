@@ -19,16 +19,16 @@ mkdir ${TEST_DIR}
 pushd ${TEST_DIR}
 
 O2DPG_TEST_GENERATOR_EXITCODE=0
-{ O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_generator_tests.sh" &> ${LOGFILE} ; O2DPG_TEST_GENERATOR_EXITCODE=$?; } || true  # don't quit immediately on error
+{ O2DPG_TEST_REPO_DIR=${WORK_DIR}/../O2DPG "${O2DPG_ROOT}/test/run_generator_tests.sh" &> ${LOGFILE} ; O2DPG_TEST_GENERATOR_EXITCODE=$?; } || true  # don't quit immediately on error
 
 O2DPG_TEST_WORKFLOW_EXITCODE=0
-{ O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_workflow_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_WORKFLOW_EXITCODE=$?; } || true  # don't quit immediately on error
+{ O2DPG_TEST_REPO_DIR=${WORK_DIR}/../O2DPG "${O2DPG_ROOT}/test/run_workflow_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_WORKFLOW_EXITCODE=$?; } || true  # don't quit immediately on error
 
 O2DPG_TEST_ANALYSISQC_EXITCODE=0
-{ O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_analysisqc_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_ANALYSISQC_EXITCODE=$?; } || true  # don't quit immediately on error
+{ O2DPG_TEST_REPO_DIR=${WORK_DIR}/../O2DPG "${O2DPG_ROOT}/test/run_analysisqc_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_ANALYSISQC_EXITCODE=$?; } || true  # don't quit immediately on error
 
 O2DPG_TEST_RELVAL_EXITCODE=0
-{ O2DPG_TEST_REPO_DIR=${SOURCEDIR}/../../../O2DPG/${O2DPG_VERSION}/0 "${O2DPG_ROOT}/test/run_relval_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_RELVAL_EXITCODE=$?; } || true  # don't quit immediately on error
+{ O2DPG_TEST_REPO_DIR=${WORK_DIR}/../O2DPG "${O2DPG_ROOT}/test/run_relval_tests.sh" >> ${LOGFILE} 2>&1 ; O2DPG_TEST_RELVAL_EXITCODE=$?; } || true  # don't quit immediately on error
 
 cat ${LOGFILE}
 

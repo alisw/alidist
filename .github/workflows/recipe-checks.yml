@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: python3 -m pip install -U --user alidistlint
+        run: python3 -m pip install -U --user 'alidistlint[git]'
 
       - uses: actions/checkout@v3
         with:
@@ -28,15 +28,16 @@ jobs:
 
       - name: Run linter
         run: |
-          ! if [ -n "$BASE_SHA" ]; then
+          if [ -n "$BASE_SHA" ]; then
             # For pull requests, only check files that have changed relative to
             # the base commit.
-            git diff -z --diff-filter d --name-only "$BASE_SHA...$HEAD_SHA" -- '*.sh' |
-              xargs -0tr alidistlint -f github
+            merge_base=$(git merge-base "$BASE_SHA" "$HEAD_SHA")
+            git diff -z --diff-filter d --name-only "$merge_base..$HEAD_SHA" -- '*.sh' |
+              xargs -0tr alidistlint -f github --changes "$merge_base..$HEAD_SHA"
           else
-            # On push, check every file.
-            alidistlint -f github ./*.sh
-          fi | grep '^::error '
+            # On push, check every file, ignoring warnings and notes.
+            alidistlint -ef github ./*.sh
+          fi
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.head_commit.sha }}
@@ -50,7 +51,7 @@ jobs:
         run: |
           sudo apt update -y
           sudo apt install -y graphviz
-          python3 -m pip install -U --user pyyaml alibuild
+          python3 -m pip install -U --user alibuild
           aliBuild analytics off
 
       - uses: actions/checkout@v3

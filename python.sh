@@ -41,7 +41,7 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   ZLIB_ROOT=${ZLIB_ROOT:+$ALIEN_RUNTIME_ROOT}
 fi
 case $ARCHITECTURE in
-  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@1.1) ;;
+  osx*) [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3) ;;
 esac
 
 # Set own OpenSSL if appropriate

@@ -1,15 +1,16 @@
 package: libInfoLogger
 version: "%(tag_basename)s"
-tag: v2.5.3
+tag: v2.6.0
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - ninja
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/InfoLogger
 incremental_recipe: |
-  make ${JOBS:+-j$JOBS} install
+  ninja ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -ex
@@ -19,17 +20,18 @@ case $ARCHITECTURE in
 esac
 
 cmake $SOURCEDIR                                              \
+      -G Ninja                                                \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}              \
+      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}             \
       -DINFOLOGGER_BUILD_LIBONLY=1 \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
-make ${JOBS+-j $JOBS} install
+ninja ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib --cmake > etc/modulefiles/$PKGNAME
 cat >> etc/modulefiles/$PKGNAME <<EoF
 # Our environment
 set INFOLOGGER_ROOT \$::env(BASEDIR)/$PKGNAME/\$version

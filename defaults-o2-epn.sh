@@ -3,9 +3,9 @@ version: v1
 env:
   CFLAGS: -fPIC -O3 -march=znver2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
-  CXXFLAGS: -fPIC -O3 -march=znver2 -std=c++17
+  CXXFLAGS: -fPIC -O3 -march=znver2 -std=c++20
   O2_CXXFLAGS_OVERRIDE: -O3
-  CXXSTD: '17'
+  CXXSTD: '20'
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'OFF'
 disable:
@@ -35,11 +35,20 @@ overrides:
     version: 4.12.2
   fastjet:
     tag: v3.4.0_1.045-alice1
-  pythia:
-    tag: v8304
+  DataDistribution:
     requires:
-      - lhapdf
+      - "GCC-Toolchain:(?!osx)"
       - boost
+      - FairLogger
+      - libInfoLogger
+      - FairMQ
+      - Ppconsul
+      - grpc
+      - Monitoring
+      - protobuf
+      - O2
+      - fmt
+      - ucx   # this one added
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

@@ -1,6 +1,6 @@
 package: boost
-version: v1.75.0
-tag: v1.75.0
+version: v1.83.0-alice2
+tag: v1.83.0-alice2
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -54,7 +54,7 @@ fi
 
 TMPB2=$BUILDDIR/tmp-boost-build
 case $ARCHITECTURE in
-  osx*) TOOLSET=clang-darwin ;;
+  osx*) TOOLSET=clang ;;
   *) TOOLSET=gcc ;;
 esac
 
@@ -84,10 +84,8 @@ b2 -q                                            \
    --without-graph                               \
    --without-graph_parallel                      \
    --without-locale                              \
-   --without-math                                \
    --without-mpi                                 \
    ${BOOST_NO_PYTHON:+--without-python}          \
-   --without-wave                                \
    --debug-configuration                         \
    -sNO_ZSTD=1                                   \
    ${BZ2_ROOT:+-sBZIP2_INCLUDE="$BZ2_ROOT/include"}  \
@@ -121,7 +119,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 
 mkdir -p etc/modulefiles
-alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib --cmake > etc/modulefiles/$PKGNAME
 cat << EOF >> etc/modulefiles/$PKGNAME
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF

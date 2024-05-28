@@ -26,16 +26,16 @@ name: Clean PR checks
         description: build/O2/alidist-dataflow-cs8
         type: boolean
         default: true
+      'check_build/O2/alidist-slc9-x86':
+        description: build/O2/alidist-slc9-x86
+        type: boolean
+        default: true
+      'check_build/O2/alidist-ubuntu2204':
+        description: build/O2/alidist-ubuntu2204
+        type: boolean
+        default: true
       'check_build/O2/fullCI/alidist':
         description: build/O2/fullCI/alidist
-        type: boolean
-        default: true
-      'check_build/alidist/O2Suite/o2/macOS':
-        description: build/alidist/O2Suite/o2/macOS
-        type: boolean
-        default: true
-      'check_build/alidist/O2Suite/o2/macOS-arm':
-        description: build/alidist/O2Suite/o2/macOS-arm
         type: boolean
         default: true
       'check_build/AliGenerators/generators':

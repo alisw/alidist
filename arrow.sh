@@ -1,6 +1,6 @@
 package: arrow
-version: "v11.0.0-alice1"
-tag: apache-arrow-11.0.0-alice3
+version: "v14.0.1-alice1"
+tag: apache-arrow-14.0.1-alice1
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
@@ -119,4 +119,4 @@ find "$INSTALLROOT/share" -name '*-gdb.py' -exec mv {} "$INSTALLROOT/lib" \;
 
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
-alibuild-generate-module --lib > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+alibuild-generate-module --lib --cmake > "$INSTALLROOT/etc/modulefiles/$PKGNAME"

@@ -1,11 +1,11 @@
 package: ThePEG
 version: "%(tag_basename)s"
-tag: "v2.2.2-alice1"
+tag: "v2.2.2-alice2"
 source: https://github.com/alisw/thepeg
 requires:
   - Rivet
   - pythia
-  - HepMC
+  - HepMC3
   - boost
   - GSL
 build_requires:
@@ -64,7 +64,8 @@ export LDFLAGS="-L$LHAPDF_ROOT/lib"
   --prefix="$INSTALLROOT"              \
   ${GSL_ROOT:+--with-gsl="$GSL_ROOT"}  \
   --with-pythia8="$PYTHIA_ROOT"        \
-  --with-hepmc="$HEPMC_ROOT"           \
+  --with-hepmc="$HEPMC3_ROOT"          \
+  --with-hepmcversion=3                \
   --with-rivet="$RIVET_ROOT"           \
   --with-lhapdf="$LHAPDF_ROOT"         \
   --with-fastjet="$FASTJET_ROOT"       \
@@ -86,7 +87,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC/$HEPMC_VERSION-$HEPMC_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION}
+module load BASE/1.0 pythia/$PYTHIA_VERSION-$PYTHIA_REVISION HepMC3/$HEPMC3_VERSION-$HEPMC3_REVISION Rivet/$RIVET_VERSION-$RIVET_REVISION ${GSL_REVISION:+GSL/$GSL_VERSION-$GSL_REVISION}
 # Our environment
 set THEPEG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv THEPEG_ROOT \$THEPEG_ROOT
