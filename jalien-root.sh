@@ -56,7 +56,7 @@ cmake --build . -- ${JOBS:+-j $JOBS} install
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module --lib > "etc/modulefiles/$PKGNAME"
+alibuild-generate-module --lib --cmake > "etc/modulefiles/$PKGNAME"
 cat >> "etc/modulefiles/$PKGNAME" <<EoF
 # Our environment
 append-path ROOT_PLUGIN_PATH \$PKG_ROOT/etc/plugins
