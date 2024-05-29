@@ -5,7 +5,6 @@ source: https://github.com/alisw/onnxruntime.git
 requires:
   - protobuf
   - re2
-  - flatbuffers
   - boost
 build_requires:
   - CMake
@@ -19,6 +18,7 @@ pushd $SOURCEDIR
   git submodule update --init -- cmake/external/date
   git submodule update --init -- cmake/external/onnx
   git submodule update --init -- cmake/external/eigen
+  git submodule update --init -- cmake/external/flatbuffers
   git submodule update --init -- cmake/external/nsync
   git submodule update --init -- cmake/external/SafeInt
   git submodule update --init -- cmake/external/json
@@ -42,8 +42,9 @@ cmake "$SOURCEDIR/cmake"                                                        
       ${PROTOBUF_ROOT:+-DProtobuf_INCLUDE_DIR=$PROTOBUF_ROOT/include}                 \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}        \
       ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}                              \
-      ${FLATBUFFERS_ROOT:+-DFLATBUFFERS_INCLUDE_DIR=${FLATBUFFERS_ROOT}/include}      \
-      ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}
+      ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                        \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable" \
+      -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
