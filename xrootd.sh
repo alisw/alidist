@@ -134,7 +134,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-alibuild-generate-module --bin --lib > "$MODULEFILE"
+alibuild-generate-module --bin --lib --cmake > "$MODULEFILE"
 
 cat >> "$MODULEFILE" <<EoF
 if { $XROOTD_PYTHON } {

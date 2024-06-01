@@ -1,16 +1,16 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "daily-20240429-0200"
+tag: "daily-20240601-0200"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
   - O2
   - O2Physics
-  - "DataDistribution:(?!osx)"
+  - "DataDistribution:(?!osx|slc9_aarch64)"
   - QualityControl
   - O2DPG
   - O2sim
-  - "ODC:(?!osx)"
+  - "ODC:(?!osx|slc9_aarch64)"
 valid_defaults:
   - o2
   - o2-dataflow

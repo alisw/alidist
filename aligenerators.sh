@@ -23,6 +23,7 @@ requires:
   - lhapdf-pdfsets
   - JETSCAPE
   - EPOS4
+  - STARlight
 build_requires:
   - EPOS-test:(?!osx)
   - alibuild-recipe-tools

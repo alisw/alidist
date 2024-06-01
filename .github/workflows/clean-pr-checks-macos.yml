@@ -1,5 +1,5 @@
 ---
-name: Clean PR checks
+name: Clean macOS PR checks
 
 'on':
   workflow_dispatch:
@@ -14,36 +14,12 @@ name: Clean PR checks
       # Warning: the check_* keys are magic and must consist of the string
       # "check_" followed by the applicable check name exactly. The
       # "description" field is only the human-readable label for the input.
-      'check_build/O2/alidist':
-        description: build/O2/alidist
+      'check_build/alidist/O2Suite/o2/macOS':
+        description: build/alidist/O2Suite/o2/macOS
         type: boolean
         default: true
-      'check_build/O2/alidist-cs8':
-        description: build/O2/alidist-cs8
-        type: boolean
-        default: true
-      'check_build/O2/alidist-dataflow-cs8':
-        description: build/O2/alidist-dataflow-cs8
-        type: boolean
-        default: true
-      'check_build/O2/alidist-slc9-x86':
-        description: build/O2/alidist-slc9-x86
-        type: boolean
-        default: true
-      'check_build/O2/alidist-ubuntu2204':
-        description: build/O2/alidist-ubuntu2204
-        type: boolean
-        default: true
-      'check_build/O2/fullCI/alidist':
-        description: build/O2/fullCI/alidist
-        type: boolean
-        default: true
-      'check_build/AliGenerators/generators':
-        description: build/AliGenerators/generators
-        type: boolean
-        default: true
-      'check_build/AliRoot/alidist':
-        description: build/AliRoot/alidist
+      'check_build/alidist/O2Suite/o2/macOS-arm':
+        description: build/alidist/O2Suite/o2/macOS-arm
         type: boolean
         default: true
 
@@ -51,7 +27,7 @@ permissions: {}
 
 jobs:
   clean:
-    name: Clean PR checks
+    name: Clean macOS PR checks
     uses: alisw/ali-bot/.github/workflows/clean-pr-checks.yml@master
     with:
       owner: ${{ github.event.repository.owner.login }}
