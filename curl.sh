@@ -14,7 +14,6 @@ if [[ $ARCHITECTURE = osx* ]]; then
 else
   ${OPENSSL_ROOT:+env LDFLAGS=-Wl,-R$OPENSSL_ROOT/lib}
 fi
-
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
 
 sed -i.deleteme 's/CPPFLAGS="$CPPFLAGS $SSL_CPPFLAGS"/CPPFLAGS="$SSL_CPPFLAGS $CPPFLAGS"/' configure.ac

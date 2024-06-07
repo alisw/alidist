@@ -7,13 +7,14 @@ requires:
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - ninja
 prepend_path:
   ROOT_INCLUDE_PATH: "$VC_ROOT/include"
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF
+cmake $SOURCEDIR -G Ninja -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_TESTING=OFF
 
-make ${JOBS+-j $JOBS} install
+cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

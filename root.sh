@@ -20,6 +20,7 @@ requires:
   - TBB
   - protobuf
   - FFTW3
+  - Vc
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -167,6 +168,8 @@ cmake $SOURCEDIR                                                                
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
       -Dvdt=OFF                                                                        \
+      -Dvc=ON                                                                          \
+      -Dbuiltin_vc=OFF                                                                 \
       -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
