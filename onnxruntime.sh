@@ -45,5 +45,5 @@ cat >> "$MODULEFILE" <<EoF
 
 # Our environment
 set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include
+prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include/onnxruntime
 EoF
