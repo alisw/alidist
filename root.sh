@@ -1,7 +1,7 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-30-01-alice5"
-source: https://github.com/alisw/root.git
+tag: "v6-32-00"
+source: https://github.com/root-project/root.git
 requires:
   - arrow
   - AliEn-Runtime:(?!.*ppc64)
@@ -157,9 +157,7 @@ cmake $SOURCEDIR                                                                
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
-      -Dminuit2=ON                                                                     \
-      -Dpythia6=ON                                                                     \
-      -Dpythia6_nolink=ON                                                              \
+      -Dminuit=ON                                                                     \
       -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
