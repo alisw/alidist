@@ -119,4 +119,4 @@ find "$INSTALLROOT/share" -name '*-gdb.py' -exec mv {} "$INSTALLROOT/lib" \;
 
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
-alibuild-generate-module --lib > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+alibuild-generate-module --lib --cmake > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
