@@ -133,30 +133,6 @@ for P in $REQUIRES $BUILD_REQUIRES; do
   echo "Environment says ${UPPER} is at ${EXPAND}"
   SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
 done
-# Special handling for broken FastJet configuration script
-#
-# Doesn't seem like fastjet-config reports GMP directly, so we will
-# need to keep the GMP part. 
-#
-# This seems to have been fixed in fastjet.sh (same PR), but I leave
-# it in for now - case something _is_ broken or we built against an
-# older fastjet
-FJ_CGAL_ROOT=$(fastjet-config --libs| \
-                   tr ' ' '\n' | \
-                   grep cgal | \
-                   sed -n -e 's!-L\(.*\)/lib!\1!p')
-FJ_GMP_ROOT=$(fastjet-config --libs| \
-                   tr ' ' '\n' | \
-                   grep GMP | \
-                   sed -n -e 's!-L\(.*\)/lib!\1!p')
-if test x$FJ_CGAL_ROOT != x ; then
-    echo "FastJet reports CGal to be at ${FJ_CGAL_ROOT}"
-    SED_EXPR="$SED_EXPR; s!$FJ_CGAL_ROOT!\$CGAL_ROOT!g"
-fi
-if test x$FJ_GMP_ROOT != x ; then
-    echo "FastJet reports GMP to be at ${FJ_GMP_ROOT}"
-    SED_EXPR="$SED_EXPR; s!$FJ_GMP_ROOT!\$GMP_ROOT!g"
-fi
 
 # Create line to source 3rdparty.sh to be inserted into 
 # rivet-config and rivet-build 
