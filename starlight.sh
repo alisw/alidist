@@ -1,6 +1,6 @@
 package: STARlight
-version: "20240714"
-tag: 9980f5d
+version: "20240617"
+tag: 196aedf
 requires:
   - HepMC3
 build_requires:
