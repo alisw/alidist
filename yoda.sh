@@ -64,6 +64,20 @@ else
     CYTHON=$PYTHON_MODULES_ROOT/bin/cython
 fi
 
+CYTHON_PATH="$(dirname -- "$CYTHON")"
+if cython; then
+    echo "Cython succesfully executed" 
+else    
+    stat=$?
+    # Check if python executable is linked in cython bin folder 
+    if [ $stat == 127 ]; then
+        echo "python not found by cython, setting up link..." 
+        ln -nsf "$PYTHON_EXECUTABLE" "$CYTHON_PATH/python3"
+    else 
+        echo "Issue in cython execution"
+    fi       
+fi    
+
 case $ARCHITECTURE in
   osx*)
       ./configure --disable-silent-rules --enable-root --prefix="$INSTALLROOT"

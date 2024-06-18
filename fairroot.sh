@@ -90,7 +90,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-alibuild-generate-module --bin --lib > $MODULEFILE
+alibuild-generate-module --bin --lib --cmake > $MODULEFILE
 
 cat >> "$MODULEFILE" <<EoF
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include

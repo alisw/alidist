@@ -26,12 +26,7 @@ make ${JOBS:+-j$JOBS} install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module > "$MODULEFILE"
+alibuild-generate-module --lib --bin --cmake > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
-
-# Our environment
-set ABSEIL_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$ABSEIL_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$ABSEIL_ROOT/lib
-prepend-path LD_LIBRARY_PATH \$ABSEIL_ROOT/lib64
+prepend-path LD_LIBRARY_PATH \$PKG_ROOT/lib64
 EoF

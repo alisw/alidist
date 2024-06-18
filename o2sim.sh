@@ -7,6 +7,7 @@ requires:
   - AEGIS
   - EVTGEN:(?!osx)
   - AliGenerators
+  - STARlight:(?!osx)
   - jq
 ---
 #!/bin/bash -ex
