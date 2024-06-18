@@ -9,6 +9,8 @@ build_requires:
 prefer_system: .*
 prefer_system_check: |
   printf "#include <tbb/concurrent_unordered_map.h>\n static_assert(TBB_INTERFACE_VERSION >= 11009, \"min version check failed\");\n" | c++ -std=c++11 -xc++ - -c -o /dev/null
+prepend_path:
+  ROOT_INCLUDE_PATH: "$TBB_ROOT/include"
 ---
 #!/bin/bash -e
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
