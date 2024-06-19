@@ -143,7 +143,7 @@ alibuild-generate-module --bin --lib --cmake > "$MODULEFILE"
 
 case $ARCHITECTURE in
   slc[78]*) OPTIONAL_ENV= ;;
-  *) OPTIONAL_ENV="--set-if-undef " ;;
+  *) OPTIONAL_ENV="" ;;
 esac
 
 cat >> "$MODULEFILE" <<EoF
