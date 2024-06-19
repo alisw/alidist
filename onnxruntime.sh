@@ -11,6 +11,8 @@ build_requires:
   - alibuild-recipe-tools
   - "Python:(slc|ubuntu)"  # this package builds ONNX, which requires Python
   - "Python-system:(?!slc.*|ubuntu)"
+prepend_path:
+  ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
 ---
 #!/bin/bash -e
 
