@@ -1,6 +1,6 @@
 package: O2DPG
 version: "%(tag_basename)s"
-tag: "daily-20240619-0200"
+tag: "daily-20240620-1402"
 source: https://github.com/AliceO2Group/O2DPG.git
 build_requires:
   - alibuild-recipe-tools
