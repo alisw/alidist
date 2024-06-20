@@ -47,21 +47,10 @@ fi
 if hash fastjet-config 2> /dev/null && test x\$FASTJET_ROOT = x ; then
    FASTJET_ROOT=\`fastjet-config --prefix\`
 fi
-if hash cgal_create_CMakeLists 2>/dev/null && test x\$CGAL_ROOT = x ; then
-   CGAL_ROOT=\$(dirname \$(dirname \`command -v cgal_create_CMakeLists\`))
-fi
-if test x\$GMP_ROOT = x ; then
-   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep GMP\` 2>/dev/null)
-   if test x\$GMP_ROOT = x ; then
-      GMP_ROOT=/usr
-   fi
-fi
 
 test x\$HEPMC3_ROOT = x  && env_err HepMC3 not found
 test x\$YODA_ROOT = x    && env_err Yoda not found
 test x\$FASTJET_ROOT = x && env_err FastJet not found
-test x\$CGAL_ROOT = x    && env_err CGal not found
-test x\$GMP_ROOT = x     && env_err GMP not found
 
 \$ret
 EOF
