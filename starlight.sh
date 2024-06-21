@@ -16,6 +16,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DENABLE_HEPMC3=ON                        \
 		 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON        \
 		 -DBUILD_SHARED_LIB=ON                     \
+                 -DCMAKE_INSTALL_LIBDIR=lib                \
                  -DHepMC3_DIR="$HEPMC3_ROOT"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
