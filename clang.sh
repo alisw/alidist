@@ -1,7 +1,7 @@
 package: Clang
 version: "v15.0.7"
-tag: "llvmorg-15.0.7"
-source: https://github.com/llvm/llvm-project
+tag: "llvmorg-15.0.7-alice1"
+source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
