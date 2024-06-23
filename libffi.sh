@@ -10,9 +10,9 @@ prepend_path:
 #!/bin/bash -ex
 rsync -a $SOURCEDIR/ .
 autoreconf -ivf .
-./configure --prefix=$INSTALLROOT --disable-docs
-make ${JOBS:+-j $JOBS}
-make install
+MAKEINFO=: ./configure --prefix=$INSTALLROOT --disable-docs
+make ${JOBS:+-j $JOBS} MAKEINFO=:
+make install MAKEINFO=:
 
 LIBPATH=$(find $INSTALLROOT -name libffi.so -o -name libffi.dylib -o -name libffi.a | head -n 1)
 # Do not install info documentation

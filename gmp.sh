@@ -31,8 +31,8 @@ case $ARCHITECTURE in
   ;;
 esac
 
-make ${JOBS+-j $JOBS}
-make install
+make ${JOBS+-j $JOBS} MAKEINFO=:
+make install MAKEINFO=:
 
 rm -f $INSTALLROOT/lib/*.la
 
