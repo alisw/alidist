@@ -8,7 +8,7 @@ requires:
   - Configuration
   - Monitoring
   - libInfoLogger
-  - "PDA:(?!osx)"
+  - "PDA:(?!osx|.*aarch64)"
   - "Python:(?!osx)"
   - "Python-system:(?!slc.*)"
 build_requires:
