@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20240630-0200"
+tag: "gpu-nightly-20240630"
 requires:
   - abseil
   - arrow
