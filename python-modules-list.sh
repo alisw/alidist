@@ -91,7 +91,7 @@ env:
 
     pandas == 0.24.2; python_version < '3.8'
     pandas == 1.2.3; python_version == '3.8'
-    pandas == 1.1.5; python_version >= '3.9' and python_version < '3.11'
+    pandas[performance] == 1.5.3; python_version >= '3.9' and python_version < '3.11'
     pandas == 1.5.3; python_version >= '3.11'
 
     dask[array,dataframe,distributed] == 2023.2.0; python_version < '3.11'
