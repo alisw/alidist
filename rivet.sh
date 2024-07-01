@@ -13,9 +13,6 @@ requires:
   - "Python-system:(osx.*)"
 build_requires:
   - GCC-Toolchain:(?!osx)
-  - cgal
-  - GMP
-  - YODA
   - Python
 prepend_path:
   PYTHONPATH: $RIVET_ROOT/lib/python/site-packages
