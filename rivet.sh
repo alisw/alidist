@@ -6,14 +6,13 @@ requires:
   - HepMC3
   - YODA
   - fastjet
+  - cgal
   - GMP
   - "Python:(?!osx)"
   - "Python-modules:(?!osx)"
   - "Python-system:(osx.*)"
 build_requires:
   - GCC-Toolchain:(?!osx)
-  - GMP
-  - YODA
   - Python
 prepend_path:
   PYTHONPATH: $RIVET_ROOT/lib/python/site-packages
