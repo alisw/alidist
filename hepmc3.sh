@@ -1,6 +1,6 @@
 package: HepMC3
 version: "%(tag_basename)s"
-tag: 3.2.5
+tag: 3.3.0
 source: https://gitlab.cern.ch/hepmc/HepMC3.git
 requires:
   - GCC-Toolchain:(?!osx.*)

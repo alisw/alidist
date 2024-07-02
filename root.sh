@@ -21,6 +21,7 @@ requires:
   - protobuf
   - FFTW3
   - Vc
+  - pythia
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -158,9 +159,7 @@ cmake $SOURCEDIR                                                                
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
-      -Dminuit2=ON                                                                     \
-      -Dpythia6=ON                                                                     \
-      -Dpythia6_nolink=ON                                                              \
+      -Dminuit=ON                                                                     \
       -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
@@ -179,6 +178,7 @@ cmake $SOURCEDIR                                                                
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
+      -Dpythia8=ON                                                                     \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
