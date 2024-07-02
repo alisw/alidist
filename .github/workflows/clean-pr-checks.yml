@@ -14,6 +14,14 @@ name: Clean PR checks
       # Warning: the check_* keys are magic and must consist of the string
       # "check_" followed by the applicable check name exactly. The
       # "description" field is only the human-readable label for the input.
+      'check_build/AliGenerators/generators':
+        description: build/AliGenerators/generators
+        type: boolean
+        default: true
+      'check_build/AliRoot/alidist':
+        description: build/AliRoot/alidist
+        type: boolean
+        default: true
       'check_build/O2/alidist':
         description: build/O2/alidist
         type: boolean
@@ -26,6 +34,10 @@ name: Clean PR checks
         description: build/O2/alidist-dataflow-cs8
         type: boolean
         default: true
+      'check_build/O2/alidist-slc9-aarch64':
+        description: build/O2/alidist-slc9-aarch64
+        type: boolean
+        default: true
       'check_build/O2/alidist-slc9-x86':
         description: build/O2/alidist-slc9-x86
         type: boolean
@@ -36,18 +48,6 @@ name: Clean PR checks
         default: true
       'check_build/O2/fullCI/alidist':
         description: build/O2/fullCI/alidist
-        type: boolean
-        default: true
-      'check_build/AliGenerators/generators':
-        description: build/AliGenerators/generators
-        type: boolean
-        default: true
-      'check_build/AliRoot/alidist':
-        description: build/AliRoot/alidist
-        type: boolean
-        default: true
-      'check_build/O2/alidist-slc9-aarch64':
-        description: build/O2/alidist-slc9-aarch64
         type: boolean
         default: true
 
