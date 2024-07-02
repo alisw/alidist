@@ -1,6 +1,6 @@
 package: hdf5
-version: "%(tag_basename)s"
-tag: hdf5-1_10_7
+version: "1.14.4"
+tag: "hdf5_1.14.4.3"
 source: https://github.com/HDFGroup/hdf5.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -9,6 +9,8 @@ build_requires:
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <hdf5.h>\n" | cc -xc - -c -o /dev/null
+env:
+  HDF5_DIR: "$HDF5_ROOT"
 ---
 #!/bin/bash -e
   cmake "$SOURCEDIR"                             \
