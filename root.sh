@@ -178,7 +178,7 @@ cmake $SOURCEDIR                                                                
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
-      -Dpythia8=ON
+      -Dpythia8=ON                                                                     \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
