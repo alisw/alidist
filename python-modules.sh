@@ -15,6 +15,9 @@ prepend_path:
 ---
 #!/bin/bash -e
 unset VIRTUAL_ENV
+# Attempt at parallelising a few binary packages
+export MAKEFLAGS="${JOBS:+-j$JOBS}"
+export SKLEARN_BUILD_PARALLEL=${JOBS}
 
 # Users might want to install more packages in the same environment. A venv
 # provides a pip binary that will install packages into the same path.
