@@ -1,13 +1,13 @@
 package: ucx
 version: "%(tag_basename)s"
-tag: v1.13.1
+tag: v1.13.1-alice1
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
   - "GCC-Toolchain:(?!osx)"
-source: https://github.com/openucx/ucx
+source: https://github.com/alisw/ucx
 ---
 #!/bin/bash -e
 
