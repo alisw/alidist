@@ -6,7 +6,7 @@ env:
   CMAKE_BUILD_TYPE: "RELWITHDEBINFO"
   CXXSTD: "20"
   ENABLE_VMC: 'ON'
-  MACOSX_DEPLOYMENT_TARGET: '10.15'
+  MACOSX_DEPLOYMENT_TARGET: '14.0'
 disable:
   - AEGIS
   - AliEn-Runtime
@@ -38,6 +38,12 @@ overrides:
   GCC-Toolchain:
     version: "v12.2.0-alice1"
     tag: "v12.2.0-alice1"
+  O2-customization:
+    env:
+      ENABLE_UPGRADES: "OFF"  # Disable detector upgrades in O2
+      BUILD_ANALYSIS: "OFF"   # Disable analysis in O2
+      BUILD_EXAMPLES: "OFF"   # Disable examples in O2
+      O2_BUILD_FOR_FLP: "ON"
   Python-modules-list:
     env:
       PIP_BASE_REQUIREMENTS: |
@@ -45,12 +51,6 @@ overrides:
         setuptools==65.5.1
         wheel==0.37.1
       PIP_REQUIREMENTS: ""
-  O2-customization:
-    env:
-      ENABLE_UPGRADES: "OFF"  # Disable detector upgrades in O2
-      BUILD_ANALYSIS: "OFF"   # Disable analysis in O2
-      BUILD_EXAMPLES: "OFF"   # Disable examples in O2
-      O2_BUILD_FOR_FLP: "ON"
   DataDistribution:
     requires:
       - "GCC-Toolchain:(?!osx)"

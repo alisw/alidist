@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-30-01-alice4"
+tag: "v6-30-01-alice5"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -20,6 +20,7 @@ requires:
   - TBB
   - protobuf
   - FFTW3
+  - Vc
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -167,6 +168,8 @@ cmake $SOURCEDIR                                                                
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
       -Dvdt=OFF                                                                        \
+      -Dvc=ON                                                                          \
+      -Dbuiltin_vc=OFF                                                                 \
       -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
