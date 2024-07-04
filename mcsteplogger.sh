@@ -1,6 +1,6 @@
 package: MCStepLogger
 version: "%(tag_basename)s"
-tag: "v0.6.1"
+tag: "v0.6.0"
 source: https://github.com/AliceO2Group/VMCStepLogger.git
 requires:
   - "GCC-Toolchain:(?!osx)"
