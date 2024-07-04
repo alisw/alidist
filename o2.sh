@@ -29,6 +29,7 @@ requires:
   - MLModels
   - KFParticle
   - RapidJSON
+  - bookkeeping-api
 build_requires:
   - abseil
   - GMP
