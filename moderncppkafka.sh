@@ -15,5 +15,5 @@ rm "$INSTALLROOT/include/CMakeLists.txt" # for some reason it is there
 # Modulefile                                                                                                                                                                                             
 mkdir -p "etc/modulefiles"
 alibuild-generate-module --lib > "etc/modulefiles/$PKGNAME"
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "$INSTALLROOT/etc/modulefiles" && rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
 
