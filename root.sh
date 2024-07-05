@@ -123,6 +123,11 @@ else
   ROOT_XROOTD_FLAGS='-Dxrootd=OFF'
 fi
 
+case $ROOT_VERSION in
+  v6[-.]30*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
+  *) EXTRA_CMAKE_OPTIONS="-Dminuit=ON" ;;
+esac
+
 unset DYLD_LIBRARY_PATH
 CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
@@ -142,6 +147,7 @@ cmake $SOURCEDIR                                                                
       ${ARROW_ROOT:+-Darrow=ON}                                                        \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                          \
       ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
+      ${EXTRA_CMAKE_OPTIONS}                                                           \
       -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
       -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
       -Dfortran=OFF                                                                    \
