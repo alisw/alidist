@@ -124,7 +124,7 @@ else
 fi
 
 case $ROOT_VERSION in
-  v6.30*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
+  v6[-.]30*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
   *) EXTRA_CMAKE_OPTIONS="-Dminuit=ON" ;;
 esac
 
