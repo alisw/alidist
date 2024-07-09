@@ -1,11 +1,12 @@
 package: hdf5
-version: "%(tag_basename)s"
-tag: hdf5-1_10_7
+version: "1.10.9"
+tag: hdf5-1_10_9
 source: https://github.com/HDFGroup/hdf5.git
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
+  - alibuild-recipe-tools
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <hdf5.h>\n" | cc -xc - -c -o /dev/null
@@ -14,7 +15,8 @@ prefer_system_check: |
   cmake "$SOURCEDIR"                             \
     -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
-    ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
+    ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
+	-DHDF_BUILD_CXX=ON
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 
@@ -22,19 +24,4 @@ cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set HDF5_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv HDF5_ROOT \$HDF5_ROOT
-prepend-path PATH \$HDF5_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$HDF5_ROOT/lib
-EoF
+alibuild-generate-module --bin --lib > "$MODULEFILE"
