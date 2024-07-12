@@ -100,6 +100,9 @@ env:
     dask[array,dataframe,distributed] == 2023.12.1; python_version >= '3.11'
     dask_jobqueue == 0.8.2
 
+    # readline is needed by alien.py (xjalienfs)
+    gnureadline
+
 build_requires:
   - alibuild-recipe-tools
 ---
