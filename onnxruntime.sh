@@ -6,6 +6,7 @@ requires:
   - protobuf
   - re2
   - boost
+  - abseil
 build_requires:
   - CMake
   - alibuild-recipe-tools
