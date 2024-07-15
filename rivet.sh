@@ -1,7 +1,7 @@
 package: Rivet
 version: "%(tag_basename)s"
-tag: "rivet-3.1.8"
-source: https://gitlab.com/hepcedar/rivet.git
+tag: "3.1.8-alice1"
+source: https://github.com/alisw/rivet.git
 requires:
   - HepMC3
   - YODA
