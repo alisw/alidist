@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "1.6.1"
+tag: "1.6.2"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
   - "OpenSSL:(?!osx)"

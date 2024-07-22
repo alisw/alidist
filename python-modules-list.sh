@@ -71,12 +71,14 @@ env:
     sklearn-evaluation == 0.12.0; python_version >= '3.11'
 
     Keras == 2.2.4; python_version < '3.8'
-    Keras == 2.4.3; python_version >= '3.8' and python_version < '3.11'
-    Keras == 2.13.1; python_version >= '3.11'
+    Keras == 2.4.3; python_version == '3.8'
+    Keras == 2.7.0; python_version == '3.9'
+    Keras == 2.13.1; python_version >= '3.10'
 
     tensorflow == 1.13.1; python_version < '3.8'
     tensorflow == 2.4.1; python_version == '3.8'
-    tensorflow == 2.13.1; python_version == '3.11'
+    tensorflow == 2.7.1; python_version == '3.9'
+    tensorflow == 2.13.1; python_version >= '3.10' and python_version <= '3.11'
 
     # See version compatibility table at https://pypi.org/project/tensorflow-metal/
     tensorflow-metal == 1.0.0; sys_platform == 'darwin' and python_version == '3.11'
@@ -97,6 +99,9 @@ env:
     dask[array,dataframe,distributed] == 2023.2.0; python_version < '3.11'
     dask[array,dataframe,distributed] == 2023.12.1; python_version >= '3.11'
     dask_jobqueue == 0.8.2
+
+    # readline is needed by alien.py (xjalienfs)
+    gnureadline
 
 build_requires:
   - alibuild-recipe-tools

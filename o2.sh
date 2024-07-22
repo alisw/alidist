@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20240705-0200"
+tag: "daily-20240722-0200"
 requires:
   - abseil
   - arrow
@@ -29,6 +29,7 @@ requires:
   - MLModels
   - KFParticle
   - RapidJSON
+  - bookkeeping-api
 build_requires:
   - abseil
   - GMP
@@ -261,7 +262,9 @@ module load BASE/1.0 \\
             ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}                                 \\
             ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}         \\
             ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
-            ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}
+            ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}                     \\
+            ${BOOKKEEPING_API_REVISION:+bookkeeping-api/$BOOKKEEPING_API_VERSION-$BOOKKEEPING_API_REVISION}
+
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT
