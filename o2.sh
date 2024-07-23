@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20240718-0200"
+tag: "epn-20240723"
 requires:
   - abseil
   - arrow
