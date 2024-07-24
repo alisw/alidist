@@ -10,6 +10,7 @@ requires:
   - utf8proc
   - OpenSSL:(?!osx)
   - xsimd
+  - Python
 build_requires:
   - zlib
   - flatbuffers
@@ -99,16 +100,18 @@ cmake ./src_tmp/cpp                                                             
       ${UTF8PROC_ROOT:+-Dutf8proc_ROOT="$UTF8PROC_ROOT"}                                            \
       ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}                                               \
       ${CLANG_ROOT:+-DLLVM_DIR="$CLANG_ROOT"}                                                       \
+      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$PYTHON_ROOT/bin/python3"}                               \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
       -DARROW_WITH_ZLIB=ON                                                                          \
       -DARROW_NO_DEPRECATED_API=ON                                                                  \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                         \
-      -DARROW_PYTHON=OFF                                                                            \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
       -DARROW_COMPUTE=ON                                                                            \
+      -DARROW_DATASET=ON                                                                            \
+      -DARROW_FILESYSTEM=ON                                                                         \
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
       -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"
