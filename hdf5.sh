@@ -16,7 +16,7 @@ prefer_system_check: |
     -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
-    -DHDF_BUILD_CXX=ON
+    -DHDF5_BUILD_CPP_LIB=ON
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 
