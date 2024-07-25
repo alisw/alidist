@@ -10,7 +10,7 @@ build_requires:
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <hdf5.h>\n" | cc -xc - -c -o /dev/null
-  env:
+env:
     HDF5_DIR: "$HDF5_ROOT"
 ---
 #!/bin/bash -e
