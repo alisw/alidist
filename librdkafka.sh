@@ -8,19 +8,18 @@ build_requires:
   - CMake
 source: https://github.com/edenhill/librdkafka
 ---
-#!/bin/bash -ex
-cmake -H"$SOURCEDIR"                        \
-      -B"$SOURCEDIR/_cmake_build"           \
-      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
-      -DCMAKE_INSTALL_LIBDIR=lib            \
-      -DENABLE_LZ4_EXT=OFF                  \
-      -DRDKAFKA_BUILD_TESTS=OFF             \
-      -DRDKAFKA_BUILD_EXAMPLES=OFF
-cmake --build "$SOURCEDIR/_cmake_build" --target install
+
+rsync -a --delete --exclude "**/.git" "$SOURCEDIR/" .
+
+# cmake in rdfkafka links against ssl even when disabled, so we need to use configure, which is also recommended by librdkafka devs.
+./configure --prefix="$INSTALLROOT" --disable-ssl --disable-gssapi --disable-curl
+
+make
+make install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
+alibuild-generate-module --lib > "etc/modulefiles/$PKGNAME"
+cat >> "etc/modulefiles/$PKGNAME" <<EoF
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+mkdir -p "$INSTALLROOT/etc/modulefiles" && rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
