@@ -6,6 +6,7 @@ requires:
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 source: https://github.com/STARlightsim/STARlight.git
 ---
 #!/bin/bash -ex
