@@ -10,6 +10,7 @@ env:
 disable:
   - mesos
   - MySQL
+  - arrow
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
