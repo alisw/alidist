@@ -1,6 +1,6 @@
 package: arrow
-version: "v17.0.0-alice1"
-tag: apache-arrow-17.0.0-alice1
+version: "v17.0.0-alice3"
+tag: apache-arrow-17.0.0-alice3
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
