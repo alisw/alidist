@@ -54,10 +54,10 @@ cmake "$SOURCEDIR/llvm" \
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-if [[ $a == v18.1.* ]]; then
+if [[ $PKGVERSION == v18.1.* ]]; then
   SPIRV_TRANSLATOR_VERSION="v18.1.3"
 else
-  SPIRV_TRANSLATOR_VERSION="${PKGVERSION%.*}.0"
+  SPIRV_TRANSLATOR_VERSION="${PKGVERSION%%.*}.0.0"
 fi
 git clone -b "$SPIRV_TRANSLATOR_VERSION" https://github.com/KhronosGroup/SPIRV-LLVM-Translator
 mkdir SPIRV-LLVM-Translator/build
