@@ -1,6 +1,6 @@
 package: Clang
-version: "v17.0.6"
-tag: "llvmorg-17.0.6-alice1"
+version: "v18.1.8"
+tag: "llvmorg-18.1.8-alice"
 source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -49,6 +49,7 @@ cmake "$SOURCEDIR/llvm" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
   -DBUILD_SHARED_LIBS=OFF \
+  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF \
   ${GCC_TOOLCHAIN_ROOT:+-DGCC_INSTALL_PREFIX=$GCC_TOOLCHAIN_ROOT}
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
@@ -56,7 +57,7 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 if [[ $a == v18.1.* ]]; then
   SPIRV_TRANSLATOR_VERSION="v18.1.3"
 else
-  SPIRV_TRANSLATOR_VERSION="${PKGVERSION%%.*}.0.0"
+  SPIRV_TRANSLATOR_VERSION="${PKGVERSION%.*}.0"
 fi
 git clone -b "$SPIRV_TRANSLATOR_VERSION" https://github.com/KhronosGroup/SPIRV-LLVM-Translator
 mkdir SPIRV-LLVM-Translator/build
