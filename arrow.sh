@@ -1,6 +1,6 @@
 package: arrow
-version: "v17.0.0-alice1"
-tag: apache-arrow-17.0.0-alice1
+version: "v17.0.0-alice4"
+tag: apache-arrow-17.0.0-alice4
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
@@ -73,7 +73,7 @@ case $ARCHITECTURE in
    fi
    ;;
   *)
-   CLANG_EXECUTABLE="${CLANG_ROOT}/bin-safe/clang ${GCC_TOOLCHAIN_REVISION:+--gcc-install-dir=$GCC_TOOLCHAIN_ROOT}"
+   CLANG_EXECUTABLE="${CLANG_ROOT}/bin-safe/clang"
    # this patches version script to hide llvm symbols in gandiva library
    sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
    ;;
@@ -123,7 +123,8 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_FILESYSTEM=ON                                                                         \
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"
+      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"                                                        \
+      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT=$GCC_TOOLCHAIN_ROOT}
 
 make ${JOBS:+-j $JOBS}
 make install
