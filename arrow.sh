@@ -69,7 +69,6 @@ case $ARCHITECTURE in
      if [ -d "$(brew --prefix llvm)@17" ]; then
        CLANG_EXECUTABLE="$(brew --prefix llvm)@17/bin/clang"
      fi
-
    fi
    ;;
   *)
