@@ -14,7 +14,7 @@ rsync -a --delete --exclude "**/.git" "$SOURCEDIR/" .
 # cmake in rdfkafka links against ssl even when disabled, so we need to use configure, which is also recommended by librdkafka devs.
 ./configure --prefix="$INSTALLROOT" --disable-ssl --disable-gssapi --disable-curl
 
-make
+make ${JOBS+-j $JOBS}
 make install
 
 #ModuleFile
