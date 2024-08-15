@@ -63,11 +63,11 @@ case $ARCHITECTURE in
   osx*)
    # use default llvm from homebrew if available
    if [ -d "$(brew --prefix llvm)" ]; then
-     CLANG_EXECUTABLE="`brew --prefix llvm`/bin/clang"
+     CLANG_EXECUTABLE="$(brew --prefix llvm)/bin/clang"
    else
      # fall back to llvm@17
      if [ -d "$(brew --prefix llvm)@17" ]; then
-       CLANG_EXECUTABLE="`brew --prefix llvm`@17/bin/clang"
+       CLANG_EXECUTABLE="$(brew --prefix llvm)@17/bin/clang"
      fi
 
    fi
