@@ -27,7 +27,18 @@ cmake "$SOURCEDIR/cmake"                                                        
       -Donnxruntime_BUILD_UNIT_TESTS=OFF                                              \
       -Donnxruntime_PREFER_SYSTEM_LIB=ON                                              \
       -Donnxruntime_BUILD_SHARED_LIB=ON                                               \
+      -Donnxruntime_USE_ROCM=ON                                                       \
+      -Donnxruntime_ROCM_HOME=/opt/rocm                                               \
+      -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                 \
+      -D__HIP_PLATFORM_AMD__=1                                                        \
+      -DCMAKE_HIP_ARCHITECTURES=gfx906,gfx908                                         \
+      -Donnxruntime_USE_COMPOSABLE_KERNEL=OFF                                         \
+      -Donnxruntime_USE_ROCBLAS_EXTENSION_API=ON                                      \
+      -Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=ON                                  \
+      -Donnxruntime_ENABLE_TRAINING=OFF                                               \
       -DProtobuf_USE_STATIC_LIBS=ON                                                   \
+      -Donnxruntime_DISABLE_RTTI=OFF                                                  \
+      -DMSVC=OFF                                                                      \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.a}           \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.a} \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.a}      \
@@ -35,8 +46,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}        \
       ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}                              \
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                        \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable" \
-      -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable"
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning" \
+      -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
