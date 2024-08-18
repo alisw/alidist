@@ -123,7 +123,7 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
       -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"                                                        \
-      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT=$(find $GCC_TOOLCHAIN_ROOT/lib -name crtbegin.o -exec dirname {} \;)}
+      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT=`find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;`}
 
 make ${JOBS:+-j $JOBS}
 make install
