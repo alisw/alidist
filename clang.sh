@@ -1,6 +1,6 @@
 package: Clang
 version: "v18.1.8"
-tag: "llvmorg-18.1.8-alice1"
+tag: "llvmorg-18.1.8-alice2"
 source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
