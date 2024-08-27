@@ -31,6 +31,7 @@ case $ARCHITECTURE in
   *_x86-64) LLVM_TARGETS_TO_BUILD=X86 ;;
   *_arm64) LLVM_TARGETS_TO_BUILD=AArch64 ;;
   *_aarch64) LLVM_TARGETS_TO_BUILD=AArch64 ;;
+  *_riscv64) LLVM_TARGETS_TO_BUILD=RISCV ;;
   *) echo 'Unknown LLVM target for architecture' >&2; exit 1 ;;
 esac
 
