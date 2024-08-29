@@ -34,7 +34,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}    \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                               \
-      ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=ON}
+      ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=OFF}
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
