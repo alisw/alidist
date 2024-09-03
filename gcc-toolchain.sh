@@ -47,6 +47,11 @@ case $ARCHITECTURE in
   ;;
 esac
 
+case $ARCHITECTURE in
+  ubuntu*) USE_GPROFNG=no ;;
+  *) ;;
+esac
+
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 
 if [ -e autoconf-archive ]; then
@@ -65,6 +70,7 @@ pushd build-binutils
   ../binutils/configure --prefix="$INSTALLROOT"                \
                         ${MARCH:+--build=$MARCH --host=$MARCH} \
                         ${USE_GOLD:+--enable-gold=yes}         \
+                        ${USE_GPROFNG:+--enable-gprofng=$USE_GPROFNG} \
                         --enable-ld=default                    \
                         --enable-lto                           \
                         --enable-plugins                       \
