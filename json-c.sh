@@ -8,7 +8,10 @@ build_requires:
 ---
 #!/bin/bash -e
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
-./cmake-configure --disable-shared --enable-static --prefix="$INSTALLROOT"
+
+mkdir build
+cd build
+../cmake-configure --disable-shared --enable-static --prefix="$INSTALLROOT"
 make ${JOBS+-j $JOBS} install
 
 # Modulefile
