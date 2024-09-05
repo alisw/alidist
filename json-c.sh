@@ -8,12 +8,13 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
-mkdir build
-cd build
-../cmake-configure --disable-shared --enable-static --prefix="$INSTALLROOT"
-make ${JOBS+-j $JOBS} install
+cmake "$SOURCEDIR"                                               \
+      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                        \
+      -DBUILD_SHARED_LIBS=OFF                                    \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
+
+cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 mkdir -p "$INSTALLROOT/etc/modulefiles"
 alibuild-generate-module --bin --lib --cmake > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
