@@ -13,6 +13,8 @@ prepend_path:
 ---
 cmake "$SOURCEDIR"                                  \
       -DCMAKE_CXX_STANDARD=20                       \
+      -DCMAKE_INSTALL_LIBDIR=lib                    \
+      -DBUILD_SHARED_LIBS=ON                        \
       -GNinja -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
 
 cmake --build . --target install
