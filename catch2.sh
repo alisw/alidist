@@ -11,7 +11,9 @@ build_requires:
 prepend_path:
   PKG_CONFIG_PATH: "$CATCH2_ROOT/share/pkgconfig"
 ---
-cmake "$SOURCEDIR" -GNinja -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
+cmake "$SOURCEDIR"                                  \
+      -DCMAKE_CXX_STANDARD=20                       \
+      -GNinja -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
 
 cmake --build . --target install
 
