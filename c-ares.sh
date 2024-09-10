@@ -14,7 +14,15 @@ incremental_recipe: |
 cmake $SOURCEDIR -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
 
-
+case $ARCHITECTURE in
+  osx*)
+    # Add correct rpath to dylibs on Mac as long as there is no better way to
+    # control rpath in the GRPC CMake
+    # Add rpath to all libraries in lib and change their IDs to be absolute paths.
+    find "$INSTALLROOT/lib" -name '*.dylib' -not -name '*ios*.dylib' \
+         -exec install_name_tool -id '{}' '{}' \;
+  ;;
+esac
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

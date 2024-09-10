@@ -14,6 +14,11 @@ rm -Rf $BUILDDIR/rtc-test
 mkdir $BUILDDIR/rtc-test
 pushd $BUILDDIR/rtc-test
 
+type $O2_ROOT/lib/libO2GPUTrackingCUDA.so
+type $O2_ROOT/lib/libO2GPUTrackingHIP.so
+type $O2_ROOT/lib/libO2GPUTrackingOCL.so
+type $O2_ROOT/lib/libO2GPUTrackingOCL2.so
+
 #o2-gpu-standalone-benchmark --noEvents -g --gpuType CUDA --RTCenable 1 --RTCcacheOutput 0 --RTCoptConstexpr 1 --RTCcompilePerKernel 1 --RTCrunTest 2
 o2-gpu-standalone-benchmark --noEvents -g --gpuType HIP --RTCenable 1 --RTCcacheOutput 0 --RTCoptConstexpr 1 --RTCcompilePerKernel 1 --RTCrunTest 2
 
