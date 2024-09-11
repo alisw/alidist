@@ -73,6 +73,7 @@ pushd build-binutils
                         --enable-lto                           \
                         --enable-plugins                       \
                         --enable-threads                       \
+                        --enable-gprofng=no                    \
                         --disable-nls
   make ${JOBS:+-j$JOBS} MAKEINFO=":"
   make install MAKEINFO=":"
