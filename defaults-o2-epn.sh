@@ -9,6 +9,7 @@ env:
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'OFF'
 disable:
+  - AliGenerators
   - O2Physics
   - KFParticle
   - OpenSSL
