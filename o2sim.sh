@@ -6,7 +6,6 @@ requires:
   - QualityControl
   - AEGIS
   - EVTGEN:(?!osx)
-  - AliGenerators:(?!osx|.*aarch64)
   - STARlight:(?!osx)
   - jq
 ---
