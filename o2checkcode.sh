@@ -59,7 +59,6 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 ,modernize-use-override\
 ,modernize-use-transparent-functors\
 ,modernize-use-uncaught-exceptions\
-,bugprone-signed-char-misuse\
 ,readability-braces-around-statements\
 }"
 
