@@ -10,7 +10,7 @@ requires:
   - LLA
 build_requires:
   - CMake
-source: https://gitlab.cern.ch/ALICEPrivateExternals/alice-tpc-fec-utils.git
+source: https://gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
