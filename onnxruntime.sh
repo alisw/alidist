@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.18.0
+tag: v1.19.0
 source: https://github.com/microsoft/onnxruntime
 requires:
   - protobuf
@@ -33,6 +33,7 @@ case $ARCHITECTURE in
       echo "Installing ONNXRuntime for ROCm"
       ORT_BUILD_FLAGS="\
                       -Donnxruntime_USE_ROCM=ON                                                       \
+                      -Donnxruntime_USE_MIGRAPHX=ON                                                   \
                       -Donnxruntime_ROCM_HOME=/opt/rocm                                               \
                       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                 \
                       -D__HIP_PLATFORM_AMD__=1                                                        \
@@ -48,15 +49,15 @@ case $ARCHITECTURE in
       CUDA_VERSION=$(nvcc --version | grep "release" | awk '{print $NF}' | cut -d. -f1)
       if [[ "$CUDA_VERSION" == "V11" ]]; then
         echo "Installing ONNXRuntime for CUDA 11.x"
-        ORT_BUILD_FLAGS="\
-                          -Donnxruntime_USE_CUDA=ON                                                     \
+        ORT_BUILD_FLAGS=" -Donnxruntime_USE_CUDA=ON                                                     \
+                          -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_ROOT                                            \
                           -Donnxruntime_USE_CUDA_NHWC_OPS=ON                                            \
                           -Donnxruntime_CUDA_USE_TENSORRT=ON                                            \
                           "
       elif [[ "$CUDA_VERSION" == "V12" ]]; then
         echo "Installing ONNXRuntime for CUDA 12.x"
-        ORT_BUILD_FLAGS="\
-                          -Donnxruntime_USE_CUDA=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_ROOT                  \
+        ORT_BUILD_FLAGS=" -Donnxruntime_USE_CUDA=ON                                                     \
+                          -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_ROOT                                            \
                           -Donnxruntime_USE_CUDA_NHWC_OPS=ON                                            \
                           -Donnxruntime_CUDA_USE_TENSORRT=ON                                            \
                           "
@@ -72,7 +73,7 @@ case $ARCHITECTURE in
 esac
 
 cmake "$SOURCEDIR/cmake"                                                              \
-      "$ORT_BUILD_FLAGS"                                                              \
+      $ORT_BUILD_FLAGS                                                                \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                             \
       -DCMAKE_BUILD_TYPE=Release                                                      \
       -DCMAKE_INSTALL_LIBDIR=lib                                                      \
