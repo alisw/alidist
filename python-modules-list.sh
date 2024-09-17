@@ -5,7 +5,7 @@ env:
     pip == 21.3.1; python_version < '3.12'
     pip == 24.0; python_version >= '3.12'
     setuptools == 59.6.0; python_version < '3.12'
-    setuptools == 69.1.0; python_version >= '3.12'
+    setuptools == 70.0.0; python_version >= '3.12'
     wheel == 0.37.1; python_version < '3.12'
     wheel == 0.42.0; python_version >= '3.12'
   PIP_REQUIREMENTS: |

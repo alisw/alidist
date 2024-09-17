@@ -10,7 +10,6 @@ env:
 disable:
   - mesos
   - MySQL
-  - arrow
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
@@ -34,11 +33,6 @@ overrides:
     version: 4.12.2
   fastjet:
     tag: v3.4.1_1.052-alice2
-  pythia:
-    tag: v8304-alice1
-    requires:
-      - lhapdf
-      - boost
   ROOT:
     tag: v6-30-05-alice1
 ---
