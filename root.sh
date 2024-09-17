@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-32-02-alice1"
+tag: "v6-32-04-alice1"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -169,7 +169,7 @@ cmake $SOURCEDIR                                                                
       -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
-      -Droot7=OFF                                                                      \
+      -Droot7=ON                                                                       \
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
       -Dvdt=OFF                                                                        \
