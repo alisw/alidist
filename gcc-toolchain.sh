@@ -14,6 +14,8 @@ prefer_system_check: |
   set -e
   which gfortran || { echo "gfortran missing"; exit 1; }
   case $REQUESTED_VERSION in
+    v14*) MIN_GCC_VERSION=140200 ;;
+    v13*) MIN_GCC_VERSION=130200 ;;
     v12*) MIN_GCC_VERSION=120100 ;;
     v10*) MIN_GCC_VERSION=100200 ;;
     *) MIN_GCC_VERSION=70300 ;;
@@ -73,6 +75,7 @@ pushd build-binutils
                         --enable-lto                           \
                         --enable-plugins                       \
                         --enable-threads                       \
+                        --enable-gprofng=no                    \
                         --disable-nls
   make ${JOBS:+-j$JOBS} MAKEINFO=":"
   make install MAKEINFO=":"
