@@ -9,6 +9,7 @@ requires:
   - Rivet
   - lhapdf-pdfsets
   - JETSCAPE
+  - CRMC
   - EPOS4
   - STARlight
 build_requires:
