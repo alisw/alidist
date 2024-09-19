@@ -80,7 +80,7 @@ cmake $SOURCEDIR                                                                
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                                          \
       -DO2_ROOT=$O2_ROOT                                                                                        \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                                                 \
-      -DMODERNCPPKAFKA_ROOT=${MODERNCPPKAFKA_ROOT}/include                                                      \
+      -DMODERNCPPKAFKA_ROOT=${MODERNCPPKAFKA_ROOT}                                                              \
       -DRDKAFKA_ROOT=${LIBRDKAFKA_ROOT}                                                                         \
       ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                                \
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                                    \
