@@ -70,6 +70,7 @@ case $ARCHITECTURE in
        CLANG_EXECUTABLE="$(brew --prefix llvm)@17/bin/clang"
      fi
    fi
+   [[ -z $CLANG_EXECUTABLE ]] && echo "Arrow requires homebrew llvm or llvm@17 on macOS" && exit 1
    ;;
   *)
    CLANG_EXECUTABLE="${CLANG_ROOT}/bin-safe/clang"
