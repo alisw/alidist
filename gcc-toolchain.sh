@@ -3,26 +3,29 @@ version: "%(tag_basename)s"
 tag: v13.2.0-alice1
 source: https://github.com/alisw/gcc-toolchain
 prepend_path:
-  "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
-  "PATH": "$GCC_TOOLCHAIN_ROOT/libexec/bin"
+"LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"
+"PATH": "$GCC_TOOLCHAIN_ROOT/libexec/bin"
 build_requires:
-  - "autotools:(slc6|slc7)"
-  - yacc-like
-  - make
+- "autotools:(slc6|slc7)"
+- yacc-like
+- make
 prefer_system: .*
 prefer_system_check: |
   set -e
-  which gfortran || { echo "gfortran missing"; exit 1; }
-  case $REQUESTED_VERSION in
-    v14*) MIN_GCC_VERSION=140200 ;;
-    v13*) MIN_GCC_VERSION=130200 ;;
-    v12*) MIN_GCC_VERSION=120100 ;;
-    v10*) MIN_GCC_VERSION=100200 ;;
-    *) MIN_GCC_VERSION=70300 ;;
-  esac
-  which gcc
-  test -f "$(dirname "$(which gcc)")/c++"
-  gcc -xc++ - -c -o /dev/null << EOF
+which gfortran || {
+  echo "gfortran missing"
+  exit 1
+}
+case $REQUESTED_VERSION in
+v14*) MIN_GCC_VERSION=140200 ;;
+v13*) MIN_GCC_VERSION=130200 ;;
+v12*) MIN_GCC_VERSION=120100 ;;
+v10*) MIN_GCC_VERSION=100200 ;;
+*) MIN_GCC_VERSION=70300 ;;
+esac
+which gcc
+test -f "$(dirname "$(which gcc)")/c++"
+gcc -xc++ - -c -o /dev/null <<EOF
   #define GCCVER ((__GNUC__ * 10000)+(__GNUC_MINOR__ * 100)+(__GNUC_PATCHLEVEL__))
   #if (GCCVER < $MIN_GCC_VERSION)
   #error "System's GCC cannot be used: we need at least ($MIN_GCC_VERSION/1e4), while we intend to go for GCC $REQUESTED_VERSION. We'll compile our own version."
@@ -41,26 +44,26 @@ echo "Building GCC because no compatible version was found on the system. To ski
 
 USE_GOLD=
 case $ARCHITECTURE in
-  osx*)
-    EXTRA_LANGS=',objc,obj-c++'
-    MARCH=
+osx*)
+  EXTRA_LANGS=',objc,obj-c++'
+  MARCH=
   ;;
-  *x86-64)
-    MARCH='x86_64-unknown-linux-gnu'
+*x86-64)
+  MARCH='x86_64-unknown-linux-gnu'
   ;;
-  *)
-    MARCH=
+*)
+  MARCH=
   ;;
 esac
 
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
 
 if [ -e autoconf-archive ]; then
-  (cd autoconf-archive && autoreconf -ivf )
+  (cd autoconf-archive && autoreconf -ivf)
   mkdir build-autoconf-archive
   pushd build-autoconf-archive
-    ../autoconf-archive/configure --prefix="$INSTALLROOT"
-    make install
+  ../autoconf-archive/configure --prefix="$INSTALLROOT"
+  make install
   popd
   export ACLOCAL_PATH=$INSTALLROOT/share/aclocal
 fi
@@ -68,22 +71,22 @@ fi
 # Binutils
 mkdir build-binutils
 pushd build-binutils
-  ../binutils/configure --prefix="$INSTALLROOT"                \
-                        ${MARCH:+--build=$MARCH --host=$MARCH} \
-                        ${USE_GOLD:+--enable-gold=yes}         \
-                        --enable-ld=default                    \
-                        --enable-lto                           \
-                        --enable-plugins                       \
-                        --enable-threads                       \
-                        --enable-gprofng=no                    \
-                        --disable-nls
-  make ${JOBS:+-j$JOBS} MAKEINFO=":"
-  make install MAKEINFO=":"
-  hash -r
+../binutils/configure --prefix="$INSTALLROOT" \
+  ${MARCH:+--build=$MARCH --host=$MARCH} \
+  ${USE_GOLD:+--enable-gold=yes} \
+  --enable-ld=default \
+  --enable-lto \
+  --enable-plugins \
+  --enable-threads \
+  --enable-gprofng=no \
+  --disable-nls
+make ${JOBS:+-j$JOBS} MAKEINFO=":"
+make install MAKEINFO=":"
+hash -r
 popd
 
 # Test program
-cat > test.c <<EOF
+cat >test.c <<EOF
 #include <string.h>
 #include <stdio.h>
 int main(void) { printf("The answer is 42.\n"); }
@@ -96,11 +99,11 @@ rsync -a gcc/isl/ isl
 rsync -a gcc/mpc/ mpc
 
 pushd gcc
-  [ -d mpfr ] && (cd mpfr && autoreconf -ivf)
-  [ -d mpc ] && (cd mpc && autoreconf -ivf)
-  [ -d gmp ] && (cd gmp && autoreconf -ivf)
-  [ -d isl ] && (cd isl && autoreconf -ivf)
-  [ -d cloog ] && (cd cloog && autoreconf -ivf)
+[ -d mpfr ] && (cd mpfr && autoreconf -ivf)
+[ -d mpc ] && (cd mpc && autoreconf -ivf)
+[ -d gmp ] && (cd gmp && autoreconf -ivf)
+[ -d isl ] && (cd isl && autoreconf -ivf)
+[ -d cloog ] && (cd cloog && autoreconf -ivf)
 popd
 
 [ -d mpfr ] && (cd mpfr && autoreconf -ivf)
@@ -111,31 +114,30 @@ popd
 
 mkdir build-gcc
 pushd build-gcc
-  ../gcc/configure --prefix="$INSTALLROOT"                          \
-                   ${MARCH:+--build=$MARCH --host=$MARCH}           \
-                   --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
-                   --disable-multilib                               \
-                   ${USE_GOLD:+--enable-gold=yes}                   \
-                   --enable-ld=default                              \
-                   --enable-lto                                     \
-                   --disable-nls
-  make ${JOBS+-j $JOBS} bootstrap-lean MAKEINFO=":"
-  make install MAKEINFO=":"
-  (if cd gmp || cd ../gmp; then make install MAKEINFO=":"; fi)
-  hash -r
+../gcc/configure --prefix="$INSTALLROOT" \
+  ${MARCH:+--build=$MARCH --host=$MARCH} \
+  --enable-languages="c,c++,fortran${EXTRA_LANGS}" \
+  --disable-multilib \
+  ${USE_GOLD:+--enable-gold=yes} \
+  --enable-ld=default \
+  --enable-lto \
+  --disable-nls
+make ${JOBS+-j $JOBS} bootstrap-lean MAKEINFO=":"
+make install MAKEINFO=":"
+hash -r
 
-  # GCC creates c++, but not cc
-  ln -nfs gcc "$INSTALLROOT/bin/cc"
-  rm -rf "$INSTALLROOT/lib/pkg-config"
+# GCC creates c++, but not cc
+ln -nfs gcc "$INSTALLROOT/bin/cc"
+rm -rf "$INSTALLROOT/lib/pkg-config"
 
-  # Provide a custom specs file if needed
-  #SPEC="$(dirname $(gcc -print-libgcc-file-name))/specs"
-  #gcc -dumpspecs > $SPEC
-  #perl -pe '++$x and next if /^\*link:/; $x-- and s/^(.*)$/\1 -rpath-link \/lib64:\/lib/ if $x' $SPEC > $SPEC.0
-  #mv $SPEC.0 $SPEC
+# Provide a custom specs file if needed
+#SPEC="$(dirname $(gcc -print-libgcc-file-name))/specs"
+#gcc -dumpspecs > $SPEC
+#perl -pe '++$x and next if /^\*link:/; $x-- and s/^(.*)$/\1 -rpath-link \/lib64:\/lib/ if $x' $SPEC > $SPEC.0
+#mv $SPEC.0 $SPEC
 
-  rm -f "$INSTALLROOT"/lib/*.la \
-        "$INSTALLROOT"/lib64/*.la
+rm -f "$INSTALLROOT"/lib/*.la \
+  "$INSTALLROOT"/lib64/*.la
 popd
 
 # From now on, use own linker and GCC
@@ -155,7 +157,7 @@ rm -f a.out
 if [ -e ccache ]; then
   mkdir -p build-cmake
   pushd build-cmake
-  cat > build-flags.cmake <<- EOF
+  cat >build-flags.cmake <<-EOF
 # Disable Java capabilities; we don't need it and on OS X might miss the
 # required /System/Library/Frameworks/JavaVM.framework/Headers/jni.h.
 SET(JNI_H FALSE CACHE BOOL "" FORCE)
@@ -167,35 +169,35 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 # so just disable it.
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
 EOF
-    $SOURCEDIR/cmake/bootstrap --prefix=$BUILDDIR/bootstrap-cmake \
-                               --no-debugger                      \
-                               --no-qt-gui                        \
-                               --init=build-flags.cmake           \
-                               ${JOBS:+--parallel=$JOBS}
-    make ${JOBS+-j $JOBS}
-    make install/strip
+  $SOURCEDIR/cmake/bootstrap --prefix=$BUILDDIR/bootstrap-cmake \
+    --no-debugger \
+    --no-qt-gui \
+    --init=build-flags.cmake \
+    ${JOBS:+--parallel=$JOBS}
+  make ${JOBS+-j $JOBS}
+  make install/strip
   popd
 
   # We build ccache using our own compiler, so that we do not have issue
   # with libstdc++ compatibility.
   mkdir build-ccache
   pushd build-ccache
-    $BUILDDIR/bootstrap-cmake/bin/cmake -S ../ccache \
-        -DENABLE_DOCUMENTATION=OFF                   \
-        -DENABLE_TESTING=OFF                         \
-        -DSTATIC_LINK=ON                             \
-        -DCMAKE_INSTALL_PREFIX="$INSTALLROOT/libexec/ccache"
-    make ${JOBS:+-j $JOBS} install
-    ln -sf ccache $INSTALLROOT/libexec/ccache/bin/gcc
-    ln -sf ccache $INSTALLROOT/libexec/ccache/bin/g++
-    ln -sf ccache $INSTALLROOT/libexec/ccache/bin/cc
-    ln -sf ccache $INSTALLROOT/libexec/ccache/bin/c++
-    export PATH=$INSTALLROOT/libexec/ccache/bin:$PATH
-    # Notice how we configure CCACHE to work, but then 
-    # disable so that users need to export CCACHE_DISABLE=false
-    # to actually have it working.
-    mkdir -p $INSTALLROOT/libexec/ccache/etc
-    cat > $INSTALLROOT/libexec/ccache/etc/ccache.conf <<EOF
+  $BUILDDIR/bootstrap-cmake/bin/cmake -S ../ccache \
+    -DENABLE_DOCUMENTATION=OFF \
+    -DENABLE_TESTING=OFF \
+    -DSTATIC_LINK=ON \
+    -DCMAKE_INSTALL_PREFIX="$INSTALLROOT/libexec/ccache"
+  make ${JOBS:+-j $JOBS} install
+  ln -sf ccache $INSTALLROOT/libexec/ccache/bin/gcc
+  ln -sf ccache $INSTALLROOT/libexec/ccache/bin/g++
+  ln -sf ccache $INSTALLROOT/libexec/ccache/bin/cc
+  ln -sf ccache $INSTALLROOT/libexec/ccache/bin/c++
+  export PATH=$INSTALLROOT/libexec/ccache/bin:$PATH
+  # Notice how we configure CCACHE to work, but then
+  # disable so that users need to export CCACHE_DISABLE=false
+  # to actually have it working.
+  mkdir -p $INSTALLROOT/libexec/ccache/etc
+  cat >$INSTALLROOT/libexec/ccache/etc/ccache.conf <<EOF
 cache_dir=$WORK_DIR/TMP/ccache/$ARCHITECTURE
 disable=true
 EOF
@@ -215,57 +217,57 @@ mkdir -p build-isl
 mkdir -p build-mpc
 
 pushd build-gmp
-  ../gmp/configure --prefix="$INSTALLROOT/libexec/extra"  \
-                   --disable-shared                       \
-                   --enable-static
-  make ${JOBS:+-j$JOBS} MAKEINFO=":"
-  make install MAKEINFO=":"
+../gmp/configure --prefix="$INSTALLROOT/libexec/extra" \
+  --disable-shared \
+  --enable-static
+make ${JOBS:+-j$JOBS} MAKEINFO=":"
+make install MAKEINFO=":"
 popd
 
 pushd build-mpfr
-  ../mpfr/configure --prefix="$INSTALLROOT/libexec/extra"  \
-                   --disable-shared                        \
-                   --with-gmp="$INSTALLROOT/libexec/extra" \
-                   --enable-static
-  make ${JOBS:+-j$JOBS} MAKEINFO=":"
-  make install MAKEINFO=":"
+../mpfr/configure --prefix="$INSTALLROOT/libexec/extra" \
+  --disable-shared \
+  --with-gmp="$INSTALLROOT/libexec/extra" \
+  --enable-static
+make ${JOBS:+-j$JOBS} MAKEINFO=":"
+make install MAKEINFO=":"
 popd
 
 pushd build-isl
-  ../isl/configure --prefix="$INSTALLROOT/libexec/extra"          \
-                   --with-gmp-prefix="$INSTALLROOT/libexec/extra" \
-                   --disable-shared                               \
-                   --enable-static
-  make ${JOBS:+-j$JOBS} MAKEINFO=":"
-  make install MAKEINFO=":"
+../isl/configure --prefix="$INSTALLROOT/libexec/extra" \
+  --with-gmp-prefix="$INSTALLROOT/libexec/extra" \
+  --disable-shared \
+  --enable-static
+make ${JOBS:+-j$JOBS} MAKEINFO=":"
+make install MAKEINFO=":"
 popd
 
 pushd build-mpc
-  ../mpc/configure --prefix="$INSTALLROOT/libexec/extra"    \
-                   --disable-shared                         \
-                   --with-gmp="$INSTALLROOT/libexec/extra"  \
-                   --with-mpft="$INSTALLROOT/libexec/extra" \
-                   --enable-static
-  make ${JOBS:+-j$JOBS} MAKEINFO=":"
-  make install MAKEINFO=":"
+../mpc/configure --prefix="$INSTALLROOT/libexec/extra" \
+  --disable-shared \
+  --with-gmp="$INSTALLROOT/libexec/extra" \
+  --with-mpft="$INSTALLROOT/libexec/extra" \
+  --enable-static
+make ${JOBS:+-j$JOBS} MAKEINFO=":"
+make install MAKEINFO=":"
 popd
 
 # GDB
 mkdir build-gdb
 pushd build-gdb
-  ../gdb/configure --prefix="$INSTALLROOT"                \
-                   ${MARCH:+--build=$MARCH --host=$MARCH} \
-                   --with-gmp=$INSTALLROOT/libexec/extra  \
-                   --with-mpfr=$INSTALLROOT/libexec/extra \
-                   --with-isl=$INSTALLROOT/libexec/extra  \
-                   --with-mpc=$INSTALLROOT/libexec/extra  \
-                   --without-guile                        \
-                   --without-python                       \
-                   --disable-multilib
-  make ${JOBS:+-j$JOBS} MAKEINFO=":"
-  make install MAKEINFO=":"
-  hash -r
-  rm -f "$INSTALLROOT"/lib/*.la
+../gdb/configure --prefix="$INSTALLROOT" \
+  ${MARCH:+--build=$MARCH --host=$MARCH} \
+  --with-gmp=$INSTALLROOT/libexec/extra \
+  --with-mpfr=$INSTALLROOT/libexec/extra \
+  --with-isl=$INSTALLROOT/libexec/extra \
+  --with-mpc=$INSTALLROOT/libexec/extra \
+  --without-guile \
+  --without-python \
+  --disable-multilib
+make ${JOBS:+-j$JOBS} MAKEINFO=":"
+make install MAKEINFO=":"
+hash -r
+rm -f "$INSTALLROOT"/lib/*.la
 popd
 
 # If fixincludes is not desired, see:
@@ -276,7 +278,7 @@ popd
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+cat >"$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
@@ -290,7 +292,7 @@ module load BASE/1.0
 regexp -- "^(.*)/.*\$" [module-info name] dummy mod_name
 if { "\$mod_name" == "GCC-Toolchain" } {
   if { [regexp {^/cvmfs.*} \$ModulesCurrentModulefile dummy1 dummy2] } {
-    module load Toolchain/GCC-${PKGVERSION//-*}
+    module load Toolchain/GCC-${PKGVERSION//-*/}
     if { [is-loaded Toolchain] } { continue }
   }
   set base_path \$::env(BASEDIR)
