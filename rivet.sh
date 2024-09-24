@@ -204,10 +204,10 @@ prepend-path LD_LIBRARY_PATH \$RIVET_ROOT/lib
 # Here trying to keep the env variable changes to their minimum, i.e touch only TEXINPUTS, LATEXINPUTS
 # Manual prepend-path for TEX variables
 # catch option to fix compatibility issues with multiple systems
-if { [catch {exec which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS} tempTEX] } { 
-    set Old_TEXINPUTS [ exec sh -c "which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS" ] 
+if { [catch {exec kpsewhich -var-value TEXINPUTS} brokenTEX] } {
+    set Old_TEXINPUTS \$brokenTEX
 } else {
-    set Old_TEXINPUTS \$tempTEX  
+    set Old_TEXINPUTS [ exec sh -c "kpsewhich -var-value TEXINPUTS" ]
 }
 
 set Extra_RivetTEXINPUTS \$RIVET_ROOT/share/Rivet/texmf/tex//
