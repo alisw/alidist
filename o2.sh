@@ -23,7 +23,7 @@ requires:
   - libuv
   - libjalienO2
   - cgal
-  - VecGeom
+  - "VecGeom:(?!osx.*)"
   - FFTW3
   - ONNXRuntime
   - MLModels
