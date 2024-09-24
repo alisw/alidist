@@ -61,11 +61,16 @@ SSL=$OPENSSL_ROOT
 _ssl _ssl.c \
         -DUSE_SSL -I\$(SSL)/include -I\$(SSL)/include/openssl \
         -L\$(SSL)/lib -lssl -lcrypto
-EOF
 
+# Get rid of the dependency on libcrypt (which is going away in any case in python 3.13)
+_crypt _cryptmodule.c # -lcrypt        # crypt(3); needs -lcrypt on some systems
+
+*disabled*
+_crypt
+EOF
 fi
 
-./configure --prefix="$INSTALLROOT"  \
+LIBCRYPT_CFLAGS=-lunknown ac_cv_search_crypt=no ac_cv_search_crypt_r=no ./configure --prefix="$INSTALLROOT"  \
             ${OPENSSL_ROOT:+--with-openssl=$OPENSSL_ROOT} ${OPENSSL_ROOT:+--with-openssl-rpath=no} \
             --enable-shared          \
             --with-system-expat      \
