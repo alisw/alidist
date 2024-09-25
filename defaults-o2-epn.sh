@@ -10,6 +10,7 @@ env:
   GEANT4_BUILD_MULTITHREADED: 'OFF'
 disable:
   - AliGenerators
+  - AliGenO2
   - O2Physics
   - KFParticle
   - OpenSSL
