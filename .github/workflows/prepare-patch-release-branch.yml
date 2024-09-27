@@ -21,7 +21,7 @@ jobs:
         id: decide_release_branch
         run: |
           case "$TAG" in
-            v5-09-59*) echo branch=master ;;
+            v5-09-60*) echo branch=master ;;
             *) echo "branch=$(echo "AliPhysics-$TAG-01-patches" | sed -r 's/[a-z]+-01-patches$/-01-patches/')" ;;
           esac >> "$GITHUB_OUTPUT"
         env:

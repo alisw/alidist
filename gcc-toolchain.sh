@@ -121,7 +121,6 @@ pushd build-gcc
                    --disable-nls
   make ${JOBS+-j $JOBS} bootstrap-lean MAKEINFO=":"
   make install MAKEINFO=":"
-  (if cd gmp || cd ../gmp; then make install MAKEINFO=":"; fi)
   hash -r
 
   # GCC creates c++, but not cc
@@ -268,6 +267,10 @@ pushd build-gdb
   rm -f "$INSTALLROOT"/lib/*.la
 popd
 
+# We remove the sim folder because it's not used and actually
+# conflicts with FairRoot when installing in a single installation
+# path.
+rm -fr "$INSTALLROOT"/include/sim
 # If fixincludes is not desired, see:
 # http://ewontfix.com/12/
 # https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/eclass/toolchain.eclass?view=markup&sortby=log#l1524
