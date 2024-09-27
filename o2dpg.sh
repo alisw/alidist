@@ -19,6 +19,7 @@ alibuild-generate-module --bin > etc/modulefiles/$PKGNAME
 cat << EOF >> etc/modulefiles/$PKGNAME
 set O2DPG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2DPG_ROOT \$O2DPG_ROOT
+setenv O2DPG_MC_CONFIG_ROOT \$O2DPG_ROOT
 setenv O2DPG_RELEASE \$version
 setenv O2DPG_VERSION $PKGVERSION
 EOF
