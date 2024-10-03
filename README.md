@@ -1,6 +1,14 @@
 # alidist
 Recipes to build ALICE SW
 
+# Stabilitty guarantees of the various branches and tags
+1. Tags are immutable. Under no circumstances tags should be moved. If it happens, this should be explicitly documented and possibly rolled back.
+2. The master branch is supposed to always be able to build O2, O2Physics and the O2DPG packages using the `o2` and `o2-epn` defaults. The goal of the master branch is to allow the wider possible audience to use it for development and eventually tagging, when deemed necessary. In particular it should always build on the ALICE production platform, Alma Linux 9.
+3. Changes should always be discussed and agreed with the stakeholders. The only case in which a stakeholder approval can be bypassed is if some external force (OS updates breaking things for many people, data taking fixes) breaks the requirement in 2 and an urgent patch is needed to allow many people to be back in business.
+4. While there should not be any deliberate attempt to break things, there is no guarantee that the master branch is validated for physics production, please follow up in the appropriate forum whether or not a given tag / commit is good for production.
+5. If something particular intrusive needs to be tested, a custom build should be done to validate the changes.
+6. Unfortunate missteps happen. If the master turns out to be not usable for development / tagging production releases, we roll back to a working state (via reverts, not by force pushing).
+
 # Guidelines for commit messages
 
 - Keep the first line of the commit below 50 chars
@@ -32,7 +40,7 @@ commodo consequat.
 rsync -a $SOURCEDIR ./
 ```
 - If a package is a toolkit not really affecting physics performance, make sure you provide a `prefer_system_check` rule to have laptop user pick it up from the system.
-- If a package is a physics related one. Avoid providing a `prefer_system_check` unless explicitly discussed withing the Computing Board or the O2 Technical board.
+- If a package is a physics related one. Avoid providing a `prefer_system_check` unless explicitly discussed within the Computing Board or the O2 Technical board.
 - If `SOMETHING_VERSION` or `SOMETHING_REVISION` is defined, you can assume `SOMETHING_ROOT` is defined and points to an aliBuild built package. However the opposite is not true. I.e. you should not assume that `SOMETHING_ROOT` being defined means that a `something` was built with aliBuild (it could come from the system) and you cannot assume that `SOMETHING_VERSION` and `SOMETHING_REVISION` are set. 
 - If a package can / could be picked up from the system, do not provide, in the modulefile, any variable which is not also exposed in general by the system installation. E.g. `ROOTSYS` is fine because that kind of a standard for ROOT installations, `GCC_ROOT` is not because GCC in general does not use `GCC_ROOT`.
 - When picking up a system dependency installed with homebrew, make sure you override the `SOMETHING_ROOT` variable when it's not set by using `brew --prefix`.
@@ -54,16 +62,7 @@ cmake ...                                   \
 
 This will make sure that if a package was selected to be picked up by the system (i.e. `BOOST_ROOT` is not set), we will look it up in the package specific folder when using homebrew.
 
-You should never set any `SOMETHING_ROOT` variable to `/usr/local` because that is a global folder and it will make it have precendence in the lookup, therefore potentially implicitly bringing in incompatible versions of external packages.
-
-- If you need python use Python-system on non SLC distributions (Ubuntu, macOS) and use Python on SLC. This can be done usually by adding:
-
-```yaml
-- Python:slc.*
-- Python-system:(osx.*)
-```
-
-in your `requires` section. Alternatively, if you also require `Python-modules` simply depend on it, without an explicit dependency on Python, which will be handled internally.
+You should never set any `SOMETHING_ROOT` variable to `/usr/local` because that is a global folder and it will make it have precedence in the lookup, therefore potentially implicitly bringing in incompatible versions of external packages.
 
 # Guidelines for handling externals sources
 
@@ -74,7 +73,7 @@ Whenever you need to build a new external, you should consider the following:
   - If a Git / GitHub repository exists and you need to patch it, fork it, decide a
     fork point, possibly based on a tag or eventually a commit hash, and create a branch
     in your fork called `alice/<fork-point>`. This can be done with:
- 
+
         git checkout -b alice/<fork-point> <fork-point>
 
     patches should be applied on such a branch. You should then tag your development as:
