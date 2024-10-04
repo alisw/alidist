@@ -20,9 +20,10 @@ prepend_path:
 mkdir -p $INSTALLROOT
 
 # Check ROCm build conditions
-if { [ "$ALIBUILD_O2_FORCE_GPU" -ne 0 ] || [ "$ALIBUILD_ENABLE_HIP" -ne 0 ] || command -v rocminfo >/dev/null 2>&1; } && \
+if { [ "$ALIBUILD_O2_FORCE_GPU" -ne 0 ] || [ "$ALIBUILD_ENABLE_HIP" -ne 0 ] || command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1; } && \
    { [ -z "$DISABLE_GPU" ] || [ "$DISABLE_GPU" -eq 0 ]; }; then
     export ORT_ROCM_BUILD=1
+    : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
 else
     export ORT_ROCM_BUILD=0
 fi
@@ -42,7 +43,7 @@ else
     export ORT_MIGRAPHX_BUILD=0
 fi
 ### TensorRT
-if [ "$ORT_CUDA_BUILD" -eq 1 ] && [ $(find /opt/rocm* -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]; then
+if [ "$ORT_CUDA_BUILD" -eq 1 ] && [ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]; then
     export ORT_TENSORRT_BUILD=1
 else
     export ORT_TENSORRT_BUILD=0
@@ -65,22 +66,22 @@ cmake "$SOURCEDIR/cmake"                                                        
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                              \
       ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}                                                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                                              \
-      -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
       -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
-      -Donnxruntime_ROCM_HOME=/opt/rocm                                                                     \
-      -Donnxruntime_CUDA_HOME=/usr/local/cuda                                                               \
-      -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
-      -D__HIP_PLATFORM_AMD__=1                                                                              \
-      -DCMAKE_HIP_ARCHITECTURES=gfx906,gfx908                                                               \
       ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DCMAKE_HIP_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}        \
+      -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
+      -Donnxruntime_USE_ROCBLAS_EXTENSION_API=${ORT_ROCM_BUILD}                                             \
+      -Donnxruntime_ROCM_HOME=/opt/rocm                                                                     \
+      -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
+      -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
+      -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
+      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCH:+-CMAKE_CUDA_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}       \
+      -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
+      -Donnxruntime_CUDA_HOME=/usr/local/cuda                                                               \
+      -Donnxruntime_CUDA_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                 \
       -Donnxruntime_USE_COMPOSABLE_KERNEL=OFF                                                               \
-      -Donnxruntime_USE_ROCBLAS_EXTENSION_API=ON                                                            \
       -Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=ON                                                        \
       -Donnxruntime_DISABLE_RTTI=OFF                                                                        \
       -DMSVC=OFF                                                                                            \
-      -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
-      -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
-      -Donnxruntime_CUDA_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                 \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated" \
       -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated"
 
