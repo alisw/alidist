@@ -13,7 +13,7 @@ build_requires:
 env:
   LLVM_ROOT: "$CLANG_ROOT" # needed by LLVMAlt
 prefer_system: (osx.*)
-prefer_system_check:
+prefer_system_check: |
   brew --prefix llvm@18 && test -d $(brew --prefix llvm@18)
 ---
 #!/bin/bash -e
