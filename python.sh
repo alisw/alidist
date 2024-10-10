@@ -54,7 +54,7 @@ esac
 if [[ $OPENSSL_ROOT ]]; then
   export CPATH="$OPENSSL_ROOT/include:$OPENSSL_ROOT/include/openssl:$CPATH"
   export CPPFLAGS="-I$OPENSSL_ROOT/include -I$OPENSSL_ROOT/include/openssl $CPPFLAGS"
-  export CFLAGS="-I$OPENSSL_ROOT/include -I$OPENSSL_ROOT/include/openssl"
+  export CFLAGS="-I$OPENSSL_ROOT/include -I$OPENSSL_ROOT/include/openssl $CFLAGS"
   cat >> Modules/Setup.dist <<EOF
 
 SSL=$OPENSSL_ROOT
