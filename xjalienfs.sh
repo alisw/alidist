@@ -12,6 +12,47 @@ build_requires:
   - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: ${XJALIENFS_ROOT}/lib/python/site-packages
+prefer_system: ".*"
+prefer_system_check: |
+  # if we are in a virtualenv, assume people know what they are doing
+  # and simply use the virtualenv recipe.
+  if [ ! -z $VIRTUAL_ENV ]; then
+    echo "alibuild_system_replace: virtualenv"
+    exit 0
+  fi
+  # If not, either they are using the system python or they are using our own python.
+  # In both cases we can simply create our own virtualenv
+  exit 1
+prefer_system_replacement_specs:
+  virtualenv:
+    recipe: |
+      #!/bin/bash -e
+
+      # Use pip's --target to install under $INSTALLROOT without weird hacks. This
+      # works inside and outside a virtualenv, but unset VIRTUAL_ENV to make sure we
+      # only depend on stuff we installed using our Python and Python-modules.
+
+      # on macos try to install gnureadline and just skip if fails (alienpy can work without it)
+      # macos python readline implementation is build on libedit which does not work
+      [[ "$ARCHITECTURE" ==  osx_* ]] && { \
+          python3 -m pip install --force-reinstall \
+          gnureadline || : ; }
+
+      env ALIBUILD=1 \
+          python3 -m pip install --force-reinstall \
+          "file://$SOURCEDIR/../$PKG_VERSION"
+      # We do not need anything else, because python is going to be in path
+      # if we are inside a virtualenv so no need to pretend we know where
+      # the correct python is.
+
+      # We generate the modulefile to avoid complains by dependencies
+      mkdir -p "$INSTALLROOT/etc/modulefiles"
+      alibuild-generate-module --bin > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+    requires:
+      - XRootD
+      - AliEn-Runtime
+    build_requires:
+      - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
