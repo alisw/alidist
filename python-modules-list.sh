@@ -51,7 +51,9 @@ env:
     scipy == 1.6.1; python_version == '3.8'
     scipy == 1.9.3; python_version >= '3.9' and python_version <= '3.10'
     scipy == 1.10.1; python_version == '3.11'
-    scipy == 1.12.0; python_version >= '3.12'
+    scipy == 1.12.0; python_version == '3.12'
+    scipy == 1.14.1; python_version == '3.13'
+    scipy; python_version >= '3.13'
 
     Cython == 0.29.16; python_version < '3.8'
     Cython == 0.29.21; python_version >= '3.8'
