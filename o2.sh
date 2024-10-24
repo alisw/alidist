@@ -30,6 +30,7 @@ requires:
   - KFParticle
   - RapidJSON
   - bookkeeping-api
+  - AliEn-CAs
 build_requires:
   - abseil
   - GMP
