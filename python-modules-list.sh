@@ -57,7 +57,7 @@ env:
     Cython == 0.29.21; python_version >= '3.8'
 
     seaborn == 0.9.0; python_version < '3.9'
-    seaborn == 0.11.0; python_version >= '3.9'
+    seaborn == 0.13.2; python_version >= '3.9'
 
     scikit-learn == 0.20.3; python_version < '3.8'
     scikit-learn == 0.24.1; python_version >= '3.8' and python_version < '3.11'
