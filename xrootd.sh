@@ -1,6 +1,6 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v5.6.6"
+tag: "v5.7.0"
 source: https://github.com/xrootd/xrootd
 requires:
   - "OpenSSL:(?!osx)"
@@ -15,6 +15,11 @@ build_requires:
   - alibuild-recipe-tools
 prepend_path:
   PYTHONPATH: "${XROOTD_ROOT}/lib/python/site-packages"
+env:
+  XRD_CONNECTIONWINDOW: "3"
+  XRD_CONNECTIONRETRY: "1"
+  XRD_TIMEOUTRESOLUTION: "1"
+  XRD_REQUESTTIMEOUT: "150"
 ---
 #!/bin/bash -e
 
@@ -134,9 +139,19 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 
-alibuild-generate-module --bin --lib > "$MODULEFILE"
+alibuild-generate-module --bin --lib --cmake > "$MODULEFILE"
+
+case $ARCHITECTURE in
+  slc[78]*) OPTIONAL_ENV= ;;
+  *) OPTIONAL_ENV="" ;;
+esac
 
 cat >> "$MODULEFILE" <<EoF
+setenv ${OPTIONAL_ENV}XRD_CONNECTIONWINDOW 3
+setenv ${OPTIONAL_ENV}XRD_CONNECTIONRETRY 1
+setenv ${OPTIONAL_ENV}XRD_TIMEOUTRESOLUTION 1
+setenv ${OPTIONAL_ENV}XRD_REQUESTTIMEOUT 150
+
 if { $XROOTD_PYTHON } {
   prepend-path PYTHONPATH \$PKG_ROOT/lib/python/site-packages
   # This is probably redundant, but should not harm.

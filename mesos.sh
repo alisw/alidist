@@ -42,7 +42,7 @@ cd build
     --with-rapidjson=${RAPIDJSON_ROOT}
 
 # We build with fewer jobs to avoid OOM errors in GCC
-make -j 6
+make -j $((JOBS / 2))
 make install
 
 

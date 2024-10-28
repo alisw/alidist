@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v2.23.0
+tag: v2.26.3
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -10,7 +10,7 @@ requires:
   - FairLogger
   - Monitoring
   - Configuration
-  - "ReadoutCard:(slc.*)"
+  - "ReadoutCard:(slc.*_x86-64)"
   - lz4
   - Control-OCCPlugin
   - ZeroMQ

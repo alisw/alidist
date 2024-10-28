@@ -5,7 +5,7 @@ env:
     pip == 21.3.1; python_version < '3.12'
     pip == 24.0; python_version >= '3.12'
     setuptools == 59.6.0; python_version < '3.12'
-    setuptools == 69.1.0; python_version >= '3.12'
+    setuptools == 70.0.0; python_version >= '3.12'
     wheel == 0.37.1; python_version < '3.12'
     wheel == 0.42.0; python_version >= '3.12'
   PIP_REQUIREMENTS: |
@@ -43,23 +43,23 @@ env:
 
     numpy == 1.16.2; python_version < '3.8'
     numpy == 1.19.5; python_version == '3.8'
-    numpy == 1.21.4; python_version == '3.9'
-    numpy == 1.23.4; python_version == '3.10'
+    numpy == 1.23.4; python_version >= '3.9' and python_version <= '3.10'
     numpy == 1.23.5; python_version == '3.11'
     numpy == 1.26.4; python_version >= '3.12'
 
     scipy == 1.2.1; python_version < '3.8'
     scipy == 1.6.1; python_version == '3.8'
-    scipy == 1.7.3; python_version == '3.9'
-    scipy == 1.9.3; python_version == '3.10'
+    scipy == 1.9.3; python_version >= '3.9' and python_version <= '3.10'
     scipy == 1.10.1; python_version == '3.11'
-    scipy == 1.12.0; python_version >= '3.12'
+    scipy == 1.12.0; python_version == '3.12'
+    scipy == 1.14.1; python_version == '3.13'
+    scipy; python_version >= '3.13'
 
     Cython == 0.29.16; python_version < '3.8'
     Cython == 0.29.21; python_version >= '3.8'
 
     seaborn == 0.9.0; python_version < '3.9'
-    seaborn == 0.11.0; python_version >= '3.9'
+    seaborn == 0.13.2; python_version >= '3.9'
 
     scikit-learn == 0.20.3; python_version < '3.8'
     scikit-learn == 0.24.1; python_version >= '3.8' and python_version < '3.11'
@@ -71,12 +71,13 @@ env:
     sklearn-evaluation == 0.12.0; python_version >= '3.11'
 
     Keras == 2.2.4; python_version < '3.8'
-    Keras == 2.4.3; python_version >= '3.8' and python_version < '3.11'
-    Keras == 2.13.1; python_version >= '3.11'
+    Keras == 2.4.3; python_version == '3.8'
+    Keras == 2.13.1; python_version >= '3.9' and python_version <= '3.10'
 
     tensorflow == 1.13.1; python_version < '3.8'
     tensorflow == 2.4.1; python_version == '3.8'
-    tensorflow == 2.13.1; python_version == '3.11'
+    # tensorflow == 2.7.1; python_version == '3.9'
+    tensorflow == 2.13.1; python_version >= '3.9' and python_version <= '3.11'
 
     # See version compatibility table at https://pypi.org/project/tensorflow-metal/
     tensorflow-metal == 1.0.0; sys_platform == 'darwin' and python_version == '3.11'
@@ -91,12 +92,14 @@ env:
 
     pandas == 0.24.2; python_version < '3.8'
     pandas == 1.2.3; python_version == '3.8'
-    pandas == 1.1.5; python_version >= '3.9' and python_version < '3.11'
-    pandas == 1.5.3; python_version >= '3.11'
+    pandas == 1.5.3; python_version >= '3.9'
 
     dask[array,dataframe,distributed] == 2023.2.0; python_version < '3.11'
     dask[array,dataframe,distributed] == 2023.12.1; python_version >= '3.11'
     dask_jobqueue == 0.8.2
+
+    # readline is needed by alien.py (xjalienfs)
+    gnureadline
 
 build_requires:
   - alibuild-recipe-tools

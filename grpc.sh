@@ -61,6 +61,17 @@ cmake $SOURCEDIR                                    \
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
+case $ARCHITECTURE in
+  osx*)
+    # Add correct rpath to dylibs on Mac as long as there is no better way to
+    # control rpath in the GRPC CMake
+    # Add rpath to all libraries in lib and change their IDs to be absolute paths.
+    find "$INSTALLROOT/lib" -name '*.dylib' -not -name '*ios*.dylib' \
+         -exec install_name_tool -id '{}' '{}' \;
+  ;;
+esac
+
+
 #ModuleFile
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME

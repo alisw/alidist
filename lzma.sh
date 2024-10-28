@@ -5,7 +5,6 @@ source: https://github.com/alisw/liblzma
 build_requires:
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
-  - rsync
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <lzma.h>\n" | c++ -xc++ - -c -M 2>&1

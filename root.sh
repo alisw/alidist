@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-30-01-alice4"
+tag: "v6-32-06-alice1"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -20,6 +20,8 @@ requires:
   - TBB
   - protobuf
   - FFTW3
+  - Vc
+  - pythia
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -121,6 +123,12 @@ else
   ROOT_XROOTD_FLAGS='-Dxrootd=OFF'
 fi
 
+case $PKG_VERSION in
+  v6[-.]30*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
+  v6[-.]32[-.]0[6789]*) EXTRA_CMAKE_OPTIONS="-Dminuit=ON -Dpythia6=ON -Dpythia6_nolink=ON -Dproof=ON" ;;
+  *) EXTRA_CMAKE_OPTIONS="-Dminuit=ON" ;;
+esac
+
 unset DYLD_LIBRARY_PATH
 CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 # Standard ROOT build
@@ -140,6 +148,7 @@ cmake $SOURCEDIR                                                                
       ${ARROW_ROOT:+-Darrow=ON}                                                        \
       ${ARROW_ROOT:+-DARROW_HOME=$ARROW_ROOT}                                          \
       ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
+      ${EXTRA_CMAKE_OPTIONS}                                                           \
       -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
       -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
       -Dfortran=OFF                                                                    \
@@ -157,16 +166,16 @@ cmake $SOURCEDIR                                                                
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
-      -Dminuit2=ON                                                                     \
-      -Dpythia6=ON                                                                     \
-      -Dpythia6_nolink=ON                                                              \
+      -Dminuit=ON                                                                     \
       -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
-      -Droot7=OFF                                                                      \
+      -Droot7=ON                                                                       \
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
       -Dvdt=OFF                                                                        \
+      -Dvc=ON                                                                          \
+      -Dbuiltin_vc=OFF                                                                 \
       -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
@@ -176,6 +185,7 @@ cmake $SOURCEDIR                                                                
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
+      -Dpythia8=ON                                                                     \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \

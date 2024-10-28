@@ -6,6 +6,7 @@ requires:
   - Clang:(?!.*osx)
 build_requires:
   - alibuild-recipe-tools
+  - CMake
 ---
 
 mkdir -p $INSTALLROOT

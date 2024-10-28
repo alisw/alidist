@@ -15,7 +15,7 @@ build_requires:
 rsync -av $SOURCEDIR/ ./
 autoreconf -ivf
 ./configure --disable-tcl --disable-readline --disable-static --prefix=$INSTALLROOT
-make
+make ${JOBS:+-j $JOBS} 
 make install
 rm -f $INSTALLROOT/lib/*.la
 rm -rf $INSTALLROOT/share

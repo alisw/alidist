@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "daily-20240425-0200"
+tag: "daily-20241028-0100"
 requires:
   - O2
   - ONNXRuntime
@@ -14,16 +14,10 @@ build_requires:
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 incremental_recipe: |
-  [[ $ALIBUILD_O2PHYSICS_TESTS ]] && CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
-
-if [[ $ALIBUILD_O2PHYSICS_TESTS ]]; then
-  # Impose extra errors.
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
-fi
 
 # When O2 is built against Gandiva (from Arrow), then we need to use
 # -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
@@ -39,11 +33,12 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}             \
       ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}    \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
-      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}
+      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                               \
+      ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=OFF}
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
-DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json

@@ -1,6 +1,6 @@
 package: SHERPA
 version: "%(tag_basename)s"
-tag: "v2.2.12"
+tag: "v2.2.16"
 source: https://gitlab.com/sherpa-team/sherpa.git
 requires:
   - "GCC-Toolchain:(?!osx)"
