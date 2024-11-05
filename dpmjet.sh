@@ -22,6 +22,9 @@ cmake  $SOURCEDIR                           \
 
 make ${JOBS+-j $JOBS} install
 
+cp -r $SOURCEDIR/include $INSTALLROOT/.
+cp -r $SOURCEDIR/dpmdata $INSTALLROOT/.
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
