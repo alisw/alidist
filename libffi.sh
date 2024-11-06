@@ -1,5 +1,5 @@
 package: libffi
-version: v3.4.4-alice1
+version: v3.2.1-alice1
 build_requires:
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
@@ -11,9 +11,11 @@ prepend_path:
 #!/bin/bash -ex
 rsync -a "$SOURCEDIR"/ .
 autoreconf -ivf .
+
 # Hack to bypass automake 1.17 creating a malformed Makefile on macOS
 # https://github.com/libffi/libffi/issues/853
-mv -f Makefile_upstream_v3.4.4.in Makefile.in
+mv -f Makefile_3.2.1_autoconf_2.69.in Makefile.in
+
 MAKEINFO=: ./configure --prefix="$INSTALLROOT" --disable-docs --disable-multi-os-directory
 make ${JOBS:+-j $JOBS} MAKEINFO=:
 make install MAKEINFO=:
