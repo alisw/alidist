@@ -5,8 +5,7 @@ requires:
   - coconut
   - Control-Core
   - Control-OCCPlugin
-  - O2
-  - O2Physics
+  - O2PDPSuite
   - "ReadoutCard:(slc.*x86)"
   - Readout
   - QualityControl
