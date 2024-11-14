@@ -1,6 +1,6 @@
 package: Common-O2
 version: "%(tag_basename)s"
-tag: v1.6.2
+tag: v1.6.3
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -30,7 +30,7 @@ make ${JOBS+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
-alibuild-generate-module --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --lib --cmake > etc/modulefiles/$PKGNAME
 cat << EOF >> etc/modulefiles/$PKGNAME
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF

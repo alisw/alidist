@@ -5,6 +5,7 @@ requires:
   - "Python-system:(?!slc.*|ubuntu)"
   - "FreeType:(?!osx)"
   - libpng
+  - hdf5
 build_requires:
   - Python-modules-list
   - alibuild-recipe-tools

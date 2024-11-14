@@ -9,6 +9,8 @@ env:
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'OFF'
 disable:
+  - AliGenerators
+  - AliGenO2
   - O2Physics
   - KFParticle
   - OpenSSL
@@ -28,18 +30,10 @@ overrides:
       - Vc
       - ZeroMQ
       - JAliEn-ROOT
-  GCC-Toolchain:
-    version: v12.2.0-alice1
-    tag: v12.2.0-alice1
   cgal:
     version: 4.12.2
   fastjet:
     tag: v3.4.0_1.045-alice1
-  pythia:
-    tag: v8304-alice1
-    requires:
-      - lhapdf
-      - boost
   DataDistribution:
     requires:
       - "GCC-Toolchain:(?!osx)"

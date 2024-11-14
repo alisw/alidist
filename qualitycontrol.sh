@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.142.0
+tag: v1.162.5
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -14,6 +14,7 @@ requires:
   - Python-modules
   - libjalienO2
   - bookkeeping-api
+  - moderncppkafka
 build_requires:
   - CMake
   - "Clang:(?!osx)"   # for Gandiva
@@ -79,6 +80,8 @@ cmake $SOURCEDIR                                                                
       ${LIBINFOLOGGER_REVISION:+-DInfoLogger_ROOT=$LIBINFOLOGGER_ROOT}                                          \
       -DO2_ROOT=$O2_ROOT                                                                                        \
       -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include                                                                 \
+      -DMODERNCPPKAFKA_ROOT=${MODERNCPPKAFKA_ROOT}/include                                                      \
+      -DRDKAFKA_ROOT=${LIBRDKAFKA_ROOT}                                                                         \
       ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                                \
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                                    \
       ${ARROW_ROOT:+${CLANG_ROOT:+-DLLVM_ROOT=$CLANG_ROOT}}                                                     \

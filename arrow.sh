@@ -1,15 +1,16 @@
 package: arrow
-version: "v14.0.1-alice1"
-tag: apache-arrow-14.0.1-alice1
+version: "v17.0.0-alice6"
+tag: apache-arrow-17.0.0-alice6
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
   - lz4
-  - Clang:(?!.*osx)
+  - Clang
   - protobuf
   - utf8proc
   - OpenSSL:(?!osx)
   - xsimd
+  - Python
 build_requires:
   - zlib
   - flatbuffers
@@ -18,6 +19,7 @@ build_requires:
   - double-conversion
   - re2
   - alibuild-recipe-tools
+  - ninja
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -57,13 +59,17 @@ esac
 
 mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
-
 case $ARCHITECTURE in
   osx*)
-   CLANG_EXECUTABLE=/usr/bin/clang
+   # use compatible llvm@18 from brew, if available. This
+   # must match the prefer_system_check in clang.sh
+   CLANG_EXECUTABLE="${CLANG_REVISION:+$CLANG_ROOT/bin-safe/clang}"
+   if [ -z "${CLANG_EXECUTABLE}" -a -d "$(brew --prefix llvm)@18" ]; then
+     CLANG_EXECUTABLE="$(brew --prefix llvm)@18/bin/clang"
+   fi
    ;;
   *)
-   CLANG_EXECUTABLE=${CLANG_ROOT}/bin-safe/clang
+   CLANG_EXECUTABLE="${CLANG_ROOT}/bin-safe/clang"
    # this patches version script to hide llvm symbols in gandiva library
    sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
    ;;
@@ -72,8 +78,9 @@ esac
 cmake ./src_tmp/cpp                                                                                 \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS="$CMAKE_SHARED_LINKER_FLAGS"}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
+      -G Ninja                                                                                      \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
-      -DCMAKE_CXX_STANDARD=17                                                                       \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                       \
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
       -DARROW_BUILD_BENCHMARKS=OFF                                                                  \
       -DARROW_BUILD_TESTS=OFF                                                                       \
@@ -99,24 +106,26 @@ cmake ./src_tmp/cpp                                                             
       ${UTF8PROC_ROOT:+-Dutf8proc_ROOT="$UTF8PROC_ROOT"}                                            \
       ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}                                               \
       ${CLANG_ROOT:+-DLLVM_DIR="$CLANG_ROOT"}                                                       \
+      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$PYTHON_ROOT/bin/python3"}                               \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
       -DARROW_WITH_ZLIB=ON                                                                          \
       -DARROW_NO_DEPRECATED_API=ON                                                                  \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                         \
-      -DARROW_PYTHON=OFF                                                                            \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
       -DARROW_COMPUTE=ON                                                                            \
+      -DARROW_DATASET=ON                                                                            \
+      -DARROW_FILESYSTEM=ON                                                                         \
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"
+      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"                                                        \
+      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT=`find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;`}
 
-make ${JOBS:+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j $JOBS} install
 find "$INSTALLROOT/share" -name '*-gdb.py' -exec mv {} "$INSTALLROOT/lib" \;
 
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
-alibuild-generate-module --lib > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+alibuild-generate-module --lib --cmake > "$INSTALLROOT/etc/modulefiles/$PKGNAME"

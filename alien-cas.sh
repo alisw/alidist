@@ -10,7 +10,8 @@ env:
 #!/bin/bash -e
 DEST="$INSTALLROOT/globus/share/certificates"
 mkdir -p "$DEST"
-find "$SOURCEDIR" -type d -maxdepth 1 -mindepth 1 -exec rsync -av {}/ "$DEST" \;
+# Make sure we ignore .git and other hidden repositories when doing the find
+find "$SOURCEDIR" -not -path '*/[@.]*' -type d -maxdepth 1 -mindepth 1 -exec rsync -av {}/ "$DEST" \;
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

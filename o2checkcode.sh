@@ -66,6 +66,7 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 run_O2CodeChecker.py ${JOBS+-j $JOBS} \
 	-clang-tidy-binary $(which O2codecheck) \
 	-clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
+	${GCC_TOOLCHAIN_REVISION:+-extra-args="--extra-arg=--gcc-install-dir=`find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;`"} \
 	-header-filter='.*SOURCES(?!.*/3rdparty/).*' \
         ${O2_CHECKER_FIX:+-fix} -checks="$CHECKS" 2>&1 | tee error-log.txt
 

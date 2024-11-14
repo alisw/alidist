@@ -7,13 +7,13 @@ requires:
   - Control-OCCPlugin
   - O2
   - O2Physics
-  - "ReadoutCard:(slc*)"
+  - "ReadoutCard:(slc.*x86)"
   - Readout
   - QualityControl
-  - "DataDistribution:(?!osx)"
-  - "ALF:(?!osx)"
-  - "mesos:(slc.*)"
-  - "TpcFecUtils:(?!osx)"
+  - "DataDistribution:(?!osx|.*aarch64)"
+  - "ALF:(?!osx|.*aarch64)"
+  - "mesos:(slc.*x86)"
+  - "TpcFecUtils:(?!osx|.*aarch64)"
 valid_defaults:
   - o2
   - o2-dataflow

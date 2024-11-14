@@ -41,6 +41,7 @@ module load BASE/1.0 ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERS
 # Our environment
 set LIBJALIENO2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path LD_LIBRARY_PATH \$LIBJALIENO2_ROOT/lib
+prepend-path CMAKE_PREFIX_PATH \$LIBJALIENO2_ROOT
 EoF
 
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

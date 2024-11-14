@@ -1,19 +1,18 @@
 package: Rivet
 version: "%(tag_basename)s"
-tag: "rivet-3.1.8"
-source: https://gitlab.com/hepcedar/rivet.git
+tag: "3.1.8-alice1"
+source: https://github.com/alisw/rivet.git
 requires:
   - HepMC3
   - YODA
   - fastjet
+  - cgal
   - GMP
   - "Python:(?!osx)"
   - "Python-modules:(?!osx)"
   - "Python-system:(osx.*)"
 build_requires:
   - GCC-Toolchain:(?!osx)
-  - GMP
-  - YODA
   - Python
 prepend_path:
   PYTHONPATH: $RIVET_ROOT/lib/python/site-packages
@@ -47,21 +46,10 @@ fi
 if hash fastjet-config 2> /dev/null && test x\$FASTJET_ROOT = x ; then
    FASTJET_ROOT=\`fastjet-config --prefix\`
 fi
-if hash cgal_create_CMakeLists 2>/dev/null && test x\$CGAL_ROOT = x ; then
-   CGAL_ROOT=\$(dirname \$(dirname \`command -v cgal_create_CMakeLists\`))
-fi
-if test x\$GMP_ROOT = x ; then
-   GMP_ROOT=\$(dirname \`echo \$LD_LIBRARY_PATH| tr ':' '\n' | grep GMP\` 2>/dev/null)
-   if test x\$GMP_ROOT = x ; then
-      GMP_ROOT=/usr
-   fi
-fi
 
 test x\$HEPMC3_ROOT = x  && env_err HepMC3 not found
 test x\$YODA_ROOT = x    && env_err Yoda not found
 test x\$FASTJET_ROOT = x && env_err FastJet not found
-test x\$CGAL_ROOT = x    && env_err CGal not found
-test x\$GMP_ROOT = x     && env_err GMP not found
 
 \$ret
 EOF
@@ -133,30 +121,6 @@ for P in $REQUIRES $BUILD_REQUIRES; do
   echo "Environment says ${UPPER} is at ${EXPAND}"
   SED_EXPR="$SED_EXPR; s!$EXPAND!\$${UPPER}_ROOT!g"
 done
-# Special handling for broken FastJet configuration script
-#
-# Doesn't seem like fastjet-config reports GMP directly, so we will
-# need to keep the GMP part. 
-#
-# This seems to have been fixed in fastjet.sh (same PR), but I leave
-# it in for now - case something _is_ broken or we built against an
-# older fastjet
-FJ_CGAL_ROOT=$(fastjet-config --libs| \
-                   tr ' ' '\n' | \
-                   grep cgal | \
-                   sed -n -e 's!-L\(.*\)/lib!\1!p')
-FJ_GMP_ROOT=$(fastjet-config --libs| \
-                   tr ' ' '\n' | \
-                   grep GMP | \
-                   sed -n -e 's!-L\(.*\)/lib!\1!p')
-if test x$FJ_CGAL_ROOT != x ; then
-    echo "FastJet reports CGal to be at ${FJ_CGAL_ROOT}"
-    SED_EXPR="$SED_EXPR; s!$FJ_CGAL_ROOT!\$CGAL_ROOT!g"
-fi
-if test x$FJ_GMP_ROOT != x ; then
-    echo "FastJet reports GMP to be at ${FJ_GMP_ROOT}"
-    SED_EXPR="$SED_EXPR; s!$FJ_GMP_ROOT!\$GMP_ROOT!g"
-fi
 
 # Create line to source 3rdparty.sh to be inserted into 
 # rivet-config and rivet-build 
@@ -240,10 +204,10 @@ prepend-path LD_LIBRARY_PATH \$RIVET_ROOT/lib
 # Here trying to keep the env variable changes to their minimum, i.e touch only TEXINPUTS, LATEXINPUTS
 # Manual prepend-path for TEX variables
 # catch option to fix compatibility issues with multiple systems
-if { [catch {exec which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS} tempTEX] } { 
-    set Old_TEXINPUTS [ exec sh -c "which kpsewhich > /dev/null 2>&1 && kpsewhich -var-value TEXINPUTS" ] 
+if { [catch {exec kpsewhich -var-value TEXINPUTS} brokenTEX] } {
+    set Old_TEXINPUTS \$brokenTEX
 } else {
-    set Old_TEXINPUTS \$tempTEX  
+    set Old_TEXINPUTS [ exec sh -c "kpsewhich -var-value TEXINPUTS" ]
 }
 
 set Extra_RivetTEXINPUTS \$RIVET_ROOT/share/Rivet/texmf/tex//

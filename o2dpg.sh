@@ -1,6 +1,6 @@
 package: O2DPG
 version: "%(tag_basename)s"
-tag: "daily-20240424-0200"
+tag: "daily-20241114-0000"
 source: https://github.com/AliceO2Group/O2DPG.git
 build_requires:
   - alibuild-recipe-tools
@@ -19,6 +19,11 @@ alibuild-generate-module --bin > etc/modulefiles/$PKGNAME
 cat << EOF >> etc/modulefiles/$PKGNAME
 set O2DPG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2DPG_ROOT \$O2DPG_ROOT
+if {[info exists env(ALIEN_JDL_O2DPG_MC_CONFIG_ROOT)] && \$::env(ALIEN_JDL_O2DPG_MC_CONFIG_ROOT) ne ""} {
+  setenv O2DPG_MC_CONFIG_ROOT \$::env(ALIEN_JDL_O2DPG_MC_CONFIG_ROOT)
+} else {
+  setenv O2DPG_MC_CONFIG_ROOT \$O2DPG_ROOT
+}
 setenv O2DPG_RELEASE \$version
 setenv O2DPG_VERSION $PKGVERSION
 EOF

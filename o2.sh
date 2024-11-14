@@ -1,7 +1,8 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20240424-0200"
+tag: "daily-20241114-0000"
 requires:
+  - abseil
   - arrow
   - FairRoot
   - Vc
@@ -22,12 +23,14 @@ requires:
   - libuv
   - libjalienO2
   - cgal
-  - VecGeom
+  - "VecGeom:(?!osx.*)"
   - FFTW3
   - ONNXRuntime
   - MLModels
   - KFParticle
   - RapidJSON
+  - bookkeeping-api
+  - AliEn-CAs
 build_requires:
   - abseil
   - GMP
@@ -189,7 +192,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
       ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET="gfx906;gfx908"}                \
       ${ALIBUILD_O2_FORCE_GPU:+-DCUDA_COMPUTETARGET=86}                                                   \
-      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF -DENABLE_OPENCL2=OFF}         \
+      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL1=OFF -DENABLE_OPENCL2=OFF}        \
       ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
       ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
       ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}             \
@@ -260,7 +263,9 @@ module load BASE/1.0 \\
             ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}                                 \\
             ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}         \\
             ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
-            ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}
+            ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}                     \\
+            ${BOOKKEEPING_API_REVISION:+bookkeeping-api/$BOOKKEEPING_API_VERSION-$BOOKKEEPING_API_REVISION}
+
 # Our environment
 set O2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv O2_ROOT \$O2_ROOT
