@@ -1,6 +1,6 @@
 package: DPMJET
 version: "%(tag_basename)s"
-tag: "v19.1.2-alice3"
+tag: "v19.3.7-alice1"
 source: https://github.com/alisw/DPMJET.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -21,9 +21,6 @@ cmake  $SOURCEDIR                           \
        ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 
 make ${JOBS+-j $JOBS} install
-
-cp -r $SOURCEDIR/include $INSTALLROOT/.
-cp -r $SOURCEDIR/dpmdata $INSTALLROOT/.
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
