@@ -1,6 +1,6 @@
 package: Upcgen
 version: "%(tag_basename)s"
-tag: tag-15-05-22-3
+tag: upcgen-o2-21-11-24-1
 source: https://github.com/alisw/upcgen
 requires:
   - ROOT
@@ -24,6 +24,7 @@ mkdir -p $INSTALLROOT/bin
 cp ./upcgen $INSTALLROOT/bin/
 mkdir -p $INSTALLROOT/lib
 cp ./libUpcgenlib.a $INSTALLROOT/lib/.
+cp ./libUpcgenlib.so $INSTALLROOT/lib/.
 cp -r $SOURCEDIR/include $INSTALLROOT/.
 
 #ModuleFile
