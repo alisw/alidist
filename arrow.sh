@@ -5,7 +5,7 @@ source: https://github.com/alisw/arrow.git
 requires:
   - boost
   - lz4
-  - Clang:(?!.*osx)
+  - Clang
   - protobuf
   - utf8proc
   - OpenSSL:(?!osx)
@@ -19,6 +19,7 @@ build_requires:
   - double-conversion
   - re2
   - alibuild-recipe-tools
+  - ninja
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -58,17 +59,13 @@ esac
 
 mkdir -p ./src_tmp
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
-
 case $ARCHITECTURE in
   osx*)
-   # use default llvm from homebrew if available
-   if [ -d "$(brew --prefix llvm)" ]; then
-     CLANG_EXECUTABLE="$(brew --prefix llvm)/bin/clang"
-   else
-     # fall back to llvm@17
-     if [ -d "$(brew --prefix llvm)@17" ]; then
-       CLANG_EXECUTABLE="$(brew --prefix llvm)@17/bin/clang"
-     fi
+   # use compatible llvm@18 from brew, if available. This
+   # must match the prefer_system_check in clang.sh
+   CLANG_EXECUTABLE="${CLANG_REVISION:+$CLANG_ROOT/bin-safe/clang}"
+   if [ -z "${CLANG_EXECUTABLE}" -a -d "$(brew --prefix llvm)@18" ]; then
+     CLANG_EXECUTABLE="$(brew --prefix llvm)@18/bin/clang"
    fi
    ;;
   *)
@@ -81,6 +78,7 @@ esac
 cmake ./src_tmp/cpp                                                                                 \
       ${CMAKE_SHARED_LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS="$CMAKE_SHARED_LINKER_FLAGS"}        \
       -DARROW_DEPENDENCY_SOURCE=SYSTEM                                                              \
+      -G Ninja                                                                                      \
       -DCMAKE_BUILD_TYPE=Release                                                                    \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                       \
       -DBUILD_SHARED_LIBS=TRUE                                                                      \
@@ -125,8 +123,7 @@ cmake ./src_tmp/cpp                                                             
       -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"                                                        \
       ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT=`find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;`}
 
-make ${JOBS:+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j $JOBS} install
 find "$INSTALLROOT/share" -name '*-gdb.py' -exec mv {} "$INSTALLROOT/lib" \;
 
 # Modulefile

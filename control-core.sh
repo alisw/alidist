@@ -1,6 +1,6 @@
 package: Control-Core
 version: "%(tag_basename)s"
-tag: "v1.20.0"
+tag: "v1.23.2"
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - golang
@@ -11,11 +11,20 @@ source: https://github.com/AliceO2Group/Control
 ---
 #!/bin/bash -e
 
+clean_vendor() {
+  go clean -modcache
+}
+
 export GOPATH=$PWD/go
 export PATH=$GOPATH/bin:$PATH
 export GO111MODULE=on
 export GOCACHE=$BUILDDIR/cache
 BUILD=$GOPATH/src/github.com/AliceO2Group/Control
+
+# if something fails during build, we need to clean modules with go tools. Manually cleaning with rf
+# results in problems with permissions.
+trap clean_vendor ERR
+
 mkdir -p $BUILD
 rsync -a --delete $SOURCEDIR/ $BUILD/
 pushd $BUILD
@@ -24,7 +33,7 @@ pushd $BUILD
   mkdir -p $INSTALLROOT/bin
   rsync -a --delete bin/ $INSTALLROOT/bin
   # safely clean up vendor directory regardless of permissions
-  go clean -modcache
+  clean_vendor
 popd
 
 #ModuleFile
