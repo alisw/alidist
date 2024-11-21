@@ -63,7 +63,8 @@ env:
 
     scikit-learn == 0.20.3; python_version < '3.8'
     scikit-learn == 0.24.1; python_version >= '3.8' and python_version < '3.11'
-    scikit-learn == 1.3.0; python_version >= '3.11'
+    scikit-learn == 1.3.0; python_version >= '3.11' and python_version < '3.13'
+    scikit-learn; python_version >= '3.13'
 
     sklearn-evaluation == 0.4; python_version < '3.9'
     sklearn-evaluation == 0.5.2; python_version == '3.9'
@@ -92,7 +93,8 @@ env:
 
     pandas == 0.24.2; python_version < '3.8'
     pandas == 1.2.3; python_version == '3.8'
-    pandas == 1.5.3; python_version >= '3.9'
+    pandas == 1.5.3; python_version >= '3.9' and python_version < '3.13'
+    pandas; python_version >= '3.13'
 
     dask[array,dataframe,distributed] == 2023.2.0; python_version < '3.11'
     dask[array,dataframe,distributed] == 2023.12.1; python_version >= '3.11'
