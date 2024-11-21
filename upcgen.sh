@@ -1,6 +1,6 @@
 package: Upcgen
 version: "%(tag_basename)s"
-tag: upcgen-o2-21-11-24-1
+tag: upcgen-o2-21-11-24-2
 source: https://github.com/alisw/upcgen
 requires:
   - ROOT
