@@ -21,26 +21,26 @@ mkdir -p $INSTALLROOT
 
 # Check ROCm build conditions
 
-if [ "$ALIBUILD_O2_FORCE_GPU" -ne 0 ] || [ "$ALIBUILD_ENABLE_HIP" -ne 0 ] || \
-    ( ( [ -z "$DISABLE_GPU" ] || [ "$DISABLE_GPU" -eq 0 ] ) && \
-    ( command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1 ) && \
-    [ -d /opt/rocm/include/hiprand ] && \
-    [ -d /opt/rocm/include/hipblas ] && \
-    [ -d /opt/rocm/include/hipsparse ] && \
-    [ -d /opt/rocm/include/hipfft ] && \
-    [ -d /opt/rocm/include/rocblas ] && \
-    [ -d /opt/rocm/include/rocrand ] && \
-    [ -d /opt/rocm/include/miopen ] && \
-    [ -d /opt/rocm/include/rccl ] && \
-    [ -z "$ORT_ROCM_BUILD" ] ); then
+if [ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ] || [ "$ALIBUILD_ENABLE_HIP" -eq 1 ] || \
+  ( ( [ -z "$DISABLE_GPU" ] || [ "$DISABLE_GPU" -eq 0 ] ) && \
+  ( command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1 ) && \
+  [ -d /opt/rocm/include/hiprand ] && \
+  [ -d /opt/rocm/include/hipblas ] && \
+  [ -d /opt/rocm/include/hipsparse ] && \
+  [ -d /opt/rocm/include/hipfft ] && \
+  [ -d /opt/rocm/include/rocblas ] && \
+  [ -d /opt/rocm/include/rocrand ] && \
+  [ -d /opt/rocm/include/miopen ] && \
+  [ -d /opt/rocm/include/rccl ] && \
+  [ -z "$ORT_ROCM_BUILD" ] ); then
   export ORT_ROCM_BUILD=1
-    : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
+  : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
 else
   export ORT_ROCM_BUILD=0
 fi
 
 # Check CUDA build conditions
-if [ "$ALIBUILD_O2_FORCE_GPU" -ne 0 ] || [ "$ALIBUILD_ENABLE_CUDA" -ne 0 ] || \
+if [ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ] || [ "$ALIBUILD_ENABLE_CUDA" -eq 1 ] || \
   ( ( [ -z "$DISABLE_GPU" ] || [ "$DISABLE_GPU" -eq 0 ] ) && \
   ( command -v nvcc >/dev/null 2>&1 ) && \
   [ -f /usr/include/cudnn.h ] && \
