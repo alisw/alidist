@@ -17,7 +17,7 @@ cmake "$SOURCEDIR"                                  \
       -DBUILD_SHARED_LIBS=ON                        \
       -GNinja -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"
 
-cmake --build . --target install
+cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
