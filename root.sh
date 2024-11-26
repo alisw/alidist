@@ -179,7 +179,6 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
-      -Dbuiltin_afterimage=ON                                                          \
       -Dbuiltin_fftw3=OFF                                                              \
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
