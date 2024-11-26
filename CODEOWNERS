@@ -55,7 +55,7 @@ vecgeom*            @alisw/simulation-experts
 mcsteplogger*       @alisw/simulation-experts
 fluka*              @alisw/simulation-experts
 evtgen*             @alisw/simulation-experts
-upcgen*             @nburmaso @pbuehler
+upcgen*             @alisw/pagmc
 
 # General PDP stuff
 o2*                 @alisw/pdp-experts
