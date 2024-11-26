@@ -21,18 +21,18 @@ mkdir -p $INSTALLROOT
 
 # Check ROCm build conditions
 
-if [ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ] || [ "$ALIBUILD_ENABLE_HIP" -eq 1 ] || \
-  ( ( [ -z "$DISABLE_GPU" ] || [ "$DISABLE_GPU" -eq 0 ] ) && \
+if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] || \
+  ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
   ( command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1 ) && \
-  [ -d /opt/rocm/include/hiprand ] && \
-  [ -d /opt/rocm/include/hipblas ] && \
-  [ -d /opt/rocm/include/hipsparse ] && \
-  [ -d /opt/rocm/include/hipfft ] && \
-  [ -d /opt/rocm/include/rocblas ] && \
-  [ -d /opt/rocm/include/rocrand ] && \
-  [ -d /opt/rocm/include/miopen ] && \
-  [ -d /opt/rocm/include/rccl ] && \
-  [ -z "$ORT_ROCM_BUILD" ] ); then
+  [[ -d /opt/rocm/include/hiprand ]] && \
+  [[ -d /opt/rocm/include/hipblas ]] && \
+  [[ -d /opt/rocm/include/hipsparse ]] && \
+  [[ -d /opt/rocm/include/hipfft ]] && \
+  [[ -d /opt/rocm/include/rocblas ]] && \
+  [[ -d /opt/rocm/include/rocrand ]] && \
+  [[ -d /opt/rocm/include/miopen ]] && \
+  [[ -d /opt/rocm/include/rccl ]] && \
+  [[ -z "$ORT_ROCM_BUILD" ]] ); then
   export ORT_ROCM_BUILD=1
   : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
 else
@@ -40,11 +40,11 @@ else
 fi
 
 # Check CUDA build conditions
-if [ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ] || [ "$ALIBUILD_ENABLE_CUDA" -eq 1 ] || \
-  ( ( [ -z "$DISABLE_GPU" ] || [ "$DISABLE_GPU" -eq 0 ] ) && \
+if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
+  ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
   ( command -v nvcc >/dev/null 2>&1 ) && \
-  [ -f /usr/include/cudnn.h ] && \
-  [ -z "$ORT_CUDA_BUILD" ] ); then
+  [[ -f /usr/include/cudnn.h ]] && \
+  [[ -z "$ORT_CUDA_BUILD" ]] ); then
   export ORT_CUDA_BUILD=1
   : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="sm_86"}
 else
@@ -53,17 +53,17 @@ fi
 
 # Optional builds
 ### MIGraphX
-if ( [ "$ORT_ROCM_BUILD" -eq 1 ] && [ $(find /opt/rocm* -name "libmigraphx*" -print -quit | wc -l 2>&1) -eq 1 ] ) && \
-   [ -z "$ORT_MIGRAPHX_BUILD" ]; then
+if ( [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ $(find /opt/rocm* -name "libmigraphx*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
+   [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   export ORT_MIGRAPHX_BUILD=1
-elif [ -z "$ORT_MIGRAPHX_BUILD" ]; then
+elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   export ORT_MIGRAPHX_BUILD=0
 fi
 ### TensorRT
-if ( [ "$ORT_CUDA_BUILD" -eq 1 ] && [ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ] ) && \
-   [ -z "$ORT_MIGRAPHX_BUILD" ]; then
+if ( [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
+   [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   export ORT_TENSORRT_BUILD=1
-elif [ -z "$ORT_TENSORRT_BUILD" ]; then
+elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   export ORT_TENSORRT_BUILD=0
 fi
 
