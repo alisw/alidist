@@ -32,11 +32,3 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
-cat >> "$MODULEFILE" <<EoF
-
-# Our environment
-set UPCGEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv UPCGEN_ROOT \$UPCGEN_ROOT
-prepend-path PATH \$UPCGEN_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$UPCGEN_ROOT/lib
-EoF
