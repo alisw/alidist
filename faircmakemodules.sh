@@ -5,6 +5,7 @@ source: https://github.com/FairRootGroup/FairCMakeModules
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 ---
 #!/bin/sh
 
@@ -15,19 +16,5 @@ cmake -S "$SOURCEDIR" -B .                                        \
 
 cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
-# Modulefile
-mkdir -p etc/modulefiles
-cat > etc/modulefiles/"$PKGNAME" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set FAIRCMAKEMODULES_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-EoF
-mkdir -p "$INSTALLROOT"/etc/modulefiles && rsync -a --delete etc/modulefiles/ "$INSTALLROOT"/etc/modulefiles
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+alibuild-generate-module --cmake > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
