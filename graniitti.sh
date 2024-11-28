@@ -27,7 +27,7 @@ mkdir -p $INSTALLROOT/obj/bin
 # compile gr
 export HEPMC3SYS=$HEPMC3_ROOT
 export LHAPDFSYS=$LHAPDF_ROOT
-make -C $INSTALLROOT -j8 CXX_ROOT=c++2a
+make -C $INSTALLROOT ${JOBS+-j$JOBS} CXX_ROOT=c++2a
 
 # clean INSTALLDIR
 rm $INSTALLROOT/src $INSTALLROOT/include $INSTALLROOT/libs
