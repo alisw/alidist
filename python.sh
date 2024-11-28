@@ -45,31 +45,20 @@ prefer_system_replacement_specs:
     env:
         PYTHON_ROOT: $(brew --prefix python3)
         PYTHON_REVISION: ""
-    recipe: |
-        mkdir -p "$INSTALLROOT/etc/modulefiles"
-        alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME" # Dummy module
   "python3.*":
     env:
         PYTHON_ROOT: ""
         PYTHON_REVISION: ""
-    recipe: |
-        mkdir -p "$INSTALLROOT/etc/modulefiles"
-        alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME" # Dummy module
+
   # Workaround to support old alibuild versions that don't regex match alibuild_system_replace
   "python-brew3":
     env:
         PYTHON_ROOT: $(brew --prefix python3)
         PYTHON_REVISION: ""
-    recipe: |
-        mkdir -p "$INSTALLROOT/etc/modulefiles"
-        alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME" # Dummy module
   "python3":
     env:
         PYTHON_ROOT: ""
         PYTHON_REVISION: ""
-    recipe: |
-        mkdir -p "$INSTALLROOT/etc/modulefiles"
-        alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME" # Dummy module
 ---
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
