@@ -1,6 +1,6 @@
 package: fmt
 version: "%(tag_basename)s"
-tag: 10.1.1
+tag: 11.0.2
 source: https://github.com/fmtlib/fmt
 requires:
   - "GCC-Toolchain:(?!osx)"
