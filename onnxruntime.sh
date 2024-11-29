@@ -45,11 +45,12 @@ else
 fi
 
 # Check CUDA build conditions
-if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
+if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
   ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
   ( command -v nvcc >/dev/null 2>&1 ) && \
   [[ -f /usr/include/cudnn.h ]] && \
-  [[ -z "$ORT_CUDA_BUILD" ]] ); then
+  [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
+  [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
   export ORT_CUDA_BUILD=1
   : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="sm_86"}
 else
