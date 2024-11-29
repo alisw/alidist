@@ -35,8 +35,8 @@ if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] ||
   [[ -d /opt/rocm/include/rocrand ]] && \
   [[ -d /opt/rocm/include/miopen ]] && \
   [[ -d /opt/rocm/include/rccl ]] && \
-  [[ -z "$ORT_ROCM_BUILD" ]] && \
-  ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -eq 9 ]]) ); then
+  [[ -z "$ORT_ROCM_BUILD" ]] ) && \
+  ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -eq 9 ]]); then
   export ORT_ROCM_BUILD=1
   : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
