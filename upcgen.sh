@@ -1,6 +1,6 @@
 package: Upcgen
 version: "%(tag_basename)s"
-tag: tag-15-05-22-3
+tag: upcgen-o2-21-11-24-2
 source: https://github.com/alisw/upcgen
 requires:
   - ROOT
@@ -20,21 +20,15 @@ cmake $SOURCEDIR                          \
       -DBUILD_WITH_PYTHIA8=ON
 
 cmake --build . -- ${JOBS:+-j$JOBS}
-mkdir -p $INSTALLROOT/bin
-cp ./upcgen $INSTALLROOT/bin/
-mkdir -p $INSTALLROOT/lib
-cp ./libUpcgenlib.a $INSTALLROOT/lib/.
-cp -r $SOURCEDIR/include $INSTALLROOT/.
+mkdir -p "$INSTALLROOT/bin"
+cp "./upcgen" "$INSTALLROOT/bin/"
+mkdir -p "$INSTALLROOT/lib"
+cp "./libUpcgenlib.a" "$INSTALLROOT/lib/."
+cp "./libUpcgenlib.so" "$INSTALLROOT/lib/."
+cp -r "$SOURCEDIR/include" "$INSTALLROOT/."
 
-#ModuleFile
-mkdir -p etc/modulefiles
-alibuild-generate-module > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-
-# Our environment
-set UPCGEN_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv UPCGEN_ROOT \$UPCGEN_ROOT
-prepend-path PATH \$UPCGEN_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$UPCGEN_ROOT/lib
-EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+#Modulefile
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+alibuild-generate-module --bin --lib > "$MODULEFILE"
