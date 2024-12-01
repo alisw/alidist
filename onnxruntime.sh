@@ -50,7 +50,8 @@ if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]]
   ( command -v nvcc >/dev/null 2>&1 ) && \
   [[ -f /usr/include/cudnn.h ]] && \
   [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
-  [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
+  [[ "$ORT_ROCM_BUILD" -eq 0 ]] && \
+  [[ -z "$ALMA_LINUX_MAJOR_VERSION" ]]; then
   export ORT_CUDA_BUILD=1
   : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="sm_86"}
 else
