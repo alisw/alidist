@@ -4,10 +4,6 @@ tag: vAN-20210812
 requires:
   - pythia
   - pythia6
-  - EVTGEN:(?!osx)
-  - STARlight:(?!osx)
-  - Upcgen:(?!osx)
-  - Graniitti:(?!osx)
 ---
 #!/bin/bash -e
 
