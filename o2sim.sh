@@ -6,10 +6,6 @@ requires:
   - QualityControl
   - AEGIS
   - AliGenO2:(?!osx|.*aarch64)
-  - EVTGEN:(?!osx)
-  - STARlight:(?!osx)
-  - Upcgen:(?!osx)
-  - Graniitti:(?!osx)
   - jq
 ---
 #!/bin/bash -ex
