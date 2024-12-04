@@ -39,7 +39,7 @@ prefer_system_check: |
     fi
 
 
-    python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 9) or sys.version_info > (3, 13) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
+    python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 9) or sys.version_info > (3, 14) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 prefer_system_replacement_specs:
   "python-brew3.*":
     env:
