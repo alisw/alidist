@@ -12,7 +12,7 @@ prefer_system_check: |
 ---
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
-./configure --prefix="$INSTALLROOT"
+./configure --prefix=$INSTALLROOT
 
 make ${JOBS+-j $JOBS}
 make install
