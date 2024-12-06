@@ -4,6 +4,7 @@ tag: v1.2.13
 source: https://github.com/madler/zlib
 build_requires:
   - "GCC-Toolchain:(?!osx)"
+  - alibuild
   - alibuild-recipe-tools
 prefer_system: "(?!slc5)"
 prefer_system_check: |
