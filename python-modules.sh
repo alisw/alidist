@@ -1,7 +1,7 @@
 package: Python-modules
 version: "1.0"
 requires:
-  - "Python"
+  - "Python:(slc|ubuntu)"
   - "Python-system:(?!slc.*|ubuntu)"
   - "FreeType:(?!osx)"
   - libpng
