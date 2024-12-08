@@ -1,6 +1,6 @@
 package: Catch2
 version: "%(tag_basename)s"
-tag: v3.7.0
+tag: v3.7.1
 source: https://github.com/catchorg/Catch2
 requires:
   - "GCC-Toolchain:(?!osx)"
