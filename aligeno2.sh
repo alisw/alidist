@@ -11,7 +11,10 @@ requires:
   - JETSCAPE
   - CRMC
   - EPOS4
-  - STARlight
+  - EVTGEN:(?!osx)
+  - STARlight:(?!osx)
+  - Upcgen:(?!osx)
+  - Graniitti:(?!osx)
 build_requires:
   - alibuild-recipe-tools
 ---
