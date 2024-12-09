@@ -4,9 +4,8 @@ tag: "OpenLoops-2.1.2"
 source: https://gitlab.com/openloops/OpenLoops.git
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - "Python:(?!osx)"
+  - "Python"
   - "Python-modules:(?!osx)"
-  - "Python-system:(osx.*)"
 build_requires:
   - alibuild-recipe-tools
 ---

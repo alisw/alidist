@@ -3,9 +3,8 @@ version: "%(tag_basename)s"
 tag: "yoda-1.9.7"
 source: https://gitlab.com/hepcedar/yoda.git
 requires:
-  - "Python:(?!osx)"
+  - "Python"
   - "Python-modules:(?!osx)"
-  - "Python-system:(osx.*)"
   - ROOT
 build_requires:
   - "autotools:(slc6|slc7)"

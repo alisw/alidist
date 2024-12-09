@@ -8,9 +8,8 @@ requires:
   - fastjet
   - cgal
   - GMP
-  - "Python:(?!osx)"
+  - "Python"
   - "Python-modules:(?!osx)"
-  - "Python-system:(osx.*)"
 build_requires:
   - GCC-Toolchain:(?!osx)
   - Python
