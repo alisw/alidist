@@ -3,7 +3,7 @@ version: "%(tag_basename)s"
 tag: "v3.5.2"
 source: https://github.com/alisw/MadGraph
 requires:
-  - "Python-modules:(?!osx)"
+  - "Python-modules"
 build_requires:
   - alibuild-recipe-tools
 ---
