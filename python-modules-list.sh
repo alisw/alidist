@@ -81,7 +81,8 @@ env:
     tensorflow == 2.15.1; python_version >= '3.9'
 
     # See version compatibility table at https://pypi.org/project/tensorflow-metal/
-    tensorflow-metal == 1.0.0; sys_platform == 'darwin' and python_version == '3.11'
+    # Temporarily disabled as it brings validation loss regressions in some cases [O2-5627]
+    # tensorflow-metal == 1.0.0; sys_platform == 'darwin' and python_version == '3.11'
 
     xgboost == 0.82; python_version < '3.8'
     xgboost == 1.3.3; python_version == '3.8'
