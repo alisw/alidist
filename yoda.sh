@@ -4,7 +4,7 @@ tag: "yoda-1.9.7"
 source: https://gitlab.com/hepcedar/yoda.git
 requires:
   - "Python"
-  - "Python-modules:(?!osx)"
+  - "Python-modules"
   - ROOT
 build_requires:
   - "autotools:(slc6|slc7)"

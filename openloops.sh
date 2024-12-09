@@ -5,7 +5,7 @@ source: https://gitlab.com/openloops/OpenLoops.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Python"
-  - "Python-modules:(?!osx)"
+  - "Python-modules"
 build_requires:
   - alibuild-recipe-tools
 ---

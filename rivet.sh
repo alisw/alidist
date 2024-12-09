@@ -9,7 +9,7 @@ requires:
   - cgal
   - GMP
   - "Python"
-  - "Python-modules:(?!osx)"
+  - "Python-modules"
 build_requires:
   - GCC-Toolchain:(?!osx)
   - Python
