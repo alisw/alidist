@@ -47,7 +47,9 @@ prefer_system_replacement_specs:
         PYTHON_REVISION: ""
   "python3.*":
     env:
-        PYTHON_ROOT: ""
+        # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
+        # to avoid having /bin in the middle of the path.
+        PYTHON_ROOT: "/dummy-python-folder"
         PYTHON_REVISION: ""
 
   # Workaround to support old alibuild versions that don't regex match alibuild_system_replace
@@ -57,7 +59,9 @@ prefer_system_replacement_specs:
         PYTHON_REVISION: ""
   "python3":
     env:
-        PYTHON_ROOT: ""
+        # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
+        # to avoid having /bin in the middle of the path.
+        PYTHON_ROOT: "/dummy-python-folder"
         PYTHON_REVISION: ""
 ---
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
