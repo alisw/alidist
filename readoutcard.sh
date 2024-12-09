@@ -9,8 +9,7 @@ requires:
   - Monitoring
   - libInfoLogger
   - "PDA:(?!osx|.*aarch64)"
-  - "Python:(?!osx)"
-  - "Python-system:(?!slc.*)"
+  - "Python"
 build_requires:
   - alibuild-recipe-tools
   - CMake

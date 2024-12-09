@@ -56,13 +56,6 @@ This will make sure that if a package was selected to be picked up by the system
 
 You should never set any `SOMETHING_ROOT` variable to `/usr/local` because that is a global folder and it will make it have precendence in the lookup, therefore potentially implicitly bringing in incompatible versions of external packages.
 
-- If you need python use Python-system on non SLC distributions (Ubuntu, macOS) and use Python on SLC. This can be done usually by adding:
-
-```yaml
-- Python:slc.*
-- Python-system:(osx.*)
-```
-
 in your `requires` section. Alternatively, if you also require `Python-modules` simply depend on it, without an explicit dependency on Python, which will be handled internally.
 
 # Guidelines for handling externals sources
