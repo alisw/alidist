@@ -43,9 +43,7 @@ env:
 
     numpy == 1.16.2; python_version < '3.8'
     numpy == 1.19.5; python_version == '3.8'
-    numpy == 1.23.4; python_version >= '3.9' and python_version <= '3.10'
-    numpy == 1.23.5; python_version == '3.11'
-    numpy == 1.26.4; python_version >= '3.12'
+    numpy; python_version >= '3.9'
 
     scipy == 1.2.1; python_version < '3.8'
     scipy == 1.6.1; python_version == '3.8'
