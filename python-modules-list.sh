@@ -77,8 +77,8 @@ env:
 
     tensorflow == 1.13.1; python_version < '3.8'
     tensorflow == 2.4.1; python_version == '3.8'
-    # tensorflow == 2.7.1; python_version == '3.9'
-    tensorflow == 2.13.1; python_version >= '3.9' and python_version <= '3.11'
+    # Pinned to 2.15.1 for compatibility with https://github.com/onnx/tensorflow-onnx
+    tensorflow == 2.15.1; python_version >= '3.9'
 
     # See version compatibility table at https://pypi.org/project/tensorflow-metal/
     tensorflow-metal == 1.0.0; sys_platform == 'darwin' and python_version == '3.11'
