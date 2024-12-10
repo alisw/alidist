@@ -4,7 +4,7 @@ tag: v1.83.0-alice2
 source: https://github.com/alisw/boost.git
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - "Python-modules:(?!osx)"
+  - "Python-modules"
   - libpng
   - zlib
 build_requires:

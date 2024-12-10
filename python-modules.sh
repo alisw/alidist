@@ -2,7 +2,6 @@ package: Python-modules
 version: "1.0"
 requires:
   - "Python"
-  - "Python-system:(?!slc.*|ubuntu)"
   - "FreeType:(?!osx)"
   - libpng
   - hdf5
