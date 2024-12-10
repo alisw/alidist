@@ -71,12 +71,12 @@ env:
 
     Keras == 2.2.4; python_version < '3.8'
     Keras == 2.4.3; python_version == '3.8'
-    Keras == 2.15.0; python_version >= '3.9'
+    Keras == 2.15.0; python_version >= '3.9' and python_version <= '3.11'
 
     tensorflow == 1.13.1; python_version < '3.8'
     tensorflow == 2.4.1; python_version == '3.8'
     # Pinned to 2.15.1 for compatibility with https://github.com/onnx/tensorflow-onnx
-    tensorflow == 2.15.1; python_version >= '3.9'
+    tensorflow == 2.15.1; python_version >= '3.9' and python_version <= '3.11'
 
     # See version compatibility table at https://pypi.org/project/tensorflow-metal/
     # Temporarily disabled as it brings validation loss regressions in some cases [O2-5627]
