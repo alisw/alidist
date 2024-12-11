@@ -29,6 +29,7 @@ fi
 cmake $SOURCEDIR                                  \
       -DBUILD_FOR_READOUT_CARD=CRU                \
       -DBUILD_FOR_CRU_HDLC_CORE=CERN_ME           \
+      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$(which python3)"}                               \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT         \
       ${BOOST_REVISION:+-DBoost_ROOT=$BOOST_ROOT} \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
