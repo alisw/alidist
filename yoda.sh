@@ -3,9 +3,8 @@ version: "%(tag_basename)s"
 tag: "yoda-1.9.7"
 source: https://gitlab.com/hepcedar/yoda.git
 requires:
-  - "Python:(?!osx)"
-  - "Python-modules:(?!osx)"
-  - "Python-system:(osx.*)"
+  - Python
+  - Python-modules
   - ROOT
 build_requires:
   - "autotools:(slc6|slc7)"
@@ -46,7 +45,7 @@ prepend_path:
 # and so on. As far as I can tell, it's not really supported by aliBuild - 
 # surprise!
 # 
-rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
+rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ ./
 
 [[ -e .missing_timestamps ]] && ./missing-timestamps.sh --apply || autoreconf -ivf
 
@@ -54,11 +53,11 @@ rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
 PYTHON_EXECUTABLE=$(/usr/bin/env python3 -c 'import sys; print(sys.executable)')
 PYTHON_VER=$( ${PYTHON_EXECUTABLE} -c 'from sys import version_info as vi; print(f"{vi.major}.{vi.minor}")' )
 if test "x$PYTHON_MODULES_ROOT" = "x" ; then 
-    PMBIN=`echo $PATH | tr ':' '\n' | grep Python-modules | head -n 1` 
-    if test x$PMBIN != x ; then 
+    PMBIN=$(echo "$PATH" | tr ':' '\n' | grep Python-modules | head -n 1)
+    if test x"$PMBIN" != x ; then 
         CYTHON=$PMBIN/cython
     else 
-        CYTHON=`which cython`
+        CYTHON=$(which cython)
     fi
 else
     CYTHON=$PYTHON_MODULES_ROOT/bin/cython
@@ -67,16 +66,16 @@ fi
 CYTHON_PATH="$(dirname -- "$CYTHON")"
 if cython; then
     echo "Cython succesfully executed" 
-else    
+else
     stat=$?
     # Check if python executable is linked in cython bin folder 
     if [ $stat == 127 ]; then
-        echo "python not found by cython, setting up link..." 
+        echo "python not found by cython, setting up link..."
         ln -nsf "$PYTHON_EXECUTABLE" "$CYTHON_PATH/python3"
     else 
         echo "Issue in cython execution"
-    fi       
-fi    
+    fi
+fi
 
 case $ARCHITECTURE in
   osx*)
@@ -86,12 +85,12 @@ case $ARCHITECTURE in
       ./configure --disable-silent-rules --enable-root --prefix="$INSTALLROOT" CYTHON="$CYTHON"
   ;;
 esac
-make -j$JOBS
+make ${JOBS+-j $JOBS}
 make install
 
-pushd $INSTALLROOT/lib
+pushd "$INSTALLROOT"/lib
 
-[[ -d python${PYTHON_VER} ]] && ln -s python${PYTHON_VER} python 
+[[ -d python${PYTHON_VER} ]] && ln -s python"${PYTHON_VER}" python 
 [[ ! -e python ]] && \
     echo "YODA env pb: NO PYTHON SYMLINK CREATED for python${PYTHON_VER} in: $(pwd -P)" && \
     exit 
@@ -100,8 +99,8 @@ popd  # get back from INSTALLROOT/lib
 
 case $ARCHITECTURE in
     osx*)
-        find $INSTALLROOT/lib/python/ -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-        find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find "$INSTALLROOT"/lib/python/ -name "*.so" -exec install_name_tool -add_rpath "${INSTALLROOT}"/lib {} \;
+        find "$INSTALLROOT"/lib/ -name "*.dylib" -exec install_name_tool -add_rpath "${INSTALLROOT}"/lib {} \;
     ;;
 esac
 )
@@ -111,7 +110,7 @@ if test "x$PYTHON_VERSION" != "x" && \
    test "x$PYTHON_REVISION" != "x" ; then 
     PYTHON_FULL_VERSION=${PYTHON_VERSION}-${PYTHON_REVISION}
 else
-    PYTHON_FULL_VERSION=$( echo $PYTHON_EXECUTABLE | sed -e 's|.*/Python/||' -e 's|/bin/.*||') 
+    PYTHON_FULL_VERSION=$( echo "$PYTHON_EXECUTABLE" | sed -e 's|.*/Python/||' -e 's|/bin/.*||') 
 fi
 
 # Modulefile
