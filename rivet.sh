@@ -11,7 +11,7 @@ requires:
   - Python
   - Python-modules
 build_requires:
-#  - GCC-Toolchain:(?!osx)
+  - GCC-Toolchain:(?!osx)
   - Python
   - make
 prepend_path:
