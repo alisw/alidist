@@ -8,14 +8,14 @@ requires:
   - fastjet
   - cgal
   - GMP
-  - "Python:(?!osx)"
-  - "Python-modules:(?!osx)"
-  - "Python-system:(osx.*)"
+  - Python
+  - Python-modules
 build_requires:
   - GCC-Toolchain:(?!osx)
   - Python
+  - make
 prepend_path:
-  PYTHONPATH: $RIVET_ROOT/lib/python/site-packages
+  PYTHONPATH: "$RIVET_ROOT/lib/python/site-packages"
 ---
 #!/bin/bash -e
 #
@@ -23,7 +23,7 @@ prepend_path:
 #
 #   aliBuild  -a slc7_x86-64 --docker-image registry.cern.ch/alisw/slc7-builder:latest. Rivet
 #
-rsync -a --exclude='**/.git' --delete --delete-excluded $SOURCEDIR/ ./
+rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ ./
  
 (
 unset PYTHON_VERSION
@@ -62,59 +62,59 @@ GMP_LDFLAGS="-L${GMP_ROOT}/lib"
 LOCAL_LDFLAGS="${CGAL_LDFLAGS} ${GMP_LDFLAGS}"
 case $ARCHITECTURE in
     osx*)
-	./configure --prefix="$INSTALLROOT"            \
-		    --disable-silent-rules             \
-		    --disable-doxygen                  \
-		    --with-yoda="$YODA_ROOT"           \
-		    --with-hepmc3="$HEPMC3_ROOT"       \
-		    --with-fastjet="$FASTJET_ROOT"     \
-		    LDFLAGS="${LOCAL_LDFLAGS}"
-	;;
+        ./configure --prefix="$INSTALLROOT"            \
+                    --disable-silent-rules             \
+                    --disable-doxygen                  \
+                    --with-yoda="$YODA_ROOT"           \
+                    --with-hepmc3="$HEPMC3_ROOT"       \
+                    --with-fastjet="$FASTJET_ROOT"     \
+                    LDFLAGS="${LOCAL_LDFLAGS}"
+        ;;
     *)
-	LOCAL_LDFLAGS="${LOCAL_LDFLAGS} -Wl,--no-as-needed"
-	./configure --prefix="$INSTALLROOT"    	                        \
-		    --disable-silent-rules                              \
-		    --disable-doxygen                  			\
-		    --with-yoda="$YODA_ROOT"           			\
-		    --with-hepmc3="$HEPMC3_ROOT"       			\
-		    --with-fastjet="$FASTJET_ROOT"     			\
-		    LDFLAGS="${LOCAL_LDFLAGS}"                          \
-		    CYTHON="$PYTHON_MODULES_ROOT/bin/cython"
+        LOCAL_LDFLAGS="${LOCAL_LDFLAGS} -Wl,--no-as-needed"
+        ./configure --prefix="$INSTALLROOT"                             \
+                    --disable-silent-rules                              \
+                    --disable-doxygen                                   \
+                    --with-yoda="$YODA_ROOT"                            \
+                    --with-hepmc3="$HEPMC3_ROOT"                        \
+                    --with-fastjet="$FASTJET_ROOT"                      \
+                    LDFLAGS="${LOCAL_LDFLAGS}"                          \
+                    CYTHON="$PYTHON_MODULES_ROOT/bin/cython"
   ;;
 esac
 
 # Fix-up rivet-build to include LDFLAGS - needed _before_ bulding 
 # After 3.1.9 this will not be needed. 
 SED_EXPR="s|^myldflags=\"\(.*\)\"|myldflags=\"\1 ${LOCAL_LDFLAGS}\"|"
-cat bin/rivet-build | sed -e "${SED_EXPR}" > bin/rivet-build.0
+sed -e "${SED_EXPR}" bin/rivet-build > bin/rivet-build.0
 mv bin/rivet-build bin/rivet-build.orig
 mv bin/rivet-build.0 bin/rivet-build
 chmod 0755 bin/rivet-build
 # Remove -L/usr/lib from pyext/build.py 
-cat pyext/build.py | sed -e 's,-L/usr/lib[^ /"]*,,g' > pyext/build.py.0
+sed -e 's,-L/usr/lib[^ /"]*,,g' pyext/build.py > pyext/build.py.0
 mv pyext/build.py pyext/build.py.orig
 mv pyext/build.py.0 pyext/build.py
 # Make pyext/build.py executable
 chmod 0755 pyext/build.py
 # Now build 
-make -j$JOBS
+make ${JOBS+-j $JOBS}
 make install
 )
 
 # Remove libRivet.la
-rm -f $INSTALLROOT/lib/libRivet.la
+rm -f "$INSTALLROOT"/lib/libRivet.la
 
 # Install shell-script fragment to set-up variables 
-cp rivet_3rdparty.sh $INSTALLROOT/etc/rivet_3rdparty.sh
+cp rivet_3rdparty.sh "$INSTALLROOT"/etc/rivet_3rdparty.sh
 
 # Dependencies relocation: rely on runtime environment.  That is,
 # specific paths in the generated script are replaced by expansions of
 # the relevant environment variables.
 SED_EXPR="s!x!x!"  # noop
 for P in $REQUIRES $BUILD_REQUIRES; do
-  UPPER=$(echo $P | tr '[:lower:]' '[:upper:]' | tr '-' '_')
-  EXPAND=$(eval echo \$${UPPER}_ROOT)
-  if test "x$EXPAND" = "x" ; then
+  UPPER=$(echo "$P" | tr '[:lower:]' '[:upper:]' | tr '-' '_')
+  EXPAND=$(eval echo \$"${UPPER}"_ROOT)
+  if [ -z "$EXPAND" ]; then
       echo "Environment variable ${UPPER}_ROOT not set"
   fi
   [[ $EXPAND ]] || continue
@@ -129,49 +129,49 @@ test -f \$prefix/etc/rivet_3rdparty.sh && source \$prefix/etc/rivet_3rdparty.sh
 EOF
 
 # Make back-up of original for debugging - disable execute bit
-cp $INSTALLROOT/bin/rivet-config $INSTALLROOT/bin/rivet-config.orig
-chmod 644 $INSTALLROOT/bin/rivet-config.orig
+cp "$INSTALLROOT"/bin/rivet-config "$INSTALLROOT"/bin/rivet-config.orig
+chmod 644 "$INSTALLROOT"/bin/rivet-config.orig
 # Modify rivet-config script to use environment from rivet_3rdparty.sh
-cat $INSTALLROOT/bin/rivet-config | sed -e "$SED_EXPR" > $INSTALLROOT/bin/rivet-config.0
-csplit $INSTALLROOT/bin/rivet-config.0 '/^datarootdir=/+1'
-cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-config
-chmod 0755 $INSTALLROOT/bin/rivet-config
+sed -e "$SED_EXPR" "$INSTALLROOT"/bin/rivet-config > "$INSTALLROOT"/bin/rivet-config.0
+csplit "$INSTALLROOT"/bin/rivet-config.0 '/^datarootdir=/+1'
+cat xx00 source3rd xx01 >  "$INSTALLROOT"/bin/rivet-config
+chmod 0755 "$INSTALLROOT"/bin/rivet-config
 
 # Make back-up of original for debugging - disable execute bit
-cp $INSTALLROOT/bin/rivet-build $INSTALLROOT/bin/rivet-build.orig
-chmod 644 $INSTALLROOT/bin/rivet-build.orig
+cp "$INSTALLROOT"/bin/rivet-build "$INSTALLROOT"/bin/rivet-build.orig
+chmod 644 "$INSTALLROOT"/bin/rivet-build.orig
 # Modify rivet-build script to use environment from rivet_3rdparty.sh.  
-cat $INSTALLROOT/bin/rivet-build | sed -e  "$SED_EXPR" > $INSTALLROOT/bin/rivet-build.0
-csplit $INSTALLROOT/bin/rivet-build.0 '/^datarootdir=/+1'
-cat xx00 source3rd xx01 >  $INSTALLROOT/bin/rivet-build
-chmod 0755 $INSTALLROOT/bin/rivet-build
+sed -e  "$SED_EXPR" "$INSTALLROOT"/bin/rivet-build > "$INSTALLROOT"/bin/rivet-build.0
+csplit "$INSTALLROOT"/bin/rivet-build.0 '/^datarootdir=/+1'
+cat xx00 source3rd xx01 >  "$INSTALLROOT"/bin/rivet-build
+chmod 0755 "$INSTALLROOT"/bin/rivet-build
 
 # Make symlink in library dir for Python
-PYVER="$(basename $(find $INSTALLROOT/lib -type d -name 'python*'))"
+PYVER="$(basename "$(find "$INSTALLROOT"/lib -type d -name 'python*')")"
 
-pushd $INSTALLROOT/lib
-ln -s ${PYVER} python
-popd
+pushd "$INSTALLROOT"/lib || exit 1
+ln -s "${PYVER}" python
+popd || exit 1
 
 # Make sure we get the YODA version we need 
 if test "x$YODA_VERSION" != "x" && test "x$YODA_REVISION" != "x" ; then 
     YODA_NEEDED=${YODA_VERSION}-${YODA_REVISION}
 else 
-    YODA_NEEDED=`basename $YODA_ROOT` 
+    YODA_NEEDED=$(basename "$YODA_ROOT")
 fi 
 
 # Make sure we get the FASTJET version we need 
 if test "x$FASTJET_VERSION" != "x" && test "x$FASTJET_REVISION" != "x" ; then 
     FASTJET_NEEDED=${FASTJET_VERSION}-${FASTJET_REVISION}
 else 
-    FASTJET_NEEDED=`basename $FASTJET_ROOT` 
+    FASTJET_NEEDED=$(basename "$FASTJET_ROOT")
 fi 
 
 # Make sure we get the HEPMC3 version we need 
 if test "x$HEPMC3_VERSION" != "x" && test "x$HEPMC3_REVISION" != "x" ; then 
     HEPMC3_NEEDED=${HEPMC3_VERSION}-${HEPMC3_REVISION}
 else 
-    HEPMC3_NEEDED=`basename $HEPMC3_ROOT` 
+    HEPMC3_NEEDED=$(basename "$HEPMC3_ROOT")
 fi 
 
 # Modulefile

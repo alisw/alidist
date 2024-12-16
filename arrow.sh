@@ -19,8 +19,7 @@ build_requires:
   - re2
   - alibuild-recipe-tools
   - ninja
-  - "Python:slc.*"
-  - "Python-system:(?!slc.*)"
+  - Python
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
