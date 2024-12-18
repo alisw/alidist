@@ -52,6 +52,4 @@ mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INS
 # External RPM dependencies
 cat > $INSTALLROOT/.rpm-extra-deps <<EoF
 pda-kadapter-dkms >= 2.0.0
-libhugetlbfs
-libhugetlbfs-utils
 EoF
