@@ -74,6 +74,14 @@ elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   export ORT_TENSORRT_BUILD=0
 fi
 
+mkdir -p $INSTALLROOT/etc
+cat << EOF > $INSTALLROOT/etc/ort-init.sh
+export ORT_ROCM_BUILD=$ORT_ROCM_BUILD
+export ORT_CUDA_BUILD=$ORT_CUDA_BUILD
+export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
+export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
+EOF
+
 cmake "$SOURCEDIR/cmake"                                                                                    \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                   \
       -DCMAKE_BUILD_TYPE=Release                                                                            \
@@ -120,4 +128,5 @@ cat >> "$MODULEFILE" <<EoF
 # Our environment
 set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include/onnxruntime
+append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF
