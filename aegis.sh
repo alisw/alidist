@@ -1,6 +1,6 @@
 package: AEGIS
 version: "%(tag_basename)s"
-tag: v1.5.4
+tag: v1.5.5
 requires:
   - ROOT
   - VMC
