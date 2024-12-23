@@ -1,6 +1,6 @@
 package: sqlite
 version: "%(tag_basename)s"
-tag: "v3.15.0"
+tag: "v3.34.1"
 source: https://github.com/alisw/sqlite
 prefer_system: (?!slc5)
 prefer_system_check: |
