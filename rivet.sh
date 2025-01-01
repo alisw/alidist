@@ -190,9 +190,9 @@ module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@
 module load BASE/1.0 YODA/$YODA_NEEDED fastjet/$FASTJET_NEEDED HepMC3/$HEPMC3_NEEDED
 # Our environment 
 set RIVET_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv RIVET_ROOT $RIVET_ROOT
-setenv RIVET_ANALYSIS_PATH $RIVET_ROOT/lib/Rivet
-setenv RIVET_DATA_PATH $RIVET_ROOT/share/Rivet
+setenv RIVET_ROOT \$RIVET_ROOT
+setenv RIVET_ANALYSIS_PATH \$RIVET_ROOT/lib/Rivet
+setenv RIVET_DATA_PATH \$RIVET_ROOT/share/Rivet
 prepend-path PYTHONPATH \$RIVET_ROOT/lib/$PYVER/site-packages
 prepend-path PYTHONPATH \$RIVET_ROOT/lib64/$PYVER/site-packages
 prepend-path PATH \$RIVET_ROOT/bin
