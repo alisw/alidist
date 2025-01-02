@@ -1,6 +1,6 @@
 package: PDA
 version: "%(tag_basename)s"
-tag: 12.0.0
+tag: 12.1.0
 source: https://github.com/AliceO2Group/pda.git
 requires:
   - "GCC-Toolchain:(?!osx)"
