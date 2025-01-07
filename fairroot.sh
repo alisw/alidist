@@ -9,7 +9,6 @@ requires:
   - boost
   - protobuf
   - FairLogger
-  - FairMQ
   - "GCC-Toolchain:(?!osx)"
 env:
   VMCWORKDIR: "$FAIRROOT_ROOT/share/fairbase/examples"
