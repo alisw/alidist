@@ -24,7 +24,7 @@ unset VIRTUAL_ENV
 # NOTE: If you get an error saying "Error: This build of python cannot create
 # venvs without using symlinks", then you are using the MacOS Python. You
 # should be using the Homebrew Python instead, so run "brew install python".
-python3 -m venv "$INSTALLROOT"
+python3 -m venv --copies "$INSTALLROOT"
 . "$INSTALLROOT/bin/activate"
 # From now on, we use the python3 binary copied into the venv. This makes pip
 # install packages into the venv.
