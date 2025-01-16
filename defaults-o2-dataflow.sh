@@ -44,9 +44,12 @@ overrides:
   Python-modules-list:
     env:
       PIP_BASE_REQUIREMENTS: |
-        pip==21.3.1
-        setuptools==65.5.1
-        wheel==0.37.1
+        pip == 21.3.1; python_version < '3.12'
+        pip == 24.0; python_version >= '3.12'
+        setuptools == 65.5.1; python_version < '3.12'
+        setuptools == 70.0.0; python_version >= '3.12'
+        wheel == 0.37.1; python_version < '3.12'
+        wheel == 0.42.0; python_version >= '3.12'
       PIP_REQUIREMENTS: ""
   DataDistribution:
     requires:

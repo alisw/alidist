@@ -1,7 +1,7 @@
 package: sqlite
-version: "%(tag_basename)s"
-tag: "v3.15.0"
-source: https://github.com/alisw/sqlite
+version: "v3.47.2"
+tag: "version-3.47.2"
+source: https://github.com/sqlite/sqlite
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf '#include <sqlite3.h>\nint main(){}\n' | cc -xc - -lsqlite3 -o /dev/null;
@@ -10,6 +10,7 @@ build_requires:
   - curl
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -ex
 rsync -av $SOURCEDIR/ ./
@@ -24,19 +25,4 @@ rm -rf $INSTALLROOT/share
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-# Our environment
-set SQLITE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-setenv SQLITE_ROOT \$SQLITE_ROOT
-prepend-path PATH \$SQLITE_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$SQLITE_ROOT/lib
-EoF
+alibuild-generate-module --lib --bin > "$MODULEFILE"

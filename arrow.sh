@@ -10,7 +10,6 @@ requires:
   - utf8proc
   - OpenSSL:(?!osx)
   - xsimd
-  - Python
 build_requires:
   - zlib
   - flatbuffers
@@ -20,6 +19,7 @@ build_requires:
   - re2
   - alibuild-recipe-tools
   - ninja
+  - Python
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -106,7 +106,7 @@ cmake ./src_tmp/cpp                                                             
       ${UTF8PROC_ROOT:+-Dutf8proc_ROOT="$UTF8PROC_ROOT"}                                            \
       ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}                                               \
       ${CLANG_ROOT:+-DLLVM_DIR="$CLANG_ROOT"}                                                       \
-      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$PYTHON_ROOT/bin/python3"}                               \
+      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$(which python3)"}                               \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
