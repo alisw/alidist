@@ -142,7 +142,7 @@ set YODA_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path PATH \$YODA_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib
 prepend-path LD_LIBRARY_PATH \$YODA_ROOT/lib64
-set pythonpath [exec yoda-config --pythonpath]
+set pythonpath [exec \$YODA_ROOT/bin/yoda-config --pythonpath]
 prepend-path PYTHONPATH \$pythonpath
 prepend-path PYTHONPATH \$YODA_ROOT/lib/python/site-packages
 EoF
