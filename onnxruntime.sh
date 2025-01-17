@@ -36,11 +36,11 @@ if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] ||
   [[ -d /opt/rocm/include/rccl ]] && \
   [[ -z "$ORT_ROCM_BUILD" ]] ) && \
   ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -eq 9 ]]); then
-  export ORT_ROCM_BUILD=1
+  export ORT_ROCM_BUILD="1"
   : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
 else
-  export ORT_ROCM_BUILD=0
+  export ORT_ROCM_BUILD="0"
 fi
 
 # Check CUDA build conditions
@@ -51,26 +51,26 @@ if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]]
   [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
   [[ "$ORT_ROCM_BUILD" -eq 0 ]] && \
   [[ -z "$ALMA_LINUX_MAJOR_VERSION" ]]; then
-  export ORT_CUDA_BUILD=1
+  export ORT_CUDA_BUILD="1"
   : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="sm_86"}
 else
-  export ORT_CUDA_BUILD=0
+  export ORT_CUDA_BUILD="0"
 fi
 
 # Optional builds
 ### MIGraphX
 if ( [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ $(find /opt/rocm* -name "libmigraphx*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
    [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD=1
+  export ORT_MIGRAPHX_BUILD="1"
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD=0
+  export ORT_MIGRAPHX_BUILD="0"
 fi
 ### TensorRT
 if ( [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
    [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_TENSORRT_BUILD=1
+  export ORT_TENSORRT_BUILD="1"
 elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
-  export ORT_TENSORRT_BUILD=0
+  export ORT_TENSORRT_BUILD="0"
 fi
 
 mkdir -p $INSTALLROOT/etc
@@ -125,7 +125,6 @@ MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
 alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
-set ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include/onnxruntime
 append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF

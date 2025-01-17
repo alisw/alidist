@@ -139,11 +139,12 @@ valid_defaults:
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
 
-source $ONNXRUNTIME_ROOT/etc/ort-init.sh
-
-echo "ORT_ROCM_BUILD: $ORT_ROCM_BUILD"
-echo "ORT_CUDA_BUILD: $ORT_CUDA_BUILD"
-echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+if [[ -z $ONNXRUNTIME_REVISION ]]
+  source $ONNXRUNTIME_ROOT/etc/ort-init.sh
+  echo "ORT_ROCM_BUILD: $ORT_ROCM_BUILD"
+  echo "ORT_CUDA_BUILD: $ORT_CUDA_BUILD"
+  echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+fi
 
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
