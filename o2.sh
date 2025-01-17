@@ -139,7 +139,7 @@ valid_defaults:
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
 
-if [[ -z $ONNXRUNTIME_REVISION ]]
+if [[ -z $ONNXRUNTIME_REVISION ]]; then
   source $ONNXRUNTIME_ROOT/etc/ort-init.sh
   echo "ORT_ROCM_BUILD: $ORT_ROCM_BUILD"
   echo "ORT_CUDA_BUILD: $ORT_CUDA_BUILD"
