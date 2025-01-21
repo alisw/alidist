@@ -86,7 +86,7 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                                   \
       -DCMAKE_BUILD_TYPE=Release                                                                            \
       -DCMAKE_INSTALL_LIBDIR=lib                                                                            \
-      -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")                                 \
+      -DPYTHON_EXECUTABLE="$(python3 -c 'import sys; print(sys.executable)')"                                 \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF                                                                    \
       -Donnxruntime_PREFER_SYSTEM_LIB=ON                                                                    \
       -Donnxruntime_BUILD_SHARED_LIB=ON                                                                     \
