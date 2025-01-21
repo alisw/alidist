@@ -83,7 +83,7 @@ export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
 
 cmake "$SOURCEDIR/cmake"                                                                                    \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                   \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                                   \
       -DCMAKE_BUILD_TYPE=Release                                                                            \
       -DCMAKE_INSTALL_LIBDIR=lib                                                                            \
       -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")                                 \
