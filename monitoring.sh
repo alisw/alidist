@@ -6,7 +6,6 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - curl
   - libInfoLogger
-  - librdkafka
 build_requires:
   - CMake
   - alibuild-recipe-tools
