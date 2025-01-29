@@ -1,7 +1,7 @@
 package: TBB
 version: "v2021.5.0"
 tag: v2021.5.0
-source: https://github.com/oneapi-src/oneTBB/
+source: https://github.com/uxlfoundation/oneTBB
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
