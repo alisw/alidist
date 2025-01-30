@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.20.0
+tag: v1.20.1
 source: https://github.com/microsoft/onnxruntime
 requires:
   - protobuf
@@ -126,6 +126,6 @@ MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
 alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
-prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include/onnxruntime
+prepend-path ROOT_INCLUDE_PATH \${ONNXRUNTIME_ROOT}/include/onnxruntime
 append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF
