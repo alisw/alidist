@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20250116-1030"
+tag: "daily-20250130-0000"
 requires:
   - abseil
   - arrow

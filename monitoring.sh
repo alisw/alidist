@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.18.1
+tag: v3.19.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -9,6 +9,7 @@ requires:
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - protobuf
 source: https://github.com/AliceO2Group/Monitoring
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
@@ -25,9 +26,10 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
 fi
 
 cmake $SOURCEDIR                                              \
-      -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                     \
-      ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+  ${LIBRDKAFKA_REVISION:+-DRDKAFKA_ROOT="${LIBRDKAFKA_ROOT}"} \
+  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
+  ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
 

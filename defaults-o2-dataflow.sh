@@ -65,6 +65,13 @@ overrides:
       - O2
       - fmt
       - ucx   # this one added
+  Monitoring:
+    requires:
+      - boost
+      - "GCC-Toolchain:(?!osx)"
+      - curl
+      - libInfoLogger
+      - librdkafka   # this one added
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the

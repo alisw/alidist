@@ -18,6 +18,11 @@ rm -Rf ${TEST_DIR}
 mkdir ${TEST_DIR}
 pushd ${TEST_DIR}
 
+# check if LHAPDF data path is set
+if [ -z "$LHAPDF_DATA_PATH" ]; then
+  echo "Setting LHAPDF_DATA_PATH to $LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
+  export LHAPDF_DATA_PATH=$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF
+fi
 O2DPG_TEST_GENERATOR_EXITCODE=0
 { O2DPG_TEST_REPO_DIR=${WORK_DIR}/../O2DPG "${O2DPG_ROOT}/test/run_generator_tests.sh" &> ${LOGFILE} ; O2DPG_TEST_GENERATOR_EXITCODE=$?; } || true  # don't quit immediately on error
 
