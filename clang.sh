@@ -9,11 +9,12 @@ build_requires:
   - CMake
   - curl
   - ninja
+  - alibuild-recipe-tools
 env:
-  LLVM_ROOT: "$CLANG_ROOT" # needed by LLVMAlt
+  LLVM_ROOT: "$CLANG_ROOT"  # needed by LLVMAlt
 prefer_system: (osx.*)
 prefer_system_check: |
-  brew --prefix llvm@18 && test -d $(brew --prefix llvm@18)
+  brew --prefix llvm@18 && test -d "$(brew --prefix llvm@18)"
 ---
 #!/bin/bash -e
 
@@ -36,6 +37,12 @@ case $ARCHITECTURE in
   *) echo 'Unknown LLVM target for architecture' >&2; exit 1 ;;
 esac
 
+
+# If we have our own python, use it
+if [ -n "$PYTHON_REVISION" ]; then
+  export PYTHON_HOME="$PYTHON_ROOT"
+fi
+
 # BUILD_SHARED_LIBS=ON is needed for e.g. adding dynamic plugins to clang-tidy.
 # Apache Arrow needs LLVM_ENABLE_RTTI=ON.
 cmake "$SOURCEDIR/llvm" \
@@ -46,7 +53,6 @@ cmake "$SOURCEDIR/llvm" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
-  -DPYTHON_EXECUTABLE="$(which python3)" \
   -DDEFAULT_SYSROOT="$DEFAULT_SYSROOT" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
@@ -109,22 +115,8 @@ EOF
 "$INSTALLROOT/bin-safe/clang++" -v -c test.cc
 
 # Modulefile
-mkdir -p etc/modulefiles
-cat > "etc/modulefiles/$PKGNAME" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0                                                          \\
-            ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION}
-# Our environment
-set CLANG_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path PATH \$CLANG_ROOT/bin-safe
-prepend-path LD_LIBRARY_PATH \$CLANG_ROOT/lib
-EoF
 mkdir -p "$INSTALLROOT/etc/modulefiles"
-rsync -a --delete etc/modulefiles/ "$INSTALLROOT/etc/modulefiles"
+alibuild-generate-module --lib --cmake >  "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+cat >> "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
+prepend-path PATH \$CLANG_ROOT/bin-safe
+EoF
