@@ -21,7 +21,7 @@ sed -i -e 's/max_string_length\ =\ 255/max_string_length\ =\ 1000/g' pyol/config
 sed -i -e 's/#!\ \/usr\/bin\/env\ python$/#!\ \/usr\/bin\/env\ python3/g' scons-local/scons.py
 
 # fix the mcmodel argument to gfortran (medium is not universal and does not exist on AARCH64 version)
-sed -i -e 's/cmodel = medium/cmodel = large/' ./pyol/config/default.cfg
+sed -i -e 's/cmodel = medium/cmodel = small/' ./pyol/config/default.cfg
 
 ./scons
 
