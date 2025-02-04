@@ -41,7 +41,13 @@ esac
 # If we have our own python, use it
 if [ -n "$PYTHON_REVISION" ]; then
   export PYTHON_HOME="$PYTHON_ROOT"
+  which -a python
+  which -a python3
+  # if [ -n "$VIRTUAL_ENV" ]; then
+  #     deactivate
+  # fi
 fi
+
 
 # BUILD_SHARED_LIBS=ON is needed for e.g. adding dynamic plugins to clang-tidy.
 # Apache Arrow needs LLVM_ENABLE_RTTI=ON.
