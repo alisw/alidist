@@ -32,9 +32,6 @@ env:
     PyYAML == 6.0.1
     uproot == 4.1.0
 
-    # Mock is included in the Python standard library as unittest.mock from
-    # 3.3 onwards.
-    mock == 2.0.0; python_version < '3.3'
     responses == 0.10.6
 
     psutil == 5.8.0; python_version < '3.10'
