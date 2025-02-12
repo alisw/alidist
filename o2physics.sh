@@ -1,6 +1,6 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "daily-20250211-0000"
+tag: "gpu-nightly-20250212"
 requires:
   - O2
   - ONNXRuntime
