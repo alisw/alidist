@@ -39,6 +39,12 @@ cmake $SOURCEDIR \
     -DRAPIDJSON_ROOT="$RAPIDJSON_ROOT" \
     -DMS_GSL_INCLUDE_DIR=$MS_GSL_ROOT/include \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+    ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
+    ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                                                             \
+    ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
+    ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
+    ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
+    ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
     ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
