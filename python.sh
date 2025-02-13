@@ -45,24 +45,32 @@ prefer_system_replacement_specs:
     env:
         PYTHON_ROOT: $(brew --prefix python3)
         PYTHON_REVISION: ""
+        PYTHONHOME: ""
+        PYTHONPATH: ""
   "python3.*":
     env:
         # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
         # to avoid having /bin in the middle of the path.
         PYTHON_ROOT: "/dummy-python-folder"
         PYTHON_REVISION: ""
+        PYTHONHOME: ""
+        PYTHONPATH: ""
 
   # Workaround to support old alibuild versions that don't regex match alibuild_system_replace
   "python-brew3":
     env:
         PYTHON_ROOT: $(brew --prefix python3)
         PYTHON_REVISION: ""
+        PYTHONHOME: ""
+        PYTHONPATH: ""
   "python3":
     env:
         # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
         # to avoid having /bin in the middle of the path.
         PYTHON_ROOT: "/dummy-python-folder"
         PYTHON_REVISION: ""
+        PYTHONHOME: ""
+        PYTHONPATH: ""
 ---
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
