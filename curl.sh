@@ -6,6 +6,8 @@ build_requires:
   - "OpenSSL:(?!osx)"
   - CMake
   - alibuild-recipe-tools
+requires: 
+  - kernel-devel:(?!osx) 
 ---
 #!/bin/bash -e
 
