@@ -2,9 +2,10 @@ package: curl
 version: "7.70.0"
 tag: curl-7_70_0
 source: https://github.com/curl/curl.git
+requires:
+  - "kernel-devel:(?!osx)"
 build_requires:
   - "OpenSSL:(?!osx)"
-  - CMake
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
