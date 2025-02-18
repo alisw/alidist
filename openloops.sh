@@ -1,6 +1,6 @@
 package: Openloops
 version: "%(tag_basename)s"
-tag: "OpenLoops-2.1.2"
+tag: "OpenLoops-2.1.3"
 source: https://gitlab.com/openloops/OpenLoops.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -18,7 +18,10 @@ unset HTTP_PROXY # unset this to build on slc6 system
 sed -i -e 's/max_string_length\ =\ 255/max_string_length\ =\ 1000/g' pyol/config/default.cfg
 
 # Make scons script work with python3 
-sed -i -e 's/#!\ \/usr\/bin\/env\ python/#!\ \/usr\/bin\/env\ python3/g' scons-local/scons.py
+sed -i -e 's/#!\ \/usr\/bin\/env\ python$/#!\ \/usr\/bin\/env\ python3/g' scons-local/scons.py
+
+# fix the mcmodel argument to gfortran (medium is not universal and does not exist on AARCH64 version)
+sed -i -e 's/cmodel = medium/cmodel = small/' ./pyol/config/default.cfg
 
 ./scons
 
