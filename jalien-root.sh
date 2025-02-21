@@ -30,15 +30,7 @@ case $ARCHITECTURE in
   ;;
 esac
 
-# This is needed to support old version which did not have FindAliceGridUtils.cmake
-ALIBUILD_CMAKE_BUILD_DIR=$SOURCEDIR
-if [ ! -f "$JALIEN_ROOT_ROOT/cmake/modules/FindAliceGridUtils.cmake" ]; then
-  ALIBUILD_CMAKE_BUILD_DIR="$BUILDDIR"
-  rsync -a --exclude '**/.git' --delete "$SOURCEDIR/" "$BUILDDIR"
-  rsync -a "$ALICE_GRID_UTILS_ROOT/include/" "$BUILDDIR/inc"
-fi
-
-cmake "$ALIBUILD_CMAKE_BUILD_DIR"                        \
+cmake "$SOURCEDIR"                                       \
       -G Ninja                                           \
       -DCMAKE_BUILD_TYPE=Debug                           \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
