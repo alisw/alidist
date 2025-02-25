@@ -15,6 +15,7 @@ requires:
   - STARlight:(?!osx)
   - Upcgen:(?!osx)
   - Graniitti:(?!osx)
+  - nOOn:(?!osx)
 build_requires:
   - alibuild-recipe-tools
 ---
