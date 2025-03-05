@@ -8,7 +8,7 @@ build_requires:
   - alibuild-recipe-tools
 source: https://github.com/mbroz84/noon.git
 ---
-#!/bin/bash -ex
+#!/bin/bash -e
 
 # Copy code here
 cp "$SOURCEDIR/NeutronGenerator.h" .
@@ -30,7 +30,7 @@ cp -r "$SOURCEDIR/Data"   "$INSTALLROOT/include/"
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --lib > $MODULEFILE
+alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EOF
 # extra environment
 # we define this so that the starlight installation can be found/queried
