@@ -36,7 +36,7 @@ cat >> "$MODULEFILE" <<EOF
 # we define this so that the starlight installation can be found/queried
 setenv ${PKGNAME}_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 # we purposely are not adding to ROOT_INCLUDE_PATH
-# to avoid making that search path to long. Users can do
-# this themsevles in the ROOT macro (just-in-time) via ${PKGNAME}_ROOT.
+# to avoid making that search path too long. Users can do
+# this themselves in the ROOT macro (just-in-time) via ${PKGNAME}_ROOT.
 # prepend-path ROOT_INCLUDE_PATH \$${PKGNAME}_ROOT/include/
 EOF
