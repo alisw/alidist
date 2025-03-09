@@ -12,10 +12,43 @@ prepend_path:
   # If we need tensorflow-metal to work on Mac during subsequent builds, we
   # must use lib/python$pyver, not lib/python here.
   PYTHONPATH: "$PYTHON_MODULES_ROOT/lib/python/site-packages"
+prefer_system: ".*"
+prefer_system_check: |
+  # if we are in a virtualenv, assume people know what they are doing
+  # and simply use the virtualenv recipe.
+  if [ -n "$VIRTUAL_ENV" ]; then
+    echo "alibuild_system_replace: virtualenv"
+    exit 0
+  fi
+  # If not, either they are using the system python or they are using our own python.
+  # In both cases we can simply create our own virtualenv
+  exit 1
+prefer_system_replacement_specs:
+  virtualenv:
+    version: "virtualenv"
+    recipe: |
+      # Install pinned basic requirements for python infrastructure
+      echo "$PIP_BASE_REQUIREMENTS" > base-requirements.txt
+      python3 -m pip install -IU -r base-requirements.txt
+      # The above updates pip and setuptools, so install the rest of the packages separately.
+      echo "$PIP_REQUIREMENTS" > requirements.txt
+      python3 -m pip install -IU -r requirements.txt
+      # We do not need anything else, because python is going to be in path
+      # if we are inside a virtualenv so no need to pretend we know where
+      # the correct python is.
+
+      # We generate the modulefile to avoid complains by dependencies
+      mkdir -p "$INSTALLROOT/etc/modulefiles"
+      alibuild-generate-module --bin > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+    requires:
+      - "FreeType:(?!osx)"
+      - libpng
+      - hdf5
+    build_requires:
+      - Python-modules-list
+      - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-unset VIRTUAL_ENV
-
 # Users might want to install more packages in the same environment. A venv
 # provides a pip binary that will install packages into the same path.
 # This copies the system python binary (or the one from PYTHON_ROOT) into the
@@ -48,9 +81,6 @@ find "$INSTALLROOT" -mindepth 2 -maxdepth 2 \
 # the venv's python using an absolute path by default, which we must change.
 find "$INSTALLROOT"/bin -type f -exec sed -r -i.deleteme -e "1s,^#!$INSTALLROOT/bin/,#!/usr/bin/env ," {} \;
 rm -f "$INSTALLROOT"/bin/*.deleteme
-
-# Link python -> python$pyver, so we can refer to it in PYTHONPATH without knowing pyver.
-ln -nsf "python$pyver" "$INSTALLROOT/lib/python"
 
 # Modulefile
 mkdir -p "$INSTALLROOT/etc/modulefiles"
