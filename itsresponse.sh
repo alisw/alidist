@@ -1,6 +1,6 @@
 package: ITSResponse
 version: "%(tag_basename)s"
-tag: v1.0.0
+tag: v2.0.0
 source: https://github.com/AliceO2Group/ITSChipResponseData.git
 build_requires:
   - alibuild-recipe-tools
