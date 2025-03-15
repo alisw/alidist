@@ -17,9 +17,9 @@ source: https://github.com/alisw/ucx
 printf "#include <rdma/rdma_cma.h>" | cc -xc - -c -o /dev/null ||
 ( printf "rdma-core not found.\n * On RHEL-compatible systems you probably need: rdma-core-devel\n"; exit 1; )
 
-rsync -a --delete --exclude "**/.git" ${SOURCEDIR}/ .
+rsync -a --delete --exclude "**/.git" "${SOURCEDIR}"/ .
 ./autogen.sh
-./contrib/configure-release-mt --prefix=${INSTALLROOT}     \
+./contrib/configure-release-mt --prefix="${INSTALLROOT}"     \
                                --with-verbs                \
                                --with-rdmacm               \
                                --with-ib-hw-tm             \
@@ -41,7 +41,5 @@ make ${JOBS+-j$JOBS} || make -j1
 make install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+alibuild-generate-module --bin --lib > "$INSTALLROOT/etc/modulefiles/$PKGNAME"

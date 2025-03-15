@@ -8,7 +8,7 @@ build_requires:
   - ninja
 prefer_system: ".*"
 prefer_system_check: |
-  pkg-config --atleast-version=3.2.0 xerces-c 2>&1 && printf "#include <xercesc/util/PlatformUtils.hpp>" | c++ -xc++ -I$(brew --prefix)/include -c -
+  pkg-config --atleast-version=3.2.0 xerces-c 2>&1 && printf "#include <xercesc/util/PlatformUtils.hpp>" | c++ -xc++ -I$(brew --prefix xerces-c)/include -c -
 prepend_path:
   ROOT_INCLUDE_PATH: "$XERCESC_ROOT/include"
   CMAKE_PREFIX_PATH: "$XERCESC_ROOT"

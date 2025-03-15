@@ -4,27 +4,23 @@ source: https://github.com/google/re2
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
+  - ninja
+  - alibuild-recipe-tools
+  - abseil
+prefer_system: .*
+prefer_system_check: |
+  printf "#include \"re2/re2.h\"\n" | cc -I$(brew --prefix re2)/include -I$(brew --prefix abseil)/include -xc++ -std=c++20 - -c -o /dev/null
 ---
 #!/bin/sh
 cmake $SOURCEDIR                           \
+      -G Ninja                             \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
       -DCMAKE_INSTALL_LIBDIR=lib
 
-make ${JOBS+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0
-EoF
+alibuild-generate-module --lib > "$MODULEFILE"
