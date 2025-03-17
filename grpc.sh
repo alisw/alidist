@@ -1,6 +1,6 @@
 package: grpc
 version: "%(tag_basename)s"
-tag: v1.50.1
+tag: v1.71.0
 requires:
   - protobuf
   - c-ares
@@ -15,6 +15,9 @@ source: https://github.com/grpc/grpc
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+prefer_system: .*
+prefer_system_check: |
+  printf "#include \"grpcpp/version_info.h\"\n" | cc -I$(brew --prefix grpc)/include -xc++ -std=c++20 - -c -o /dev/null
 ---
 #!/bin/bash -e
 SONAME=so
@@ -23,9 +26,11 @@ case $ARCHITECTURE in
     SONAME=dylib
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
+    [[ ! $ABSEIL_ROOT ]] && ABSEIL_ROOT=$(brew --prefix abseil)
     # to avoid issues with rpath on mac
     extra_cmake_variables="-DCMAKE_INSTALL_RPATH=$INSTALLROOT/lib \
     -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
+    --debug-find
     "
   ;;
 esac
@@ -33,11 +38,12 @@ esac
 echo "OPENSSL_ROOT : $OPENSSL_ROOT"
 echo "OPENSSL_REVISION: $OPENSSL_REVISION"
 
+
 cmake $SOURCEDIR                                    \
   -G Ninja 					                                \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}           \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
-  -DgRPC_PROTOBUF_PACKAGE_TYPE="CONFIG"             \
+  -DCMAKE_PREFIX_PATH=$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake \
   -DgRPC_BUILD_TESTS=OFF                            \
   -DBUILD_SHARED_LIBS=OFF                           \
   -DgRPC_SSL_PROVIDER=package                       \
