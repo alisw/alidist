@@ -3,7 +3,7 @@ version: "7.70.0"
 tag: curl-7_70_0
 source: https://github.com/curl/curl.git
 requires:
-  - kernel-devel:(?!osx)
+  - "kernel-devel:defaults=o2-dataflow"
 build_requires:
   - "OpenSSL:(?!osx)"
   - CMake
