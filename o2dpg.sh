@@ -1,6 +1,6 @@
 package: O2DPG
 version: "%(tag_basename)s"
-tag: "daily-20250317-0000"
+tag: "gpu-nightly-20250318"
 source: https://github.com/AliceO2Group/O2DPG.git
 build_requires:
   - alibuild-recipe-tools
