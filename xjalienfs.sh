@@ -40,7 +40,7 @@ prefer_system_replacement_specs:
 
       env ALIBUILD=1 \
           python3 -m pip install --force-reinstall \
-          "file://$SOURCEDIR/../$PKG_VERSION"
+          "git+https://gitlab.cern.ch/jalien/xjalienfs.git@$PKG_VERSION"
       # We do not need anything else, because python is going to be in path
       # if we are inside a virtualenv so no need to pretend we know where
       # the correct python is.
