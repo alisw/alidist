@@ -15,6 +15,8 @@ prefer_system_check: |
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+prepend_path:
+  PKG_CONFIG_PATH: "$ABSEIL_ROOT/lib/pkgconfig"
 ---
 #!/bin/bash -e
 
