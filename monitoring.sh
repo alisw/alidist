@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.19.1
+tag: v3.19.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -27,6 +27,7 @@ fi
 
 cmake $SOURCEDIR                                              \
   ${LIBRDKAFKA_REVISION:+-DRDKAFKA_ROOT="${LIBRDKAFKA_ROOT}"} \
+  ${GRPC_REVISION:+-DGRPC_ROOT="${GRPC_ROOT}"}                \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                         \
   ${BOOST_REVISION:+-DBOOST_ROOT=$BOOST_ROOT}                 \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON

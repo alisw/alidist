@@ -8,6 +8,9 @@ build_requires:
   - ninja
   - alibuild-recipe-tools
 source: https://github.com/abseil/abseil-cpp
+prefer_system: "osx"
+prefer_system_check: |
+  printf '#include <absl/container/flat_hash_map.h>' | c++ -std=c++17 -I"$(brew --prefix abseil)/include" -c -xc++ - >/dev/null
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -19,13 +22,11 @@ cmake $SOURCEDIR                             \
   -G Ninja                                   \
   -DCMAKE_INSTALL_LIBDIR=lib                 \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
+  -DCMAKE_INSTALL_LIBDIR=lib                 \
   -DBUILD_TESTING=OFF                        \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
-
-# A copy of abseil-cpp for those who want to build it themselves via FETCHCONTENT (e.g. ONNX)
-rsync -av $SOURCEDIR/ $INSTALLROOT/src/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"

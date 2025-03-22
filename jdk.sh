@@ -1,5 +1,5 @@
 package: JDK
-version: "12.0.1"
+version: "17.0.14"
 build_requires:
   - curl
 prefer_system: .*
@@ -16,9 +16,9 @@ JDK_PLATFORM=linux
 [[ $ARCHITECTURE != osx* ]] || JDK_PLATFORM=osx
 
 if [[ $JDK_PLATFORM == osx ]]; then
-  URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-macosx_x64.tar.gz"
+  URL="https://cdn.azul.com/zulu/bin/zulu17.56.15-ca-jdk17.0.14-macosx_x64.tar.gz"
 else
-  URL="https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz"  
+  URL="https://cdn.azul.com/zulu/bin/zulu17.56.15-ca-jdk17.0.14-linux_x64.tar.gz"  
 fi
 
 mkdir -p "$INSTALLROOT"

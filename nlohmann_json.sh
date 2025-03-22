@@ -1,24 +1,22 @@
-package: hdf5
-version: "1.10.9"
-tag: hdf5-1_10_9
-source: https://github.com/HDFGroup/hdf5.git
+package: nlohmann_json
+version: "v3.11.3"
+tag: v3.11.3
+source: https://github.com/nlohmann/json
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
   - alibuild-recipe-tools
-prefer_system: (?!slc5)
+prefer_system: .*
 prefer_system_check: |
-  printf "#include <hdf5.h>\n" | cc -xc - -I$(brew --prefix hdf5)/include -c -o /dev/null
-env:
-    HDF5_DIR: "$HDF5_ROOT"
+  printf "#include <nlohmann/json_fwd.hpp>\n" | cc -xc++ - -I"$(brew --prefix nlohmann-json)"-c -o/dev/null
 ---
 #!/bin/bash -e
   cmake "$SOURCEDIR"                             \
-    -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DJSON_BuildTests=OFF                          \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
-    -DHDF5_BUILD_CPP_LIB=ON
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 

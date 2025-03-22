@@ -22,8 +22,12 @@ export COP=BASIC
 
 rsync -a --exclude='**/.git' --delete ${SOURCEDIR}/ .
 
+# patch few CMakeFiles
+find ./ -name "CM*.txt" -exec sed -i -e 's/-m64//' {} ';' # not platform independent
+find ./ -name "CM*.txt" -exec sed -i -e 's/-fPIC//' {} ';' # not needed and clashes with mcmodel=large on AARCH64
+
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
-cmake -B$LIBDIR
+cmake -B$LIBDIR -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 make -C$LIBDIR -j8
 
 # "Install"

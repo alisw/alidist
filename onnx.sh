@@ -1,24 +1,24 @@
-package: hdf5
-version: "1.10.9"
-tag: hdf5-1_10_9
-source: https://github.com/HDFGroup/hdf5.git
+package: onnx
+version: "v1.17.0"
+tag: v1.17.0
+source: https://github.com/onnx/onnx
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - protobuf
+  - abseil
 build_requires:
   - CMake
   - alibuild-recipe-tools
-prefer_system: (?!slc5)
-prefer_system_check: |
-  printf "#include <hdf5.h>\n" | cc -xc - -I$(brew --prefix hdf5)/include -c -o /dev/null
-env:
-    HDF5_DIR: "$HDF5_ROOT"
+  - ninja
 ---
 #!/bin/bash -e
-  cmake "$SOURCEDIR"                             \
-    -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+CPPFLAFS="-I$ABSEIL_ROOT/include"  cmake "$SOURCEDIR"                             \
+    -G Ninja \
+    -DABSEIL_DIR=$ABSEIL_ROOT \
+    -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
-    -DHDF5_BUILD_CPP_LIB=ON
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 
