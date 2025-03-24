@@ -34,8 +34,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}        \
       ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}                              \
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                        \
-      -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable -Wno-error=deprecated" \
-      -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable -Wno-error=deprecated"
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=template-id-cdtor" \
+      -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-error=unused-but-set-variable -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=template-id-cdtor"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
