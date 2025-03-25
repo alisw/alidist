@@ -48,7 +48,8 @@ cmake $SOURCEDIR                                    \
   -DgRPC_BENCHMARK_PROVIDER=package                 \
   -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF               \
   -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF          \
-  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF 		    \
+  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF                  \
+  -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF                  \
   -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
   -DgRPC_BUILD_CSHARP_EXT=OFF                       \
   -DgRPC_RE2_PROVIDER=package                       \
