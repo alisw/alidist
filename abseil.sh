@@ -7,6 +7,7 @@ build_requires:
   - CMake
   - ninja
   - alibuild-recipe-tools
+  - ninja
 source: https://github.com/abseil/abseil-cpp
 prefer_system: "osx"
 prefer_system_check: |
@@ -19,6 +20,7 @@ incremental_recipe: |
 
 mkdir -p $INSTALLROOT
 cmake $SOURCEDIR                             \
+  -G Ninja                                   \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
   -DCMAKE_INSTALL_LIBDIR=lib                 \
   -DBUILD_TESTING=OFF                        \
