@@ -1,6 +1,7 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v1.6.6
+tag: v1.6.7
+source: https://github.com/AliceO2Group/DataDistribution
 requires:
   - "GCC-Toolchain:(?!osx)"
   - boost
@@ -15,7 +16,6 @@ requires:
   - fmt
 build_requires:
   - CMake
-source: https://github.com/AliceO2Group/DataDistribution
 incremental_recipe: |
   # reduce number of compile slots if invoked by Jenkins
   if [ ! "X$JENKINS_HOME" = X ]; then
@@ -38,6 +38,7 @@ esac
 cmake $SOURCEDIR                                                \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                 \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE} \
+      -DCMAKE_CXX_STANDARD=20                                   \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                       \
       ${BOOST_ROOT:+-DBoost_ROOT=$BOOST_ROOT}                   \
       ${FAIRLOGGER_ROOT:+-DFairLogger_ROOT=$FAIRLOGGER_ROOT}    \
@@ -45,6 +46,7 @@ cmake $SOURCEDIR                                                \
       ${FAIRMQ_ROOT:+-DFairMQ_ROOT=$FAIRMQ_ROOT}                \
       ${PPCONSUL_ROOT:+-Dppconsul_DIR=${PPCONSUL_ROOT}/cmake}   \
       ${O2_ROOT:+-DO2_ROOT=$O2_ROOT}                            \
+      -Dprotobuf_MODULE_COMPATIBLE=ON                           \
       ${MONITORING_ROOT:+-DMonitoring_ROOT=$MONITORING_ROOT}    \
       ${PROTOBUF_ROOT:+-DProtobuf_ROOT=$PROTOBUF_ROOT}          \
       ${UCX_ROOT:+-DUCX_DIR=${UCX_ROOT}}                        \
