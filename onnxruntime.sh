@@ -69,13 +69,13 @@ fi
 ### MIGraphX
 if ( [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ $(find /opt/rocm* -name "libmigraphx*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
    [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD="1"
+  export ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   export ORT_MIGRAPHX_BUILD="0"
 fi
 ### TensorRT
 if ( [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
-   [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
+   [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   export ORT_TENSORRT_BUILD="1"
 elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   export ORT_TENSORRT_BUILD="0"
