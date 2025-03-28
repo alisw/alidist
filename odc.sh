@@ -1,7 +1,7 @@
 # Online Device Control
 package: ODC
-version: "0.84.2-alice1"
-tag: "0.84.2-alice1"
+version: "0.84.2-alice2"
+tag: "0.84.2-alice2"
 source: https://github.com/alisw/ODC.git
 requires:
   - boost
