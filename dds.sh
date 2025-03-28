@@ -1,19 +1,21 @@
 package: DDS
-version: "%(tag_basename)s"
-tag: "3.12"
-source: https://github.com/FairRootGroup/DDS
+version: "3.12"
+tag: support-new-protobuf
+source: https://github.com/ktf/DDS
 requires:
   - boost
   - protobuf
+  - abseil
 build_requires:
   - CMake
+  - ninja
   - alibuild-recipe-tools
 incremental_recipe: |
   case $ARCHITECTURE in
     osx*) ;;
-    *) make -j$JOBS wn_bin ;;
+    *) cmake --build . -- ${JOBS:+-j$JOBS} wn_bin ;;
   esac
-  make -j$JOBS install
+  cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 case $ARCHITECTURE in
@@ -27,7 +29,10 @@ esac
 
 cmake $SOURCEDIR                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                \
+      -G Ninja                                                           \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}          \
+      -Dabsl_DIR=$ABSEIL_ROOT \
+      -Dprotobuf_MODULE_COMPATIBLE=ON                                    \
       ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT -DBoost_NO_SYSTEM_PATHS=ON} \
       -DProtobuf_ROOT=${PROTOBUF_ROOT}                                   \
       -DCMAKE_INSTALL_LIBDIR=lib
@@ -41,10 +46,10 @@ JOBS=$((${JOBS:-1}*2/5))
 # seems to break the creation of the tarball.
 case $ARCHITECTURE in
   osx*) ;;
-  *) make -j$JOBS wn_bin ;;
+  *) cmake --build . -- ${JOBS:+-j$JOBS} wn_bin ;;
 esac
 
-make -j$JOBS install
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 find $INSTALLROOT -path "*/lib/libboost_*" -delete
 rm -f "$INSTALLROOT/LICENSE"
