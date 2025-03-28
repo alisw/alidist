@@ -1,6 +1,6 @@
 package: onnx
-version: "v1.17.0-alice1"
-tag: v1.17.0-alice1
+version: "v1.17.0-alice2"
+tag: v1.17.0-alice2
 source: https://github.com/alisw/onnx
 requires:
   - "GCC-Toolchain:(?!osx)"
