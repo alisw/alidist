@@ -1,8 +1,8 @@
 # Online Device Control
 package: ODC
-version: "0.84.2"
+version: "0.84.2-alice1"
 tag: "2d500f0cf3f131caaf42286afd614ad53827e474"
-source: https://github.com/FairRootGroup/ODC.git
+source: https://github.com/alisw/ODC.git
 requires:
   - boost
   - protobuf
