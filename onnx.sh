@@ -1,7 +1,7 @@
 package: onnx
-version: "v1.17.0"
-tag: v1.17.0
-source: https://github.com/onnx/onnx
+version: "v1.17.0-alice1"
+tag: v1.17.0-alice1
+source: https://github.com/alisw/onnx
 requires:
   - "GCC-Toolchain:(?!osx)"
   - protobuf
