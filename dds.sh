@@ -1,7 +1,7 @@
 package: DDS
-version: "3.12"
-tag: support-new-protobuf
-source: https://github.com/ktf/DDS
+version: "3.13"
+tag: "3.13"
+source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
   - protobuf
