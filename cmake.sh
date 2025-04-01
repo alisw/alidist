@@ -10,9 +10,11 @@ build_requires:
   - alibuild-recipe-tools
 prefer_system: osx.*
 prefer_system_check: |
-  verge() { [[  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]]; }
-  echo alibuild_system_replace: cmake"$(cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3)"
-  type cmake && verge 3.28.1 $(cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3)
+  verge() { [[  "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]; }
+  verle() { [[  "$1" = "$(echo -e "$1\n$2" | sort -V -r | head -n1)" ]]; }
+  current_version=$(cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3)
+  echo alibuild_system_replace: cmake"$current_version"
+  type cmake && verge 3.28.1 $current_version && verle 4.0.0 $current_version
 prefer_system_replacement_specs:
   "cmake.*":
     env:
