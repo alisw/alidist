@@ -22,6 +22,7 @@ requires:
   - FFTW3
   - Vc
   - pythia
+  - nlohmann_json
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -164,9 +165,10 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
+      ${NLOHMANN_JSON_ROOT:+nlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                   \
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
-      -Dminuit=ON                                                                     \
+      -Dminuit=ON                                                                      \
       -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \

@@ -9,11 +9,14 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-  cmake "$SOURCEDIR"                             \
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DJSON_BuildTests=OFF                          \
-    -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
-    ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
+cmake "$SOURCEDIR"                        \
+  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}  \
+  -DJSON_BuildTests=OFF                   \
+  -DCPUINFO_BUILD_UNIT_TESTS=OFF          \
+  -DCPUINFO_BUILD_MOCK_TESTS=OFF          \
+  -DCPUINFO_BUILD_BENCHMARKS=OFF          \
+  -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"   \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 
