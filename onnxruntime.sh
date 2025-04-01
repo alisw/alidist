@@ -7,17 +7,17 @@ requires:
   - re2
   - boost
   - abseil
-  - date
-  - nlohmann_json
-  - pytorch_cpuinfo
   - ms_gsl
-  - safe_int
   - flatbuffers
   - Eigen3
   - onnx
 build_requires:
+  - date
+  - safe_int
+  - pytorch_cpuinfo
   - CMake
   - alibuild-recipe-tools
+  - nlohmann_json
   - "Python"  # this package builds ONNX, which requires Python
 prepend_path:
   ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
@@ -167,5 +167,6 @@ MODULEFILE="$INSTALLROOT/etc/modulefiles/$PKGNAME"
 alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/onnxruntime
 append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF
