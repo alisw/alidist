@@ -1,10 +1,11 @@
 package: AEGIS
-version: "%(tag_basename)s"
-tag: v1.5.5
+version: "v1.5.5"
+tag: 28089be3c6365733c8776b3a65424c3d13b6e660
 requires:
   - ROOT
   - VMC
   - pythia6
+  - nlohmann_json
 build_requires:
   - CMake
   - hijing
