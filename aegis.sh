@@ -1,6 +1,6 @@
 package: AEGIS
 version: "v1.5.5"
-tag: 28089be3c6365733c8776b3a65424c3d13b6e660
+tag: v1.5.5-alice1
 requires:
   - ROOT
   - VMC
