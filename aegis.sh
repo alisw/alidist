@@ -1,5 +1,5 @@
 package: AEGIS
-version: "v1.5.5"
+version: "%(tag_basename)s"
 tag: v1.5.5-alice1
 requires:
   - ROOT
