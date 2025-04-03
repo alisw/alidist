@@ -108,6 +108,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DFETCHCONTENT_QUIET=OFF                                                                              \
       -DCMAKE_POLICY_DEFAULT_CMP0170=NEW                                                                    \
       -DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS                                                           \
+      -DCMAKE_SHARED_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup' \
+      -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup' \
       -Dsafeint_SOURCE_DIR=${SAFE_INT_ROOT}/include                                                         \
       -Deigen_SOURCE_PATH=${EIGEN3_ROOT}/include/eigen3                                                     \
       -DGIT_EXECUTABLE=$(type git)                                                                          \
