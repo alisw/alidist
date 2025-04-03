@@ -7,6 +7,7 @@ requires:
   - Python-modules
   - AliEn-Runtime
   - libxml2
+  - zlib
 build_requires:
   - CMake
   - "osx-system-openssl:(osx.*)"
@@ -45,6 +46,9 @@ libuuid_soname=$SONAME
 case $ARCHITECTURE in
   osx_*)
     [[ $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
+    # Find where ZLIB is defined
+    [[ $ZLIB_ROOT ]] || ZLIB_ROOT="$(brew --prefix zlib)"
+    [[ -d "$ZLIB_ROOT" ]] || unset ZLIB_ROOT
     # Python from Homebrew will have a hardcoded sysroot pointing to the
     # Xcode.app directory, which might not exist. This seems to be a robust
     # way to discover a working SDK path and present it to Python setuptools.
@@ -60,7 +64,7 @@ esac
 
 case $ARCHITECTURE in
   osx_x86-64) export ARCHFLAGS="-arch x86_64" ;;
-  osx_arm64) CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks ;;
+  osx_arm64) CMAKE_FRAMEWORK_PATH=$(brew --prefix python)/Frameworks ;;
 esac
 
 cd $BUILDDIR
