@@ -63,11 +63,8 @@ case $ARCHITECTURE in
   osx_arm64) CMAKE_FRAMEWORK_PATH=$(brew --prefix)/Frameworks ;;
 esac
 
-rsync -a --delete ${SOURCEDIR}/ ${BUILDDIR}
-
-mkdir build
-pushd build
-cmake "${BUILDDIR}"                                                   \
+cd $BUILDDIR
+cmake "${SOURCEDIR}"                                                  \
       --log-level DEBUG                                               \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                       \
       -DCMAKE_CXX_COMPILER=$COMPILER_CXX                              \
@@ -95,7 +92,6 @@ cmake "${BUILDDIR}"                                                   \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-Wno-error"
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
-popd
 
 if [[ x"$XROOTD_PYTHON" == x"True" ]]; then
     pushd ${INSTALLROOT}

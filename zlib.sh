@@ -9,7 +9,7 @@ prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <zlib.h>\n" | cc -xc - -c -M 2>&1
 ---
-rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 ./configure --prefix="$INSTALLROOT"
 

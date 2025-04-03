@@ -58,7 +58,7 @@ esac
 #   boost
 
 mkdir -p ./src_tmp
-rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 case $ARCHITECTURE in
   osx*)
    # use compatible llvm@18 from brew, if available. This
