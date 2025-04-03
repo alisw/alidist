@@ -14,6 +14,8 @@ prefer_system_check: |
 ---
 #!/bin/bash -ex
 rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
+type libtoolize && export LIBTOOLIZE=libtoolize
+type glibtoolize && export LIBTOOLIZE=glibtoolize
 sh autogen.sh
 ./configure --prefix="$INSTALLROOT"              \
             --with-png=no                        \
