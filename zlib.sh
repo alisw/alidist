@@ -1,6 +1,6 @@
 package: zlib
 version: "%(tag_basename)s"
-tag: v1.2.13
+tag: v1.3.1
 source: https://github.com/madler/zlib
 build_requires:
   - "GCC-Toolchain:(?!osx)"
