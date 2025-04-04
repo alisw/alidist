@@ -26,7 +26,7 @@ prepend_path:
   PYTHONPATH: $MESOS_ROOT/lib/python2.7/site-packages
 ---
 export CXXFLAGS="-fPIC -O2 -std=c++20 -w"
-export LIBS="-L${ABSEIL_ROOT}/lib -L${C_ARES_ROOT}/lib -L${RE2_ROOT}/lib -L${GRPC_ROOT}/lib -L${PROTOBUF_ROOT}/lib $(pkg-config --libs-only-l absl_log absl_cord absl_log_internal_check_op absl_raw_hash_set absl_status absl_flags protobuf libcares upb grpc utf8_range) -laddress_sorting"
+export LIBS="-L${ABSEIL_ROOT}/lib -L${C_ARES_ROOT}/lib -L${RE2_ROOT}/lib -L${GRPC_ROOT}/lib -L${PROTOBUF_ROOT}/lib $(pkg-config --libs-only-l absl_log absl_cord absl_log_internal_check_op absl_raw_hash_set absl_status absl_flags protobuf libcares upb grpc_unsecure utf8_range) -laddress_sorting"
 # Needed for mesos grpc configure checks
 export CPPFLAGS="-I${ABSEIL_ROOT}/include"
 export CFLAGS="-I${ABSEIL_ROOT}/include"
