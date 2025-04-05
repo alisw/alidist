@@ -1,5 +1,6 @@
 package: protobuf
 version: v29.3
+tag: v29.3
 source: https://github.com/protocolbuffers/protobuf
 build_requires:
   - CMake

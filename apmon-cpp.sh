@@ -8,7 +8,7 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
 ---
 #!/bin/bash -e
-rsync -a --exclude='**/.git' --delete --delete-excluded \
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded \
       $SOURCEDIR/ ./
 autoreconf -ivf
 

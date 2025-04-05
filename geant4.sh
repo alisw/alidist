@@ -1,11 +1,12 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v11.2.0"
+tag: "v11.3.0"
 # source: https://github.com/alisw/geant4.git
 source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - xercesc
+  - zlib
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -46,7 +47,8 @@ cmake $SOURCEDIR                                                \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}             \
   ${CXXSTD:+-DGEANT4_BUILD_CXXSTD=$CXXSTD}                      \
   -DG4_USE_GDML=ON                                              \
-  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                            \
+  -DGEANT4_USE_SYSTEM_ZLIB=ON
 
 
 make ${JOBS+-j $JOBS}
@@ -54,7 +56,9 @@ make install
 
 # we should not use cached package links
 packagecachefile=$(find ${INSTALLROOT} -name "Geant4PackageCache.cmake")
-echo "#" > $packagecachefile
+if [ -f "$packagecachefile" ]; then
+    echo "#" > $packagecachefile
+fi
 
 # Install data sets
 # Can be done after Geant4 installation, if installed with -DGEANT4_INSTALL_DATA=OFF

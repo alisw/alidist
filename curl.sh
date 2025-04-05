@@ -4,7 +4,6 @@ tag: curl-7_70_0
 source: https://github.com/curl/curl.git
 build_requires:
   - "OpenSSL:(?!osx)"
-  - CMake
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
@@ -14,7 +13,7 @@ if [[ $ARCHITECTURE = osx* ]]; then
 else
   ${OPENSSL_ROOT:+env LDFLAGS=-Wl,-R$OPENSSL_ROOT/lib}
 fi
-rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
+rsync -a --chmod=ug=rwX  --delete --exclude="**/.git" --delete-excluded $SOURCEDIR/ .
 
 sed -i.deleteme 's/CPPFLAGS="$CPPFLAGS $SSL_CPPFLAGS"/CPPFLAGS="$SSL_CPPFLAGS $CPPFLAGS"/' configure.ac
 sed -i.deleteme 's/LDFLAGS="$LDFLAGS $SSL_LDFLAGS"/LDFLAGS="$SSL_LDFLAGS $LDFLAGS"/' configure.ac

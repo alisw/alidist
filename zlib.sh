@@ -1,6 +1,6 @@
 package: zlib
 version: "%(tag_basename)s"
-tag: v1.2.13
+tag: v1.3.1
 source: https://github.com/madler/zlib
 build_requires:
   - "GCC-Toolchain:(?!osx)"
@@ -9,7 +9,7 @@ prefer_system: "(?!slc5)"
 prefer_system_check: |
   printf "#include <zlib.h>\n" | cc -xc - -c -M 2>&1
 ---
-rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 ./configure --prefix="$INSTALLROOT"
 
