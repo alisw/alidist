@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "daily-20250407-0000"
+tag: "async-async-2023-PbPb-apass5-v1-slc9-alidist-async-2023-PbPb-apass5-v1"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
