@@ -1,10 +1,10 @@
 package: libpng
-version: v1.6.34
+version: v1.6.47
 requires:
   - zlib
 build_requires:
   - CMake
-source: https://github.com/alisw/libpng
+source: https://github.com/pnggroup/libpng
 prefer_system: (?!slc5)
 prefer_system_check: |
   printf "#include <png.h>\n" | c++ -xc++ - `libpng-config --cflags` -c -M 2>&1
@@ -14,6 +14,7 @@ prefer_system_check: |
 rsync -a $SOURCEDIR/ .
 cmake .                                        \
     -DCMAKE_INSTALL_PREFIX:PATH=$INSTALLROOT   \
+    -DCMAKE_CXX_STANDARD=${CXXSTD}             \
     -DBUILD_SHARED_LIBS=YES                    \
     ${ZLIB_ROOT:+-DZLIB_ROOT:PATH=$ZLIB_ROOT}  \
     -DCMAKE_SKIP_RPATH=YES                     \

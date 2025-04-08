@@ -15,8 +15,9 @@ env:
 ---
 #!/bin/bash -e
   cmake "$SOURCEDIR"                             \
-    -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+    -DCMAKE_CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE:-Release}" \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
+    -DBUILD_TESTING=OFF                          \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
     -DHDF5_BUILD_CPP_LIB=ON
 

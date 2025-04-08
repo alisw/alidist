@@ -23,7 +23,7 @@ case $ARCHITECTURE in
   ;;
 esac
 
-rsync -a --exclude '**/.git' $SOURCEDIR/ ./
+rsync -a --chmod=ug=rwX --exclude '**/.git' $SOURCEDIR/ ./
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
@@ -53,7 +53,7 @@ pushd "$INSTALLROOT"
   fi
   # Uniform Python library path
   pushd lib
-    ln -nfs python* python
+    find $PWD -name "python3*" -exec ln -nfs {} python \;
   popd
 popd
 

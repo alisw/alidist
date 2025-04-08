@@ -58,7 +58,7 @@ case $ARCHITECTURE in
   *) TOOLSET=gcc ;;
 esac
 
-rsync -a "$SOURCEDIR"/ "$BUILDDIR"/
+rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete --delete-excluded "$SOURCEDIR"/ "$BUILDDIR"/
 cd "$BUILDDIR"/tools/build
 # This is to work around an issue in boost < 1.70 where the include path misses
 # the ABI suffix. E.g. ../include/python3 rather than ../include/python3m.
@@ -120,4 +120,4 @@ alibuild-generate-module --lib --cmake > etc/modulefiles/"$PKGNAME"
 cat << EOF >> etc/modulefiles/"$PKGNAME"
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EOF
-mkdir -p "$INSTALLROOT"/etc/modulefiles && rsync -a --delete etc/modulefiles/ "$INSTALLROOT"/etc/modulefiles
+mkdir -p "$INSTALLROOT"/etc/modulefiles && rsync -a --no-specials --no-devices  --delete etc/modulefiles/ "$INSTALLROOT"/etc/modulefiles
