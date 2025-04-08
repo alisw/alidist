@@ -5,9 +5,7 @@ requires:
   - O2DPG
   - QualityControl
   - AEGIS
-  - AliGenO2:(?!osx|.*aarch64)
-  - EVTGEN:(?!osx)
-  - STARlight:(?!osx)
+  - AliGenO2:(?!osx)
   - jq
 ---
 #!/bin/bash -ex

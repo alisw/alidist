@@ -10,7 +10,16 @@ build_requires:
 #!/bin/bash -e
 rsync -a "$SOURCEDIR/" ./
 
-./configure --prefix="$INSTALLROOT" --64
+export LOGFILE=${PWD}/configure.log
+
+# adjust some config options based on architecture
+# (--64 does not work on aarch64)
+ARCHFLAG="--64"
+case $ARCHITECTURE in
+  *_aarch64) ARCHFLAG="" ;;
+esac
+
+./configure --prefix="$INSTALLROOT" ${ARCHFLAG}
 
 make ${JOBS+-j $JOBS}
 make install

@@ -16,9 +16,11 @@ autoreconf -ivf .
 # https://github.com/libffi/libffi/issues/853
 mv -f Makefile_3.2.1_autoconf_2.69.in Makefile.in
 
-MAKEINFO=: ./configure --prefix="$INSTALLROOT" --disable-docs --disable-multi-os-directory
+MAKEINFO=: ./configure --prefix="$INSTALLROOT" --libdir=$INSTALLROOT/lib --disable-docs --disable-multi-os-directory
 make ${JOBS:+-j $JOBS} MAKEINFO=:
 make install MAKEINFO=:
+
+[ -d "$INSTALLROOT/lib64" ] && rsync -av "$INSTALLROOT/lib64/" "$INSTALLROOT/lib/" && rm -rf "$INSTALLROOT/lib64"
 
 # Do not install info documentation
 rm -fr "$INSTALLROOT/share/info"

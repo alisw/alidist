@@ -1,8 +1,8 @@
 # Online Device Control
 package: ODC
-version: "%(tag_basename)s"
-tag: "0.83.2"
-source: https://github.com/FairRootGroup/ODC.git
+version: "0.84.2-alice2"
+tag: "0.84.2-alice2"
+source: https://github.com/alisw/ODC.git
 requires:
   - boost
   - protobuf
@@ -15,6 +15,7 @@ build_requires:
   - flatbuffers
   - CMake
   - GCC-Toolchain:(?!osx.*)
+  - ninja
 ---
 
 case $ARCHITECTURE in
@@ -35,6 +36,7 @@ esac
 
 
 cmake  $SOURCEDIR                                                                            \
+       -G Ninja                                                                              \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                   \
        ${DDS_ROOT:+-DDDS_PATH=$DDS_ROOT}                                                     \
        ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}                                               \
@@ -49,9 +51,20 @@ cmake  $SOURCEDIR                                                               
        ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
        -DBUILD_INFOLOGGER=ON
 
+cmake --build . -- ${JOBS:+-j $JOBS} install
 
-make ${JOBS+-j $JOBS}
-make install
+cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
+
+DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+# This really means we are in development mode. We need to make sure we
+# use the real path for sources in this case. We also copy the
+# compile_commands.json file so that IDEs can make use of it directly, this
+# is a departure from our "no changes in sourcecode" policy, but for a good reason
+# and in any case the file is in gitignore.
+if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
+  perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
+  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+fi
 
 
 # Modulefile

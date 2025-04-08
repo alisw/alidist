@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20241111-0000"
+tag: "daily-20250408-0000"
 requires:
   - abseil
   - arrow
@@ -139,6 +139,12 @@ valid_defaults:
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
 
+if [[ -n $ONNXRUNTIME_REVISION ]]; then
+  source $ONNXRUNTIME_ROOT/etc/ort-init.sh
+  echo "ORT_ROCM_BUILD: $ORT_ROCM_BUILD"
+  echo "ORT_CUDA_BUILD: $ORT_CUDA_BUILD"
+fi
+
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
 # fairroot, so this really should be cleaned up in FairRoot itself for
@@ -189,10 +195,9 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
       ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \
       ${JALIEN_ROOT_REVISION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT}                                       \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL1=ON -DENABLE_OPENCL2=ON}  \
-      ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET="gfx906;gfx908"}                \
-      ${ALIBUILD_O2_FORCE_GPU:+-DCUDA_COMPUTETARGET=86}                                                   \
-      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL1=OFF -DENABLE_OPENCL2=OFF}        \
+      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL=ON}                       \
+      ${ALIBUILD_O2_FORCE_GPU:+-DHIP_AMDGPUTARGET=default -DCUDA_COMPUTETARGET=default}                   \
+      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF}                              \
       ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
       ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
       ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}             \
@@ -207,7 +212,11 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
       ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
-      ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}
+      ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}                                              \
+      ${ORT_ROCM_BUILD:+-DORT_ROCM_BUILD=${ORT_ROCM_BUILD}}                                               \
+      ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
+      ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
+      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   
 # LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install

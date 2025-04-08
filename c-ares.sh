@@ -8,6 +8,8 @@ source: https://github.com/c-ares/c-ares
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+prepend_path:
+  PKG_CONFIG_PATH: "$C_ARES_ROOT/lib/pkgconfig"
 ---
 #!/bin/bash -e
 

@@ -5,8 +5,7 @@ source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
-  - "Python:slc.*"
-  - "Python-system:(?!slc.*)"
+  - "Python"
   - CMake
   - curl
   - ninja
@@ -45,6 +44,8 @@ cmake "$SOURCEDIR/llvm" \
   -DLLVM_ENABLE_RUNTIMES='libcxx;libcxxabi' \
   -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD:?}" \
   -DCMAKE_BUILD_TYPE=Release \
+  ${COMPILER_RT_OSX_ARCHS:+-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON} \
+  ${COMPILER_RT_OSX_ARCHS:+-DCOMPILER_RT_OSX_ARCHS=${COMPILER_RT_OSX_ARCHS}} \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT" \
   -DLLVM_INSTALL_UTILS=ON \
   -DPYTHON_EXECUTABLE="$(which python3)" \

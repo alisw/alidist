@@ -7,7 +7,7 @@ build_requires:
   - "GCC-Toolchain:(?!osx)"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
-  printf "#include <lzma.h>\n" | c++ -xc++ - -c -M 2>&1
+  printf "#include <lzma.h>\n" | cc -xc - -I$(brew --prefix xz)/include -c -M 2>&1
 ---
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 ./autogen.sh

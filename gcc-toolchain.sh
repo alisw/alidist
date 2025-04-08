@@ -1,6 +1,6 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
-tag: v13.2.0-alice1
+tag: v14.2.0-alice2
 source: https://github.com/alisw/gcc-toolchain
 prepend_path:
   "LD_LIBRARY_PATH": "$GCC_TOOLCHAIN_ROOT/lib64"

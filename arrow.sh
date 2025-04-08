@@ -10,7 +10,6 @@ requires:
   - utf8proc
   - OpenSSL:(?!osx)
   - xsimd
-  - Python
 build_requires:
   - zlib
   - flatbuffers
@@ -20,6 +19,7 @@ build_requires:
   - re2
   - alibuild-recipe-tools
   - ninja
+  - Python
 env:
   ARROW_HOME: "$ARROW_ROOT"
 ---
@@ -58,7 +58,7 @@ esac
 #   boost
 
 mkdir -p ./src_tmp
-rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 case $ARCHITECTURE in
   osx*)
    # use compatible llvm@18 from brew, if available. This
@@ -106,7 +106,8 @@ cmake ./src_tmp/cpp                                                             
       ${UTF8PROC_ROOT:+-Dutf8proc_ROOT="$UTF8PROC_ROOT"}                                            \
       ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}                                               \
       ${CLANG_ROOT:+-DLLVM_DIR="$CLANG_ROOT"}                                                       \
-      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$PYTHON_ROOT/bin/python3"}                               \
+      ${PYTHON_ROOT:+-DPython3_EXECUTABLE="$(which python3)"}                                       \
+      ${XSIMD_REVISION:+-Dxsimd_DIR=${XSIMD_ROOT}}                                                  \
       -DARROW_WITH_SNAPPY=OFF                                                                       \
       -DARROW_WITH_ZSTD=OFF                                                                         \
       -DARROW_WITH_BROTLI=OFF                                                                       \
@@ -120,8 +121,8 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_FILESYSTEM=ON                                                                         \
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"                                                        \
-      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT=`find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;`}
+      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT="$(find "$GCC_TOOLCHAIN_ROOT/lib"-name crtbegin.o -exec dirname {} \;)"} \
+      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"
 
 cmake --build . -- ${JOBS:+-j $JOBS} install
 find "$INSTALLROOT/share" -name '*-gdb.py' -exec mv {} "$INSTALLROOT/lib" \;

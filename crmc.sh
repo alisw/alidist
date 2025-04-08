@@ -17,8 +17,12 @@ case $ARCHITECTURE in
   ;;
 esac
 
-cmake $SOURCEDIR                               \
-      ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}  \
+rsync -a "$SOURCEDIR/" ./
+
+# fix the CMakeFile (taking out fpe treatment which does not compile on AARCH)
+sed -i -e 's/src\/CRMCtrapfpe.c//' CMakeLists.txt
+
+cmake ${BOOST_ROOT:+-DBOOST_ROOT=$BOOST_ROOT}  \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_Fortran_FLAGS="-std=legacy" \
       ${LINKER_FLAGS:+-DCMAKE_SHARED_LINKER_FLAGS="$LINKER_FLAGS"}
 make ${JOBS+-j $JOBS} all

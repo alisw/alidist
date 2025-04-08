@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 tag: v1.13.1-alice2
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - rdma-core
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
@@ -12,14 +13,10 @@ source: https://github.com/alisw/ucx
 #!/bin/bash -e
 
 # Unified Communication X Library (linux only)
-## NOTE: rdma-core and rdma-core-devel (v35+) packages must be installed for O2 FLP/EPN use
 
-printf "#include <rdma/rdma_cma.h>" | cc -xc - -c -o /dev/null ||
-( printf "rdma-core not found.\n * On RHEL-compatible systems you probably need: rdma-core-devel\n"; exit 1; )
-
-rsync -a --delete --exclude "**/.git" ${SOURCEDIR}/ .
+rsync -a --delete --exclude "**/.git" "${SOURCEDIR}"/ .
 ./autogen.sh
-./contrib/configure-release-mt --prefix=${INSTALLROOT}     \
+./contrib/configure-release-mt --prefix="${INSTALLROOT}"     \
                                --with-verbs                \
                                --with-rdmacm               \
                                --with-ib-hw-tm             \
@@ -41,7 +38,5 @@ make ${JOBS+-j$JOBS} || make -j1
 make install
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+alibuild-generate-module --bin --lib > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
