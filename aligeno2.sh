@@ -4,7 +4,6 @@ requires:
   - DPMJET
   - POWHEG
   - pythia
-  - SHERPA
   - ThePEG
   - Rivet
   - lhapdf-pdfsets
