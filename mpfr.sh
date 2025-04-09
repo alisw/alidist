@@ -8,8 +8,9 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/sh
-rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
-perl -p -i -e 's/ doc / /' Makefile.am
+rsync -a --chmod=ug=rwX --delete --exclude .git --delete-excluded $SOURCEDIR/ .
+sed -i.bak -e 's/ doc / /' Makefile.am
+rm *.bak
 autoreconf -ivf
 
 ./configure --prefix=$INSTALLROOT    \

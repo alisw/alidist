@@ -10,7 +10,7 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-rsync -a --delete --exclude '**/.git' --delete-excluded "$SOURCEDIR/" .
+rsync -a --chmod=ug=rwX --delete --exclude .git --delete-excluded "$SOURCEDIR/" .
 
 unset HTTP_PROXY # unset this to build on slc6 system
 
