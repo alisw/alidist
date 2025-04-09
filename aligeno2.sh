@@ -6,6 +6,7 @@ requires:
   - pythia
   - ThePEG
   - Rivet
+  - SHERPA
   - lhapdf-pdfsets
   - JETSCAPE
   - CRMC
