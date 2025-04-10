@@ -1,5 +1,5 @@
 package: JDK
-version: "17.0.14"
+version: "21.0.6"
 build_requires:
   - curl
 prefer_system: .*
@@ -13,22 +13,10 @@ prepend_path:
 #!/bin/bash -e
 
 JDK_PLATFORM=linux
-[[ $ARCHITECTURE != osx* ]] || JDK_PLATFORM=osx
-
-if [[ $JDK_PLATFORM == osx ]]; then
-  URL="https://cdn.azul.com/zulu/bin/zulu17.56.15-ca-jdk17.0.14-macosx_x64.tar.gz"
-else
-  URL="https://cdn.azul.com/zulu/bin/zulu17.56.15-ca-jdk17.0.14-linux_x64.tar.gz"  
-fi
+URL="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.tar.gz"
 
 mkdir -p "$INSTALLROOT"
 curl -L $URL | tar --strip-components 1 -C "$INSTALLROOT" -xvvz
-
-if [[ $JDK_PLATFORM == osx ]]; then
-  JAVA_HOME_SUBDIR=$(cd $INSTALLROOT && find . -type d -name Home -mindepth 3 -maxdepth 3)
-  JAVA_HOME_SUBDIR=/${JAVA_HOME_SUBDIR:2}
-  [[ $JAVA_HOME_SUBDIR ]] || exit 1
-fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
