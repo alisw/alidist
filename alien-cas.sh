@@ -1,6 +1,6 @@
 package: AliEn-CAs
 version: v1
-tag: f62625ede780d455b3b7878064bcfee6bd9a4f53
+tag: 5fac97c4132df4bba9434a40a3f214401def20fa
 source: https://github.com/alisw/alien-cas.git
 build_requires:
   - alibuild-recipe-tools
