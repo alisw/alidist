@@ -23,7 +23,7 @@ cmake -S "$ALIBUILD_CMAKE_SOURCE_DIR"                  \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
     -Dprotobuf_BUILD_TESTS=NO             \
     -Dprotobuf_MODULE_COMPATIBLE=YES      \
-    -Dprotobuf_BUILD_SHARED_LIBS=OFF      \
+    -Dprotobuf_BUILD_SHARED_LIBS=ON       \
     -Dprotobuf_ABSL_PROVIDER=package      \
     -DABSL_ROOT_DIR=$ABSEIL_ROOT          \
     -DCMAKE_INSTALL_LIBDIR=lib
