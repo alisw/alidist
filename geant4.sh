@@ -6,6 +6,7 @@ source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - xercesc
+  - expat
   - zlib
 build_requires:
   - CMake
@@ -43,11 +44,11 @@ cmake $SOURCEDIR                                                \
   -DGEANT4_USE_G3TOG4=ON                                        \
   -DGEANT4_INSTALL_DATA=ON                                      \
   ${GEANT4_DATADIR:+-DGEANT4_INSTALL_DATADIR="$GEANT4_DATADIR"} \
-  -DGEANT4_USE_SYSTEM_EXPAT=OFF                                 \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}             \
   ${CXXSTD:+-DGEANT4_BUILD_CXXSTD=$CXXSTD}                      \
   -DG4_USE_GDML=ON                                              \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                            \
+  -DGEANT4_USE_SYSTEM_EXPAT=ON                                  \
   -DGEANT4_USE_SYSTEM_ZLIB=ON
 
 
