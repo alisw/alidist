@@ -11,6 +11,7 @@ requires:
   - flatbuffers
   - Eigen3
   - onnx
+  - gpu-system
 build_requires:
   - date
   - safe_int
