@@ -31,6 +31,7 @@ requires:
   - RapidJSON
   - bookkeeping-api
   - AliEn-CAs
+  - gpu-system
 build_requires:
   - abseil
   - GMP
@@ -139,10 +140,9 @@ valid_defaults:
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
 
+source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
 if [[ -n $ONNXRUNTIME_REVISION ]]; then
   source $ONNXRUNTIME_ROOT/etc/ort-init.sh
-  echo "ORT_ROCM_BUILD: $ORT_ROCM_BUILD"
-  echo "ORT_CUDA_BUILD: $ORT_CUDA_BUILD"
 fi
 
 # Making sure people do not have SIMPATH set when they build fairroot.
@@ -216,7 +216,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ORT_ROCM_BUILD:+-DORT_ROCM_BUILD=${ORT_ROCM_BUILD}}                                               \
       ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
       ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
-      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   
+      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}
 # LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install
