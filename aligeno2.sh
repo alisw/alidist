@@ -11,6 +11,7 @@ requires:
   - JETSCAPE
   - CRMC
   - EPOS4
+  - EPOS4HQ
   - EVTGEN:(?!osx)
   - STARlight:(?!osx)
   - Upcgen:(?!osx)
