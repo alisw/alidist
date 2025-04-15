@@ -140,7 +140,9 @@ valid_defaults:
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
 
-source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+  source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+fi
 if [[ -n $ONNXRUNTIME_REVISION ]]; then
   source $ONNXRUNTIME_ROOT/etc/ort-init.sh
 fi

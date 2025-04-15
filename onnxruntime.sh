@@ -25,7 +25,9 @@ prepend_path:
 ---
 #!/bin/bash -e
 
-source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+  source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+fi
 
 mkdir -p $INSTALLROOT
 
@@ -35,7 +37,7 @@ if [[ -f /etc/redhat-release ]]; then
 fi
 if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] || \
   ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  [[ $O2_GPU_MIOPEN_AVAILABLE == 1 ]] && \
+  [[ ${O2_GPU_MIOPEN_AVAILABLE:-0} == 1 ]] && \
   [[ -z "$ORT_ROCM_BUILD" ]] ) && \
   ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -ge 9 ]]); then
     ORT_ROCM_BUILD="1"
@@ -48,7 +50,7 @@ fi
 # Check CUDA CUDNN build conditions
 if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
   ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  [[ $O2_GPU_CUDNN_AVAILABLE == 1 ]] && \
+  [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && \
   [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
   [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
     ORT_CUDA_BUILD="1"
@@ -59,13 +61,13 @@ fi
 
 # Optional GPU features
 ### MIGraphX
-if [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ $O2_GPU_MIGRAPHX_AVAILABLE == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
+if [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ ${O2_GPU_MIGRAPHX_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   ORT_MIGRAPHX_BUILD="0"
 fi
 ### TensorRT
-if [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ $O2_GPU_TENSORRT_AVAILABLE == 1 ]] && [[ -z "$ORT_TENSORRT_BUILD" ]]; then
+if [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ ${O2_GPU_TENSORRT_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   ORT_TENSORRT_BUILD="1"
 elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   ORT_TENSORRT_BUILD="0"
