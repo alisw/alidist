@@ -1,5 +1,6 @@
 package: gpu-system
 version: "error"
+allow_system_package_upload: True
 prefer_system: .*
 prefer_system_check: |
   GPU_FEATURES=
