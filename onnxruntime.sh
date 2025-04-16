@@ -11,6 +11,7 @@ requires:
   - flatbuffers
   - Eigen3
   - onnx
+  - gpu-system
 build_requires:
   - date
   - safe_int
@@ -24,61 +25,52 @@ prepend_path:
 ---
 #!/bin/bash -e
 
+if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+  source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+fi
+
 mkdir -p $INSTALLROOT
 
-# Check ROCm build conditions
+# Check ROCm MIOPEN build conditions
 if [[ -f /etc/redhat-release ]]; then
-  export ALMA_LINUX_MAJOR_VERSION=$(awk '{print $3}' /etc/redhat-release | cut -d. -f1)
+  ALMA_LINUX_MAJOR_VERSION=$(awk '{print $3}' /etc/redhat-release | cut -d. -f1)
 fi
 if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] || \
   ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  ( command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1 ) && \
-  [[ -d /opt/rocm/include/hiprand ]] && \
-  [[ -d /opt/rocm/include/hipblas ]] && \
-  [[ -d /opt/rocm/include/hipsparse ]] && \
-  [[ -d /opt/rocm/include/hipfft ]] && \
-  [[ -d /opt/rocm/include/rocblas ]] && \
-  [[ -d /opt/rocm/include/rocrand ]] && \
-  [[ -d /opt/rocm/include/miopen ]] && \
-  [[ -d /opt/rocm/include/rccl ]] && \
-  [[ -d /opt/rocm/lib/hipblaslt ]] && \
+  [[ ${O2_GPU_MIOPEN_AVAILABLE:-0} == 1 ]] && \
   [[ -z "$ORT_ROCM_BUILD" ]] ) && \
-  ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -eq 9 ]]); then
-  export ORT_ROCM_BUILD="1"
-  : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
+  ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -ge 9 ]]); then
+    ORT_ROCM_BUILD="1"
+    : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
 else
-  export ORT_ROCM_BUILD="0"
+  ORT_ROCM_BUILD="0"
 fi
 
-# Check CUDA build conditions
+# Check CUDA CUDNN build conditions
 if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
   ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  ( command -v nvcc >/dev/null 2>&1 ) && \
-  [[ -f /usr/include/cudnn.h ]] && \
+  [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && \
   [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
-  [[ "$ORT_ROCM_BUILD" -eq 0 ]] && \
-  [[ -z "$ALMA_LINUX_MAJOR_VERSION" ]]; then
-  export ORT_CUDA_BUILD="1"
-  : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="sm_86"}
+  [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
+    ORT_CUDA_BUILD="1"
+    : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="89"}
 else
-  export ORT_CUDA_BUILD="OFF"
+  ORT_CUDA_BUILD="0"
 fi
 
-# Optional builds
+# Optional GPU features
 ### MIGraphX
-if ( [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ $(find /opt/rocm* -name "libmigraphx*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
-   [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
+if [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ ${O2_GPU_MIGRAPHX_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
+  ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD="0"
+  ORT_MIGRAPHX_BUILD="0"
 fi
 ### TensorRT
-if ( [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
-   [[ -z "$ORT_TENSORRT_BUILD" ]]; then
-  export ORT_TENSORRT_BUILD="1"
+if [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ ${O2_GPU_TENSORRT_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_TENSORRT_BUILD" ]]; then
+  ORT_TENSORRT_BUILD="1"
 elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
-  export ORT_TENSORRT_BUILD="0"
+  ORT_TENSORRT_BUILD="0"
 fi
 
 mkdir -p $INSTALLROOT/etc
@@ -108,8 +100,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DFETCHCONTENT_QUIET=OFF                                                                              \
       -DCMAKE_POLICY_DEFAULT_CMP0170=NEW                                                                    \
       -DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS                                                           \
-      -DCMAKE_SHARED_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup' \
-      -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup' \
+      -DCMAKE_SHARED_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup'                                           \
+      -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup'                                              \
       -Dsafeint_SOURCE_DIR=${SAFE_INT_ROOT}/include                                                         \
       -Deigen_SOURCE_PATH=${EIGEN3_ROOT}/include/eigen3                                                     \
       -DGIT_EXECUTABLE=$(type git)                                                                          \
@@ -148,7 +140,7 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
       -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
       ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DCMAKE_HIP_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}        \
-      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCH:+-CMAKE_CUDA_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}       \
+      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:+-DCMAKE_CUDA_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}     \
       -Donnxruntime_USE_COMPOSABLE_KERNEL=OFF                                                               \
       -Donnxruntime_USE_ROCBLAS_EXTENSION_API=${ORT_ROCM_BUILD}                                             \
       -Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=ON                                                        \
