@@ -3,7 +3,7 @@ Recipes to build ALICE SW
 
 # Stabilitty guarantees of the various branches and tags
 1. Tags are immutable. Under no circumstances tags should be moved. If it happens, this should be explicitly documented and possibly rolled back.
-2. The master branch is supposed to always be able to build O2, O2Physics and the O2DPG package using the o2 and o2-epn defaults. The goal of the master branch is to allow the wider possible audience to use it for development and eventually tagging, when deemed necessary. In particular it should always build on the ALICE production platform, Alma Linux 9.
+2. The master branch is supposed to always be able to build O2, O2Physics and the O2DPG packages using the `o2` and `o2-epn` defaults. The goal of the master branch is to allow the wider possible audience to use it for development and eventually tagging, when deemed necessary. In particular it should always build on the ALICE production platform, Alma Linux 9.
 3. Changes should always be discussed and agreed with the stakeholders. The only case in which a stakeholder approval can be bypassed is if some external force (OS updates breaking things for many people, data taking fixes) breaks the requirement in 2 and an urgent patch is needed to allow many people to be back in business.
 4. While there should not be any deliberate attempt to break things, there is no guarantee that the master branch is validated for physics production, please follow up in the appropriate forum whether or not a given tag / commit is good for production.
 5. If something particular intrusive needs to be tested, a custom build should be done to validate the changes.
