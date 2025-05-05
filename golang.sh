@@ -1,5 +1,5 @@
 package: golang
-version: "1.22.2"
+version: "1.24.2"
 build_requires:
   - curl
   - alibuild-recipe-tools
