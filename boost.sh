@@ -13,6 +13,9 @@ build_requires:
   - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$BOOST_ROOT/include"
+prefer_system: osx.*
+prefer_system_check: |
+  printf "#include <boost/version.hpp>" | cc -x c++ -I$(brew --prefix boost)/include - -c -o /dev/null
 ---
 BOOST_PYTHON=
 BOOST_CXXFLAGS=
