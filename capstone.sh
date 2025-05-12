@@ -1,13 +1,18 @@
 package: capstone
-version: "4.0.2"
+version: "6.0.0.Alpha4-alice1"
+tag: 42fbce6c524a3a57748f9de2b5460a7135e236c1
 requires:
   - "GCC-Toolchain:(?!osx)"
 build_requires:
   - CMake
   - alibuild-recipe-tools
+  - ninja
 source: https://github.com/aquynh/capstone
+prepend_path:
+  PKG_CONFIG_PATH: "$CAPSTONE_ROOT/lib/pkgconfig"
 ---
 cmake $SOURCEDIR                          \
+      -G Ninja                            \
       -DCAPSTONE_ARCHITECUTRE_DEFAULT=OFF \
       -DCAPSTONE_BUILD_SHARED=OFF         \
       -DCMAKE_INSTALL_LIBDIR=lib          \
