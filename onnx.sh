@@ -14,12 +14,13 @@ build_requires:
 ---
 #!/bin/bash -e
 CPPFLAFS="-I$ABSEIL_ROOT/include"  cmake "$SOURCEDIR"                             \
-    -G Ninja \
-    -DABSEIL_DIR=$ABSEIL_ROOT \
-    -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-    -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
-    ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
+    -G Ninja                                  \
+    -DABSEIL_DIR="$ABSEIL_ROOT"               \
+    -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON     \
+    -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"  \
+    -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"     \
+    -DONNX_DISABLE_STATIC_REGISTRATION=ON     \
+    ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}   \
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 
