@@ -42,8 +42,8 @@ name: Clean PR checks
         description: build/O2/alidist-ubuntu2204
         type: boolean
         default: true
-      'check_build/O2/fullCI/alidist':
-        description: build/O2/fullCI/alidist
+      'check_build/O2/fullCI/alidist_slc9':
+        description: build/O2/fullCI/alidist_slc9
         type: boolean
         default: true
 
