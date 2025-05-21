@@ -5,6 +5,8 @@ name: Check recipes
 
 'on':
   push:
+    branches:
+      - master
     paths:
       - '*.sh'
   pull_request:
