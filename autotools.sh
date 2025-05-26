@@ -116,17 +116,15 @@ pushd pkg-config*
   hash -r
 popd
 
-# We need to detect OSX becase xargs behaves differently there
-XARGS_DO_NOT_FAIL='-r'
-[[ ${ARCHITECTURE:0:3} == osx ]] && XARGS_DO_NOT_FAIL=
+popd || exit 1
 
 # Fix perl location, required on /usr/bin/perl
-grep -l -R -e '^#!.*perl' $INSTALLROOT | \
-  xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
-find $INSTALLROOT -name '*deleteme' -delete
-grep -l -R -e 'exec [^ ]*/perl' $INSTALLROOT | \
-  xargs ${XARGS_DO_NOT_FAIL} -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
-find $INSTALLROOT -name '*deleteme' -delete
+grep -l -R -e '^#!.*perl' "$INSTALLROOT" | \
+  xargs -n1 sed -ideleteme -e 's;^#!.*perl;#!/usr/bin/perl;'
+find "$INSTALLROOT" -name '*deleteme' -delete
+grep -l -R -e 'exec [^ ]*/perl' "$INSTALLROOT" | \
+  xargs -n1 sed -ideleteme -e 's;exec [^ ]*/perl;exec /usr/bin/perl;g'
+find "$INSTALLROOT" -name '*deleteme' -delete
 
 # Pretend we have a modulefile to make the linter happy (don't delete)
 #%Module
