@@ -28,9 +28,9 @@ esac
 echo "Building ALICE autotools. To avoid this install autoconf, automake, autopoint, texinfo, pkg-config."
 
 # Restore original timestamps to avoid reconf (Git does not preserve them)
-pushd "$SOURCEDIR" || exit 1
+pushd "$SOURCEDIR"
   ./missing-timestamps.sh --apply
-popd || exit 1
+popd
 
 rsync -a --delete --exclude '**/.git' "$SOURCEDIR"/ .
 
@@ -44,11 +44,11 @@ if pushd help2man*; then
   make ${JOBS+-j $JOBS}
   make install
   hash -r
-  popd || exit 1
+  popd
 fi
 
 # m4 -- requires: nothing special
-pushd m4* || exit 1
+pushd m4*
   # texinfo uses utf-8 by default, but doc/m4.text is still iso-8859-1.
   # MacOS sed only understands the command with the linebreaks like this.
   sed -i.bak '1i\
@@ -60,29 +60,29 @@ pushd m4* || exit 1
   make ${JOBS+-j $JOBS}
   make install
   hash -r
-popd || exit 1
+popd
 
 # autoconf -- requires: m4
 # FIXME: is that really true? on slc7 it fails if I do it the other way around
 # with the latest version of autoconf / m4
-pushd autoconf* || exit 1
+pushd autoconf*
   $USE_AUTORECONF && autoreconf -ivf
   ./configure --prefix "$INSTALLROOT"
   make MAKEINFO=true ${JOBS+-j $JOBS}
   make MAKEINFO=true install
   hash -r
-popd || exit 1
+popd
 
 # libtool -- requires: m4
-pushd libtool* || exit 1
+pushd libtool*
   ./configure --disable-dependency-tracking --prefix "$INSTALLROOT" --enable-ltdl-install
   make ${JOBS+-j $JOBS}
   make install
   hash -r
-popd || exit 1
+popd
 
 # gettext -- requires: nothing special
-pushd gettext* || exit 1
+pushd gettext*
   $USE_AUTORECONF && autoreconf -ivf
   ./configure --prefix "$INSTALLROOT" \
               --without-xz \
@@ -101,10 +101,10 @@ pushd gettext* || exit 1
   make ${JOBS+-j $JOBS}
   make install
   hash -r
-popd || exit 1
+popd
 
 # pkgconfig -- requires: nothing special
-pushd pkg-config* || exit 1
+pushd pkg-config*
   OLD_LDFLAGS="$LDFLAGS"
   [[ ${ARCHITECTURE:0:3} == osx ]] && export LDFLAGS="$LDFLAGS -framework CoreFoundation -framework Carbon"
   ./configure --disable-debug \
@@ -115,7 +115,7 @@ pushd pkg-config* || exit 1
   make ${JOBS+-j $JOBS}
   make install
   hash -r
-popd || exit 1
+popd
 
 # Fix perl location, required on /usr/bin/perl
 grep -l -R -e '^#!.*perl' "$INSTALLROOT" | \
