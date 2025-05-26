@@ -80,24 +80,6 @@ pushd libtool*
   hash -r
 popd
 
-# Do not judge me. I am simply trying to float.
-# Apparently slc6 needs a different order compared
-# to the rest.
-case $ARCHITECTURE in
-  slc6*|ubuntu14*)
-    # automake -- requires: m4, autoconf, gettext
-    pushd automake*
-      $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
-      ./configure --prefix $INSTALLROOT
-      make MAKEINFO=true ${JOBS+-j $JOBS}
-      make MAKEINFO=true install
-      hash -r
-    popd
-  ;;
-  *) ;;
-esac
-
-
 # gettext -- requires: nothing special
 pushd gettext*
   $USE_AUTORECONF && autoreconf -ivf
@@ -119,22 +101,6 @@ pushd gettext*
   make install
   hash -r
 popd
-
-# Do not judge me. I am simply trying to float.
-case $ARCHITECTURE in
-  slc6*|ubuntu14*) ;;
-  *)
-    # automake -- requires: m4, autoconf, gettext
-    pushd automake*
-      $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
-      ./configure --prefix $INSTALLROOT
-      make MAKEINFO=true ${JOBS+-j $JOBS}
-      make MAKEINFO=true install
-      hash -r
-    popd
-  ;;
-esac
-
 
 # pkgconfig -- requires: nothing special
 pushd pkg-config*
