@@ -3,72 +3,580 @@ version: "error"
 allow_system_package_upload: true
 prefer_system: .*
 prefer_system_check: |
+  #!/bin/bash -e
+  rm -Rf alibuild-gpu-system-temp-dir
+  mkdir alibuild-gpu-system-temp-dir
+  pushd alibuild-gpu-system-temp-dir > /dev/null
   GPU_FEATURES=
-  case $(uname) in
-    Darwin*) GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}metal;;
-  esac
 
-  # Detect the various GPU features we consider for rebuilding stuff.
-  # for now it's just the name. In principle we could put also the (part of) the version
+  while true; do
+    case $(uname) in
+      Darwin*) GPU_FEATURES+=${GPU_FEATURES:+-}metal;;
+    esac
 
-  if command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1 && \
-    [[ -d /opt/rocm/ ]] && \
-    [[ -d /opt/rocm/lib/cmake ]] && \
-    [[ -d /opt/rocm/include/hip ]] && \
-    [[ -d /opt/rocm/include/rocprim ]] && \
-    [[ -d /opt/rocm/include/thrust ]] && \
-    [[ -d /opt/rocm/include/hipcub ]]; then
-      GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}rocm
-  fi
+    # Valid options:
+    # - auto: normal auto-detection
+    # - onthefly: auto-detection at runtime, no CUDNN / MIOPEN
+    # - 1 : detect forcing all backends, and fail if a feature is not found
+    # disable : disable all backends
+    # 0 / unset --> defaults to onthefly
 
-  if [[ ${GPU_FEATURES} =~ (^|-)"rocm"(-|$) ]] && \
-    [[ -d /opt/rocm/include/hiprand ]] && \
-    [[ -d /opt/rocm/include/hipblas ]] && \
-    [[ -d /opt/rocm/include/hipsparse ]] && \
-    [[ -d /opt/rocm/include/hipfft ]] && \
-    [[ -d /opt/rocm/include/rocblas ]] && \
-    [[ -d /opt/rocm/include/rocrand ]] && \
-    [[ -d /opt/rocm/include/miopen ]] && \
-    [[ -d /opt/rocm/include/rccl ]] && \
-    [[ -d /opt/rocm/lib/hipblaslt ]]; then
-      GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}miopen
-  fi
+    if [[ -z ${ALIBUILD_O2_FORCE_GPU} || ${ALIBUILD_O2_FORCE_GPU} == "0" ]]; then
+      ALIBUILD_O2_FORCE_GPU=onthefly
+    fi
 
-  if [[ ${GPU_FEATURES} =~ (^|-)"miopen"(-|$) ]] && \
-    [[ -d /opt/rocm/lib/migraphx ]]; then
-      GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}migraphx
-  fi
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]]; then
+      [[ -z $ALIBUILD_O2_FORCE_GPU_CUDA_ARCH ]] && ALIBUILD_O2_FORCE_GPU_CUDA_ARCH=default
+      [[ -z $ALIBUILD_O2_FORCE_GPU_HIP_ARCH ]] && ALIBUILD_O2_FORCE_GPU_HIP_ARCH=default
+    fi
 
-  if command -v nvcc >/dev/null 2>&1; then
-    GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}cuda
-  fi
+    if ! [[ ${ALIBUILD_O2_FORCE_GPU} == "disable" || ${ALIBUILD_O2_FORCE_GPU} == "onthefly" ]]; then
 
-  if [[ ${GPU_FEATURES} =~ (^|-)"cuda"(-|$) ]] && \
-    [[ -f /usr/include/cudnn.h || -f /opt/cuda/targets/x86_64-linux/include/cudnn.h ]]; then
-      GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}cudnn
-  fi
+      if ! type cmake; then
+        if [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]]; then
+          GPU_FEATURES="error-No system CMake found for gpu-system.sh"
+          break
+        else
+          ALIBUILD_O2_FORCE_GPU="onthefly" # divert to onthefly since no system CMake found
+        fi
+      fi
 
-  if [[ ${GPU_FEATURES} =~ (^|-)"cudnn"(-|$) ]] && \
-    [[ ! $(find /usr/lib* /opt/cuda /usr/local/cuda -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 0 ]]; then
-      GPU_FEATURES=${GPU_FEATURES:+${GPU_FEATURES}-}tensorrt
-  fi
+      current_version=$(cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3)
+      verge() { [[  "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]; }
+      if ! verge 3.26.0 $current_version; then
+        if [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]]; then
+          GPU_FEATURES="error-Too old system CMake for gpu-system.sh"
+          break
+        else
+          ALIBUILD_O2_FORCE_GPU="onthefly" # divert to onthefly since no system CMake found
+        fi
+      fi
 
-  if [[ -z ${GPU_FEATURES} ]]; then
-    GPU_FEATURES=none
-  fi
+      if [[ ${ALIBUILD_O2_FORCE_GPU} != "onthefly" ]]; then
+        # Note: Don't change this here, but in O2 and copy it over!!!
+        cat > FindO2GPU.cmake << "EOF1"
+
+        # Copyright 2019-2020 CERN and copyright holders of ALICE O2.
+        # See https://alice-o2.web.cern.ch/copyright for details of the copyright holders.
+        # All rights not expressly granted are reserved.
+        #
+        # This software is distributed under the terms of the GNU General Public
+        # License v3 (GPL Version 3), copied verbatim in the file "COPYING".
+        #
+        # In applying this license CERN does not waive the privileges and immunities
+        # granted to it by virtue of its status as an Intergovernmental Organization
+        # or submit itself to any jurisdiction.
+
+        if(NOT DEFINED ENABLE_CUDA)
+          set(ENABLE_CUDA "AUTO")
+        endif()
+        if(NOT DEFINED ENABLE_OPENCL)
+          set(ENABLE_OPENCL "AUTO")
+        endif()
+        if(NOT DEFINED ENABLE_HIP)
+          set(ENABLE_HIP "AUTO")
+        endif()
+        string(TOUPPER "${ENABLE_CUDA}" ENABLE_CUDA)
+        string(TOUPPER "${ENABLE_OPENCL}" ENABLE_OPENCL)
+        string(TOUPPER "${ENABLE_HIP}" ENABLE_HIP)
+        if(NOT DEFINED CMAKE_BUILD_TYPE_UPPER)
+          string(TOUPPER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_UPPER)
+        endif()
+        if(CMAKE_BUILD_TYPE_UPPER STREQUAL "DEBUG")
+          set(GPUCA_BUILD_DEBUG 1)
+        endif()
+
+        if(CUDA_COMPUTETARGET AND CUDA_COMPUTETARGET STREQUAL "default")
+          set(CUDA_COMPUTETARGET 86 89)
+        endif()
+
+        if(HIP_AMDGPUTARGET AND HIP_AMDGPUTARGET STREQUAL "default")
+          set(HIP_AMDGPUTARGET gfx906;gfx908)
+        endif()
+
+        function(set_target_cuda_arch target)
+          if(CUDA_COMPUTETARGET AND (CUDA_COMPUTETARGET MATCHES "86" OR CUDA_COMPUTETARGET MATCHES "89"))
+            message(STATUS "Using optimized CUDA settings for Ampere GPU")
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_AMPERE)
+          elseif(CUDA_COMPUTETARGET AND CUDA_COMPUTETARGET MATCHES "75")
+            message(STATUS "Using optimized CUDA settings for Turing GPU")
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_TURING)
+          else()
+            message(STATUS "Defaulting optimized CUDA settings for Ampere GPU")
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_AMPERE)
+          endif()
+        endfunction()
+
+        function(set_target_hip_arch target)
+          if(HIP_AMDGPUTARGET AND HIP_AMDGPUTARGET MATCHES "gfx906")
+            message(STATUS "Using optimized HIP settings for MI50 GPU")
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_VEGA)
+          elseif(HIP_AMDGPUTARGET AND HIP_AMDGPUTARGET MATCHES "gfx908")
+            message(STATUS "Using optimized HIP settings for MI100 GPU")
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_MI2xx)
+          elseif(HIP_AMDGPUTARGET AND HIP_AMDGPUTARGET MATCHES "gfx90a")
+            message(STATUS "Using optimized HIP settings for MI210 GPU")
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_MI2xx)
+          else()
+            target_compile_definitions(${target} PUBLIC GPUCA_GPUTYPE_VEGA)
+          endif()
+        endfunction()
+
+        # Need to strip c++17 imposed by alidist defaults
+        STRING(REGEX REPLACE "\-std=[^ ]*" "" O2_GPU_CMAKE_CXX_FLAGS_NOSTD "${CMAKE_CXX_FLAGS}")
+
+        # ================================== Fast Math / Deterministic Mode ==================================
+        # set(GPUCA_DETERMINISTIC_MODE WHOLEO2)          # Override
+        set(GPUCA_DETERMINISTIC_MODE_MAP_OFF 0)
+        set(GPUCA_DETERMINISTIC_MODE_MAP_NO_FAST_MATH 1) # No -ffast-math and similar compile flags for GPU folder
+        set(GPUCA_DETERMINISTIC_MODE_MAP_OPTO2 2)        # In addition, -O2 optimization on host for GPU folder
+        set(GPUCA_DETERMINISTIC_MODE_MAP_GPU 3)          # In addition, GPUCA_DETERMINISTIC_MODE define for GPU folder
+        set(GPUCA_DETERMINISTIC_MODE_MAP_ON 3)           # Synonym for GPU
+        set(GPUCA_DETERMINISTIC_MODE_MAP_WHOLEO2 4)      # As GPU but for whole O2 code
+        if(NOT DEFINED GPUCA_DETERMINISTIC_MODE)
+          set(GPUCA_DETERMINISTIC_MODE 0)
+        elseif(NOT GPUCA_DETERMINISTIC_MODE MATCHES "^[0-9]+$")
+          if(NOT DEFINED GPUCA_DETERMINISTIC_MODE_MAP_${GPUCA_DETERMINISTIC_MODE})
+            message(FATAL_ERROR "Invalid setting ${GPUCA_DETERMINISTIC_MODE} for GPUCA_DETERMINISTIC_MODE")
+          endif()
+          set(GPUCA_DETERMINISTIC_MODE ${GPUCA_DETERMINISTIC_MODE_MAP_${GPUCA_DETERMINISTIC_MODE}})
+        endif()
+        if (CMAKE_SYSTEM_NAME MATCHES Darwin OR NOT CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+          set(GPUCA_CXX_DENORMALS_FLAGS "")
+        else()
+          set(GPUCA_CXX_DENORMALS_FLAGS "-mdaz-ftz")
+        endif()
+        set(GPUCA_CUDA_DENORMALS_FLAGS "--ftz=true")
+        set(GPUCA_OCL_DENORMALS_FLAGS "-cl-denorms-are-zero")
+        set(GPUCA_HIP_DENORMALS_FLAGS "-fgpu-flush-denormals-to-zero")
+        set(GPUCA_CXX_NO_FAST_MATH_FLAGS "-fno-fast-math -ffp-contract=off")
+        set(GPUCA_CUDA_NO_FAST_MATH_FLAGS "--prec-div=true --prec-sqrt=true --fmad false")
+        set(GPUCA_OCL_NO_FAST_MATH_FLAGS -cl-fp32-correctly-rounded-divide-sqrt )
+        if(GPUCA_DETERMINISTIC_MODE GREATER_EQUAL ${GPUCA_DETERMINISTIC_MODE_MAP_WHOLEO2})
+          add_definitions(-DGPUCA_DETERMINISTIC_MODE)
+          string(APPEND CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " ${GPUCA_CXX_NO_FAST_MATH_FLAGS}")
+          string(APPEND CMAKE_C_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " ${GPUCA_CXX_NO_FAST_MATH_FLAGS}")
+        endif()
+
+
+        # ================================== CUDA ==================================
+        if(ENABLE_CUDA)
+          if(CUDA_COMPUTETARGET)
+            set(CMAKE_CUDA_ARCHITECTURES ${CUDA_COMPUTETARGET})
+          else()
+            set(CMAKE_CUDA_ARCHITECTURES 61-virtual)
+          endif()
+          set(CMAKE_CUDA_STANDARD ${CMAKE_CXX_STANDARD})
+          set(CMAKE_CUDA_STANDARD_REQUIRED TRUE)
+          include(CheckLanguage)
+          check_language(CUDA)
+          if (NOT ENABLE_CUDA STREQUAL "AUTO")
+            if (NOT CMAKE_CUDA_COMPILER)
+              set(CMAKE_CUDA_COMPILER "nvcc")
+            endif()
+            set(CMAKE_CUDA_FLAGS "-allow-unsupported-compiler")
+          endif()
+          if(CMAKE_CUDA_COMPILER)
+            if(GPUCA_CUDA_GCCBIN)
+              message(STATUS "Using as CUDA GCC version: ${GPUCA_CUDA_GCCBIN}")
+              set(CMAKE_CUDA_HOST_COMPILER "${GPUCA_CUDA_GCCBIN}")
+            endif()
+            enable_language(CUDA)
+            get_property(LANGUAGES GLOBAL PROPERTY ENABLED_LANGUAGES)
+            if (ENABLE_CUDA STREQUAL "AUTO")
+              set(FAILURE_SEVERITY STATUS)
+            else()
+              set(FAILURE_SEVERITY FATAL_ERROR)
+            endif()
+            if(NOT CUDA IN_LIST LANGUAGES)
+              message(${FAILURE_SEVERITY} "CUDA was found but cannot be enabled")
+              set(CMAKE_CUDA_COMPILER OFF)
+            endif()
+            find_path(THRUST_INCLUDE_DIR thrust/version.h PATHS ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES} NO_DEFAULT_PATH)
+            if(THRUST_INCLUDE_DIR STREQUAL "THRUST_INCLUDE_DIR-NOTFOUND")
+              message(${FAILURE_SEVERITY} "CUDA found but thrust not available")
+              set(CMAKE_CUDA_COMPILER OFF)
+            endif()
+            if (NOT CMAKE_CUDA_COMPILER_VERSION VERSION_GREATER_EQUAL "12.8")
+              message(${FAILURE_SEVERITY} "CUDA Version too old: ${CMAKE_CUDA_COMPILER_VERSION}, 12.8 required")
+              set(CMAKE_CUDA_COMPILER OFF)
+            endif()
+          endif()
+          if(CMAKE_CUDA_COMPILER)
+            set(CMAKE_CUDA_FLAGS "-Xcompiler \"${O2_GPU_CMAKE_CXX_FLAGS_NOSTD}\" ${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr --extended-lambda -Xcompiler -Wno-attributes ${GPUCA_CUDA_DENORMALS_FLAGS}")
+            set(CMAKE_CUDA_FLAGS_${CMAKE_BUILD_TYPE_UPPER} "-Xcompiler \"${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE_UPPER}}\" ${CMAKE_CUDA_FLAGS_${CMAKE_BUILD_TYPE_UPPER}}")
+            if(GPUCA_KERNEL_RESOURCE_USAGE_VERBOSE)
+              string(APPEND CMAKE_CUDA_FLAGS " -Xptxas -v")
+            endif()
+            string(APPEND CMAKE_CUDA_FLAGS " -Xcudafe --diag_suppress=114")
+            if (NOT ENABLE_CUDA STREQUAL "AUTO")
+              string(APPEND CMAKE_CUDA_FLAGS " --allow-unsupported-compiler")
+            endif()
+            if(CMAKE_BUILD_TYPE_UPPER STREQUAL "DEBUG")
+              string(APPEND CMAKE_CUDA_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " -lineinfo -Xptxas -O0")
+            else()
+              string(APPEND CMAKE_CUDA_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " -Xptxas -O4 -Xcompiler -O4")
+            endif()
+            if(GPUCA_DETERMINISTIC_MODE GREATER_EQUAL ${GPUCA_DETERMINISTIC_MODE_MAP_NO_FAST_MATH})
+              string(APPEND CMAKE_CUDA_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " ${GPUCA_CUDA_NO_FAST_MATH_FLAGS}")
+            elseif(NOT CMAKE_BUILD_TYPE_UPPER STREQUAL "DEBUG")
+              string(APPEND CMAKE_CUDA_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " -use_fast_math ${GPUCA_CUDA_DENORMALS_FLAGS}")
+            endif()
+            if(CMAKE_CXX_FLAGS MATCHES "(^| )-Werror( |$)")
+              string(APPEND CMAKE_CUDA_FLAGS " -Werror=cross-execution-space-call")
+            endif()
+            if(GPUCA_CUDA_GCCBIN)
+              list(FILTER CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES EXCLUDE REGEX "^/usr/lib.*/gcc/") # Workaround, since CMake adds old GCC lib paths implicitly if we request that gcc for CUDA
+            endif()
+
+            set(CUDA_ENABLED ON)
+            message(STATUS "CUDA found (Version ${CMAKE_CUDA_COMPILER_VERSION})")
+          elseif(NOT ENABLE_CUDA STREQUAL "AUTO")
+            message(FATAL_ERROR "CUDA not found (Compiler: ${CMAKE_CUDA_COMPILER})")
+          else()
+            set(CUDA_ENABLED OFF)
+          endif()
+        endif()
+
+        # ================================== OpenCL ==================================
+        if(ENABLE_OPENCL)
+          find_package(OpenCL)
+          if(ENABLE_OPENCL AND NOT ENABLE_OPENCL STREQUAL "AUTO")
+            set_package_properties(OpenCL PROPERTIES TYPE REQUIRED)
+          else()
+            set_package_properties(OpenCL PROPERTIES TYPE OPTIONAL)
+          endif()
+          if(NOT OPENCL_COMPATIBLE_CLANG_FOUND)
+            find_package(LLVM)
+            if(LLVM_FOUND)
+              find_package(Clang)
+            endif()
+          endif()
+          if (GPUCA_OPENCL_CLANGBIN)
+            set(LLVM_CLANG ${GPUCA_OPENCL_CLANGBIN})
+            execute_process(COMMAND "which" "${GPUCA_OPENCL_CLANGBIN}" OUTPUT_VARIABLE TMP_LLVM_SPIRV_PATH COMMAND_ERROR_IS_FATAL ANY)
+            cmake_path(GET TMP_LLVM_SPIRV_PATH PARENT_PATH TMP_LLVM_SPIRV_PATH)
+            find_program(LLVM_SPIRV llvm-spirv HINTS "${TMP_LLVM_SPIRV_PATH}")
+          else()
+            find_program(LLVM_CLANG clang HINTS "${Clang_DIR}/../../../bin-safe")
+            find_program(LLVM_SPIRV llvm-spirv HINTS "${Clang_DIR}/../../../bin-safe")
+          endif()
+          if(Clang_FOUND
+            AND LLVM_FOUND
+            AND NOT LLVM_CLANG STREQUAL "LLVM_CLANG-NOTFOUND"
+            AND LLVM_PACKAGE_VERSION VERSION_GREATER_EQUAL 18.0)
+            set(OPENCL_COMPATIBLE_CLANG_FOUND ON)
+          endif()
+          if(OpenCL_VERSION_STRING VERSION_GREATER_EQUAL 2.2
+            AND NOT LLVM_SPIRV STREQUAL "LLVM_SPIRV-NOTFOUND"
+            AND OPENCL_COMPATIBLE_CLANG_FOUND)
+            set(OPENCL_ENABLED_SPIRV ON)
+            message(STATUS "Using CLANG ${LLVM_CLANG} and ${LLVM_SPIRV} for SPIR-V compilation")
+          endif ()
+          if(OPENCL_COMPATIBLE_CLANG_FOUND AND
+            (OpenCL_VERSION_STRING VERSION_GREATER_EQUAL 2.2
+            OR OPENCL_ENABLED_SPIRV))
+            set(OPENCL_ENABLED ON)
+            message(STATUS "Found OpenCL 2 (${OpenCL_VERSION_STRING} SPIR-V ${OPENCL_ENABLED_SPIRV} with CLANG ${LLVM_PACKAGE_VERSION})")
+          elseif(NOT ENABLE_OPENCL STREQUAL "AUTO")
+            message(FATAL_ERROR "OpenCL 2.x not available")
+          else()
+            set(OPENCL_ENABLED OFF)
+          endif()
+        endif()
+
+        # ================================== HIP ==================================
+        if(ENABLE_HIP)
+          if(HIP_AMDGPUTARGET)
+            set(CMAKE_HIP_ARCHITECTURES "${HIP_AMDGPUTARGET}")
+            set(AMDGPU_TARGETS "${HIP_AMDGPUTARGET}")
+          endif()
+          if(NOT "$ENV{CMAKE_PREFIX_PATH}" MATCHES "rocm" AND NOT CMAKE_PREFIX_PATH MATCHES "rocm" AND EXISTS "/opt/rocm/lib/cmake/")
+            list(APPEND CMAKE_PREFIX_PATH "/opt/rocm/lib/cmake")
+          endif()
+          if("$ENV{CMAKE_PREFIX_PATH}" MATCHES "rocm" OR CMAKE_PREFIX_PATH MATCHES "rocm")
+            set(CMAKE_HIP_STANDARD ${CMAKE_CXX_STANDARD})
+            set(CMAKE_HIP_STANDARD_REQUIRED TRUE)
+            set(TMP_ROCM_DIR_LIST "${CMAKE_PREFIX_PATH}:$ENV{CMAKE_PREFIX_PATH}")
+            string(REPLACE ":" ";" TMP_ROCM_DIR_LIST "${TMP_ROCM_DIR_LIST}")
+            list(FILTER TMP_ROCM_DIR_LIST INCLUDE REGEX rocm)
+            list(POP_FRONT TMP_ROCM_DIR_LIST TMP_ROCM_DIR)
+            get_filename_component(TMP_ROCM_DIR ${TMP_ROCM_DIR}/../../ ABSOLUTE)
+            if (NOT DEFINED CMAKE_HIP_COMPILER)
+              set(CMAKE_HIP_COMPILER "${TMP_ROCM_DIR}/llvm/bin/clang++")
+              if(NOT EXISTS ${CMAKE_HIP_COMPILER})
+                unset(CMAKE_HIP_COMPILER)
+              endif()
+            endif()
+            include(CheckLanguage)
+            check_language(HIP)
+            find_package(hip)
+            find_package(hipcub)
+            find_package(rocprim)
+            find_package(rocthrust)
+            find_program(hip_HIPIFY_PERL_EXECUTABLE "hipify-perl")
+            if(NOT hip_HIPIFY_PERL_EXECUTABLE)
+              find_program(hip_HIPIFY_PERL_EXECUTABLE "hipify-perl" HINTS "${TMP_ROCM_DIR}/bin")
+            endif()
+            if(ENABLE_HIP STREQUAL "AUTO")
+              set_package_properties(hip PROPERTIES TYPE OPTIONAL)
+              set_package_properties(hipcub PROPERTIES TYPE OPTIONAL)
+              set_package_properties(rocprim PROPERTIES TYPE OPTIONAL)
+              set_package_properties(rocthrust PROPERTIES TYPE OPTIONAL)
+            else()
+              set_package_properties(hip PROPERTIES TYPE REQUIRED)
+              set_package_properties(hipcub PROPERTIES TYPE REQUIRED)
+              set_package_properties(rocprim PROPERTIES TYPE REQUIRED)
+              set_package_properties(rocthrust PROPERTIES TYPE REQUIRED)
+              if(NOT hip_HIPIFY_PERL_EXECUTABLE)
+                message(FATAL_ERROR "Could not find hipify-perl command")
+              endif()
+            endif()
+            if (CMAKE_HIP_COMPILER)
+              enable_language(HIP)
+              message(STATUS "HIP language enabled: ${CMAKE_HIP_COMPILER}")
+            endif()
+          elseif(NOT ENABLE_HIP STREQUAL "AUTO")
+            message(FATAL_ERROR "HIP requested, but CMAKE_PREFIX_PATH env variable does not contain rocm folder!")
+          endif()
+          if(hip_FOUND AND NOT hip_VERSION VERSION_GREATER_EQUAL "6.3")
+            set(hip_FOUND 0)
+          endif()
+          if(hip_FOUND AND hipcub_FOUND AND rocthrust_FOUND AND rocprim_FOUND AND hip_HIPCC_EXECUTABLE AND hip_HIPIFY_PERL_EXECUTABLE)
+            set(HIP_ENABLED ON)
+            set_target_properties(roc::rocthrust PROPERTIES IMPORTED_GLOBAL TRUE)
+            message(STATUS "HIP Found (${hip_HIPCC_EXECUTABLE} version ${hip_VERSION})")
+            set(CMAKE_HIP_FLAGS "${O2_GPU_CMAKE_CXX_FLAGS_NOSTD} ${CMAKE_HIP_FLAGS} ${GPUCA_HIP_DENORMALS_FLAGS}")
+            set(CMAKE_HIP_FLAGS_${CMAKE_BUILD_TYPE_UPPER} "${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE_UPPER}} ${CMAKE_HIP_FLAGS_${CMAKE_BUILD_TYPE_UPPER}}")
+            string(APPEND CMAKE_HIP_FLAGS " -fgpu-defer-diag -mllvm -amdgpu-enable-lower-module-lds=false -mllvm -amdgpu-function-calls=true -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -Wno-invalid-constexpr -Wno-ignored-optimization-argument -Wno-unused-private-field -Wno-pass-failed ")
+            if(GPUCA_KERNEL_RESOURCE_USAGE_VERBOSE)
+              string(APPEND CMAKE_HIP_FLAGS " -Rpass-analysis=kernel-resource-usage")
+            endif()
+            if(GPUCA_DETERMINISTIC_MODE GREATER_EQUAL ${GPUCA_DETERMINISTIC_MODE_MAP_NO_FAST_MATH})
+              string(APPEND CMAKE_HIP_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " ${GPUCA_CXX_NO_FAST_MATH_FLAGS}")
+            elseif(NOT CMAKE_BUILD_TYPE_UPPER STREQUAL "DEBUG")
+              string(APPEND CMAKE_HIP_FLAGS_${CMAKE_BUILD_TYPE_UPPER} " -ffast-math -O3")
+            endif()
+            string(REGEX REPLACE "(gfx1[0-9]+;?)" "" CMAKE_HIP_ARCHITECTURES "${CMAKE_HIP_ARCHITECTURES}") # ROCm currently doesn’t support integrated graphics
+            if(HIP_AMDGPUTARGET)
+              set(CMAKE_HIP_ARCHITECTURES "${HIP_AMDGPUTARGET}")
+            endif()
+          else()
+            set(HIP_ENABLED OFF)
+          endif()
+          if(NOT HIP_ENABLED AND NOT ENABLE_HIP STREQUAL "AUTO")
+            if (NOT hip_FOUND)
+              message(WARNING "HIP not found")
+            endif()
+            if (NOT hipcub_FOUND)
+              message(WARNING "hipcub not found")
+            endif()
+            if (NOT rocthrust_FOUND)
+              message(WARNING "rocthrust not found")
+            endif()
+            if (NOT rocprim_FOUND)
+              message(WARNING "rocprim not found")
+            endif()
+            if (NOT hip_HIPCC_EXECUTABLE)
+              message(WARNING "hipcc executable not found")
+            endif()
+            if (NOT hip_HIPIFY_PERL_EXECUTABLE)
+              message(WARNING "hipify-perl executable not found")
+            endif()
+            message(FATAL_ERROR "HIP requested but some of the above packages are not found")
+          endif()
+        endif()
+
+        # if we end up here without a FATAL, it means we have found the "O2GPU" package
+        set(O2GPU_FOUND TRUE)
+        if (NOT GPUCA_FINDO2GPU_CHECK_ONLY)
+          include("${CMAKE_CURRENT_LIST_DIR}/../GPU/GPUTracking/cmake/kernel_helpers.cmake")
+        endif()
+
+  EOF1
+        # FindO2GPU.cmake
+
+        cat > CMakeLists.txt << "EOF2"
+        cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
+        project(gpu-system)
+        list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+        include(FeatureSummary)
+        set(GPUCA_FINDO2GPU_CHECK_ONLY 1)
+        set(OPENCL_COMPATIBLE_CLANG_FOUND 1)
+        find_package(O2GPU REQUIRED)
+        if(CUDA_ENABLED)
+          set(CUDA_ENABLED 1)
+        endif()
+        if(HIP_ENABLED)
+          set(HIP_ENABLED 1)
+        endif()
+        if(OPENCL_ENABLED)
+          set(OPENCL_ENABLED 1)
+        endif()
+        file(CONFIGURE
+            OUTPUT "env.sh"
+            CONTENT "
+              export GPU_CUDA_ENABLED=\"@CUDA_ENABLED@\"
+              export GPU_HIP_ENABLED=\"@HIP_ENABLED@\"
+              export GPU_OPENCL_ENABLED=\"@OPENCL_ENABLED@\"
+              export GPU_CUDA_VERSION=\"@CMAKE_CUDA_COMPILER_VERSION@\"
+              export GPU_HIP_VERSION=\"@hip_VERSION@\"
+              export GPU_CUDA_ARCHITECTURE=\"@CMAKE_CUDA_ARCHITECTURES@\"
+              export GPU_HIP_ARCHITECTURE=\"@CMAKE_HIP_ARCHITECTURES@\"
+            ")
+  EOF2
+        # CMakeLists.txt
+
+        # Run System CMake, trying to detect as many GPU features as possible
+        cmake -Wno-dev . \
+          ${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_FORCE_GPU_HIP_ARCH}} \
+          ${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:+-DCUDA_COMPUTETARGET=${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH}} \
+          &> /dev/null
+        if [[ $? -eq 0 && -f env.sh ]]; then
+          source env.sh
+        elif [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]]; then
+          GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but running CMake for GPU detection failed"
+          break
+        else
+          ALIBUILD_O2_FORCE_GPU="onthefly"
+        fi
+      fi
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]] && [[ $GPU_HIP_ENABLED != 1 || $GPU_CUDA_ENABLED != 1 || $GPU_OPENCL_ENABLED != 1 ]]; then
+      GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but not all GPU backends detected"
+      break
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "disable" ]]; then
+      GPU_CUDA_ENABLED=0
+      GPU_HIP_ENABLED=0
+      GPU_OPENCL_ENABLED=0
+    elif [[ ${ALIBUILD_O2_FORCE_GPU} == "onthefly" ]]; then
+      GPU_CUDA_ENABLED=AUTO
+      GPU_HIP_ENABLED=AUTO
+      GPU_OPENCL_ENABLED=AUTO
+      GPU_FEATURES+=${GPU_FEATURES:+-}auto
+    else
+      [[ $GPU_CUDA_ENABLED != 1 ]] && GPU_CUDA_ENABLED=0
+      [[ $GPU_HIP_ENABLED != 1 ]] && GPU_HIP_ENABLED=0
+      [[ $GPU_OPENC_ENABLED != 1 ]] && GPU_OPENC_ENABLED=0
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU_CUDA} == 1 ]]; then
+      GPU_CUDA_ENABLED=1
+    fi
+    if [[ ${ALIBUILD_O2_FORCE_GPU_HIP} == 1 ]]; then
+      GPU_HIP_ENABLED=1
+    fi
+    if [[ ${ALIBUILD_O2_FORCE_GPU_OPENCL} == 1 ]]; then
+      GPU_OPENCL_ENABLED=1
+    fi
+
+    if [[ $GPU_CUDA_ENABLED == 1 ]]; then
+      GPU_FEATURES+=${GPU_FEATURES:+-}cuda
+      if [[ -n ${GPU_CUDA_ARCHITECTURE} ]]; then
+        GPU_FEATURES+=_arch@${GPU_CUDA_ARCHITECTURE//;/#}@
+      fi
+      if [[ -n ${GPU_CUDA_VERSION} ]]; then
+        GPU_FEATURES+=_${GPU_CUDA_VERSION}
+      fi
+    fi
+
+    if [[ $GPU_HIP_ENABLED == 1 ]]; then
+      GPU_FEATURES+=${GPU_FEATURES:+-}rocm
+      if [[ -n ${GPU_HIP_ARCHITECTURE} ]]; then
+        GPU_FEATURES+=_arch@${GPU_HIP_ARCHITECTURE//;/#}@
+      fi
+      if [[ -n ${GPU_HIP_VERSION} ]]; then
+        GPU_FEATURES+=_${GPU_HIP_VERSION}
+      fi
+    fi
+
+    if [[ $GPU_OPENCL_ENABLED == 1 ]]; then
+      GPU_FEATURES+=${GPU_FEATURES:+-}opencl
+    fi
+
+    # Detect MI GPU features
+    # Eventually should improve this to be based on CMake as well
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU_MIOPEN} == 1 ]] || [[ ${GPU_FEATURES} =~ (^|-)"rocm"(-|_|$) && \
+      -d /opt/rocm/lib/cmake && \
+      -d /opt/rocm/include/hip && \
+      -d /opt/rocm/include/rocprim && \
+      -d /opt/rocm/include/thrust && \
+      -d /opt/rocm/include/hipcub && \
+      -d /opt/rocm/include/hiprand && \
+      -d /opt/rocm/include/hipblas && \
+      -d /opt/rocm/include/hipsparse && \
+      -d /opt/rocm/include/hipfft && \
+      -d /opt/rocm/include/rocblas && \
+      -d /opt/rocm/include/rocrand && \
+      -d /opt/rocm/include/miopen && \
+      -d /opt/rocm/include/rccl && \
+      -d /opt/rocm/lib/hipblaslt ]]; then
+        GPU_FEATURES+=${GPU_FEATURES:+-}miopen
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} == 1 ]] || [[ ${GPU_FEATURES} =~ (^|-)"miopen"(-|_|$) && -d /opt/rocm/lib/migraphx ]]; then
+        GPU_FEATURES+=${GPU_FEATURES:+-}migraphx
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU_CUDNN} == 1 ]] || [[ ${GPU_FEATURES} =~ (^|-)"cuda"(-|_|$) && ( -f /usr/include/cudnn.h || -f /opt/cuda/targets/x86_64-linux/include/cudnn.h ) ]]; then
+        GPU_FEATURES+=${GPU_FEATURES:+-}cudnn
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU_TENSORRT} == 1 ]] || [[ ${GPU_FEATURES} =~ (^|-)"cudnn"(-|_|$) && $(find /usr/lib* /opt/cuda /usr/local/cuda -name "libnvinfer*" -print -quit | wc -l 2>&1) != 0 ]]; then
+        GPU_FEATURES+=${GPU_FEATURES:+-}tensorrt
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]] && ! [[ ${GPU_FEATURES} =~ (^|-)"miopen"(-|_|$) && ${GPU_FEATURES} =~ (^|-)"migraphx"(-|_|$) && ${GPU_FEATURES} =~ (^|-)"cudnn"(-|_|$) && ${GPU_FEATURES} =~ (^|-)"tensorrt"(-|_|$) ]]; then
+      GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but not all ML libraries detected"
+      break
+    fi
+
+    if [[ -z ${GPU_FEATURES} ]]; then
+      GPU_FEATURES=none
+    fi
+    break
+  done
+
+  popd > /dev/null
+  rm -Rf alibuild-gpu-system-temp-dir
 
   echo "alibuild_system_replace: ${GPU_FEATURES}"
+  true
 
 prefer_system_replacement_specs:
+  "error.*":
+    version: error
+    env:
+      ERROR_STRING: "%(key)s"
+    recipe: |
+      #!/bin/bash -e
+      #%Module1.0
+      echo "gpu-system.sh GPU detection failed: ${ERROR_STRING}"
+      exit 1
   ".*":
     version: "%(key)s"
     recipe: |
-      mkdir -p $INSTALLROOT/etc
-      rm -f $INSTALLROOT/etc/gpu-features-available.sh
-      echo "export O2_GPU_ROCM_AVAILABLE=$([[ ${PKG_VERSION} =~ (^|-)rocm(-|$) ]] && echo 1 || echo 0)" >> $INSTALLROOT/etc/gpu-features-available.sh
-      echo "export O2_GPU_CUDA_AVAILABLE=$([[ ${PKG_VERSION} =~ (^|-)cuda(-|$) ]] && echo 1 || echo 0)" >> $INSTALLROOT/etc/gpu-features-available.sh
-      echo "export O2_GPU_MIOPEN_AVAILABLE=$([[ ${PKG_VERSION} =~ (^|-)miopen(-|$) ]] && echo 1 || echo 0)" >> $INSTALLROOT/etc/gpu-features-available.sh
-      echo "export O2_GPU_CUDNN_AVAILABLE=$([[ ${PKG_VERSION} =~ (^|-)cudnn(-|$) ]] && echo 1 || echo 0)" >> $INSTALLROOT/etc/gpu-features-available.sh
-      echo "export O2_GPU_MIGRAPHX_AVAILABLE=$([[ ${PKG_VERSION} =~ (^|-)migraphx(-|$) ]] && echo 1 || echo 0)" >> $INSTALLROOT/etc/gpu-features-available.sh
-      echo "export O2_GPU_TENSORRT_AVAILABLE=$([[ ${PKG_VERSION} =~ (^|-)tensorrt(-|$) ]] && echo 1 || echo 0)" >> $INSTALLROOT/etc/gpu-features-available.sh
+      #!/bin/bash -e
+      #%Module1.0
+      mkdir -p "$INSTALLROOT"/etc
+      rm -f "$INSTALLROOT"/etc/gpu-features-available.sh
+      {
+        echo "export O2_GPU_ROCM_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)rocm(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
+        echo "export O2_GPU_CUDA_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)cuda(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
+        echo "export O2_GPU_OPENCL_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)opencl(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
+        echo "export O2_GPU_MIOPEN_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)miopen(-|_|$) ]] && echo 1 ) || echo 0)\""
+        echo "export O2_GPU_CUDNN_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)cudnn(-|_|$) ]] && echo 1 ) || echo 0)\""
+        echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)migraphx(-|_|$) ]] && echo 1 ) || echo 0)\""
+        echo "export O2_GPU_TENSORRT_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)tensorrt(-|_|$) ]] && echo 1 ) || echo 0)\""
+        if [[ "${PKG_VERSION}" =~ (^|-)cuda_arch@ ]]; then
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)cuda_arch@[^@]*@' | sed -e 's/-*cuda_arch/export O2_GPU_CUDA_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+        fi
+        if [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+        fi
+      } > "$INSTALLROOT"/etc/gpu-features-available.sh
 ---
