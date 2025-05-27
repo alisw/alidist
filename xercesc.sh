@@ -14,14 +14,23 @@ prepend_path:
   CMAKE_PREFIX_PATH: "$XERCESC_ROOT"
 ---
 
-cmake $SOURCEDIR                                         \
+case $ARCHITECTURE in
+  osx*)
+    # Without this, it defaults to ICU and might fail looking for
+    # unicode/uloc.h
+    TRANSCODER=macosunicodeconverter
+    ;;
+esac
+
+cmake "$SOURCEDIR"                                       \
       -G Ninja                                           \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                \
       -DBUILD_SHARED_LIBS=ON                             \
       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}             \
       -DCMAKE_CXX_STANDARD=${CXXSTD}                     \
       -Dnetwork:BOOL=OFF                                 \
-      -DCMAKE_INSTALL_LIBDIR=lib
+      -DCMAKE_INSTALL_LIBDIR=lib                         \
+      ${TRANSCODER:+-Dtranscoder=$TRANSCODER}
 
 cmake --build . -- ${JOBS:+-j $JOBS} install
 
@@ -29,7 +38,7 @@ cmake --build . -- ${JOBS:+-j $JOBS} install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --lib > $MODULEFILE
+alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EOF
 # extra environment
 set XERCESC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
