@@ -198,13 +198,11 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
       ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \
       ${JALIEN_ROOT_REVISION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT}                                       \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL=ON}                       \
-      ${ALIBUILD_O2_FORCE_GPU:+-DHIP_AMDGPUTARGET=default -DCUDA_COMPUTETARGET=default}                   \
-      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF}                              \
-      ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
-      ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
-      ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}             \
-      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:+-DCUDA_COMPUTETARGET=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}         \
+      -DENABLE_CUDA="${O2_GPU_CUDA_AVAILABLE:-AUTO}"                                                      \
+      -DENABLE_HIP="${O2_GPU_ROCM_AVAILABLE:-AUTO}"                                                       \
+      -DENABLE_OPENCL="${O2_GPU_OPENCL_AVAILABLE:-AUTO}"                                                  \
+      ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DHIP_AMDGPUTARGET="${O2_GPU_ROCM_AVAILABLE_ARCH}"}                   \
+      ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCUDA_COMPUTETARGET="${O2_GPU_CUDA_AVAILABLE_ARCH}"}                 \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                                                             \
       ${BUILD_ANALYSIS:+-DBUILD_ANALYSIS=$BUILD_ANALYSIS}                                                 \
