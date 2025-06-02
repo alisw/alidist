@@ -7,6 +7,8 @@ requires:
   - fastjet
   - HepMC3
   - alibuild-recipe-tools
+env:
+  EPO4VSN: "4.0.3"
 ---
 #!/bin/bash -ex
 
