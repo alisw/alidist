@@ -65,6 +65,14 @@ incremental_recipe: |
     # FIXME: this breaks some corner cases, apparently...
     # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
   fi
+
+  if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+    source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+  fi
+  if [[ -n $ONNXRUNTIME_REVISION ]]; then
+    source $ONNXRUNTIME_ROOT/etc/ort-init.sh
+  fi
+
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
