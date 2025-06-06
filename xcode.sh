@@ -3,7 +3,7 @@ version: "1.0"
 prefer_system: ".*"
 prefer_system_check: |
   # In case we are not on Darwin, this should not be included
-  case `uname -o` in
+  case $(uname -o) in
     Darwin) ;;
     *) echo "alibuild_system_replace: unsupported" ;;
   esac
