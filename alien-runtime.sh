@@ -9,7 +9,6 @@ build_requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-CAs
-  - ApMon-CPP
   - UUID
   - alibuild-recipe-tools
 env:
