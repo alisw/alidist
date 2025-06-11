@@ -139,7 +139,7 @@ incremental_recipe: |
   fi
 
   if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
-    $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+    GPUCA_STANDALONE_CI=1 $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
   fi
 
 valid_defaults:
@@ -253,7 +253,7 @@ if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
 fi
 
 if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
-  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+  GPUCA_STANDALONE_CI=1  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
 fi
 
 # Modulefile
