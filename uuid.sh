@@ -20,7 +20,8 @@ case $ARCHITECTURE in
   *) disable_shared= ;;
 esac
 
-autoreconf -ivf
+# Avoid building docs
+GTKDOCIZE=echo autoreconf -ivf
 # --disable-nls so we don't depend on gettext/libintl at runtime on Intel Macs.
 ./configure ${disable_shared:+--disable-shared}   \
             "--libdir=$INSTALLROOT/lib"           \

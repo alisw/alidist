@@ -18,28 +18,14 @@ env:
   PYTHONPATH: "$PYTHON_ROOT/lib/python/site-packages"
 prefer_system: "(?!slc5|ubuntu)"
 prefer_system_check: |
-    MIN_ALIBUILD_VERSION_REGEX="v1.17.12"
-    if [[ $(printf '%s\n' "$ALIBUILD_VERSION" "$MIN_ALIBUILD_VERSION_REGEX" | sort -V | head -n 1) == "$ALIBUILD_VERSION" && "$ALIBUILD_VERSION" != "$MIN_ALIBUILD_VERSION_REGEX" ]]; then
-        # Workaround to support old alibuild versions that don't regex match alibuild_system_replace
-        case $ALIBUILD_ARCHITECTURE in
-            osx*)
-                python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python-brew3")' ;;
-            *)
-                python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python3")'
-            ;;
-        esac
-    else
-        case $ALIBUILD_ARCHITECTURE in
-            osx*)
-                # We need to include the python patch number because brew has it in the path
-                python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python-brew{version_info.major}.{version_info.minor}.{version_info.micro}")' ;;
-            *)
-                python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python{version_info.major}.{version_info.minor}")'
-            ;;
-        esac
-    fi
-
-
+    case $ALIBUILD_ARCHITECTURE in
+        osx*)
+            # We need to include the python patch number because brew has it in the path
+            python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python-brew{version_info.major}.{version_info.minor}.{version_info.micro}")' ;;
+        *)
+            python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python{version_info.major}.{version_info.minor}")'
+        ;;
+    esac
     python3 -c 'import sys; import sqlite3; sys.exit(1 if sys.version_info < (3, 9) or sys.version_info > (3, 14) else 0)' && python3 -m pip --help > /dev/null && printf '#include "pyconfig.h"' | cc -c $(python3-config --includes) -xc -o /dev/null -; if [ $? -ne 0 ]; then printf "Python, the Python development packages, and pip must be installed on your system.\nUsually those packages are called python, python-devel (or python-dev) and python-pip.\n"; exit 1; fi
 prefer_system_replacement_specs:
   "python-brew3.*":
@@ -48,20 +34,6 @@ prefer_system_replacement_specs:
         PYTHON_ROOT: $(brew --prefix python3)
         PYTHON_REVISION: ""
   "python3.*":
-    version: "%(key)s"
-    env:
-        # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
-        # to avoid having /bin in the middle of the path.
-        PYTHON_ROOT: "/dummy-python-folder"
-        PYTHON_REVISION: ""
-
-  # Workaround to support old alibuild versions that don't regex match alibuild_system_replace
-  "python-brew3":
-    version: "%(key)s"
-    env:
-        PYTHON_ROOT: $(brew --prefix python3)
-        PYTHON_REVISION: ""
-  "python3":
     version: "%(key)s"
     env:
         # Python is in path, so we need a dummy placeholder for PYTHON_ROOT

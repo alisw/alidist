@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20250526-0000"
+tag: "daily-20250611-0000"
 requires:
   - abseil
   - arrow
@@ -65,6 +65,14 @@ incremental_recipe: |
     # FIXME: this breaks some corner cases, apparently...
     # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
   fi
+
+  if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+    source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+  fi
+  if [[ -n $ONNXRUNTIME_REVISION ]]; then
+    source $ONNXRUNTIME_ROOT/etc/ort-init.sh
+  fi
+
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
@@ -129,6 +137,11 @@ incremental_recipe: |
     perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
     lcov --list coverage.info
   fi
+
+  if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
+    GPUCA_STANDALONE_CI=1 $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+  fi
+
 valid_defaults:
   - o2
   - o2-dataflow
@@ -187,6 +200,7 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   unset NINJA_BIN
 fi
 
+
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                           \
@@ -236,6 +250,10 @@ DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+fi
+
+if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
+  GPUCA_STANDALONE_CI=1  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
 fi
 
 # Modulefile
