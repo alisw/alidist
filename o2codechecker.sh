@@ -1,6 +1,6 @@
 package: o2codechecker
-version: v18.1.2
-tag: v18.1.2
+version: v18.1.2.1
+tag: v18.1.2.1
 requires:
   - Clang:(?!osx*)
 build_requires:
