@@ -1,7 +1,7 @@
 package: FairMQ
-version: "%(tag_basename)s"
-tag: "v1.9.2"
-source: https://github.com/FairRootGroup/FairMQ
+version: "v1.10.0"
+tag: "e4bb4721ff83a39a8b1f9d9499ffb3a7fe0d715c"
+source: https://github.com/ktf/FairMQ
 requires:
   - boost
   - FairLogger
