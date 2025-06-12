@@ -1,6 +1,6 @@
 package: o2codechecker
-version: v18.1.2
-tag: v18.1.2
+version: v18.1.2.1
+tag: v18.1.2.1
 requires:
   - Clang:(?!osx*)
 build_requires:
@@ -12,11 +12,12 @@ incremental_recipe: |
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
-    osx*)
-	CLANG_ROOT=`brew --prefix llvm`
-	;;
-    *)
-	;;
+  osx*)
+    # use compatible llvm@18 from brew, if available. This
+    # must match the prefer_system_check in clang.sh
+    CLANG_ROOT=`brew --prefix llvm@18`
+  ;;
+    *) ;;
 esac
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE    \
