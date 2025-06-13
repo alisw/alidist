@@ -1,7 +1,7 @@
 package: pythia
 version: "%(tag_basename)s"
-tag: pythia8315
-source: https://gitlab.com/Pythia8/releases.git
+tag: v8315-alice1
+source: https://github.com/alisw/pythia8.git
 requires:
   - lhapdf
   - HepMC
