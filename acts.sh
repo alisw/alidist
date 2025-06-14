@@ -7,6 +7,7 @@ requires:
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
+  - HepMC3
   - boost
   - Eigen3
   - alibuild-recipe-tools
