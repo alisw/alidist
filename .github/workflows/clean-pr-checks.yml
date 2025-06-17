@@ -22,14 +22,6 @@ name: Clean PR checks
         description: build/AliRoot/alidist
         type: boolean
         default: true
-      'check_build/O2/alidist-cs8':
-        description: build/O2/alidist-cs8
-        type: boolean
-        default: true
-      'check_build/O2/alidist-dataflow-cs8':
-        description: build/O2/alidist-dataflow-cs8
-        type: boolean
-        default: true
       'check_build/O2/alidist-slc9-aarch64':
         description: build/O2/alidist-slc9-aarch64
         type: boolean
