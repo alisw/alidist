@@ -28,7 +28,6 @@ requires:
   - ONNXRuntime
   - nlohmann_json
   - MLModels
-  - KFParticle
   - RapidJSON
   - bookkeeping-api
   - AliEn-CAs
