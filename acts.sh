@@ -1,5 +1,5 @@
 package: ACTS
-version: "v23.5.0-alice"
+version: "main"
 requires:
   - ROOT
   - pythia
@@ -7,6 +7,7 @@ requires:
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
+  - HepMC3
   - boost
   - Eigen3
   - alibuild-recipe-tools
