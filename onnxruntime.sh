@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.21.0
+tag: v1.22.0
 source: https://github.com/microsoft/onnxruntime
 requires:
   - protobuf
@@ -150,6 +150,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
       -Donnxruntime_CUDA_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                 \
       -Donnxruntime_FUZZ_ENABLED=OFF                                                                        \
+      -DCMAKE_CUDA_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
+      -DCMAKE_HIP_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_CXX_FLAGS="${CXXFLAGS} -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w"
 
