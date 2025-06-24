@@ -29,6 +29,6 @@ mkdir -p "$MODULEDIR"
 cat > "$MODULEFILE" <<EoF
 $(alibuild-generate-module --bin --lib)
 # Our environment
-setenv KFPARTICLE_ROOT \$KFPARTICLE_ROOT
+setenv KFPARTICLE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF
