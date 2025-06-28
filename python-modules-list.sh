@@ -2,8 +2,7 @@ package: Python-modules-list
 version: "1.0"
 env:
   PIP_BASE_REQUIREMENTS: |
-    pip == 21.3.1; python_version < '3.12'
-    pip < 26.0; python_version >= '3.12'
+    pip < 26.0
     setuptools == 59.6.0; python_version < '3.12'
     setuptools == 70.0.0; python_version >= '3.12'
     wheel == 0.37.1; python_version < '3.12'
