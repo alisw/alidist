@@ -32,14 +32,7 @@ fi
 mkdir -p $INSTALLROOT
 
 # Check ROCm MIOPEN build conditions
-if [[ -f /etc/redhat-release ]]; then
-  ALMA_LINUX_MAJOR_VERSION=$(awk '{print $3}' /etc/redhat-release | cut -d. -f1)
-fi
-if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] || \
-  ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  [[ ${O2_GPU_MIOPEN_AVAILABLE:-0} == 1 ]] && \
-  [[ -z "$ORT_ROCM_BUILD" ]] ) && \
-  ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -ge 9 ]]); then
+if [[ ${O2_GPU_MIOPEN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_ROCM_BUILD" ]]; then
     ORT_ROCM_BUILD="1"
     : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
@@ -48,11 +41,7 @@ else
 fi
 
 # Check CUDA CUDNN build conditions
-if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
-  ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && \
-  [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
-  [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
+if [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_CUDA_BUILD" ]] && [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
     ORT_CUDA_BUILD="1"
     : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="89"}
 else
@@ -139,8 +128,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       -Donnxruntime_CUDA_HOME=/usr/local/cuda                                                               \
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
       -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
-      ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DCMAKE_HIP_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}        \
-      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:+-DCMAKE_CUDA_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}     \
+      ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
+      ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCMAKE_CUDA_ARCHITECTURES="${O2_GPU_CUDA_AVAILABLE_ARCH}"}             \
       -Donnxruntime_USE_COMPOSABLE_KERNEL=OFF                                                               \
       -Donnxruntime_USE_ROCBLAS_EXTENSION_API=${ORT_ROCM_BUILD}                                             \
       -Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=ON                                                        \
