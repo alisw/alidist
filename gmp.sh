@@ -22,6 +22,13 @@ case $ARCHITECTURE in
 			   --with-pic
   ;;
   *)
+      STDC_VER=$(gcc -E -dM -x c /dev/null | grep __STDC_VERSION__ | cut -d ' ' -f3 | sed 's/L//')
+      # from '#define __STDC_VERSION__ YYYYMML' to 'YYYYMM'
+      if [ "$STDC_VER" -ge  202311 ]; then
+          # temporary fix C23 (since gcc 15) compatibility
+          sed -i.orig 's/void g(){}/void g(int,t1 const*,t1,t2,t1 const*,int){}/' "$SOURCEDIR/acinclude.m4"
+          sed -i.orig 's/void g(){}/void g(int,t1 const*,t1,t2,t1 const*,int){}/' "$SOURCEDIR/configure"
+      fi
       $SOURCEDIR/configure --prefix=$INSTALLROOT \
 			   --enable-cxx \
 			   --enable-static \
