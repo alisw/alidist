@@ -12,6 +12,10 @@ case $ARCHITECTURE in
   *) MARCH= ;;
 esac
 
+# temporary fix C23 (since gcc 15) compatibility
+sed -i.orig 's/void g(){}/void g(int p1,t1 const* p2,t1 p3,t2 p4,t1 const* p5,int p6){}/' "$SOURCEDIR/acinclude.m4"
+sed -i.orig 's/void g(){}/void g(int p1,t1 const* p2,t1 p3,t2 p4,t1 const* p5,int p6){}/' "$SOURCEDIR/configure"
+
 case $ARCHITECTURE in
   osx*)
       $SOURCEDIR/configure --prefix=$INSTALLROOT \
@@ -22,13 +26,6 @@ case $ARCHITECTURE in
 			   --with-pic
   ;;
   *)
-      STDC_VER=$(gcc -E -dM -x c /dev/null | grep __STDC_VERSION__ | cut -d ' ' -f3 | sed 's/L//')
-      # from '#define __STDC_VERSION__ YYYYMML' to 'YYYYMM'
-      if [ "$STDC_VER" -ge  202311 ]; then
-          # temporary fix C23 (since gcc 15) compatibility
-          sed -i.orig 's/void g(){}/void g(int,t1 const*,t1,t2,t1 const*,int){}/' "$SOURCEDIR/acinclude.m4"
-          sed -i.orig 's/void g(){}/void g(int,t1 const*,t1,t2,t1 const*,int){}/' "$SOURCEDIR/configure"
-      fi
       $SOURCEDIR/configure --prefix=$INSTALLROOT \
 			   --enable-cxx \
 			   --enable-static \
