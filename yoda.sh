@@ -21,7 +21,7 @@ rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ ./
 
 export PYTHON=$(type -p python3)
 
-./configure --disable-silent-rules --enable-root --prefix="$INSTALLROOT"
+./configure --disable-silent-rules --enable-root --prefix="$INSTALLROOT" --with-hdf5="$HDF5_ROOT"
 make ${JOBS+-j $JOBS}
 make install
 
