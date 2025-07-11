@@ -11,7 +11,6 @@ requires:
   - flatbuffers
   - Eigen3
   - onnx
-  - gpu-system
 build_requires:
   - date
   - safe_int
@@ -20,6 +19,7 @@ build_requires:
   - alibuild-recipe-tools
   - nlohmann_json
   - "Python"  # this package builds ONNX, which requires Python
+  - gpu-system
 prepend_path:
   ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
 ---
