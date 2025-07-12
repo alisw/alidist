@@ -31,7 +31,6 @@ requires:
   - RapidJSON
   - bookkeeping-api
   - AliEn-CAs
-  - gpu-system
 build_requires:
   - abseil
   - GMP
@@ -40,6 +39,7 @@ build_requires:
   - O2-customization
   - Clang:(?!osx*)
   - ITSResponse
+  - gpu-system
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
