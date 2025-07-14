@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-32-06-alice1"
+tag: "v6-32-06-alice9"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -22,6 +22,7 @@ requires:
   - FFTW3
   - Vc
   - pythia
+  - nlohmann_json
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -98,8 +99,8 @@ fi
 # ROOT 6+: enable Python
 ROOT_PYTHON_FLAGS="-Dpyroot=ON"
 ROOT_HAS_PYTHON=1
-python_exec=$(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
-if [ "$python_exec" = "$(which python3)" ]; then
+python_exec=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
+if [ "$python_exec" = "$(which python)" ]; then
   # By default, if there's nothing funny going on, let ROOT pick the Python in
   # the PATH, which is the one built by us (unless disabled, in which case it
   # is the system one). This is substituted into ROOT's Python scripts'
@@ -164,9 +165,10 @@ cmake $SOURCEDIR                                                                
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
+      ${NLOHMANN_JSON_ROOT:+nlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                   \
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
-      -Dminuit=ON                                                                     \
+      -Dminuit=ON                                                                      \
       -Dmathmore=ON                                                                    \
       -Droofit=ON                                                                      \
       -Dhttp=ON                                                                        \
@@ -179,7 +181,6 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
-      -Dbuiltin_afterimage=ON                                                          \
       -Dbuiltin_fftw3=OFF                                                              \
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
