@@ -9,10 +9,10 @@ env:
 overrides:
   AliRoot:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-60a
+    tag: v5-09-61a
   AliPhysics:
     version: "%(tag_basename)s_JALIEN"
-    tag: v5-09-60a-01
+    tag: v5-09-61a-01
   fastjet:
     tag: v3.4.0_1.045-alice1
 ---

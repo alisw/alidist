@@ -14,10 +14,10 @@ disable:
 overrides:
   AliPhysics:
     version: '%(commit_hash)s_O2'
-    tag: 'v5-09-60a-01'
+    tag: 'v5-09-61a-01'
   AliRoot:
     version: '%(commit_hash)s_O2'
-    tag: 'v5-09-60a'
+    tag: 'v5-09-61a'
     requires:
       - ROOT
       - DPMJET
