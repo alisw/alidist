@@ -13,6 +13,8 @@ build_requires:
   - Python
 prepend_path:
   PYTHONPATH: $YODA_ROOT/lib/python/site-packages
+env:
+  HDF5_DIR: "$HDF5_ROOT"
 ---
 #!/bin/bash -e
 rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ ./
