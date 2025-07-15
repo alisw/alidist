@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "daily-20250715-1012"
+tag: "async-epn-20250714-slc9-alidist-master-NERSC"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
