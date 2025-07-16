@@ -221,14 +221,14 @@ prefer_system_replacement_specs:
     version: error
     recipe: |
       #!/bin/bash -e
+      #%Module1.0
       echo "ERROR: gpu-system.sh GPU detection failed: ${ALIBUILD_PREFER_SYSTEM_KEY}" 1>&2
       exit 1
   ".*":
     version: "%(key)s"
-    build_requires:
-    - alibuild-recipe-tools
     recipe: |
       #!/bin/bash -e
+      #%Module1.0
       mkdir -p "$INSTALLROOT"/etc
       rm -f "$INSTALLROOT"/etc/gpu-features-available.sh
       {
@@ -246,9 +246,4 @@ prefer_system_replacement_specs:
           echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
-
-      # Modulefile
-      moduledir="$INSTALLROOT/etc/modulefiles"
-      mkdir -p "$moduledir"
-      alibuild-generate-module > "$moduledir/$PKGNAME"
 ---
