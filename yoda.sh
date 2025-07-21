@@ -21,6 +21,14 @@ rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ ./
 
 export PYTHON=$(type -p python3)
 
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $HDF5_ROOT ]] && HDF5_ROOT="$(brew --prefix hdf5)"
+  ;;
+  *) ;;
+esac
+
 ./configure --disable-silent-rules --enable-root --prefix="$INSTALLROOT" ${HDF5_ROOT:+--with-hdf5=$HDF5_ROOT} 
 make ${JOBS+-j $JOBS}
 make install
