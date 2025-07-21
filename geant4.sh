@@ -65,15 +65,15 @@ fi
 # ./geant4-config --install-datasets
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
+mkdir -p etc/modulefiles
+MODULEFILE="etc/modulefiles/$PKGNAME"
+alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EOF
 # extra environment
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
 EOF
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 # Data sets environment
 $INSTALLROOT/bin/geant4-config --datasets |  sed 's/[^ ]* //' | sed 's/G4/setenv G4/' >> "$MODULEFILE"
