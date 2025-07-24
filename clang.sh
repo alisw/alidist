@@ -105,11 +105,24 @@ mv "$INSTALLROOT"/bin/git-clang* "$INSTALLROOT/bin-safe/"  # we also need git-cl
 sed -i.bak -e "s|bin/clang|bin-safe/clang|g" "$INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake"
 rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 
+# Allow clang to find our own GCC. Notice the cat does not expand variables because
+# we want to resolve the environment when we run, not when we build this, to avoid
+# relocation issues in case GCC and clang are not built at the same time.
+if [ X$GCC_TOOLCHAIN_ROOT = X ]; then
+  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang++.cfg" << \EOF
+--gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+EOF
+  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang.cfg" << \EOF
+--gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+EOF
+fi
+
 # Check it actually works
 cat << \EOF > test.cc
 #include <iostream>
 EOF
 "$INSTALLROOT/bin-safe/clang++" -v -c test.cc
+
 
 # Modulefile
 mkdir -p etc/modulefiles
