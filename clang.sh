@@ -59,6 +59,8 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 
 if [[ $PKGVERSION == v18.1.* ]]; then
   SPIRV_TRANSLATOR_VERSION="v18.1.3"
+elif [[ $PKGVERSION == v20.1.* ]]; then
+  SPIRV_TRANSLATOR_VERSION="v20.1.3"
 else
   SPIRV_TRANSLATOR_VERSION="${PKGVERSION%%.*}.0.0"
 fi
