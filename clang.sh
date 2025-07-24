@@ -115,6 +115,9 @@ EOF
   cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang.cfg" << \EOF
 --gcc-toolchain=$GCC_TOOLCHAIN_ROOT
 EOF
+  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang-cpp.cfg" << \EOF
+--gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+EOF
 fi
 
 # Check it actually works
