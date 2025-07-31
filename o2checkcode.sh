@@ -16,7 +16,7 @@ cp "${O2_ROOT}"/compile_commands.json .
 # We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
 # Heuristically guess source directory
-O2_SRC=$(python3 -c 'import json, os; print(os.path.commonprefix([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
+O2_SRC=$(python3 -c 'import json, os; print(os.path.commonpath([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
 [[ -e "$O2_SRC"/CMakeLists.txt && -d "$O2_SRC"/.git ]]
 
 # We have something to compare our working directory to (ALIBUILD_BASE_HASH). We check only the
