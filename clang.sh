@@ -1,6 +1,6 @@
 package: Clang
-version: "v18.1.8"
-tag: "llvmorg-18.1.8-alice2"
+version: "v20.1.7"
+tag: "llvmorg-20.1.7-alice2"
 source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -53,13 +53,14 @@ cmake "$SOURCEDIR/llvm" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
   -DBUILD_SHARED_LIBS=OFF \
-  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF \
-  ${GCC_TOOLCHAIN_ROOT:+-DGCC_INSTALL_PREFIX=$GCC_TOOLCHAIN_ROOT}
-
+  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF 
+  
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 if [[ $PKGVERSION == v18.1.* ]]; then
   SPIRV_TRANSLATOR_VERSION="v18.1.3"
+elif [[ $PKGVERSION == v20.1.* ]]; then
+  SPIRV_TRANSLATOR_VERSION="v20.1.3"
 else
   SPIRV_TRANSLATOR_VERSION="${PKGVERSION%%.*}.0.0"
 fi
@@ -104,11 +105,27 @@ mv "$INSTALLROOT"/bin/git-clang* "$INSTALLROOT/bin-safe/"  # we also need git-cl
 sed -i.bak -e "s|bin/clang|bin-safe/clang|g" "$INSTALLROOT/lib/cmake/clang/ClangTargets-release.cmake"
 rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 
+# Allow clang to find our own GCC. Notice the cat does not expand variables because
+# we want to resolve the environment when we run, not when we build this, to avoid
+# relocation issues in case GCC and clang are not built at the same time.
+if [ ! "X$GCC_TOOLCHAIN_ROOT" = X ]; then
+  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang++.cfg" << \EOF
+--gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+EOF
+  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang.cfg" << \EOF
+--gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+EOF
+  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang-cpp.cfg" << \EOF
+--gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+EOF
+fi
+
 # Check it actually works
 cat << \EOF > test.cc
 #include <iostream>
 EOF
 "$INSTALLROOT/bin-safe/clang++" -v -c test.cc
+
 
 # Modulefile
 mkdir -p etc/modulefiles
