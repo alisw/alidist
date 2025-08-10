@@ -8,6 +8,8 @@ build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - alibuild-recipe-tools
+env:
+  STARlight_ROOT: "$STARLIGHT_ROOT"
 source: https://github.com/STARlightsim/STARlight.git
 ---
 #!/bin/bash -ex

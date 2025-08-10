@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20250716-0656"
+tag: "daily-20250810-0000"
 requires:
   - abseil
   - arrow
@@ -31,6 +31,7 @@ requires:
   - RapidJSON
   - bookkeeping-api
   - AliEn-CAs
+  - gpu-system
 build_requires:
   - abseil
   - GMP
@@ -39,7 +40,6 @@ build_requires:
   - O2-customization
   - Clang:(?!osx*)
   - ITSResponse
-  - gpu-system
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
