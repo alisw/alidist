@@ -1,6 +1,6 @@
 package: FOCAL
 version: "%(commit_hash)s"
-tag: v1.17
+tag: v1.18
 requires:
   - AliRoot
 build_requires:
