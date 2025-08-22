@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -U --user 'alidistlint[git]'
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -54,7 +54,7 @@ jobs:
           python3 -m pip install -U --user alibuild
           aliBuild analytics off
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run check
         run: |

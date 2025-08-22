@@ -25,7 +25,7 @@ jobs:
         branch=$(echo AliPhysics-${{ github.event.inputs.tag }}-01-patches | sed -e's/[a-z][a-z]*-01-patches$/-01-patches/')
         EOF
       id: decide_release_branch
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         ref: "${{ steps.decide_release_branch.outputs.branch }}"
     - name: Update the branch
