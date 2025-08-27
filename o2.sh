@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20250724-0000"
+tag: "daily-20250827-0000"
 requires:
   - abseil
   - arrow
@@ -121,6 +121,15 @@ incremental_recipe: |
     set -x
     [[ ! $TESTERR ]] || exit 1
   fi
+
+  if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+    ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+    [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+      $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+    echo "FindO2GPU.cmake differs in O2 compared to alidist"
+    exit 1
+  fi
+
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
   if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
@@ -152,14 +161,6 @@ valid_defaults:
 ---
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
-
-if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
-  ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
-  [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
-    $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-  echo "FindO2GPU.cmake differs in O2 compared to alidist"
-  exit 1
-fi
 
 if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
   source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
@@ -206,7 +207,6 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
   unset NINJA_BIN
 fi
-
 
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
@@ -347,6 +347,14 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   done
   set -x
   [[ ! $TESTERR ]] || exit 1
+fi
+
+if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+  ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+  [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+    $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+  echo "FindO2GPU.cmake differs in O2 compared to alidist"
+  exit 1
 fi
 
 # Create code coverage information to be uploaded
