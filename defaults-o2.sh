@@ -1,5 +1,6 @@
-package: defaults-o2
-version: v1
+disable:
+- mesos
+- MySQL
 env:
   CFLAGS: -fPIC -O2
   CMAKE_BUILD_TYPE: RELWITHDEBINFO
@@ -8,29 +9,29 @@ env:
   ENABLE_VMC: 'ON'
   GEANT4_BUILD_MULTITHREADED: 'OFF'
   MACOSX_DEPLOYMENT_TARGET: '14.0'
-disable:
-  - mesos
-  - MySQL
 overrides:
   AliPhysics:
-    version: '%(commit_hash)s_O2'
-    tag: 'v5-09-61a-01'
+    tag: vAN-20250828
+    version: '%(tag_basename)s_O2'
   AliRoot:
-    version: '%(commit_hash)s_O2'
-    tag: 'v5-09-61a'
     requires:
-      - ROOT
-      - DPMJET
-      - fastjet:(?!.*ppc64)
-      - GEANT3
-      - GEANT4_VMC
-      - Vc
-      - ZeroMQ
-      - JAliEn-ROOT
+    - ROOT
+    - DPMJET
+    - fastjet:(?!.*ppc64)
+    - GEANT3
+    - GEANT4_VMC
+    - Vc
+    - ZeroMQ
+    - JAliEn-ROOT
+    tag: v5-09-61a
+    version: '%(commit_hash)s_O2'
   cgal:
     version: 4.12.2
   fastjet:
     tag: v3.4.1_1.052-alice2
+package: defaults-o2
+version: v1
+
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
