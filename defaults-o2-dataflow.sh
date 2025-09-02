@@ -74,7 +74,7 @@ overrides:
       - grpc   # this one added
   FairMQ:
     tag: "v1.9.2"
-  ROOT
+  ROOT:
     tag: "v6-32-06-alice9"
 ---
 # This file is included in any build recipe and it's only used to set
