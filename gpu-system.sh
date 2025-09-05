@@ -80,6 +80,8 @@ prefer_system_check: |
         if(OPENCL_ENABLED)
           set(OPENCL_ENABLED 1)
         endif()
+        list(REMOVE_DUPLICATES CMAKE_CUDA_ARCHITECTURES)
+        list(REMOVE_DUPLICATES CMAKE_HIP_ARCHITECTURES)
         file(CONFIGURE
             OUTPUT "env.sh"
             CONTENT "

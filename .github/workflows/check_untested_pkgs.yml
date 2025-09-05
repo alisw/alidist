@@ -9,8 +9,6 @@ name: Check untested packages
       - reopened
       - synchronize
 
-permissions: {}
-
 jobs:
   check-untested:
     uses: alisw/ali-bot/.github/workflows/check-untested-packages.yml@master
