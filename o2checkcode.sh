@@ -16,14 +16,16 @@ cp "${O2_ROOT}"/compile_commands.json .
 # We will try to setup a list of files to be checked by using 2 specific Git commits to compare
 
 # Heuristically guess source directory
-O2_SRC=$(python3 -c 'import json, os; print(os.path.commonprefix([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
-[[ -e "$O2_SRC"/CMakeLists.txt && -d "$O2_SRC"/.git ]]
+
+O2_SRC=$(python3 -c 'import json, os; print(os.path.commonpath([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
+[[ -e "$O2_SRC"/CMakeLists.txt ]]
 
 # We have something to compare our working directory to (ALIBUILD_BASE_HASH). We check only the
 # changed files (including the untracked ones) if the list of relevant files that changed is up to
 # 50 entries long
 if [[ $ALIBUILD_BASE_HASH ]]; then
   pushd "$O2_SRC"
+    [[ -d .git ]]
     ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} || true ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
     if [[ $(cat $BUILDDIR/changed | wc -l) -le 50 ]]; then
       O2_CHECKCODE_CHANGEDFILES=$(while read FILE; do [[ -e "$O2_SRC/$FILE" ]] && echo "$FILE" || true; done < <(cat $BUILDDIR/changed) | \
@@ -62,11 +64,13 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 ,readability-braces-around-statements\
 }"
 
+echo $CHECKS
+$CLANG_ROOT/bin-safe/clang-tidy --load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so --list-checks -checks="*"
 # Run C++ checks
 run_O2CodeChecker.py ${JOBS+-j $JOBS} \
-	-clang-tidy-binary $(which O2codecheck) \
+	-clang-tidy-binary $CLANG_ROOT/bin-safe/clang-tidy \
 	-clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
-	${GCC_TOOLCHAIN_REVISION:+-extra-args="--extra-arg=--gcc-install-dir=`find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;`"} \
+  -extra-args="--load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so ${GCC_TOOLCHAIN_REVISION:+--extra-arg=--gcc-install-dir=$(find \"$GCC_TOOLCHAIN_ROOT/lib\" -name crtbegin.o -exec dirname {} \;)}" \
 	-header-filter='.*SOURCES(?!.*/3rdparty/).*' \
         ${O2_CHECKER_FIX:+-fix} -checks="$CHECKS" 2>&1 | tee error-log.txt
 

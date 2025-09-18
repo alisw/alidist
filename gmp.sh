@@ -12,6 +12,10 @@ case $ARCHITECTURE in
   *) MARCH= ;;
 esac
 
+# temporary fix C23 (since gcc 15) compatibility
+sed -i.orig 's/void g(){}/void g(int p1,t1 const* p2,t1 p3,t2 p4,t1 const* p5,int p6){}/' "$SOURCEDIR/acinclude.m4"
+sed -i.orig 's/void g(){}/void g(int p1,t1 const* p2,t1 p3,t2 p4,t1 const* p5,int p6){}/' "$SOURCEDIR/configure"
+
 case $ARCHITECTURE in
   osx*)
       $SOURCEDIR/configure --prefix=$INSTALLROOT \
