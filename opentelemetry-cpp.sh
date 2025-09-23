@@ -14,16 +14,13 @@ incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/sh
+#!/bin/bash -e
 
 if [[ $ALIBUILD_NDMSPC_TESTS ]]; then
   # Impose extra errors.
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
-# When O2 is built against Gandiva (from Arrow), then we need to use
-# -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
-# -CMake, which requires it.
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"} \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                   \

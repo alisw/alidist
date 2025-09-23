@@ -20,11 +20,9 @@ incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/sh
-SONAME=so
+#!/bin/bash -e
 case $ARCHITECTURE in
   osx*)
-        SONAME=dylib
         [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
         [[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
   ;;
@@ -35,9 +33,6 @@ if [[ $ALIBUILD_NDMSPC_TESTS ]]; then
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
-# When O2 is built against Gandiva (from Arrow), then we need to use
-# -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
-# -CMake, which requires it.
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                \
       -G Ninja                                                          \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}       \
@@ -66,6 +61,5 @@ cat >> "$MODULEFILE" <<EoF
 # Our environment
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/ndmspc
-prepend-path DYLD_LIBRARY_PATH \$PKG_ROOT/lib
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
