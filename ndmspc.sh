@@ -23,8 +23,8 @@ incremental_recipe: |
 #!/bin/bash -e
 case $ARCHITECTURE in
   osx*)
-        [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
-        [[ ! $LIBWEBSOCKETS_ROOT ]] && LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+        [ -n $OPENSSL_ROOT ] || OPENSSL_ROOT=$(brew --prefix openssl@3)
+        [ -n $LIBWEBSOCKETS_ROOT ] || LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
   ;;
 esac
 
@@ -47,7 +47,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                \
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
-DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json

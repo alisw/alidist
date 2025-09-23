@@ -35,7 +35,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
-DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
