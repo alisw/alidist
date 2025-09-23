@@ -23,8 +23,8 @@ incremental_recipe: |
 #!/bin/bash -e
 case $ARCHITECTURE in
   osx*)
-        [ -n $OPENSSL_ROOT ] || OPENSSL_ROOT=$(brew --prefix openssl@3)
-        [ -n $LIBWEBSOCKETS_ROOT ] || LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+        [[ -n $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
+        [[ -n $LIBWEBSOCKETS_ROOT ]] || LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
   ;;
 esac
 
