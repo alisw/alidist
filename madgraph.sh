@@ -5,11 +5,6 @@ source: https://github.com/alisw/MadGraph
 requires:
   - Python-modules
   - curl
-  - cgal
-  - GMP
-  - fastjet
-  - ROOT
-  - zlib
 build_requires:
   - alibuild-recipe-tools
 ---
@@ -59,17 +54,7 @@ EOF
     export PATH="$PWD/tmpwget:$PATH"
 fi
 
-# Set library paths for MadAnalysis5 FastJet linking, otherwise package build will fail
-# This will be shown only in the log, but not in the final exit code because after a while the package will be skipped and the build will succeed
-export LIBRARY_PATH="${CGAL_ROOT:+$CGAL_ROOT/lib:}${GMP_ROOT:+$GMP_ROOT/lib:}$LIBRARY_PATH"
-
-./bin/mg5_aMC install.dat &
-# Link to ZLIB in HEPTools for MadAnalysis5, no other way to pass this dependency otherwise
-while [ ! -d HEPTools ]; do sleep 1; done
-if [ -n "$ZLIB_ROOT" ]; then
-  ln -s "$ZLIB_ROOT" HEPTools/zlib
-fi
-wait
+./bin/mg5_aMC install.dat
 
 # cleanup after build
 rm install.dat
