@@ -1,6 +1,6 @@
 package: Herwig
 version: "%(tag_basename)s"
-tag: "v7.2.2"
+tag: "v7.3.0"
 source: https://github.com/alisw/herwig
 requires:
   - GMP
