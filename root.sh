@@ -62,10 +62,12 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
-[[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
-[[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
-[[ "$CXXFLAGS" == *'-std=c++20'* ]] && CMAKE_CXX_STANDARD=20 || true
-[[ "$CXXFLAGS" == *'-std=c++23'* ]] && CMAKE_CXX_STANDARD=23 || true
+case $CXXFLAGS in
+  *-std=c++14*) CMAKE_CXX_STANDARD=14 ;;
+  *-std=c++17*) CMAKE_CXX_STANDARD=17 ;;
+  *-std=c++20*) CMAKE_CXX_STANDARD=20 ;;
+  *-std=c++23*) CMAKE_CXX_STANDARD=23 ;;
+esac
 
 # We do not use global options for ROOT, otherwise the -g will
 # kill compilation on < 8GB machines
