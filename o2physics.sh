@@ -16,7 +16,7 @@ source: https://github.com/AliceO2Group/O2Physics
 track_env:
   O2PHYSICS_COMPONENTS: echo ${O2PHYSICS_COMPONENTS:-install}
 incremental_recipe: |
-  cmake --build . -- ${JOBS:+-j$JOBS} ${O2PHYSICS_COMPONENTS}
+  cmake --build . -- ${JOBS:+-j$JOBS} ${O2PHYSICS_COMPONENTS:-install}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
@@ -37,7 +37,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                               \
       ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=ON}
-cmake --build . -- ${JOBS+-j $JOBS} $O2PHYSICS_COMPONENTS
+cmake --build . -- ${JOBS+-j $JOBS} ${O2PHYSICS_COMPONENTS:-install}
 
 # export compile_commands.json in (taken from o2.sh)
 DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
