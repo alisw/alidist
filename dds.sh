@@ -1,6 +1,6 @@
 package: DDS
-version: "3.13"
-tag: "3.13"
+version: "%(tag_basename)s"
+tag: "3.16"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
@@ -11,10 +11,6 @@ build_requires:
   - ninja
   - alibuild-recipe-tools
 incremental_recipe: |
-  case $ARCHITECTURE in
-    osx*) ;;
-    *) cmake --build . -- ${JOBS:+-j$JOBS} wn_bin ;;
-  esac
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -41,13 +37,6 @@ cmake $SOURCEDIR                                                         \
 # on smaller machines.
 JOBS=$((${JOBS:-1}*2/5))
 [[ $JOBS -gt 0 ]] || JOBS=1
-
-# This is needed because https://github.com/Homebrew/homebrew-core/pull/35735
-# seems to break the creation of the tarball.
-case $ARCHITECTURE in
-  osx*) ;;
-  *) cmake --build . -- ${JOBS:+-j$JOBS} wn_bin ;;
-esac
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
