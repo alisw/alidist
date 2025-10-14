@@ -17,7 +17,7 @@ requires:
   - Upcgen:(?!osx)
   - Graniitti:(?!osx)
   - nOOn:(?!osx)
-  - Herwig
+  - Herwig:(?!osx)
 build_requires:
   - alibuild-recipe-tools
 ---
