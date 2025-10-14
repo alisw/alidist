@@ -94,4 +94,5 @@ setenv THEPEG_ROOT \$THEPEG_ROOT
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
 prepend-path PATH \$THEPEG_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$THEPEG_ROOT/lib/ThePEG
+prepend-path ROOT_INCLUDE_PATH \$THEPEG_ROOT/include
 EoF

@@ -28,5 +28,5 @@ MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
 cat >> "$MODULEFILE" <<EoF
-setenv GSL_ROOT \$PKG_ROOT/
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
 EoF

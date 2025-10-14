@@ -48,5 +48,6 @@ setenv HERWIG_ROOT \$HERWIG_ROOT
 setenv HERWIG_INSTALL_PATH \$::env(HERWIG_ROOT)/lib/Herwig
 prepend-path PATH \$HERWIG_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$HERWIG_ROOT/lib/Herwig
+prepend-path ROOT_INCLUDE_PATH \$HERWIG_ROOT/include
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
