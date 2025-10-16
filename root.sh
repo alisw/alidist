@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-32-06-alice10"
+tag: "v6-36-04-alice2"
 source: https://github.com/alisw/root.git
 requires:
   - arrow
@@ -62,9 +62,12 @@ COMPILER_CC=cc
 COMPILER_CXX=c++
 COMPILER_LD=c++
 [[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
-[[ "$CXXFLAGS" == *'-std=c++14'* ]] && CMAKE_CXX_STANDARD=14 || true
-[[ "$CXXFLAGS" == *'-std=c++17'* ]] && CMAKE_CXX_STANDARD=17 || true
-[[ "$CXXFLAGS" == *'-std=c++20'* ]] && CMAKE_CXX_STANDARD=20 || true
+case $CXXFLAGS in
+  *-std=c++14*) CMAKE_CXX_STANDARD=14 ;;
+  *-std=c++17*) CMAKE_CXX_STANDARD=17 ;;
+  *-std=c++20*) CMAKE_CXX_STANDARD=20 ;;
+  *-std=c++23*) CMAKE_CXX_STANDARD=23 ;;
+esac
 
 # We do not use global options for ROOT, otherwise the -g will
 # kill compilation on < 8GB machines
@@ -127,6 +130,7 @@ fi
 case $PKG_VERSION in
   v6[-.]30*) EXTRA_CMAKE_OPTIONS="-Dminuit2=ON -Dpythia6=ON -Dpythia6_nolink=ON" ;;
   v6[-.]32[-.]0[6789]*) EXTRA_CMAKE_OPTIONS="-Dminuit=ON -Dpythia6=ON -Dpythia6_nolink=ON -Dproof=ON" ;;
+  v6[-.]36[-.][0-9]*) EXTRA_CMAKE_OPTIONS="-Dminuit=ON -Dpythia6=ON -Dpythia6_nolink=ON -Dproof=ON -Dgeombuilder=ON" ;;
   *) EXTRA_CMAKE_OPTIONS="-Dminuit=ON" ;;
 esac
 
