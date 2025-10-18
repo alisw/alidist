@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.22.0
+tag: v1.22.2
 source: https://github.com/microsoft/onnxruntime
 requires:
   - protobuf
@@ -24,6 +24,14 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
 ---
 #!/bin/bash -e
+
+case $ARCHITECTURE in
+  osx*) 
+    export abseil_cpp_DIR=${ABSEIL_ROOT:-$(brew --prefix abseil)}
+    ABSEIL_ROOT=${ABSEIL_ROOT:-$(brew --prefix abseil)}
+    export CMAKE_PATH_PREFIX=${ABSEIL_ROOT}:$CMAKE_PATH_PREFIX
+    ;;
+esac
 
 if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
   source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
@@ -115,6 +123,11 @@ cmake "$SOURCEDIR/cmake"                                                        
       -Donnxruntime_USE_FULL_PROTOBUF=ON                                                                    \
       -Donnxruntime_ENABLE_PYTHON=OFF                                                                       \
       -Donnxruntime_MINIMAL_BUILD=OFF                                                                       \
+      -Donnxruntime_DISABLE_ABSEIL=ON                                                                       \
+      --debug-find-pkg=absl                                                                               \
+      ${ABSEIL_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${ABSEIL_ROOT}}                                   \
+      ${ABSEIL_ROOT:+-Dabseil_cpp_DIR=$ABSEIL_ROOT}                                                         \
+      ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                               \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.a}                                 \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.a}                       \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.a}                            \
