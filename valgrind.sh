@@ -9,6 +9,7 @@ build_requires:
 ---
 
 rsync -a --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+echo test
 CONF_OPTS="--enable-only64bit"
 case $ARCHITECTURE in
   osx*)
