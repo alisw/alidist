@@ -39,7 +39,7 @@ env:
 
     numpy == 1.16.2; python_version < '3.8'
     numpy == 1.19.5; python_version == '3.8'
-    numpy; python_version >= '3.9'
+    numpy >= 1.21.0; python_version >= '3.9'
 
     scipy == 1.2.1; python_version < '3.8'
     scipy == 1.6.1; python_version == '3.8'
@@ -56,9 +56,9 @@ env:
     seaborn == 0.13.2; python_version >= '3.9'
 
     scikit-learn == 0.20.3; python_version < '3.8'
-    scikit-learn == 0.24.1; python_version >= '3.8' and python_version < '3.11'
-    scikit-learn == 1.3.0; python_version >= '3.11' and python_version < '3.13'
-    scikit-learn; python_version >= '3.13'
+    scikit-learn == 1.0.2; python_version == '3.9'
+    scikit-learn == 1.1.3; python_version == '3.10'
+    scikit-learn >= 1.3.0; python_version >= '3.11'
 
     sklearn-evaluation == 0.4; python_version < '3.9'
     sklearn-evaluation == 0.5.2; python_version == '3.9'
@@ -80,7 +80,7 @@ env:
 
     xgboost == 0.82; python_version < '3.8'
     xgboost == 1.3.3; python_version == '3.8'
-    xgboost == 1.2.0; python_version >= '3.9' and python_version < '3.11'
+    xgboost == 1.7.5; python_version >= '3.9'
     xgboost == 1.7.5; python_version >= '3.11'
 
     dryable == 1.0.3; python_version < '3.9'
