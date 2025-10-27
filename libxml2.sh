@@ -13,7 +13,7 @@ prefer_system_check: |
 ---
 #!/bin/sh
 echo "Building ALICE libxml. To avoid this install libxml development package."
-rsync -a $SOURCEDIR/ ./
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ .
 autoreconf -i
 ./configure --disable-static \
             --prefix=$INSTALLROOT \
