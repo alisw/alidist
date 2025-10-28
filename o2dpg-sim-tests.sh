@@ -18,6 +18,10 @@ rm -Rf ${TEST_DIR}
 mkdir ${TEST_DIR}
 pushd ${TEST_DIR}
 
+# Add Herwig, GSL, ThePEG and nlohmann_json packages to root include path and library path at building time
+export ROOT_INCLUDE_PATH="$THEPEG_ROOT/include:$HERWIG_ROOT/include:$GSL_ROOT/include:$NLOHMANN_JSON_ROOT/include:$ROOT_INCLUDE_PATH"
+export LD_LIBRARY_PATH="$THEPEG_ROOT/lib/ThePEG:$HERWIG_ROOT/lib/Herwig:$GSL_ROOT/lib:$LD_LIBRARY_PATH"
+
 # check if LHAPDF data path is set
 if [ -z "$LHAPDF_DATA_PATH" ]; then
   echo "Setting LHAPDF_DATA_PATH to $LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LHAPDF"
