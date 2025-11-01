@@ -10,7 +10,7 @@ requires:
 build_requires:
   - "Clang:(?!osx)"
   - CMake
-  - ninja
+  - ninja-alice
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 track_env:
@@ -37,7 +37,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                               \
       ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=ON}
-cmake --build . -- ${JOBS+-j $JOBS} ${O2PHYSICS_COMPONENTS:-install}
+cmake --build . -- ${JOBS+-j $JOBS} ${NINJA_ALICE_REVISION:+--keep-free-memory 4G} ${O2PHYSICS_COMPONENTS:-install}
 
 # export compile_commands.json in (taken from o2.sh)
 DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
