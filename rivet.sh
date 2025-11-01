@@ -94,7 +94,7 @@ MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
 cat >> "$MODULEFILE" <<EoF
-setenv RIVET_ROOT \$RIVET_ROOT
+setenv RIVET_ROOT \$PKG_ROOT
 setenv RIVET_ANALYSIS_PATH \$RIVET_ROOT/lib/Rivet
 setenv RIVET_DATA_PATH \$RIVET_ROOT/share/Rivet
 prepend-path PYTHONPATH \$RIVET_ROOT/lib/$PYVER/site-packages
