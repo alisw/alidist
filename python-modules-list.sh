@@ -84,7 +84,7 @@ env:
     xgboost == 1.7.5; python_version >= '3.11'
 
     dryable == 1.0.3; python_version < '3.9'
-    dryable == 1.0.5; python_version >= '3.9'
+    dryable == 1.2.0; python_version >= '3.9'
 
     pandas == 0.24.2; python_version < '3.8'
     pandas == 1.2.3; python_version == '3.8'
