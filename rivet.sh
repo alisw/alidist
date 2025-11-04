@@ -114,7 +114,7 @@ if { [catch {exec kpsewhich -var-value TEXINPUTS} brokenTEX] } {
     set Old_TEXINPUTS [ exec sh -c "kpsewhich -var-value TEXINPUTS" ]
 }
 
-set Extra_RivetTEXINPUTS \$RIVET_ROOT/share/Rivet/texmf/tex//
+set Extra_RivetTEXINPUTS \$PKG_ROOT/share/Rivet/texmf/tex//
 setenv TEXINPUTS  \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 setenv LATEXINPUTS \$Old_TEXINPUTS:\$Extra_RivetTEXINPUTS
 EoF
