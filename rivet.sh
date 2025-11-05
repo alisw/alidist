@@ -59,7 +59,7 @@ rm -f "$INSTALLROOT"/lib/libRivet.la
 # Create line to source 3rdparty.sh to be inserted into 
 # rivet-config and rivet-build 
 cat << EOF > source3rd
-source $INSTALLROOT/etc/profile.d/init.sh
+WORK_DIR=${WORK_DIR:-$INSTALLROOT/../../../} source $INSTALLROOT/etc/profile.d/init.sh
 EOF
 
 # Make back-up of original for debugging - disable execute bit
