@@ -126,7 +126,7 @@ incremental_recipe: |
     ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
     [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
       $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-    echo "FindO2GPU.cmake differs in O2 compared to alidist"
+    echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
     exit 1
   fi
 
@@ -353,7 +353,7 @@ if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.
   ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
   [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
     $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-  echo "FindO2GPU.cmake differs in O2 compared to alidist"
+  echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
   exit 1
 fi
 
