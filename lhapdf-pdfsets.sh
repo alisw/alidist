@@ -6,7 +6,7 @@ build_requires:
 ---
 #!/bin/bash -ex
 
-PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl cteq66 CT10nlo CT14lo CT14nlo"
+PDFSETS="cteq6l1 MMHT2014lo68cl MMHT2014nlo68cl cteq66 CT10nlo CT14lo CT14nlo CT18NLO"
 if [ ! -d $INSTALLROOT/share/LHAPDF ]; then mkdir -p $INSTALLROOT/share/LHAPDF; fi
 pushd $INSTALLROOT/share/LHAPDF
   # REPO=https://lhapdf.hepforge.org/downloads?f=pdfsets/6.2.1
