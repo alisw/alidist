@@ -10,7 +10,7 @@ requires:
 build_requires:
   - "Clang:(?!osx)"
   - CMake
-  - ninja-alice
+  - ninja
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
 track_env:
