@@ -28,7 +28,7 @@ jobs:
           TAG: ${{ github.event.inputs.tag }}
 
       - name: Checkout alidist
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ steps.decide_release_branch.outputs.branch }}
 
