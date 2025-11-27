@@ -64,6 +64,19 @@ incremental_recipe: |
     # FIXME: this breaks some corner cases, apparently...
     # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
   fi
+  checkFindO2GPU() {
+    if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+      ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+      [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+        $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+      echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
+      exit 1
+    fi
+  }
+
+  if [[ ! ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) ]]; then
+    checkFindO2GPU
+  fi
 
   if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
     source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
@@ -122,13 +135,7 @@ incremental_recipe: |
     [[ ! $TESTERR ]] || exit 1
   fi
 
-  if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
-    ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
-    [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
-      $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-    echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
-    exit 1
-  fi
+  checkFindO2GPU
 
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
@@ -206,6 +213,20 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   type "$NINJA_BIN" &> /dev/null || NINJA_BIN=
   [[ $NINJA_BIN ]] && CMAKE_GENERATOR=Ninja || true
   unset NINJA_BIN
+fi
+
+checkFindO2GPU() {
+  if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+    ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+    [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+      $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+    echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
+    exit 1
+  fi
+}
+
+if [[ ! ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) ]]; then
+  checkFindO2GPU
 fi
 
 unset DYLD_LIBRARY_PATH
@@ -349,13 +370,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   [[ ! $TESTERR ]] || exit 1
 fi
 
-if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
-  ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
-  [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
-    $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-  echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
-  exit 1
-fi
+checkFindO2GPU
 
 # Create code coverage information to be uploaded
 # by the calling driver to codecov.io or similar service
