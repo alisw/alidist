@@ -16,7 +16,8 @@ cmake  $SOURCEDIR                          \
        -DROOT_DIR=$ROOT_ROOT               \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
        -DCMAKE_INSTALL_LIBDIR=lib          \
-       -DHEPMC3_ENABLE_PYTHON=OFF
+       -DHEPMC3_ENABLE_PYTHON=OFF          \
+       -DHEPMC3_ENABLE_ROOTIO=ON
 
 make ${JOBS+-j $JOBS}
 make install
