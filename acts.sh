@@ -22,13 +22,13 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DACTS_BUILD_FATRAS=ON                    \
                  -DACTS_BUILD_EXAMPLES=ON                  \
                  -DACTS_BUILD_EXAMPLES_PYTHON_BINDINGS=ON  \
-		 -DACTS_BUILD_ANALYSIS_APPS=ON             \
+                 -DACTS_BUILD_ANALYSIS_APPS=ON             \
                  -DACTS_BUILD_EXAMPLES_PYTHIA8=ON          \
-                 -DCMAKE_PREFIX_PATH=${PYTHIA_ROOT}  	   \
-                 -DACTS_BUILD_PLUGIN_GEANT4=ON		   \
-                 -DACTS_BUILD_FATRAS_GEANT4=ON		   \
+                 -DCMAKE_PREFIX_PATH=${PYTHIA_ROOT}        \
+                 -DACTS_BUILD_PLUGIN_GEANT4=ON             \
+                 -DACTS_BUILD_FATRAS_GEANT4=ON             \
                  -DACTS_BUILD_EXAMPLES_GEANT4=ON           \
-		 -DGeant4_DIR=${GEANT4_ROOT}/lib           \
+                 -DGeant4_DIR=${GEANT4_ROOT}/lib           \
                  -G Ninja 
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
