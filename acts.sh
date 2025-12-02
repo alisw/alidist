@@ -1,5 +1,5 @@
 package: ACTS
-version: "v44.1.0"
+version: "v43.0.1"
 requires:
   - ROOT
   - pythia
