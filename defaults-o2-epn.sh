@@ -48,10 +48,6 @@ overrides:
       - O2
       - fmt
       - ucx   # this one added
-  FairMQ:
-    tag: "v1.9.2"
-  ROOT:
-    tag: "v6-32-06-alice10"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
