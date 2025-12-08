@@ -56,8 +56,7 @@ env:
     seaborn == 0.13.2; python_version >= '3.9'
 
     scikit-learn == 0.20.3; python_version < '3.8'
-    scikit-learn == 0.24.1; python_version >= '3.8' and python_version < '3.11'
-    scikit-learn == 1.3.0; python_version >= '3.11' and python_version < '3.13'
+    scikit-learn == 1.3.0; python_version >= '3.8' and python_version < '3.13'
     scikit-learn; python_version >= '3.13'
 
     sklearn-evaluation == 0.4; python_version < '3.9'
