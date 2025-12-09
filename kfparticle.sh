@@ -10,6 +10,8 @@ build_requires:
   - CMake
   - ninja
   - alibuild-recipe-tools
+prepend_path:
+  ROOT_INCLUDE_PATH: "$KFPARTICLE_ROOT/include"
 ---
 #!/bin/bash -e
 
