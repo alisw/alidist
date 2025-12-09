@@ -50,7 +50,7 @@ env:
     scipy; python_version >= '3.13'
 
     Cython == 0.29.16; python_version < '3.8'
-    Cython == 0.29.21; python_version >= '3.8'
+    Cython >= 3.0.0; python_version >= '3.8'
 
     seaborn == 0.9.0; python_version < '3.9'
     seaborn == 0.13.2; python_version >= '3.9'
