@@ -3,19 +3,24 @@ version: "%(tag_basename)s"
 tag: v2.3.0
 requires:
   - "GCC-Toolchain:(?!osx)"
+  - lz4
+  - zlib
 build_requires:
   - alibuild-recipe-tools
   - CMake
+  - ninja
 source: https://github.com/edenhill/librdkafka
 ---
 
-rsync -a --delete --exclude "**/.git" "$SOURCEDIR/" .
+cmake ${SOURCEDIR}                                                                                  \
+      -DWITH_SSL=OFF                                                                                \
+      -DWITH_CURL=OFF                                                                               \
+      -DRDKAFKA_BUILD_EXAMPLES=OFF                                                                  \
+      -DRDKAFKA_BUILD_TESTS=OFF                                                                     \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                         \
+      -G Ninja                                                                                      \
 
-# cmake in rdfkafka links against ssl even when disabled, so we need to use configure, which is also recommended by librdkafka devs.
-./configure --prefix="$INSTALLROOT" --disable-ssl --disable-gssapi --disable-curl
-
-make ${JOBS+-j $JOBS}
-make install
+cmake --build . -- ${JOBS:+-j $JOBS} install
 
 #ModuleFile
 mkdir -p etc/modulefiles
