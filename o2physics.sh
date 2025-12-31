@@ -37,6 +37,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                               \
       ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=ON}
+if [[ -n $O2PHYSICSOVERRIDEJOBS ]]; then JOBS=$O2PHYSICSOVERRIDEJOBS; fi
 cmake --build . -- ${JOBS+-j $JOBS} ${NINJA_ALICE_REVISION:+--keep-free-memory 4G} ${O2PHYSICS_COMPONENTS:-install}
 
 # export compile_commands.json in (taken from o2.sh)
