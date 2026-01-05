@@ -106,6 +106,7 @@ pushd "$INSTALLROOT/bin"
   PYTHON_BIN=$(for X in python*; do echo "$X"; done | grep -E '^python[0-9]+\.[0-9]+$' | head -n1)
   PIP_BIN=$(for X in pip*; do echo "$X"; done | grep -E '^pip[0-9]+\.[0-9]+$' | head -n1)
   PYTHON_CONFIG_BIN=$(for X in python*-config; do echo "$X"; done | grep -E '^python[0-9]+\.[0-9]+m?-config$' | head -n1)
+  chmod +x $PYTHON_BIN $PIP_BIN $PYTHON_CONFIG_BIN
   [[ -x python ]] || ln -nfs "$PYTHON_BIN" python
   [[ -x python3 ]] || ln -nfs "$PYTHON_BIN" python3
   [[ -x pip ]] || ln -nfs "$PIP_BIN" pip
@@ -115,6 +116,10 @@ pushd "$INSTALLROOT/bin"
 popd
 
 # Install Python SSL certificates right away
+env PATH="$INSTALLROOT/bin:$PATH" \
+    LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
+    PYTHONHOME="$INSTALLROOT" \
+    which python3
 env PATH="$INSTALLROOT/bin:$PATH" \
     LD_LIBRARY_PATH="$INSTALLROOT/lib:$LD_LIBRARY_PATH" \
     PYTHONHOME="$INSTALLROOT" \
