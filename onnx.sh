@@ -2,6 +2,7 @@ package: onnx
 version: "v1.17.0-alice2"
 tag: v1.17.0-alice2
 source: https://github.com/alisw/onnx
+license: ApacheV2+BSD2C+CC0
 requires:
   - "GCC-Toolchain:(?!osx)"
   - protobuf
