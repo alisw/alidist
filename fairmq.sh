@@ -1,6 +1,7 @@
 package: FairMQ
 version: "%(tag_basename)s"
 tag: "v1.10.0"
+license: LGPLv3
 source: https://github.com/FairRootGroup/FairMQ
 requires:
   - boost
