@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20251023-0000"
+tag: "daily-20260105-0000"
 requires:
   - abseil
   - arrow
@@ -39,7 +39,6 @@ build_requires:
   - googlebenchmark
   - O2-customization
   - Clang:(?!osx*)
-  - ITSResponse
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
@@ -63,6 +62,19 @@ incremental_recipe: |
     # Delete all those which are found twice (i.e. which are in old.txt only)
     # FIXME: this breaks some corner cases, apparently...
     # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
+  fi
+  checkFindO2GPU() {
+    if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+      ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+      [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+        $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+      echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
+      exit 1
+    fi
+  }
+
+  if [[ ! ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) ]]; then
+    checkFindO2GPU
   fi
 
   if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
@@ -122,13 +134,7 @@ incremental_recipe: |
     [[ ! $TESTERR ]] || exit 1
   fi
 
-  if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
-    ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
-    [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
-      $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-    echo "FindO2GPU.cmake differs in O2 compared to alidist"
-    exit 1
-  fi
+  checkFindO2GPU
 
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
@@ -208,6 +214,20 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   unset NINJA_BIN
 fi
 
+checkFindO2GPU() {
+  if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+    ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+    [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+      $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+    echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
+    exit 1
+  fi
+}
+
+if [[ ! ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) ]]; then
+  checkFindO2GPU
+fi
+
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                           \
@@ -235,7 +255,6 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
       ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
-      ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}                                              \
       ${ORT_ROCM_BUILD:+-DORT_ROCM_BUILD=${ORT_ROCM_BUILD}}                                               \
       ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
       ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
@@ -349,13 +368,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   [[ ! $TESTERR ]] || exit 1
 fi
 
-if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
-  ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
-  [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
-    $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
-  echo "FindO2GPU.cmake differs in O2 compared to alidist"
-  exit 1
-fi
+checkFindO2GPU
 
 # Create code coverage information to be uploaded
 # by the calling driver to codecov.io or similar service

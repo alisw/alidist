@@ -7,9 +7,8 @@ requires:
 build_requires:
   - CMake
   - alibuild-recipe-tools
-prefer_system: .*
-prefer_system_check: |
-  printf "#include <nlohmann/json_fwd.hpp>\n" | cc -xc++ - -I"$(brew --prefix nlohmann-json)/include" -c -o /dev/null
+prepend_path:
+  CMAKE_PREFIX_PATH: "$NLOHMANN_JSON_ROOT/share/cmake"
 ---
 #!/bin/bash -e
   cmake "$SOURCEDIR"                             \
@@ -24,7 +23,4 @@ cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > "$MODULEFILE"
-cat << EOF >> "$MODULEFILE"
-prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
-EOF
+alibuild-generate-module --bin --lib --root > "$MODULEFILE"

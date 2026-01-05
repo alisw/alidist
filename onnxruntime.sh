@@ -24,6 +24,12 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
 ---
 #!/bin/bash -e
+rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+# In order to work with new versions of eigen3, backport
+sed -i.bak "s/eigen/Eigen3/g" cmake/external/eigen.cmake
+python3 -c 'import sys; print(sys.executable)'
+sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" cmake/CMakeLists.txt
 
 if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
   source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
@@ -70,15 +76,10 @@ export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
 
-python3 $SOURCEDIR/onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
-python3 $SOURCEDIR/onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
+python3 onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
+python3 onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
 
-# In order to work with new versions of eigen3, backport
-sed -i.bak "s/eigen/Eigen3/g" $SOURCEDIR/cmake/external/eigen.cmake
-python3 -c 'import sys; print(sys.executable)'
-sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" $SOURCEDIR/cmake/CMakeLists.txt
-
-cmake "$SOURCEDIR/cmake"                                                                                    \
+cmake "cmake"                                                                                               \
       --debug-find                                                                                          \
       -G Ninja                                                                                              \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                                 \
@@ -93,6 +94,7 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup'                                              \
       -Dsafeint_SOURCE_DIR=${SAFE_INT_ROOT}/include                                                         \
       -Deigen_SOURCE_PATH=${EIGEN3_ROOT}/include/eigen3                                                     \
+      -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                                             \
       -DGIT_EXECUTABLE=$(type git)                                                                          \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF                                                                    \
       -Donnxruntime_USE_PREINSTALLED_EIGEN=ON                                                               \

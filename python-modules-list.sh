@@ -50,15 +50,14 @@ env:
     scipy; python_version >= '3.13'
 
     Cython == 0.29.16; python_version < '3.8'
-    Cython == 0.29.21; python_version >= '3.8'
+    Cython >= 3.0.0; python_version >= '3.8'
 
     seaborn == 0.9.0; python_version < '3.9'
     seaborn == 0.13.2; python_version >= '3.9'
 
     scikit-learn == 0.20.3; python_version < '3.8'
-    scikit-learn == 1.0.2; python_version == '3.9'
-    scikit-learn == 1.1.3; python_version == '3.10'
-    scikit-learn >= 1.3.0; python_version >= '3.11'
+    scikit-learn == 1.3.0; python_version >= '3.8' and python_version < '3.13'
+    scikit-learn; python_version >= '3.13'
 
     sklearn-evaluation == 0.4; python_version < '3.9'
     sklearn-evaluation == 0.5.2; python_version == '3.9'
