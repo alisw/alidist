@@ -1,6 +1,6 @@
 package: KFParticle
 version: "%(tag_basename)s"
-tag: alice/v1.1-7
+tag: v1.1-alice8
 source: https://github.com/alisw/KFParticle
 requires:
   - ROOT
@@ -29,8 +29,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 cat > "$MODULEFILE" <<EoF
-$(alibuild-generate-module --bin --lib)
+$(alibuild-generate-module --bin --lib --root)
 # Our environment
-setenv KFPARTICLE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
-prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+setenv KFPARTICLE_ROOT \$PKG_ROOT
 EoF
