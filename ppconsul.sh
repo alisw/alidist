@@ -1,6 +1,6 @@
 package: Ppconsul
 version: "%(tag_basename)s"
-tag: v0.2.3-alice2
+tag: v0.2.3-alice3
 source: https://github.com/alisw/ppconsul
 requires:
   - boost
