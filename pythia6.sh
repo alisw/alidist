@@ -26,5 +26,5 @@ mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 setenv PYTHIA6_ROOT \$PKG_ROOT
-prepend-path AGILE_GEN_PATH \$PYTHIA6_ROOT
+prepend-path AGILE_GEN_PATH \$PKG_ROOT
 EoF
