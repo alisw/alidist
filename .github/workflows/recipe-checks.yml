@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: python3 -m pip install -U --user 'alidistlint[git]'
+        run: python3 -m pip install -U --user 'alidistlint[git] @ git+https://github.com/alisw/alidistlint@master'
 
       - uses: actions/checkout@v6
         with:
