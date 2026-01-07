@@ -37,7 +37,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 cat > "$MODULEFILE" <<EoF
-$(alibuild-generate-module)
+$(alibuild-generate-module --lib)
 # Our environment
 setenv GEANT3_ROOT \$PKG_ROOT
 setenv GEANT3DIR \$PKG_ROOT
