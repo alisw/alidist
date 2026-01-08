@@ -28,11 +28,11 @@ export LHAPDF_DATA_PATH="$LHAPDF_ROOT/share/LHAPDF:$LHAPDF_PDFSETS_ROOT/share/LH
 [[ -e .missing_timestamps ]] && ./missing-timestamps.sh --apply || autoreconf -ivf
 [[ $ALIEN_RUNTIME_VERSION ]] && LDZLIB="-L$ALIEN_RUNTIME_ROOT/lib" || { [[ $ZLIB_VERSION ]] && LDZLIB="-L$ZLIB_ROOT/lib" || LDZLIB= ; }
 export LDFLAGS="-L$LHAPDF_ROOT/lib -L$CGAL_ROOT/lib -L$GMP_ROOT/lib $LDZLIB -L${GSL_ROOT}/lib"
-./configure                        \
-    --prefix="$INSTALLROOT"        \
-    --with-thepeg="${THEPEG_ROOT}" \
+GENGETOPT=true ./configure             \
+    --prefix="$INSTALLROOT"            \
+    --with-thepeg="${THEPEG_ROOT}"     \
     --with-openloops=${OPENLOOPS_ROOT} \
-    --with-madgraph=${MADGRAPH_ROOT} \
+    --with-madgraph=${MADGRAPH_ROOT}   \
      ${GSL_ROOT:+--with-gsl="${GSL_ROOT}"} FCFLAGS="$FCFLAGS -fno-range-check"
 
 make ${JOBS:+-j $JOBS}
