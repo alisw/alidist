@@ -14,6 +14,7 @@ cmake $SOURCEDIR                                                       \
       -G Ninja                                                         \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                              \
       -DCMAKE_POLICY_DEFAULT_CMP0077=NEW                               \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                               \
       -DRAPIDJSON_BUILD_TESTS=OFF                                      \
       -DRAPIDJSON_BUILD_EXAMPLES=OFF
 

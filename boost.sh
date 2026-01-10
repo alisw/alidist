@@ -81,6 +81,7 @@ b2 -q                                                 \
    --disable-icu                                      \
    --without-context                                  \
    --without-coroutine                                \
+   --without-fiber                                    \
    --without-graph                                    \
    --without-graph_parallel                           \
    --without-locale                                   \

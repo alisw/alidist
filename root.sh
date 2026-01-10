@@ -103,8 +103,11 @@ fi
 # ROOT 6+: enable Python
 ROOT_PYTHON_FLAGS="-Dpyroot=ON"
 ROOT_HAS_PYTHON=1
-python_exec=$(python -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')/bin/python3
-if [ "$python_exec" = "$(which python)" ]; then
+# Use python3 explicitly for compatibility with systems that don't have 'python' symlink
+PYTHON_CMD=$(which python3 2>/dev/null || which python 2>/dev/null || echo "python3")
+# Use sysconfig instead of distutils.sysconfig (distutils removed in Python 3.12+)
+python_exec=$($PYTHON_CMD -c 'import sysconfig; print(sysconfig.get_config_var("exec_prefix"))')/bin/python3
+if [ "$python_exec" = "$(which $PYTHON_CMD)" ]; then
   # By default, if there's nothing funny going on, let ROOT pick the Python in
   # the PATH, which is the one built by us (unless disabled, in which case it
   # is the system one). This is substituted into ROOT's Python scripts'
@@ -205,7 +208,7 @@ cmake --build . --target install ${JOBS+-j $JOBS}
 
 # Make sure ROOT actually found its build dependencies and didn't disable
 # features we requested. "-Dfail-on-missing=ON" would probably be better.
-[ "$("$INSTALLROOT/bin/root-config" --has-fftw3)" = yes ]
+[ "$("$INSTALLROOT/bin/root-config" --has-fftw3)" = yes ] || { echo "FFTW3 support required"; exit 1; }
 
 # Add support for ROOT_PLUGIN_PATH envvar for specifying additional plugin search paths
 grep -v '^Unix.*.Root.PluginPath' $INSTALLROOT/etc/system.rootrc > system.rootrc.0
@@ -231,8 +234,7 @@ rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
        "$INSTALLROOT/LICENSE"
 
 # Make sure all the tools use the correct python
-for binfile in "$INSTALLROOT"/bin/*; do
-  [ -f "$binfile" ] || continue
+for binfile in $(find "$INSTALLROOT"/bin -type f -exec grep -Iq . {} \; -print); do
   if grep -q "^'''exec' .*python.*" "$binfile"; then
     # This file uses a hack to get around shebang size limits. As we're
     # replacing the shebang with the system python, the limit doesn't apply and
