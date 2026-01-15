@@ -10,7 +10,7 @@ build_requires:
 ---
 #!/bin/bash -e
 
-rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
+rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
 
 # install internal packages 
 cd "$BUILDDIR"
