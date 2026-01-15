@@ -36,6 +36,7 @@ cmake --build . -- ${JOBS:+-j$JOBS} install
 case ${ARCHITECTURE} in
   osx*)
     install_name_tool -add_rpath $INSTALLROOT/lib $INSTALLROOT/lib/libTEPEMGEN.dylib
+    install_name_tool -add_rpath $PYTHIA6_ROOT/lib $INSTALLROOT/lib/libTEPEMGEN.dylib
     ;;
 esac
 
