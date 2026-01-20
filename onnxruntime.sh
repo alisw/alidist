@@ -156,5 +156,4 @@ alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/onnxruntime
-append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF
