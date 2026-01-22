@@ -125,10 +125,10 @@ prefer_system_check: |
           ROCM_HOME_ENC=""
 
           if [[ -n "${O2_GPU_CUDA_HOME}" ]]; then
-            CUDA_HOME_ENC="$(printf '%s' "${O2_GPU_CUDA_HOME}" | base32 2>/dev/null | tr -d '=\n')"
+            CUDA_HOME_ENC="$(printf '%s' "${O2_GPU_CUDA_HOME}" | base32 2>/dev/null | tr -d '\n' | tr '=' '_')"
           fi
           if [[ -n "${O2_GPU_ROCM_HOME}" ]]; then
-            ROCM_HOME_ENC="$(printf '%s' "${O2_GPU_ROCM_HOME}" | base32 2>/dev/null | tr -d '=\n')"
+            ROCM_HOME_ENC="$(printf '%s' "${O2_GPU_ROCM_HOME}" | base32 2>/dev/null | tr -d '\n' | tr '=' '_')"
           fi
 
         elif [[ ${ALIBUILD_O2_FORCE_GPU} != "fullauto" ]]; then
@@ -288,23 +288,11 @@ prefer_system_replacement_specs:
         echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"${O2_GPU_MIGRAPHX_AVAILABLE}\""
         echo "export O2_GPU_TENSORRT_AVAILABLE=\"${O2_GPU_TENSORRT_AVAILABLE}\""
 
-        # Base32 decode helper: stored tokens without '=' padding; re-pad to a multiple of 8.
-        b32decode_nopad() {
-          local s="$1"
-          local mod=$(( ${#s} % 8 ))
-          if [[ $mod -ne 0 ]]; then
-            local pad=$(( 8 - mod ))
-            # shellcheck disable=SC2046
-            s="${s}$(printf '=%.0s' $(seq 1 $pad))"
-          fi
-          printf '%s' "$s" | base32 -d 2>/dev/null
-        }
-
         # CUDA block
         O2_GPU_CUDA_HOME=""
         if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" ]]; then
-          if [[ "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
-            O2_GPU_CUDA_HOME="$(b32decode_nopad "${BASH_REMATCH[1]}")"
+          if [[ "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
+            O2_GPU_ROCM_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
           fi
           echo "export O2_GPU_CUDA_HOME=\"${O2_GPU_CUDA_HOME}\""
         else
@@ -320,7 +308,7 @@ prefer_system_replacement_specs:
         O2_GPU_ROCM_HOME=""
         if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]]; then
           if [[ "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
-            O2_GPU_ROCM_HOME="$(b32decode_nopad "${BASH_REMATCH[1]}")"
+            O2_GPU_ROCM_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
           fi
           echo "export O2_GPU_ROCM_HOME=\"${O2_GPU_ROCM_HOME}\""
         else
