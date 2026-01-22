@@ -289,7 +289,6 @@ prefer_system_replacement_specs:
         echo "export O2_GPU_TENSORRT_AVAILABLE=\"${O2_GPU_TENSORRT_AVAILABLE}\""
 
         ### CUDA
-
         O2_GPU_CUDA_HOME=""
 
         if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" && "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
@@ -303,7 +302,6 @@ prefer_system_replacement_specs:
         fi
 
         ### ROCm
-
         O2_GPU_ROCM_HOME=""
 
         if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" && "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
@@ -315,7 +313,6 @@ prefer_system_replacement_specs:
         if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]] && [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
           echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
-
 
         if [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
           echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
