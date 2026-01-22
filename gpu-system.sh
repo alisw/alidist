@@ -125,7 +125,7 @@ prefer_system_check: |
           ROCM_HOME_ENC=""
 
           if [[ -n "${O2_GPU_CUDA_HOME}" ]]; then
-            CUDA_HOME_ENC="$(printf '%s' "${O2_GPU_CUDA_HOME}" | base32 2>/dev/null | tr -d '\n' | tr '=' '_')"
+            CUDA_HOME_ENC="$(base32 -i -w0 <<<"${O2_GPU_CUDA_HOME}" | tr '=' '_')"
           fi
           if [[ -n "${O2_GPU_ROCM_HOME}" ]]; then
             ROCM_HOME_ENC="$(printf '%s' "${O2_GPU_ROCM_HOME}" | base32 2>/dev/null | tr -d '\n' | tr '=' '_')"
