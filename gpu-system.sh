@@ -108,8 +108,8 @@ prefer_system_check: |
               export GPU_HIP_VERSION=\"@hip_VERSION@\"
               export GPU_CUDA_ARCHITECTURE=\"@CMAKE_CUDA_ARCHITECTURES@\"
               export GPU_HIP_ARCHITECTURE=\"@CMAKE_HIP_ARCHITECTURES@\"
-              export O2_ORT_CUDA_HOME=\"@GPU_CUDA_HOME@\"
-              export O2_ORT_ROCM_HOME=\"@GPU_ROCM_HOME@\"
+              export O2_GPU_CUDA_HOME=\"@GPU_CUDA_HOME@\"
+              export O2_GPU_ROCM_HOME=\"@GPU_ROCM_HOME@\"
             ")
   EOF
 
@@ -121,14 +121,14 @@ prefer_system_check: |
         if [[ $? -eq 0 && -f env.sh ]]; then
           source env.sh
 
-          # Encode toolkit roots for PKG_VERSION ("/" -> "__"), safe chars only
           CUDA_HOME_ENC=""
           ROCM_HOME_ENC=""
-          if [[ -n "${O2_ORT_CUDA_HOME}" ]]; then
-            CUDA_HOME_ENC="${O2_ORT_CUDA_HOME//\//__}"
+
+          if [[ -n "${O2_GPU_CUDA_HOME}" ]]; then
+            CUDA_HOME_ENC="$(printf '%s' "${O2_GPU_CUDA_HOME}" | base32 2>/dev/null | tr -d '=\n')"
           fi
-          if [[ -n "${O2_ORT_ROCM_HOME}" ]]; then
-            ROCM_HOME_ENC="${O2_ORT_ROCM_HOME//\//__}"
+          if [[ -n "${O2_GPU_ROCM_HOME}" ]]; then
+            ROCM_HOME_ENC="$(printf '%s' "${O2_GPU_ROCM_HOME}" | base32 2>/dev/null | tr -d '=\n')"
           fi
 
         elif [[ ${ALIBUILD_O2_FORCE_GPU} != "fullauto" ]]; then
@@ -279,23 +279,32 @@ prefer_system_replacement_specs:
         echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)migraphx(-|_|$) ]] && echo 1 ) || echo 0)\""
         echo "export O2_GPU_TENSORRT_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)tensorrt(-|_|$) ]] && echo 1 ) || echo 0)\""
 
-        # Decode toolkit roots from PKG_VERSION tokens:
-        #   cuda_home@__usr__local__cuda@   -> /usr/local/cuda
-        #   rocm_home@__opt__rocm@          -> /opt/rocm
-        O2_ORT_CUDA_HOME=""
-        O2_ORT_ROCM_HOME=""
+        O2_GPU_CUDA_HOME=""
+        O2_GPU_ROCM_HOME=""
+
+        # Base32 decode helper: Stored tokens without '=' padding; re-pad to a multiple of 8.
+        b32decode_nopad() {
+          local s="$1"
+          local mod=$(( ${#s} % 8 ))
+          if [[ $mod -ne 0 ]]; then
+            local pad=$(( 8 - mod ))
+            s="${s}$(printf '=%.0s' $(seq 1 $pad))"
+          fi
+          # GNU base32 uses -d; if not available, this will just fail (leaving empty)
+          printf '%s' "$s" | base32 -d 2>/dev/null
+        }
 
         if [[ "${PKG_VERSION}" =~ cuda_home@[^@]*@ ]]; then
           _enc="$(echo "${PKG_VERSION}" | grep -E -o 'cuda_home@[^@]*@' | head -n1 | sed -e 's/^cuda_home@//' -e 's/@$//')"
-          O2_ORT_CUDA_HOME="${_enc//__/\/}"
+          O2_GPU_CUDA_HOME="$(b32decode_nopad "$_enc")"
         fi
         if [[ "${PKG_VERSION}" =~ rocm_home@[^@]*@ ]]; then
           _enc="$(echo "${PKG_VERSION}" | grep -E -o 'rocm_home@[^@]*@' | head -n1 | sed -e 's/^rocm_home@//' -e 's/@$//')"
-          O2_ORT_ROCM_HOME="${_enc//__/\/}"
+          O2_GPU_ROCM_HOME="$(b32decode_nopad "$_enc")"
         fi
 
-        echo "export O2_ORT_CUDA_HOME=\"${O2_ORT_CUDA_HOME}\""
-        echo "export O2_ORT_ROCM_HOME=\"${O2_ORT_ROCM_HOME}\""
+        echo "export O2_GPU_CUDA_HOME=\"${O2_GPU_CUDA_HOME}\""
+        echo "export O2_GPU_ROCM_HOME=\"${O2_GPU_ROCM_HOME}\""
 
         if [[ "${PKG_VERSION}" =~ (^|-)cuda_arch@ ]]; then
           echo "${PKG_VERSION}" | grep -E -o '(^|-)cuda_arch@[^@]*@' | sed -e 's/-*cuda_arch/export O2_GPU_CUDA_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'

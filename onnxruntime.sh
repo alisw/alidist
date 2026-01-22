@@ -127,8 +127,8 @@ cmake "cmake"                                                                   
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                                              \
       -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
       -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
-      -Donnxruntime_ROCM_HOME=${O2_ORT_ROCM_HOME}                                                           \
-      -Donnxruntime_CUDA_HOME=${O2_ORT_CUDA_HOME}                                                           \
+      -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
+      -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
       -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
