@@ -288,8 +288,10 @@ prefer_system_replacement_specs:
         echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"${O2_GPU_MIGRAPHX_AVAILABLE}\""
         echo "export O2_GPU_TENSORRT_AVAILABLE=\"${O2_GPU_TENSORRT_AVAILABLE}\""
 
-        # CUDA block
+        ### CUDA
+
         O2_GPU_CUDA_HOME=""
+
         if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" ]]; then
           if [[ "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
             O2_GPU_CUDA_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
@@ -299,13 +301,14 @@ prefer_system_replacement_specs:
           echo "export O2_GPU_CUDA_HOME="
         fi
 
-        if [[ "${PKG_VERSION}" =~ (^|-)cuda_arch@ ]]; then
-          echo "${PKG_VERSION}" | grep -E -o '(^|-)cuda_arch@[^@]*@' \
-            | sed -e 's/-*cuda_arch/export O2_GPU_CUDA_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+        if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" ]] && [[ "${PKG_VERSION}" =~ (^|-)cuda_arch@ ]]; then
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)cuda_arch@[^@]*@' | sed -e 's/-*cuda_arch/export O2_GPU_CUDA_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
 
-        # ROCm block
+        ### ROCm
+
         O2_GPU_ROCM_HOME=""
+
         if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]]; then
           if [[ "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
             O2_GPU_ROCM_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
@@ -315,9 +318,13 @@ prefer_system_replacement_specs:
           echo "export O2_GPU_ROCM_HOME="
         fi
 
+        if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]] && [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+        fi
+
+
         if [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
-          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' \
-            | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
 ---
