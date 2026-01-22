@@ -313,9 +313,5 @@ prefer_system_replacement_specs:
         if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]] && [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
           echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
-
-        if [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
-          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
-        fi
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
 ---
