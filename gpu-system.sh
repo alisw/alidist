@@ -291,8 +291,8 @@ prefer_system_replacement_specs:
         # CUDA block
         O2_GPU_CUDA_HOME=""
         if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" ]]; then
-          if [[ "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
-            O2_GPU_ROCM_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
+          if [[ "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
+            O2_GPU_CUDA_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
           fi
           echo "export O2_GPU_CUDA_HOME=\"${O2_GPU_CUDA_HOME}\""
         else
