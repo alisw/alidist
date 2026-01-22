@@ -236,10 +236,10 @@ prefer_system_check: |
     fi
 
     # Append encoded toolkit roots to the version key
-    if [[ -n "${CUDA_HOME_ENC}" ]]; then
+    if [[ "${GPU_CUDA_ENABLED}" == "1" && -n "${CUDA_HOME_ENC}" ]]; then
       GPU_FEATURES+=${GPU_FEATURES:+-}cuda_home@${CUDA_HOME_ENC}@
     fi
-    if [[ -n "${ROCM_HOME_ENC}" ]]; then
+    if [[ "${GPU_HIP_ENABLED}" == "1" && -n "${ROCM_HOME_ENC}" ]]; then
       GPU_FEATURES+=${GPU_FEATURES:+-}rocm_home@${ROCM_HOME_ENC}@
     fi
 
@@ -271,46 +271,65 @@ prefer_system_replacement_specs:
       mkdir -p "$INSTALLROOT"/etc
       rm -f "$INSTALLROOT"/etc/gpu-features-available.sh
       {
-        echo "export O2_GPU_ROCM_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)rocm(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
-        echo "export O2_GPU_CUDA_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)cuda(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
-        echo "export O2_GPU_OPENCL_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)opencl(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
-        echo "export O2_GPU_MIOPEN_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)miopen(-|_|$) ]] && echo 1 ) || echo 0)\""
-        echo "export O2_GPU_CUDNN_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)cudnn(-|_|$) ]] && echo 1 ) || echo 0)\""
-        echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)migraphx(-|_|$) ]] && echo 1 ) || echo 0)\""
-        echo "export O2_GPU_TENSORRT_AVAILABLE=\"$( ( [[ "${PKG_VERSION}" =~ (^|-)tensorrt(-|_|$) ]] && echo 1 ) || echo 0)\""
+        # Availability flags
+        O2_GPU_CUDA_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)cuda(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )"
+        O2_GPU_ROCM_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)rocm(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )"
+        O2_GPU_OPENCL_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)opencl(-|_|$) ]] && echo 1 ) || ( [[ "${PKG_VERSION}" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )"
+        O2_GPU_MIOPEN_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)miopen(-|_|$) ]] && echo 1 ) || echo 0 )"
+        O2_GPU_CUDNN_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)cudnn(-|_|$) ]] && echo 1 ) || echo 0 )"
+        O2_GPU_MIGRAPHX_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)migraphx(-|_|$) ]] && echo 1 ) || echo 0 )"
+        O2_GPU_TENSORRT_AVAILABLE="$( ( [[ "${PKG_VERSION}" =~ (^|-)tensorrt(-|_|$) ]] && echo 1 ) || echo 0 )"
 
-        O2_GPU_CUDA_HOME=""
-        O2_GPU_ROCM_HOME=""
+        echo "export O2_GPU_ROCM_AVAILABLE=\"${O2_GPU_ROCM_AVAILABLE}\""
+        echo "export O2_GPU_CUDA_AVAILABLE=\"${O2_GPU_CUDA_AVAILABLE}\""
+        echo "export O2_GPU_OPENCL_AVAILABLE=\"${O2_GPU_OPENCL_AVAILABLE}\""
+        echo "export O2_GPU_MIOPEN_AVAILABLE=\"${O2_GPU_MIOPEN_AVAILABLE}\""
+        echo "export O2_GPU_CUDNN_AVAILABLE=\"${O2_GPU_CUDNN_AVAILABLE}\""
+        echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"${O2_GPU_MIGRAPHX_AVAILABLE}\""
+        echo "export O2_GPU_TENSORRT_AVAILABLE=\"${O2_GPU_TENSORRT_AVAILABLE}\""
 
-        # Base32 decode helper: Stored tokens without '=' padding; re-pad to a multiple of 8.
+        # Base32 decode helper: stored tokens without '=' padding; re-pad to a multiple of 8.
         b32decode_nopad() {
           local s="$1"
           local mod=$(( ${#s} % 8 ))
           if [[ $mod -ne 0 ]]; then
             local pad=$(( 8 - mod ))
+            # shellcheck disable=SC2046
             s="${s}$(printf '=%.0s' $(seq 1 $pad))"
           fi
-          # GNU base32 uses -d; if not available, this will just fail (leaving empty)
           printf '%s' "$s" | base32 -d 2>/dev/null
         }
 
-        if [[ "${PKG_VERSION}" =~ cuda_home@[^@]*@ ]]; then
-          _enc="$(echo "${PKG_VERSION}" | grep -E -o 'cuda_home@[^@]*@' | head -n1 | sed -e 's/^cuda_home@//' -e 's/@$//')"
-          O2_GPU_CUDA_HOME="$(b32decode_nopad "$_enc")"
+        # CUDA block
+        O2_GPU_CUDA_HOME=""
+        if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" ]]; then
+          if [[ "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
+            O2_GPU_CUDA_HOME="$(b32decode_nopad "${BASH_REMATCH[1]}")"
+          fi
+          echo "export O2_GPU_CUDA_HOME=\"${O2_GPU_CUDA_HOME}\""
+        else
+          echo "export O2_GPU_CUDA_HOME="
         fi
-        if [[ "${PKG_VERSION}" =~ rocm_home@[^@]*@ ]]; then
-          _enc="$(echo "${PKG_VERSION}" | grep -E -o 'rocm_home@[^@]*@' | head -n1 | sed -e 's/^rocm_home@//' -e 's/@$//')"
-          O2_GPU_ROCM_HOME="$(b32decode_nopad "$_enc")"
-        fi
-
-        echo "export O2_GPU_CUDA_HOME=\"${O2_GPU_CUDA_HOME}\""
-        echo "export O2_GPU_ROCM_HOME=\"${O2_GPU_ROCM_HOME}\""
 
         if [[ "${PKG_VERSION}" =~ (^|-)cuda_arch@ ]]; then
-          echo "${PKG_VERSION}" | grep -E -o '(^|-)cuda_arch@[^@]*@' | sed -e 's/-*cuda_arch/export O2_GPU_CUDA_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)cuda_arch@[^@]*@' \
+            | sed -e 's/-*cuda_arch/export O2_GPU_CUDA_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
+
+        # ROCm block
+        O2_GPU_ROCM_HOME=""
+        if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]]; then
+          if [[ "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
+            O2_GPU_ROCM_HOME="$(b32decode_nopad "${BASH_REMATCH[1]}")"
+          fi
+          echo "export O2_GPU_ROCM_HOME=\"${O2_GPU_ROCM_HOME}\""
+        else
+          echo "export O2_GPU_ROCM_HOME="
+        fi
+
         if [[ "${PKG_VERSION}" =~ (^|-)rocm_arch@ ]]; then
-          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
+          echo "${PKG_VERSION}" | grep -E -o '(^|-)rocm_arch@[^@]*@' \
+            | sed -e 's/-*rocm_arch/export O2_GPU_ROCM_AVAILABLE_ARCH=/' -e 's/@/"/g' -e 's/#/;/g'
         fi
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
 ---

@@ -77,6 +77,9 @@ export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
 
+echo "O2_GPU_ROCM_HOME=$O2_GPU_ROCM_HOME"
+echo "O2_GPU_CUDA_HOME=$O2_GPU_CUDA_HOME"
+
 python3 onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
 python3 onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
 
