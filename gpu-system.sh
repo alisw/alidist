@@ -292,11 +292,8 @@ prefer_system_replacement_specs:
 
         O2_GPU_CUDA_HOME=""
 
-        if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" ]]; then
-          if [[ "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
-            O2_GPU_CUDA_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
-          fi
-          echo "export O2_GPU_CUDA_HOME=\"${O2_GPU_CUDA_HOME}\""
+        if [[ "${O2_GPU_CUDA_AVAILABLE}" == "1" && "${PKG_VERSION}" =~ cuda_home@([^@]*)@ ]]; then
+          echo "export O2_GPU_CUDA_HOME=\"$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)\""
         else
           echo "export O2_GPU_CUDA_HOME="
         fi
@@ -309,11 +306,8 @@ prefer_system_replacement_specs:
 
         O2_GPU_ROCM_HOME=""
 
-        if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" ]]; then
-          if [[ "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
-            O2_GPU_ROCM_HOME="$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)"
-          fi
-          echo "export O2_GPU_ROCM_HOME=\"${O2_GPU_ROCM_HOME}\""
+        if [[ "${O2_GPU_ROCM_AVAILABLE}" == "1" && "${PKG_VERSION}" =~ rocm_home@([^@]*)@ ]]; then
+          echo "export O2_GPU_ROCM_HOME=\"$(printf '%s' "${BASH_REMATCH[1]}" | tr '_' '=' | base32 -d 2>/dev/null)\""
         else
           echo "export O2_GPU_ROCM_HOME="
         fi
