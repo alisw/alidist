@@ -31,7 +31,7 @@ prefer_system_replacement_specs:
   "python-brew3.*":
     version: "%(key)s"
     env:
-        PYTHON_ROOT: $(brew --prefix python3)
+        PYTHON_ROOT: $(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')
         PYTHON_REVISION: ""
   "python3.*":
     version: "%(key)s"
