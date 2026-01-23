@@ -77,6 +77,9 @@ export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
 
+echo "O2_GPU_ROCM_HOME=$O2_GPU_ROCM_HOME"
+echo "O2_GPU_CUDA_HOME=$O2_GPU_CUDA_HOME"
+
 python3 onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
 python3 onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
 
@@ -127,8 +130,8 @@ cmake "cmake"                                                                   
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                                              \
       -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
       -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
-      -Donnxruntime_ROCM_HOME=/opt/rocm                                                                     \
-      -Donnxruntime_CUDA_HOME=/usr/local/cuda                                                               \
+      -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
+      -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
       -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
