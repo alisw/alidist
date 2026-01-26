@@ -31,15 +31,15 @@ prefer_system_replacement_specs:
   "python-brew3.*":
     version: "%(key)s"
     env:
-        PYTHON_ROOT: $(python3 -c 'import distutils.sysconfig; print(distutils.sysconfig.get_config_var("exec_prefix"))')
-        PYTHON_REVISION: ""
+      PYTHON_ROOT: $(python3 -c 'import sysconfig; print(sysconfig.get_config_var("exec_prefix"))')
+      PYTHON_REVISION: ""
   "python3.*":
     version: "%(key)s"
     env:
-        # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
-        # to avoid having /bin in the middle of the path.
-        PYTHON_ROOT: "/dummy-python-folder"
-        PYTHON_REVISION: ""
+      # Python is in path, so we need a dummy placeholder for PYTHON_ROOT
+      # to avoid having /bin in the middle of the path.
+      PYTHON_ROOT: "/dummy-python-folder"
+      PYTHON_REVISION: ""
 ---
 rsync -av --exclude '**/.git' $SOURCEDIR/ $BUILDDIR/
 
