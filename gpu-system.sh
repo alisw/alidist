@@ -132,7 +132,7 @@ prefer_system_check: |
           fi
 
         elif [[ ${ALIBUILD_O2_FORCE_GPU} != "fullauto" ]]; then
-          GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but running CMake for GPU detection failed"
+          GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU != fullauto, but running CMake for GPU detection failed"
           break
         else
           ALIBUILD_O2_FORCE_GPU="onthefly"
