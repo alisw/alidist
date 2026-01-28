@@ -39,7 +39,7 @@ env:
 
     numpy == 1.16.2; python_version < '3.8'
     numpy == 1.19.5; python_version == '3.8'
-    numpy; python_version >= '3.9'
+    numpy >= 1.21.0; python_version >= '3.9'
 
     scipy == 1.2.1; python_version < '3.8'
     scipy == 1.6.1; python_version == '3.8'
@@ -79,11 +79,11 @@ env:
 
     xgboost == 0.82; python_version < '3.8'
     xgboost == 1.3.3; python_version == '3.8'
-    xgboost == 1.2.0; python_version >= '3.9' and python_version < '3.11'
+    xgboost == 1.7.5; python_version >= '3.9'
     xgboost == 1.7.5; python_version >= '3.11'
 
     dryable == 1.0.3; python_version < '3.9'
-    dryable == 1.0.5; python_version >= '3.9'
+    dryable == 1.2.0; python_version >= '3.9'
 
     pandas == 0.24.2; python_version < '3.8'
     pandas == 1.2.3; python_version == '3.8'
