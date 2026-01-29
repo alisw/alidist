@@ -11,12 +11,13 @@ name: Check untested packages
 
 jobs:
   check-untested:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     uses: alisw/ali-bot/.github/workflows/check-untested-packages.yml@master
     with:
       owner: ${{ github.event.repository.owner.login }}
       repo: ${{ github.event.repository.name }}
       pr: ${{ github.event.pull_request.number }}
       max_workers: '2'
-    permissions:
-      contents: read
-      pull-requests: write

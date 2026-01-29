@@ -1,6 +1,7 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
 tag: v1.22.2
+license: MIT
 source: https://github.com/microsoft/onnxruntime
 requires:
   - protobuf
@@ -24,6 +25,12 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
 ---
 #!/bin/bash -e
+rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+# In order to work with new versions of eigen3, backport
+sed -i.bak "s/eigen/Eigen3/g" cmake/external/eigen.cmake
+python3 -c 'import sys; print(sys.executable)'
+sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" cmake/CMakeLists.txt
 
 case $ARCHITECTURE in
   osx*) 
@@ -78,15 +85,13 @@ export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
 
-python3 $SOURCEDIR/onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
-python3 $SOURCEDIR/onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
+echo "O2_GPU_ROCM_HOME=$O2_GPU_ROCM_HOME"
+echo "O2_GPU_CUDA_HOME=$O2_GPU_CUDA_HOME"
 
-# In order to work with new versions of eigen3, backport
-sed -i.bak "s/eigen/Eigen3/g" $SOURCEDIR/cmake/external/eigen.cmake
-python3 -c 'import sys; print(sys.executable)'
-sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" $SOURCEDIR/cmake/CMakeLists.txt
+python3 onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
+python3 onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
 
-cmake "$SOURCEDIR/cmake"                                                                                    \
+cmake "cmake"                                                                                               \
       --debug-find                                                                                          \
       -G Ninja                                                                                              \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                                 \
@@ -101,6 +106,7 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup'                                              \
       -Dsafeint_SOURCE_DIR=${SAFE_INT_ROOT}/include                                                         \
       -Deigen_SOURCE_PATH=${EIGEN3_ROOT}/include/eigen3                                                     \
+      -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                                             \
       -DGIT_EXECUTABLE=$(type git)                                                                          \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF                                                                    \
       -Donnxruntime_USE_PREINSTALLED_EIGEN=ON                                                               \
@@ -137,8 +143,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                                              \
       -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
       -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
-      -Donnxruntime_ROCM_HOME=/opt/rocm                                                                     \
-      -Donnxruntime_CUDA_HOME=/usr/local/cuda                                                               \
+      -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
+      -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
       -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
@@ -166,5 +172,4 @@ alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/onnxruntime
-append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF

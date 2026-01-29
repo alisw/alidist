@@ -17,15 +17,15 @@ prefer_system_check: |
   # if we are in a virtualenv, assume people know what they are doing
   # and simply use the virtualenv recipe.
   if [ -n "$VIRTUAL_ENV" ]; then
-    echo "alibuild_system_replace: virtualenv"
+    echo "alibuild_system_replace: virtualenv-$(echo $VIRTUAL_ENV | sha256sum --quiet)"
     exit 0
   fi
   # If not, either they are using the system python or they are using our own python.
   # In both cases we can simply create our own virtualenv
   exit 1
 prefer_system_replacement_specs:
-  virtualenv:
-    version: "virtualenv"
+  "virtualenv.*":
+    version: "%(key)s"
     recipe: |
       # Install pinned basic requirements for python infrastructure
       echo "$PIP_BASE_REQUIREMENTS" > base-requirements.txt

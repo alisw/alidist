@@ -1,6 +1,7 @@
 package: ms_gsl
-version: "4.0.0"
-tag: v4.0.0
+version: "4.2.1"
+tag: v4.2.1
+license: MIT
 source: https://github.com/Microsoft/GSL.git
 prepend_path:
   ROOT_INCLUDE_PATH: "$MS_GSL_ROOT/include"

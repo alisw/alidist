@@ -4,12 +4,13 @@ tag: "v3.5.2"
 source: https://github.com/alisw/MadGraph
 requires:
   - Python-modules
+  - curl
 build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
-rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
+rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
 
 # install internal packages 
 cd "$BUILDDIR"
@@ -21,6 +22,37 @@ install RunningCoupling
 install QCDLoop
 install MadAnalysis5
 EOF
+
+# MadGraph uses wget for non macOSx systems, but this might not be available.
+# This is a workaround using curl (similar procedure in SHERPA)
+if ! (command -v wget > /dev/null); then
+    echo "wget not found, using curl"
+    mkdir -p tmpwget
+    cat > tmpwget/wget << EOF
+#!/bin/sh
+outfile=""
+url=""
+for arg in "\$@"; do
+  case "\$arg" in
+    --output-document=*)
+      outfile="\${arg#--output-document=}"
+      ;;
+    -*)
+      ;;
+    *)
+      url="\$arg"
+      ;;
+  esac
+done
+if [ -z "\$outfile" ]; then
+  exec curl -fLO "\$url"
+else
+  exec curl -fL "\$url" -o "\$outfile"
+fi
+EOF
+    chmod +x tmpwget/wget
+    export PATH="$PWD/tmpwget:$PATH"
+fi
 
 ./bin/mg5_aMC install.dat
 

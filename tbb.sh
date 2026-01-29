@@ -2,6 +2,7 @@ package: TBB
 version: "v2021.5.0"
 tag: v2021.5.0
 source: https://github.com/uxlfoundation/oneTBB
+license: ApacheV2
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake

@@ -2,6 +2,7 @@ package: XRootD
 version: "%(tag_basename)s"
 tag: "v5.8.4"
 source: https://github.com/xrootd/xrootd
+license: LGPLv3
 requires:
   - "OpenSSL:(?!osx)"
   - Python-modules

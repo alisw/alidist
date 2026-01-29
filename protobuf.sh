@@ -12,6 +12,7 @@ prepend_path:
   # The protobuf headers must match the protoc binary version, so prevent the
   # use of system headers by putting ours first in the path.
   PKG_CONFIG_PATH: "$PROTOBUF_ROOT/lib/pkgconfig"
+  CMAKE_PREFIX_PATH: "$PROTOBUF_ROOT/lib/cmake"
 ---
 #!/bin/bash -e
 if [ -f $SOURCEDIR/cmake/CMakeLists.txt ]; then

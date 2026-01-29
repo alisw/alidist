@@ -1,6 +1,7 @@
 package: FairRoot
 version: "v18.4.9-alice3"
 source: https://github.com/alisw/FairRoot
+license: LGPLv3
 requires:
   - generators
   - simulation

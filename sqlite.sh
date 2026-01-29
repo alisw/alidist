@@ -13,7 +13,7 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -ex
-rsync -av $SOURCEDIR/ ./
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ .
 autoreconf -ivf
 ./configure --disable-tcl --disable-readline --disable-static --prefix=$INSTALLROOT
 make ${JOBS:+-j $JOBS} 

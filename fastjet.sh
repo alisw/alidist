@@ -2,6 +2,7 @@ package: fastjet
 version: "%(tag_basename)s"
 tag: "v3.4.1_1.052-alice3"
 source: https://github.com/alisw/fastjet
+license: GPLv2
 requires:
   - cgal
   - GMP
