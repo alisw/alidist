@@ -7,6 +7,7 @@ requires:
   - Python-modules
   - libpng
   - zlib
+  - "Xcode:osx.*"
 build_requires:
   - lzma
   - bz2
