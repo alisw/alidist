@@ -8,23 +8,23 @@ requires:
   - lhapdf5
   - HepMC
   - Python-modules
+  - GSL
 build_requires:
   - "autotools:(slc6|slc7)"
   - SWIG
+  - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-
 case $ARCHITECTURE in
   osx*)
     # If we preferred system tools, we need to make sure we can pick them up.
-    [[ ! $GSL_ROOT ]] && GSL_ROOT=`brew --prefix gsl`
-  ;;
-  *)
-    ARCH_LDFLAGS="-Wl,--no-as-needed"
+    [[ ! -n $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
   ;;
 esac
 
-rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./
+
+sed -i -e '1s|#!.*python|#!/usr/bin/env python3|' pyext/setup.py.in pyext/ez_setup.py
 
 autoreconf -ifv
 ./configure                                 \
@@ -34,26 +34,15 @@ autoreconf -ifv
 make -j$JOBS
 make install
 
-PYVER="$(basename $(find $INSTALLROOT/lib -type d -name 'python*'))"
+PYVER="$(find $INSTALLROOT/lib -type d -name 'python*' -exec basename {} \; | head -n 1)"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 HepMC/$HEPMC_VERSION-$HEPMC_REVISION lhapdf5/${LHAPDF5_VERSION}-${LHAPDF5_REVISION} ${BOOST_ROOT:+boost/$BOOST_VERSION-$BOOST_REVISION} ${PYTHON_REVISION:+Python/$PYTHON_VERSION-$PYTHON_REVISION}
-# Our environment
+$(alibuild-generate-module --lib --bin)
 set AGILE_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv AGILE_ROOT \$AGILE_ROOT
 prepend-path PYTHONPATH \$AGILE_ROOT/lib/$PYVER/site-packages
-prepend-path PATH \$AGILE_ROOT/bin
-prepend-path LD_LIBRARY_PATH \$AGILE_ROOT/lib
 EoF
