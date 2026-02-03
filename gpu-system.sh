@@ -12,8 +12,13 @@ prefer_system_check: |
     [[ $GPU_FEATURES && $GPU_FEATURES != *"$1" ]] && GPU_FEATURES+="$1"
     GPU_FEATURES+="$2"
   }
+  verge() { [[ "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]; }
 
   while true; do
+    if [[ -z $ALIBUILD_VERSION ]] || ! verge 1.17.39 $ALIBUILD_VERSION; then
+      GPU_FEATURES=none
+      break
+    fi
     if [[ ${ALIBUILD_O2_FORCE_GPU} == "disable" ]]; then
       GPU_FEATURES=none
       break
@@ -55,7 +60,6 @@ prefer_system_check: |
         fi
       else
         current_version=$(cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3)
-        verge() { [[ "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]; }
         if ! verge 3.26.0 $current_version; then
           if [[ ${ALIBUILD_O2_FORCE_GPU} != "fullauto" ]]; then
             GPU_FEATURES="error-Too old system CMake for gpu-system.sh"
