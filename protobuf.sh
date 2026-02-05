@@ -21,6 +21,7 @@ if [ -f $SOURCEDIR/cmake/CMakeLists.txt ]; then
 else
   ALIBUILD_CMAKE_SOURCE_DIR=$SOURCEDIR
 fi
+
 cmake -S "$ALIBUILD_CMAKE_SOURCE_DIR"                  \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
     -Dprotobuf_BUILD_TESTS=NO             \
