@@ -49,6 +49,8 @@ cmake "$SOURCEDIR"                                                              
   -DgRPC_SSL_PROVIDER=package                                                                               \
   -DgRPC_ZLIB_PROVIDER=package                                                                              \
   -DgRPC_GFLAGS_PROVIDER=package                                                                            \
+  ${PROTOBUF_ROOT:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                                                     \
+  ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                                   \
   -DgRPC_PROTOBUF_PROVIDER=package                                                                          \
   -DgRPC_ABSL_PROVIDER=package                                                                              \
   -DgRPC_BENCHMARK_PROVIDER=package                                                                         \
