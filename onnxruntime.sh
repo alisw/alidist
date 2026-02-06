@@ -137,7 +137,6 @@ cmake "cmake"                                                                   
       -Donnxruntime_USE_FULL_PROTOBUF=ON                                                                    \
       -Donnxruntime_ENABLE_PYTHON=OFF                                                                       \
       -Donnxruntime_MINIMAL_BUILD=OFF                                                                       \
-      -Donnxruntime_DISABLE_ABSEIL=ON                                                                       \
       --debug-find-pkg=absl                                                                               \
       ${ABSEIL_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${ABSEIL_ROOT}}                                   \
       ${ABSEIL_ROOT:+-Dabseil_cpp_DIR=$ABSEIL_ROOT}                                                         \
