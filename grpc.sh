@@ -38,37 +38,41 @@ case $ARCHITECTURE in
   ;;
 esac
 
-echo "OPENSSL_ROOT : $OPENSSL_ROOT"
-echo "OPENSSL_REVISION: $OPENSSL_REVISION"
+export CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH=OFF
 
+# Build CMAKE_PREFIX_PATH without trailing colons from unset variables
+CMAKE_PREFIX_PATH="$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake${C_ARES_ROOT:+:$C_ARES_ROOT}"
+[[ $C_ARES_ROOT ]] && CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$C_ARES_ROOT"
 
-
-
-cmake $SOURCEDIR                                    \
-  -G Ninja 					                                \
-  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}           \
-  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
-  -DCMAKE_PREFIX_PATH=$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake \
-  -DgRPC_BUILD_TESTS=OFF                            \
-  -DBUILD_SHARED_LIBS=ON                            \
-  -DgRPC_SSL_PROVIDER=package                       \
-  -DgRPC_ZLIB_PROVIDER=package                      \
-  -DgRPC_GFLAGS_PROVIDER=package                    \
-  -DgRPC_PROTOBUF_PROVIDER=package                  \
-  -DgRPC_ABSL_PROVIDER=package                      \
-  -DgRPC_BENCHMARK_PROVIDER=package                 \
-  -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF               \
-  -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF          \
-  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF                  \
-  -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF                  \
-  -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
-  -DgRPC_BUILD_CSHARP_EXT=OFF                       \
-  -DgRPC_RE2_PROVIDER=package                       \
-  ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
-  ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}   \
-  ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+cmake "$SOURCEDIR"                                                                                          \
+  -G Ninja 					                                                                                \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                                   \
+  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                       \
+  -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH                                                                    \
+  -DgRPC_BUILD_TESTS=OFF                                                                                    \
+  -DBUILD_SHARED_LIBS=ON                                                                                    \
+  -DgRPC_SSL_PROVIDER=package                                                                               \
+  -DgRPC_ZLIB_PROVIDER=package                                                                              \
+  -DgRPC_GFLAGS_PROVIDER=package                                                                            \
+  ${PROTOBUF_ROOT:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                                                         \
+  ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                                   \
+  ${C_ARES_ROOT:+-Dc-ares_DIR=$C_ARES_ROOT}                                                                 \
+  -Dre2_DIR=${RE2_ROOT:-$(brew --prefix re2)/lib/cmake/re2}                                                 \
+  -DgRPC_PROTOBUF_PROVIDER=package                                                                          \
+  -DgRPC_ABSL_PROVIDER=package                                                                              \
+  -DgRPC_BENCHMARK_PROVIDER=package                                                                         \
+  -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF                                                                       \
+  -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF                                                                  \
+  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF                                                                          \
+  -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF                                                                         \
+  -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                                                                           \
+  -DgRPC_BUILD_CSHARP_EXT=OFF                                                                               \
+  -DgRPC_RE2_PROVIDER=package                                                                               \
+  ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}                                                         \
+  ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}                                                           \
+  ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
   ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
-  -DgRPC_CARES_PROVIDER=package \
+  -DgRPC_CARES_PROVIDER=package                                                                             \
   $extra_cmake_variables
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
