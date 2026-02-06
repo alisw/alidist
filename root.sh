@@ -35,6 +35,7 @@ prepend_path:
   PYTHONPATH: "$ROOTSYS/lib"
   ROOT_DYN_PATH: "$ROOT_ROOT/lib"
 incremental_recipe: |
+  #!/bin/bash -e
   # Limit parallel builds to prevent OOM
   cmake --build . --target install ${JOBS+-j $JOBS}
   rm -vf "$INSTALLROOT/etc/plugins/TGrid/P010_TAlien.C"         \
@@ -59,11 +60,8 @@ cat >/dev/null <<EOF
 EOF
 
 unset ROOTSYS
-COMPILER_CC=cc
-COMPILER_CXX=c++
-COMPILER_LD=c++
-[[ "$CXXFLAGS" == *'-std=c++11'* ]] && CMAKE_CXX_STANDARD=11 || true
 case $CXXFLAGS in
+  *-std=c++11*) CMAKE_CXX_STANDARD=11 ;;
   *-std=c++14*) CMAKE_CXX_STANDARD=14 ;;
   *-std=c++17*) CMAKE_CXX_STANDARD=17 ;;
   *-std=c++20*) CMAKE_CXX_STANDARD=20 ;;
@@ -82,9 +80,6 @@ case $ARCHITECTURE in
     ENABLE_COCOA=1
     DISABLE_MYSQL=1
     USE_BUILTIN_GLEW=1
-    COMPILER_CC=clang
-    COMPILER_CXX=clang++
-    COMPILER_LD=clang
     SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
@@ -156,10 +151,7 @@ cmake $SOURCEDIR                                                                
       ${ENABLE_COCOA:+-Dcocoa=ON}                                                      \
       -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                        \
       ${EXTRA_CMAKE_OPTIONS}                                                           \
-      -DCMAKE_CXX_COMPILER=$COMPILER_CXX                                               \
-      -DCMAKE_C_COMPILER=$COMPILER_CC                                                  \
       -Dfortran=OFF                                                                    \
-      -DCMAKE_LINKER=$COMPILER_LD                                                      \
       ${GCC_TOOLCHAIN_REVISION:+-DCMAKE_EXE_LINKER_FLAGS="-L$GCC_TOOLCHAIN_ROOT/lib64"} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT=$OPENSSL_ROOT}                                    \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIR=$OPENSSL_ROOT/include}                     \
@@ -246,9 +238,10 @@ done
 rm -fv "$INSTALLROOT"/bin/*.bak
 
 # Modulefile
-mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
+
+mkdir -p "$INSTALLROOT/etc/modulefiles"
+cat > "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
+$(alibuild-generate-module --bin --lib)
 # Our environment
 setenv ROOT_RELEASE \$version
 setenv ROOT_BASEDIR \$::env(BASEDIR)/$PKGNAME
@@ -256,7 +249,6 @@ setenv ROOTSYS \$::env(ROOT_BASEDIR)/\$::env(ROOT_RELEASE)
 prepend-path PYTHONPATH \$PKG_ROOT/lib
 prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
 EoF
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 
 # External RPM dependencies
 cat > $INSTALLROOT/.rpm-extra-deps <<EoF
