@@ -42,7 +42,7 @@ cmake "$SOURCEDIR"                                                              
   -G Ninja 					                                                                                \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                                   \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                       \
-  -DCMAKE_PREFIX_PATH=$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake                                               \
+  -DCMAKE_PREFIX_PATH=$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake:$CARES_ROOT                                   \
   -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                                                 \
   -DgRPC_BUILD_TESTS=OFF                                                                                    \
   -DBUILD_SHARED_LIBS=ON                                                                                    \
