@@ -32,7 +32,8 @@ prefer_system_replacement_specs:
     version: "%(key)s"
     env:
       PYTHON_ROOT: $(python3 -c 'import sysconfig; print(sysconfig.get_config_var("exec_prefix"))')
-      PYTHON_REVISION: ""
+      PYTHON_VERSION: "3.x"
+      PYTHON_REVISION: "1"
   "python3.*":
     version: "%(key)s"
     env:
