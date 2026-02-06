@@ -15,7 +15,7 @@ prefer_system_check: |
   verge() { [[ "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]; }
 
   while true; do
-    if [[ -z $ALIBUILD_VERSION ]] || ! verge 1.17.39 $ALIBUILD_VERSION; then
+    if [[ -z $ALIBUILD_VERSION ]] || ! verge 1.17.40 $ALIBUILD_VERSION; then
       GPU_FEATURES=none
       break
     fi
