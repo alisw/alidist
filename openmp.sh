@@ -6,5 +6,5 @@ system_requirement_missing: |
     * On Linux it comes with the compiler
 system_requirement: ".*"
 system_requirement_check: |
-  printf "#include <omp.h>\n" | cc -xc - -I$(brew --prefix libomp)/include $([[ ${ALIBUILD_ARCHITECTURE} = osx* ]] && echo "-Xclang"}) -fopenmp -c -o /dev/null
+  printf "#include <omp.h>\n" | cc -xc - -I$(brew --prefix libomp)/include $([[ ${ALIBUILD_ARCHITECTURE} = osx* ]] && echo "-Xclang") -fopenmp -c -o /dev/null
 ---
