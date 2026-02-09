@@ -32,6 +32,22 @@ sed -i.bak "s/eigen/Eigen3/g" cmake/external/eigen.cmake
 python3 -c 'import sys; print(sys.executable)'
 sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" cmake/CMakeLists.txt
 
+case $ARCHITECTURE in
+  osx*)
+    NLOHMANN_JSON_ROOT=${NLOHMANN_JSON_ROOT:-$(brew --prefix nlohmann-json)}
+    RE2_ROOT=${RE2_ROOT:-$(brew --prefix re2)}
+    BOOST_ROOT=${BOOST_ROOT:-$(brew --prefix boost)}
+    MS_GSL_ROOT=${MS_GSL_ROOT:-$(brew --prefix cpp-gsl)}
+  ;;
+esac
+
+export re2_DIR=${RE2_ROOT}
+export absl_DIR=${ABSEIL_ROOT}
+export abseil_cpp_DIR=${ABSEIL_ROOT}
+export GSL_DIR=${MS_GSL_ROOT}
+export mp11_DIR=${BOOST_ROOT}
+export CMAKE_PATH_PREFIX=${MS_GSL_ROOT}:${NLOHMANN_JSON_ROOT}:${ABSEIL_ROOT}:$CMAKE_PATH_PREFIX
+
 if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
   source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
 fi
@@ -121,6 +137,10 @@ cmake "cmake"                                                                   
       -Donnxruntime_USE_FULL_PROTOBUF=ON                                                                    \
       -Donnxruntime_ENABLE_PYTHON=OFF                                                                       \
       -Donnxruntime_MINIMAL_BUILD=OFF                                                                       \
+      --debug-find-pkg=absl                                                                               \
+      ${ABSEIL_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${ABSEIL_ROOT}}                                   \
+      ${ABSEIL_ROOT:+-Dabseil_cpp_DIR=$ABSEIL_ROOT}                                                         \
+      ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                               \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.a}                                 \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.a}                       \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.a}                            \
