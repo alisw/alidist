@@ -21,6 +21,13 @@ incremental_recipe: |
 ---
 #!/bin/sh
 
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT="$(brew --prefix libuv)"
+  ;;
+esac
+
 # When O2 is built against Gandiva (from Arrow), then we need to use
 # -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
 # -CMake, which requires it.
@@ -29,6 +36,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}           \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                    \
+      -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                           \
       ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                              \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}              \
       ${FASTJET_ROOT:+-Dfjcontrib_ROOT="$FASTJET_ROOT"}                     \
