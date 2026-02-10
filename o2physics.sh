@@ -49,10 +49,10 @@ if [[ -n $O2PHYSICSOVERRIDEJOBS ]]; then JOBS=$O2PHYSICSOVERRIDEJOBS; fi
 cmake --build . -- ${JOBS+-j $JOBS} ${NINJA_ALICE_REVISION:+--keep-free-memory 4G} ${O2PHYSICS_COMPONENTS:-install}
 
 # export compile_commands.json in (taken from o2.sh)
-DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
+DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+  ln -sf "$BUILDDIR"/compile_commands.json "$DEVEL_SOURCES"/compile_commands.json
 fi
 
 # Modulefile
