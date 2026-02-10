@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.22.0
+tag: v1.22.2
 license: MIT
 source: https://github.com/microsoft/onnxruntime
 requires:
@@ -31,6 +31,14 @@ rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDI
 sed -i.bak "s/eigen/Eigen3/g" cmake/external/eigen.cmake
 python3 -c 'import sys; print(sys.executable)'
 sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" cmake/CMakeLists.txt
+
+case $ARCHITECTURE in
+  osx*) 
+    export abseil_cpp_DIR=${ABSEIL_ROOT:-$(brew --prefix abseil)}
+    ABSEIL_ROOT=${ABSEIL_ROOT:-$(brew --prefix abseil)}
+    export CMAKE_PATH_PREFIX=${ABSEIL_ROOT}:$CMAKE_PATH_PREFIX
+    ;;
+esac
 
 if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
   source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
@@ -121,6 +129,11 @@ cmake "cmake"                                                                   
       -Donnxruntime_USE_FULL_PROTOBUF=ON                                                                    \
       -Donnxruntime_ENABLE_PYTHON=OFF                                                                       \
       -Donnxruntime_MINIMAL_BUILD=OFF                                                                       \
+      -Donnxruntime_DISABLE_ABSEIL=ON                                                                       \
+      --debug-find-pkg=absl                                                                               \
+      ${ABSEIL_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${ABSEIL_ROOT}}                                   \
+      ${ABSEIL_ROOT:+-Dabseil_cpp_DIR=$ABSEIL_ROOT}                                                         \
+      ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                               \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.a}                                 \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.a}                       \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.a}                            \
