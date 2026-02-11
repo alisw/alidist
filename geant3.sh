@@ -25,6 +25,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
                  -G Ninja                                 \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE     \
                  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
+                 -DCMAKE_C_STANDARD=99                    \
                  -DCMAKE_SKIP_RPATH=TRUE \
                  ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch -fallow-invalid-boz -fno-tree-loop-distribute-patterns"}
 
