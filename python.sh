@@ -105,13 +105,15 @@ pushd "$INSTALLROOT/bin"
   sed -i.deleteme -e "1 s|^#!${INSTALLROOT}/bin/\(.*\)$|#!/usr/bin/env \1|" * || true
   rm -f *.deleteme
   PYTHON_BIN=$(for X in python*; do echo "$X"; done | grep -E '^python[0-9]+\.[0-9]+$' | head -n1)
-  PIP_BIN=$(for X in pip*; do echo "$X"; done | grep -E '^pip[0-9]+\.[0-9]+$' | head -n1)
+  PIP_BIN=$(for X in pip*; do echo "$X"; done | grep -E '^pip[0-9]+\.[0-9]+$' | head -n1 || true)
   PYTHON_CONFIG_BIN=$(for X in python*-config; do echo "$X"; done | grep -E '^python[0-9]+\.[0-9]+m?-config$' | head -n1)
   chmod +x $PYTHON_BIN $PIP_BIN $PYTHON_CONFIG_BIN
   [[ -x python ]] || ln -nfs "$PYTHON_BIN" python
   [[ -x python3 ]] || ln -nfs "$PYTHON_BIN" python3
-  [[ -x pip ]] || ln -nfs "$PIP_BIN" pip
-  [[ -x pip3 ]] || ln -nfs "$PIP_BIN" pip3
+  if [[ -n "$PIP_BIN" ]]; then
+    [[ -x pip ]] || ln -nfs "$PIP_BIN" pip
+    [[ -x pip3 ]] || ln -nfs "$PIP_BIN" pip3
+  fi
   [[ -x python-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python-config
   [[ -x python3-config ]] || ln -nfs "$PYTHON_CONFIG_BIN" python3-config
 popd
