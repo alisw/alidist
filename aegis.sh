@@ -29,6 +29,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DCMAKE_SKIP_RPATH=TRUE                   \
                  -DPYTHIA6_DIR=${PYTHIA6_ROOT}             \
+                 -DCMAKE_C_STANDARD=99                     \
                  ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
