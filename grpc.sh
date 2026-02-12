@@ -29,6 +29,7 @@ case $ARCHITECTURE in
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
     [[ ! $ABSEIL_ROOT ]] && ABSEIL_ROOT=$(brew --prefix abseil)
+    [[ ! $RE2_ROOT ]] && RE2_ROOT=$(brew --prefix re2)
     # to avoid issues with rpath on mac
     extra_cmake_variables="-DCMAKE_INSTALL_RPATH=$INSTALLROOT/lib \
     -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
@@ -49,6 +50,7 @@ cmake "$SOURCEDIR"                                                              
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                                   \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                       \
   -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH                                                                    \
+  -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                                                 \
   -DgRPC_BUILD_TESTS=OFF                                                                                    \
   -DBUILD_SHARED_LIBS=ON                                                                                    \
   -DgRPC_SSL_PROVIDER=package                                                                               \
@@ -57,7 +59,7 @@ cmake "$SOURCEDIR"                                                              
   ${PROTOBUF_ROOT:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                                                         \
   ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                                   \
   ${C_ARES_ROOT:+-Dc-ares_DIR=$C_ARES_ROOT}                                                                 \
-  -Dre2_DIR=${RE2_ROOT:-$(brew --prefix re2)/lib/cmake/re2}                                                 \
+  ${RE2_ROOT:+-Dre2_DIR=$RE2_ROOT}                                                                          \
   -DgRPC_PROTOBUF_PROVIDER=package                                                                          \
   -DgRPC_ABSL_PROVIDER=package                                                                              \
   -DgRPC_BENCHMARK_PROVIDER=package                                                                         \
