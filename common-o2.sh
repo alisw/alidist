@@ -1,6 +1,6 @@
 package: Common-O2
 version: "%(tag_basename)s"
-tag: v1.6.3
+tag: v1.6.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
