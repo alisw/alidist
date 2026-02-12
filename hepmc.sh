@@ -9,6 +9,7 @@ build_requires:
 #!/bin/bash -e
 
 cmake  $SOURCEDIR                           \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5   \
        -Dmomentum=GEV                       \
        -Dlength=MM                          \
        -Dbuild_docs:BOOL=OFF                \
