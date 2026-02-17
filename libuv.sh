@@ -1,5 +1,5 @@
 package: libuv
-version: v1.40.0
+version: v1.52.0
 source: https://github.com/libuv/libuv
 requires:
   - "GCC-Toolchain:(?!osx)"
