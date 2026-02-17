@@ -19,6 +19,7 @@ cmake --debug-output $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
   -DGLFW_BUILD_EXAMPLES=OFF                          \
   -DCMAKE_INSTALL_LIBDIR=lib                         \
   -DGLFW_BUILD_TESTS=OFF                             \
+  -DGLFW_BUILD_WAYLAND=OFF                           \
   -DGLFW_BUILD_DOCS=OFF
 
 cmake --build . -- ${JOBS+-j $JOBS} install
