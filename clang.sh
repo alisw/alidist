@@ -108,7 +108,7 @@ rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 # Allow clang to find our own GCC. Notice the cat does not expand variables because
 # we want to resolve the environment when we run, not when we build this, to avoid
 # relocation issues in case GCC and clang are not built at the same time.
-if [ -n "$GCC_TOOLCHAIN_ROOT" ]; then
+if [ ! "X$GCC_TOOLCHAIN_ROOT" = X ]; then
   cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang++.cfg" << \EOF
 --gcc-toolchain=$GCC_TOOLCHAIN_ROOT
 EOF
@@ -125,7 +125,7 @@ cat << \EOF > test.cc
 #include <iostream>
 EOF
 # Make sure we use our own GCC toolchain if it exists
-if [ -n "$GCC_TOOLCHAIN_ROOT" ]; then
+if [ ! "X$GCC_TOOLCHAIN_ROOT" = X ]; then
   "$INSTALLROOT/bin-safe/clang++" --gcc-toolchain="$GCC_TOOLCHAIN_ROOT" -v -c test.cc
 else
   "$INSTALLROOT/bin-safe/clang++" -v -c test.cc
