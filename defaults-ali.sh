@@ -26,8 +26,6 @@ overrides:
       - JAliEn-ROOT
   vgm:
     tag: "v5-2"
-  cgal:
-    version: 4.12.2
   fastjet:
     tag: v3.4.1_1.052-alice2
   ROOT:
