@@ -1,6 +1,6 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v4.3.2"
+tag: "v4.5.2"
 source: https://github.com/warmcat/libwebsockets
 requires:
   - libuv
