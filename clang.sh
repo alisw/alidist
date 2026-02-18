@@ -124,7 +124,12 @@ fi
 cat << \EOF > test.cc
 #include <iostream>
 EOF
-"$INSTALLROOT/bin-safe/clang++" -v -c test.cc
+# Make sure we use our own GCC toolchain if it exists
+if [ ! "X$GCC_TOOLCHAIN_ROOT" = X ]; then
+  "$INSTALLROOT/bin-safe/clang++" --gcc-toolchain="$GCC_TOOLCHAIN_ROOT" -v -c test.cc
+else
+  "$INSTALLROOT/bin-safe/clang++" -v -c test.cc
+fi
 
 
 # Modulefile
