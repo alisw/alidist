@@ -1,5 +1,5 @@
 package: cgal
-version: "4.6.3"
+version: "6.1.1"
 requires:
   - boost
 license: GPL-3.0
@@ -16,7 +16,7 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
-URL="https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
+URL="https://github.com/CGAL/cgal/releases/download/v$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
 
 curl -kLo cgal.tar.xz "$URL"
 tar xJf cgal.tar.xz
