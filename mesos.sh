@@ -1,6 +1,6 @@
 package: mesos
 version: v1.11.0
-tag: 1.11.0-alice4
+tag: 1.11.0-alice5
 source: https://github.com/AliceO2Group/mesos.git
 requires:
   - zlib
