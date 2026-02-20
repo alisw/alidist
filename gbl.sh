@@ -17,3 +17,8 @@ cmake -S "${SOURCEDIR}/cpp/" -B "$BUILDDIR"            \
     -DSUPPORT_ROOT=ON
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
+
+mkdir -p etc/modulefiles
+alibuild-generate-module > etc/modulefiles/$PKGNAME
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+mkdir -p "$MODULEDIR" && rsync -a --delete etc/modulefiles/ "$MODULEDIR"
