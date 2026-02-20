@@ -1,5 +1,7 @@
 package: cgal
 version: "4.6.3"
+tag: v4.6.3
+source: https://github.com/alisw/CGAL.git
 requires:
   - boost
 build_requires:
@@ -15,11 +17,8 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
-URL="https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
 
-curl -kLo cgal.tar.xz "$URL"
-tar xJf cgal.tar.xz
-cd CGAL-*
+rsync -a --delete --exclude .git $SOURCEDIR/ ./
 
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="-L$BOOST_ROOT/lib"
@@ -67,8 +66,7 @@ cmake . \
       -DCGAL_IGNORE_PRECONFIGURED_MPFR:BOOL=YES \
       ${BOOST_ROOT:+-DBoost_NO_SYSTEM_PATHS:BOOL=TRUE -DBOOST_ROOT:PATH="$BOOST_ROOT"}
 
-make VERBOSE=1 ${JOBS:+-j$JOBS}
-make install VERBOSE=1
+cmake --build . -- ${JOBS:+-j$JOBS} install
 
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath @loader_path/../lib {} \;
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
