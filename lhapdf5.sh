@@ -14,7 +14,7 @@ build_requires:
 
 rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
-./configure --prefix=$INSTALLROOT FCFLAGS="$FCFLAGS -std=legacy"
+./configure --prefix=$INSTALLROOT FCFLAGS="$FCFLAGS -std=legacy" --disable-octave
 
 make ${JOBS+-j $JOBS} all
 make install
