@@ -1,12 +1,13 @@
 package: cgal
 version: "4.6.3"
+tag: v4.6.3
+source: https://github.com/alisw/CGAL.git
 requires:
   - boost
 build_requires:
   - GMP
   - MPFR
   - CMake
-  - curl
 ---
 #!/bin/bash -e
 case $ARCHITECTURE in
@@ -15,11 +16,6 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
-URL="https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
-
-curl -kLo cgal.tar.xz "$URL"
-tar xJf cgal.tar.xz
-cd CGAL-*
 
 if [[ "$BOOST_ROOT" != '' ]]; then
   export LDFLAGS="-L$BOOST_ROOT/lib"
@@ -32,7 +28,7 @@ export MPFR_INC_DIR="${MPFR_ROOT}/include"
 export GMP_LIB_DIR="${GMP_ROOT}/lib"
 export GMP_INC_DIR="${GMP_ROOT}/include"
 
-cmake . \
+cmake "$SOURCEDIR" \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
       -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
       -DCMAKE_BUILD_TYPE=Release \
@@ -67,8 +63,7 @@ cmake . \
       -DCGAL_IGNORE_PRECONFIGURED_MPFR:BOOL=YES \
       ${BOOST_ROOT:+-DBoost_NO_SYSTEM_PATHS:BOOL=TRUE -DBOOST_ROOT:PATH="$BOOST_ROOT"}
 
-make VERBOSE=1 ${JOBS:+-j$JOBS}
-make install VERBOSE=1
+cmake --build . --target install ${JOBS:+-- -j$JOBS}
 
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath @loader_path/../lib {} \;
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
