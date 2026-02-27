@@ -17,6 +17,8 @@ case $ARCHITECTURE in
   ;;
 esac
 
+export RECC_LOG_LEVEL=error
+
 if [[ $GGAL_ROOT ]]; then
   export LIBRARY_PATH="${BOOST_ROOT:+$BOOST_ROOT/lib:}$LIBRARY_PATH"
   BOOST_INC=${BOOST_ROOT:+$BOOST_ROOT/include:}
