@@ -1,6 +1,6 @@
 package: protobuf
-version: v29.3
-tag: v29.3
+version: v32.1
+tag: v32.1
 source: https://github.com/protocolbuffers/protobuf
 license: Google BSD Like
 build_requires:
