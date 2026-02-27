@@ -90,9 +90,7 @@ if [ -n "$ALIBUILD_XJALIENFS_TESTS" ] &&
      # Tests need a JAliEn token, so skip them if we have none.
      [ -n "$JALIEN_TOKEN_CERT" ] && [ -n "$JALIEN_TOKEN_KEY" ]
 then
-  # temporary measure againt breakage of alienpy tests on Alma9 aarch64 builder environment
-  # the breakage is present only in the special CI environment on that machine
-  [[ "${ARCHITECTURE}" != "slc9_aarch64" ]] && PATH="$INSTALLROOT/bin:$PATH" \
+  PATH="$INSTALLROOT/bin:$PATH" \
   PYTHONPATH="$INSTALLROOT/lib/python/site-packages:$PYTHONPATH" \
   "$SOURCEDIR/tests/run_tests" ci-tests
 fi
