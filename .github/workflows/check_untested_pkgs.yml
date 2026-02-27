@@ -3,7 +3,7 @@
 name: Check untested packages
 
 'on':
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - reopened
