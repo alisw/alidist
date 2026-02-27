@@ -1,6 +1,6 @@
 package: json-c
-version: "v0.17.0"
-tag: "json-c-0.17-20230812"
+version: "v0.18.0"
+tag: "json-c-0.18-20240915"
 source: https://github.com/json-c/json-c
 build_requires:
   - CMake
@@ -11,6 +11,7 @@ build_requires:
 
 cmake "$SOURCEDIR"                                               \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                      \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                         \
       -DBUILD_SHARED_LIBS=OFF                                    \
       ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}
 

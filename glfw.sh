@@ -1,6 +1,6 @@
 package: GLFW
-version: "3.3.2"
-tag: 3.3.2
+version: "3.4"
+tag: "3.4"
 source: https://github.com/glfw/glfw.git
 build_requires:
   - CMake
@@ -19,6 +19,7 @@ cmake --debug-output $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
   -DGLFW_BUILD_EXAMPLES=OFF                          \
   -DCMAKE_INSTALL_LIBDIR=lib                         \
   -DGLFW_BUILD_TESTS=OFF                             \
+  -DGLFW_BUILD_WAYLAND=OFF                           \
   -DGLFW_BUILD_DOCS=OFF
 
 cmake --build . -- ${JOBS+-j $JOBS} install

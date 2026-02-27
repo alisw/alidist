@@ -1,6 +1,6 @@
 package: utf8proc
-version: "v2.6.1"
-tag: v2.6.1
+version: "v2.11.2"
+tag: v2.11.2
 source: https://github.com/JuliaStrings/utf8proc
 build_requires:
   - "GCC-Toolchain:(?!osx)"

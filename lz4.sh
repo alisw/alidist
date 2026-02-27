@@ -1,6 +1,6 @@
 package: lz4
 version: "%(tag_basename)s"
-tag: v1.9.3
+tag: v1.10.0
 source: https://github.com/lz4/lz4
 build_requires:
   - "GCC-Toolchain:(?!osx)"
