@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/ALICEPrivateExternals/epos.git
 requires:
   - ROOT
   - fastjet
+license: GPL-2.0
 env:
   EPOVSN: "${EPOS_VERSION/./}"
   EPO: "${EPOS_ROOT}/epos/"

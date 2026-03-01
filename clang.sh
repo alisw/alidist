@@ -4,6 +4,7 @@ tag: "llvmorg-20.1.7-alice2"
 source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: Apache-2.0
 build_requires:
   - "Python"
   - CMake

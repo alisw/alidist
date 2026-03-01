@@ -7,6 +7,7 @@ requires:
   - fastjet
   - HepMC3
   - alibuild-recipe-tools
+license: GPL-2.0
 env:
   EPO4HQVSN: "1.0"
 ---

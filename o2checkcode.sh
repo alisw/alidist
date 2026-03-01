@@ -3,6 +3,7 @@ version: "1.0"
 requires:
   - O2
   - o2codechecker
+license: GPL-3.0
 build_requires:
   - CMake
 force_rebuild: true

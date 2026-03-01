@@ -7,6 +7,7 @@ env:
 requires:
   - "GCC-Toolchain:(?!osx)"
   - Python-modules
+license: GPL-3.0
 build_requires:
   - curl
 ---

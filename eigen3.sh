@@ -2,6 +2,7 @@ package: Eigen3
 version: 3.4.0-onnx1
 # Needed to compile ONNXRuntime correctly
 tag: e7248b26a1ed53fa030c5c459f7ea095dfd276ac
+license: MPL-2.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake

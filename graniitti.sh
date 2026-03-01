@@ -6,6 +6,7 @@ requires:
   - HepMC3
   - lhapdf
   - lhapdf-pdfsets
+license: MIT
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - alibuild-recipe-tools

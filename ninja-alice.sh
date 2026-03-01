@@ -1,6 +1,7 @@
 package: ninja-alice
 version: "%(tag_basename)s"
 tag: "v1.13.1-alice1"
+license: Apache-2.0
 source: https://github.com/alisw/ninja
 build_requires:
   - "GCC-Toolchain:(?!osx)"

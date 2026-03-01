@@ -4,6 +4,7 @@ source: https://github.com/zeromq/cppzmq
 requires:
   - "GCC-Toolchain:(?!osx)"
   - ZeroMQ
+license: MIT
 build_requires:
   - "CMake"
   - ninja

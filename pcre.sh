@@ -1,6 +1,7 @@
 package: PCRE
 version: master
 tag: master
+license: BSD-3-Clause
 source: https://github.com/ktf/pcre
 prefer_system: (?!slc5.*)
 prefer_system_check: |

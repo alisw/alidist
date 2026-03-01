@@ -7,6 +7,7 @@ requires:
   - fastjet
   - libjalienO2
   - KFParticle
+license: GPL-3.0
 build_requires:
   - "Clang:(?!osx)"
   - CMake

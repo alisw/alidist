@@ -5,6 +5,7 @@ source: https://github.com/Microsoft/cpprestsdk
 requires:
   - boost
   - OpenSSL:(?!osx)
+license: MIT
 build_requires:
   - CMake
 ---

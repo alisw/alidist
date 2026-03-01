@@ -1,6 +1,7 @@
 package: libxml2
 version: "%(tag_basename)s"
 tag: v2.9.3
+license: MIT
 build_requires:
   - "autotools:(slc6|slc7)"
   - zlib

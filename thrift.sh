@@ -4,6 +4,7 @@ tag: 0.12.0
 source: https://github.com/apache/thrift
 requires:
   - boost
+license: Apache-2.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - "OpenSSL:(?!osx)"

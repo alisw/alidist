@@ -1,5 +1,6 @@
 package: Python-modules-list
 version: "1.0"
+license: Python-2.0
 env:
   PIP_BASE_REQUIREMENTS: |
     pip < 26.0

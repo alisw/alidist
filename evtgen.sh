@@ -7,6 +7,7 @@ requires:
   - pythia
   - TAUOLA
   - PHOTOS
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
   - "GCC-Toolchain:(?!osx)"

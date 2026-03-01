@@ -7,6 +7,7 @@ requires:
   - protobuf
   - boost
   - glog
+license: GPL-3.0
 build_requires:
   - CMake
 ---

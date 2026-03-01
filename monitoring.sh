@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - curl
   - libInfoLogger
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

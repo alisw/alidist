@@ -11,6 +11,7 @@ requires:
   - FairMQ
   - grpc
   - libInfoLogger
+license: GPL-3.0
 build_requires:
   - flatbuffers
   - CMake

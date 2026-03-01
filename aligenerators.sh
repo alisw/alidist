@@ -24,6 +24,7 @@ requires:
   - JETSCAPE
   - EPOS4
   - STARlight
+license: GPL-3.0
 build_requires:
   - EPOS-test:(?!osx)
   - alibuild-recipe-tools

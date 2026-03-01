@@ -16,6 +16,7 @@ requires:
   # those conflict with system-cyrus-sasl.
   # - curl
   # - OpenSSL
+license: GPL-3.0
 build_requires:
   - "autotools:(slc.*)"
   - protobuf

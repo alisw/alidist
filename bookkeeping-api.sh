@@ -4,6 +4,7 @@ tag: "@aliceo2/bookkeeping@1.9.2"
 requires:
   - grpc
   - protobuf
+license: GPL-3.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake

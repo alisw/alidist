@@ -8,6 +8,7 @@ requires:
   - pythia
   - HepMC3
   - ROOT
+license: BSD-3-Clause
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

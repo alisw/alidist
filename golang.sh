@@ -1,5 +1,6 @@
 package: golang
 version: "1.24.2"
+license: BSD-3-Clause
 build_requires:
   - curl
   - alibuild-recipe-tools

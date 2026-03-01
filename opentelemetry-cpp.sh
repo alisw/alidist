@@ -4,6 +4,7 @@ tag: "v1.22.0"
 requires:
   - curl
   - protobuf
+license: Apache-2.0
 build_requires:
   - CMake
   - ninja

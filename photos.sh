@@ -5,6 +5,7 @@ source: https://github.com/alisw/photospp.git
 requires:
   - HepMC
   - HepMC3
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools

@@ -1,5 +1,6 @@
 package: libunwind
 version: v1.6.2
+license: MIT
 source: http://github.com/libunwind/libunwind
 build_requires:
   - libatomic_ops

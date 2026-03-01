@@ -1,6 +1,7 @@
 package: googlebenchmark
 version: "1.6.1"
 tag: v1.6.1
+license: Apache-2.0
 source: https://github.com/google/benchmark
 build_requires:
   - "GCC-Toolchain:(?!osx)"

@@ -1,5 +1,6 @@
 package: JDK
 version: "21.0.6"
+license: GPL-2.0
 build_requires:
   - curl
 prefer_system: .*

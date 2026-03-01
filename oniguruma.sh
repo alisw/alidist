@@ -1,6 +1,7 @@
 package: oniguruma
 version: v6.9.5
 tag: v6.9.5_rev1
+license: BSD-2-Clause
 source: https://github.com/kkos/oniguruma/
 build_requires:
   - "GCC-Toolchain:(?!osx)"

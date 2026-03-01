@@ -2,6 +2,7 @@ package: O2-RTC-test
 version: "1.0"
 requires:
   - O2
+license: GPL-3.0
 force_rebuild: true
 ---
 #!/bin/bash -e

@@ -8,6 +8,7 @@ requires:
   - lhapdf5
   - HepMC
   - Python-modules
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - SWIG

@@ -1,6 +1,7 @@
 package: valgrind
 version: "3.18.1"
 tag: VALGRIND_3_18_1
+license: GPL-2.0
 source: git://sourceware.org/git/valgrind.git
 build_requires:
   - autotools

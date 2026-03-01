@@ -6,6 +6,7 @@ requires:
   - AliRoot
   - boost
   - yaml-cpp
+license: GPL-3.0
 build_requires:
   - CMake
   - RapidJSON

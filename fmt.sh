@@ -4,6 +4,7 @@ tag: "11.1.2"
 source: https://github.com/fmtlib/fmt
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MIT
 build_requires:
   - CMake
   - alibuild-recipe-tools

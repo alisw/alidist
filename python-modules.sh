@@ -5,6 +5,7 @@ requires:
   - "FreeType:(?!osx)"
   - libpng
   - hdf5
+license: Python-2.0
 build_requires:
   - Python-modules-list
   - alibuild-recipe-tools

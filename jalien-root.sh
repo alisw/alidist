@@ -8,6 +8,7 @@ requires:
   - XRootD
   - libwebsockets
   - libuv
+license: GPL-3.0
 build_requires:
   - json-c
   - CMake

@@ -4,6 +4,7 @@ tag: v3.11.3
 source: https://github.com/nlohmann/json
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MIT
 build_requires:
   - CMake
   - alibuild-recipe-tools

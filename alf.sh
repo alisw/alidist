@@ -10,6 +10,7 @@ requires:
   - ReadoutCard
   - "DimRpcParallel:(?!osx)"
   - "Python:slc.*"
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
   - CMake

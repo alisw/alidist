@@ -1,6 +1,7 @@
 package: curl
 version: "7.70.0"
 tag: curl-7_70_0
+license: curl
 source: https://github.com/curl/curl.git
 build_requires:
   - "OpenSSL:(?!osx)"

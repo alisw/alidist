@@ -5,6 +5,7 @@ requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - MySQL
+license: GPL-3.0
 build_requires:
   - CMake
   - golang

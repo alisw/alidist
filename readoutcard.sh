@@ -10,6 +10,7 @@ requires:
   - libInfoLogger
   - "PDA:(?!osx|.*aarch64)"
   - "Python"
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
   - CMake

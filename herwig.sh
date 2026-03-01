@@ -10,6 +10,7 @@ requires:
   - lhapdf-pdfsets
   - Openloops
   - madgraph
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools

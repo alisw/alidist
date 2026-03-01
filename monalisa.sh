@@ -2,6 +2,7 @@ package: MonALISA
 version: "20221109"
 requires:
   - JDK
+license: LGPL-2.1
 build_requires:
   - curl
   - alibuild-recipe-tools

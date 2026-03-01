@@ -6,6 +6,7 @@ requires:
   - GLFW
   - FreeType
   - libuv
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

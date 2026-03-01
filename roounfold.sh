@@ -5,6 +5,7 @@ source: https://github.com/alisw/RooUnfold
 requires:
   - ROOT
   - boost
+license: GPL-3.0
 ---
 cmake $SOURCEDIR                              \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT     \

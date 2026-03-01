@@ -1,6 +1,7 @@
 package: sqlite
 version: "v3.47.2"
 tag: "version-3.47.2"
+license: Public Domain
 source: https://github.com/sqlite/sqlite
 prefer_system: (?!slc5)
 prefer_system_check: |

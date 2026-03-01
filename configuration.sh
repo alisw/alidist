@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - Ppconsul
   - curl
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools
