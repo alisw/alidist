@@ -4,6 +4,7 @@ tag: v3.0.3
 source: https://github.com/HowardHinnant/date
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MIT
 build_requires:
   - CMake
   - alibuild-recipe-tools

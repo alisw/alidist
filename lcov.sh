@@ -1,6 +1,7 @@
 package: lcov
 version: v1.13
 tag: v1.13
+license: GPL-2.0
 source: https://github.com/linux-test-project/lcov.git
 env:
   CMAKE_BUILD_TYPE: COVERAGE

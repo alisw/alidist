@@ -1,6 +1,7 @@
 package: bz2
 version: "1.0.8"
 tag: 8ca1faa31f396d94ab927b257f3a05236c84e330
+license: BSD-4-Clause
 source: https://github.com/alisw/bzip2
 build_requires:
   - "GCC-Toolchain:(?!osx)"

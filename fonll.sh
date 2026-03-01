@@ -5,6 +5,7 @@ source: https://github.com/alisw/fonll.git
 requires:
   - lhapdf
   - "GCC-Toolchain:(?!osx)"
+license: GPL-2.0
 env:
   FONLL_NPDF: "$FONLL_ROOT/share/nPDF"
 ---

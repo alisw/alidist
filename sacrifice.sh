@@ -9,6 +9,7 @@ requires:
   - HepMC
   - Python-modules
   - pythia
+license: GPL-2.0
 build_requires:
   - "autotools:(slc6|slc7)"
 ---

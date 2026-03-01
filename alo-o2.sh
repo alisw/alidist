@@ -5,6 +5,7 @@ requires:
   - googlebenchmark
   - O2
   - yaml-cpp
+license: GPL-3.0
 build_requires:
   - RapidJSON
   - CMake

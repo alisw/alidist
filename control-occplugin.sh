@@ -10,6 +10,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - libInfoLogger
   - Configuration
+license: GPL-3.0
 build_requires:
   - RapidJSON
   - CMake

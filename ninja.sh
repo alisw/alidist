@@ -1,6 +1,7 @@
 package: ninja
 version: "fortran-%(short_hash)s"
 tag: "v1.11.1.g95dee.kitware.jobserver-1"
+license: Apache-2.0
 source: https://github.com/Kitware/ninja
 build_requires:
   - "GCC-Toolchain:(?!osx)"

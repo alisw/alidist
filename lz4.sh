@@ -1,6 +1,7 @@
 package: lz4
 version: "%(tag_basename)s"
 tag: v1.9.3
+license: BSD-2-Clause
 source: https://github.com/lz4/lz4
 build_requires:
   - "GCC-Toolchain:(?!osx)"

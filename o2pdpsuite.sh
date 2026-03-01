@@ -11,6 +11,7 @@ requires:
   - O2DPG
   - O2sim
   - "ODC:(?!osx|slc9_aarch64)"
+license: GPL-3.0
 valid_defaults:
   - o2
   - o2-dataflow

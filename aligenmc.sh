@@ -1,6 +1,7 @@
 package: aligenmc
 version: "%(tag_basename)s"
 tag: "v0.0.7-2"
+license: GPL-3.0
 source: https://github.com/alisw/aligenmc
 ---
 #!/bin/bash -e

@@ -1,6 +1,7 @@
 package: HepMC
 version: "%(tag_basename)s"
 tag: HEPMC_02_06_10
+license: GPL-3.0
 source: https://gitlab.cern.ch/hepmc/HepMC.git
 build_requires:
   - CMake

@@ -7,6 +7,7 @@ requires:
   - O2-full-system-test
   - O2-sim-challenge-test
   - O2-RTC-test:(.*x86-64)
+license: GPL-3.0
 valid_defaults:
   - o2
   - o2-epn

@@ -1,6 +1,7 @@
 package: Alice-GRID-Utils
 version: "%(tag_basename)s"
 tag: "0.0.7"
+license: GPL-3.0
 source: https://gitlab.cern.ch/jalien/alice-grid-utils.git
 ---
 #!/bin/bash -e

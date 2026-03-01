@@ -6,6 +6,7 @@ requires:
   - VMC
   - pythia6
   - nlohmann_json
+license: GPL-3.0
 build_requires:
   - CMake
   - hijing

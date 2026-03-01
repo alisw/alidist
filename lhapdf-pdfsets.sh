@@ -1,5 +1,6 @@
 package: lhapdf-pdfsets
 version: "v%(year)s"
+license: GPL-3.0
 build_requires:
   - lhapdf
   - curl

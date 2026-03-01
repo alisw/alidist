@@ -8,6 +8,7 @@ requires:
   - re2
   - protobuf
   - zlib
+license: Apache-2.0
 build_requires:
   - CMake
   - ninja

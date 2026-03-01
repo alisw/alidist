@@ -6,6 +6,7 @@ requires:
   - ROOT
   - XRootD
   - xalienfs
+license: GPL-3.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

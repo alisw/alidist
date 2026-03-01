@@ -1,6 +1,7 @@
 package: json-c
 version: "v0.17.0"
 tag: "json-c-0.17-20230812"
+license: MIT
 source: https://github.com/json-c/json-c
 build_requires:
   - CMake

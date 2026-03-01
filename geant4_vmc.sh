@@ -7,6 +7,7 @@ requires:
   - VMC
   - GEANT4
   - vgm
+license: Geant4
 build_requires:
   - CMake
   - ninja

@@ -4,6 +4,7 @@ tag: v4-5
 requires:
   - ROOT
   - VMC
+license: LGPL-2.1
 build_requires:
   - CMake
   - ninja-fortran

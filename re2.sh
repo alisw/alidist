@@ -1,5 +1,6 @@
 package: re2
 version: "2024-07-02"
+license: BSD-3-Clause
 source: https://github.com/google/re2
 build_requires:
   - "GCC-Toolchain:(?!osx)"

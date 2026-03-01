@@ -5,6 +5,7 @@ tag: "428-alice4"
 source: https://github.com/alisw/pythia6.git
 requires:
   - GCC-Toolchain:(?!osx)
+license: GPL-2.0
 build_requires:
   - CMake
   - ninja-fortran

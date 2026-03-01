@@ -4,6 +4,7 @@ tag: v2.16-alice1
 source: https://github.com/alisw/LoopTools
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: LGPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

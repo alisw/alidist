@@ -7,6 +7,7 @@ requires:
   - "OpenSSL:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
   - re2
+license: Apache-2.0
 build_requires:
   - CMake
   - abseil

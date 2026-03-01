@@ -5,6 +5,7 @@ source: https://github.com/alisw/general-broken-lines.git
 requires:
   - Eigen3
   - ROOT
+license: GPL-3.0
 build_requires:
   - CMake
 ---

@@ -3,6 +3,7 @@ version: v1.40.0
 source: https://github.com/libuv/libuv
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MIT
 build_requires:
   - CMake
   - alibuild-recipe-tools

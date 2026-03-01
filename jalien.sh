@@ -6,6 +6,7 @@ requires:
   - JDK
   - XRootD
   - curl
+license: GPL-3.0
 valid_defaults:
   - jalien
   - o2

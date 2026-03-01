@@ -7,6 +7,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - zlib
   - curl
+license: BSD-3-Clause
 build_requires:
   - make
   - alibuild-recipe-tools

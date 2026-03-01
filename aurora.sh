@@ -1,6 +1,7 @@
 package: aurora
 version: alice1
 tag: alice/0.16.0
+license: Apache-2.0
 source: https://github.com/alisw/aurora
 ---
 #!/bin/bash -ex

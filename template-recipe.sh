@@ -3,6 +3,7 @@ version: "v1.0.0"
 source: https://github.com/alisw/MyGenerator
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - CMake
 ---

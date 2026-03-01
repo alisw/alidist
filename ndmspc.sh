@@ -8,6 +8,7 @@ requires:
   - libwebsockets
   - curl
   - libuv
+license: GPL-3.0
 #  - arrow
 build_requires:
   - CMake

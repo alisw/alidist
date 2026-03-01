@@ -2,6 +2,7 @@ package: cgal
 version: "4.6.3"
 requires:
   - boost
+license: GPL-3.0
 build_requires:
   - GMP
   - MPFR

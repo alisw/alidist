@@ -1,6 +1,7 @@
 package: autotools
 version: "%(tag_basename)s"
 tag: v1.6.4
+license: GPL-3.0
 source: https://github.com/alisw/autotools
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |

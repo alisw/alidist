@@ -3,6 +3,7 @@ version: "20250110"
 tag: 2b5056c
 requires:
   - ROOT
+license: GPL-2.0
 build_requires:
   - ROOT
   - alibuild-recipe-tools

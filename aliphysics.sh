@@ -9,6 +9,7 @@ requires:
   - boost:(osx.*)
   - ZeroMQ:(osx.*)
   - "jemalloc:(?!osx.*)"
+license: GPL-3.0
 build_requires:
   - "Xcode:(osx.*)"
 source: https://github.com/alisw/AliPhysics

@@ -15,6 +15,7 @@ requires:
   - libjalienO2
   - bookkeeping-api
   - moderncppkafka
+license: GPL-3.0
 build_requires:
   - CMake
   - "Clang:(?!osx)"   # for Gandiva

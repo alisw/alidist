@@ -4,6 +4,7 @@ tag: 14.0.0
 source: https://github.com/xtensor-stack/xsimd
 requires:
   - Clang:(?!.*osx)
+license: BSD-3-Clause
 build_requires:
   - alibuild-recipe-tools
   - CMake

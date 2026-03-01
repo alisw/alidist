@@ -11,6 +11,7 @@ requires:
   - JAliEn-ROOT
   - ApMon-CPP
   - ZeroMQ:(osx.*)
+license: GPL-3.0
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

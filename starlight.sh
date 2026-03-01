@@ -4,6 +4,7 @@ tag: d6dfae2ea604646bfc3ec63aa06443f035685c45
 requires:
   - DPMJET
   - HepMC3
+license: GPL-3.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

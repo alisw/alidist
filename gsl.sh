@@ -4,6 +4,7 @@ tag: "v2.8"
 source: https://github.com/alisw/gsl
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools

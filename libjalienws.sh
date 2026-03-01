@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/jalien/libjalienws.git
 requires:
   - libjalienO2
   - AliEn-Runtime
+license: GPL-3.0
 build_requires:
   - libwebsockets
   - CMake

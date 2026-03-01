@@ -4,6 +4,7 @@ tag: v1.6.4
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools
