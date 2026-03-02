@@ -14,6 +14,7 @@ build_requires:
 cmake -S "${SOURCEDIR}/cpp/" -B "$BUILDDIR"            \
     -DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"             \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5                 \
     -DEIGEN3_INCLUDE_DIR="$EIGEN3_ROOT/include/eigen3" \
     -DSUPPORT_ROOT=ON
 cmake --build . -- ${JOBS:+-j$JOBS}
