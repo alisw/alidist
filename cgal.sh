@@ -75,6 +75,8 @@ find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath @loade
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -id {} {} \;
 
+echo "" | gcc -o $INSTALLROOT/lib/libCGAL.so -shared -x c++ -
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
