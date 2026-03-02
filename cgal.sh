@@ -75,7 +75,11 @@ find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath @loade
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -id {} {} \;
 
-echo "" | gcc -o $INSTALLROOT/lib/libCGAL.so -shared -x c++ -
+if [[ ${ALIBUILD_ARCHITECTURE} = osx* ]]; then
+  echo "" | cc -o $INSTALLROOT/lib/libCGAL.dylib -dynamiclib -x c++ -
+else
+  echo "" | gcc -o $INSTALLROOT/lib/libCGAL.so -shared -x c++ -
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
