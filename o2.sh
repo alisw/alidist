@@ -326,6 +326,7 @@ module load BASE/1.0 \\
             ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
             ${NLOHMANN_JSON_REVISION:+nlohmann_json/$NLOHMANN_JSON_VERSION-$NLOHMANN_JSON_REVISION} \\
             ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}                     \\
+            ${GBL_REVISION:+GBL/$GBL_VERSION-$GBL_REVISION}                                         \\
             ${BOOKKEEPING_API_REVISION:+bookkeeping-api/$BOOKKEEPING_API_VERSION-$BOOKKEEPING_API_REVISION}
 
 # Our environment
