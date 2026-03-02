@@ -28,7 +28,7 @@ pushd fastjet
   FJTAG=${GIT_TAG#alice-}
   if [[ $FJTAG < "v3.3.3" ]]
   then
-    ADDITIONAL_FLAGS="${GMP_ROOT:+-L$GMP_ROOT/lib -lgmp} ${MPFR_ROOT:+-L$MPFR_ROOT/lib -lmpfr} $BOOST_LIBS ${CGAL_ROOT:+-L$CGAL_ROOT/lib -lCGAL -I$CGAL_ROOT/include} ${BOOST_ROOT:+-I$BOOST_ROOT/include} ${GMP_ROOT:+-I$GMP_ROOT/include} ${MPFR_ROOT:+-I$MPFR_ROOT/include} ${CGAL_ROOT:+-DCGAL_DO_NOT_USE_MPZF} -O2 -g"
+    ADDITIONAL_FLAGS="${GMP_ROOT:+-L$GMP_ROOT/lib -lgmp} ${MPFR_ROOT:+-L$MPFR_ROOT/lib -lmpfr} $BOOST_LIBS ${CGAL_ROOT:+-L$CGAL_ROOT/lib -I$CGAL_ROOT/include} ${BOOST_ROOT:+-I$BOOST_ROOT/include} ${GMP_ROOT:+-I$GMP_ROOT/include} ${MPFR_ROOT:+-I$MPFR_ROOT/include} ${CGAL_ROOT:+-DCGAL_DO_NOT_USE_MPZF} -O2 -g"
     export CXXFLAGS="$CXXFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
     export CFLAGS="$CFLAGS $ARCH_FLAGS $ADDITIONAL_FLAGS"
     export CPATH="${BOOST_INC}${CGAL_ROOT:+$CGAL_ROOT/include:}${GMP_ROOT:+$GMP_ROOT/include:}${MPFR_ROOT:+$MPFR_ROOT/include}"
