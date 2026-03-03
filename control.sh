@@ -1,5 +1,5 @@
 package: Control
-version: "v1.48.2"
+version: "v1.49.0"
 requires:
   - Control-Core
   - Control-OCCPlugin
