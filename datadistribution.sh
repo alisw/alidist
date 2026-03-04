@@ -1,7 +1,7 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v1.6.9
-source: https://github.com/AliceO2Group/DataDistribution
+tag: v1.6.10
+source: https://github.com/davidrohr/DataDistribution
 requires:
   - "GCC-Toolchain:(?!osx)"
   - boost
