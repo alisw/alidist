@@ -11,6 +11,7 @@ build_requires:
   - CMake
   - alibuild-recipe-tools
   - ninja
+  - Xcode:(osx)
 source: https://github.com/AliceO2Group/DebugGUI
 incremental_recipe: |
   cmake $SOURCEDIR                          \
