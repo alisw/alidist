@@ -7,6 +7,7 @@ requires:
   - ROOT
 license: GPL-3.0
 build_requires:
+  - alibuild-recipe-tools
   - CMake
 ---
 #!/bin/bash -e
