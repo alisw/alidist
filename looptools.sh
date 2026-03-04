@@ -14,10 +14,10 @@ rsync -a "$SOURCEDIR/" ./
 export LOGFILE=${PWD}/configure.log
 
 # adjust some config options based on architecture
-# (--64 does not work on aarch64)
+# (--64 does not work on aarch64 and riscv64)
 ARCHFLAG="--64"
 case $ARCHITECTURE in
-  *_aarch64) ARCHFLAG="" ;;
+  *_aarch64|*_riscv64) ARCHFLAG="" ;;
 esac
 
 ./configure --prefix="$INSTALLROOT" ${ARCHFLAG}
