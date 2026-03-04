@@ -30,6 +30,7 @@ export GMP_LIB_DIR="${GMP_ROOT}/lib"
 export GMP_INC_DIR="${GMP_ROOT}/include"
 
 cmake "$SOURCEDIR" \
+      -DCMAKE_CXX_STANDARD=14 \
       -DCMAKE_INSTALL_PREFIX:PATH="${INSTALLROOT}" \
       -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
       -DCMAKE_BUILD_TYPE=Release \
