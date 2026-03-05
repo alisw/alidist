@@ -14,6 +14,7 @@ env:
   LLVM_ROOT: "$CLANG_ROOT" # needed by LLVMAlt
 prefer_system: (osx.*)
 prefer_system_check: |
+  # Must be kept in sync with the arrow.sh check for clang!
   brew --prefix llvm@20 && test -d $(brew --prefix llvm@20)
 ---
 #!/bin/bash -e
