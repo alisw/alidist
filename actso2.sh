@@ -1,0 +1,41 @@
+package: ACTSO2
+version: "master"
+tag: "master"
+requires:
+  - ROOT
+  - ACTS
+build_requires:
+  - "GCC-Toolchain:(?!osx)"
+  - CMake
+  - HepMC3
+  - boost
+  - Eigen3
+  - ninja
+  - alibuild-recipe-tools
+source: https://github.com/AliceO2Group/actsO2.git
+---
+#!/bin/bash -ex
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+                 -DACTS_ROOT=$ACTS_ROOT \
+                 -DCMAKE_PREFIX_PATH=$ACTS_ROOT
+echo "Using ACTS from $ACTS_ROOT"
+cmake --build . -- ${JOBS:+-j$JOBS}
+cmake --install .
+
+[[ -d $INSTALLROOT/lib64 ]] && [[ ! -d $INSTALLROOT/lib ]] && ln -sf ${INSTALLROOT}/lib64 $INSTALLROOT/lib
+
+#ModuleFile
+MODULEDIR="${INSTALLROOT}/etc/modulefiles"
+MODULEFILE="${MODULEDIR}/${PKGNAME}"
+mkdir -p ${MODULEDIR}
+alibuild-generate-module --bin --lib > "${MODULEFILE}"
+# extra environment
+cat >> ${MODULEFILE} <<EOF
+set ACTSO2_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
+setenv ACTSO2_ROOT \$ACTSO2_ROOT
+prepend-path ROOT_INCLUDE_PATH \$ACTSO2_ROOT/include
+EOF
+
+# Print a message to remind people to source the ACTS python bindings
+echo -e "\033[1mTo use the ACTS python bindings, source the following script:\033[0m"
+echo ". $ACTSO2_ROOT/python/setup.sh"
