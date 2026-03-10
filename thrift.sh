@@ -1,6 +1,6 @@
 package: thrift
 version: "%(tag_basename)s"
-tag: 0.12.0
+tag: 0.22.0
 source: https://github.com/apache/thrift
 requires:
   - boost
@@ -32,6 +32,8 @@ rsync -a --delete --exclude="**/.git" $SOURCEDIR/ ./
             --without-php               \
             --without-php_extension     \
             --without-ruby              \
+            --without-rs                \
+            --without-swift             \
             --without-qt                \
             --enable-libs               \
             --disable-tests             \
