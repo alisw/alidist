@@ -6,6 +6,9 @@ requires:
   - pythia
   - GEANT4
   - HepMC3
+  - xercesc
+  - TBB
+license: GPL-3.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
@@ -19,9 +22,9 @@ source: https://github.com/AliceO2Group/acts.git
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DCMAKE_SKIP_RPATH=TRUE                   \
+                 -DACTS_BUILD_PYTHON_BINDINGS=ON           \
                  -DACTS_BUILD_FATRAS=ON                    \
                  -DACTS_BUILD_EXAMPLES=ON                  \
-                 -DACTS_BUILD_EXAMPLES_PYTHON_BINDINGS=ON  \
                  -DACTS_BUILD_ANALYSIS_APPS=ON             \
                  -DACTS_BUILD_EXAMPLES_PYTHIA8=ON          \
                  -DACTS_BUILD_PLUGIN_ROOT=ON               \
@@ -29,11 +32,26 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DACTS_BUILD_PLUGIN_GEANT4=ON             \
                  -DACTS_BUILD_FATRAS_GEANT4=ON             \
                  -DACTS_BUILD_EXAMPLES_GEANT4=ON           \
+                 -DACTS_BUILD_EXAMPLES_ROOT=ON             \
                  -DGeant4_DIR=${GEANT4_ROOT}/lib           \
                  -G Ninja 
 
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
+
+case $ARCHITECTURE in
+    osx*)
+        find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/python/acts {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${GEANT4_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${XERCESC_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${ROOT_DYN_PATH} {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${TBB_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${HEPMC3_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${PYTHIA_ROOT}/lib {} \;
+	;;
+esac
 
 [[ -d $INSTALLROOT/lib64 ]] && [[ ! -d $INSTALLROOT/lib ]] && ln -sf ${INSTALLROOT}/lib64 $INSTALLROOT/lib
 
