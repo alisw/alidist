@@ -80,8 +80,8 @@ env:
 
     xgboost == 0.82; python_version < '3.8'
     xgboost == 1.3.3; python_version == '3.8'
-    xgboost == 1.2.0; python_version >= '3.9' and python_version < '3.11'
-    xgboost == 1.7.5; python_version >= '3.11'
+    xgboost == 1.2.0; python_version == '3.9'
+    xgboost == 1.7.5; python_version >= '3.10'
 
     dryable == 1.0.3; python_version < '3.9'
     dryable == 1.0.5; python_version >= '3.9'
