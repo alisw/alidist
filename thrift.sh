@@ -47,7 +47,3 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p etc/modulefiles
 alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
-cat >> etc/modulefiles/$PKGNAME <<EoF
-prepend-path PATH \$BASEDIR/$PKGNAME/\$version/bin
-prepend-path LD_LIBRARY_PATH \$BASEDIR/$PKGNAME/\$version/lib
-EoF
