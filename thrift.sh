@@ -4,10 +4,10 @@ tag: v0.22.0
 source: https://github.com/apache/thrift
 requires:
   - boost
-  - ninja
 license: Apache-2.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
+  - ninja
   - "OpenSSL:(?!osx)"
   - yacc-like
 prefer_system: ".*"
