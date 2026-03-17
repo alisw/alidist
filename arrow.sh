@@ -10,7 +10,6 @@ requires:
   - utf8proc
   - OpenSSL:(?!osx)
   - xsimd
-  - thrift
 license: Apache-2.0
 build_requires:
   - zlib
