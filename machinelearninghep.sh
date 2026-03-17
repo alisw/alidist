@@ -4,6 +4,7 @@ tag: "run3"
 source: https://github.com/alisw/MachineLearningHEP
 requires:
   - Python-modules
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 prepend_path:

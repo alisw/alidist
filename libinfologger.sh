@@ -1,9 +1,10 @@
 package: libInfoLogger
 version: "%(tag_basename)s"
-tag: v2.10.0
+tag: v2.10.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - CMake
   - ninja

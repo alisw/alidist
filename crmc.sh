@@ -5,6 +5,7 @@ source: https://github.com/alisw/crmc.git
 requires:
   - boost
   - HepMC
+license: GPL-2.0
 build_requires:
   - CMake
 ---

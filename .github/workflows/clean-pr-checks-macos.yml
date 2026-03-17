@@ -22,6 +22,11 @@ name: Clean macOS PR checks
         description: build/alidist/O2Suite/o2/macOS-arm
         type: boolean
         default: true
+      'check_build/alidist/O2Suite/o2/macOS-arm/staging':
+        description: build/alidist/O2Suite/o2/macOS-arm/staging
+        type: boolean
+        default: true
+
 
 permissions: {}
 

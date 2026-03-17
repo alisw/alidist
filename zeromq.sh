@@ -3,6 +3,7 @@ version: v4.3.5
 source: https://github.com/zeromq/libzmq
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MPL-2.0
 build_requires:
   - "CMake"
   - ninja

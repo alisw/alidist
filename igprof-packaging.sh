@@ -4,6 +4,7 @@ source: https://github.com/alisw/ali-bot
 force_rebuild: true
 requires:
   - IgProf
+license: GPL-2.0
 ---
 #!/bin/bash -e
 mkdir -p igprof/usr libunwind/usr libatomic_ops/usr

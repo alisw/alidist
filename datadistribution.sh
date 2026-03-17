@@ -14,6 +14,7 @@ requires:
   - protobuf
   - O2
   - fmt
+license: GPL-3.0
 build_requires:
   - CMake
 incremental_recipe: |

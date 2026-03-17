@@ -4,6 +4,7 @@ source: https://gitlab.cern.ch/cholm/alice-rivet-task
 requires:
   - Rivet
   - AliRoot
+license: GPL-3.0
 build_requires:
   - GCC-Toolchain:(?!osx)
   - alibuild-recipe-tools

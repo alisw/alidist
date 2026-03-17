@@ -3,6 +3,7 @@ version: v24.3.25
 source: https://github.com/google/flatbuffers
 requires:
   - zlib
+license: Apache-2.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

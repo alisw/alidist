@@ -5,6 +5,7 @@ source: https://github.com/alisw/LHAPDF
 requires:
   - "Python"
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
 prepend_path:

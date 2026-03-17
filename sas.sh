@@ -4,6 +4,7 @@ tag: master
 source: https://github.com/ktf/SAS.git
 requires:
   - Clang:(?!osx*)
+license: GPL-3.0
 ---
 #!/bin/sh
 cmake $SOURCEDIR \

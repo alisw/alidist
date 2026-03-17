@@ -1,6 +1,7 @@
 package: ApMon-CPP
 version: "%(tag_basename)s"
 tag: v2.2.8-alice6
+license: Apache-2.0
 source: https://github.com/alisw/apmon-cpp.git
 build_requires:
   - "libtirpc:(?!osx)"

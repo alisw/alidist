@@ -1,6 +1,6 @@
 package: Control-OCCPlugin
 version: "%(tag_basename)s"
-tag: "v1.48.2"
+tag: "v1.49.0"
 requires:
   - FairMQ
   - FairLogger
@@ -10,6 +10,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - libInfoLogger
   - Configuration
+license: GPL-3.0
 build_requires:
   - RapidJSON
   - CMake

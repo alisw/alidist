@@ -7,6 +7,7 @@ env:
 requires:
   - "GCC-Toolchain:(?!osx)"
   - Python-modules
+license: GPL-3.0
 build_requires:
   - curl
 ---
@@ -14,7 +15,7 @@ build_requires:
 
 rsync -a --exclude '**/.git' $SOURCEDIR/ ./
 
-./configure --prefix=$INSTALLROOT FCFLAGS="$FCFLAGS -std=legacy"
+./configure --prefix=$INSTALLROOT FCFLAGS="$FCFLAGS -std=legacy" --disable-octave
 
 make ${JOBS+-j $JOBS} all
 make install

@@ -4,6 +4,7 @@ tag: v3.7.1
 source: https://github.com/catchorg/Catch2
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MIT
 build_requires:
   - CMake
   - alibuild-recipe-tools

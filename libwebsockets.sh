@@ -4,6 +4,7 @@ tag: "v4.3.2"
 source: https://github.com/warmcat/libwebsockets
 requires:
   - libuv
+license: MIT
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

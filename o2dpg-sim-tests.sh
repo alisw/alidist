@@ -2,6 +2,7 @@ package: O2DPG-sim-tests
 version: "1.0"
 requires:
   - O2sim
+license: GPL-3.0
 force_rebuild: true
 ---
 #!/bin/bash -e

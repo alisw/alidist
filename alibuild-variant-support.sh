@@ -1,6 +1,7 @@
 package: alibuild-variant-support
 version: "0.1.0"
 tag: "v0.1.0"
+license: GPL-3.0
 source: https://github.com/ktf/alibuild-variant-support
 env:
   ALIBUILD_VARIANT_SUPPORT: "$ALIBUILD_VARIANT_SUPPORT_ROOT/bin/alibuild-variant-support"

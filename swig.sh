@@ -1,5 +1,6 @@
 package: SWIG
 version: 4.2.0
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"

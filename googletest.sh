@@ -1,6 +1,7 @@
 package: googletest
 version: "1.8.0"
 tag: release-1.8.0
+license: BSD-3-Clause
 source: https://github.com/google/googletest
 build_requires:
   - "GCC-Toolchain:(?!osx)"

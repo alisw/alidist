@@ -1,6 +1,7 @@
 package: FairCMakeModules
 version: "%(tag_basename)s"
 tag: v1.0.0
+license: GPL-3.0
 source: https://github.com/FairRootGroup/FairCMakeModules
 build_requires:
   - CMake

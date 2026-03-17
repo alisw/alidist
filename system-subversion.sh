@@ -1,5 +1,6 @@
 package: system-subversion
 version: "1.0"
+license: Apache-2.0
 build_requires:
   - system-apr
 system_requirement_missing: |

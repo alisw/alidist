@@ -1,6 +1,7 @@
 package: CodingGuidelines
 version: "%(tag_basename)s"
 tag: master
+license: GPL-3.0
 source: https://github.com/AliceO2Group/CodingGuidelines
 ---
 #!/bin/sh

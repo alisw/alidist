@@ -13,8 +13,6 @@ disable:
   - AliGenO2
   - O2Physics
   - KFParticle
-  - OpenSSL
-  - curl
   - mesos
 overrides:
   AliPhysics:

@@ -1,11 +1,12 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.19.10
+tag: v3.19.11
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - curl
   - libInfoLogger
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

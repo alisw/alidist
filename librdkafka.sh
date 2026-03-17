@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 tag: v2.3.0
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: BSD-2-Clause
 build_requires:
   - alibuild-recipe-tools
   - CMake

@@ -6,6 +6,7 @@ requires:
   - Python-modules
   - curl
   - zlib
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

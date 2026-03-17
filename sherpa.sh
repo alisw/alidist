@@ -12,6 +12,7 @@ requires:
   - fastjet
   - pythia
   - sqlite
+license: GPL-2.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - cgal

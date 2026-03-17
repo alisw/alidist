@@ -6,6 +6,7 @@ requires:
   - HepMC
   - lhapdf
   - pythia
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

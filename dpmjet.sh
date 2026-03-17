@@ -4,6 +4,7 @@ tag: "v19.3.7-alice1"
 source: https://github.com/alisw/DPMJET.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-2.0
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

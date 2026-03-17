@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20260219-0000"
+tag: "daily-20260317-0000"
 requires:
   - abseil
   - arrow
@@ -32,6 +32,9 @@ requires:
   - bookkeeping-api
   - AliEn-CAs
   - gpu-system
+  - Eigen3
+  - GBL
+license: GPL-3.0
 build_requires:
   - abseil
   - GMP
@@ -191,6 +194,7 @@ case $ARCHITECTURE in
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
     [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
+    [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=`brew --prefix libuv`
   ;;
 esac
 
@@ -243,6 +247,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DENABLE_CUDA="${O2_GPU_CUDA_AVAILABLE:-AUTO}"                                                      \
       -DENABLE_HIP="${O2_GPU_ROCM_AVAILABLE:-AUTO}"                                                       \
       -DENABLE_OPENCL="${O2_GPU_OPENCL_AVAILABLE:-AUTO}"                                                  \
+      -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                                                         \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DHIP_AMDGPUTARGET="${O2_GPU_ROCM_AVAILABLE_ARCH}"}                   \
       ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCUDA_COMPUTETARGET="${O2_GPU_CUDA_AVAILABLE_ARCH}"}                 \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
@@ -258,7 +263,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ORT_ROCM_BUILD:+-DORT_ROCM_BUILD=${ORT_ROCM_BUILD}}                                               \
       ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
       ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
-      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}
+      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   \
+      ${EIGEN3_ROOT:+-DEIGEN3_ROOT=${EIGEN3_ROOT}}
 # LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install
@@ -320,6 +326,7 @@ module load BASE/1.0 \\
             ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
             ${NLOHMANN_JSON_REVISION:+nlohmann_json/$NLOHMANN_JSON_VERSION-$NLOHMANN_JSON_REVISION} \\
             ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}                     \\
+            ${GBL_REVISION:+GBL/$GBL_VERSION-$GBL_REVISION}                                         \\
             ${BOOKKEEPING_API_REVISION:+bookkeeping-api/$BOOKKEEPING_API_VERSION-$BOOKKEEPING_API_REVISION}
 
 # Our environment

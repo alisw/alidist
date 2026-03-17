@@ -1,6 +1,7 @@
 package: PyTorch
 version: "%(tag_basename)s"
 tag: "2.2.1"
+license: BSD-3-Clause
 build_requires:
   - alibuild-recipe-tools
   - curl:(?!osx)

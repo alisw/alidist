@@ -1,6 +1,6 @@
 package: ReadoutCard
 version: "%(tag_basename)s"
-tag: v0.46.1
+tag: v0.46.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -10,6 +10,7 @@ requires:
   - libInfoLogger
   - "PDA:(?!osx|.*aarch64)"
   - "Python"
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
   - CMake

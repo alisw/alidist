@@ -7,6 +7,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - xercesc
   - zlib
+license: Geant4
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

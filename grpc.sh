@@ -7,6 +7,7 @@ requires:
   - "OpenSSL:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
   - re2
+license: Apache-2.0
 build_requires:
   - CMake
   - abseil
@@ -15,9 +16,9 @@ source: https://github.com/grpc/grpc
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
-prefer_system: .*
-prefer_system_check: |
-  printf "#include \"grpcpp/version_info.h\"\n" | cc -I$(brew --prefix grpc)/include -xc++ -std=c++20 - -c -o /dev/null
+# prefer_system: .*
+# prefer_system_check: |
+#   printf "#include \"grpcpp/version_info.h\"\n" | cc -I$(brew --prefix grpc)/include -xc++ -std=c++20 - -c -o /dev/null
 prepend_path:
   PKG_CONFIG_PATH: "$GRPC_ROOT/lib/pkgconfig"
 ---
@@ -29,6 +30,7 @@ case $ARCHITECTURE in
     [[ ! $OPENSSL_ROOT ]] && OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=$(brew --prefix protobuf)
     [[ ! $ABSEIL_ROOT ]] && ABSEIL_ROOT=$(brew --prefix abseil)
+    [[ ! $RE2_ROOT ]] && RE2_ROOT=$(brew --prefix re2)
     # to avoid issues with rpath on mac
     extra_cmake_variables="-DCMAKE_INSTALL_RPATH=$INSTALLROOT/lib \
     -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON \
@@ -38,37 +40,42 @@ case $ARCHITECTURE in
   ;;
 esac
 
-echo "OPENSSL_ROOT : $OPENSSL_ROOT"
-echo "OPENSSL_REVISION: $OPENSSL_REVISION"
+export CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH=OFF
 
+# Build CMAKE_PREFIX_PATH without trailing colons from unset variables
+CMAKE_PREFIX_PATH="$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake${C_ARES_ROOT:+:$C_ARES_ROOT}"
+[[ $C_ARES_ROOT ]] && CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$C_ARES_ROOT"
 
-
-
-cmake $SOURCEDIR                                    \
-  -G Ninja 					                                \
-  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}           \
-  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT               \
-  -DCMAKE_PREFIX_PATH=$ABSEIL_ROOT/cmake:$PROTOBUF_ROOT/cmake \
-  -DgRPC_BUILD_TESTS=OFF                            \
-  -DBUILD_SHARED_LIBS=ON                            \
-  -DgRPC_SSL_PROVIDER=package                       \
-  -DgRPC_ZLIB_PROVIDER=package                      \
-  -DgRPC_GFLAGS_PROVIDER=package                    \
-  -DgRPC_PROTOBUF_PROVIDER=package                  \
-  -DgRPC_ABSL_PROVIDER=package                      \
-  -DgRPC_BENCHMARK_PROVIDER=package                 \
-  -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF               \
-  -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF          \
-  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF                  \
-  -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF                  \
-  -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                   \
-  -DgRPC_BUILD_CSHARP_EXT=OFF                       \
-  -DgRPC_RE2_PROVIDER=package                       \
-  ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT} \
-  ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}   \
-  ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
+cmake "$SOURCEDIR"                                                                                          \
+  -G Ninja 					                                                                                \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                                   \
+  -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                                       \
+  -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH                                                                    \
+  -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                                                 \
+  -DgRPC_BUILD_TESTS=OFF                                                                                    \
+  -DBUILD_SHARED_LIBS=ON                                                                                    \
+  -DgRPC_SSL_PROVIDER=package                                                                               \
+  -DgRPC_ZLIB_PROVIDER=package                                                                              \
+  -DgRPC_GFLAGS_PROVIDER=package                                                                            \
+  ${PROTOBUF_ROOT:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                                                         \
+  ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                                   \
+  ${C_ARES_ROOT:+-Dc-ares_DIR=$C_ARES_ROOT}                                                                 \
+  ${RE2_ROOT:+-Dre2_DIR=$RE2_ROOT}                                                                          \
+  -DgRPC_PROTOBUF_PROVIDER=package                                                                          \
+  -DgRPC_ABSL_PROVIDER=package                                                                              \
+  -DgRPC_BENCHMARK_PROVIDER=package                                                                         \
+  -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF                                                                       \
+  -DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF                                                                  \
+  -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF                                                                          \
+  -DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF                                                                         \
+  -DgRPC_BUILD_GRPC_CPP_PLUGIN=ON                                                                           \
+  -DgRPC_BUILD_CSHARP_EXT=OFF                                                                               \
+  -DgRPC_RE2_PROVIDER=package                                                                               \
+  ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}                                                         \
+  ${OPENSSL_ROOT:+-DOpenSSL_ROOT="$OPENSSL_ROOT"}                                                           \
+  ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
   ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
-  -DgRPC_CARES_PROVIDER=package \
+  -DgRPC_CARES_PROVIDER=package                                                                             \
   $extra_cmake_variables
 
 cmake --build . -- ${JOBS:+-j$JOBS} install

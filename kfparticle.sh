@@ -6,6 +6,7 @@ requires:
   - ROOT
   - "GCC-Toolchain:(?!osx)"
   - Vc
+license: GPL-3.0
 build_requires:
   - CMake
   - ninja

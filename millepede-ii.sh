@@ -8,6 +8,7 @@ requires:
   - OpenBLAS
   - "GCC-Toolchain:(?!osx)"
   - "gfortran-system:(osx.*)"
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

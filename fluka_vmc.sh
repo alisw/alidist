@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - ROOT
   - VMC
+license: Proprietary
 build_requires:
   - CMake
   - FLUKA

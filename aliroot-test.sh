@@ -6,6 +6,7 @@ requires:
   - GEANT3
   - OCDB-test
   - "IgProf:slc7.*"
+license: GPL-3.0
 ---
 #!/bin/bash -e
 export ALICE_ROOT=$ALIROOT_ROOT

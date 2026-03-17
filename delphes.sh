@@ -5,6 +5,7 @@ requires:
   - ROOT
   - HepMC
   - pythia
+license: GPL-3.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

@@ -34,11 +34,12 @@ prepend_path:
 #!/bin/bash -e
 
 mkdir -p $INSTALLROOT
-cmake $SOURCEDIR                             \
-  -G Ninja                                   \
-  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}    \
-  -DCMAKE_INSTALL_LIBDIR=lib                 \
-  -DBUILD_TESTING=OFF                        \
+cmake $SOURCEDIR                              \
+  -G Ninja                                    \
+  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}     \
+  -DCMAKE_INSTALL_LIBDIR=lib                  \
+  -DBUILD_TESTING=OFF                         \
+  -DCMAKE_IGNORE_PATH="/opt/homebrew/include" \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 cmake --build . -- ${JOBS:+-j$JOBS} install

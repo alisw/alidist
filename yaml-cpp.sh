@@ -4,6 +4,7 @@ tag: yaml-cpp-0.6.2
 source: https://github.com/jbeder/yaml-cpp
 requires:
   - boost
+license: MIT
 build_requires:
   - CMake
 prefer_system: (?!slc5)

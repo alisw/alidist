@@ -1,11 +1,12 @@
 package: JAliEn
 version: "%(tag_basename)s"
-tag: "2.0.8"
+tag: "2.0.9"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
   - JDK
   - XRootD
   - curl
+license: GPL-3.0
 valid_defaults:
   - jalien
   - o2

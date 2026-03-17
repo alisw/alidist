@@ -3,6 +3,7 @@ version: v5.4.17-alice2
 source: https://github.com/alisw/cctools
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-2.0
 build_requires:
   - zlib
   - SWIG

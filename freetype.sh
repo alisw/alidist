@@ -4,6 +4,7 @@ tag: VER-2-10-1
 source: https://github.com/freetype/freetype
 requires:
   - zlib
+license: FTL
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools

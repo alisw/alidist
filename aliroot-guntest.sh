@@ -4,6 +4,7 @@ force_rebuild: true
 requires:
   - AliRoot
   - AliRoot-OCDB
+license: GPL-3.0
 ---
 #!/bin/bash -e
 

@@ -17,14 +17,7 @@ case $ARCHITECTURE in
   ;;
 esac
 
-if [[ $GGAL_ROOT ]]; then
-  export LIBRARY_PATH="${BOOST_ROOT:+$BOOST_ROOT/lib:}$LIBRARY_PATH"
-  BOOST_INC=${BOOST_ROOT:+$BOOST_ROOT/include:}
-  printf "void main() {}" | c++ -xc ${BOOST_ROOT:+-L$BOOST_ROOT/lib} -lboost_thread - -o /dev/null 2>/dev/null  \
-    && BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread"                                              \
-    || BOOST_LIBS="${BOOST_ROOT+-L$BOOST_ROOT/lib} -lboost_thread-mt"
-  BOOST_LIBS="$BOOST_LIBS -lboost_system"
-fi
+export RECC_LOG_LEVEL=error
 
 rsync -a --delete --cvs-exclude --exclude .git $SOURCEDIR/ ./
 

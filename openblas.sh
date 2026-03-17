@@ -5,6 +5,7 @@ source: https://github.com/xianyi/OpenBLAS.git
 requires:
   - openmp
   - "GCC-Toolchain:(?!osx)"
+license: BSD-3-Clause
 build_requires:
   - CMake
   - alibuild-recipe-tools

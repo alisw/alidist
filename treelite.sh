@@ -4,6 +4,7 @@ tag: "8498081"
 source: https://github.com/dmlc/treelite
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: Apache-2.0
 build_requires:
   - CMake
   - "Xcode:(osx.*)"

@@ -7,6 +7,7 @@ requires:
   - ROOT
   - VMC
   - boost
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

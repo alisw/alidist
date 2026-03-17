@@ -1,5 +1,6 @@
 package: re2
 version: "2024-07-02"
+license: BSD-3-Clause
 source: https://github.com/google/re2
 build_requires:
   - "GCC-Toolchain:(?!osx)"
@@ -7,9 +8,9 @@ build_requires:
   - ninja
   - alibuild-recipe-tools
   - abseil
-prefer_system: .*
-prefer_system_check: |
-  printf "#include \"re2/re2.h\"\n" | cc -I$(brew --prefix re2)/include -I$(brew --prefix abseil)/include -xc++ -std=c++20 - -c -o /dev/null
+# prefer_system: .*
+# prefer_system_check: |
+#   printf "#include \"re2/re2.h\"\n" | cc -I$(brew --prefix re2)/include -I$(brew --prefix abseil)/include -xc++ -std=c++20 - -c -o /dev/null
 prepend_path:
   PKG_CONFIG_PATH: "$RE2_ROOT/lib/pkgconfig"
 ---

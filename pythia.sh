@@ -6,6 +6,7 @@ requires:
   - lhapdf
   - HepMC
   - boost
+license: GPL-2.0
 env:
   PYTHIA8DATA: "$PYTHIA_ROOT/share/Pythia8/xmldoc"
   PYTHIA8: "$PYTHIA_ROOT"

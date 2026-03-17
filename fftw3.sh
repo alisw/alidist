@@ -1,6 +1,7 @@
 package: FFTW3
 version: "%(tag_basename)s"
 tag: v3.3.9
+license: GPL-2.0
 source: https://github.com/alisw/fftw3
 prefer_system: (?!slc5.*)
 build_requires:

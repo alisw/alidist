@@ -5,6 +5,7 @@ source: https://github.com/alisw/dim
 requires:
   - "GCC-Toolchain:(?!osx)"
   - motif
+license: LGPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

@@ -1,6 +1,7 @@
 package: libtirpc
 version: "%(tag_basename)s"
 tag: "libtirpc-1-1-4"
+license: BSD-3-Clause
 source: https://github.com/alisw/libtirpc
 build_requires:
   - "autotools:(slc6|slc7)"

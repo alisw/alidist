@@ -7,6 +7,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - ReadoutCard
   - "Python:slc.*"
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
   - CMake

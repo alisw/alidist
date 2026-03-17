@@ -1,5 +1,6 @@
 package: Geekbench
 version: v3.4.1
+license: Proprietary
 source: https://gitlab.cern.ch/ALICEPrivateExternals/Geekbench.git
 ---
 #!/bin/bash
