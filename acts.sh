@@ -21,7 +21,6 @@ source: https://github.com/AliceO2Group/acts.git
 #!/bin/bash -ex
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
-                 -DCMAKE_SKIP_RPATH=TRUE                   \
                  -DACTS_BUILD_PYTHON_BINDINGS=ON           \
                  -DACTS_BUILD_FATRAS=ON                    \
                  -DACTS_BUILD_EXAMPLES=ON                  \
