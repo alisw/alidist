@@ -1,6 +1,6 @@
 package: CMake
 version: "%(tag_basename)s"
-tag: "v4.2.3"
+tag: "v4.3.0"
 source: https://github.com/Kitware/CMake
 requires:
   - "OpenSSL:(?!osx)"
