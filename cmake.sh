@@ -6,7 +6,7 @@ requires:
   - "OpenSSL:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
   - zlib
-  - curl
+  - "curl:(?!osx)"
 license: BSD-3-Clause
 build_requires:
   - make
