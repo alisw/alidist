@@ -161,6 +161,7 @@ incremental_recipe: |
 
 valid_defaults:
   - o2
+  - o2-acts
   - o2-dataflow
   - o2-epn
   - o2-dev-fairroot
