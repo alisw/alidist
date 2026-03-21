@@ -1,6 +1,6 @@
 package: utf8proc
-version: "v2.6.1"
-tag: v2.6.1
+version: "v2.11.2"
+tag: v2.11.2
 license: MIT
 source: https://github.com/JuliaStrings/utf8proc
 build_requires:
@@ -12,7 +12,7 @@ prefer_system_check: |
   printf "#include <utf8proc.h>\n" | c++ -c -I$(brew --prefix utf8proc)/include -xc++ - -o /dev/null 2>&1;
   if [ $? -ne 0 ]; then printf "Use brew install utf8proc"; exit 1; fi
 ---
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_SHARED_LIBS=ON
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS+-j $JOBS} install
 
 mkdir -p etc/modulefiles

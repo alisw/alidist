@@ -1,6 +1,6 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v4.3.2"
+tag: "v4.5.2"
 source: https://github.com/warmcat/libwebsockets
 requires:
   - libuv
@@ -35,7 +35,16 @@ case $ARCHITECTURE in
     : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}" ;;
 esac
 
-cmake $SOURCEDIR                                                    \
+if [[ "${ARCHITECTURE}" =~ ^slc7 ]]; then
+  mkdir -p srcdir
+  rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./srcdir/
+  sed -i 's/^.*LWS_HAVE_LINUX_IPV6_H.*$/set(LWS_HAVE_LINUX_IPV6_H 0)/' ./srcdir/CMakeLists.txt
+  SOURCEDIR2="./srcdir/"
+else
+  SOURCEDIR2="$SOURCEDIR"
+fi
+
+cmake $SOURCEDIR2                                                   \
       -GNinja                                                       \
       -DCMAKE_C_FLAGS_RELEASE="-Wno-error"                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \

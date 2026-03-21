@@ -1,6 +1,6 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v1.6.9
+tag: v1.6.10
 source: https://github.com/AliceO2Group/DataDistribution
 requires:
   - "GCC-Toolchain:(?!osx)"

@@ -1,5 +1,5 @@
 package: cgal
-version: "4.6.3"
+version: "6.1.1"
 requires:
   - boost
 license: GPL-3.0
@@ -16,7 +16,7 @@ case $ARCHITECTURE in
     [[ ! $BOOST_ROOT ]] && BOOST_ROOT=`brew --prefix boost`
   ;;
 esac
-URL="https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
+URL="https://github.com/CGAL/cgal/releases/download/v$PKGVERSION/CGAL-$PKGVERSION.tar.xz"
 
 curl -kLo cgal.tar.xz "$URL"
 tar xJf cgal.tar.xz
@@ -74,6 +74,12 @@ make install VERBOSE=1
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath @loader_path/../lib {} \;
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
 find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -id {} {} \;
+
+if [[ ${ALIBUILD_ARCHITECTURE} = osx* ]]; then
+  echo "" | cc -o $INSTALLROOT/lib/libCGAL.dylib -dynamiclib -x c++ -
+else
+  echo "" | gcc -o $INSTALLROOT/lib/libCGAL.so -shared -x c++ -
+fi
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
