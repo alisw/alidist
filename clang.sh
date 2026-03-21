@@ -15,7 +15,7 @@ env:
 prefer_system: (osx.*)
 prefer_system_check: |
   # Must be kept in sync with the arrow.sh check for clang!
-  brew --prefix llvm@20 && test -d $(brew --prefix llvm@20)
+  brew --prefix --installed llvm@20 > /dev/null 2>&1
 ---
 #!/bin/bash -e
 
@@ -55,8 +55,8 @@ cmake "$SOURCEDIR/llvm" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
   -DBUILD_SHARED_LIBS=OFF \
-  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF 
-  
+  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF
+
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 if [[ $PKGVERSION == v18.1.* ]]; then
