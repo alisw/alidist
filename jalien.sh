@@ -1,6 +1,6 @@
 package: JAliEn
 version: "%(tag_basename)s"
-tag: "2.0.9"
+tag: "2.1.0"
 source: https://gitlab.cern.ch/jalien/jalien.git
 requires:
   - JDK
@@ -16,7 +16,8 @@ valid_defaults:
 rsync -av $SOURCEDIR/ ./
 ./compile.sh users
 mkdir -p $INSTALLROOT/{bin,lib}
-cp alien-users.jar $INSTALLROOT/lib/
+cp alien-users.jar $INSTALLROOT/lib/alien-users-1.jar
+ln -s $INSTALLROOT/lib/alien-users-1.jar $INSTALLROOT/lib/alien-users.jar
 rsync -av bin/ $INSTALLROOT/bin/
 
 # Modulefile
