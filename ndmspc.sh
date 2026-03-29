@@ -9,6 +9,7 @@ requires:
   - curl
   - libuv
 #  - arrow
+license: GPL-3.0
 build_requires:
   - CMake
   - ninja
