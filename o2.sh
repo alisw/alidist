@@ -175,36 +175,28 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
 fi
 
 unset DYLD_LIBRARY_PATH
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
-      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                           \
-      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE}                                           \
-      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                           \
-      ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
-      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
-      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
-      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
-      ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \
-      ${JALIEN_ROOT_REVISION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT}                                       \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=ON -DENABLE_OPENCL1=OFF -DENABLE_OPENCL2=ON} \
-      ${ALIBUILD_O2_FORCE_GPU:+-DOCL2_GPUTARGET=gfx906 -DHIP_AMDGPUTARGET="gfx906;gfx908"}                \
-      ${ALIBUILD_O2_FORCE_GPU:+-DCUDA_COMPUTETARGET=86}                                                   \
-      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL1=OFF -DENABLE_OPENCL2=OFF}        \
-      ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
-      ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
-      ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}             \
-      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:+-DCUDA_COMPUTETARGET=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}         \
-      ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
-      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                                                             \
-      ${BUILD_ANALYSIS:+-DBUILD_ANALYSIS=$BUILD_ANALYSIS}                                                 \
-      ${BUILD_EXAMPLES:+-DBUILD_EXAMPLES=$BUILD_EXAMPLES}                                                 \
-      ${BUILD_TEST_ROOT_MACROS:+-BUILD_TEST_ROOT_MACROS=$BUILD_TEST_ROOT_MACROS}                          \
-      ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=$ENABLE_UPGRADES}                                              \
-      ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva}                                          \
-      ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
-      ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
-      ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_DISABLE_FIND_PACKAGE_CUDA=ON \
+      ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
+      ${CMAKE_BUILD_TYPE:+-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE} \
+      ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON} \
+      ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}} \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD} \
+      ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT} \
+      ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT} \
+      ${JALIEN_ROOT_REVISION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT} \
+      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL1=OFF -DENABLE_OPENCL2=OFF} \
+      ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT} \
+      ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT} \
+      ${BUILD_ANALYSIS:+-DBUILD_ANALYSIS=$BUILD_ANALYSIS} \
+      ${BUILD_EXAMPLES:+-DBUILD_EXAMPLES=$BUILD_EXAMPLES} \
+      ${BUILD_TEST_ROOT_MACROS:+-DBUILD_TEST_ROOT_MACROS=$BUILD_TEST_ROOT_MACROS} \
+      ${ENABLE_UPGRADES:+-DENABLE_UPGRADES=$ENABLE_UPGRADES} \
+      ${ARROW_ROOT:+-DGandiva_DIR=$ARROW_ROOT/lib/cmake/Gandiva} \
+      ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow} \
+      ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"} \
+      ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
       ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}
-# LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
