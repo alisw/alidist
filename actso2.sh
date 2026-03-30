@@ -13,7 +13,7 @@ build_requires:
   - Eigen3
   - ninja
   - alibuild-recipe-tools
-source: https://github.com/AliceO2Group/actsO2.git
+source: ssh://git@gitlab.cern.ch:7999/alice3-trackers/wp1-simulationsandperformances/actso2.git
 ---
 #!/bin/bash -ex
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
