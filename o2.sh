@@ -26,7 +26,6 @@ requires:
   - "VecGeom:(?!osx.*)"
   - FFTW3
   - ONNXRuntime
-  - nlohmann_json
   - MLModels
   - RapidJSON
   - bookkeeping-api
