@@ -12,8 +12,6 @@ disable:
   - mesos
   - MySQL
 overrides:
-  cgal:
-    version: 4.12.2
   O2:
     requires:
         - abseil
