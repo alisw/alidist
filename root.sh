@@ -188,6 +188,7 @@ cmake $SOURCEDIR                                                                
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_fftw3=OFF                                                              \
+      -Dbuiltin_lzma=OFF                                                               \
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
