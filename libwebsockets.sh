@@ -1,6 +1,6 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v4.5.2"
+tag: "v4.3.4"
 source: https://github.com/warmcat/libwebsockets
 requires:
   - libuv
@@ -53,6 +53,7 @@ cmake $SOURCEDIR2                                                   \
       -DLWS_WITH_SHARED=OFF                                         \
       -DLWS_WITH_IPV6=ON                                            \
       -DLWS_WITH_ZLIB=OFF                                           \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                            \
       ${OPENSSL_ROOT:+-DOPENSSL_EXECUTABLE=$OPENSSL_ROOT/bin/openssl} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \
