@@ -201,7 +201,7 @@ esac
 # This affects only PR checkers
 if [[ $ALIBUILD_O2_TESTS ]]; then
   # Impose extra errors.
-  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
+  CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations -Wnoerror=vla-cxx-extension"
   # On OSX CI, we do not want to run the GUI, even if available.
   case $ARCHITECTURE in
     osx*) DPL_TESTS_BATCH_MODE=ON ;;
