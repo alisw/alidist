@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "daily-20260413-0000"
+tag: "epn-20260413.2-DDv1.6.10-QCv1.190.0-flp-suite-v1.80.0"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
