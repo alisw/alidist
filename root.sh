@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-36-04-alice9"
+tag: "v6-36-10-alice1"
 source: https://github.com/alisw/root.git
 license: LGPLv2.1
 requires:
@@ -89,6 +89,7 @@ case $ARCHITECTURE in
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
+    [[ ! $LZMA_ROOT ]] && LZMA_ROOT=$(brew --prefix xz)
   ;;
 esac
 
@@ -99,6 +100,7 @@ if [[ $ALIEN_RUNTIME_VERSION ]]; then
   LIBXML2_ROOT=${LIBXML2_REVISION:+$ALIEN_RUNTIME_ROOT}
 fi
 [[ $SYS_OPENSSL_ROOT ]] && OPENSSL_ROOT=$SYS_OPENSSL_ROOT
+[[ -d $LZMA_ROOT ]] || unset LZMA_ROOT
 
 # ROOT 6+: enable Python
 ROOT_PYTHON_FLAGS="-Dpyroot=ON"
@@ -168,6 +170,8 @@ cmake $SOURCEDIR                                                                
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR="${LZMA_ROOT}/include"}                       \
+      ${LZMA_ROOT:+-DLIBLZMA_LIBRARY="${LZMA_ROOT}/lib/liblzma.${SONAME}"}             \
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
@@ -188,6 +192,7 @@ cmake $SOURCEDIR                                                                
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_fftw3=OFF                                                              \
+      -Dbuiltin_lzma=OFF                                                               \
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
