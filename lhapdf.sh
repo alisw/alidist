@@ -28,19 +28,12 @@ rsync -a --chmod=ug=rwX --exclude '**/.git' $SOURCEDIR/ ./
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
-if type "python" &>/dev/null; then
-  # Python2 or Python3 point to "python"
-  if python -c 'import sys; exit(0 if sys.version_info.major >=3 else 1)'; then
-    # LHAPDF not yet ready for Python3
-    DISABLE_PYTHON=1
-  fi
-else
-  # Python2 not installed and Python3 points to "python3"
-  DISABLE_PYTHON=1
-fi
-
 autoreconf -ivf
-./configure --prefix=$INSTALLROOT ${DISABLE_PYTHON:+--disable-python}
+if [[ -n $DISABLE_PYTHON ]]; then
+  ./configure --prefix=$INSTALLROOT --disable-python
+else
+  ./configure --prefix=$INSTALLROOT --enable-python PYTHON=$(which python3)
+fi
 
 make ${JOBS+-j $JOBS} all
 make install

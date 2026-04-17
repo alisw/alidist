@@ -13,6 +13,7 @@ cmake  $SOURCEDIR                           \
        -DCMAKE_POLICY_VERSION_MINIMUM=3.5   \
        -Dmomentum=GEV                       \
        -Dlength=MM                          \
+       -DBUILD_STATIC_LIBS=ON               \
        -Dbuild_docs:BOOL=OFF                \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 

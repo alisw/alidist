@@ -1,11 +1,15 @@
 package: madgraph
 version: "%(tag_basename)s"
-tag: "v3.5.2"
-source: https://github.com/alisw/MadGraph
+tag: "v3.5.13"
+source: https://github.com/mg5amcnlo/mg5amcnlo
 requires:
   - Python-modules
   - curl
   - zlib
+  - fastjet
+  - lhapdf
+  - pythia
+  - ninja
 license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
@@ -17,12 +21,15 @@ rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete
 # install internal packages 
 cd "$BUILDDIR"
 cat << EOF >> install.dat
+set lhapdf $LHAPDF_ROOT/bin/lhapdf-config
+set fastjet $FASTJET_ROOT/bin/fastjet-config
+set pythia8_path $PYTHIA_ROOT
 install oneloop
-install ninja
 install collier
 install RunningCoupling
 install QCDLoop
-install MadAnalysis5 --with_zlib=$ZLIB_ROOT
+install MadAnalysis5 --with_zlib=$ZLIB_ROOT --with_fastjet=$FASTJET/lib
+install mg5amc_py8_interface
 EOF
 
 # MadGraph uses wget for non macOSx systems, but this might not be available.
@@ -56,15 +63,15 @@ EOF
     export PATH="$PWD/tmpwget:$PATH"
 fi
 
+# FastJet was built with CGAL support; MA5 links against -lCGAL and -lgmp but
+# only passes -L$FASTJET/lib. This ensures the linker can find CGAL and GMP.
+export LIBRARY_PATH="${CGAL_ROOT:+$CGAL_ROOT/lib:}${GMP_ROOT:+$GMP_ROOT/lib:}${LIBRARY_PATH:-}"
+
 ./bin/mg5_aMC install.dat
 
 # cleanup after build
 rm install.dat
-rm HEPTools/ninja/ninja_install.log 
-rm HEPTools/oneloop/oneloop_install.log
-rm HEPTools/collier/collier_install.log
-rm HEPTools/madanalysis5/madanalysis5_install.log
-rm -rf HEPTools/ninja/Ninja 
+find HEPTools -name "*.log" -delete
 rm -rf HEPTools/oneloop/OneLOop*
 rm -rf HEPTools/collier/COLLIER*
 find QCDLoop -mindepth 1 -maxdepth 1 -not -name include -not -name lib -not -name share -exec rm -rf {} \;
