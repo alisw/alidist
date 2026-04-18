@@ -17,6 +17,7 @@ case $ARCHITECTURE in
     # If we preferred system tools, we need to make sure we can pick them up.
     [[ ! $AUTOTOOLS_ROOT ]] && PATH=$PATH:`brew --prefix gettext`/bin
     # Do not compile Python2 bindings on Mac
+    DISABLE_PYTHON=1
   ;;
   *)
     EXTRA_LD_FLAGS="-Wl,--no-as-needed"
@@ -28,7 +29,11 @@ rsync -a --chmod=ug=rwX --exclude '**/.git' $SOURCEDIR/ ./
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
 autoreconf -ivf
-./configure --prefix=$INSTALLROOT --enable-python PYTHON=$(which python3)
+if [[ -n $DISABLE_PYTHON ]]; then
+  ./configure --prefix=$INSTALLROOT --disable-python
+else
+  ./configure --prefix=$INSTALLROOT --enable-python PYTHON=$(which python3)
+fi
 
 make ${JOBS+-j $JOBS} all
 make install
