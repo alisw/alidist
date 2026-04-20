@@ -48,6 +48,7 @@ cmake $SOURCEDIR                                                \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}             \
   ${CXXSTD:+-DGEANT4_BUILD_CXXSTD=$CXXSTD}                      \
   -DG4_USE_GDML=ON                                              \
+  -DGEANT4_USE_GDML=ON                                          \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                            \
   -DGEANT4_USE_SYSTEM_ZLIB=ON
 
