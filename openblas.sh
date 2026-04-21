@@ -17,6 +17,7 @@ cmake $SOURCEDIR                                 \
       -DDYNAMIC_ARCH=ON                          \
       -DBUILD_WITHOUT_LAPACK=OFF                 \
       -DCMAKE_INSTALL_LIBDIR=lib                 \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5         \
       -DBUILD_SHARED_LIBS=ON                     
 make ${JOBS:+-j$JOBS}
 make install 
