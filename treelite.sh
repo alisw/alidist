@@ -29,6 +29,7 @@ popd
 cmake src                                   \
   ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"} \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.27       \
+  -DCMAKE_INSTALL_LIBDIR:PATH=lib           \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"     \
   -DUSE_OPENMP=OFF
 
