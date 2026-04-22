@@ -1,6 +1,6 @@
 package: VMC
 version: "%(tag_basename)s"
-tag: "v2-1"
+tag: "v2-2"
 source: https://github.com/vmc-project/vmc
 requires:
   - ROOT
