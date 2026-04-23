@@ -47,7 +47,7 @@ sed -i.bak -e's/c++11/c++20/' ../configure
     --with-grpc=${GRPC_ROOT} \
     --with-glog=${GLOG_ROOT} \
     --with-rapidjson=${RAPIDJSON_ROOT} \
-    --with-zlib=/lib64
+    --with-zlib=${ZLIB_ROOT}/lib
 
 # We build with fewer jobs to avoid OOM errors in GCC
 make -j $((JOBS / 2))
