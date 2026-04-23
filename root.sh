@@ -90,6 +90,7 @@ case $ARCHITECTURE in
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
     [[ ! $LZMA_ROOT ]] && LZMA_ROOT=$(brew --prefix xz)
+    EXTRA_CMAKE_CXX_FLAGS="-Wno-vla-cxx-extension"
   ;;
 esac
 
@@ -142,6 +143,7 @@ CMAKE_GENERATOR=${CMAKE_GENERATOR:-Ninja}
 cmake $SOURCEDIR                                                                       \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                        \
       -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE                                             \
+      ${EXTRA_CMAKE_CXX_FLAGS:+-DCMAKE_CXX_FLAGS="${EXTRA_CMAKE_CXX_FLAGS}"}           \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                              \
       -Dalien=OFF                                                                      \
       ${CMAKE_CXX_STANDARD:+-DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}}                \
