@@ -171,7 +171,8 @@ cmake $SOURCEDIR                                                                
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
-      ${LZMA_ROOT:+-DLibLZMA_ROOT=${LZMA_ROOT}}                                        \
+      ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR=${LZMA_ROOT}/include}                       \
+      ${LZMA_ROOT:+-DLIBLZMA_LIBRARY=${LZMA_ROOT}/lib/liblzma.${SONAME}}              \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
       ${NLOHMANN_JSON_ROOT:+nlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                   \
       -Dfftw3=ON                                                                       \
