@@ -33,6 +33,7 @@ export CPPFLAGS="-I${ABSEIL_ROOT}/include"
 export CFLAGS="-I${ABSEIL_ROOT}/include"
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
+sed -i 's/\[deflate, gzread, gzwrite, inflate\]/[gzread]/' configure.ac # fix the wrong syntax
 ./bootstrap
 mkdir build
 cd build
@@ -45,7 +46,8 @@ sed -i.bak -e's/c++11/c++20/' ../configure
     --with-re2=${RE2_ROOT} \
     --with-grpc=${GRPC_ROOT} \
     --with-glog=${GLOG_ROOT} \
-    --with-rapidjson=${RAPIDJSON_ROOT}
+    --with-rapidjson=${RAPIDJSON_ROOT} \
+    --with-zlib=/lib64
 
 # We build with fewer jobs to avoid OOM errors in GCC
 make -j $((JOBS / 2))
