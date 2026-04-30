@@ -90,7 +90,7 @@ case $ARCHITECTURE in
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
     [[ ! $LZMA_ROOT ]] && LZMA_ROOT=$(brew --prefix xz)
-    EXTRA_CMAKE_CXX_FLAGS="-Wno-vla-cxx-extension"
+    EXTRA_CMAKE_CXX_FLAGS="-Wno-vla-extension"
   ;;
 esac
 
