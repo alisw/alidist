@@ -1,6 +1,6 @@
 package: coconut
 version: "%(tag_basename)s"
-tag: "v1.49.0"
+tag: "v1.50.0"
 license: GPL-3.0
 build_requires:
   - golang
