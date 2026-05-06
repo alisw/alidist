@@ -16,6 +16,8 @@ build_requires:
 source: https://github.com/AliceO2Group/O2Physics
 track_env:
   O2PHYSICS_COMPONENTS: echo ${O2PHYSICS_COMPONENTS:-install}
+  CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} ${O2PHYSICS_COMPONENTS:-install}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
