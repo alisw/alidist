@@ -72,6 +72,9 @@ overrides:
       - libInfoLogger
       - librdkafka   # this one added
       - grpc   # this one added
+  ROOT:
+    version: "v6-36-04-alice9"
+    tag: "v6-36-04-alice9"
 ---
 # This file is included in any build recipe and it's only used to set
 # environment variables. Which file to actually include can be defined by the
