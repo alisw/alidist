@@ -1,6 +1,6 @@
 package: FOCAL
 version: "%(commit_hash)s"
-tag: v1.20
+tag: v1.21
 requires:
   - AliRoot
 license: GPL-3.0
