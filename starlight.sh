@@ -1,6 +1,6 @@
 package: STARlight
-version: "20251025"
-tag: d6dfae2ea604646bfc3ec63aa06443f035685c45
+version: "20260511"
+tag: 7c41208d3c0fa7da9e9f01542e658cee438184cc
 requires:
   - DPMJET
   - HepMC3
