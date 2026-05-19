@@ -1,6 +1,6 @@
 package: FOCAL
 version: "%(commit_hash)s"
-tag: v1.21
+tag: v1.22
 requires:
   - AliRoot
 license: GPL-3.0
@@ -56,7 +56,6 @@ cmake "$SOURCEDIR/aliroot"                                         \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                           \
       -DROOTSYS="$ROOT_ROOT"                                       \
       ${ALIEN_RUNTIME_ROOT:+-DALIEN="$ALIEN_RUNTIME_ROOT"}         \
-      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                           \
       -DALIROOT="$ALIROOT_ROOT"
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
