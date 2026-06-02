@@ -1,5 +1,5 @@
 package: golang
-version: "1.24.2"
+version: "1.25.0"
 license: BSD-3-Clause
 build_requires:
   - curl
