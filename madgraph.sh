@@ -78,9 +78,10 @@ find QCDLoop -mindepth 1 -maxdepth 1 -not -name include -not -name lib -not -nam
 rm *.tgz
 rm vendor/*tar.gz
 
-# change paths in conifguration file for package relocation
-sed -i.deleteme -e "s|$BUILDDIR|$INSTALLROOT|" input/mg5_configuration.txt
+# change paths in configuration file for package relocation
+sed -i.deleteme -e "s|$BUILDDIR|/TEMP_PATH/|" input/mg5_configuration.txt
 rm -f input/mg5_configuration.deleteme
+mv input/mg5_configuration.txt input/mg5_configuration.txt.buildtime
 rsync -a "$BUILDDIR/" "$INSTALLROOT/"
 
 #ModuleFile
@@ -91,5 +92,17 @@ cat << EOF >> "$INSTALLROOT"/etc/modulefiles/"$PKGNAME"
 set MADGRAPH_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv MADGRAPH_ROOT \$MADGRAPH_ROOT
 prepend-path PATH \$MADGRAPH_ROOT/bin
-
+# Copy mg5_configuration.txt done at build time to ~/.mg5/ and patch it with runtime env var paths
+set mg5_home "$::env(HOME)/.mg5"
+set mg5_cfg "\$mg5_home/mg5_configuration.txt"
+if { ![ file exists \$mg5_cfg ] } {
+    exec mkdir -p \$mg5_home
+    exec cp "\$MADGRAPH_ROOT/input/mg5_configuration.txt.buildtime" \$mg5_cfg
+    exec sed -i \
+        -e "s|^fastjet *=.*|fastjet = $::env(FASTJET)/bin/fastjet-config|" \
+        -e "s|^pythia8_path *=.*|pythia8_path = $::env(PYTHIA_ROOT)|" \
+        -e "s|/TEMP_PATH/|\$MADGRAPH_ROOT|g" \
+        -e "s|^lhapdf *=.*|lhapdf = $::env(LHAPDF_ROOT)/bin/lhapdf-config|" \
+        \$mg5_cfg
+}
 EOF
