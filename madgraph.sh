@@ -18,6 +18,11 @@ build_requires:
 
 rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
 
+# Pythia8 Makefile.inc could have a space after "-rpath," which causes the linker to fail to find HepMC2. This ensures there is no space.
+sed -i -E \
+    -e "s|HEPMC2_LIB=.*|HEPMC2_LIB=-L${HEPMC_ROOT}/lib -Wl,-rpath,${HEPMC_ROOT}/lib -lHepMC|" \
+    "$PYTHIA_ROOT/share/Pythia8/examples/Makefile.inc"
+
 # install internal packages 
 cd "$BUILDDIR"
 cat << EOF >> install.dat
