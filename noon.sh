@@ -25,6 +25,7 @@ cp "NeutronGenerator_cxx_ACLiC_dict_rdict.pcm"  "$INSTALLROOT/lib"
 cp "NeutronGenerator_cxx.d" "$INSTALLROOT/lib"
 cp "NeutronGenerator_cxx.so"  "$INSTALLROOT/lib/"
 cp "$SOURCEDIR/NeutronGenerator.h"   "$INSTALLROOT/include/"
+cp "$SOURCEDIR/NeutronGenerator.cxx"   "$INSTALLROOT/include/"
 cp -r "$SOURCEDIR/Data"   "$INSTALLROOT/include/"
 
 # Modulefile
