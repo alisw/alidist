@@ -44,7 +44,7 @@ if [[ -n "$USE_PERF" ]]; then
     echo "O2-full-system-test: USE_PERF set but 'perf record' is not permitted here" \
          "(check /proc/sys/kernel/perf_event_paranoid); running without profiling." >&2
   else
-    : "${ALIBUILD_PERF_COMMAND:=perf record -K -F 49 -g --call-graph dwarf,2028 --user-callchains}"
+    : "${ALIBUILD_PERF_COMMAND:=perf record -e cycles:u --compression-level=5 -F 49 -g --call-graph dwarf,2048 --user-callchains}"
     read -r -a PERF_CMD <<< "$ALIBUILD_PERF_COMMAND"
     echo "O2-full-system-test: perf profiling enabled -> ${ALIBUILD_PERF_COMMAND} -o $(pwd)/perf.data"
   fi
