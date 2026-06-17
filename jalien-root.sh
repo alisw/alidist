@@ -33,7 +33,7 @@ esac
 
 # This is needed to support old version which did not have FindAliceGridUtils.cmake
 ALIBUILD_CMAKE_BUILD_DIR=$SOURCEDIR
-if [ ! -f "$JALIEN_ROOT_ROOT/cmake/modules/FindAliceGridUtils.cmake" ]; then
+if [ ! -f "$SOURCEDIR/cmake/modules/FindAliceGridUtils.cmake" ]; then
   ALIBUILD_CMAKE_BUILD_DIR="$BUILDDIR"
   rsync -a --exclude .git --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR"
   rsync -a "$ALICE_GRID_UTILS_ROOT/include/" "$BUILDDIR/inc"
