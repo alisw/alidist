@@ -1,6 +1,6 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
-tag: v15.2.0-alice1
+tag: v15.3.0-alice1
 license: GPL-3.0
 source: https://github.com/alisw/gcc-toolchain
 prepend_path:
