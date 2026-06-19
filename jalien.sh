@@ -16,7 +16,8 @@ valid_defaults:
 rsync -av $SOURCEDIR/ ./
 ./compile.sh users
 mkdir -p $INSTALLROOT/{bin,lib}
-cp alien-users.jar $INSTALLROOT/lib/alien-users-1.jar
+mv alien-users.jar alien-users-1.jar
+cp alien-users-1.jar $INSTALLROOT/lib/
 ln -s alien-users-1.jar alien-users.jar
 cp -P alien-users.jar $INSTALLROOT/lib/
 rsync -av bin/ $INSTALLROOT/bin/
