@@ -88,6 +88,7 @@ rm vendor/*tar.gz
 sed -i.deleteme -e "s|$BUILDDIR|/TEMP_PATH/|" input/mg5_configuration.txt
 rm -f input/mg5_configuration.deleteme
 mv input/mg5_configuration.txt input/mg5_configuration.txt.buildtime
+echo "# Dummy configuration file" > input/mg5_configuration.txt
 rsync -a "$BUILDDIR/" "$INSTALLROOT/"
 
 #ModuleFile
