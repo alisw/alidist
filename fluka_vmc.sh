@@ -1,6 +1,6 @@
 package: FLUKA_VMC
 version: "%(tag_basename)s"
-tag: "4-1.1-vmc5"
+tag: "4-5.1-vmc1"
 source: https://gitlab.cern.ch/ALICEPrivateExternals/FLUKA_VMC.git
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -23,7 +23,8 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT      \
                  ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}  \
                  -DCMAKE_SKIP_RPATH=TRUE                  \
                  -DFLUKA_ROOT=$FLUKA_ROOT                 \
-                 -DFLUKAWITHDPMJET=TRUE
+                 -DFLUKAWITHDPMJET=TRUE                   \
+                 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 make ${JOBS:+-j $JOBS} install
 
 [[ ! -d $INSTALLROOT/lib64 ]] && ln -sf lib $INSTALLROOT/lib64
