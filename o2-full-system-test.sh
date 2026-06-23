@@ -46,7 +46,10 @@ if [[ -n "$USE_PERF" ]]; then
   else
     : "${ALIBUILD_PERF_COMMAND:=perf record -e cycles:u --compression-level=5 -F 49 -g --call-graph dwarf,2048 --user-callchains}"
     read -r -a PERF_CMD <<< "$ALIBUILD_PERF_COMMAND"
-    echo "O2-full-system-test: perf profiling enabled -> ${ALIBUILD_PERF_COMMAND} -o $(pwd)/perf.data"
+    # Always write to an explicit file; without -o some perf builds stream the
+    # raw perf.data to stdout, which then pollutes the production log.
+    PERF_CMD+=(-o "$(pwd)/perf.data")
+    echo "O2-full-system-test: perf profiling enabled -> ${PERF_CMD[*]}"
   fi
 fi
 
