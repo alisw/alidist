@@ -63,7 +63,7 @@ find $BUILDDIR/full-system-test-sim -name '*.log' -exec cp {} $BUILDDIR/../artif
 # (done before any cleanup/early-exit so the profile survives a failed run).
 if [[ -n "$USE_PERF" && -f perf.data ]]; then
   echo "O2-full-system-test: generating perf text report (perf script -i perf.data)"
-  perf script -i perf.data | gzip -c > $BUILDDIR/../artifacts/perf.script.txt.gz 2>/dev/null || echo "O2-full-system-test: 'perf script' failed" >&2
+  perf script -i perf.data 2>/dev/null | gzip -c > $BUILDDIR/../artifacts/perf.script.txt.gz || echo "O2-full-system-test: 'perf script' failed" >&2
 fi
 
 if [[ ${FST_RC:-0} -ne 0 ]]; then
