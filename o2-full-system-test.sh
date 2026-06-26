@@ -65,6 +65,7 @@ if [[ -n "$USE_PERF" && -f perf.data ]]; then
   echo "O2-full-system-test: generating perf text report (perf script -i perf.data)"
   perf script -i perf.data > perf.script.txt 2>/dev/null || echo "O2-full-system-test: 'perf script' failed" >&2
   cp perf.script.txt $BUILDDIR/../artifacts/ 2>/dev/null || true
+  gzip $BUILDDIR/../artifacts/perf.script.txt
 fi
 
 if [[ ${FST_RC:-0} -ne 0 ]]; then
