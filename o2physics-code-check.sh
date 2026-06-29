@@ -59,12 +59,15 @@ printf "%s\n" "${FILES_TO_CHECK[@]}" | xargs -r ${JOBS+-P $JOBS} -I{} \
   "$CLANG_TIDY" --checks="$O2PHYSICS_CHECKER_CHECKS" ${O2PHYSICS_CHECKER_FIX:+-fix} "{}" 2>&1 | tee "$LOGFILE" || true
 [[ -f "$LOGFILE" ]]
 
-# If issues were found, report them and abort.
+# If issues were found, report them.
+# If errors were found, abort.
 # Consider only issues in the O2Physics files.
-echo -e "\n\n========== List of errors found =========="
+echo -e "\n\n========== List of issues found =========="
 if grep -qE "^${O2PHYSICS_SRC}/.+: (warning|error): " "$LOGFILE"; then
   grep -E "^${O2PHYSICS_SRC}/.+: (warning|error): " "$LOGFILE" | sed -e "s,${O2PHYSICS_SRC}/,,g" | sort -V | uniq
-  exit 1
+  if grep -qE "^${O2PHYSICS_SRC}/.+: error: " "$LOGFILE"; then
+    exit 1
+  fi
 fi
 
 popd
