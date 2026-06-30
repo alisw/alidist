@@ -63,12 +63,14 @@ printf "%s\n" "${FILES_TO_CHECK[@]}" | xargs -r ${JOBS+-P $JOBS} -I{} \
 # If errors were found, abort.
 # Consider only issues in the O2Physics files.
 echo -e "\n\n========== List of issues found =========="
-if grep -qE "^${O2PHYSICS_SRC}/.+: (warning|error): " "$LOGFILE"; then
-  grep -E "^${O2PHYSICS_SRC}/.+: (warning|error): " "$LOGFILE" | sed -e "s,${O2PHYSICS_SRC}/,,g" | sort -V | uniq
-  if grep -qE "^${O2PHYSICS_SRC}/.+: error: " "$LOGFILE"; then
-    exit 1
-  fi
-fi
+grep -E "^${O2PHYSICS_SRC}/.+: warning: " "$LOGFILE" | sed -e "s,${O2PHYSICS_SRC}/,,g" | sort -V | uniq > "${BUILDDIR}/warnings.txt" || true
+grep -E "^${O2PHYSICS_SRC}/.+: error: " "$LOGFILE" | sed -e "s,${O2PHYSICS_SRC}/,,g" | sort -V | uniq > "${BUILDDIR}/errors.txt" || true
+N_WARNING=$(wc -l < "${BUILDDIR}/warnings.txt")
+N_ERROR=$(wc -l < "${BUILDDIR}/errors.txt")
+echo "Found $N_ERROR errors and $N_WARNING warnings."
+[[ $N_ERROR -gt 0 ]] && cat "${BUILDDIR}/errors.txt"
+[[ $N_WARNING -gt 0 ]] && cat "${BUILDDIR}/warnings.txt"
+[[ $N_ERROR -gt 0 ]] && exit 1
 
 popd
 
