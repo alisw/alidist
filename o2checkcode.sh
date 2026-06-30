@@ -25,10 +25,10 @@ O2_SRC=$(python3 -c 'import json, os; print(os.path.commonpath([x["file"] for x 
 # We have something to compare our working directory to (ALIBUILD_BASE_HASH). We check only the
 # changed files (including the untracked ones) if the list of relevant files that changed is up to
 # 50 entries long
-if [[ $ALIBUILD_BASE_HASH ]]; then
+if [[ -n "${ALIBUILD_BASE_HASH:-}" ]]; then
   pushd "$O2_SRC"
     [[ -d .git ]]
-    ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} || true ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
+    ( git diff --name-only $ALIBUILD_BASE_HASH${ALIBUILD_HEAD_HASH:+...$ALIBUILD_HEAD_HASH} || { echo "Git diff failed."; exit 0; } ; git ls-files --others --exclude-standard ) | ( grep -E '\.cxx$|\.h$' || true ) | sort -u > $BUILDDIR/changed
     if [[ $(cat $BUILDDIR/changed | wc -l) -le 50 ]]; then
       O2_CHECKCODE_CHANGEDFILES=$(while read FILE; do [[ -e "$O2_SRC/$FILE" ]] && echo "$FILE" || true; done < <(cat $BUILDDIR/changed) | \
                                   xargs echo | sed -e 's/ /:/g')
@@ -46,45 +46,30 @@ fi
 ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc|.*\_amalgamated\..*)' ${O2_CHECKCODE_CHANGEDFILES:+-use-files ${O2_CHECKCODE_CHANGEDFILES}}
 cp thinned_compile_commands.json compile_commands.json
 
-# List of explicitely enabled C++ checks (make sure they are all green)
-CHECKS="${O2_CHECKER_CHECKS:--*\
-,modernize-avoid-bind\
-,modernize-deprecated-headers\
-,modernize-make-shared\
-,modernize-raw-string-literal\
-,modernize-redundant-void-arg\
-,modernize-replace-auto-ptr\
-,modernize-replace-random-shuffle\
-,modernize-shrink-to-fit\
-,modernize-unary-static-assert\
-,modernize-use-equals-default\
-,modernize-use-noexcept\
-,modernize-use-nullptr\
-,modernize-use-override\
-,modernize-use-transparent-functors\
-,modernize-use-uncaught-exceptions\
-,readability-braces-around-statements\
-,-clang-diagnostic-vla-cxx-extension\
-}"
-
-echo $CHECKS
-$CLANG_ROOT/bin-safe/clang-tidy --load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so --list-checks -checks="*"
+pushd "$O2_SRC" # Needed to auto-detect .clang-tidy in the source directory.
+[[ -e .clang-tidy ]] && echo "Found configuration file: $O2_SRC/.clang-tidy"
+echo "Additional checks on command line: \"${O2_CHECKER_CHECKS=""}\""
+$CLANG_ROOT/bin-safe/clang-tidy --load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so --list-checks --checks="$O2_CHECKER_CHECKS"
 # Run C++ checks
 run_O2CodeChecker.py ${JOBS+-j $JOBS} \
-	-clang-tidy-binary $CLANG_ROOT/bin-safe/clang-tidy \
-	-clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
+  -clang-tidy-binary $CLANG_ROOT/bin-safe/clang-tidy \
+  -clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
   -extra-args="--load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so ${GCC_TOOLCHAIN_REVISION:+--extra-arg=--gcc-install-dir=$(find \"$GCC_TOOLCHAIN_ROOT/lib\" -name crtbegin.o -exec dirname {} \;)}" \
-	-header-filter='.*SOURCES(?!.*/3rdparty/).*' \
-        ${O2_CHECKER_FIX:+-fix} -checks="$CHECKS" 2>&1 | tee error-log.txt
-
-# Turn warnings into errors
-sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.txt.0 error-log.txt
+  -header-filter='.*SOURCES(?!.*/3rdparty/).*' \
+  -p="${BUILDDIR}" \
+  ${O2_CHECKER_FIX:+-fix} -checks="$O2_CHECKER_CHECKS" 2>&1 | tee "${BUILDDIR}/error-log.txt"
+popd
 
 # Show only errors from the log, break in case some were found
-echo ; echo ; echo "========== List of errors found =========="
-GRERR=0
-grep -v clang-diagnostic-error error-log.txt | grep " error:"   || GRERR=$?
-[[ $GRERR == 0 ]] && exit 1
+echo -e "\n\n========== List of errors found =========="
+grep -v clang-diagnostic-error error-log.txt | grep -E ".+: error: " | sort -V | uniq > errors.txt || true
+grep -v clang-diagnostic-error error-log.txt | grep -E ".+: warning: " | sort -V | uniq > warnings.txt || true
+N_ERROR=$(wc -l < errors.txt)
+N_WARNING=$(wc -l < warnings.txt)
+echo "Found $N_ERROR errors and $N_WARNING warnings."
+[[ $N_ERROR -gt 0 ]] && cat errors.txt
+[[ $N_WARNING -gt 0 ]] && cat warnings.txt
+[[ $N_ERROR -gt 0 ]] && exit 1
 
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
