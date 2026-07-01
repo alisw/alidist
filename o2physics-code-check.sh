@@ -56,17 +56,17 @@ CLANG_TIDY="${CLANG_ROOT}/bin-safe/clang-tidy"
 echo "Additional checks on command line: \"${O2PHYSICS_CHECKER_CHECKS=""}\""
 "$CLANG_TIDY" --list-checks --checks="$O2PHYSICS_CHECKER_CHECKS"
 printf "%s\n" "${FILES_TO_CHECK[@]}" | xargs -r ${JOBS+-P $JOBS} -I{} \
-  "$CLANG_TIDY" --checks="$O2PHYSICS_CHECKER_CHECKS" ${O2PHYSICS_CHECKER_FIX:+-fix} "{}" 2>&1 | tee "$LOGFILE" || true
+  "$CLANG_TIDY" -p "${O2PHYSICS_BUILDDIR}" --checks="$O2PHYSICS_CHECKER_CHECKS" ${O2PHYSICS_CHECKER_FIX:+-fix} "{}" 2>&1 | tee "$LOGFILE" || true
 [[ -f "$LOGFILE" ]]
 
 # If issues were found, report them.
 # If errors were found, abort.
 # Consider only issues in the O2Physics files.
-echo -e "\n\n========== List of issues found =========="
-grep -E "^${O2PHYSICS_SRC}/.+: error: " "$LOGFILE" | sed -e "s,${O2PHYSICS_SRC}/,,g" | sort -V | uniq > "${BUILDDIR}/errors.txt" || true
-grep -E "^${O2PHYSICS_SRC}/.+: warning: " "$LOGFILE" | sed -e "s,${O2PHYSICS_SRC}/,,g" | sort -V | uniq > "${BUILDDIR}/warnings.txt" || true
+grep -E "/O2Physics/.+: error: " "$LOGFILE" | sed -E -e "s,(.*/O2Physics/)(.+/0/)?,," | sort -V | uniq > "${BUILDDIR}/errors.txt" || true
+grep -E "/O2Physics/.+: warning: " "$LOGFILE" | sed -E -e "s,(.*/O2Physics/)(.+/0/)?,," | sort -V | uniq > "${BUILDDIR}/warnings.txt" || true
 N_ERROR=$(wc -l < "${BUILDDIR}/errors.txt")
 N_WARNING=$(wc -l < "${BUILDDIR}/warnings.txt")
+echo -e "\n\n========== List of issues found =========="
 echo "Found $N_ERROR errors and $N_WARNING warnings."
 [[ $N_ERROR -gt 0 ]] && cat "${BUILDDIR}/errors.txt"
 [[ $N_WARNING -gt 0 ]] && cat "${BUILDDIR}/warnings.txt"
