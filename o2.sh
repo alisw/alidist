@@ -47,6 +47,9 @@ env:
   VMCWORKDIR: "$O2_ROOT/share"
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/GPU"
+track_env:
+  CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
   if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
