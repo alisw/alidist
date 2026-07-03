@@ -106,7 +106,7 @@ cmake "cmake"                                                                   
       -DCMAKE_BUILD_TYPE=Release                                                                            \
       -DCMAKE_INSTALL_LIBDIR=lib                                                                            \
       -DPython_EXECUTABLE="$(python3 -c 'import sys; print(sys.executable)')"                               \
-      -DFETCHCONTENT_FULLY_DISCONNECTED=OFF                                                                 \
+      -DFETCHCONTENT_FULLY_DISCONNECTED=ON                                                                  \
       -DFETCHCONTENT_QUIET=OFF                                                                              \
       -DCMAKE_POLICY_DEFAULT_CMP0170=NEW                                                                    \
       -DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS                                                           \
@@ -164,6 +164,8 @@ cmake "cmake"                                                                   
       -DMSVC=OFF                                                                                            \
       -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
       -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
+      -DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND=${CUDNN_FRONTEND_ROOT}                                       \
+      -DFETCHCONTENT_SOURCE_DIR_CUTLASS=${CUTLASS_ROOT}                                                     \
       -Donnxruntime_FUZZ_ENABLED=OFF                                                                        \
       -Donnxruntime_USE_FLASH_ATTENTION=OFF                                                                 \
       -Donnxruntime_USE_LEAN_ATTENTION=OFF                                                                  \
