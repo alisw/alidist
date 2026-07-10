@@ -1,6 +1,6 @@
 package: Monitoring
 version: "%(tag_basename)s"
-tag: v3.19.15
+tag: v3.19.16
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
