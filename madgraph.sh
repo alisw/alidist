@@ -18,7 +18,13 @@ build_requires:
 
 rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
 
-# install internal packages 
+# Pythia8 Makefile.inc could have a space after "-rpath," which causes the linker to fail to find HepMC2. This ensures there is no space.
+sed -i -E \
+    -e "s|HEPMC2_LIB=.*|HEPMC2_LIB=-L${HEPMC_ROOT}/lib -Wl,-rpath,${HEPMC_ROOT}/lib -lHepMC|" \
+    -e "s|HEPMC2_INCLUDE=.*|HEPMC2_INCLUDE=-I${HEPMC_ROOT}/include|" \
+    "$PYTHIA_ROOT/share/Pythia8/examples/Makefile.inc"
+
+# install internal packages
 cd "$BUILDDIR"
 cat << EOF >> install.dat
 set lhapdf $LHAPDF_ROOT/bin/lhapdf-config
@@ -79,8 +85,10 @@ rm *.tgz
 rm vendor/*tar.gz
 
 # change paths in configuration file for package relocation
-sed -i.deleteme -e "s|$BUILDDIR|$INSTALLROOT|" input/mg5_configuration.txt
-rm -f input/mg5_configuration.deleteme
+sed -i.deleteme -e "s|$BUILDDIR|/TEMP_PATH/|" input/mg5_configuration.txt
+rm -f input/mg5_configuration.txt.deleteme
+mv input/mg5_configuration.txt input/mg5_configuration.txt.buildtime
+echo "# Dummy configuration file" > input/mg5_configuration.txt
 rsync -a "$BUILDDIR/" "$INSTALLROOT/"
 
 #ModuleFile
@@ -91,4 +99,18 @@ cat << EOF >> "$INSTALLROOT"/etc/modulefiles/"$PKGNAME"
 set MADGRAPH_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv MADGRAPH_ROOT \$MADGRAPH_ROOT
 prepend-path PATH \$MADGRAPH_ROOT/bin
+# Copy mg5_configuration.txt done at build time to /tmp and patch it with runtime env var paths
+set MADGRAPH_BASE /tmp/madgraph-\$version
+setenv MADGRAPH_BASE \$MADGRAPH_BASE
+set mg5_cfg \$MADGRAPH_BASE/mg5_configuration.txt
+if { ![ file exists \$mg5_cfg ] } {
+    exec mkdir -p \$MADGRAPH_BASE
+    exec cp "\$MADGRAPH_ROOT/input/mg5_configuration.txt.buildtime" \$mg5_cfg
+    exec sed -i \
+        -e "s|^fastjet *=.*|fastjet = $::env(FASTJET)/bin/fastjet-config|" \
+        -e "s|^pythia8_path *=.*|pythia8_path = $::env(PYTHIA_ROOT)|" \
+        -e "s|/TEMP_PATH/|\$MADGRAPH_ROOT|g" \
+        -e "s|^lhapdf *=.*|lhapdf = $::env(LHAPDF_ROOT)/bin/lhapdf-config|" \
+        \$mg5_cfg
+}
 EOF
