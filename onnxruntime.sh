@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.22.0
+tag: v1.24.4
 license: MIT
 source: https://github.com/microsoft/onnxruntime
 requires:
