@@ -4,6 +4,7 @@ tag: "O2GPUCI-1.0.0"
 requires:
   - O2
   - O2-GPU-test:(.*x86-64)
+  - O2-GPU-deterministic-test:(.*x86-64)
 license: GPL-3.0
 valid_defaults:
   - o2
