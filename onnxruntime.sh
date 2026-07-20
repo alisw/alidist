@@ -126,7 +126,8 @@ cmake "cmake"                                                                   
       -Donnxruntime_ENABLE_DLPACK=OFF                                                                       \
       -Donnxruntime_USE_NUPHAR=OFF                                                                          \
       -Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF                                                           \
-      -Donnxruntime_USE_TENSORRT=OFF                                                                        \
+      -Donnxruntime_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                      \
+      -Donnxruntime_TENSORRT_HOME=/usr                                                                      \
       -Donnxruntime_CROSS_COMPILING=OFF                                                                     \
       -Donnxruntime_DISABLE_CONTRIB_OPS=OFF                                                                 \
       -Donnxruntime_PREFER_SYSTEM_LIB=OFF                                                                   \
@@ -137,7 +138,7 @@ cmake "cmake"                                                                   
       -Donnxruntime_USE_FULL_PROTOBUF=ON                                                                    \
       -Donnxruntime_ENABLE_PYTHON=OFF                                                                       \
       -Donnxruntime_MINIMAL_BUILD=OFF                                                                       \
-      --debug-find-pkg=absl                                                                               \
+      --debug-find-pkg=absl                                                                                 \
       ${ABSEIL_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${ABSEIL_ROOT}}                                   \
       ${ABSEIL_ROOT:+-Dabseil_cpp_DIR=$ABSEIL_ROOT}                                                         \
       ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                               \
@@ -163,12 +164,34 @@ cmake "cmake"                                                                   
       -DMSVC=OFF                                                                                            \
       -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
       -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
-      -Donnxruntime_CUDA_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                 \
+      -DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND=${CUDNN_FRONTEND_ROOT}                                       \
+      -DFETCHCONTENT_SOURCE_DIR_CUTLASS=${CUTLASS_ROOT}                                                     \
       -Donnxruntime_FUZZ_ENABLED=OFF                                                                        \
+      -Donnxruntime_USE_FLASH_ATTENTION=OFF                                                                 \
+      -Donnxruntime_USE_LEAN_ATTENTION=OFF                                                                  \
+      -Donnxruntime_USE_MEMORY_EFFICIENT_ATTENTION=OFF                                                      \
       -DCMAKE_CUDA_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_HIP_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_CXX_FLAGS="${CXXFLAGS} -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w"
+
+if [[ "$ORT_TENSORRT_BUILD" -eq 1 ]]; then
+  # onnx-tensorrt forces C++17 after our C++20 flags. The external Abseil package
+  # uses std::*_ordering, so compile the fetched parser with C++20 as well.
+  sed -i.bak "s/set(CMAKE_CXX_STANDARD 17)/set(CMAKE_CXX_STANDARD 20)/" \
+    _deps/onnx_tensorrt-src/CMakeLists.txt
+
+  # The TensorRT 10.9 parser revision uses ONNX's FLOAT4E2M1 enum, which was
+  # introduced after the ONNX 1.17 version pinned by ONNX Runtime 1.22. Disable
+  # only those FP4 conversion paths; INT4 and all other parser support remains.
+  sed -i.bak \
+    -e '/case .*FLOAT4E2M1/d' \
+    -e 's/ || onnxDtype == ::ONNX_NAMESPACE::TensorProto::FLOAT4E2M1//g' \
+    _deps/onnx_tensorrt-src/TensorOrWeights.cpp \
+    _deps/onnx_tensorrt-src/weightUtils.cpp \
+    _deps/onnx_tensorrt-src/WeightsContext.cpp \
+    _deps/onnx_tensorrt-src/importerUtils.cpp
+fi
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
