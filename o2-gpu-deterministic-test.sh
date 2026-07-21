@@ -14,6 +14,7 @@ build_requires:
   - CMake
   - Clang
   - ninja
+  - alibuild-recipe-tools
 license: GPL-3.0
 force_rebuild: true
 ---
@@ -98,23 +99,5 @@ popd
 rm -Rf "$BUILDDIR/gpu-standalone-test"
 
 # Dummy modulefile
-MODULEFILE_DEPS=
-for RPKG in $REQUIRES; do
-  RPKG_UP=$(echo "$RPKG" | tr '[:lower:]' '[:upper:]' | tr '-' '_')
-  RPKG_VERSION=$(eval echo "\$${RPKG_UP}_VERSION")
-  RPKG_REVISION=$(eval echo "\$${RPKG_UP}_REVISION")
-  MODULEFILE_DEPS+=" $RPKG/$RPKG_VERSION-$RPKG_REVISION"
-done
-
 mkdir -p "$INSTALLROOT/etc/modulefiles"
-cat > "$INSTALLROOT/etc/modulefiles/$PKGNAME" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0$MODULEFILE_DEPS
-EoF
+alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
