@@ -3,6 +3,8 @@ version: "1.0"
 requires:
   - O2
   - gpu-system
+build_requires:
+  - alibuild-recipe-tools
 license: GPL-3.0
 force_rebuild: true
 ---
@@ -38,14 +40,4 @@ rm -Rf $BUILDDIR/gpu-test
 
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles
-cat > $INSTALLROOT/etc/modulefiles/$PKGNAME <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-# Dependencies
-module load BASE/1.0 O2/$O2_VERSION-$O2_REVISION
-EoF
+alibuild-generate-module > $INSTALLROOT/etc/modulefiles/$PKGNAME
