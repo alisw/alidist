@@ -61,8 +61,9 @@ pushd "$BUILDDIR/gpu-standalone-test/build"
 
 cp "$O2_SOURCEDIR/GPU/GPUTracking/Standalone/cmake/config.cmake" .
 cat >> config.cmake <<'EoF'
-set(GPUCA_DETERMINISTIC_MODE GPU)
 set(GPUCA_BUILD_EVENT_DISPLAY 0)
+set(GPUCA_DETERMINISTIC_MODE GPU)
+set(GPUCA_DETERMINISTIC_NO_FTZ 1)
 EoF
 
 cmake -DCMAKE_INSTALL_PREFIX=../install "$O2_SOURCEDIR/GPU/GPUTracking/Standalone"
