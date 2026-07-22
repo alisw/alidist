@@ -70,30 +70,7 @@ cmake -DCMAKE_INSTALL_PREFIX=../install "$O2_SOURCEDIR/GPU/GPUTracking/Standalon
 cmake --build . --target install -- ${JOBS:+-j $JOBS}
 
 for BACKEND in "${GPU_BACKENDS[@]}"; do
-  case ${BACKEND^^} in
-    CUDA)
-      LIB=../install/libGPUTrackingCUDA.so
-      GPU_TYPE=CUDA
-      ;;
-    HIP|ROCM)
-      LIB=../install/libGPUTrackingHIP.so
-      GPU_TYPE=HIP
-      ;;
-    OCL|OPENCL)
-      LIB=../install/libGPUTrackingOCL.so
-      GPU_TYPE=OCL
-      ;;
-    *)
-      echo "O2-GPU-deterministic-test: unsupported backend '$BACKEND'. Use CUDA, HIP, or OCL." >&2
-      exit 1
-      ;;
-  esac
-
-  if [[ ! -e $LIB ]]; then
-    echo "O2-GPU-deterministic-test: missing $LIB" >&2
-    exit 1
-  fi
-  ../install/ca --noEvents -g --gpuType "$GPU_TYPE"
+  ../install/ca --noEvents -g --gpuType "${BACKEND^^}"
 done
 
 popd
