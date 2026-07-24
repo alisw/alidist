@@ -1,0 +1,10 @@
+{
+  "keys": {
+    "15595d8f4ae554cb21ea2e9a925bdd8fdde4c9c969274968326aef677fea3109": {
+      "notAfter": "2028-01-01T00:00:00Z",
+      "publicKey": "cul7C5OlyMcvLh2I+UOCOUNTy92F6Fk6aSjRBfCzoUY=",
+      "signer": "giulio-laptop"
+    }
+  },
+  "revoked": []
+}
