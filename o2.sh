@@ -24,6 +24,7 @@ requires:
   - libjalienO2
   - cgal
   - "VecGeom:(?!osx.*)"
+  - "TGeo2VecGeom:(?!osx.*)"
   - FFTW3
   - ONNXRuntime
   - nlohmann_json
