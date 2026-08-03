@@ -13,7 +13,6 @@ requires:
   - "DataDistribution:(?!osx|.*aarch64)"
   - "ALF:(?!osx|.*aarch64)"
   - "mesos:(slc.*x86)"
-  - "TpcFecUtils:(?!osx|.*aarch64)"
 license: GPL-3.0
 valid_defaults:
   - o2
