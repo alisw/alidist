@@ -43,10 +43,22 @@ case $ARCHITECTURE in
 _LLVM*
 __ZN4llvm*
 __ZNK4llvm*
+__ZTIN4llvm*
+__ZTSN4llvm*
+__ZTVN4llvm*
+__ZTVSt*N4llvm*
+__ZTTN4llvm*
+__ZGVN4llvm*
 EOF
     CMAKE_SHARED_LINKER_FLAGS="-Wl,-unexported_symbols_list,$PWD/no-llvm-symbols.txt"
   ;;
-  *) SONAME=so ;;
+  *)
+    SONAME=so
+    # Symbols coming from the static libraries we link (LLVM in particular) must
+    # not end up in the dynamic symbol table, or they interpose the LLVM shipped
+    # with the GPU drivers.
+    CMAKE_SHARED_LINKER_FLAGS="-Wl,--exclude-libs,ALL"
+  ;;
 esac
 
 # Downloaded by CMake, built, and linked statically (not needed at runtime):
@@ -71,8 +83,19 @@ case $ARCHITECTURE in
    ;;
   *)
    CLANG_EXECUTABLE="${CLANG_ROOT}/bin-safe/clang"
-   # this patches version script to hide llvm symbols in gandiva library
-   sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
+   # Patch the version script to hide llvm symbols in the gandiva library, so
+   # they cannot interpose the LLVM shipped with the GPU drivers. The patterns
+   # inside the extern "C++" block match the *demangled* name, which covers the
+   # llvm:: functions but not typeinfo / vtable / VTT / guard variables. The
+   # latter are added as *mangled* patterns at top level (single leading
+   # underscore on ELF): _ZTI (typeinfo), _ZTS (typeinfo name), _ZTV (vtable),
+   # _ZTT (VTT), _ZGV (guard variable). _ZTVSt*N4llvm* also hides vtables for
+   # std:: types instantiated on an llvm type (mangled _ZTVSt..., which the
+   # _ZTVN4llvm* pattern does not match).
+   sed -i.deleteme \
+       -e '/^[[:space:]]*local:/ a \ \ \ \ \ \ _ZN4llvm*; _ZNK4llvm*; _ZTIN4llvm*; _ZTSN4llvm*; _ZTVN4llvm*; _ZTVSt*N4llvm*; _ZTTN4llvm*; _ZGVN4llvm*;' \
+       -e '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' \
+       "./src_tmp/cpp/src/gandiva/symbols.map"
    ;;
 esac
 
@@ -117,6 +140,7 @@ cmake ./src_tmp/cpp                                                             
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                         \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
+      -DARROW_LLVM_USE_SHARED=OFF                                                                   \
       -DARROW_COMPUTE=ON                                                                            \
       -DARROW_DATASET=ON                                                                            \
       -DARROW_FILESYSTEM=ON                                                                         \
