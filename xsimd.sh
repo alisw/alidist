@@ -1,6 +1,6 @@
 package: xsimd
-version: "14.0.0"
-tag: 14.0.0
+version: "14.2.0"
+tag: 14.2.0
 source: https://github.com/xtensor-stack/xsimd
 requires:
   - Clang:(?!.*osx)
