@@ -4,6 +4,11 @@
       "notAfter": "2028-01-01T00:00:00Z",
       "publicKey": "bppFX0aJ4woEoZPBkCo2hV6gGAua/7ul2Ta5dteXsno=",
       "signer": "giulio-laptop"
+    },
+    "7999f3b452160cc238ed5deaddcf9604400e120529a6d823bff288f75fe8ea10": {
+      "notAfter": "2027-08-11T00:00:00Z",
+      "publicKey": "Ght2DTwk9X5AlI+qWX9KFvHQrSRs4WrZEZZCZBOAZZs=",
+      "signer": "alibuild-ci"
     }
   },
   "revoked": []
