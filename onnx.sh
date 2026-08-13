@@ -7,6 +7,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - protobuf
   - abseil
+  - zlib
 build_requires:
   - CMake
   - alibuild-recipe-tools
