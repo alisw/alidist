@@ -1,6 +1,6 @@
 package: FreeType
-version: v2.10.1
-tag: VER-2-10-1
+version: v2.13.3
+tag: VER-2-13-3
 source: https://github.com/freetype/freetype
 requires:
   - zlib
@@ -20,6 +20,9 @@ type glibtoolize && export LIBTOOLIZE=glibtoolize
 sh autogen.sh
 ./configure --prefix="$INSTALLROOT"              \
             --with-png=no                        \
+            --with-harfbuzz=no                   \
+            --with-brotli=no                     \
+            --with-bzip2=no                      \
             ${ZLIB_ROOT:+--with-zlib="$ZLIB_ROOT"}
 
 make ${JOBS:+-j$JOBS}
