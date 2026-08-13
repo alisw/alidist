@@ -1,6 +1,6 @@
 package: abseil
 version: "%(tag_basename)s"
-tag: "20240722.0"
+tag: "20250814.0"
 requires:
   - "GCC-Toolchain:(?!osx)"
 license: Apache v2
