@@ -28,9 +28,18 @@ prefer_system_replacement_specs:
   "virtualenv.*":
     version: "%(key)s"
     recipe: |
-      # Install pinned basic requirements for python infrastructure
+      # Install pinned basic requirements for python infrastructure.
+      # --force-reinstall, not -I: this list pins pip itself, so pip replaces
+      # the pip that is running. -I (--ignore-installed) overwrites in place
+      # without uninstalling first, which leaves files behind whenever the
+      # layout changed -- pip 26.2 turned _internal/build_env.py into a
+      # package, so downgrading over it left a stale build_env/ directory that
+      # shadows the module, and the next pip invocation dies with "cannot
+      # import name BuildDependencyInstallError". --force-reinstall uninstalls
+      # first, so nothing survives, while still reinstalling a version the
+      # environment already satisfies (which is why -I was here).
       echo "$PIP_BASE_REQUIREMENTS" > base-requirements.txt
-      python3 -m pip install -IU -r base-requirements.txt
+      python3 -m pip install --force-reinstall -U -r base-requirements.txt
       # The above updates pip and setuptools, so install the rest of the packages separately.
       echo "$PIP_REQUIREMENTS" > requirements.txt
       python3 -m pip install -IU -r requirements.txt
@@ -68,7 +77,9 @@ pyver="$(python3 -c 'import sys; print(str(sys.version_info[0]) + "." + str(sys.
 
 # Install pinned basic requirements for python infrastructure
 echo "$PIP_BASE_REQUIREMENTS" > base-requirements.txt
-python3 -m pip install -IU -r base-requirements.txt
+# --force-reinstall rather than -I: see the note in the virtualenv replacement
+# recipe above. This list pins pip, so it replaces the running pip.
+python3 -m pip install --force-reinstall -U -r base-requirements.txt
 # The above updates pip and setuptools, so install the rest of the packages separately.
 echo "$PIP_REQUIREMENTS" > requirements.txt
 python3 -m pip install -IU -r requirements.txt
