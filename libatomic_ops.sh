@@ -1,6 +1,7 @@
 package: libatomic_ops
 version: libatomic_ops-7_4_2
 tag: master
+license: GPL-2.0
 source: https://github.com/ivmai/libatomic_ops/
 build_requires:
   - "autotools:(slc6|slc7)"

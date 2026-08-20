@@ -1,6 +1,7 @@
 package: MLModels
 version: "%(tag_basename)s"
 tag: "20220530"
+license: GPL-3.0
 source: https://github.com/alisw/MLModels.git
 build_requires:
   - alibuild-recipe-tools

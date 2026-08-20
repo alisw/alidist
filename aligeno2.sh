@@ -10,12 +10,15 @@ requires:
   - lhapdf-pdfsets
   - JETSCAPE
   - CRMC
-  - EPOS4
+  - EPOS4:(?!.*aarch64)
+  - EPOS4HQ:(?!.*aarch64)
   - EVTGEN:(?!osx)
   - STARlight:(?!osx)
   - Upcgen:(?!osx)
   - Graniitti:(?!osx)
   - nOOn:(?!osx)
+  - Herwig:(?!osx)
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

@@ -1,10 +1,11 @@
 package: InfoLogger
 version: "%(tag_basename)s"
-tag: v2.8.2
+tag: v2.10.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - MySQL
+license: GPL-3.0
 build_requires:
   - CMake
   - golang

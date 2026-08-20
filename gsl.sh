@@ -1,9 +1,10 @@
 package: GSL
-version: "v1.16"
-tag: "release-1-16"
+version: "v2.8"
+tag: "v2.8"
 source: https://github.com/alisw/gsl
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
@@ -12,10 +13,10 @@ prefer_system_check: |
   printf "#include \"gsl/gsl_version.h\"\n#define GSL_V GSL_MAJOR_VERSION * 100 + GSL_MINOR_VERSION\n# if (GSL_V < 116)\n#error \"Cannot use system's gsl. Notice we only support versions from 1.16 (included)\"\n#endif\nint main(){}" | cc -xc - -I$(brew --prefix gsl)/include  -c -o /dev/null
 ---
 #!/bin/bash -e
-rsync -a --exclude '**/.git' --delete $SOURCEDIR/ $BUILDDIR
+rsync -a --chmod=ug=rwX --exclude .git --delete-excluded $SOURCEDIR/ $BUILDDIR/
 # Do not build documentation
-perl -p -i -e "s/doc//" Makefile.am
-perl -p -i -e "s|doc/Makefile||" configure.ac
+sed -i.bak -e "s/doc//" Makefile.am
+sed -i.bak -e "s|doc/Makefile||" configure.ac
 autoreconf -f -v -i
 ./configure --prefix="$INSTALLROOT" \
             --enable-maintainer-mode
@@ -27,3 +28,6 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
+cat >> "$MODULEFILE" <<EoF
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+EoF

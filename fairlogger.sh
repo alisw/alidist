@@ -1,9 +1,10 @@
 package: FairLogger
 version: "%(tag_basename)s"
-tag: v2.1.0
+tag: v2.3.1
 source: https://github.com/FairRootGroup/FairLogger
 requires:
   - fmt
+license: LGPL-3.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

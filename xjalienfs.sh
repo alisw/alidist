@@ -1,6 +1,6 @@
 package: xjalienfs
 version: "%(tag_basename)s"
-tag: "1.6.3"
+tag: "1.7.0"
 source: https://gitlab.cern.ch/jalien/xjalienfs.git
 requires:
   - "OpenSSL:(?!osx)"
@@ -8,6 +8,7 @@ requires:
   - XRootD
   - AliEn-Runtime
   - Python-modules
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 prepend_path:

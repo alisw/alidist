@@ -1,6 +1,7 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.21.0
+tag: v1.22.0
+license: MIT
 source: https://github.com/microsoft/onnxruntime
 requires:
   - protobuf
@@ -11,6 +12,7 @@ requires:
   - flatbuffers
   - Eigen3
   - onnx
+  - gpu-system
 build_requires:
   - date
   - safe_int
@@ -23,62 +25,64 @@ prepend_path:
   ROOT_INCLUDE_PATH: "$ONNXRUNTIME_ROOT/include/onnxruntime"
 ---
 #!/bin/bash -e
+rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+# In order to work with new versions of eigen3, backport
+sed -i.bak "s/eigen/Eigen3/g" cmake/external/eigen.cmake
+python3 -c 'import sys; print(sys.executable)'
+sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" cmake/CMakeLists.txt
+
+case $ARCHITECTURE in
+  osx*)
+    NLOHMANN_JSON_ROOT=${NLOHMANN_JSON_ROOT:-$(brew --prefix nlohmann-json)}
+    RE2_ROOT=${RE2_ROOT:-$(brew --prefix re2)}
+    BOOST_ROOT=${BOOST_ROOT:-$(brew --prefix boost)}
+    MS_GSL_ROOT=${MS_GSL_ROOT:-$(brew --prefix cpp-gsl)}
+  ;;
+esac
+
+export re2_DIR=${RE2_ROOT}
+export absl_DIR=${ABSEIL_ROOT}
+export abseil_cpp_DIR=${ABSEIL_ROOT}
+export GSL_DIR=${MS_GSL_ROOT}
+export mp11_DIR=${BOOST_ROOT}
+export CMAKE_PATH_PREFIX=${MS_GSL_ROOT}:${NLOHMANN_JSON_ROOT}:${ABSEIL_ROOT}:$CMAKE_PATH_PREFIX
+
+if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+  source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+fi
 
 mkdir -p $INSTALLROOT
 
-# Check ROCm build conditions
-if [[ -f /etc/redhat-release ]]; then
-  export ALMA_LINUX_MAJOR_VERSION=$(awk '{print $3}' /etc/redhat-release | cut -d. -f1)
-fi
-if [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_HIP" -eq 1 ]] || \
-  ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  ( command -v /opt/rocm/bin/rocminfo >/dev/null 2>&1 ) && \
-  [[ -d /opt/rocm/include/hiprand ]] && \
-  [[ -d /opt/rocm/include/hipblas ]] && \
-  [[ -d /opt/rocm/include/hipsparse ]] && \
-  [[ -d /opt/rocm/include/hipfft ]] && \
-  [[ -d /opt/rocm/include/rocblas ]] && \
-  [[ -d /opt/rocm/include/rocrand ]] && \
-  [[ -d /opt/rocm/include/miopen ]] && \
-  [[ -d /opt/rocm/include/rccl ]] && \
-  [[ -d /opt/rocm/lib/hipblaslt ]] && \
-  [[ -z "$ORT_ROCM_BUILD" ]] ) && \
-  ([[ -z "$ALMA_LINUX_MAJOR_VERSION" ]] || [[ "$ALMA_LINUX_MAJOR_VERSION" -eq 9 ]]); then
-  export ORT_ROCM_BUILD="1"
-  : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
+# Check ROCm MIOPEN build conditions
+if [[ ${O2_GPU_MIOPEN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_ROCM_BUILD" ]]; then
+    ORT_ROCM_BUILD="1"
+    : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
 else
-  export ORT_ROCM_BUILD="0"
+  ORT_ROCM_BUILD="0"
 fi
 
-# Check CUDA build conditions
-if ( [[ "$ALIBUILD_O2_FORCE_GPU" -eq 1 ]] || [[ "$ALIBUILD_ENABLE_CUDA" -eq 1 ]] || \
-  ( ( [[ -z "$DISABLE_GPU" ]] || [[ "$DISABLE_GPU" -eq 0 ]] ) && \
-  ( command -v nvcc >/dev/null 2>&1 ) && \
-  [[ -f /usr/include/cudnn.h ]] && \
-  [[ -z "$ORT_CUDA_BUILD" ]] ) ) && \
-  [[ "$ORT_ROCM_BUILD" -eq 0 ]] && \
-  [[ -z "$ALMA_LINUX_MAJOR_VERSION" ]]; then
-  export ORT_CUDA_BUILD="1"
-  : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="sm_86"}
+# Check CUDA CUDNN build conditions
+if [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_CUDA_BUILD" ]] && [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
+    ORT_CUDA_BUILD="1"
+    : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="89"}
 else
-  export ORT_CUDA_BUILD="OFF"
+  ORT_CUDA_BUILD="0"
 fi
 
-# Optional builds
+# Optional GPU features
 ### MIGraphX
-if ( [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ $(find /opt/rocm* -name "libmigraphx*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
-   [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
+if [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ ${O2_GPU_MIGRAPHX_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
+  ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  export ORT_MIGRAPHX_BUILD="0"
+  ORT_MIGRAPHX_BUILD="0"
 fi
 ### TensorRT
-if ( [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ $(find /usr -name "libnvinfer*" -print -quit | wc -l 2>&1) -eq 1 ]] ) && \
-   [[ -z "$ORT_TENSORRT_BUILD" ]]; then
-  export ORT_TENSORRT_BUILD="1"
+if [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ ${O2_GPU_TENSORRT_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_TENSORRT_BUILD" ]]; then
+  ORT_TENSORRT_BUILD="1"
 elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
-  export ORT_TENSORRT_BUILD="0"
+  ORT_TENSORRT_BUILD="0"
 fi
 
 mkdir -p $INSTALLROOT/etc
@@ -89,15 +93,13 @@ export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
 
-python3 $SOURCEDIR/onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
-python3 $SOURCEDIR/onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
+echo "O2_GPU_ROCM_HOME=$O2_GPU_ROCM_HOME"
+echo "O2_GPU_CUDA_HOME=$O2_GPU_CUDA_HOME"
 
-# In order to work with new versions of eigen3, backport
-sed -i.bak "s/eigen/Eigen3/g" $SOURCEDIR/cmake/external/eigen.cmake
-python3 -c 'import sys; print(sys.executable)'
-sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" $SOURCEDIR/cmake/CMakeLists.txt
+python3 onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which flatc)
+python3 onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
 
-cmake "$SOURCEDIR/cmake"                                                                                    \
+cmake "cmake"                                                                                               \
       --debug-find                                                                                          \
       -G Ninja                                                                                              \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                                 \
@@ -108,10 +110,11 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DFETCHCONTENT_QUIET=OFF                                                                              \
       -DCMAKE_POLICY_DEFAULT_CMP0170=NEW                                                                    \
       -DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS                                                           \
-      -DCMAKE_SHARED_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup' \
-      -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup' \
+      -DCMAKE_SHARED_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup'                                           \
+      -DCMAKE_EXE_LINKER_FLAGS='-Wl,-undefined,dynamic_lookup'                                              \
       -Dsafeint_SOURCE_DIR=${SAFE_INT_ROOT}/include                                                         \
       -Deigen_SOURCE_PATH=${EIGEN3_ROOT}/include/eigen3                                                     \
+      -DCMAKE_IGNORE_PATH=/opt/homebrew/include                                                             \
       -DGIT_EXECUTABLE=$(type git)                                                                          \
       -Donnxruntime_BUILD_UNIT_TESTS=OFF                                                                    \
       -Donnxruntime_USE_PREINSTALLED_EIGEN=ON                                                               \
@@ -123,7 +126,8 @@ cmake "$SOURCEDIR/cmake"                                                        
       -Donnxruntime_ENABLE_DLPACK=OFF                                                                       \
       -Donnxruntime_USE_NUPHAR=OFF                                                                          \
       -Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF                                                           \
-      -Donnxruntime_USE_TENSORRT=OFF                                                                        \
+      -Donnxruntime_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                      \
+      -Donnxruntime_TENSORRT_HOME=/usr                                                                      \
       -Donnxruntime_CROSS_COMPILING=OFF                                                                     \
       -Donnxruntime_DISABLE_CONTRIB_OPS=OFF                                                                 \
       -Donnxruntime_PREFER_SYSTEM_LIB=OFF                                                                   \
@@ -134,6 +138,10 @@ cmake "$SOURCEDIR/cmake"                                                        
       -Donnxruntime_USE_FULL_PROTOBUF=ON                                                                    \
       -Donnxruntime_ENABLE_PYTHON=OFF                                                                       \
       -Donnxruntime_MINIMAL_BUILD=OFF                                                                       \
+      --debug-find-pkg=absl                                                                                 \
+      ${ABSEIL_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${ABSEIL_ROOT}}                                   \
+      ${ABSEIL_ROOT:+-Dabseil_cpp_DIR=$ABSEIL_ROOT}                                                         \
+      ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT}                                                               \
       ${PROTOBUF_ROOT:+-DProtobuf_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf.a}                                 \
       ${PROTOBUF_ROOT:+-DProtobuf_LITE_LIBRARY=$PROTOBUF_ROOT/lib/libprotobuf-lite.a}                       \
       ${PROTOBUF_ROOT:+-DProtobuf_PROTOC_LIBRARY=$PROTOBUF_ROOT/lib/libprotoc.a}                            \
@@ -143,12 +151,12 @@ cmake "$SOURCEDIR/cmake"                                                        
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                                              \
       -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
       -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
-      -Donnxruntime_ROCM_HOME=/opt/rocm                                                                     \
-      -Donnxruntime_CUDA_HOME=/usr/local/cuda                                                               \
+      -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
+      -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
       -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
-      ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DCMAKE_HIP_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}        \
-      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCH:+-CMAKE_CUDA_ARCHITECTURES=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}       \
+      ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
+      ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCMAKE_CUDA_ARCHITECTURES="${O2_GPU_CUDA_AVAILABLE_ARCH}"}             \
       -Donnxruntime_USE_COMPOSABLE_KERNEL=OFF                                                               \
       -Donnxruntime_USE_ROCBLAS_EXTENSION_API=${ORT_ROCM_BUILD}                                             \
       -Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=ON                                                        \
@@ -156,10 +164,34 @@ cmake "$SOURCEDIR/cmake"                                                        
       -DMSVC=OFF                                                                                            \
       -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
       -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
-      -Donnxruntime_CUDA_USE_TENSORRT=${ORT_TENSORRT_BUILD}                                                 \
+      -DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND=${CUDNN_FRONTEND_ROOT}                                       \
+      -DFETCHCONTENT_SOURCE_DIR_CUTLASS=${CUTLASS_ROOT}                                                     \
       -Donnxruntime_FUZZ_ENABLED=OFF                                                                        \
+      -Donnxruntime_USE_FLASH_ATTENTION=OFF                                                                 \
+      -Donnxruntime_USE_LEAN_ATTENTION=OFF                                                                  \
+      -Donnxruntime_USE_MEMORY_EFFICIENT_ATTENTION=OFF                                                      \
+      -DCMAKE_CUDA_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
+      -DCMAKE_HIP_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_CXX_FLAGS="${CXXFLAGS} -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_C_FLAGS="$CFLAGS -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w"
+
+if [[ "$ORT_TENSORRT_BUILD" -eq 1 ]]; then
+  # onnx-tensorrt forces C++17 after our C++20 flags. The external Abseil package
+  # uses std::*_ordering, so compile the fetched parser with C++20 as well.
+  sed -i.bak "s/set(CMAKE_CXX_STANDARD 17)/set(CMAKE_CXX_STANDARD 20)/" \
+    _deps/onnx_tensorrt-src/CMakeLists.txt
+
+  # The TensorRT 10.9 parser revision uses ONNX's FLOAT4E2M1 enum, which was
+  # introduced after the ONNX 1.17 version pinned by ONNX Runtime 1.22. Disable
+  # only those FP4 conversion paths; INT4 and all other parser support remains.
+  sed -i.bak \
+    -e '/case .*FLOAT4E2M1/d' \
+    -e 's/ || onnxDtype == ::ONNX_NAMESPACE::TensorProto::FLOAT4E2M1//g' \
+    _deps/onnx_tensorrt-src/TensorOrWeights.cpp \
+    _deps/onnx_tensorrt-src/weightUtils.cpp \
+    _deps/onnx_tensorrt-src/WeightsContext.cpp \
+    _deps/onnx_tensorrt-src/importerUtils.cpp
+fi
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
@@ -170,5 +202,4 @@ alibuild-generate-module --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
 prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/onnxruntime
-append-path LD_LIBRARY_PATH /opt/rocm/lib
 EoF

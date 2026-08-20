@@ -1,6 +1,6 @@
 package: Readout
 version: "%(tag_basename)s"
-tag: v2.27.2
+tag: v2.28.1
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -17,6 +17,7 @@ requires:
   - fmt
   - "MySQL:(slc.*)"
   - bookkeeping-api
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

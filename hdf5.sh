@@ -1,9 +1,10 @@
 package: hdf5
-version: "1.10.9"
-tag: hdf5-1_10_9
+version: "1.14.6"
+tag: hdf5_1.14.6
 source: https://github.com/HDFGroup/hdf5.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: BSD-3-Clause
 build_requires:
   - CMake
   - alibuild-recipe-tools

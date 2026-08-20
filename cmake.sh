@@ -1,12 +1,13 @@
 package: CMake
 version: "%(tag_basename)s"
-tag: "v4.0.0"
+tag: "v4.1.4"
 source: https://github.com/Kitware/CMake
 requires:
   - "OpenSSL:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
   - zlib
-  - curl
+  - "curl:(?!osx)"
+license: BSD-3-Clause
 build_requires:
   - make
   - alibuild-recipe-tools

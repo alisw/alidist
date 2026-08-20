@@ -5,6 +5,7 @@ requires:
   - GEANT4_VMC
   - GEANT3
   - pythia6
+license: LGPL-2.1
 build_requires:
   - CMake
 ---

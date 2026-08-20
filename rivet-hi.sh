@@ -8,6 +8,7 @@ requires:
   - fastjet
   - HepMC
   - boost
+license: GPL-3.0
 build_requires:
   - GCC-Toolchain:(?!osx)
 prepend_path:

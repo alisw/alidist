@@ -9,7 +9,9 @@ requires:
   - GEANT4_VMC
   - Vc
   - JAliEn-ROOT
+  - ApMon-CPP
   - ZeroMQ:(osx.*)
+license: GPL-3.0
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -94,7 +96,7 @@ cmake $SOURCEDIR                                                     \
       ${ALICE_DAQ:+-DDATE_ENV=$DATE_ENV}                             \
       ${ALICE_DAQ:+-DDIMDIR=$DAQ_DIM -DODIR=linux}                   \
       ${ALICE_SHUTTLE:+-DDIMDIR=$HOME/dim -DODIR=linux}              \
-      ${ALICE_SHUTTLE:+-DSHUTTLE=ON -DApMon=$ALIEN_RUNTIME_ROOT}     \
+      ${ALICE_SHUTTLE:+-DSHUTTLE=ON -DApMon=$APMON_ROOT}             \
       -DOCDB_INSTALL=PLACEHOLDER                                     \
       ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 

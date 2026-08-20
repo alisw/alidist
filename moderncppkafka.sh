@@ -3,6 +3,7 @@ version: "%(tag_basename)s"
 tag: v2023.03.07
 requires:
   - librdkafka
+license: Apache-2.0
 source: https://github.com/morganstanley/modern-cpp-kafka.git
 ---
 #!/bin/bash -e                                                                                                                                                                                           

@@ -1,9 +1,10 @@
 package: libjalienO2
 version: "%(tag_basename)s"
-tag: "0.1.4"
+tag: "0.2.3"
 source: https://gitlab.cern.ch/jalien/libjalieno2.git
 requires:
   - "OpenSSL:(?!osx)"
+license: GPL-3.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"

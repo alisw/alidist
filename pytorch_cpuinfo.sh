@@ -4,6 +4,7 @@ tag: b73ae6ce38d5dd0b7fe46dbe0a4b5f4bab91c7ea
 source: https://github.com/pytorch/cpuinfo
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: BSD-3-Clause
 build_requires:
   - CMake
   - alibuild-recipe-tools

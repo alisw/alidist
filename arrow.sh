@@ -1,6 +1,6 @@
 package: arrow
-version: "v17.0.0-alice6"
-tag: apache-arrow-17.0.0-alice6
+version: "v25.0.0-alice"
+tag: apache-arrow-25.0.0-alice2
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
@@ -10,6 +10,7 @@ requires:
   - utf8proc
   - OpenSSL:(?!osx)
   - xsimd
+license: Apache-2.0
 build_requires:
   - zlib
   - flatbuffers
@@ -42,10 +43,22 @@ case $ARCHITECTURE in
 _LLVM*
 __ZN4llvm*
 __ZNK4llvm*
+__ZTIN4llvm*
+__ZTSN4llvm*
+__ZTVN4llvm*
+__ZTVSt*N4llvm*
+__ZTTN4llvm*
+__ZGVN4llvm*
 EOF
     CMAKE_SHARED_LINKER_FLAGS="-Wl,-unexported_symbols_list,$PWD/no-llvm-symbols.txt"
   ;;
-  *) SONAME=so ;;
+  *)
+    SONAME=so
+    # Symbols coming from the static libraries we link (LLVM in particular) must
+    # not end up in the dynamic symbol table, or they interpose the LLVM shipped
+    # with the GPU drivers.
+    CMAKE_SHARED_LINKER_FLAGS="-Wl,--exclude-libs,ALL"
+  ;;
 esac
 
 # Downloaded by CMake, built, and linked statically (not needed at runtime):
@@ -61,17 +74,28 @@ mkdir -p ./src_tmp
 rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 case $ARCHITECTURE in
   osx*)
-   # use compatible llvm@18 from brew, if available. This
+   # use compatible llvm@20 from brew, if available. This
    # must match the prefer_system_check in clang.sh
    CLANG_EXECUTABLE="${CLANG_REVISION:+$CLANG_ROOT/bin-safe/clang}"
-   if [ -z "${CLANG_EXECUTABLE}" -a -d "$(brew --prefix llvm)@18" ]; then
-     CLANG_EXECUTABLE="$(brew --prefix llvm)@18/bin/clang"
+   if [[ -z "${CLANG_EXECUTABLE}" ]] && brew --prefix --installed llvm@20 > /dev/null 2>&1; then
+     CLANG_EXECUTABLE="$(brew --prefix llvm)@20/bin/clang"
    fi
    ;;
   *)
    CLANG_EXECUTABLE="${CLANG_ROOT}/bin-safe/clang"
-   # this patches version script to hide llvm symbols in gandiva library
-   sed -i.deleteme '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' "./src_tmp/cpp/src/gandiva/symbols.map"
+   # Patch the version script to hide llvm symbols in the gandiva library, so
+   # they cannot interpose the LLVM shipped with the GPU drivers. The patterns
+   # inside the extern "C++" block match the *demangled* name, which covers the
+   # llvm:: functions but not typeinfo / vtable / VTT / guard variables. The
+   # latter are added as *mangled* patterns at top level (single leading
+   # underscore on ELF): _ZTI (typeinfo), _ZTS (typeinfo name), _ZTV (vtable),
+   # _ZTT (VTT), _ZGV (guard variable). _ZTVSt*N4llvm* also hides vtables for
+   # std:: types instantiated on an llvm type (mangled _ZTVSt..., which the
+   # _ZTVN4llvm* pattern does not match).
+   sed -i.deleteme \
+       -e '/^[[:space:]]*local:/ a \ \ \ \ \ \ _ZN4llvm*; _ZNK4llvm*; _ZTIN4llvm*; _ZTSN4llvm*; _ZTVN4llvm*; _ZTVSt*N4llvm*; _ZTTN4llvm*; _ZGVN4llvm*;' \
+       -e '/^[[:space:]]*extern/ a \ \ \ \ \ \ llvm*; LLVM*;' \
+       "./src_tmp/cpp/src/gandiva/symbols.map"
    ;;
 esac
 
@@ -116,12 +140,13 @@ cmake ./src_tmp/cpp                                                             
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                         \
       -DARROW_TENSORFLOW=ON                                                                         \
       -DARROW_GANDIVA=ON                                                                            \
+      -DARROW_LLVM_USE_SHARED=OFF                                                                   \
       -DARROW_COMPUTE=ON                                                                            \
       -DARROW_DATASET=ON                                                                            \
       -DARROW_FILESYSTEM=ON                                                                         \
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
-      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT="$(find "$GCC_TOOLCHAIN_ROOT/lib"-name crtbegin.o -exec dirname {} \;)"} \
+      ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT="$(find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;)"} \
       -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"
 
 cmake --build . -- ${JOBS:+-j $JOBS} install

@@ -1,6 +1,7 @@
 package: UUID
 version: v2.27.1
 tag: v2.27.1-alice1
+license: BSD-3-Clause
 source: https://github.com/alisw/uuid
 build_requires:
   - "GCC-Toolchain:(?!osx)"
@@ -20,7 +21,8 @@ case $ARCHITECTURE in
   *) disable_shared= ;;
 esac
 
-autoreconf -ivf
+# Avoid building docs
+GTKDOCIZE=echo autoreconf -ivf
 # --disable-nls so we don't depend on gettext/libintl at runtime on Intel Macs.
 ./configure ${disable_shared:+--disable-shared}   \
             "--libdir=$INSTALLROOT/lib"           \

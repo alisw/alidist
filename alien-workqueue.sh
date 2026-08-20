@@ -4,6 +4,7 @@ source: https://github.com/alisw/alien-workqueue
 requires:
   - "GCC-Toolchain:(?!osx)"
   - cctools
+license: GPL-3.0
 build_requires:
   - CMake
 ---

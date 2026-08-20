@@ -7,6 +7,7 @@ requires:
   - AEGIS
   - AliGenO2:(?!osx)
   - jq
+license: GPL-3.0
 ---
 #!/bin/bash -ex
 

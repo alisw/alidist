@@ -1,0 +1,23 @@
+---
+# Check for untested packages and comment on PRs
+name: Check untested packages
+
+'on':
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  check-untested:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    uses: alisw/ali-bot/.github/workflows/check-untested-packages.yml@master
+    with:
+      owner: ${{ github.event.repository.owner.login }}
+      repo: ${{ github.event.repository.name }}
+      pr: ${{ github.event.pull_request.number }}
+      max_workers: '2'

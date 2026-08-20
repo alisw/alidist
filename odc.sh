@@ -1,8 +1,8 @@
 # Online Device Control
 package: ODC
-version: "0.84.2-alice2"
-tag: "0.84.2-alice2"
-source: https://github.com/alisw/ODC.git
+version: "%(tag_basename)s"
+tag: "v0.87.2"
+source: https://github.com/FairRootGroup/ODC.git
 requires:
   - boost
   - protobuf
@@ -11,6 +11,7 @@ requires:
   - FairMQ
   - grpc
   - libInfoLogger
+license: GPL-3.0
 build_requires:
   - flatbuffers
   - CMake

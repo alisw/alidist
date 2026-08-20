@@ -4,6 +4,7 @@ force_rebuild: true
 requires:
   - ThePEG
   - Rivet
+license: GPL-3.0
 ---
 #!/bin/bash -e
 cat > DIPSYpp_HepMC.in <<\EOF

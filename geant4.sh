@@ -1,12 +1,13 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v11.3.0"
-# source: https://github.com/alisw/geant4.git
-source: https://gitlab.cern.ch/geant4/geant4.git
+tag: "v11.2.0-alice2"
+source: https://github.com/alisw/geant4.git
+# source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - xercesc
   - zlib
+license: Geant4
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -47,6 +48,7 @@ cmake $SOURCEDIR                                                \
   ${XERCESC_ROOT:+-DXERCESC_ROOT_DIR=$XERCESC_ROOT}             \
   ${CXXSTD:+-DGEANT4_BUILD_CXXSTD=$CXXSTD}                      \
   -DG4_USE_GDML=ON                                              \
+  -DGEANT4_USE_GDML=ON                                          \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                            \
   -DGEANT4_USE_SYSTEM_ZLIB=ON
 
@@ -65,15 +67,17 @@ fi
 # ./geant4-config --install-datasets
 
 # Modulefile
-MODULEDIR="$INSTALLROOT/etc/modulefiles"
-MODULEFILE="$MODULEDIR/$PKGNAME"
-mkdir -p "$MODULEDIR"
-alibuild-generate-module --bin --lib > $MODULEFILE
+mkdir -p etc/modulefiles
+MODULEFILE="etc/modulefiles/$PKGNAME"
+alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EOF
 # extra environment
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
 EOF
 
-# Data sets environment
+# add datasets environment to modulefile
 $INSTALLROOT/bin/geant4-config --datasets |  sed 's/[^ ]* //' | sed 's/G4/setenv G4/' >> "$MODULEFILE"
+
+# install modulefile
+mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

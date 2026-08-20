@@ -1,5 +1,6 @@
 package: libffi
 version: v3.2.1-alice1
+license: MIT
 build_requires:
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"
@@ -9,7 +10,7 @@ prepend_path:
   LD_LIBRARY_PATH: "$LIBFFI_ROOT/lib64"
 ---
 #!/bin/bash -ex
-rsync -a "$SOURCEDIR"/ .
+rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR"/ .
 autoreconf -ivf .
 
 # Hack to bypass automake 1.17 creating a malformed Makefile on macOS

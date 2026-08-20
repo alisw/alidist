@@ -1,6 +1,6 @@
 package: mesos
 version: v1.11.0
-tag: 1.11.0-alice2
+tag: 1.11.0-alice5
 source: https://github.com/AliceO2Group/mesos.git
 requires:
   - zlib
@@ -16,6 +16,7 @@ requires:
   # those conflict with system-cyrus-sasl.
   # - curl
   # - OpenSSL
+license: GPL-3.0
 build_requires:
   - "autotools:(slc.*)"
   - protobuf
@@ -32,6 +33,7 @@ export CPPFLAGS="-I${ABSEIL_ROOT}/include"
 export CFLAGS="-I${ABSEIL_ROOT}/include"
 
 rsync -av --delete --exclude="**/.git" $SOURCEDIR/ .
+sed -i 's/\[deflate, gzread, gzwrite, inflate\]/[gzread]/' configure.ac # fix the wrong syntax
 ./bootstrap
 mkdir build
 cd build
@@ -44,7 +46,8 @@ sed -i.bak -e's/c++11/c++20/' ../configure
     --with-re2=${RE2_ROOT} \
     --with-grpc=${GRPC_ROOT} \
     --with-glog=${GLOG_ROOT} \
-    --with-rapidjson=${RAPIDJSON_ROOT}
+    --with-rapidjson=${RAPIDJSON_ROOT} \
+    --with-zlib=${ZLIB_ROOT}/lib
 
 # We build with fewer jobs to avoid OOM errors in GCC
 make -j $((JOBS / 2))

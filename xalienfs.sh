@@ -7,6 +7,7 @@ requires:
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
   - AliEn-Runtime
+license: BSD-3-Clause
 build_requires:
   - "autotools:(slc6|slc7)"
   - SWIG

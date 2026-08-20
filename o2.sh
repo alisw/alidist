@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20250408-0000"
+tag: "daily-20260819-0000"
 requires:
   - abseil
   - arrow
@@ -24,13 +24,18 @@ requires:
   - libjalienO2
   - cgal
   - "VecGeom:(?!osx.*)"
+  - "TGeo2VecGeom:(?!osx.*)"
   - FFTW3
   - ONNXRuntime
+  - nlohmann_json
   - MLModels
-  - KFParticle
   - RapidJSON
   - bookkeeping-api
   - AliEn-CAs
+  - gpu-system
+  - Eigen3
+  - GBL
+license: GPL-3.0
 build_requires:
   - abseil
   - GMP
@@ -38,12 +43,14 @@ build_requires:
   - googlebenchmark
   - O2-customization
   - Clang:(?!osx*)
-  - ITSResponse
 source: https://github.com/AliceO2Group/AliceO2
 env:
   VMCWORKDIR: "$O2_ROOT/share"
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/GPU"
+track_env:
+  CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
   if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
@@ -63,6 +70,27 @@ incremental_recipe: |
     # FIXME: this breaks some corner cases, apparently...
     # cat old.txt old.txt new.txt | sort | uniq -c | grep " 2 " | sed -e's|[ ][ ]*2 ||' | xargs rm -f
   fi
+  checkFindO2GPU() {
+    if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+      ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+      [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+        $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+      echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
+      exit 1
+    fi
+  }
+
+  if [[ ! ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) ]]; then
+    checkFindO2GPU
+  fi
+
+  if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+    source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+  fi
+  if [[ -n $ONNXRUNTIME_REVISION ]]; then
+    source $ONNXRUNTIME_ROOT/etc/ort-init.sh
+  fi
+
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
@@ -99,7 +127,7 @@ incremental_recipe: |
     find $PWD -name "*.root" -delete
     rm -rf test_logs
     TESTERR=
-    ctest -C ${CMAKE_BUILD_TYPE} -E "test_Framework" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+    ctest -C ${CMAKE_BUILD_TYPE} -LE gpu -E "test_Framework" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
     ctest -C ${CMAKE_BUILD_TYPE} -R test_Framework --output-on-failure || TESTERR=$?
     # Display additional logs for tests that timed out in a non-fatal way
     set +x
@@ -112,6 +140,9 @@ incremental_recipe: |
     set -x
     [[ ! $TESTERR ]] || exit 1
   fi
+
+  checkFindO2GPU
+
   # Create code coverage information to be uploaded
   # by the calling driver to codecov.io or similar service
   if [[ $CMAKE_BUILD_TYPE == COVERAGE ]]; then
@@ -127,8 +158,14 @@ incremental_recipe: |
     perl -p -i -e "s|^[0-9]+/||g" coverage.info # Remove PR location path
     lcov --list coverage.info
   fi
+
+  if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
+    GPUCA_STANDALONE_CI=1 $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+  fi
+
 valid_defaults:
   - o2
+  - o2-acts
   - o2-dataflow
   - o2-epn
   - o2-dev-fairroot
@@ -139,10 +176,11 @@ valid_defaults:
 #!/bin/sh
 export ROOTSYS=$ROOT_ROOT
 
+if [[ -f $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh ]]; then
+  source $GPU_SYSTEM_ROOT/etc/gpu-features-available.sh
+fi
 if [[ -n $ONNXRUNTIME_REVISION ]]; then
   source $ONNXRUNTIME_ROOT/etc/ort-init.sh
-  echo "ORT_ROCM_BUILD: $ORT_ROCM_BUILD"
-  echo "ORT_CUDA_BUILD: $ORT_CUDA_BUILD"
 fi
 
 # Making sure people do not have SIMPATH set when they build fairroot.
@@ -161,6 +199,7 @@ case $ARCHITECTURE in
     [[ ! $PROTOBUF_ROOT ]] && PROTOBUF_ROOT=`brew --prefix protobuf`
     [[ ! $GLFW_ROOT ]] && GLFW_ROOT=`brew --prefix glfw`
     [[ ! $FMT_ROOT ]] && FMT_ROOT=`brew --prefix fmt`
+    [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT=`brew --prefix libuv`
   ;;
 esac
 
@@ -184,6 +223,20 @@ if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR 
   unset NINJA_BIN
 fi
 
+checkFindO2GPU() {
+  if [[ -n "$ALIBUILD_CONFIG_DIR" && -f "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" ]] && \
+    ! cmp -s "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" "$SOURCEDIR/dependencies/FindO2GPU.cmake" && \
+    [[ ! $(grep "# FindO2GPU.cmake Version " "$ALIBUILD_CONFIG_DIR/resources/FindO2GPU.cmake" | awk '{print $4}') -gt \
+      $(grep "# FindO2GPU.cmake Version " "$SOURCEDIR/dependencies/FindO2GPU.cmake" | awk '{print $4}') ]]; then
+    echo "FindO2GPU.cmake differs in O2 compared to alidist, please sync O2/dependencies/FindO2GPU.cmake to alidist/resources and make sure to update the version number"
+    exit 1
+  fi
+}
+
+if [[ ! ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) ]]; then
+  checkFindO2GPU
+fi
+
 unset DYLD_LIBRARY_PATH
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                                                      \
       ${CMAKE_GENERATOR:+-G "$CMAKE_GENERATOR"}                                                           \
@@ -195,13 +248,13 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
       ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \
       ${JALIEN_ROOT_REVISION:+-DJALIEN_ROOT_ROOT=$JALIEN_ROOT_ROOT}                                       \
-      ${ALIBUILD_O2_FORCE_GPU:+-DENABLE_CUDA=ON -DENABLE_HIP=ON -DENABLE_OPENCL=ON}                       \
-      ${ALIBUILD_O2_FORCE_GPU:+-DHIP_AMDGPUTARGET=default -DCUDA_COMPUTETARGET=default}                   \
-      ${DISABLE_GPU:+-DENABLE_CUDA=OFF -DENABLE_HIP=OFF -DENABLE_OPENCL=OFF}                              \
-      ${ALIBUILD_ENABLE_CUDA:+-DENABLE_CUDA=ON}                                                           \
-      ${ALIBUILD_ENABLE_HIP:+-DENABLE_HIP=ON}                                                             \
-      ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:+-DHIP_AMDGPUTARGET=${ALIBUILD_O2_OVERRIDE_HIP_ARCHS}}             \
-      ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:+-DCUDA_COMPUTETARGET=${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS}}         \
+      ${GPUCA_BUILD_EVENT_DISPLAY:+-GPUCA_BUILD_EVENT_DISPLAY=${GPUCA_BUILD_EVENT_DISPLAY}}               \
+      -DENABLE_CUDA="${O2_GPU_CUDA_AVAILABLE:-AUTO}"                                                      \
+      -DENABLE_HIP="${O2_GPU_ROCM_AVAILABLE:-AUTO}"                                                       \
+      -DENABLE_OPENCL="${O2_GPU_OPENCL_AVAILABLE:-AUTO}"                                                  \
+      -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                                                         \
+      ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DHIP_AMDGPUTARGET="${O2_GPU_ROCM_AVAILABLE_ARCH}"}                   \
+      ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCUDA_COMPUTETARGET="${O2_GPU_CUDA_AVAILABLE_ARCH}"}                 \
       ${CURL_ROOT:+-DCURL_ROOT=$CURL_ROOT}                                                                \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                                                             \
       ${BUILD_ANALYSIS:+-DBUILD_ANALYSIS=$BUILD_ANALYSIS}                                                 \
@@ -212,11 +265,11 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
       ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
-      ${ITSRESPONSE_ROOT:+-DITSRESPONSE=${ITSRESPONSE_ROOT}}                                              \
       ${ORT_ROCM_BUILD:+-DORT_ROCM_BUILD=${ORT_ROCM_BUILD}}                                               \
       ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
       ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
-      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   
+      ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   \
+      ${EIGEN3_ROOT:+-DEIGEN3_ROOT=${EIGEN3_ROOT}}
 # LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install
@@ -233,6 +286,10 @@ DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+fi
+
+if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
+  GPUCA_STANDALONE_CI=1  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
 fi
 
 # Modulefile
@@ -272,7 +329,9 @@ module load BASE/1.0 \\
             ${FFTW3_REVISION:+FFTW3/$FFTW3_VERSION-$FFTW3_REVISION}                                 \\
             ${ONNXRUNTIME_REVISION:+ONNXRuntime/$ONNXRUNTIME_VERSION-$ONNXRUNTIME_REVISION}         \\
             ${RAPIDJSON_REVISION:+RapidJSON/$RAPIDJSON_VERSION-$RAPIDJSON_REVISION}                 \\
+            ${NLOHMANN_JSON_REVISION:+nlohmann_json/$NLOHMANN_JSON_VERSION-$NLOHMANN_JSON_REVISION} \\
             ${MLMODELS_REVISION:+MLModels/$MLMODELS_VERSION-$MLMODELS_REVISION}                     \\
+            ${GBL_REVISION:+GBL/$GBL_VERSION-$GBL_REVISION}                                         \\
             ${BOOKKEEPING_API_REVISION:+bookkeeping-api/$BOOKKEEPING_API_VERSION-$BOOKKEEPING_API_REVISION}
 
 # Our environment
@@ -307,7 +366,7 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   # Clean up ROOT files created by tests in build area
   find $PWD -name "*.root" -delete
   TESTERR=
-  ctest -C ${CMAKE_BUILD_TYPE} -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
+  ctest -C ${CMAKE_BUILD_TYPE} -LE gpu -E "(test_Framework)|(test_GPUsort(CUDA|HIP))" --output-on-failure ${JOBS+-j $JOBS} || TESTERR=$?
   ctest -C ${CMAKE_BUILD_TYPE} -R test_Framework --output-on-failure || TESTERR=$?
   # Display additional logs for tests that timed out in a non-fatal way
   set +x
@@ -320,6 +379,8 @@ if [[ $ALIBUILD_O2_TESTS ]]; then
   set -x
   [[ ! $TESTERR ]] || exit 1
 fi
+
+checkFindO2GPU
 
 # Create code coverage information to be uploaded
 # by the calling driver to codecov.io or similar service

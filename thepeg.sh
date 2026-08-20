@@ -1,6 +1,6 @@
 package: ThePEG
 version: "%(tag_basename)s"
-tag: "v2.2.2-alice2"
+tag: "v2.3.0-alice2"
 source: https://github.com/alisw/thepeg
 requires:
   - Rivet
@@ -8,6 +8,7 @@ requires:
   - HepMC3
   - boost
   - GSL
+license: GPL-2.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - GMP
@@ -94,4 +95,5 @@ setenv THEPEG_ROOT \$THEPEG_ROOT
 setenv ThePEG_INSTALL_PATH \$::env(THEPEG_ROOT)/lib/ThePEG
 prepend-path PATH \$THEPEG_ROOT/bin
 prepend-path LD_LIBRARY_PATH \$THEPEG_ROOT/lib/ThePEG
+prepend-path ROOT_INCLUDE_PATH \$THEPEG_ROOT/include
 EoF

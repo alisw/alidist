@@ -1,6 +1,7 @@
 package: zlib
 version: "%(tag_basename)s"
 tag: v1.3.1
+license: Zlib
 source: https://github.com/madler/zlib
 build_requires:
   - "GCC-Toolchain:(?!osx)"
@@ -15,6 +16,12 @@ rsync -a --chmod=ug=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDI
 
 make ${JOBS+-j $JOBS}
 make install
+
+# Upstream ships no CMake package config, so config-mode find_package(ZLIB) walks
+# past us to the system one -- which on EL10 (zlib-ng-compat-devel) references a
+# libz.a that only ships in CRB, and errors out when it is absent.
+alibuild-generate-cmake-config --name ZLIB --lib z --static-target ZLIB::zlibstatic
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

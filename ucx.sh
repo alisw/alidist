@@ -4,6 +4,7 @@ tag: v1.13.1-alice2
 requires:
   - "GCC-Toolchain:(?!osx)"
   - rdma-core
+license: BSD-3-Clause
 build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools

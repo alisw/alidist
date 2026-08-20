@@ -5,6 +5,7 @@ source: https://github.com/alisw/jewel.git
 requires:
   - lhapdf5
   - "GCC-Toolchain:(?!osx)"
+license: GPL-2.0
 ---
 #!/bin/bash -ex
 rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./

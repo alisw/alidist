@@ -1,12 +1,13 @@
 package: GEANT4_VMC
 version: "%(tag_basename)s"
-tag: "v6-7-p1"
+tag: "v6-6-update2-p3"
 source: https://github.com/vmc-project/geant4_vmc
 requires:
   - ROOT
   - VMC
   - GEANT4
   - vgm
+license: Geant4
 build_requires:
   - CMake
   - ninja

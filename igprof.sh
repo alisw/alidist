@@ -4,6 +4,7 @@ tag: v5.9.18
 source: http://github.com/igprof/igprof.git
 requires:
   - libunwind
+license: GPL-2.0
 build_requires:
   - CMake
   - ninja

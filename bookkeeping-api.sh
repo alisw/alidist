@@ -1,9 +1,10 @@
 package: bookkeeping-api
-version: "v1.6.0"
-tag: "@aliceo2/bookkeeping@1.6.0"
+version: "v1.9.2"
+tag: "@aliceo2/bookkeeping@1.9.2"
 requires:
   - grpc
   - protobuf
+license: GPL-3.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake

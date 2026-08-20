@@ -1,23 +1,35 @@
 package: O2Physics
 version: "%(tag_basename)s"
-tag: "daily-20250408-0000"
+tag: "daily-20260819-0000"
 requires:
   - O2
   - ONNXRuntime
   - fastjet
   - libjalienO2
   - KFParticle
+license: GPL-3.0
 build_requires:
   - "Clang:(?!osx)"
   - CMake
   - ninja
   - alibuild-recipe-tools
 source: https://github.com/AliceO2Group/O2Physics
+track_env:
+  O2PHYSICS_COMPONENTS: echo ${O2PHYSICS_COMPONENTS:-install}
+  CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
 incremental_recipe: |
-  cmake --build . -- ${JOBS:+-j$JOBS} install
+  cmake --build . -- ${JOBS:+-j$JOBS} ${O2PHYSICS_COMPONENTS:-install}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/sh
+
+case $ARCHITECTURE in
+  osx*)
+    # If we preferred system tools, we need to make sure we can pick them up.
+    [[ ! $LIBUV_ROOT ]] && LIBUV_ROOT="$(brew --prefix libuv)"
+  ;;
+esac
 
 # When O2 is built against Gandiva (from Arrow), then we need to use
 # -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
@@ -27,6 +39,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}           \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                    \
+      -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                           \
       ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                              \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}              \
       ${FASTJET_ROOT:+-Dfjcontrib_ROOT="$FASTJET_ROOT"}                     \
@@ -35,13 +48,14 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"} \
       ${LIBUV_ROOT:+-DLibUV_ROOT=$LIBUV_ROOT}                               \
       ${ALIBUILD_O2PHYSICS_TESTS:+-DO2PHYSICS_WARNINGS_AS_ERRORS=ON}
-cmake --build . -- ${JOBS+-j $JOBS} install
+if [[ -n $O2PHYSICSOVERRIDEJOBS ]]; then JOBS=$O2PHYSICSOVERRIDEJOBS; fi
+cmake --build . -- ${JOBS+-j $JOBS} ${NINJA_ALICE_REVISION:+--keep-free-memory 4G} ${O2PHYSICS_COMPONENTS:-install}
 
 # export compile_commands.json in (taken from o2.sh)
-DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
+DEVEL_SOURCES="$(readlink "$SOURCEDIR" || echo "$SOURCEDIR")"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
-  ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
+  ln -sf "$BUILDDIR"/compile_commands.json "$DEVEL_SOURCES"/compile_commands.json
 fi
 
 # Modulefile
