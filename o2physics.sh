@@ -1,6 +1,14 @@
 package: O2Physics
-version: "%(tag_basename)s"
-tag: "daily-20260819-0000"
+version: "pr17456"
+# Testing PR 17456 (shared precompiled header) before it is merged. Pinned to a
+# commit, not the branch name: aliBuild resolves tag: by looking up
+# refs/tags/<tag>, so a branch name does not resolve and it uses the literal
+# string as the "commit hash" -- the package hash then never changes as the
+# branch moves, and pushes are silently ignored ("Commit hash for ...@pr17456
+# is pr17456", same BUILD dir, same stale result).
+# BUMP THIS ON EVERY PUSH to the PR. Revert version, tag and source together
+# once it lands.
+tag: "7499439563623bec1aa5a365f7721336b7e353fe"
 requires:
   - O2
   - ONNXRuntime
@@ -13,7 +21,7 @@ build_requires:
   - CMake
   - ninja
   - alibuild-recipe-tools
-source: https://github.com/AliceO2Group/O2Physics
+source: https://github.com/ktf/O2Physics
 track_env:
   O2PHYSICS_COMPONENTS: echo ${O2PHYSICS_COMPONENTS:-install}
   CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
