@@ -35,7 +35,13 @@ prefer_system_check: |
     # - ci: for now defaults to 1
     # - disable: disable all backends
     # - manual: disable auto-detection, set features manually
+    # - build: build GPU tools from alidist recipe
     # 0 / unset: defaults to fullauto
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "build" ]]; then
+      GPU_FEATURES=build
+      break
+    fi
 
     if [[ -z ${ALIBUILD_O2_FORCE_GPU} || ${ALIBUILD_O2_FORCE_GPU} == "0" ]]; then
       ALIBUILD_O2_FORCE_GPU=fullauto
@@ -257,6 +263,18 @@ prefer_system_replacement_specs:
         [[ "$PKG_VERSION" =~ (^|-)rocm([^-]*)_home_([^@]*)(-|_|$) ]] && echo 'export O2_GPU_ROCM_HOME="'$(tr '0' '=' <<< "${BASH_REMATCH[3]}" | base32 -d 2> /dev/null)'"'
         [[ "$PKG_VERSION" =~ (^|-)cuda([^-]*)_arch@([^@]*)@(-|_|$) ]] && echo 'export O2_GPU_CUDA_AVAILABLE_ARCH="'$(sed -e 's/#/;/g' -e 's/_/-/g' <<< "${BASH_REMATCH[3]}" 2> /dev/null)'"'
         [[ "$PKG_VERSION" =~ (^|-)rocm([^-]*)_arch@([^@]*)@(-|_|$) ]] && echo 'export O2_GPU_ROCM_AVAILABLE_ARCH="'$(sed -e 's/#/;/g' -e 's/_/-/g' <<< "${BASH_REMATCH[3]}" 2> /dev/null)'"'
+        true
+      } > "$INSTALLROOT"/etc/gpu-features-available.sh
+  "build":
+    requires:
+      - CUDA
+      - ROCm
+    recipe: |
+      #!/bin/bash -e
+      #%Module1.0
+      mkdir -p "$INSTALLROOT"/etc
+      rm -f "$INSTALLROOT"/etc/gpu-features-available.sh
+      {
         true
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
 ---
