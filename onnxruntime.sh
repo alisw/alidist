@@ -1,6 +1,6 @@
 package: ONNXRuntime
 version: "%(tag_basename)s"
-tag: v1.22.0
+tag: v1.29.0
 license: MIT
 source: https://github.com/microsoft/onnxruntime
 requires:
@@ -13,6 +13,8 @@ requires:
   - Eigen3
   - onnx
   - gpu-system
+  - "cudnn_frontend:(?!osx)"
+  - "cutlass:(?!osx)"
 build_requires:
   - date
   - safe_int
@@ -73,13 +75,21 @@ fi
 
 # Optional GPU features
 ### MIGraphX
-if [[ "$ORT_ROCM_BUILD" -eq 1 ]] && [[ ${O2_GPU_MIGRAPHX_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
-  ORT_MIGRAPHX_BUILD="0" # Disable for now, not working
+# Not gated on ORT_ROCM_BUILD: upstream removed the ROCm execution provider
+# after v1.22, so MIGraphX is the only remaining AMD path and has to stand on
+# its own. It needs hip and migraphx from the ROCm installation.
+if [[ ${O2_GPU_MIGRAPHX_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
+  ORT_MIGRAPHX_BUILD="1"
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   ORT_MIGRAPHX_BUILD="0"
 fi
 ### TensorRT
-if [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ ${O2_GPU_TENSORRT_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_TENSORRT_BUILD" ]]; then
+# Also gated on onnx_tensorrt being available. Its provider FetchContents that
+# source, which we build with FETCHCONTENT_FULLY_DISCONNECTED=ON and nothing in
+# alidist provides -- so on a TensorRT-capable host the configure step fails
+# outright. Gating on the root, as with cudnn_frontend and cutlass, turns it
+# back on by itself once a recipe supplies one.
+if [[ "$ORT_CUDA_BUILD" -eq 1 ]] && [[ ${O2_GPU_TENSORRT_AVAILABLE:-0} == 1 ]] && [[ -n "$ONNX_TENSORRT_ROOT" ]] && [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   ORT_TENSORRT_BUILD="1"
 elif [[ -z "$ORT_TENSORRT_BUILD" ]]; then
   ORT_TENSORRT_BUILD="0"
@@ -92,6 +102,22 @@ export ORT_CUDA_BUILD=$ORT_CUDA_BUILD
 export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
 EOF
+
+# MIGraphX installs into a self-contained prefix under lib/ on ROCm 6.x
+# (/opt/rocm/lib/migraphx/include/migraphx/version.h), which is on no default
+# include path: onnxruntime's provider then fails on <migraphx/version.h> even
+# though find_package(migraphx) succeeded. Find the prefix and pass it, rather
+# than assuming the headers sit beside ROCm's own.
+if [[ "$ORT_MIGRAPHX_BUILD" == 1 ]]; then
+  for _p in "${O2_GPU_ROCM_HOME:-/opt/rocm}/lib/migraphx" "${O2_GPU_ROCM_HOME:-/opt/rocm}"; do
+    if [[ -f "$_p/include/migraphx/version.h" ]]; then
+      MIGRAPHX_HOME=$_p
+      CXXFLAGS="$CXXFLAGS -isystem $_p/include"
+      break
+    fi
+  done
+  echo "MIGRAPHX_HOME=${MIGRAPHX_HOME:-<not found>}"
+fi
 
 echo "O2_GPU_ROCM_HOME=$O2_GPU_ROCM_HOME"
 echo "O2_GPU_CUDA_HOME=$O2_GPU_CUDA_HOME"
@@ -149,7 +175,9 @@ cmake "cmake"                                                                   
       ${PROTOBUF_ROOT:+-DONNX_CUSTOM_PROTOC_EXECUTABLE=$PROTOBUF_ROOT/bin/protoc}                           \
       ${RE2_ROOT:+-DRE2_INCLUDE_DIR=${RE2_ROOT}/include}                                                    \
       ${BOOST_ROOT:+-DBOOST_INCLUDE_DIR=${BOOST_ROOT}/include}                                              \
+      ${BOOST_ROOT:+-DFETCHCONTENT_SOURCE_DIR_MP11=${BOOST_ROOT}}                                            \
       -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
+      ${MIGRAPHX_HOME:+-DAMD_MIGRAPHX_HOME=${MIGRAPHX_HOME}}                                                \
       -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
       -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
       -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
@@ -164,12 +192,13 @@ cmake "cmake"                                                                   
       -DMSVC=OFF                                                                                            \
       -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
       -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
-      -DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND=${CUDNN_FRONTEND_ROOT}                                       \
-      -DFETCHCONTENT_SOURCE_DIR_CUTLASS=${CUTLASS_ROOT}                                                     \
+      ${CUDNN_FRONTEND_ROOT:+-DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND=${CUDNN_FRONTEND_ROOT}}             \
+      ${CUTLASS_ROOT:+-DFETCHCONTENT_SOURCE_DIR_CUTLASS=${CUTLASS_ROOT}}                                   \
+      ${ONNX_TENSORRT_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ONNX_TENSORRT=${ONNX_TENSORRT_ROOT}}           \
       -Donnxruntime_FUZZ_ENABLED=OFF                                                                        \
       -Donnxruntime_USE_FLASH_ATTENTION=OFF                                                                 \
       -Donnxruntime_USE_LEAN_ATTENTION=OFF                                                                  \
-      -Donnxruntime_USE_MEMORY_EFFICIENT_ATTENTION=OFF                                                      \
+      -Donnxruntime_USE_MEMORY_EFFICIENT_ATTENTION=ON                                                       \
       -DCMAKE_CUDA_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_HIP_FLAGS="${CXXFLAGS} -Wno-error=deprecated-enum-float-conversion -Wno-error -Wno-error=missing-requires -w" \
       -DCMAKE_CXX_FLAGS="${CXXFLAGS} -Wno-unknown-warning -Wno-unknown-warning-option -Wno-pass-failed -Wno-error=unused-but-set-variable -Wno-pass-failed=transform-warning -Wno-error=deprecated -Wno-error=maybe-uninitialized -Wno-error=deprecated-enum-enum-conversion -Wno-error -Wno-error=missing-requires -w" \
