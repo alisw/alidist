@@ -202,7 +202,22 @@ prefer_system_check: |
         add_feature - miopen
     fi
 
-    if [[ $ALIBUILD_O2_FORCE_GPU_MIGRAPHX == 1 ]] || [[ $GPU_FEATURES =~ (^|-)"miopen"(-|_|$) && ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} != 0 && -d /opt/rocm/lib/migraphx ]]; then
+    # MIGraphX has to be new enough for the ONNXRuntime we build, not merely
+    # present: its provider references migraphx_shape_fp4x2_type, which appears
+    # in MIGraphX 7.1 (bf16 and fp8e5m2fnuz arrived in 6.4). On anything older
+    # every other file compiles and the build then dies on three enum cases, so
+    # gate on the API itself -- this turns MIGraphX back on by itself once the
+    # host is upgraded, with no disable left behind to forget about.
+    #
+    # ROCm 6.x keeps these headers in a self-contained prefix under lib/, which
+    # is on no default include path; onnxruntime.sh finds the prefix and passes
+    # it. Look in both places.
+    MIGRAPHX_C_API=
+    for _hdr in /opt/rocm/lib/migraphx/include/migraphx/migraphx.h \
+                /opt/rocm/include/migraphx/migraphx.h; do
+      if [[ -f $_hdr ]] && grep -q fp4x2 "$_hdr"; then MIGRAPHX_C_API=$_hdr; break; fi
+    done
+    if [[ $ALIBUILD_O2_FORCE_GPU_MIGRAPHX == 1 ]] || [[ $GPU_FEATURES =~ (^|-)"miopen"(-|_|$) && ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} != 0 && -n $MIGRAPHX_C_API ]]; then
       add_feature - migraphx
     fi
 
@@ -214,8 +229,20 @@ prefer_system_check: |
       add_feature - tensorrt
     fi
 
-    if [[ $ALIBUILD_O2_FORCE_GPU == "1" ]] && ! [[ $GPU_FEATURES =~ (^|-)"miopen"(-|_|$) && ${GPU_FEATURES} =~ (^|-)"migraphx"(-|_|$) && ${GPU_FEATURES} =~ (^|-)"cudnn"(-|_|$) && ${GPU_FEATURES} =~ (^|-)"tensorrt"(-|_|$) ]]; then
-      GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but not all ML libraries detected"
+    # MIGraphX is gated on the C API above, so it is legitimately absent when the
+    # host ROCm is older than the ONNXRuntime needs -- demand it only when it
+    # could have been enabled, otherwise FORCE_GPU=1 makes that state unreachable
+    # and even ALIBUILD_O2_FORCE_GPU_MIGRAPHX=0 cannot opt out.
+    _ml_required="miopen cudnn tensorrt"
+    if [[ ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} == 1 ]] || [[ ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} != 0 && -n $MIGRAPHX_C_API ]]; then
+      _ml_required="$_ml_required migraphx"
+    fi
+    _ml_missing=
+    for _ml in $_ml_required; do
+      [[ $GPU_FEATURES =~ (^|-)"$_ml"(-|_|$) ]] || _ml_missing="$_ml_missing $_ml"
+    done
+    if [[ $ALIBUILD_O2_FORCE_GPU == "1" && -n $_ml_missing ]]; then
+      GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but not all ML libraries detected:$_ml_missing"
       break
     fi
 
