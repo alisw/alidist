@@ -1,6 +1,6 @@
 package: c-ares
-version: "1.18.1"
-tag: cares-1_18_1
+version: "1.34.6"
+tag: cares-1_34_6
 license: MIT
 build_requires:
   - "GCC-Toolchain:(?!osx)"
