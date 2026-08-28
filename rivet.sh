@@ -10,6 +10,7 @@ requires:
   - GMP
   - Python
   - Python-modules
+license: GPL-3.0
 build_requires:
   - GCC-Toolchain:(?!osx)
   - Python

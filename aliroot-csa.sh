@@ -4,6 +4,7 @@ tag: master
 requires:
   - ROOT
   - SAS
+license: GPL-3.0
 env:
   ALICE_ROOT: "$ALIROOT_ROOT"
 source: http://git.cern.ch/pub/AliRoot

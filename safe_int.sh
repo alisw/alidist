@@ -1,6 +1,7 @@
 package: safe_int
 version: "v3.0.28a"
 tag: 3.0.28a
+license: MIT
 source: https://github.com/dcleblanc/SafeInt
 prefer_system: .*
 prefer_system_check: |

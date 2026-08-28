@@ -1,11 +1,12 @@
 package: Upcgen
 version: "%(tag_basename)s"
-tag: upcgen-o2-25-12-24-1
+tag: upcgen-o2-26-03-02-1
 source: https://github.com/alisw/upcgen
 requires:
   - ROOT
   - HepMC3
   - pythia
+license: GPL-2.0
 build_requires:
   - CMake
   - GCC-Toolchain:(?!osx.*)

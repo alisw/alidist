@@ -1,24 +1,15 @@
 package: Alice-GRID-Utils
 version: "%(tag_basename)s"
-tag: "0.0.7"
+tag: "0.0.8"
+license: GPL-3.0
 source: https://gitlab.cern.ch/jalien/alice-grid-utils.git
+build_requires:
+  - alibuild-recipe-tools
 ---
-#!/bin/bash -e
-
-DST="$INSTALLROOT/include"
-mkdir -p "$DST"
-cp -v "$SOURCEDIR"/*.h "$DST/"
+rsync -a --no-specials --no-devices  --chmod=ug=rwX --delete --delete-excluded $SOURCEDIR/ $INSTALLROOT/include/
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
-#%Module1.0
-proc ModulesHelp { } {
-  global version
-  puts stderr "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-}
-set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
-module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
-EoF
+alibuild-generate-module --root > "$MODULEFILE"

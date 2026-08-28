@@ -1,6 +1,7 @@
 package: MPFR
 version: v3.1.3
 tag: v3.1.3
+license: LGPL-3.0
 source: https://github.com/alisw/MPFR.git
 build_requires:
   - "autotools:(slc6|slc7)"

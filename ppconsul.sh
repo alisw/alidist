@@ -6,6 +6,7 @@ requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
   - curl
+license: BSL-1.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

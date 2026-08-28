@@ -5,6 +5,7 @@ requires:
   - ROOT
   - Delphes
   - O2
+license: GPL-3.0
 overrides:
   O2:
     version: "%(short_hash)s%(defaults_upper)s"

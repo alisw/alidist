@@ -5,6 +5,7 @@ source: https://github.com/alisw/ampt
 requires:
   - "GCC-Toolchain:(?!osx)"
   - HepMC
+license: GPL-2.0
 ---
 #!/bin/bash -e
 

@@ -1,6 +1,7 @@
 package: jemalloc
 version: "v%(commit_hash)s"
 tag: 5.1.0
+license: BSD-2-Clause
 source: https://github.com/jemalloc/jemalloc
 build_requires:
   - "GCC-Toolchain:(?!osx)"

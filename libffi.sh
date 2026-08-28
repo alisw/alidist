@@ -1,5 +1,6 @@
 package: libffi
 version: v3.2.1-alice1
+license: MIT
 build_requires:
   - "autotools:(slc6|slc7)"
   - "GCC-Toolchain:(?!osx)"

@@ -18,6 +18,7 @@ requires:
   - Graniitti:(?!osx)
   - nOOn:(?!osx)
   - Herwig:(?!osx)
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

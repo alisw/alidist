@@ -1,10 +1,11 @@
 package: alibuild-recipe-tools
-version: "0.2.6"
-tag: "v0.2.6"
+version: "v0.4.0"
+tag: "v0.4.0"
+license: GPL-3.0
 source: https://github.com/alisw/alibuild-recipe-tools
 ---
 mkdir -p $INSTALLROOT/bin
-install $SOURCEDIR/alibuild-generate-module $INSTALLROOT/bin
+install $SOURCEDIR/alibuild-generate-module $SOURCEDIR/alibuild-generate-cmake-config $INSTALLROOT/bin
 
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

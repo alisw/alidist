@@ -1,6 +1,7 @@
 package: zlib-cloudflare
 version: "%(tag_basename)s"
 tag: gcc.amd64
+license: Zlib
 source: https://github.com/cloudflare/zlib/
 build_requires:
   - "GCC-Toolchain:(?!osx)"

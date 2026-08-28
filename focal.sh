@@ -1,8 +1,9 @@
 package: FOCAL
 version: "%(commit_hash)s"
-tag: v1.19
+tag: v1.22
 requires:
   - AliRoot
+license: GPL-3.0
 build_requires:
   - "Xcode:(osx.*)"
 source: https://gitlab.cern.ch/mvl/FOCAL.git

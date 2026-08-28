@@ -1,8 +1,15 @@
 package: Python-modules-list
 version: "1.0"
+license: Python-2.0
 env:
   PIP_BASE_REQUIREMENTS: |
-    pip < 26.0
+    # Newest pip each interpreter supports. Only the last line moves: the
+    # others are EOL pythons, so their final pip is fixed for good.
+    pip == 21.3.1; python_version < '3.7'
+    pip == 24.0; python_version >= '3.7' and python_version < '3.8'
+    pip == 25.0.1; python_version >= '3.8' and python_version < '3.9'
+    pip == 26.0.1; python_version >= '3.9' and python_version < '3.10'
+    pip == 26.2.1; python_version >= '3.10'
     setuptools == 59.6.0; python_version < '3.12'
     setuptools == 70.0.0; python_version >= '3.12'
     wheel == 0.37.1; python_version < '3.12'
@@ -79,8 +86,8 @@ env:
 
     xgboost == 0.82; python_version < '3.8'
     xgboost == 1.3.3; python_version == '3.8'
-    xgboost == 1.2.0; python_version >= '3.9' and python_version < '3.11'
-    xgboost == 1.7.5; python_version >= '3.11'
+    xgboost == 1.2.0; python_version == '3.9'
+    xgboost == 1.7.5; python_version >= '3.10'
 
     dryable == 1.0.3; python_version < '3.9'
     dryable == 1.0.5; python_version >= '3.9'

@@ -1,6 +1,6 @@
 package: ALF
 version: "%(tag_basename)s"
-tag: v0.21.0
+tag: v0.21.3
 requires:
   - boost
   - Common-O2
@@ -10,6 +10,7 @@ requires:
   - ReadoutCard
   - "DimRpcParallel:(?!osx)"
   - "Python:slc.*"
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
   - CMake

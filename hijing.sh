@@ -4,6 +4,7 @@ tag: "v1.36.1-alice1"
 source: https://github.com/alisw/hijing.git
 requires:
   - GCC-Toolchain:(?!osx)
+license: GPL-2.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

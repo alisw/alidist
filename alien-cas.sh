@@ -1,6 +1,7 @@
 package: AliEn-CAs
 version: v1
 tag: 5fac97c4132df4bba9434a40a3f214401def20fa
+license: GPL-3.0
 source: https://github.com/alisw/alien-cas.git
 build_requires:
   - alibuild-recipe-tools

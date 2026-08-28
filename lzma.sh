@@ -1,6 +1,7 @@
 package: lzma
 version: "%(tag_basename)s"
 tag: "v5.2.3"
+license: Public Domain
 source: https://github.com/alisw/liblzma
 build_requires:
   - "autotools:(slc6|slc7)"

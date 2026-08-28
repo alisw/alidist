@@ -3,6 +3,7 @@ version: "6.0.0.Alpha4-alice1"
 tag: 42fbce6c524a3a57748f9de2b5460a7135e236c1
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: BSD-3-Clause
 build_requires:
   - CMake
   - alibuild-recipe-tools

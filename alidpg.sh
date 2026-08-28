@@ -1,6 +1,7 @@
 package: AliDPG
 version: "%(tag_basename)s"
 tag: master
+license: GPL-3.0
 source: https://github.com/alisw/AliDPG
 ---
 #!/bin/bash -e

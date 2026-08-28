@@ -5,6 +5,7 @@ source: https://github.com/alisw/LHAPDF
 requires:
   - "Python"
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - "autotools:(slc6|slc7)"
 prepend_path:
@@ -27,19 +28,12 @@ rsync -a --chmod=ug=rwX --exclude '**/.git' $SOURCEDIR/ ./
 
 export LIBRARY_PATH="$LD_LIBRARY_PATH"
 
-if type "python" &>/dev/null; then
-  # Python2 or Python3 point to "python"
-  if python -c 'import sys; exit(0 if sys.version_info.major >=3 else 1)'; then
-    # LHAPDF not yet ready for Python3
-    DISABLE_PYTHON=1
-  fi
-else
-  # Python2 not installed and Python3 points to "python3"
-  DISABLE_PYTHON=1
-fi
-
 autoreconf -ivf
-./configure --prefix=$INSTALLROOT ${DISABLE_PYTHON:+--disable-python}
+if [[ -n $DISABLE_PYTHON ]]; then
+  ./configure --prefix=$INSTALLROOT --disable-python
+else
+  ./configure --prefix=$INSTALLROOT --enable-python PYTHON=$(which python3)
+fi
 
 make ${JOBS+-j $JOBS} all
 make install
@@ -51,9 +45,9 @@ pushd "$INSTALLROOT"
   elif [[ -d lib && ! -d lib64 ]]; then
     ln -nfs lib lib64
   fi
-  # Uniform Python library path
+  # Uniform Python library path (relative symlink so it survives relocation)
   pushd lib
-    find $PWD -name "python3*" -exec ln -nfs {} python \;
+    for d in python3*; do [[ -d $d ]] && ln -nfs "$d" python && break; done
   popd
 popd
 

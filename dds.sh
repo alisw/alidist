@@ -1,11 +1,12 @@
 package: DDS
 version: "%(tag_basename)s"
-tag: "3.16"
+tag: "3.18"
 source: https://github.com/FairRootGroup/DDS
 requires:
   - boost
   - protobuf
   - abseil
+license: GPL-3.0
 build_requires:
   - CMake
   - ninja

@@ -7,6 +7,7 @@ requires:
   - O2sim
   - O2Physics
   - jq
+license: GPL-3.0
 force_rebuild: true
 ---
 #!/bin/bash -e
