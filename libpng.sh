@@ -2,6 +2,7 @@ package: libpng
 version: v1.6.47
 requires:
   - zlib
+license: Libpng
 build_requires:
   - CMake
   - ninja

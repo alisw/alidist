@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - HepMC
   - ROOT
+license: GPL-2.0
 ---
 #!/bin/bash -e
 

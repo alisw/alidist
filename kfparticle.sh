@@ -1,11 +1,12 @@
 package: KFParticle
 version: "%(tag_basename)s"
-tag: v1.1-alice8
+tag: v1.1-alice10
 source: https://github.com/alisw/KFParticle
 requires:
   - ROOT
   - "GCC-Toolchain:(?!osx)"
   - Vc
+license: GPL-3.0
 build_requires:
   - CMake
   - ninja

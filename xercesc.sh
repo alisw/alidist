@@ -1,6 +1,7 @@
 package: xercesc
 version: Xerces-C_3_2_5
 tag: v3.2.5
+license: Apache-2.0
 source: https://github.com/apache/xerces-c
 build_requires:
   - CMake

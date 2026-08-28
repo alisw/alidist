@@ -8,6 +8,7 @@ requires:
   - HepMC3
   - boost
   - GSL
+license: GPL-2.0
 build_requires:
   - "autotools:(slc6|slc7)"
   - GMP

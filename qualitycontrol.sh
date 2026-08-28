@@ -1,6 +1,6 @@
 package: QualityControl
 version: "%(tag_basename)s"
-tag: v1.185.0
+tag: v1.195.2
 requires:
   - boost
   - "GCC-Toolchain:(?!osx)"
@@ -15,6 +15,7 @@ requires:
   - libjalienO2
   - bookkeeping-api
   - moderncppkafka
+license: GPL-3.0
 build_requires:
   - CMake
   - "Clang:(?!osx)"   # for Gandiva

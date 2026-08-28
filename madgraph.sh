@@ -1,26 +1,41 @@
 package: madgraph
 version: "%(tag_basename)s"
-tag: "v3.5.2"
-source: https://github.com/alisw/MadGraph
+tag: "v3.5.13"
+source: https://github.com/mg5amcnlo/mg5amcnlo
 requires:
   - Python-modules
   - curl
+  - zlib
+  - fastjet
+  - lhapdf
+  - pythia
+  - ninja
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
-rsync -a --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
+rsync -a --no-specials --no-devices  --chmod=ug=rwX --exclude '**/.git' --delete --delete-excluded "$SOURCEDIR/" "$BUILDDIR/"
 
-# install internal packages 
+# Pythia8 Makefile.inc could have a space after "-rpath," which causes the linker to fail to find HepMC2. This ensures there is no space.
+sed -i -E \
+    -e "s|HEPMC2_LIB=.*|HEPMC2_LIB=-L${HEPMC_ROOT}/lib -Wl,-rpath,${HEPMC_ROOT}/lib -lHepMC|" \
+    -e "s|HEPMC2_INCLUDE=.*|HEPMC2_INCLUDE=-I${HEPMC_ROOT}/include|" \
+    "$PYTHIA_ROOT/share/Pythia8/examples/Makefile.inc"
+
+# install internal packages
 cd "$BUILDDIR"
 cat << EOF >> install.dat
+set lhapdf $LHAPDF_ROOT/bin/lhapdf-config
+set fastjet $FASTJET_ROOT/bin/fastjet-config
+set pythia8_path $PYTHIA_ROOT
 install oneloop
-install ninja
 install collier
 install RunningCoupling
 install QCDLoop
-install MadAnalysis5
+install MadAnalysis5 --with_zlib=$ZLIB_ROOT --with_fastjet=$FASTJET/lib
+install mg5amc_py8_interface
 EOF
 
 # MadGraph uses wget for non macOSx systems, but this might not be available.
@@ -54,24 +69,34 @@ EOF
     export PATH="$PWD/tmpwget:$PATH"
 fi
 
+# FastJet was built with CGAL support; MA5 links against -lCGAL and -lgmp but
+# only passes -L$FASTJET/lib. This ensures the linker can find CGAL and GMP.
+export LIBRARY_PATH="${CGAL_ROOT:+$CGAL_ROOT/lib:}${GMP_ROOT:+$GMP_ROOT/lib:}${LIBRARY_PATH:-}"
+
 ./bin/mg5_aMC install.dat
 
 # cleanup after build
 rm install.dat
-rm HEPTools/ninja/ninja_install.log 
-rm HEPTools/oneloop/oneloop_install.log
-rm HEPTools/collier/collier_install.log
-rm HEPTools/madanalysis5/madanalysis5_install.log
-rm -rf HEPTools/ninja/Ninja 
+find HEPTools -name "*.log" -delete
 rm -rf HEPTools/oneloop/OneLOop*
 rm -rf HEPTools/collier/COLLIER*
 find QCDLoop -mindepth 1 -maxdepth 1 -not -name include -not -name lib -not -name share -exec rm -rf {} \;
 rm *.tgz
 rm vendor/*tar.gz
 
-# change paths in conifguration file for package relocation
-sed -i.deleteme -e "s|$BUILDDIR|$INSTALLROOT|" input/mg5_configuration.txt
-rm -f input/mg5_configuration.deleteme
+# Make the configuration written at build time relocatable, editing it in place so
+# that anything else MG5 wrote is kept.
+# Paths inside the package are relative to the MG5 install directory
+PYTHIA_REL="../../pythia/$(basename "$PYTHIA_ROOT")"
+sed -i.deleteme \
+    -e "s|$BUILDDIR/*|./|g" \
+    -e "s|^pythia8_path *=.*|pythia8_path = $PYTHIA_REL|" \
+    -e "s|^fastjet *=.*|fastjet = fastjet-config|" \
+    -e "s|^lhapdf *=.*|lhapdf = lhapdf-config|" \
+    -e "s|^#* *automatic_html_opening *=.*|automatic_html_opening = False|" \
+    -e "s|^mg5_path *=|# mg5_path =|" \
+    input/mg5_configuration.txt
+rm -f input/mg5_configuration.txt.deleteme
 rsync -a "$BUILDDIR/" "$INSTALLROOT/"
 
 #ModuleFile
@@ -82,5 +107,4 @@ cat << EOF >> "$INSTALLROOT"/etc/modulefiles/"$PKGNAME"
 set MADGRAPH_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv MADGRAPH_ROOT \$MADGRAPH_ROOT
 prepend-path PATH \$MADGRAPH_ROOT/bin
-
 EOF

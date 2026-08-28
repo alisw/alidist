@@ -1,6 +1,7 @@
 package: msgpack
 version: v3.1.1
 tag: cpp-3.1.1
+license: MIT
 source: https://github.com/msgpack/msgpack-c
 build_requires:
   - CMake

@@ -7,6 +7,7 @@ requires:
   - "Python"
   - ReadoutCard
   - LLA
+license: GPL-3.0
 build_requires:
   - CMake
 source: https://gitlab.cern.ch/alice-tpc-upgrade/alice-tpc-fec-utils

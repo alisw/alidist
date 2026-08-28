@@ -2,6 +2,7 @@ package: HepMC
 version: "%(tag_basename)s"
 tag: HEPMC_02_06_10-alice1
 source: https://gitlab.cern.ch/alisw/HepMC.git
+license: GPL-3.0
 build_requires:
   - CMake
   - GCC-Toolchain:(?!osx.*)
@@ -11,8 +12,10 @@ build_requires:
 #!/bin/bash -e
 cmake  $SOURCEDIR                           \
        -G Ninja                             \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5   \
        -Dmomentum=GEV                       \
        -Dlength=MM                          \
+       -DBUILD_STATIC_LIBS=ON               \
        -Dbuild_docs:BOOL=OFF                \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 

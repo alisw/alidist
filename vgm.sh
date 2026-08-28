@@ -5,6 +5,7 @@ source: https://github.com/vmc-project/vgm
 requires:
   - ROOT
   - GEANT4
+license: GPL-3.0
 build_requires:
   - CMake
 ---

@@ -1,6 +1,7 @@
 package: clang-build-analyser
 version: "%(tag_basename)s"
 tag: v1.6.0
+license: Apache-2.0
 source: https://github.com/aras-p/ClangBuildAnalyzer.git
 build_requires:
   - "GCC-Toolchain:(?!osx)"

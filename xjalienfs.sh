@@ -8,6 +8,7 @@ requires:
   - XRootD
   - AliEn-Runtime
   - Python-modules
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 prepend_path:

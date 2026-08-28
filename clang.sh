@@ -4,6 +4,7 @@ tag: "llvmorg-20.1.7-alice2"
 source: https://github.com/alisw/llvm-project-reduced
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: Apache-2.0
 build_requires:
   - "Python"
   - CMake
@@ -13,7 +14,8 @@ env:
   LLVM_ROOT: "$CLANG_ROOT" # needed by LLVMAlt
 prefer_system: (osx.*)
 prefer_system_check: |
-  brew --prefix llvm@18 && test -d $(brew --prefix llvm@18)
+  # Must be kept in sync with the arrow.sh check for clang!
+  brew --prefix --installed llvm@20 > /dev/null 2>&1
 ---
 #!/bin/bash -e
 
@@ -53,8 +55,8 @@ cmake "$SOURCEDIR/llvm" \
   -DLLVM_BUILD_LLVM_DYLIB=ON \
   -DLLVM_ENABLE_RTTI=ON \
   -DBUILD_SHARED_LIBS=OFF \
-  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF 
-  
+  -DLIBCXXABI_USE_LLVM_UNWINDER=OFF
+
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 if [[ $PKGVERSION == v18.1.* ]]; then

@@ -4,6 +4,7 @@ tag: v6.2.1
 source: https://github.com/alisw/GMP.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: LGPL-3.0
 ---
 #!/bin/sh
 case $ARCHITECTURE in

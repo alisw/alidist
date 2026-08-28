@@ -5,6 +5,7 @@ tag: "428-alice4"
 source: https://github.com/alisw/pythia6.git
 requires:
   - GCC-Toolchain:(?!osx)
+license: GPL-2.0
 build_requires:
   - CMake
   - ninja-fortran
@@ -24,7 +25,7 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --lib > "$MODULEFILE"
-cat > "$MODULEFILE" <<EoF
+cat >> "$MODULEFILE" <<EoF
 setenv PYTHIA6_ROOT \$PKG_ROOT
-prepend-path AGILE_GEN_PATH \$PYTHIA6_ROOT
+prepend-path AGILE_GEN_PATH \$PKG_ROOT
 EoF

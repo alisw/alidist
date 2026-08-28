@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/hepmc/HepMC3.git
 requires:
   - GCC-Toolchain:(?!osx.*)
   - ROOT
+license: GPL-3.0
 build_requires:
   - CMake
 prepend_path:

@@ -1,6 +1,7 @@
 package: snappy
 version: "%(tag_basename)s"
 tag: 1.1.3
+license: BSD-3-Clause
 source: https://github.com/google/snappy
 build_requires:
   - "GCC-Toolchain:(?!osx)"

@@ -1,6 +1,7 @@
 package: CLHEP
 version: "2.2.0.8"
 tag: CLHEP_2_2_0_8
+license: LGPL-3.0
 source: https://github.com/alisw/clhep
 build_requires:
   - CMake

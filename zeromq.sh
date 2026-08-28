@@ -3,6 +3,7 @@ version: v4.3.5
 source: https://github.com/zeromq/libzmq
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: MPL-2.0
 build_requires:
   - "CMake"
   - ninja
@@ -13,6 +14,7 @@ cmake $SOURCEDIR                          \
       -G Ninja                            \
       -DENABLE_WS=OFF                     \
       -DBUILD_TESTS=OFF                   \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5  \
       -DCMAKE_INSTALL_LIBDIR=lib          \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 

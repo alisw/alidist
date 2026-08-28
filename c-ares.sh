@@ -1,6 +1,7 @@
 package: c-ares
-version: "1.18.1"
-tag: cares-1_18_1
+version: "1.34.6"
+tag: v1.34.6
+license: MIT
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
@@ -13,7 +14,7 @@ prepend_path:
 ---
 #!/bin/bash -e
 
-cmake $SOURCEDIR -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_INSTALL_LIBDIR=lib
+cmake $SOURCEDIR -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_INSTALL_LIBDIR=lib
 make ${JOBS:+-j$JOBS} install
 
 case $ARCHITECTURE in

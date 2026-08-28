@@ -1,6 +1,7 @@
 package: autotools
 version: "%(tag_basename)s"
 tag: v1.6.4
+license: GPL-3.0
 source: https://github.com/alisw/autotools
 prefer_system: "(?!slc5|slc6)"
 prefer_system_check: |
@@ -16,7 +17,10 @@ build_requires:
 #!/bin/bash -e
 
 unset CXXFLAGS
-unset CFLAGS
+# Not unset: GCC 14 turns implicit declarations, implicit int and mismatched
+# pointers into errors, and these sources predate that. gettext 0.20.1 calls
+# free() without <stdlib.h>, for one.
+export CFLAGS="-Wno-implicit-function-declaration -Wno-implicit-int -Wno-int-conversion -Wno-incompatible-pointer-types"
 export EMACS=no
 
 case $ARCHITECTURE in
@@ -80,22 +84,15 @@ pushd libtool*
   hash -r
 popd
 
-# Do not judge me. I am simply trying to float.
-# Apparently slc6 needs a different order compared
-# to the rest.
-case $ARCHITECTURE in
-  slc6*|ubuntu14*)
-    # automake -- requires: m4, autoconf, gettext
-    pushd automake*
-      $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
-      ./configure --prefix $INSTALLROOT
-      make MAKEINFO=true ${JOBS+-j $JOBS}
-      make MAKEINFO=true install
-      hash -r
-    popd
-  ;;
-  *) ;;
-esac
+# automake -- requires: m4, autoconf. Must come before gettext, whose
+# autoreconf needs our aclocal rather than the host's.
+pushd automake*
+  if $USE_AUTORECONF && [ -e bootstrap ]; then sh ./bootstrap; fi
+  ./configure --prefix $INSTALLROOT
+  make MAKEINFO=true ${JOBS+-j $JOBS}
+  make MAKEINFO=true install
+  hash -r
+popd
 
 
 # gettext -- requires: nothing special
@@ -119,22 +116,6 @@ pushd gettext*
   make install
   hash -r
 popd
-
-# Do not judge me. I am simply trying to float.
-case $ARCHITECTURE in
-  slc6*|ubuntu14*) ;;
-  *)
-    # automake -- requires: m4, autoconf, gettext
-    pushd automake*
-      $USE_AUTORECONF && [ -e bootstrap ] && sh ./bootstrap
-      ./configure --prefix $INSTALLROOT
-      make MAKEINFO=true ${JOBS+-j $JOBS}
-      make MAKEINFO=true install
-      hash -r
-    popd
-  ;;
-esac
-
 
 # pkgconfig -- requires: nothing special
 pushd pkg-config*

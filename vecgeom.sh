@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/VecGeom/VecGeom.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Vc"
+license: Apache-2.0
 build_requires:
   - CMake
   - ninja

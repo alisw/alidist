@@ -1,6 +1,6 @@
 package: JETSCAPE
 version: "%(tag_basename)s"
-tag: "v3.1.1-alice6"
+tag: "v3.1.1-alice7"
 source: https://github.com/alisw/JETSCAPE
 requires:
   - boost
@@ -8,6 +8,7 @@ requires:
   - pythia
   - HepMC3
   - ROOT
+license: BSD-3-Clause
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
