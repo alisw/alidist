@@ -98,6 +98,38 @@ popd
 # gettext -- requires: nothing special
 pushd gettext*
   $USE_AUTORECONF && autoreconf -ivf
+
+  # Do not let make re-run bison on the shipped parsers.
+  #
+  # gettext-runtime/intl/Makefile.am hardcodes
+  #
+  #   YACC = @INTLBISON@ -y -d
+  #   $(YACC) $(BISONFLAGS) --output plural.c ... && rm -f plural.c plural.h
+  #
+  # so the rule generates plural.h (that is what -d does) and then deletes it,
+  # keeping a plural.c that opens with #include "plural.h". Any firing of that
+  # rule therefore produces a source that cannot compile:
+  #
+  #   plural.c:133:10: fatal error: plural.h: No such file or directory
+  #
+  # This is not a bison-version problem -- 3.0.4, 3.7.4 and 3.8.2 all behave
+  # identically, and all pass the version gate in m4/intl.m4, so upstream's own
+  # guard (INTLBISON=: when bison is missing or too old) never engages for us.
+  # intl.m4 admits the hazard in as many words: "some people carelessly touch
+  # the files ... hence the plural.c rule will sometimes fire".
+  #
+  # The only reliable prevention is to keep the shipped .c newer than the .y, so
+  # make never considers it out of date. missing-timestamps.sh above aims at the
+  # same thing (git does not preserve mtimes); this makes it explicit for the
+  # three generated parsers rather than relying on it.
+  for parser in gettext-runtime/intl/plural gettext-tools/src/cldr-plural \
+                gettext-tools/src/po-gram-gen; do
+    # if/then rather than `[ -f ] && touch`: the latter leaves $? at 1 when the
+    # last file is absent, which is harmless before ./configure but a trap for
+    # whoever moves this next.
+    if [ -f "$parser.c" ]; then touch "$parser.c"; fi
+  done
+
   ./configure --prefix $INSTALLROOT \
               --without-xz \
               --without-bzip2 \
