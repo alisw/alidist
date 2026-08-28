@@ -5,12 +5,12 @@ source: https://github.com/tpaviot/pythonocc-core.git
 license: LGPLv2.1
 requires:
   - OCCT
+  - Python-modules
 build_requires:
   - "GCC-Toolchain:(?!osx)"
   - CMake
   - alibuild-recipe-tools
   - SWIG
-  - Python-modules
   - RapidJSON
 ---
 #!/bin/bash -e
@@ -23,8 +23,9 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
 # Build and install
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
-# find out python package installation path
-OCC_PATH=$(find ${INSTALLROOT} -name "OCC")
+# find out python package installation path; PYTHONPATH needs the site-packages
+# directory that CONTAINS the OCC package, not the package directory itself
+OCC_PATH=$(dirname $(find ${INSTALLROOT} -name "OCC"))
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
