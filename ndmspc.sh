@@ -1,38 +1,56 @@
 package: ndmspc
 version: "%(tag_basename)s"
-tag: "v0.20240422.0"
+tag: "v1.2.0"
 requires:
   - ROOT
+  - JAliEn-ROOT
+  - nlohmann_json
+  - libwebsockets
+  - curl
+  - libuv
+  - ZeroMQ
+#  - arrow
 build_requires:
   - CMake
   - ninja
   - alibuild-recipe-tools
+  - "OpenSSL:(?!osx)"
+license: GPL-3.0
 source: https://gitlab.com/ndmspc/ndmspc.git
 incremental_recipe: |
   [[ $ALIBUILD_NDMSPC_TESTS ]] && CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
-#!/bin/sh
+#!/bin/bash -e
+case $ARCHITECTURE in
+  osx*)
+        [[ -n $OPENSSL_ROOT ]] || OPENSSL_ROOT=$(brew --prefix openssl@3)
+        [[ -n $LIBWEBSOCKETS_ROOT ]] || LIBWEBSOCKETS_ROOT=$(brew --prefix libwebsockets)
+  ;;
+esac
 
 if [[ $ALIBUILD_NDMSPC_TESTS ]]; then
   # Impose extra errors.
   CXXFLAGS="${CXXFLAGS} -Werror -Wno-error=deprecated-declarations"
 fi
 
-# When O2 is built against Gandiva (from Arrow), then we need to use
-# -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
-# -CMake, which requires it.
-cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"          \
-      -G Ninja                                                    \
-      ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"} \
-      ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                   \
+cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                \
+      -G Ninja                                                          \
+      ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}       \
+      ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                         \
+      ${PROTOBUF_ROOT:+"-DPROTOBUF_ROOT=$PROTOBUF_ROOT"}                \
+      ${LIBUV_ROOT:+"-DLIBUV_ROOT=$LIBUV_ROOT"}                         \
+      ${LIBWEBSOCKETS_ROOT:+"-DLIBWEBSOCKETS_ROOT=$LIBWEBSOCKETS_ROOT"} \
+      ${NLOHMANN_JSON_ROOT:+"-DNLOHMANN_JSON_ROOT=$NLOHMANN_JSON_ROOT"} \
+      ${CURL_ROOT:+"-DCURL_ROOT=$CURL_ROOT"}                            \
+      -DWITH_PARQUET=OFF                                                \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
 # export compile_commands.json in (taken from o2.sh)
-DEVEL_SOURCES="`readlink $SOURCEDIR || echo $SOURCEDIR`"
+DEVEL_SOURCES="$(readlink $SOURCEDIR || echo $SOURCEDIR)"
 if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   perl -p -i -e "s|$SOURCEDIR|$DEVEL_SOURCES|" compile_commands.json
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
@@ -44,7 +62,12 @@ MODULEFILE="etc/modulefiles/$PKGNAME"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
 # Our environment
-setenv NDMSPC_MACRO_DIR \$PKG_ROOT/macros
-prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include
+setenv NDMSPC_RELEASE \$version
+setenv NDMSPC_BASEDIR \$::env(BASEDIR)/$PKGNAME
+setenv NDMSPC_DIR \$::env(NDMSPC_BASEDIR)/\$::env(NDMSPC_RELEASE)
+setenv NDMSPC_MACRO_DIR \$::env(NDMSPC_DIR)/macros
+setenv NDMSPC_TUTORIAL_DIR \$::env(NDMSPC_DIR)/tutorial
+prepend-path ROOT_DYN_PATH \$PKG_ROOT/lib
+prepend-path ROOT_INCLUDE_PATH \$PKG_ROOT/include/ndmspc
 EoF
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

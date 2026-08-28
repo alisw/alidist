@@ -6,6 +6,7 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - Python
   - Python-modules
+license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
 ---

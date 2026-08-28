@@ -1,13 +1,16 @@
 package: STARlight
-version: "20241115"
-tag: b845eb773cd5be1ed2286e236e575519d08fed4d
+version: "20260511"
+tag: 7c41208d3c0fa7da9e9f01542e658cee438184cc
 requires:
   - DPMJET
   - HepMC3
+license: GPL-3.0
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
   - alibuild-recipe-tools
+env:
+  STARlight_ROOT: "$STARLIGHT_ROOT"
 source: https://github.com/STARlightsim/STARlight.git
 ---
 #!/bin/bash -ex

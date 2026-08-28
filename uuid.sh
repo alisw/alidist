@@ -1,6 +1,7 @@
 package: UUID
 version: v2.27.1
 tag: v2.27.1-alice1
+license: BSD-3-Clause
 source: https://github.com/alisw/uuid
 build_requires:
   - "GCC-Toolchain:(?!osx)"

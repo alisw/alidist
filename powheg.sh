@@ -8,6 +8,7 @@ requires:
   - lhapdf
   - lhapdf-pdfsets
   - looptools
+license: GPL-2.0
 build_requires:
   - alibuild-recipe-tools
 ---

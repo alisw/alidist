@@ -4,6 +4,7 @@ tag: "v19.3.7-alice1"
 source: https://github.com/alisw/DPMJET.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-2.0
 build_requires:
   - CMake
   - "Xcode:(osx.*)"
@@ -17,6 +18,7 @@ if [ $FVERSION -ge 10 ]; then
 fi
 
 cmake  $SOURCEDIR                           \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5   \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
        ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 

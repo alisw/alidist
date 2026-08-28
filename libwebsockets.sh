@@ -1,9 +1,10 @@
 package: libwebsockets
 version: "%(tag_basename)s"
-tag: "v4.3.2"
+tag: "v4.3.4"
 source: https://github.com/warmcat/libwebsockets
 requires:
   - libuv
+license: MIT
 build_requires:
   - CMake
   - "GCC-Toolchain:(?!osx)"
@@ -34,7 +35,16 @@ case $ARCHITECTURE in
     : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}" ;;
 esac
 
-cmake $SOURCEDIR                                                    \
+if [[ "${ARCHITECTURE}" =~ ^slc7 ]]; then
+  mkdir -p srcdir
+  rsync -a --delete --exclude '**/.git' $SOURCEDIR/ ./srcdir/
+  sed -i 's/^.*LWS_HAVE_LINUX_IPV6_H.*$/set(LWS_HAVE_LINUX_IPV6_H 0)/' ./srcdir/CMakeLists.txt
+  SOURCEDIR2="./srcdir/"
+else
+  SOURCEDIR2="$SOURCEDIR"
+fi
+
+cmake $SOURCEDIR2                                                   \
       -GNinja                                                       \
       -DCMAKE_C_FLAGS_RELEASE="-Wno-error"                          \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                         \
@@ -43,6 +53,7 @@ cmake $SOURCEDIR                                                    \
       -DLWS_WITH_SHARED=OFF                                         \
       -DLWS_WITH_IPV6=ON                                            \
       -DLWS_WITH_ZLIB=OFF                                           \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                            \
       ${OPENSSL_ROOT:+-DOPENSSL_EXECUTABLE=$OPENSSL_ROOT/bin/openssl} \
       ${OPENSSL_ROOT:+-DOPENSSL_ROOT_DIR=$OPENSSL_ROOT}             \
       ${OPENSSL_ROOT:+-DOPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include} \

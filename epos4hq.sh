@@ -1,12 +1,13 @@
 package: EPOS4HQ
 version: "%(tag_basename)s"
-tag: "v1.0hq-alice"
+tag: "v1.0hq-alice6"
 source: https://github.com/alisw/EPOS4.git
 requires:
   - ROOT
   - fastjet
   - HepMC3
   - alibuild-recipe-tools
+license: GPL-2.0
 env:
   EPO4HQVSN: "1.0"
 ---

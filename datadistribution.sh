@@ -1,6 +1,6 @@
 package: DataDistribution
 version: "%(tag_basename)s"
-tag: v1.6.9
+tag: v1.6.11
 source: https://github.com/AliceO2Group/DataDistribution
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -14,6 +14,7 @@ requires:
   - protobuf
   - O2
   - fmt
+license: GPL-3.0
 build_requires:
   - CMake
 incremental_recipe: |

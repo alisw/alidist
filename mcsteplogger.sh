@@ -1,12 +1,13 @@
 package: MCStepLogger
 version: "%(tag_basename)s"
-tag: "v0.6.1"
+tag: "v0.6.2"
 source: https://github.com/AliceO2Group/VMCStepLogger.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - ROOT
   - VMC
   - boost
+license: GPL-3.0
 build_requires:
   - CMake
   - alibuild-recipe-tools

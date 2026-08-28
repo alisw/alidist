@@ -1,6 +1,7 @@
 package: FFTW3
 version: "%(tag_basename)s"
 tag: v3.3.9
+license: GPL-2.0
 source: https://github.com/alisw/fftw3
 prefer_system: (?!slc5.*)
 build_requires:
@@ -16,7 +17,9 @@ build_requires:
 # First, build fftw3 (double precision), required by ROOT.
 cmake -S "$SOURCEDIR" -B "$BUILDDIR/fftw3"              \
       -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"        \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                \
       -DCMAKE_INSTALL_LIBDIR:PATH=lib
+
 make -C "$BUILDDIR/fftw3" ${JOBS+-j "$JOBS"}
 make -C "$BUILDDIR/fftw3" install
 
@@ -24,6 +27,7 @@ make -C "$BUILDDIR/fftw3" install
 cmake -S "$SOURCEDIR" -B "$BUILDDIR/fftw3f"             \
       -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"        \
       -DCMAKE_INSTALL_LIBDIR:PATH=lib                   \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                \
       -DENABLE_FLOAT=ON
 make -C "$BUILDDIR/fftw3f" ${JOBS+-j "$JOBS"}
 make -C "$BUILDDIR/fftw3f" install

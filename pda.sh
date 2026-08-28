@@ -1,9 +1,10 @@
 package: PDA
 version: "%(tag_basename)s"
-tag: 12.1.2
+tag: 12.3.0
 source: https://github.com/AliceO2Group/pda.git
 requires:
   - "GCC-Toolchain:(?!osx)"
+license: GPL-3.0
 build_requires:
   - kernel-devel
   - "autotools:(slc6|slc7)"
@@ -12,7 +13,7 @@ build_requires:
 #!/bin/bash -e
 
 rsync -a --delete --exclude '**/.git' --delete-excluded "$SOURCEDIR/" ./
-./configure --debug=false --numa=true --modprobe=true --prefix="$INSTALLROOT"
+./configure --debug=false --numa=true --modprobe=true --prefix="$INSTALLROOT" --extra=PDA_SKIP_UNLOCK_FAILURE
 make ${JOBS+-j $JOBS} install
 
 #ModuleFile

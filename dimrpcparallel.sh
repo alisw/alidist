@@ -4,6 +4,7 @@ tag: v0.1.3
 requires:
   - "dim:(?!osx)"
   - "GCC-Toolchain:(?!osx)"
+license: LGPL-3.0
 build_requires:
   - CMake
 source: https://gitlab.cern.ch/alialfred/DimRpcParallel.git

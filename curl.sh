@@ -1,7 +1,10 @@
 package: curl
 version: "7.70.0"
 tag: curl-7_70_0
+license: curl
 source: https://github.com/curl/curl.git
+prepend_path:
+  PKG_CONFIG_PATH: "$CURL_ROOT/lib/pkgconfig"
 build_requires:
   - "OpenSSL:(?!osx)"
   - alibuild-recipe-tools

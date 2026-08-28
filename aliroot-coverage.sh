@@ -4,6 +4,7 @@ force_rebuild: true
 requires:
   - lcov
   - AliRoot-test
+license: GPL-3.0
 ---
 #!/bin/sh
 # Uses the same setup as AliRoot

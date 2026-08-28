@@ -1,6 +1,7 @@
 package: AliRoot-OCDB
 version: "%(short_hash)s"
 tag: master
+license: GPL-3.0
 source: https://gitlab.cern.ch/alisw/AliRootOCDB.git
 ---
 #!/bin/bash -e

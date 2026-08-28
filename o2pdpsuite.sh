@@ -1,6 +1,6 @@
 package: O2PDPSuite
 version: "%(tag_basename)s"
-tag: "daily-20250623-0000"
+tag: "daily-20260828-0000"
 requires:
   # List important packages separately, even though they're also
   # pulled in by O2sim, so they show up in the dependency list on Monalisa.
@@ -13,6 +13,7 @@ requires:
   - "ODC:(?!osx|slc9_aarch64)"
 build_requires:
   - alibuild-recipe-tools
+license: GPL-3.0
 valid_defaults:
   - o2
   - o2-dataflow

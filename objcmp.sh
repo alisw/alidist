@@ -5,6 +5,7 @@ source: https://gitlab.cern.ch/swenzel/ObjectCmp.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - ROOT
+license: GPL-3.0
 build_requires:
   - CMake
 ---
