@@ -1,6 +1,6 @@
 package: TGeo2VecGeom
 version: "%(tag_basename)s"
-tag: v0.1.1
+tag: v0.1.2
 source: https://gitlab.cern.ch/VecGeom/tgeo2vecgeom.git
 requires:
   - "GCC-Toolchain:(?!osx)"

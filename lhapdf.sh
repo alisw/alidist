@@ -45,9 +45,9 @@ pushd "$INSTALLROOT"
   elif [[ -d lib && ! -d lib64 ]]; then
     ln -nfs lib lib64
   fi
-  # Uniform Python library path
+  # Uniform Python library path (relative symlink so it survives relocation)
   pushd lib
-    find $PWD -name "python3*" -exec ln -nfs {} python \;
+    for d in python3*; do [[ -d $d ]] && ln -nfs "$d" python && break; done
   popd
 popd
 
