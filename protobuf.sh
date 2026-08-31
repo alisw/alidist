@@ -22,6 +22,12 @@ else
   ALIBUILD_CMAKE_SOURCE_DIR=$SOURCEDIR
 fi
 
+case $ARCHITECTURE in
+  osx*)
+    CMAKE_IGNORE_PATH="$(brew --prefix)/include"
+  ;;
+esac
+
 cmake -S "$ALIBUILD_CMAKE_SOURCE_DIR"                  \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT" \
     -Dprotobuf_BUILD_TESTS=NO             \
@@ -29,6 +35,7 @@ cmake -S "$ALIBUILD_CMAKE_SOURCE_DIR"                  \
     -Dprotobuf_BUILD_SHARED_LIBS=OFF      \
     -Dprotobuf_ABSL_PROVIDER=package      \
     ${ABSEIL_ROOT:+-Dabsl_DIR=$ABSEIL_ROOT} \
+    ${CMAKE_IGNORE_PATH:+-DCMAKE_IGNORE_PATH="$CMAKE_IGNORE_PATH"} \
     -DCMAKE_INSTALL_LIBDIR=lib
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
