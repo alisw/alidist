@@ -1,10 +1,11 @@
 package: VecGeom
 version: "%(tag_basename)s"
-tag: v1.2.6
+tag: v2.1.0
 source: https://gitlab.cern.ch/VecGeom/VecGeom.git
 requires:
   - "GCC-Toolchain:(?!osx)"
   - "Vc"
+  - xercesc
 license: Apache-2.0
 build_requires:
   - CMake
@@ -22,6 +23,7 @@ case $ARCHITECTURE in
             -DBUILD_TESTING=OFF                            \
             -DVECGEOM_BUILTIN_VECCORE=ON                   \
             ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}        \
+            ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}  \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
   ;;
     *_aarch64)
@@ -32,6 +34,7 @@ case $ARCHITECTURE in
             -DBUILD_TESTING=OFF                            \
             -DVECGEOM_BUILTIN_VECCORE=ON                   \
             ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}        \
+            ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}  \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
   ;;
     *)
@@ -43,6 +46,7 @@ case $ARCHITECTURE in
             -DVECGEOM_BUILTIN_VECCORE=ON                   \
             -GNinja                                        \
             ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}        \
+            ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}  \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
   ;;
 esac

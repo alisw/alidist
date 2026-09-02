@@ -1,6 +1,6 @@
 package: ucx
 version: "%(tag_basename)s"
-tag: v1.13.1-alice2
+tag: v1.21.0
 requires:
   - "GCC-Toolchain:(?!osx)"
   - rdma-core
@@ -9,7 +9,7 @@ build_requires:
   - "autotools:(slc6|slc7)"
   - alibuild-recipe-tools
   - "GCC-Toolchain:(?!osx)"
-source: https://github.com/alisw/ucx
+source: https://github.com/openucx/ucx
 ---
 #!/bin/bash -e
 
@@ -21,7 +21,7 @@ rsync -a --delete --exclude "**/.git" "${SOURCEDIR}"/ .
                                --with-verbs                \
                                --with-rdmacm               \
                                --with-ib-hw-tm             \
-                               --with-mlx5-dv              \
+                               --with-mlx5                 \
                                --with-rc                   \
                                --with-ud                   \
                                --with-dc                   \
