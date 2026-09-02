@@ -278,6 +278,8 @@ prefer_system_replacement_specs:
     recipe: |
       #!/bin/bash -e
       mkdir -p "$INSTALLROOT/etc/modulefiles"
+      CUDA_DEFAULT_ARCH=$(grep -m1 -oP 'set\(CUDA_COMPUTETARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
+      ROCM_DEFAULT_ARCH=$(grep -m1 -oP 'set\(HIP_AMDGPUTARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
       alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
       {
         echo 'if [[ -z ${CUDA_PATH} || -z ${ROCM_PATH} ]]; then echo "ERROR: CUDA or ROCm PATH NOT SET!"; exit 1; fi'
@@ -289,8 +291,8 @@ prefer_system_replacement_specs:
         echo 'export O2_GPU_CUDNN_AVAILABLE=1'
         echo 'export O2_GPU_MIGRAPHX_AVAILABLE=0'
         echo 'export O2_GPU_TENSORRT_AVAILABLE=0'
-        echo 'O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-default}'"'
-        echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_ROCM_ARCH:-default}'"'
+        echo 'O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
+        echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_ROCM_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
   ".*":
     version: "%(key)s"
