@@ -41,7 +41,9 @@ prefer_system_check: |
     # 0 / unset: defaults to fullauto
 
     if [[ ${ALIBUILD_O2_FORCE_GPU} == "build" ]]; then
-      GPU_FEATURES=build
+      GPU_FEATURES=build-from-alidist
+      [[ -n $ALIBUILD_O2_FORCE_GPU_CUDA_ARCH ]] && add_feature _ cudaarch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH}")@
+      [[ -n $ALIBUILD_O2_FORCE_GPU_HIP_ARCH ]] && add_feature _ rocmarch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_HIP_ARCH}")@
       break
     fi
 
@@ -272,8 +274,8 @@ prefer_system_replacement_specs:
       #%Module1.0
       echo "ERROR: gpu-system.sh GPU detection failed: ${ALIBUILD_PREFER_SYSTEM_KEY}" | sed "s/error-//" 1>&2
       exit 1
-  "build":
-    version: "build-from-alidist"
+  "build.*":
+    version: "%(key)s"
     requires:
       - CUDA
       - ROCm
@@ -294,7 +296,7 @@ prefer_system_replacement_specs:
         echo 'export O2_GPU_MIGRAPHX_AVAILABLE=0'
         echo 'export O2_GPU_TENSORRT_AVAILABLE=0'
         echo 'O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
-        echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_ROCM_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
+        echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
   ".*":
     version: "%(key)s"
