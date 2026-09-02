@@ -84,6 +84,5 @@ MODULEFILE="${MODULEDIR}/${PKGNAME}"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
-set CUDA_PATH \$::env(BASEDIR)/$PKGNAME/\$version
-setenv CUDA_PATH \$CUDA_PATH
+setenv CUDA_PATH \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
