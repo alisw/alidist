@@ -56,30 +56,21 @@ fi
 
 mkdir -p $INSTALLROOT
 
-# Check ROCm MIOPEN build conditions
-if [[ ${O2_GPU_MIOPEN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_ROCM_BUILD" ]]; then
-    ORT_ROCM_BUILD="1"
-    : ${ALIBUILD_O2_OVERRIDE_HIP_ARCHS:="gfx906,gfx908"}
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/lib
-else
-  ORT_ROCM_BUILD="0"
-fi
-
 # Check CUDA CUDNN build conditions
-if [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_CUDA_BUILD" ]] && [[ "$ORT_ROCM_BUILD" -eq 0 ]]; then
-    ORT_CUDA_BUILD="1"
-    : ${ALIBUILD_O2_OVERRIDE_CUDA_ARCHS:="89"}
+if [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_CUDA_BUILD" ]]; then
+  ORT_CUDA_BUILD="1"
 else
   ORT_CUDA_BUILD="0"
 fi
 
 # Optional GPU features
 ### MIGraphX
-# Not gated on ORT_ROCM_BUILD: upstream removed the ROCm execution provider
+# Upstream removed the ROCm execution provider
 # after v1.22, so MIGraphX is the only remaining AMD path and has to stand on
 # its own. It needs hip and migraphx from the ROCm installation.
 if [[ ${O2_GPU_MIGRAPHX_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   ORT_MIGRAPHX_BUILD="1"
+  LD_LIBRARY_PATH+=$O2_GPU_ROCM_HOME/lib
 elif [[ -z "$ORT_MIGRAPHX_BUILD" ]]; then
   ORT_MIGRAPHX_BUILD="0"
 fi
@@ -97,7 +88,6 @@ fi
 
 mkdir -p $INSTALLROOT/etc
 cat << EOF > $INSTALLROOT/etc/ort-init.sh
-export ORT_ROCM_BUILD=$ORT_ROCM_BUILD
 export ORT_CUDA_BUILD=$ORT_CUDA_BUILD
 export ORT_MIGRAPHX_BUILD=$ORT_MIGRAPHX_BUILD
 export ORT_TENSORRT_BUILD=$ORT_TENSORRT_BUILD
@@ -126,7 +116,6 @@ python3 onnxruntime/core/flatbuffers/schema/compile_schema.py --flatc $(which fl
 python3 onnxruntime/lora/adapter_format/compile_schema.py --flatc $(which flatc)
 
 cmake "cmake"                                                                                               \
-      --debug-find                                                                                          \
       -G Ninja                                                                                              \
       -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                                 \
       -DCMAKE_BUILD_TYPE=Release                                                                            \
@@ -178,16 +167,11 @@ cmake "cmake"                                                                   
       ${BOOST_ROOT:+-DFETCHCONTENT_SOURCE_DIR_MP11=${BOOST_ROOT}}                                            \
       -Donnxruntime_USE_MIGRAPHX=${ORT_MIGRAPHX_BUILD}                                                      \
       ${MIGRAPHX_HOME:+-DAMD_MIGRAPHX_HOME=${MIGRAPHX_HOME}}                                                \
-      -Donnxruntime_USE_ROCM=${ORT_ROCM_BUILD}                                                              \
       -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
       -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
       -DCMAKE_HIP_COMPILER=/opt/rocm/llvm/bin/clang++                                                       \
-      -D__HIP_PLATFORM_AMD__=${ORT_ROCM_BUILD}                                                              \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
       ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCMAKE_CUDA_ARCHITECTURES="${O2_GPU_CUDA_AVAILABLE_ARCH}"}             \
-      -Donnxruntime_USE_COMPOSABLE_KERNEL=OFF                                                               \
-      -Donnxruntime_USE_ROCBLAS_EXTENSION_API=${ORT_ROCM_BUILD}                                             \
-      -Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=ON                                                        \
       -Donnxruntime_DISABLE_RTTI=OFF                                                                        \
       -DMSVC=OFF                                                                                            \
       -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
