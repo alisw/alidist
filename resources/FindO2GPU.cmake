@@ -12,7 +12,7 @@
 # NOTE!!!! - Whenever this file is changed, move it over to alidist/resources
 # FindO2GPU.cmake Version 18
 
-set(CUDA_COMPUTETARGET_DEFAULT_FULL 80-real 86-real 89-real 120-real 75-virtual)
+set(CUDA_COMPUTETARGET_DEFAULT_FULL 80-real;86-real;89-real;120-real;75-virtual)
 set(HIP_AMDGPUTARGET_DEFAULT_FULL gfx906;gfx908)
 set(CUDA_COMPUTETARGET_DEFAULT_MINIMAL 75-virtual)
 set(HIP_AMDGPUTARGET_DEFAULT_MINIMAL gfx906)
