@@ -65,6 +65,5 @@ MODULEFILE="${MODULEDIR}/${PKGNAME}"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > "$MODULEFILE"
 cat >> "$MODULEFILE" <<EoF
-set ROCM_PATH \$::env(BASEDIR)/$PKGNAME/\$version
-setenv ROCM_PATH \$ROCM_PATH
+setenv ROCM_PATH \$::env(BASEDIR)/$PKGNAME/\$version
 EoF
