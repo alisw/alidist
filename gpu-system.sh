@@ -1,6 +1,8 @@
 package: gpu-system
 version: "error-notset"
 allow_system_package_upload: true
+build_requires:
+  - alibuild-recipe-tools
 prefer_system: .*
 prefer_system_check: |
   #!/bin/bash -e
