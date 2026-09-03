@@ -300,6 +300,8 @@ prefer_system_replacement_specs:
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
   ".*":
     version: "%(key)s"
+    build_requires:
+      - alibuild-recipe-tools
     recipe: |
       #!/bin/bash -e
       mkdir -p "$INSTALLROOT/etc/modulefiles"
