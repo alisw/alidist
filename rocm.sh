@@ -1,5 +1,5 @@
 package: ROCm
-version: "10.0.0"
+version: "10.0"
 license: MIT
 build_requires:
   - alibuild-recipe-tools
