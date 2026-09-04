@@ -59,6 +59,10 @@ mkdir -p $INSTALLROOT
 # Check CUDA CUDNN build conditions
 if [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_CUDA_BUILD" ]]; then
   ORT_CUDA_BUILD="1"
+  # Workaround for problem in ONNXRuntime when all architectures are included. To be reverted when fixed.
+  if [[ "${O2_GPU_CUDA_AVAILABLE_ARCH}" == "80-real;86-real;89-real;120-real;75-virtual" ]]; then
+    O2_GPU_CUDA_AVAILABLE_ARCH="80-real;86-real;89-real;120-real"
+  fi
 else
   ORT_CUDA_BUILD="0"
 fi
