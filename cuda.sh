@@ -78,6 +78,8 @@ mv cudnn-linux-x86_64-*/include/* "$INSTALLROOT"/include/
 mv cudnn-linux-x86_64-*/lib/* "$INSTALLROOT"/lib64/
 rm -Rf cudnn-linux-x86_64-*
 
+ln -s lib64 "$INSTALLROOT"/lib
+
 # Modulefile
 MODULEDIR="${INSTALLROOT}/etc/modulefiles"
 MODULEFILE="${MODULEDIR}/${PKGNAME}"
