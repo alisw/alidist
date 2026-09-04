@@ -65,7 +65,7 @@ for i in builds/*/; do
   merge_move "$i" "$INSTALLROOT"
 done
 
-rm -Rf builds ${FILENAME}
+rm -Rf builds "${FILENAME}"
 
 FILENAME=cudnn-linux-x86_64-${CUDNN_VERSION}_cuda13-archive.tar.xz
 if [[ -n $ALIBUILD_O2_FORCE_GPU_BUILDSOURCES ]]; then
@@ -73,7 +73,7 @@ if [[ -n $ALIBUILD_O2_FORCE_GPU_BUILDSOURCES ]]; then
 else
   curl -o "${FILENAME}" "https://developer.download.nvidia.com/compute/cudnn/redist/cudnn/linux-x86_64/${FILENAME}"
 fi
-tar -Jxf ${FILENAME}
+tar -Jxf "${FILENAME}"
 mv cudnn-linux-x86_64-*/include/* "$INSTALLROOT"/include/
 mv cudnn-linux-x86_64-*/lib/* "$INSTALLROOT"/lib64/
 rm -Rf cudnn-linux-x86_64-*
