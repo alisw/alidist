@@ -293,7 +293,7 @@ prefer_system_replacement_specs:
         echo 'export O2_GPU_ROCM_HOME="${ROCM_PATH}"'
         echo 'export O2_GPU_MIOPEN_AVAILABLE=1'
         echo 'export O2_GPU_CUDNN_AVAILABLE=1'
-        echo 'export O2_GPU_MIGRAPHX_AVAILABLE=0'
+        echo 'export O2_GPU_MIGRAPHX_AVAILABLE=1'
         echo 'export O2_GPU_TENSORRT_AVAILABLE=0'
         echo 'O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
         echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
