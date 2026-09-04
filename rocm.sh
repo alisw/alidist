@@ -57,7 +57,7 @@ for i in $(ls rocm-installer/component-rocm/ | grep '.xz$'); do
   rm -Rf unpack
 done
 
-rm -Rf "$INSTALLROOT"/bin/flatc "$INSTALLROOT"/bin/clinfo "$INSTALLROOT"/include/flatbuffers "$INSTALLROOT"/include/CL "$INSTALLROOT"/lib/libflatbuffers*
+rm -Rf "$INSTALLROOT"/bin/flatc "$INSTALLROOT"/bin/clinfo "$INSTALLROOT"/include/flatbuffers "$INSTALLROOT"/include/CL "$INSTALLROOT"/lib/libflatbuffers* "$INSTALLROOT"/lib/cmake/llvm "$INSTALLROOT"/lib/cmake/clang
 
 # Modulefile
 MODULEDIR="${INSTALLROOT}/etc/modulefiles"
