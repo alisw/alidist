@@ -63,6 +63,9 @@ if [[ ${O2_GPU_CUDNN_AVAILABLE:-0} == 1 ]] && [[ -z "$ORT_CUDA_BUILD" ]]; then
   if [[ "${O2_GPU_CUDA_AVAILABLE_ARCH}" == "80-real;86-real;89-real;120-real;75-virtual" ]]; then
     O2_GPU_CUDA_AVAILABLE_ARCH="80-real;86-real;89-real;120-real"
   fi
+  if [[ "${O2_GPU_CUDA_AVAILABLE_ARCH}" == "75-virtual" ]]; then
+    O2_GPU_CUDA_AVAILABLE_ARCH="75"
+  fi
 else
   ORT_CUDA_BUILD="0"
 fi
