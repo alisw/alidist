@@ -214,6 +214,36 @@ if [[ "$ORT_TENSORRT_BUILD" -eq 1 ]]; then
     _deps/onnx_tensorrt-src/importerUtils.cpp
 fi
 
+# ONNXRuntime 1.29.0 added the CUDA MoE GEMM kernels, whose cicc peaks near 5 GiB
+# per translation unit -- once per architecture, and we build five. A full -j24
+# then wants ~120 GiB and the container OOM-kills mid-ninja with no diagnostic.
+# Cap on the memory we can actually see, not on cores: the two are only coupled
+# on the CI builders, and this recipe also runs on GPU boxes where they are not.
+if [[ "$ORT_CUDA_BUILD" == 1 || "$ORT_ROCM_BUILD" == 1 || "$ORT_MIGRAPHX_BUILD" == 1 ]]; then
+  ORT_MEM_KB=
+  for ORT_CG in /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory/memory.limit_in_bytes; do
+    if [[ -r $ORT_CG ]]; then
+      ORT_CG_VAL=$(cat "$ORT_CG")
+      # cgroup v2 writes "max" when unlimited; v1 writes a huge sentinel.
+      if [[ $ORT_CG_VAL =~ ^[0-9]+$ ]] && [[ $ORT_CG_VAL -lt 1000000000000 ]]; then
+        ORT_MEM_KB=$((ORT_CG_VAL / 1024))
+        break
+      fi
+    fi
+  done
+  if [[ -z $ORT_MEM_KB ]] && [[ -r /proc/meminfo ]]; then
+    ORT_MEM_KB=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)
+  fi
+  if [[ -n $ORT_MEM_KB ]]; then
+    ORT_MEM_JOBS=$((ORT_MEM_KB / 1024 / 1024 / 6))
+    [[ $ORT_MEM_JOBS -gt 0 ]] || ORT_MEM_JOBS=1
+    if [[ ${JOBS:-1} -gt $ORT_MEM_JOBS ]]; then
+      echo "ONNXRuntime: GPU build, limiting to $ORT_MEM_JOBS jobs (from $JOBS) for $((ORT_MEM_KB / 1024 / 1024)) GiB" >&2
+      JOBS=$ORT_MEM_JOBS
+    fi
+  fi
+fi
+
 cmake --build . -- ${JOBS:+-j$JOBS} install
 
 # Modulefile
