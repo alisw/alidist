@@ -184,6 +184,7 @@ cmake "cmake"                                                                   
       -DMSVC=OFF                                                                                            \
       -Donnxruntime_USE_CUDA=${ORT_CUDA_BUILD}                                                              \
       -Donnxruntime_USE_CUDA_NHWC_OPS=${ORT_CUDA_BUILD}                                                     \
+      -Donnxruntime_NVCC_THREADS=1                                                                          \
       ${CUDNN_FRONTEND_ROOT:+-DFETCHCONTENT_SOURCE_DIR_CUDNN_FRONTEND=${CUDNN_FRONTEND_ROOT}}               \
       ${CUTLASS_ROOT:+-DFETCHCONTENT_SOURCE_DIR_CUTLASS=${CUTLASS_ROOT}}                                    \
       ${ONNX_TENSORRT_ROOT:+-DFETCHCONTENT_SOURCE_DIR_ONNX_TENSORRT=${ONNX_TENSORRT_ROOT}}                  \
