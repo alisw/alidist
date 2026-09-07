@@ -32,6 +32,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DACTS_BUILD_FATRAS_GEANT4=ON             \
                  -DACTS_BUILD_EXAMPLES_GEANT4=ON           \
                  -DACTS_BUILD_EXAMPLES_ROOT=ON             \
+                 -DACTS_BUILD_ALIGNMENT=ON                 \
                  -DGeant4_DIR=${GEANT4_ROOT}/lib           \
                  -G Ninja 
 
