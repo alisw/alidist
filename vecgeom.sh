@@ -49,6 +49,17 @@ esac
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
+# VecCore 0.8.0, which VecGeom v1.2.6 pins and fetches via VECGEOM_BUILTIN_VECCORE,
+# initialises fVal from the *previous* constructor's parameter name in a constructor
+# nobody instantiates. WrappedScalar is the current instantiation there, so clang
+# rejects it at definition time and o2codechecker fails on any TU reaching the header.
+# Fixed upstream in VecCore 0.8.2; self-disabling once we pin a VecGeom that uses it.
+VECCORE_SCALAR_WRAPPER="$INSTALLROOT/include/VecCore/Backend/ScalarWrapper.h"
+if grep -q 'fVal(s->val_ptr)' "$VECCORE_SCALAR_WRAPPER" 2>/dev/null; then
+  sed -i.bak 's|fVal(s->val_ptr)|fVal(s->fVal)|' "$VECCORE_SCALAR_WRAPPER"
+  rm -f "$VECCORE_SCALAR_WRAPPER.bak"
+fi
+
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"

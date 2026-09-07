@@ -1,6 +1,6 @@
 package: abseil
 version: "%(tag_basename)s"
-tag: "20250814.0"
+tag: "20250814.0-alice1"
 requires:
   - "GCC-Toolchain:(?!osx)"
 license: Apache v2
@@ -9,7 +9,7 @@ build_requires:
   - ninja
   - alibuild-recipe-tools
   - ninja
-source: https://github.com/abseil/abseil-cpp
+source: https://github.com/alisw/abseil-cpp
 #prefer_system: "osx"
 #prefer_system_check: |
 #  printf '#include <absl/container/flat_hash_map.h>' | c++ -std=c++20 -I"$(brew --prefix abseil)/include" -c -xc++ - >/dev/null

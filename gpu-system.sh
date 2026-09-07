@@ -1,6 +1,8 @@
 package: gpu-system
-version: "error"
+version: "error-notset"
 allow_system_package_upload: true
+build_requires:
+  - alibuild-recipe-tools
 prefer_system: .*
 prefer_system_check: |
   #!/bin/bash -e
@@ -35,7 +37,15 @@ prefer_system_check: |
     # - ci: for now defaults to 1
     # - disable: disable all backends
     # - manual: disable auto-detection, set features manually
+    # - build: build GPU tools from alidist recipe
     # 0 / unset: defaults to fullauto
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "build" ]]; then
+      GPU_FEATURES=build-from-alidist
+      [[ -n $ALIBUILD_O2_FORCE_GPU_CUDA_ARCH ]] && add_feature _ cudaarch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH}")@
+      [[ -n $ALIBUILD_O2_FORCE_GPU_HIP_ARCH ]] && add_feature _ rocmarch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_HIP_ARCH}")@
+      break
+    fi
 
     if [[ -z ${ALIBUILD_O2_FORCE_GPU} || ${ALIBUILD_O2_FORCE_GPU} == "0" ]]; then
       ALIBUILD_O2_FORCE_GPU=fullauto
@@ -264,13 +274,38 @@ prefer_system_replacement_specs:
       #%Module1.0
       echo "ERROR: gpu-system.sh GPU detection failed: ${ALIBUILD_PREFER_SYSTEM_KEY}" | sed "s/error-//" 1>&2
       exit 1
-  ".*":
+  "build.*":
     version: "%(key)s"
+    requires:
+      - CUDA
+      - ROCm
     recipe: |
       #!/bin/bash -e
-      #%Module1.0
-      mkdir -p "$INSTALLROOT"/etc
-      rm -f "$INSTALLROOT"/etc/gpu-features-available.sh
+      mkdir -p "$INSTALLROOT/etc/modulefiles"
+      CUDA_DEFAULT_ARCH=$(grep -m1 -oP 'set\(CUDA_COMPUTETARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
+      ROCM_DEFAULT_ARCH=$(grep -m1 -oP 'set\(HIP_AMDGPUTARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
+      alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
+      {
+        echo 'if [[ -z ${CUDA_PATH} || -z ${ROCM_PATH} ]]; then echo "ERROR: CUDA or ROCm PATH NOT SET!"; exit 1; fi'
+        echo 'export O2_GPU_CUDA_AVAILABLE=1'
+        echo 'export O2_GPU_ROCM_AVAILABLE=1'
+        echo 'export O2_GPU_CUDA_HOME="${CUDA_PATH}"'
+        echo 'export O2_GPU_ROCM_HOME="${ROCM_PATH}"'
+        echo 'export O2_GPU_MIOPEN_AVAILABLE=1'
+        echo 'export O2_GPU_CUDNN_AVAILABLE=1'
+        echo 'export O2_GPU_MIGRAPHX_AVAILABLE=1'
+        echo 'export O2_GPU_TENSORRT_AVAILABLE=0'
+        echo 'O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
+        echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
+      } > "$INSTALLROOT"/etc/gpu-features-available.sh
+  ".*":
+    version: "%(key)s"
+    build_requires:
+      - alibuild-recipe-tools
+    recipe: |
+      #!/bin/bash -e
+      mkdir -p "$INSTALLROOT/etc/modulefiles"
+      alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
       {
         echo "export O2_GPU_CUDA_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)cuda(-|_|$) ]] && echo 1 ) || ( [[ "$PKG_VERSION" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
         echo "export O2_GPU_ROCM_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)rocm(-|_|$) ]] && echo 1 ) || ( [[ "$PKG_VERSION" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
