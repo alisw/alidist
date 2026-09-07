@@ -29,6 +29,11 @@ case $ARCHITECTURE in
   osx*) SONAME=dylib ;;
 esac
 
+rsync -a --chmod=ugo=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
+
+# NOTE: write the init file only AFTER the rsync above: with --delete, rsync
+# removes anything in the build dir that is not in the source tree, and
+# bootstrap silently ignores a missing --init file.
 cat > build-flags.cmake <<- EOF
 # Disable Java capabilities; we don't need it and on OS X might miss the
 # required /System/Library/Frameworks/JavaVM.framework/Headers/jni.h.
@@ -47,9 +52,17 @@ SET(BUILD_TESTING OFF)
 # but cmake is not smart enough to find it. We do not really need ccmake anyway,
 # so just disable it.
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
+
+# Some shared/NFS build areas run a fraction of a second behind the fileserver
+# clock, so GNU make emits "Clock skew detected" / "modification time ... in the
+# future" warnings. cm_cxx_features.cmake treats ANY warning in a feature-check
+# build as "feature unavailable" and then aborts with a bogus "The C++ compiler
+# does not support C++11". Pre-declare the results so the checks are skipped.
+SET(CMake_HAVE_CXX_MAKE_UNIQUE 1 CACHE BOOL "" FORCE)
+SET(CMake_HAVE_CXX_UNIQUE_PTR 1 CACHE BOOL "" FORCE)
+SET(CMake_HAVE_CXX_FILESYSTEM 1 CACHE BOOL "" FORCE)
 EOF
 
-rsync -a --chmod=ugo=rwX --delete --exclude '**/.git' --delete-excluded $SOURCEDIR/ ./
 
 ./bootstrap --prefix=$INSTALLROOT \
                      ${ZLIB_ROOT:+--no-system-zlib} \

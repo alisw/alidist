@@ -166,6 +166,15 @@ SET(Java_JAVAC_EXECUTABLE FALSE CACHE BOOL "" FORCE)
 # but cmake is not smart enough to find it. We do not really need ccmake anyway,
 # so just disable it.
 SET(BUILD_CursesDialog FALSE CACHE BOOL "" FORCE)
+
+# Some shared/NFS build areas run a fraction of a second behind the fileserver
+# clock, so GNU make emits "Clock skew detected" / "modification time ... in the
+# future" warnings. cm_cxx_features.cmake treats ANY warning in a feature-check
+# build as "feature unavailable" and then aborts with a bogus "The C++ compiler
+# does not support C++11". Pre-declare the results so the checks are skipped.
+SET(CMake_HAVE_CXX_MAKE_UNIQUE 1 CACHE BOOL "" FORCE)
+SET(CMake_HAVE_CXX_UNIQUE_PTR 1 CACHE BOOL "" FORCE)
+SET(CMake_HAVE_CXX_FILESYSTEM 1 CACHE BOOL "" FORCE)
 EOF
     $SOURCEDIR/cmake/bootstrap --prefix=$BUILDDIR/bootstrap-cmake \
                                --no-debugger                      \
