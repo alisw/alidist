@@ -32,6 +32,7 @@ fi
 
 echo "ONNXRuntime-inference-test: ORT_CUDA_BUILD=${ORT_CUDA_BUILD:-unset}"
 echo "ONNXRuntime-inference-test: ORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD:-unset}"
+echo "ONNXRuntime-inference-test: ORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD:-unset}"
 echo "ONNXRuntime-inference-test: model=$MODEL"
 
 rm -Rf "$BUILDDIR/onnxruntime-inference-test"

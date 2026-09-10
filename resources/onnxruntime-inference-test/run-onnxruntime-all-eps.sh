@@ -8,7 +8,20 @@ if [[ ! -f $MODEL ]]; then
   exit 2
 fi
 
-IFS=', ' read -r -a PROVIDERS <<< "${ONNXRUNTIME_INFERENCE_TEST_PROVIDERS:-cpu,migraphx,cuda}"
+if [[ -n ${ONNXRUNTIME_ROOT:-} && -f $ONNXRUNTIME_ROOT/etc/ort-init.sh ]]; then
+  source "$ONNXRUNTIME_ROOT/etc/ort-init.sh"
+fi
+
+if [[ -n ${ONNXRUNTIME_INFERENCE_TEST_PROVIDERS:-} ]]; then
+  IFS=', ' read -r -a PROVIDERS <<< "$ONNXRUNTIME_INFERENCE_TEST_PROVIDERS"
+else
+  PROVIDERS=(cpu)
+  [[ ${ORT_MIGRAPHX_BUILD:-0} == 1 ]] && PROVIDERS+=(migraphx)
+  [[ ${ORT_CUDA_BUILD:-0} == 1 ]] && PROVIDERS+=(cuda)
+  [[ ${ORT_TENSORRT_BUILD:-0} == 1 ]] && PROVIDERS+=(tensorrt)
+fi
+
+echo "onnxruntime-inference-test: selected providers: ${PROVIDERS[*]}"
 
 FAILURES=()
 for PROVIDER in "${PROVIDERS[@]}"; do

@@ -13,5 +13,7 @@ install(PROGRAMS
   run-onnxruntime-cpu.sh
   run-onnxruntime-cuda.sh
   run-onnxruntime-migraphx.sh
+  run-onnxruntime-tensorrt.sh
+  run-local-onnxruntime-inference-test.sh
   DESTINATION bin)
 install(FILES net.onnx DESTINATION test/onnxruntime-inference)

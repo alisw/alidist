@@ -10,6 +10,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace
@@ -49,7 +50,7 @@ std::string join(const std::vector<std::string>& values)
 void usage(const char* argv0)
 {
   std::cerr << "usage: " << argv0
-            << " --model MODEL.onnx --provider cpu|migraphx|cuda "
+            << " --model MODEL.onnx --provider cpu|migraphx|cuda|tensorrt "
                "[--device-id N] [--expected-input-elements N] "
                "[--expected-output-elements N] [--allow-cpu-fallback]\n";
 }
@@ -89,8 +90,8 @@ Arguments parseArguments(int argc, char** argv)
   if (args.modelPath.empty()) {
     throw std::runtime_error("--model is required");
   }
-  if (args.provider != "cpu" && args.provider != "migraphx" && args.provider != "cuda") {
-    throw std::runtime_error("--provider must be one of: cpu, migraphx, cuda");
+  if (args.provider != "cpu" && args.provider != "migraphx" && args.provider != "cuda" && args.provider != "tensorrt") {
+    throw std::runtime_error("--provider must be one of: cpu, migraphx, cuda, tensorrt");
   }
   return args;
 }
@@ -105,6 +106,9 @@ std::string ortProviderName(const std::string& provider)
   }
   if (provider == "cuda") {
     return "CUDAExecutionProvider";
+  }
+  if (provider == "tensorrt") {
+    return "TensorrtExecutionProvider";
   }
   throw std::runtime_error("unsupported provider: " + provider);
 }
@@ -125,6 +129,12 @@ void appendProvider(Ort::SessionOptions& options, const Arguments& args)
     migraphxOptions.device_id = args.deviceId;
     migraphxOptions.migraphx_mem_limit = std::numeric_limits<size_t>::max();
     options.AppendExecutionProvider_MIGraphX(migraphxOptions);
+    return;
+  }
+  if (args.provider == "tensorrt") {
+    Ort::TensorRTProviderOptions tensorrtOptions;
+    tensorrtOptions.Update({{"device_id", std::to_string(args.deviceId)}});
+    options.AppendExecutionProvider_TensorRT_V2(*tensorrtOptions);
     return;
   }
 }
