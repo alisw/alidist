@@ -5,6 +5,7 @@ requires:
   - O2
   - O2-GPU-test:(.*x86-64)
   - O2-GPU-deterministic-test:(.*x86-64)
+  - ONNXRuntime-inference-test:(.*x86-64)
 build_requires:
   - alibuild-recipe-tools
 license: GPL-3.0
