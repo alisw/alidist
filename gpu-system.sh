@@ -212,20 +212,25 @@ prefer_system_check: |
         add_feature - miopen
     fi
 
-    # MIGraphX has to be new enough for the ONNXRuntime we build, not merely
-    # present: its provider references migraphx_shape_fp4x2_type, which appears
-    # in MIGraphX 7.1 (bf16 and fp8e5m2fnuz arrived in 6.4). On anything older
-    # every other file compiles and the build then dies on three enum cases, so
-    # gate on the API itself -- this turns MIGraphX back on by itself once the
-    # host is upgraded, with no disable left behind to forget about.
+    # ONNXRuntime's MIGraphX provider references three type enums (bf16 and
+    # fp8e5m2fnuz arrived in MIGraphX 2.12 / ROCm 6.4, fp4x2 later still).
+    # onnxruntime.sh detects which ones the installed header lacks and guards
+    # those cases out of the provider, so anything from MIGraphX 2.11 (ROCm
+    # 6.3) on is usable. Older than that has never been tried: keep it off.
     #
-    # ROCm 6.x keeps these headers in a self-contained prefix under lib/, which
-    # is on no default include path; onnxruntime.sh finds the prefix and passes
+    # ROCm 6.x keeps version.h in a self-contained prefix under lib/, which is
+    # on no default include path; onnxruntime.sh finds the prefix and passes
     # it. Look in both places.
     MIGRAPHX_C_API=
-    for _hdr in /opt/rocm/lib/migraphx/include/migraphx/migraphx.h \
-                /opt/rocm/include/migraphx/migraphx.h; do
-      if [[ -f $_hdr ]] && grep -q fp4x2 "$_hdr"; then MIGRAPHX_C_API=$_hdr; break; fi
+    for _vh in /opt/rocm/lib/migraphx/include/migraphx/version.h \
+               /opt/rocm/include/migraphx/version.h; do
+      [[ -f $_vh ]] || continue
+      _mgx_major=$(grep -oP 'MIGRAPHX_VERSION_MAJOR\s+\K[0-9]+' "$_vh" || true)
+      _mgx_minor=$(grep -oP 'MIGRAPHX_VERSION_MINOR\s+\K[0-9]+' "$_vh" || true)
+      if [[ -n $_mgx_major && -n $_mgx_minor ]] && (( _mgx_major > 2 || (_mgx_major == 2 && _mgx_minor >= 11) )); then
+        MIGRAPHX_C_API=$_vh
+      fi
+      break
     done
     if [[ $ALIBUILD_O2_FORCE_GPU_MIGRAPHX == 1 ]] || [[ $GPU_FEATURES =~ (^|-)"miopen"(-|_|$) && ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} != 0 && -n $MIGRAPHX_C_API ]]; then
       add_feature - migraphx
@@ -239,7 +244,7 @@ prefer_system_check: |
       add_feature - tensorrt
     fi
 
-    # MIGraphX is gated on the C API above, so it is legitimately absent when the
+    # MIGraphX is gated on the version above, so it is legitimately absent when the
     # host ROCm is older than the ONNXRuntime needs -- demand it only when it
     # could have been enabled, otherwise FORCE_GPU=1 makes that state unreachable
     # and even ALIBUILD_O2_FORCE_GPU_MIGRAPHX=0 cannot opt out.

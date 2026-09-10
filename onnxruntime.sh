@@ -114,6 +114,42 @@ if [[ "$ORT_MIGRAPHX_BUILD" == 1 ]]; then
     fi
   done
   echo "MIGRAPHX_HOME=${MIGRAPHX_HOME:-<not found>}"
+
+  # The provider maps ONNX element types onto MIGraphX enums that older
+  # MIGraphX lacks: bf16 and fp8e5m2fnuz arrived in 2.12 (ROCm 6.4), fp4x2
+  # later. Everything else in the provider is already guarded upstream by HIP
+  # version checks; only these three switch cases are not, so detect each one
+  # in the installed C header and compile the case out when it is missing.
+  # The guards are opt-out: an untouched build keeps upstream behaviour.
+  for _hdr in "${O2_GPU_ROCM_HOME:-/opt/rocm}/include/migraphx/migraphx.h" \
+              "${MIGRAPHX_HOME:-/nonexistent}/include/migraphx/migraphx.h"; do
+    [[ -f $_hdr ]] && { MIGRAPHX_C_HEADER=$_hdr; break; }
+  done
+  if [[ -n $MIGRAPHX_C_HEADER ]]; then
+    for _t in bf16 fp8e5m2fnuz fp4x2; do
+      if ! grep -q "${_t}_type" "$MIGRAPHX_C_HEADER"; then
+        echo "MIGraphX header lacks ${_t}_type: compiling that case out of the provider"
+        CXXFLAGS="$CXXFLAGS -DO2_MGX_NO_$(tr a-z A-Z <<< "$_t")_TYPE"
+      fi
+    done
+    python3 - <<'PYEOF'
+import pathlib, re
+p = pathlib.Path("onnxruntime/core/providers/migraphx/migraphx_execution_provider.cc")
+s = p.read_text()
+for onnx_type, mgx_type in (("BFLOAT16", "bf16"), ("FLOAT8E5M2FNUZ", "fp8e5m2fnuz"), ("FLOAT4E2M1", "fp4x2")):
+    case = ("    case ONNX_TENSOR_ELEMENT_DATA_TYPE_%s:\n"
+            "      mgx_type = migraphx_shape_%s_type;\n"
+            "      break;\n") % (onnx_type, mgx_type)
+    if "#ifndef O2_MGX_NO_%s_TYPE" % mgx_type.upper() in s:
+        continue  # already patched
+    if s.count(case) != 1:
+        raise SystemExit("MIGraphX provider patch: expected exactly one %s case, found %d" % (mgx_type, s.count(case)))
+    s = s.replace(case, "#ifndef O2_MGX_NO_%s_TYPE\n%s#endif\n" % (mgx_type.upper(), case))
+p.write_text(s)
+PYEOF
+  else
+    echo "WARNING: MIGraphX C header not found, provider built unpatched"
+  fi
 fi
 
 echo "O2_GPU_ROCM_HOME=$O2_GPU_ROCM_HOME"
