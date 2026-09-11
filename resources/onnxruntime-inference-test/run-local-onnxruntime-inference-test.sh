@@ -6,8 +6,8 @@ usage() {
 usage: run-local-onnxruntime-inference-test.sh [options]
 
 Build and run the ONNX Runtime execution-provider inference smoke test in the
-currently loaded aliBuild environment. Run this after loading an environment
-that provides ONNXRuntime, CMake, and Ninja.
+currently loaded aliBuild environment. If needed, the script re-runs itself in
+an environment that provides ONNXRuntime, CMake, and Ninja.
 
 Options:
   --model FILE        ONNX model to test. Defaults to the bundled net.onnx.
@@ -19,6 +19,7 @@ Options:
 EOF
 }
 
+ORIGINAL_ARGS=("$@")
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 if [[ -f ${SCRIPT_DIR}/net.onnx ]]; then
   MODEL=${SCRIPT_DIR}/net.onnx
@@ -64,10 +65,42 @@ if [[ ! -f $MODEL ]]; then
   exit 2
 fi
 
+detect_onnxruntime_root() {
+  [[ -n ${ONNXRUNTIME_ROOT:-} && -d $ONNXRUNTIME_ROOT/lib/cmake/onnxruntime ]] && return 0
+
+  IFS=: read -r -a SEARCH_PATHS <<< "${CMAKE_PREFIX_PATH:-}:${LD_LIBRARY_PATH:-}:${ROOT_INCLUDE_PATH:-}"
+  for PATH_ENTRY in "${SEARCH_PATHS[@]}"; do
+    CANDIDATE=
+    case "$PATH_ENTRY" in
+      */ONNXRuntime/*/lib)
+        CANDIDATE=${PATH_ENTRY%/lib}
+        ;;
+      */ONNXRuntime/*/include/onnxruntime)
+        CANDIDATE=${PATH_ENTRY%/include/onnxruntime}
+        ;;
+      */ONNXRuntime/*)
+        CANDIDATE=$PATH_ENTRY
+        ;;
+    esac
+    if [[ -n $CANDIDATE && -d $CANDIDATE/lib/cmake/onnxruntime ]]; then
+      export ONNXRUNTIME_ROOT=$CANDIDATE
+      return 0
+    fi
+  done
+  return 1
+}
+
+if ! detect_onnxruntime_root || ! command -v cmake > /dev/null || ! command -v ninja > /dev/null; then
+  if [[ ${ONNXRUNTIME_INFERENCE_TEST_BOOTSTRAPPED:-0} != 1 ]] && command -v alienv > /dev/null; then
+    export ONNXRUNTIME_INFERENCE_TEST_BOOTSTRAPPED=1
+    exec alienv setenv ONNXRuntime/latest,CMake/latest,ninja/latest \
+      -c "$SCRIPT_DIR/run-local-onnxruntime-inference-test.sh" "${ORIGINAL_ARGS[@]}"
+  fi
+fi
+
 if [[ -z ${ONNXRUNTIME_ROOT:-} ]]; then
   echo "run-local-onnxruntime-inference-test: ONNXRUNTIME_ROOT is not set" >&2
-  echo "Load an aliBuild environment first, for example:" >&2
-  echo "  alienv enter ONNXRuntime/latest,CMake/latest,ninja/latest" >&2
+  echo "Could not infer it from the loaded environment." >&2
   exit 2
 fi
 
