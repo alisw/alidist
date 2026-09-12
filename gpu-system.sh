@@ -10,29 +10,21 @@ prefer_system_check: |
   mkdir alibuild-gpu-system-temp-dir
   pushd alibuild-gpu-system-temp-dir > /dev/null
   GPU_FEATURES=
+  GPU_SETTINGS=
   add_feature() {
     [[ $GPU_FEATURES && $GPU_FEATURES != *"$1" ]] && GPU_FEATURES+="$1"
     GPU_FEATURES+="$2"
   }
+  add_setting() {
+    GPU_SETTINGS+="$1"$'\n'
+  }
   verge() { [[ "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]; }
 
   while true; do
-    if [[ -z $ALIBUILD_VERSION ]] || ! verge 1.17.40 $ALIBUILD_VERSION; then
-      GPU_FEATURES=none
-      break
-    fi
-    if [[ ${ALIBUILD_O2_FORCE_GPU} == "disable" ]]; then
-      GPU_FEATURES=none
-      break
-    fi
-    case $(uname) in
-      Darwin*) add_feature - metal;;
-    esac
-
     # Valid options:
     # - auto: normal auto-detection, fail if CMake is missing
     # - onthefly: auto-detection at runtime, no CUDNN / MIOPEN
-    # - fullauto: if system CMake is found behave as auto, otherwise as onthefly
+    # - fullauto: if system CMake is found behave as auto, otherwise as onthefly (default)
     # - 1 / force: detect forcing all backends, and fail if a feature is not found
     # - ci: for now defaults to 1
     # - disable: disable all backends
@@ -40,10 +32,8 @@ prefer_system_check: |
     # - build: build GPU tools from alidist recipe
     # 0 / unset: defaults to fullauto
 
-    if [[ ${ALIBUILD_O2_FORCE_GPU} == "build" ]]; then
-      GPU_FEATURES=build-from-alidist
-      [[ -n $ALIBUILD_O2_FORCE_GPU_CUDA_ARCH ]] && add_feature _ cudaarch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH}")@
-      [[ -n $ALIBUILD_O2_FORCE_GPU_HIP_ARCH ]] && add_feature _ rocmarch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_HIP_ARCH}")@
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "disable" ]]; then
+      GPU_FEATURES=disabled
       break
     fi
 
@@ -54,6 +44,42 @@ prefer_system_check: |
     if [[ ${ALIBUILD_O2_FORCE_GPU} == "force" || ${ALIBUILD_O2_FORCE_GPU} == "ci" ]]; then
       ALIBUILD_O2_FORCE_GPU=1
     fi
+
+    if [[ -z $ALIBUILD_VERSION ]] || ! verge 1.17.44 $ALIBUILD_VERSION; then
+      if [[ $ALIBUILD_O2_FORCE_GPU != "onthefly" || $ALIBUILD_O2_FORCE_GPU != "fullauto" ]]; then
+        GPU_FEATURES="error-aliBuild too old for gpu-system"
+      else
+        GPU_FEATURES=disabled-old-aliBuild
+      fi
+      break
+    fi
+
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "build" ]]; then
+      GPU_FEATURES=build-from-alidist
+      if [[ ${ALIBUILD_O2_FORCE_GPU_CUDA:-1} != "0" ]]; then
+        echo "alibuild_system_replace_requires: CUDA"
+        add_setting 'if [[ -z ${CUDA_PATH} ]]; then echo "ERROR: CUDA PATH NOT SET!"; exit 1; fi'
+        add_setting "export O2_GPU_CUDA_AVAILABLE=1"
+        add_setting "export O2_GPU_CUDNN_AVAILABLE=1"
+        add_setting 'export O2_GPU_CUDA_HOME="${CUDA_PATH}"'
+        CUDA_DEFAULT_ARCH=$(grep -m1 -oP 'set\(CUDA_COMPUTETARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
+        add_feature - cuda_arch_$(sed -e "s/;\|-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}")
+        add_setting 'export O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
+      fi
+      if [[ ${ALIBUILD_O2_FORCE_GPU_HIP:-1} != "0" ]]; then
+        echo "alibuild_system_replace_requires: ROCm"
+        add_setting 'if [[ -z ${ROCM_PATH} ]]; then echo "ERROR: ROCm PATH NOT SET!"; exit 1; fi'
+        add_setting "export O2_GPU_ROCM_AVAILABLE=1"
+        add_setting "export O2_GPU_MIOPEN_AVAILABLE=1"
+        add_setting "export O2_GPU_MIGRAPHX_AVAILABLE=1"
+        add_setting 'export O2_GPU_ROCM_HOME="${ROCM_PATH}"'
+        ROCM_DEFAULT_ARCH=$(grep -m1 -oP 'set\(HIP_AMDGPUTARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
+        add_feature - rocm_arch_$(sed -e "s/;\|-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}")
+        add_setting 'export O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
+      fi
+      break
+    fi
+
     if [[ ${ALIBUILD_O2_FORCE_GPU} == "1" ]]; then
       [[ -z $ALIBUILD_O2_FORCE_GPU_CUDA_ARCH ]] && ALIBUILD_O2_FORCE_GPU_CUDA_ARCH=default
       [[ -z $ALIBUILD_O2_FORCE_GPU_HIP_ARCH ]] && ALIBUILD_O2_FORCE_GPU_HIP_ARCH=default
@@ -81,6 +107,10 @@ prefer_system_check: |
       fi
 
       if [[ ${ALIBUILD_O2_FORCE_GPU} != "onthefly" ]]; then
+        case $(uname) in
+          Darwin*) add_feature - metal;;
+        esac
+
         cat > CMakeLists.txt << "EOF"
         cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
         project(gpu-system)
@@ -176,21 +206,36 @@ prefer_system_check: |
 
     if [[ $GPU_CUDA_ENABLED == 1 ]]; then
       add_feature - cuda
+      add_setting "export O2_GPU_CUDA_AVAILABLE=1"
       [[ -n $GPU_CUDA_VERSION ]] && add_feature _ ${GPU_CUDA_VERSION//-/_}
-      [[ -n $GPU_CUDA_ARCHITECTURE ]] && add_feature _ arch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${GPU_CUDA_ARCHITECTURE}")@
-      [[ -n $O2_GPU_CUDA_HOME ]] && add_feature _ "home_$(base32 -i -w0 <<< "${O2_GPU_CUDA_HOME}" | tr '=' '0')"
+      if [[ -n $GPU_CUDA_ARCHITECTURE ]]; then
+        add_feature _ arch_$(sed -e "s/;\|-/_/g" <<< "${GPU_CUDA_ARCHITECTURE}")
+        add_setting 'export O2_GPU_CUDA_AVAILABLE_ARCH="'${GPU_CUDA_ARCHITECTURE}'"'
+      fi
+      [[ -n $O2_GPU_CUDA_HOME ]] && add_setting 'export O2_GPU_CUDA_HOME="'${O2_GPU_CUDA_HOME}'"'
+    elif [[ $GPU_CUDA_ENABLED == "AUTO" ]]; then
+      add_setting "export O2_GPU_CUDA_AVAILABLE=AUTO"
     fi
 
     if [[ $GPU_HIP_ENABLED == 1 ]]; then
       add_feature - rocm
+      add_setting "export O2_GPU_ROCM_AVAILABLE=1"
       [[ -n $GPU_HIP_VERSION ]] && add_feature _ ${GPU_HIP_VERSION//-/_}
-      [[ -n $GPU_HIP_ARCHITECTURE ]] && add_feature _ arch@$(sed -e "s/;/#/g" -e "s/-/_/g" <<< "${GPU_HIP_ARCHITECTURE}")@
-      [[ -n $O2_GPU_ROCM_HOME ]] && add_feature _ "home_$(base32 -i -w0 <<< "${O2_GPU_ROCM_HOME}" | tr '=' '0')"
+      if [[ -n $GPU_HIP_ARCHITECTURE ]]; then
+        add_feature _ arch_$(sed -e "s/;\|-/_/g" <<< "${GPU_HIP_ARCHITECTURE}")
+        add_setting 'export O2_GPU_ROCM_AVAILABLE_ARCH="'${GPU_HIP_ARCHITECTURE}'"'
+      fi
+      [[ -n $O2_GPU_ROCM_HOME ]] && add_setting 'export O2_GPU_ROCM_HOME="'${O2_GPU_ROCM_HOME}'"'
+    elif [[ $GPU_HIP_ENABLED == "AUTO" ]]; then
+      add_setting "export O2_GPU_ROCM_AVAILABLE=AUTO"
     fi
 
 
     if [[ $GPU_OPENCL_ENABLED == 1 ]]; then
       add_feature - opencl
+      add_setting "export O2_GPU_OPENCL_AVAILABLE=1"
+    elif [[ $GPU_OPENCL_ENABLED == "AUTO" ]]; then
+      add_setting "export O2_GPU_OPENCL_AVAILABLE=AUTO"
     fi
 
     # Detect MIOpen requirements, eventually should improve this to be based on CMake as well
@@ -210,50 +255,35 @@ prefer_system_check: |
       -d /opt/rocm/include/miopen && \
       -d /opt/rocm/include/rccl ]]; then
         add_feature - miopen
+        add_setting "export O2_GPU_MIOPEN_AVAILABLE=1"
     fi
 
-    # MIGraphX has to be new enough for the ONNXRuntime we build, not merely
-    # present: its provider references migraphx_shape_fp4x2_type, which appears
-    # in MIGraphX 7.1 (bf16 and fp8e5m2fnuz arrived in 6.4). On anything older
-    # every other file compiles and the build then dies on three enum cases, so
-    # gate on the API itself -- this turns MIGraphX back on by itself once the
-    # host is upgraded, with no disable left behind to forget about.
-    #
-    # ROCm 6.x keeps these headers in a self-contained prefix under lib/, which
-    # is on no default include path; onnxruntime.sh finds the prefix and passes
-    # it. Look in both places.
     MIGRAPHX_C_API=
-    for _hdr in /opt/rocm/lib/migraphx/include/migraphx/migraphx.h \
-                /opt/rocm/include/migraphx/migraphx.h; do
+    for _hdr in /opt/rocm/lib/migraphx/include/migraphx/migraphx.h /opt/rocm/include/migraphx/migraphx.h; do
       if [[ -f $_hdr ]] && grep -q fp4x2 "$_hdr"; then MIGRAPHX_C_API=$_hdr; break; fi
     done
     if [[ $ALIBUILD_O2_FORCE_GPU_MIGRAPHX == 1 ]] || [[ $GPU_FEATURES =~ (^|-)"miopen"(-|_|$) && ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} != 0 && -n $MIGRAPHX_C_API ]]; then
       add_feature - migraphx
+      add_setting "export O2_GPU_MIGRAPHX_AVAILABLE=1"
     fi
 
     if [[ $ALIBUILD_O2_FORCE_GPU_CUDNN == 1 ]] || [[ $GPU_FEATURES =~ (^|-)"cuda"(-|_|$) && ${ALIBUILD_O2_FORCE_GPU_CUDNN} != 0 && ( -f /usr/include/cudnn.h || -f /opt/cuda/targets/x86_64-linux/include/cudnn.h ) ]]; then
       add_feature - cudnn
+      add_setting "export O2_GPU_CUDNN_AVAILABLE=1"
     fi
 
     if [[ $ALIBUILD_O2_FORCE_GPU_TENSORRT == 1 ]] || [[ $GPU_FEATURES =~ (^|-)"cudnn"(-|_|$) && ${ALIBUILD_O2_FORCE_GPU_TENSORRT} != 0 && $(find /usr/lib* /opt/cuda /usr/local/cuda -name "libnvinfer*" -print -quit | wc -l 2>&1) != 0 ]]; then
       add_feature - tensorrt
+      add_setting "export O2_GPU_TENSORRT_AVAILABLE=1"
     fi
 
-    # MIGraphX is gated on the C API above, so it is legitimately absent when the
-    # host ROCm is older than the ONNXRuntime needs -- demand it only when it
-    # could have been enabled, otherwise FORCE_GPU=1 makes that state unreachable
-    # and even ALIBUILD_O2_FORCE_GPU_MIGRAPHX=0 cannot opt out.
-    _ml_required="miopen cudnn tensorrt"
-    if [[ ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} == 1 ]] || [[ ${ALIBUILD_O2_FORCE_GPU_MIGRAPHX} != 0 && -n $MIGRAPHX_C_API ]]; then
-      _ml_required="$_ml_required migraphx"
-    fi
-    _ml_missing=
-    for _ml in $_ml_required; do
-      [[ $GPU_FEATURES =~ (^|-)"$_ml"(-|_|$) ]] || _ml_missing="$_ml_missing $_ml"
-    done
     if [[ $ALIBUILD_O2_FORCE_GPU == "1" && -n $_ml_missing ]]; then
-      GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but not all ML libraries detected:$_ml_missing"
-      break
+      for _ml in miopen cudnn; do
+        if [[ $GPU_FEATURES =~ (^|-)"$_ml"(-|_|$) ]]; then
+          GPU_FEATURES="error-ALIBUILD_O2_FORCE_GPU=1 set, but not all ML libraries detected: $_ml"
+          break
+        fi
+      done
     fi
 
     [[ -z $GPU_FEATURES ]] && GPU_FEATURES=none
@@ -264,6 +294,7 @@ prefer_system_check: |
   rm -Rf alibuild-gpu-system-temp-dir
 
   echo "alibuild_system_replace: $GPU_FEATURES"
+  echo "alibuild_system_replace_track_env: ALIBUILD_O2_GPU_SETTINGS="$(base32 -i -w0 <<< "${GPU_SETTINGS}")
   true
 
 prefer_system_replacement_specs:
@@ -274,30 +305,6 @@ prefer_system_replacement_specs:
       #%Module1.0
       echo "ERROR: gpu-system.sh GPU detection failed: ${ALIBUILD_PREFER_SYSTEM_KEY}" | sed "s/error-//" 1>&2
       exit 1
-  "build.*":
-    version: "%(key)s"
-    requires:
-      - CUDA
-      - ROCm
-    recipe: |
-      #!/bin/bash -e
-      mkdir -p "$INSTALLROOT/etc/modulefiles"
-      CUDA_DEFAULT_ARCH=$(grep -m1 -oP 'set\(CUDA_COMPUTETARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
-      ROCM_DEFAULT_ARCH=$(grep -m1 -oP 'set\(HIP_AMDGPUTARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
-      alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
-      {
-        echo 'if [[ -z ${CUDA_PATH} || -z ${ROCM_PATH} ]]; then echo "ERROR: CUDA or ROCm PATH NOT SET!"; exit 1; fi'
-        echo 'export O2_GPU_CUDA_AVAILABLE=1'
-        echo 'export O2_GPU_ROCM_AVAILABLE=1'
-        echo 'export O2_GPU_CUDA_HOME="${CUDA_PATH}"'
-        echo 'export O2_GPU_ROCM_HOME="${ROCM_PATH}"'
-        echo 'export O2_GPU_MIOPEN_AVAILABLE=1'
-        echo 'export O2_GPU_CUDNN_AVAILABLE=1'
-        echo 'export O2_GPU_MIGRAPHX_AVAILABLE=1'
-        echo 'export O2_GPU_TENSORRT_AVAILABLE=0'
-        echo 'O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
-        echo 'O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
-      } > "$INSTALLROOT"/etc/gpu-features-available.sh
   ".*":
     version: "%(key)s"
     build_requires:
@@ -305,20 +312,15 @@ prefer_system_replacement_specs:
     recipe: |
       #!/bin/bash -e
       mkdir -p "$INSTALLROOT/etc/modulefiles"
+      echo "gpu-system key: $PKG_VERSION"
       alibuild-generate-module > "$INSTALLROOT/etc/modulefiles/$PKGNAME"
       {
-        echo "export O2_GPU_CUDA_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)cuda(-|_|$) ]] && echo 1 ) || ( [[ "$PKG_VERSION" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
-        echo "export O2_GPU_ROCM_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)rocm(-|_|$) ]] && echo 1 ) || ( [[ "$PKG_VERSION" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
-        echo "export O2_GPU_OPENCL_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)opencl(-|_|$) ]] && echo 1 ) || ( [[ "$PKG_VERSION" =~ (^|-)auto(-|_|$) ]] && echo auto || echo 0 ) )\""
-        echo "export O2_GPU_MIOPEN_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)miopen(-|_|$) ]] && echo 1 ) || echo 0 )\""
-        echo "export O2_GPU_CUDNN_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)cudnn(-|_|$) ]] && echo 1 ) || echo 0 )\""
-        echo "export O2_GPU_MIGRAPHX_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)migraphx(-|_|$) ]] && echo 1 ) || echo 0 )\""
-        echo "export O2_GPU_TENSORRT_AVAILABLE=\"$( ( [[ "$PKG_VERSION" =~ (^|-)tensorrt(-|_|$) ]] && echo 1 ) || echo 0 )\""
-
-        [[ "$PKG_VERSION" =~ (^|-)cuda([^-]*)_home_([^@]*)(-|_|$) ]] && echo 'export O2_GPU_CUDA_HOME="'$(tr '0' '=' <<< "${BASH_REMATCH[3]}" | base32 -d 2> /dev/null)'"'
-        [[ "$PKG_VERSION" =~ (^|-)rocm([^-]*)_home_([^@]*)(-|_|$) ]] && echo 'export O2_GPU_ROCM_HOME="'$(tr '0' '=' <<< "${BASH_REMATCH[3]}" | base32 -d 2> /dev/null)'"'
-        [[ "$PKG_VERSION" =~ (^|-)cuda([^-]*)_arch@([^@]*)@(-|_|$) ]] && echo 'export O2_GPU_CUDA_AVAILABLE_ARCH="'$(sed -e 's/#/;/g' -e 's/_/-/g' <<< "${BASH_REMATCH[3]}" 2> /dev/null)'"'
-        [[ "$PKG_VERSION" =~ (^|-)rocm([^-]*)_arch@([^@]*)@(-|_|$) ]] && echo 'export O2_GPU_ROCM_AVAILABLE_ARCH="'$(sed -e 's/#/;/g' -e 's/_/-/g' <<< "${BASH_REMATCH[3]}" 2> /dev/null)'"'
-        true
+        GPU_SETTINGS=$(base32 -d 2> /dev/null <<< ${ALIBUILD_O2_GPU_SETTINGS})
+        for i in O2_GPU_CUDA_AVAILABLE O2_GPU_ROCM_AVAILABLE O2_GPU_OPENCL_AVAILABLE O2_GPU_MIOPEN_AVAILABLE O2_GPU_CUDNN_AVAILABLE O2_GPU_MIGRAPHX_AVAILABLE O2_GPU_TENSORRT_AVAILABLE; do
+          if [[ ! "${GPU_SETTINGS}" =~ $i ]]; then
+            echo "export $i=0"
+          fi
+        done
+        echo "${GPU_SETTINGS}"
       } > "$INSTALLROOT"/etc/gpu-features-available.sh
 ---
