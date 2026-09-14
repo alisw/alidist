@@ -1,6 +1,6 @@
 package: ACTS
-version: "v46.4.0"
-tag: "v46.4.0-alice"
+version: "v47.7.0"
+tag: "v47.7.0-alice"
 requires:
   - ROOT
   - pythia
@@ -32,6 +32,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DACTS_BUILD_FATRAS_GEANT4=ON             \
                  -DACTS_BUILD_EXAMPLES_GEANT4=ON           \
                  -DACTS_BUILD_EXAMPLES_ROOT=ON             \
+                 -DACTS_BUILD_ALIGNMENT=ON                 \
                  -DGeant4_DIR=${GEANT4_ROOT}/lib           \
                  -G Ninja 
 
