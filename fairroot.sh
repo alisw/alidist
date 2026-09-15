@@ -21,6 +21,7 @@ incremental_recipe: |
   cmake $SOURCEDIR                          \
         -DCMAKE_GENERATOR=Ninja             \
         -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5  \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
   cp ${BUILDDIR}/compile_commands.json ${INSTALLROOT}
   cmake --build . -- ${JOBS+-j $JOBS} install
@@ -75,6 +76,7 @@ cmake $SOURCEDIR                                                                
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                               \
       -DCMAKE_DISABLE_FIND_PACKAGE_yaml-cpp=ON                                              \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                    \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5                                                    \
       -DCMAKE_INSTALL_LIBDIR=lib                                                            \
       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
