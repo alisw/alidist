@@ -91,6 +91,55 @@ incremental_recipe: |
     source $ONNXRUNTIME_ROOT/etc/ort-init.sh
   fi
 
+  runONNXRuntimeInferenceTest() {
+    local TEST_SCRIPT="$SOURCEDIR/Common/ML/test/onnxruntime-inference/run-local-onnxruntime-inference-test.sh"
+    if [[ ! -f $TEST_SCRIPT ]]; then
+      echo "O2: could not find ONNXRuntime inference test runner: $TEST_SCRIPT" >&2
+      exit 1
+    fi
+
+    local GPU_BACKENDS=()
+    if [[ -n ${O2GPUCI_BACKENDS:-} ]]; then
+      read -r -a GPU_BACKENDS <<< "${O2GPUCI_BACKENDS//,/ }"
+    else
+      [[ ${O2_GPU_CUDA_AVAILABLE:-0} == 1 ]] && GPU_BACKENDS+=(CUDA)
+      [[ ${O2_GPU_ROCM_AVAILABLE:-0} == 1 ]] && GPU_BACKENDS+=(HIP)
+    fi
+
+    if [[ ${#GPU_BACKENDS[@]} == 0 ]]; then
+      echo "O2: no GPU backend selected or detected for the ONNXRuntime inference test." >&2
+      echo "Set O2GPUCI_BACKENDS='CUDA,HIP' in CI to require both production GPU backends." >&2
+      exit 1
+    fi
+
+    local PROVIDERS=(cpu)
+    local BACKEND
+    for BACKEND in "${GPU_BACKENDS[@]}"; do
+      local BACKEND_UP=$(echo "$BACKEND" | tr '[:lower:]' '[:upper:]')
+      case "$BACKEND_UP" in
+        CUDA)
+          [[ ${ORT_CUDA_BUILD:-0} == 1 ]] && PROVIDERS+=(cuda)
+          [[ ${ORT_TENSORRT_BUILD:-0} == 1 ]] && PROVIDERS+=(tensorrt)
+          ;;
+        HIP|ROCM)
+          [[ ${ORT_MIGRAPHX_BUILD:-0} == 1 ]] && PROVIDERS+=(migraphx)
+          ;;
+        *)
+          echo "O2: unsupported ONNXRuntime inference test backend requested: $BACKEND" >&2
+          exit 1
+          ;;
+      esac
+    done
+
+    if [[ ${#PROVIDERS[@]} == 1 ]]; then
+      echo "O2: no ONNXRuntime GPU execution provider was selected." >&2
+      echo "ORT_CUDA_BUILD=${ORT_CUDA_BUILD:-0}, ORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD:-0}, ORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD:-0}" >&2
+      exit 1
+    fi
+
+    ONNXRUNTIME_INFERENCE_TEST_PROVIDERS=$(IFS=,; echo "${PROVIDERS[*]}") "$TEST_SCRIPT"
+  }
+
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
@@ -161,6 +210,7 @@ incremental_recipe: |
 
   if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
     GPUCA_STANDALONE_CI=1 $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+    runONNXRuntimeInferenceTest
   fi
 
 valid_defaults:
@@ -182,6 +232,55 @@ fi
 if [[ -n $ONNXRUNTIME_REVISION ]]; then
   source $ONNXRUNTIME_ROOT/etc/ort-init.sh
 fi
+
+runONNXRuntimeInferenceTest() {
+  local TEST_SCRIPT="$SOURCEDIR/Common/ML/test/onnxruntime-inference/run-local-onnxruntime-inference-test.sh"
+  if [[ ! -f $TEST_SCRIPT ]]; then
+    echo "O2: could not find ONNXRuntime inference test runner: $TEST_SCRIPT" >&2
+    exit 1
+  fi
+
+  local GPU_BACKENDS=()
+  if [[ -n ${O2GPUCI_BACKENDS:-} ]]; then
+    read -r -a GPU_BACKENDS <<< "${O2GPUCI_BACKENDS//,/ }"
+  else
+    [[ ${O2_GPU_CUDA_AVAILABLE:-0} == 1 ]] && GPU_BACKENDS+=(CUDA)
+    [[ ${O2_GPU_ROCM_AVAILABLE:-0} == 1 ]] && GPU_BACKENDS+=(HIP)
+  fi
+
+  if [[ ${#GPU_BACKENDS[@]} == 0 ]]; then
+    echo "O2: no GPU backend selected or detected for the ONNXRuntime inference test." >&2
+    echo "Set O2GPUCI_BACKENDS='CUDA,HIP' in CI to require both production GPU backends." >&2
+    exit 1
+  fi
+
+  local PROVIDERS=(cpu)
+  local BACKEND
+  for BACKEND in "${GPU_BACKENDS[@]}"; do
+    local BACKEND_UP=$(echo "$BACKEND" | tr '[:lower:]' '[:upper:]')
+    case "$BACKEND_UP" in
+      CUDA)
+        [[ ${ORT_CUDA_BUILD:-0} == 1 ]] && PROVIDERS+=(cuda)
+        [[ ${ORT_TENSORRT_BUILD:-0} == 1 ]] && PROVIDERS+=(tensorrt)
+        ;;
+      HIP|ROCM)
+        [[ ${ORT_MIGRAPHX_BUILD:-0} == 1 ]] && PROVIDERS+=(migraphx)
+        ;;
+      *)
+        echo "O2: unsupported ONNXRuntime inference test backend requested: $BACKEND" >&2
+        exit 1
+        ;;
+    esac
+  done
+
+  if [[ ${#PROVIDERS[@]} == 1 ]]; then
+    echo "O2: no ONNXRuntime GPU execution provider was selected." >&2
+    echo "ORT_CUDA_BUILD=${ORT_CUDA_BUILD:-0}, ORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD:-0}, ORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD:-0}" >&2
+    exit 1
+  fi
+
+  ONNXRUNTIME_INFERENCE_TEST_PROVIDERS=$(IFS=,; echo "${PROVIDERS[*]}") "$TEST_SCRIPT"
+}
 
 # Making sure people do not have SIMPATH set when they build fairroot.
 # Unfortunately SIMPATH seems to be hardcoded in a bunch of places in
@@ -289,6 +388,7 @@ fi
 
 if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
   GPUCA_STANDALONE_CI=1  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+  runONNXRuntimeInferenceTest
 fi
 
 # Modulefile
