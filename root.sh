@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-36-10-alice4"
+tag: "v6-40-04-alice1"
 source: https://github.com/alisw/root.git
 license: LGPLv2.1
 requires:
