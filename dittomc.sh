@@ -12,7 +12,6 @@ build_requires:
   - alibuild-recipe-tools
 source: https://github.com/njacazio/FastGenMB.git
 ---
-
 #!/bin/bash -e
 
 cmake "$SOURCEDIR" \
