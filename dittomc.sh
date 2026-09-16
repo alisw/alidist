@@ -10,7 +10,7 @@ build_requires:
   - CMake
   - ninja
   - alibuild-recipe-tools
-source: https://github.com/njacazio/FastGenMB.git
+source: https://github.com/njacazio/DittoMC.git
 ---
 #!/bin/bash -e
 
