@@ -94,7 +94,6 @@ case $ARCHITECTURE in
     [[ ! $LZMA_ROOT ]] && LZMA_ROOT=$(brew --prefix xz)
     [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
     [[ ! $ZSTD_ROOT ]] && ZSTD_ROOT=$(brew --prefix zstd)
-    [[ ! $gL2ps_DIR ]] && gl2ps_DIR=$(brew --prefix gl2ps)
     EXTRA_CMAKE_CXX_FLAGS="-Wno-vla-extension"
   ;;
 esac
@@ -182,7 +181,6 @@ cmake $SOURCEDIR                                                                
       ${LZMA_ROOT:+-DLIBLZMA_LIBRARY=${LZMA_ROOT}/lib/liblzma.${SONAME}}               \
       ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                              \
       ${ZSTD_ROOT:+-DZSTD_ROOT=${ZSTD_ROOT}}                                           \
-      ${gl2ps_DIR:+-Dgl2ps_DIR=${gl2ps_DIR}}                                           \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
       ${NLOHMANN_JSON_ROOT:+nlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                   \
       -Dfftw3=ON                                                                       \
@@ -210,6 +208,7 @@ cmake $SOURCEDIR                                                                
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${USE_BUILTIN_GIF:+-Dbuiltin_gif=ON}                                                \
       ${USE_BUILTIN_JPEG:+-Dbuiltin_jpeg=ON}                                            \
+      -Dbuiltin_gl2ps=ON                                                                                     \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
