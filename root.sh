@@ -208,7 +208,7 @@ cmake $SOURCEDIR                                                                
       -Dunfold=ON                                                                      \
       -Dpythia8=ON                                                                     \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
-      ${USE_BIULTIN_GIF:+-Dbuiltin_gif=ON}                                                   \
+      ${USE_BUILTIN_GIF:+-Dbuiltin_gif=ON}                                                \
       ${USE_BUILTIN_JPEG:+-Dbuiltin_jpeg=ON}                                            \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
