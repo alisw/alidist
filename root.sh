@@ -82,6 +82,8 @@ case $ARCHITECTURE in
     ENABLE_COCOA=1
     DISABLE_MYSQL=1
     USE_BUILTIN_GLEW=1
+    USE_BUILTIN_GIF=1
+    USE_BUILTIN_JPEG=1
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
@@ -206,6 +208,8 @@ cmake $SOURCEDIR                                                                
       -Dunfold=ON                                                                      \
       -Dpythia8=ON                                                                     \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
+      ${USE_BIULTIN_GIF:+-Dbuiltin_gif=ON}                                                   \
+      ${USE_BUILTIN_JPEG:+-Dbuiltin_jpeg=ON}                                            \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
