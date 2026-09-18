@@ -13,21 +13,39 @@ prepend_path:
 ---
 #!/bin/bash -e
 
-cmake  $SOURCEDIR                          \
-       -DROOT_DIR=$ROOT_ROOT               \
-       -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-       -DCMAKE_INSTALL_LIBDIR=lib          \
-       -DHEPMC3_ENABLE_PYTHON=OFF          \
-       -DHEPMC3_ENABLE_ROOTIO=ON
+cmake $SOURCEDIR \
+    -DROOT_DIR=$ROOT_ROOT \
+    -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DHEPMC3_ENABLE_PYTHON=OFF \
+    -DHEPMC3_ENABLE_ROOTIO=ON
 
 make ${JOBS+-j $JOBS}
 make install
+
+# HepMC3::rootIO exports ROOT_INCLUDE_DIRS as an absolute path.
+# This makes the installed HepMC3 package non-relocatable and can leave
+# references to the ROOT installation of the machine where HepMC3 was built.
+#
+# ROOT is already propagated through ROOT::Tree, ROOT::RIO and ROOT::Core,
+# so the explicit absolute ROOT include directory is unnecessary.
+# Locate the CMake import file installed for HepMC3's ROOT I/O target.
+ROOTIO_TARGETS="$INSTALLROOT/share/HepMC3/cmake/HepMC3rootIOTargets.cmake"
+
+# Remove the build machine's absolute ROOT include path from the exported target.
+# Keep a backup temporarily so sed can edit the file in place safely.
+sed -i.bak \
+    "s#$ROOT_ROOT/include##g" \
+    "$ROOTIO_TARGETS"
+
+# Delete the temporary backup after the replacement succeeds.
+rm -f "${ROOTIO_TARGETS}.bak"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat > "$MODULEFILE" <<EoF
+cat >"$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
