@@ -319,6 +319,8 @@ module load BASE/1.0 \\
             ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}         \\
             ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
             ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}                                     \\
+            ${VECGEOM_REVISION:+VecGeom/$VECGEOM_VERSION-$VECGEOM_REVISION}                         \\
+            ${TGEO2VECGEOM_REVISION:+TGeo2VecGeom/$TGEO2VECGEOM_VERSION-$TGEO2VECGEOM_REVISION}     \\
             ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}                                     \\
             ${FMT_REVISION:+fmt/$FMT_VERSION-$FMT_REVISION}                                         \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\
