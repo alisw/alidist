@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-36-10-alice4"
+tag: "v6-40-04-alice1"
 source: https://github.com/alisw/root.git
 license: LGPLv2.1
 requires:
@@ -82,6 +82,8 @@ case $ARCHITECTURE in
     ENABLE_COCOA=1
     DISABLE_MYSQL=1
     USE_BUILTIN_GLEW=1
+    USE_BUILTIN_GIF=1
+    USE_BUILTIN_JPEG=1
     COMPILER_CC=clang
     COMPILER_CXX=clang++
     COMPILER_LD=clang
@@ -90,6 +92,8 @@ case $ARCHITECTURE in
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
     [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
     [[ ! $LZMA_ROOT ]] && LZMA_ROOT=$(brew --prefix xz)
+    [[ ! $LZ4_ROOT ]] && LZ4_ROOT=$(brew --prefix lz4)
+    [[ ! $ZSTD_ROOT ]] && ZSTD_ROOT=$(brew --prefix zstd)
     EXTRA_CMAKE_CXX_FLAGS="-Wno-vla-extension"
   ;;
 esac
@@ -173,8 +177,10 @@ cmake $SOURCEDIR                                                                
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
-      ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR=${LZMA_ROOT}/include}                       \
-      ${LZMA_ROOT:+-DLIBLZMA_LIBRARY=${LZMA_ROOT}/lib/liblzma.${SONAME}}              \
+      ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR=${LZMA_ROOT}/include}                         \
+      ${LZMA_ROOT:+-DLIBLZMA_LIBRARY=${LZMA_ROOT}/lib/liblzma.${SONAME}}               \
+      ${LZ4_ROOT:+-DLZ4_ROOT=${LZ4_ROOT}}                                              \
+      ${ZSTD_ROOT:+-DZSTD_ROOT=${ZSTD_ROOT}}                                           \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
       ${NLOHMANN_JSON_ROOT:+nlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                   \
       -Dfftw3=ON                                                                       \
@@ -200,6 +206,9 @@ cmake $SOURCEDIR                                                                
       -Dunfold=ON                                                                      \
       -Dpythia8=ON                                                                     \
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
+      ${USE_BUILTIN_GIF:+-Dbuiltin_gif=ON}                                                \
+      ${USE_BUILTIN_JPEG:+-Dbuiltin_jpeg=ON}                                            \
+      -Dbuiltin_gl2ps=ON                                                                                     \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
