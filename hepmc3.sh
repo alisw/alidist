@@ -45,7 +45,7 @@ rm -f "${ROOTIO_TARGETS}.bak"
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
-cat >"$MODULEFILE" <<EoF
+cat > "$MODULEFILE" <<EoF
 #%Module1.0
 proc ModulesHelp { } {
   global version
