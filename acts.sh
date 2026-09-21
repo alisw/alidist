@@ -19,7 +19,6 @@ build_requires:
 source: https://github.com/AliceO2Group/acts.git
 ---
 #!/bin/bash -ex
-
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE      \
                  -DACTS_BUILD_PYTHON_BINDINGS=ON           \
@@ -35,7 +34,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DACTS_BUILD_EXAMPLES_ROOT=ON             \
                  -DACTS_BUILD_ALIGNMENT=ON                 \
                  -DGeant4_DIR=${GEANT4_ROOT}/lib           \
-                 -G Ninja
+                 -G Ninja 
 
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
