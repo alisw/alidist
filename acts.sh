@@ -45,17 +45,17 @@ cmake -E copy_directory \
     "$INSTALLROOT/include/ActsExamples/Digitization"
 
 case $ARCHITECTURE in
-osx*)
-    find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/python/acts {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${GEANT4_ROOT}/lib {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${XERCESC_ROOT}/lib {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${ROOT_DYN_PATH} {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${TBB_ROOT}/lib {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${HEPMC3_ROOT}/lib {} \;
-    find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${PYTHIA_ROOT}/lib {} \;
-    ;;
+    osx*)
+        find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${INSTALLROOT}/python/acts {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${GEANT4_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${XERCESC_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${ROOT_DYN_PATH} {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${TBB_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${HEPMC3_ROOT}/lib {} \;
+        find $INSTALLROOT/python/acts -name "*.so" -exec install_name_tool -add_rpath ${PYTHIA_ROOT}/lib {} \;
+	;;
 esac
 
 [[ -d $INSTALLROOT/lib64 ]] && [[ ! -d $INSTALLROOT/lib ]] && ln -sf ${INSTALLROOT}/lib64 $INSTALLROOT/lib
