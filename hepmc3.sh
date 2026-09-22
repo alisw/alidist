@@ -10,13 +10,21 @@ build_requires:
   - CMake
 prepend_path:
   ROOT_INCLUDE_PATH: "$HEPMC3_ROOT/include"
+track_env:
+  CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
 ---
 #!/bin/bash -e
 
+# Do not use RECC for link steps. On macOS, its command parser
+# misinterprets valid @rpath/... install names as response files.
+# Compilation can still use the compiler launcher normally.
 cmake  $SOURCEDIR                          \
        -DROOT_DIR=$ROOT_ROOT               \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
        -DCMAKE_INSTALL_LIBDIR=lib          \
+       -DCMAKE_C_LINKER_LAUNCHER=          \
+       -DCMAKE_CXX_LINKER_LAUNCHER=        \
        -DHEPMC3_ENABLE_PYTHON=OFF          \
        -DHEPMC3_ENABLE_ROOTIO=ON
 
