@@ -28,5 +28,5 @@ make install
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib --root > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
