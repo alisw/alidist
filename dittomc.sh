@@ -1,6 +1,6 @@
 package: DittoMC
 version: "%(tag_basename)s"
-tag: v1.0.0
+tag: v1.0.1
 requires:
   - ROOT
   - pythia
