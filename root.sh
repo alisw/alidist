@@ -1,6 +1,6 @@
 package: ROOT
 version: "%(tag_basename)s"
-tag: "v6-36-10-alice4"
+tag: "v6-40-04-alice2"
 source: https://github.com/alisw/root.git
 license: LGPLv2.1
 requires:
@@ -14,6 +14,8 @@ requires:
   - "GCC-Toolchain:(?!osx)"
   - libpng
   - lzma
+  - libgif
+  - gl2ps
   - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
@@ -88,8 +90,27 @@ case $ARCHITECTURE in
     SONAME=dylib
     [[ ! $GSL_ROOT ]] && GSL_ROOT=$(brew --prefix gsl)
     [[ ! $OPENSSL_ROOT ]] && SYS_OPENSSL_ROOT=$(brew --prefix openssl@3)
-    [[ ! $LIBPNG_ROOT ]] && LIBPNG_ROOT=$(brew --prefix libpng)
-    [[ ! $LZMA_ROOT ]] && LZMA_ROOT=$(brew --prefix xz)
+    # These are prefer_system packages, so aliBuild only sets <PKG>_ROOT when it
+    # actually built them. When it did not, point ROOT at the Homebrew copy: the
+    # -DCMAKE_IGNORE_PATH=/opt/homebrew/include below stops it finding one by
+    # itself. --installed leaves the variable empty for a formula that is not
+    # there, rather than handing out a prefix that does not exist.
+    [[ -n $LIBPNG_ROOT ]] || LIBPNG_ROOT=$(brew --prefix --installed libpng 2>/dev/null) || true
+    [[ -n $LZMA_ROOT ]] || LZMA_ROOT=$(brew --prefix --installed xz 2>/dev/null) || true
+    [[ -n $LIBGIF_ROOT ]] || LIBGIF_ROOT=$(brew --prefix --installed giflib 2>/dev/null) || true
+    [[ -n $GL2PS_ROOT ]] || GL2PS_ROOT=$(brew --prefix --installed gl2ps 2>/dev/null) || true
+    # ROOT 6.40 also hard-requires JPEG, LZ4 and ZSTD. alidist has no recipe for
+    # JPEG or ZSTD at all, and lz4 is prefer_system here, so on macOS all three
+    # come from Homebrew. CMake finds their libraries under /opt/homebrew/lib
+    # but not their headers, because CMAKE_IGNORE_PATH below hides
+    # /opt/homebrew/include -- and ZSTD cannot be pointed at with -DZSTD_*,
+    # since SearchInstalledSoftware.cmake unsets every ZSTD_* cache entry before
+    # searching. Hand CMake the per-formula prefixes instead, which are outside
+    # the ignored directory.
+    for brew_formula in jpeg-turbo jpeg lz4 zstd; do
+      brew_prefix=$(brew --prefix --installed "$brew_formula" 2>/dev/null) || continue
+      EXTRA_CMAKE_PREFIX_PATH="${EXTRA_CMAKE_PREFIX_PATH:+$EXTRA_CMAKE_PREFIX_PATH;}$brew_prefix"
+    done
     EXTRA_CMAKE_CXX_FLAGS="-Wno-vla-extension"
   ;;
 esac
@@ -171,6 +192,10 @@ cmake $SOURCEDIR                                                                
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${LIBGIF_ROOT:+-DGIF_INCLUDE_DIR="${LIBGIF_ROOT}/include"}                       \
+      ${LIBGIF_ROOT:+-DGIF_LIBRARY="${LIBGIF_ROOT}/lib/libgif.${SONAME}"}              \
+      ${GL2PS_ROOT:+-Dgl2ps_INCLUDE_DIR="${GL2PS_ROOT}/include"}                       \
+      ${GL2PS_ROOT:+-Dgl2ps_LIBRARY="${GL2PS_ROOT}/lib/libgl2ps.${SONAME}"}            \
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR=${LZMA_ROOT}/include}                       \
@@ -203,7 +228,7 @@ cmake $SOURCEDIR                                                                
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT"
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$LIBGIF_ROOT;$GL2PS_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT${EXTRA_CMAKE_PREFIX_PATH:+;$EXTRA_CMAKE_PREFIX_PATH}"
 
 # Workaround issue with cmake 3.29.0
 sed -i.removeme '/deps = gcc/d' build.ninja
