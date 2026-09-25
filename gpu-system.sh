@@ -41,7 +41,14 @@ prefer_system_check: |
       ALIBUILD_O2_FORCE_GPU=fullauto
     fi
 
-    if [[ ${ALIBUILD_O2_FORCE_GPU} == "force" || ${ALIBUILD_O2_FORCE_GPU} == "ci" ]]; then
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "ci" ]]; then
+      if [[ "${ARCHITECTURE}" =~ ^slc10 ]]; then
+        ALIBUILD_O2_FORCE_GPU=build
+      else
+        ALIBUILD_O2_FORCE_GPU=1
+      fi
+    fi
+    if [[ ${ALIBUILD_O2_FORCE_GPU} == "force" ]]; then
       ALIBUILD_O2_FORCE_GPU=1
     fi
 
