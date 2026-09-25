@@ -13,43 +13,26 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
+# Only the SIMD backend really differs per architecture: Vc with SSE4.2 on
+# x86-64, plain scalar on arm64, where Vc has no backend.
 case $ARCHITECTURE in
-    osx_arm64)
-      cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-            -DCMAKE_APPLE_SILICON_PROCESSOR=arm64          \
-            -DVECGEOM_BACKEND=Scalar                       \
-            -GNinja                                        \
-            -DBENCHMARK=OFF                                \
-            -DBUILD_TESTING=OFF                            \
-            -DVECGEOM_BUILTIN_VECCORE=ON                   \
-            ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}        \
-            ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}  \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-  ;;
-    *_aarch64)
-      cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-            -DVECGEOM_BACKEND=Scalar                       \
-            -GNinja                                        \
-            -DBENCHMARK=OFF                                \
-            -DBUILD_TESTING=OFF                            \
-            -DVECGEOM_BUILTIN_VECCORE=ON                   \
-            ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}        \
-            ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}  \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-  ;;
-    *)
-      cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-            -DVECGEOM_BACKEND=Vc                           \
-            -DVECGEOM_VECTOR=sse4.2                        \
-            -DBENCHMARK=OFF                                \
-            -DBUILD_TESTING=OFF                            \
-            -DVECGEOM_BUILTIN_VECCORE=ON                   \
-            -GNinja                                        \
-            ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}        \
-            ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}  \
-            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-  ;;
+  osx_arm64) VECGEOM_BACKEND=Scalar; APPLE_SILICON_PROCESSOR=arm64 ;;
+  *_aarch64) VECGEOM_BACKEND=Scalar ;;
+  *)         VECGEOM_BACKEND=Vc; VECGEOM_VECTOR=sse4.2 ;;
 esac
+
+cmake "$SOURCEDIR" -GNinja                                                                 \
+      -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"                                                \
+      -DCMAKE_INSTALL_LIBDIR=lib                                                           \
+      -DVECGEOM_BACKEND="$VECGEOM_BACKEND"                                                 \
+      -DVECGEOM_BUILTIN_VECCORE=ON                                                         \
+      -DBENCHMARK=OFF                                                                      \
+      -DBUILD_TESTING=OFF                                                                  \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                   \
+      ${VECGEOM_VECTOR:+-DVECGEOM_VECTOR=$VECGEOM_VECTOR}                                  \
+      ${APPLE_SILICON_PROCESSOR:+-DCMAKE_APPLE_SILICON_PROCESSOR=$APPLE_SILICON_PROCESSOR} \
+      ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                              \
+      ${XERCESC_ROOT:+-DXercesC_ROOT=$XERCESC_ROOT}
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
