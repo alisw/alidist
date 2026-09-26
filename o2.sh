@@ -161,6 +161,7 @@ incremental_recipe: |
 
   if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == "ci" ]]; then
     GPUCA_STANDALONE_CI=1 $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+    $SOURCEDIR/Common/ML/test/onnxruntime-inference/run-ci-onnxruntime-inference-test.sh $SOURCEDIR
   fi
 
 valid_defaults:
@@ -289,6 +290,7 @@ fi
 
 if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == "ci" ]]; then
   GPUCA_STANDALONE_CI=1  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
+  $SOURCEDIR/Common/ML/test/onnxruntime-inference/run-ci-onnxruntime-inference-test.sh $SOURCEDIR
 fi
 
 # Modulefile
