@@ -21,6 +21,9 @@ case $ARCHITECTURE in
     # unicode/uloc.h
     TRANSCODER=macosunicodeconverter
     ;;
+  *)
+    TRANSCODER=gnuiconv
+    ;;
 esac
 
 cmake "$SOURCEDIR"                                       \
