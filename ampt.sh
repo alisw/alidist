@@ -1,6 +1,6 @@
 package: AMPT
 version: "%(tag_basename)s"
-tag: "v1.26t7b-v2.26t7b-alice1"
+tag: "v1.26t9b-v2.26t9b-alice1"
 source: https://github.com/alisw/ampt
 requires:
   - "GCC-Toolchain:(?!osx)"
@@ -11,6 +11,7 @@ license: GPL-2.0
 
 cmake  $SOURCEDIR                           \
        -DCMAKE_INSTALL_PREFIX=$INSTALLROOT  \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5   \
        ${HEPMC_REVISION:+-DHEPMC_ROOT=$HEPMC_ROOT}
 
 make ${JOBS+-j $JOBS} install
