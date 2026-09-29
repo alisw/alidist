@@ -2,6 +2,7 @@ package: AliGenO2
 version: "v%(year)s%(month)s%(day)s"
 requires:
   - DPMJET
+  - AMPT
   - POWHEG
   - pythia
   - ThePEG
