@@ -3,6 +3,8 @@ version: "7.70.0"
 tag: curl-7_70_0
 license: curl
 source: https://github.com/curl/curl.git
+prepend_path:
+  PKG_CONFIG_PATH: "$CURL_ROOT/lib/pkgconfig"
 build_requires:
   - "OpenSSL:(?!osx)"
   - alibuild-recipe-tools
@@ -26,5 +28,5 @@ make install
 
 # Modulefile
 mkdir -p etc/modulefiles
-alibuild-generate-module --bin --lib > etc/modulefiles/$PKGNAME
+alibuild-generate-module --bin --lib --root > etc/modulefiles/$PKGNAME
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

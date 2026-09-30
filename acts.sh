@@ -1,6 +1,6 @@
 package: ACTS
-version: "v45.5.0"
-tag: "v45.5.0-alice"
+version: "v47.7.0"
+tag: "v47.7.0-alice"
 requires:
   - ROOT
   - pythia
@@ -32,11 +32,17 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
                  -DACTS_BUILD_FATRAS_GEANT4=ON             \
                  -DACTS_BUILD_EXAMPLES_GEANT4=ON           \
                  -DACTS_BUILD_EXAMPLES_ROOT=ON             \
+                 -DACTS_BUILD_ALIGNMENT=ON                 \
                  -DGeant4_DIR=${GEANT4_ROOT}/lib           \
                  -G Ninja 
 
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
+
+# Install ACTS example Digitization headers
+cmake -E copy_directory \
+    "$SOURCEDIR/Examples/Algorithms/Digitization/include/ActsExamples/Digitization" \
+    "$INSTALLROOT/include/ActsExamples/Digitization"
 
 case $ARCHITECTURE in
     osx*)
@@ -54,13 +60,16 @@ esac
 
 [[ -d $INSTALLROOT/lib64 ]] && [[ ! -d $INSTALLROOT/lib ]] && ln -sf ${INSTALLROOT}/lib64 $INSTALLROOT/lib
 
-#ModuleFile
+# ModuleFile
 MODULEDIR="${INSTALLROOT}/etc/modulefiles"
 MODULEFILE="${MODULEDIR}/${PKGNAME}"
+
 mkdir -p ${MODULEDIR}
-alibuild-generate-module --bin --lib > "${MODULEFILE}"
+
+alibuild-generate-module --bin --lib >"${MODULEFILE}"
+
 # extra environment
-cat >> ${MODULEFILE} <<EOF
+cat >>${MODULEFILE} <<EOF
 set ACTS_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv ACTS_ROOT \$ACTS_ROOT
 prepend-path ROOT_INCLUDE_PATH \$ACTS_ROOT/include

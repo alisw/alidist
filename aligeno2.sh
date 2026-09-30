@@ -10,6 +10,7 @@ requires:
   - lhapdf-pdfsets
   - JETSCAPE
   - CRMC
+  - DittoMC
   - EPOS4:(?!.*aarch64)
   - EPOS4HQ:(?!.*aarch64)
   - EVTGEN:(?!osx)

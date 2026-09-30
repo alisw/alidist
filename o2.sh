@@ -1,6 +1,6 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20260628-0000"
+tag: "daily-20260927-0000"
 requires:
   - abseil
   - arrow
@@ -24,6 +24,7 @@ requires:
   - libjalienO2
   - cgal
   - "VecGeom:(?!osx.*)"
+  - "TGeo2VecGeom:(?!osx.*)"
   - FFTW3
   - ONNXRuntime
   - nlohmann_json
@@ -47,6 +48,9 @@ env:
   VMCWORKDIR: "$O2_ROOT/share"
 prepend_path:
   ROOT_INCLUDE_PATH: "$O2_ROOT/include:$O2_ROOT/include/GPU"
+track_env:
+  CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
 incremental_recipe: |
   unset DYLD_LIBRARY_PATH
   if [[ ! $CMAKE_GENERATOR && $DISABLE_NINJA != 1 && $DEVEL_SOURCES != $SOURCEDIR ]]; then
@@ -155,7 +159,7 @@ incremental_recipe: |
     lcov --list coverage.info
   fi
 
-  if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
+  if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == "ci" ]]; then
     GPUCA_STANDALONE_CI=1 $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
   fi
 
@@ -261,7 +265,6 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ARROW_ROOT:+-DArrow_DIR=$ARROW_ROOT/lib/cmake/Arrow}                                              \
       ${CLANG_REVISION:+-DCLANG_EXECUTABLE="$CLANG_ROOT/bin-safe/clang"}                                  \
       ${CLANG_REVISION:+-DLLVM_LINK_EXECUTABLE="$CLANG_ROOT/bin/llvm-link"}                               \
-      ${ORT_ROCM_BUILD:+-DORT_ROCM_BUILD=${ORT_ROCM_BUILD}}                                               \
       ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
       ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
       ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   \
@@ -284,7 +287,7 @@ if [ "$DEVEL_SOURCES" != "$SOURCEDIR" ]; then
   ln -sf $BUILDDIR/compile_commands.json $DEVEL_SOURCES/compile_commands.json
 fi
 
-if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == 1 ]]; then
+if [[ ( "$ALIBOT_PR_REPO" == "AliceO2Group/AliceO2" || "$ALIBOT_PR_REPO" == "alisw/alidist" ) && $ALIBUILD_O2_FORCE_GPU == "ci" ]]; then
   GPUCA_STANDALONE_CI=1  $SOURCEDIR/GPU/GPUTracking/Standalone/cmake/build.sh $SOURCEDIR
 fi
 
@@ -316,6 +319,8 @@ module load BASE/1.0 \\
             ${JALIEN_ROOT_REVISION:+JAliEn-ROOT/$JALIEN_ROOT_VERSION-$JALIEN_ROOT_REVISION}         \\
             ${FASTJET_REVISION:+fastjet/$FASTJET_VERSION-$FASTJET_REVISION}                         \\
             ${CGAL_REVISION:+cgal/$CGAL_VERSION-$CGAL_REVISION}                                     \\
+            ${VECGEOM_REVISION:+VecGeom/$VECGEOM_VERSION-$VECGEOM_REVISION}                         \\
+            ${TGEO2VECGEOM_REVISION:+TGeo2VecGeom/$TGEO2VECGEOM_VERSION-$TGEO2VECGEOM_REVISION}     \\
             ${GLFW_REVISION:+GLFW/$GLFW_VERSION-$GLFW_REVISION}                                     \\
             ${FMT_REVISION:+fmt/$FMT_VERSION-$FMT_REVISION}                                         \\
             ${AEGIS_REVISION:+AEGIS/$AEGIS_VERSION-$AEGIS_REVISION}                                 \\

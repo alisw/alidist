@@ -23,7 +23,7 @@ build_requires:
 #!/bin/bash -e
 
 # When using the official repo the .git files are needed as Git_Info.C
-# is generated and used during the build process, which fails in case 
+# is generated and used during the build process, which fails in case
 # we would not include the .git directory
 rsync -a --chmod=ug=rwX --exclude .git  --delete-excluded $SOURCEDIR/ ./
 
@@ -31,7 +31,11 @@ rsync -a --chmod=ug=rwX --exclude .git  --delete-excluded $SOURCEDIR/ ./
 sed -i.bak /Manual/d Makefile.am
 rm -f Makefile.am.bak
 
-[[ "X$SQLITE_ROOT" = X ]] && SQLITE_ROOT=$(brew --prefix sqlite)
+case $ARCHITECTURE in
+  osx*)
+    [[ -z $SQLITE_ROOT ]] && SQLITE_ROOT=$(brew --prefix sqlite)
+  ;;
+esac
 
 autoreconf -ivf
 

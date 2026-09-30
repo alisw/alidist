@@ -1,11 +1,12 @@
 package: pythia
 version: "%(tag_basename)s"
-tag: v8315-alice1
-source: https://github.com/alisw/pythia8.git
+tag: pythia8318
+source: https://gitlab.com/Pythia8/releases.git
 requires:
   - lhapdf
   - HepMC
   - boost
+  - zlib
 license: GPL-2.0
 env:
   PYTHIA8DATA: "$PYTHIA_ROOT/share/Pythia8/xmldoc"
@@ -24,7 +25,8 @@ esac
             --enable-shared \
             ${HEPMC_ROOT:+--with-hepmc2="$HEPMC_ROOT"} \
             ${LHAPDF_ROOT:+--with-lhapdf6="$LHAPDF_ROOT"} \
-            ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"}
+            ${BOOST_ROOT:+--with-boost="$BOOST_ROOT"} \
+            ${ZLIB_ROOT:+--with-gzip="$ZLIB_ROOT"}
 
 if [[ $ARCHITECTURE =~ "slc5.*" ]]; then
     ln -s LHAPDF5.h include/Pythia8Plugins/LHAPDF5.cc
