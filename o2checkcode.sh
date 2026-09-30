@@ -61,11 +61,11 @@ run_O2CodeChecker.py ${JOBS+-j $JOBS} \
 popd
 
 # Show only errors from the log, break in case some were found
-echo -e "\n\n========== List of errors found =========="
 grep -v clang-diagnostic-error error-log.txt | grep -E ".+: error: " | sort -V | uniq > errors.txt || true
 grep -v clang-diagnostic-error error-log.txt | grep -E ".+: warning: " | sort -V | uniq > warnings.txt || true
 N_ERROR=$(wc -l < errors.txt)
 N_WARNING=$(wc -l < warnings.txt)
+echo -e "\n\n========== List of errors found =========="
 echo "Found $N_ERROR errors and $N_WARNING warnings."
 [[ $N_ERROR -gt 0 ]] && cat errors.txt
 [[ $N_WARNING -gt 0 ]] && cat warnings.txt
