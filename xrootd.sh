@@ -1,6 +1,6 @@
 package: XRootD
 version: "%(tag_basename)s"
-tag: "v5.8.4"
+tag: "v5.9.8"
 source: https://github.com/xrootd/xrootd
 license: LGPLv3
 requires:
