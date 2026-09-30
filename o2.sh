@@ -23,8 +23,8 @@ requires:
   - libuv
   - libjalienO2
   - cgal
-  - "VecGeom:(?!osx.*)"
-  - "TGeo2VecGeom:(?!osx.*)"
+  - VecGeom
+  - TGeo2VecGeom
   - FFTW3
   - ONNXRuntime
   - nlohmann_json
