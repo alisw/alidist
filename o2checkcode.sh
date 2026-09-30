@@ -82,8 +82,9 @@ sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.t
 
 # Show only errors from the log, break in case some were found
 echo ; echo ; echo "========== List of errors found =========="
+# -a: the log can contain NUL bytes, which would make grep treat it as binary and print nothing
 GRERR=0
-grep -v clang-diagnostic-error error-log.txt | grep " error:"   || GRERR=$?
+grep -a -v clang-diagnostic-error error-log.txt | grep -a " error:"   || GRERR=$?
 [[ $GRERR == 0 ]] && exit 1
 
 # Dummy modulefile
