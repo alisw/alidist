@@ -1,6 +1,6 @@
 package: o2codechecker
-version: v20.1.7-alice2
-tag: v20.1.7-alice2
+version: v20.1.7-alice3
+tag: v20.1.7-alice3
 requires:
   - Clang:(?!osx*)
 license: GPL-3.0
