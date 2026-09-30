@@ -34,6 +34,11 @@ sed -i.bak "s/eigen/Eigen3/g" cmake/external/eigen.cmake
 python3 -c 'import sys; print(sys.executable)'
 sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-size/-w/" cmake/CMakeLists.txt
 
+# ONNX Runtime 1.29 streams the MIGraphX cache path with filesystem quoting.
+# An empty path becomes literal '""', enabling caching in a nonexistent directory.
+# Serialize the string instead, preserving empty paths and avoiding added quotes.
+sed -i.bak 's/MakeStringWithClassicLocale(model_cache_dir)/MakeStringWithClassicLocale(model_cache_dir.string())/' onnxruntime/core/providers/migraphx/migraphx_execution_provider_info.cc
+
 case $ARCHITECTURE in
   osx*)
     NLOHMANN_JSON_ROOT=${NLOHMANN_JSON_ROOT:-$(brew --prefix nlohmann-json)}
