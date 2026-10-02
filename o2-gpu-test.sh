@@ -2,6 +2,7 @@ package: O2-GPU-test
 version: "1.0"
 requires:
   - O2
+  - ONNXRuntime
   - gpu-system
 build_requires:
   - alibuild-recipe-tools
@@ -37,6 +38,9 @@ done
 
 popd
 rm -Rf $BUILDDIR/gpu-test
+
+# Run the ONNXRuntime inference test installed by O2.
+"$O2_ROOT/share/test/onnxruntime-inference/run-ci-onnxruntime-inference-test.sh"
 
 # Dummy modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles

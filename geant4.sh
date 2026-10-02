@@ -62,6 +62,25 @@ if [ -f "$packagecachefile" ]; then
     echo "#" > $packagecachefile
 fi
 
+# Precompute the tables of the pion elastic model G4ElasticHadrNucleusHE.
+# Jobs read them through G4ELASTICHEDATA; if this step fails, Geant4 computes them.
+ELASTICHE_DIR="$INSTALLROOT/share/Geant4/data/ElasticHE"
+cat > elastiche_gen.cc <<\EOF
+#include "G4ElasticHadrNucleusHE.hh"
+int main()
+{
+  G4ElasticHadrNucleusHE model;
+  model.StoreData();
+  return 0;
+}
+EOF
+mkdir -p ElasticHE/hedata
+if c++ elastiche_gen.cc $("$INSTALLROOT/bin/geant4-config" --cflags --libs) -o elastiche_gen &&
+   (cd ElasticHE && LD_LIBRARY_PATH="$INSTALLROOT/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" ../elastiche_gen); then
+  mkdir -p "$(dirname "$ELASTICHE_DIR")"
+  mv ElasticHE "$ELASTICHE_DIR"
+fi
+
 # Install data sets
 # Can be done after Geant4 installation, if installed with -DGEANT4_INSTALL_DATA=OFF
 # ./geant4-config --install-datasets
@@ -78,6 +97,9 @@ EOF
 
 # add datasets environment to modulefile
 $INSTALLROOT/bin/geant4-config --datasets |  sed 's/[^ ]* //' | sed 's/G4/setenv G4/' >> "$MODULEFILE"
+if [ -d "$ELASTICHE_DIR" ]; then
+  echo "setenv G4ELASTICHEDATA \$::env(BASEDIR)/$PKGNAME/\$version/share/Geant4/data/ElasticHE" >> "$MODULEFILE"
+fi
 
 # install modulefile
 mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles

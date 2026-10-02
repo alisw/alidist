@@ -69,11 +69,17 @@ CHECKS="${O2_CHECKER_CHECKS:--*\
 
 echo $CHECKS
 $CLANG_ROOT/bin-safe/clang-tidy --load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so --list-checks -checks="*"
-# Run C++ checks
+# GCC installation of the toolchain O2 was compiled with
+GCC_INSTALL_DIR=
+if [[ $GCC_TOOLCHAIN_REVISION ]]; then
+  GCC_INSTALL_DIR=$(find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \; | head -n1)
+fi
+# Run C++ checks. -Wno-error overrides the -Werror of PR builds, which would otherwise
+# turn compiler warnings into errors that clang-tidy cannot filter out with -checks.
 run_O2CodeChecker.py ${JOBS+-j $JOBS} \
 	-clang-tidy-binary $CLANG_ROOT/bin-safe/clang-tidy \
 	-clang-apply-replacements-binary "$CLANG_ROOT/bin-safe/clang-apply-replacements" \
-  -extra-args="--load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so ${GCC_TOOLCHAIN_REVISION:+--extra-arg=--gcc-install-dir=$(find \"$GCC_TOOLCHAIN_ROOT/lib\" -name crtbegin.o -exec dirname {} \;)}" \
+  -extra-args="--load $O2CODECHECKER_ROOT/lib/libclangTidyAliceO2Module.so --extra-arg=-Wno-error${GCC_INSTALL_DIR:+ --extra-arg=--gcc-install-dir=$GCC_INSTALL_DIR}" \
 	-header-filter='.*SOURCES(?!.*/3rdparty/).*' \
         ${O2_CHECKER_FIX:+-fix} -checks="$CHECKS" 2>&1 | tee error-log.txt
 
@@ -82,8 +88,9 @@ sed -e 's/ warning:/ error:/g' error-log.txt > error-log.txt.0 && mv error-log.t
 
 # Show only errors from the log, break in case some were found
 echo ; echo ; echo "========== List of errors found =========="
+# -a: the log can contain NUL bytes, which would make grep treat it as binary and print nothing
 GRERR=0
-grep -v clang-diagnostic-error error-log.txt | grep " error:"   || GRERR=$?
+grep -a -v clang-diagnostic-error error-log.txt | grep -a " error:"   || GRERR=$?
 [[ $GRERR == 0 ]] && exit 1
 
 # Dummy modulefile

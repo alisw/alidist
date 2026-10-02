@@ -4,7 +4,7 @@ tag: 66d734137868f1948bb90eae620f795f7f03cda8
 source: https://gitlab.cern.ch/VecGeom/VecGeom.git
 requires:
   - "GCC-Toolchain:(?!osx)"
-  - "Vc"
+  - "Vc:(?!osx_arm64|.*_aarch64)"
   - xercesc
 license: Apache-2.0
 build_requires:
