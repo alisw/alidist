@@ -14,7 +14,12 @@ prepend_path:
 ---
 #!/bin/bash -e
 
-cmake $SOURCEDIR -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_INSTALL_LIBDIR=lib
+# HAVE_PIPE2 is pre-seeded rather than probed. CHECK_SYMBOL_EXISTS only asks whether
+# the symbol is declared, which it is on the macOS 27 SDK, where pipe2() is marked as
+# introduced in 27.0. With MACOSX_DEPLOYMENT_TARGET below that, the unguarded call in
+# src/lib/event/ares_event_wake_pipe.c is a -Wunguarded-availability-new error. The
+# #else branch there is plain pipe() + fcntl(O_NONBLOCK), so nothing is lost.
+cmake $SOURCEDIR -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DCMAKE_INSTALL_LIBDIR=lib -DHAVE_PIPE2=OFF
 make ${JOBS:+-j$JOBS} install
 
 case $ARCHITECTURE in
