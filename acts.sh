@@ -49,6 +49,7 @@ cmake -E copy_directory \
     "$SOURCEDIR/Examples/Detectors/Common/include/ActsExamples/DetectorCommons" \
     "$INSTALLROOT/include/ActsExamples/DetectorCommons"
 
+# Install ACTS example TrackFinding headers (needed by AliceTrackFindingAlgorithm)
 cmake -E copy_directory \
     "$SOURCEDIR/Examples/Algorithms/TrackFinding/include/ActsExamples/TrackFinding" \
     "$INSTALLROOT/include/ActsExamples/TrackFinding"
