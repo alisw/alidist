@@ -49,7 +49,7 @@ cmake -E copy_directory \
     "$INSTALLROOT/include/ActsExamples/DetectorCommons"
 
 cmake -E copy_directory \
-    "$SOURCEDIR/Examples/Detectors/Common/include/ActsExamples/TrackFinding" \
+    "$SOURCEDIR/Examples/Algorithms/TrackFinding/include/ActsExamples/TrackFinding" \
     "$INSTALLROOT/include/ActsExamples/TrackFinding"
 
 case $ARCHITECTURE in
