@@ -1,6 +1,6 @@
 package: ACTS
-version: "v47.7.0"
-tag: "v47.7.0-alice"
+version: "%(tag_basename)s"
+tag: "v48.0.1-alice"
 requires:
   - ROOT
   - pythia
