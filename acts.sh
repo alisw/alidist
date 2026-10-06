@@ -48,6 +48,10 @@ cmake -E copy_directory \
     "$SOURCEDIR/Examples/Detectors/Common/include/ActsExamples/DetectorCommons" \
     "$INSTALLROOT/include/ActsExamples/DetectorCommons"
 
+cmake -E copy_directory \
+    "$SOURCEDIR/Examples/Detectors/Common/include/ActsExamples/TrackFinding" \
+    "$INSTALLROOT/include/ActsExamples/TrackFinding"
+
 case $ARCHITECTURE in
     osx*)
         find $INSTALLROOT/lib/ -name "*.dylib" -exec install_name_tool -add_rpath ${INSTALLROOT}/lib {} \;
