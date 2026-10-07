@@ -1,6 +1,6 @@
 package: ACTS
-version: "v47.7.0"
-tag: "v47.7.0-alice"
+version: "%(tag_basename)s"
+tag: "v48.0.1-alice"
 requires:
   - ROOT
   - pythia
@@ -39,10 +39,18 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT       \
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
 
-# Install ACTS example Digitization headers
+# Install ACTS example headers required by ACTSO2
 cmake -E copy_directory \
     "$SOURCEDIR/Examples/Algorithms/Digitization/include/ActsExamples/Digitization" \
     "$INSTALLROOT/include/ActsExamples/Digitization"
+
+cmake -E copy_directory \
+    "$SOURCEDIR/Examples/Detectors/Common/include/ActsExamples/DetectorCommons" \
+    "$INSTALLROOT/include/ActsExamples/DetectorCommons"
+
+cmake -E copy_directory \
+    "$SOURCEDIR/Examples/Algorithms/TrackFinding/include/ActsExamples/TrackFinding" \
+    "$INSTALLROOT/include/ActsExamples/TrackFinding"
 
 case $ARCHITECTURE in
     osx*)
