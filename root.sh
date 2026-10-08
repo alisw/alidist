@@ -176,7 +176,7 @@ cmake $SOURCEDIR                                                                
       ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR=${LZMA_ROOT}/include}                       \
       ${LZMA_ROOT:+-DLIBLZMA_LIBRARY=${LZMA_ROOT}/lib/liblzma.${SONAME}}              \
       ${FFTW3_ROOT:+-DFFTW_DIR=${FFTW3_ROOT}}                                          \
-      ${NLOHMANN_JSON_ROOT:+nlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                   \
+      ${NLOHMANN_JSON_ROOT:+-Dnlohmann_json_DIR=${NLOHMANN_JSON_ROOT}}                \
       -Dfftw3=ON                                                                       \
       -Dpgsql=OFF                                                                      \
       -Dminuit=ON                                                                      \
@@ -187,13 +187,17 @@ cmake $SOURCEDIR                                                                
       -Dsoversion=ON                                                                   \
       -Dshadowpw=OFF                                                                   \
       -Dvdt=OFF                                                                        \
-      -Dvc=ON                                                                          \
-      -Dbuiltin_vc=OFF                                                                 \
+      -Uvc                                                                            \
+      -Ubuiltin_vc                                                                    \
       -Dbuiltin_vdt=OFF                                                                \
       -Dgviz=OFF                                                                       \
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_fftw3=OFF                                                              \
-      -Dbuiltin_lzma=OFF                                                               \
+      -Dbuiltin_lzma=ON \
+      -Dbuiltin_xxhash=ON \
+      -Dbuiltin_gif=ON \
+      -Dbuiltin_gl2ps=ON \
+      -Dbuiltin_civetweb=ON \
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
@@ -202,7 +206,7 @@ cmake $SOURCEDIR                                                                
       ${USE_BUILTIN_GLEW:+-Dbuiltin_glew=ON}                                           \
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
-      ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
+      -DPython3_EXECUTABLE="$(command -v python3)"                 \
 -DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT"
 
 # Workaround issue with cmake 3.29.0
