@@ -42,6 +42,9 @@ prefer_system_check: |
     fi
 
     if [[ ${ALIBUILD_O2_FORCE_GPU} == "ci" ]]; then
+      if [[ -z ${ARCHITECTURE} && -f /etc/redhat-release && $(cat /etc/redhat-release) =~ "release 10" ]]; then
+        ARCHITECTURE=slc10 # temporary fix while aliBuild does not expose ARCHITECTURE during prefer_system_check
+      fi
       if [[ "${ARCHITECTURE}" =~ ^slc10 ]]; then
         ALIBUILD_O2_FORCE_GPU=build
       else
