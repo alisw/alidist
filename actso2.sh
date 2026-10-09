@@ -19,7 +19,7 @@ source: https://gitlab.cern.ch/alice3-trackers/wp1-simulationsandperformances/ac
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
                  -DACTS_ROOT=$ACTS_ROOT \
                  -DACTS_SOURCE_DIR=$ACTS_ROOT \
-                 -DCMAKE_PREFIX_PATH=$ACTS_ROOT
+                 -DCMAKE_PREFIX_PATH="$ACTS_ROOT;$TBB_ROOT"
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
 
