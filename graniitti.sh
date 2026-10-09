@@ -1,6 +1,6 @@
 package: Graniitti
 version: v1.09
-tag: master
+tag: ad41a8a69327f6fe723c193f35645f5b478f3d9f
 requires:
   - ROOT
   - HepMC3
