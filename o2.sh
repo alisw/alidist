@@ -268,7 +268,9 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ORT_CUDA_BUILD:+-DORT_CUDA_BUILD=${ORT_CUDA_BUILD}}                                               \
       ${ORT_MIGRAPHX_BUILD:+-DORT_MIGRAPHX_BUILD=${ORT_MIGRAPHX_BUILD}}                                   \
       ${ORT_TENSORRT_BUILD:+-DORT_TENSORRT_BUILD=${ORT_TENSORRT_BUILD}}                                   \
-      ${EIGEN3_ROOT:+-DEIGEN3_ROOT=${EIGEN3_ROOT}}
+      ${EIGEN3_ROOT:+-DEIGEN3_ROOT=${EIGEN3_ROOT}}                                                        \
+      -DGPUCA_BUILD_SOFIE=ON
+      #${GPUCA_BUILD_SOFIE:+-DGPUCA_BUILD_SOFIE=${GPUCA_BUILD_SOFIE}}
 # LLVM_ROOT is required for Gandiva
 
 cmake --build . -- ${JOBS+-j $JOBS} install
