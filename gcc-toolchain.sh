@@ -1,6 +1,6 @@
 package: GCC-Toolchain
 version: "%(tag_basename)s"
-tag: v14.2.0-alice2
+tag: v15.3.0-alice2
 license: GPL-3.0
 source: https://github.com/alisw/gcc-toolchain
 prepend_path:
@@ -15,6 +15,7 @@ prefer_system_check: |
   set -e
   which gfortran || { echo "gfortran missing"; exit 1; }
   case $REQUESTED_VERSION in
+    v15*) MIN_GCC_VERSION=150300 ;;
     v14*) MIN_GCC_VERSION=140200 ;;
     v13*) MIN_GCC_VERSION=130200 ;;
     v12*) MIN_GCC_VERSION=120100 ;;
@@ -95,6 +96,17 @@ rsync -a gcc/mpfr/ mpfr
 rsync -a gcc/gmp/ gmp
 rsync -a gcc/isl/ isl
 rsync -a gcc/mpc/ mpc
+
+# isl 0.27 ships C++17 self-tests (isl_test_cpp17, isl_test_cpp17-checked) that
+# break the in-tree GCC build: AX_CXX_COMPILE_STDCXX_17 sets HAVE_CXX17=1 when
+# the host compiler accepts C++17 "by default" but adds no -std switch, then the
+# TUs get compiled with __cplusplus < 201703L so the C++17-only members
+# (id::try_user, the std::any ctor) are invisible. These tests are not needed to
+# build libisl for GCC, so drop them from both isl copies before autoreconf
+# regenerates the Makefiles.
+for islmf in gcc/isl/Makefile.am isl/Makefile.am; do
+  [ -f "$islmf" ] && perl -ni -e 'print unless /^if HAVE_CXX17$/ .. /^endif$/' "$islmf"
+done
 
 pushd gcc
   [ -d mpfr ] && (cd mpfr && autoreconf -ivf)
@@ -215,6 +227,7 @@ mkdir -p build-isl
 mkdir -p build-mpc
 
 pushd build-gmp
+  CFLAGS="-O2 -pedantic -fomit-frame-pointer -std=gnu17"  \
   ../gmp/configure --prefix="$INSTALLROOT/libexec/extra"  \
                    --disable-shared                       \
                    --enable-static
