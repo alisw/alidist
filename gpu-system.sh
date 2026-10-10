@@ -207,7 +207,7 @@ prefer_system_check: |
     else
       [[ $GPU_CUDA_ENABLED != 1 ]] && GPU_CUDA_ENABLED=0
       [[ $GPU_HIP_ENABLED != 1 ]] && GPU_HIP_ENABLED=0
-      [[ $GPU_OPENC_ENABLED != 1 ]] && GPU_OPENC_ENABLED=0
+      [[ $GPU_OPENCL_ENABLED != 1 ]] && GPU_OPENCL_ENABLED=0
     fi
 
     [[ -n ${ALIBUILD_O2_FORCE_GPU_CUDA} ]] && GPU_CUDA_ENABLED=${ALIBUILD_O2_FORCE_GPU_CUDA}
