@@ -18,6 +18,7 @@ track_env:
   O2PHYSICS_COMPONENTS: echo ${O2PHYSICS_COMPONENTS:-install}
   CMAKE_CXX_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
   CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
+  O2PHYSICS_DEBUG_FLAGS: echo ${O2PHYSICS_DEBUG_FLAGS}
 incremental_recipe: |
   cmake --build . -- ${JOBS:+-j$JOBS} ${O2PHYSICS_COMPONENTS:-install}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -37,6 +38,8 @@ esac
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       -G Ninja                                                              \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}           \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${O2PHYSICS_DEBUG_FLAGS:--O2 -g1 -DNDEBUG}" \
+      -DCMAKE_C_FLAGS_RELWITHDEBINFO="${O2PHYSICS_DEBUG_FLAGS:--O2 -g1 -DNDEBUG}" \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                    \
       -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                           \
