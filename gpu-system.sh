@@ -87,6 +87,12 @@ prefer_system_check: |
         add_feature - rocm_arch_$(sed -e "s/;\|-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}")
         add_setting 'export O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
       fi
+      if [[ ${ALIBUILD_O2_FORCE_GPU_OPENCL:-1} != "0" ]]; then
+        echo "alibuild_system_replace_requires: OpenCL"
+        add_setting 'if [[ -z ${OPENCL_ROOT} ]]; then echo "ERROR: OpenCL ROOT NOT SET!"; exit 1; fi'
+        add_setting "export O2_GPU_OPENCL_AVAILABLE=1"
+        add_feature - opencl
+      fi
       break
     fi
 
@@ -207,7 +213,7 @@ prefer_system_check: |
     else
       [[ $GPU_CUDA_ENABLED != 1 ]] && GPU_CUDA_ENABLED=0
       [[ $GPU_HIP_ENABLED != 1 ]] && GPU_HIP_ENABLED=0
-      [[ $GPU_OPENC_ENABLED != 1 ]] && GPU_OPENC_ENABLED=0
+      [[ $GPU_OPENCL_ENABLED != 1 ]] && GPU_OPENCL_ENABLED=0
     fi
 
     [[ -n ${ALIBUILD_O2_FORCE_GPU_CUDA} ]] && GPU_CUDA_ENABLED=${ALIBUILD_O2_FORCE_GPU_CUDA}
