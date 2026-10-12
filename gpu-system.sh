@@ -71,6 +71,11 @@ prefer_system_check: |
         add_setting 'export O2_GPU_CUDA_HOME="${CUDA_PATH}"'
         CUDA_DEFAULT_ARCH=$(grep -m1 -oP 'set\(CUDA_COMPUTETARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
         add_feature - cuda_arch_$(sed -e "s/;\|-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}")
+        add_feature - cudnn
+        if [[ ${ALIBUILD_O2_FORCE_GPU_TENSORRT} == 1 ]]; then
+          add_setting "export O2_GPU_TENSORRT_AVAILABLE=1"
+          add_feature - tensorrt
+        fi
         add_setting 'export O2_GPU_CUDA_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_CUDA_ARCH:-${CUDA_DEFAULT_ARCH}}'"'
       fi
       if [[ ${ALIBUILD_O2_FORCE_GPU_HIP:-1} != "0" ]]; then
@@ -82,6 +87,8 @@ prefer_system_check: |
         add_setting 'export O2_GPU_ROCM_HOME="${ROCM_PATH}"'
         ROCM_DEFAULT_ARCH=$(grep -m1 -oP 'set\(HIP_AMDGPUTARGET_DEFAULT_FULL\s+\K[^)]+' ${ALIBUILD_CONFIG_DIR}/resources/FindO2GPU.cmake)
         add_feature - rocm_arch_$(sed -e "s/;\|-/_/g" <<< "${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}")
+        add_feature - miopen
+        add_feature - migraphx
         add_setting 'export O2_GPU_ROCM_AVAILABLE_ARCH="'${ALIBUILD_O2_FORCE_GPU_HIP_ARCH:-${ROCM_DEFAULT_ARCH}}'"'
       fi
       if [[ ${ALIBUILD_O2_FORCE_GPU_OPENCL:-1} != "0" ]]; then
