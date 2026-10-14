@@ -198,7 +198,7 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_gif=ON \
       -Dbuiltin_gl2ps=ON \
       -Dbuiltin_civetweb=ON \
-      -Dtmva-sofie=ON                                                                  \
+      -Dtmva-sofie=OFF                                                                 \
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
       -Dunfold=ON                                                                      \
