@@ -1,6 +1,6 @@
 package: GenTopo
 version: "%(tag_basename)s"
-tag: "nightly-20230105"
+tag: "nightly-20260121"
 license: GPL-3.0
 source: https://github.com/AliceO2Group/O2DPG.git
 build_requires:
