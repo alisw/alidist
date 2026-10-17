@@ -21,6 +21,11 @@ prefer_system: "(?!slc5|ubuntu)"
 prefer_system_check: |
     case $ALIBUILD_ARCHITECTURE in
         osx*)
+            # Use the Python version alisw/system-deps/o2-full-deps depends on,
+            # not whatever brew currently links as python3.
+            # Unversioned python3/python3-config live in libexec/bin.
+            PY_FORMULA=$(HOMEBREW_NO_ENV_HINTS=1 brew deps --direct alisw/system-deps/o2-full-deps 2>/dev/null | grep -m1 '^python@')
+            [ -n "$PY_FORMULA" ] && export PATH="$(brew --prefix "$PY_FORMULA")/libexec/bin:$PATH"
             # We need to include the python patch number because brew has it in the path
             python3 -c 'from sys import version_info; print(f"alibuild_system_replace: python-brew{version_info.major}.{version_info.minor}.{version_info.micro}")' ;;
         *)
@@ -32,8 +37,11 @@ prefer_system_replacement_specs:
   "python-brew3.*":
     version: "%(key)s"
     env:
-      PYTHON_ROOT: $(python3 -c 'import sysconfig; print(sysconfig.get_config_var("exec_prefix"))')
+      # PYTHON_VERSION (python-brewX.Y.Z) is exported before these, derive X.Y from it
+      PYTHON_ROOT: $(brew --prefix python@$(echo ${PYTHON_VERSION#python-brew} | cut -d. -f1,2))/Frameworks/Python.framework/Versions/$(echo ${PYTHON_VERSION#python-brew} | cut -d. -f1,2)
       PYTHON_REVISION: ""
+    prepend_path:
+      PATH: $(brew --prefix python@$(echo ${PYTHON_VERSION#python-brew} | cut -d. -f1,2))/libexec/bin
   "python3.*":
     version: "%(key)s"
     env:
