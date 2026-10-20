@@ -1,8 +1,9 @@
 package: Millepede-II
 version: "%(tag_basename)s"
-tag: "V04-17-05"
-source: https://gitlab.desy.de/claus.kleinwort/millepede-ii.git
+tag: "V05-01-06"
+source: https://github.com/millepede-project/millepede-ii.git
 requires:
+  - Mille
   - zlib
   - openmp
   - OpenBLAS
@@ -10,26 +11,27 @@ requires:
   - "gfortran-system:(osx.*)"
 license: GPL-3.0
 build_requires:
+  - CMake
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
 
-rsync -av --delete --exclude="**/.git" ${SOURCEDIR}/ .
+rsync -a --delete --exclude='**/.git' --delete-excluded "$SOURCEDIR/" ./
 
-case $ARCHITECTURE in
-    osx*)
-    GFORTRAN=gfortran
-    [[ ! $ZLIB_ROOT ]] && ZLIB_ROOT=$(brew --prefix zlib) ;;
-esac
+cmake "$SOURCEDIR"                              \
+  -DCMAKE_BUILD_TYPE=Release                    \
+  -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"         \
+  -DCMAKE_INSTALL_LIBDIR=lib                    \
+  -DCMAKE_PREFIX_PATH="$OPENBLAS_ROOT"          \
+  -DLAPACK_OPENBLAS=ON                          \
+  -DSUPPORT_ROOT=OFF                            \
+  -DSUPPORT_OPENMP=ON
 
-make pede\
-     ${ZLIB_ROOT:+ ZLIB_INCLUDES_DIR=${ZLIB_ROOT}/include ZLIB_LIBS_DIR=${ZLIB_ROOT}/lib}\
-     ${OPENBLAS_ROOT:+ SUPPORT_LAPACK64=yes LAPACK64=OPENBLAS LAPACK64_LIBS_DIR=${OPENBLAS_ROOT}/lib LAPACK64_LIB=openblas}\
-     ${GFORTRAN:+ GCC=${GFORTRAN}}
-      
-rsync -a --delete pede ${INSTALLROOT}/bin/
+cmake --build . -- ${JOBS+-j $JOBS}
+cmake --install .
 
 #ModuleFile
-mkdir -p etc/modulefiles
-alibuild-generate-module --bin > etc/modulefiles/$PKGNAME
-mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
+MODULEDIR="$INSTALLROOT/etc/modulefiles"
+MODULEFILE="$MODULEDIR/$PKGNAME"
+mkdir -p "$MODULEDIR"
+alibuild-generate-module --bin > "$MODULEFILE"
