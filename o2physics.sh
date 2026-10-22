@@ -32,6 +32,10 @@ case $ARCHITECTURE in
   ;;
 esac
 
+# ROOT v6.40 deprecates TGrid, which PWGEM still calls; -Werror comes from
+# O2PHYSICS_WARNINGS_AS_ERRORS, so demote it here rather than failing the build.
+CXXFLAGS="${CXXFLAGS} -Wno-error=deprecated-declarations"
+
 # When O2 is built against Gandiva (from Arrow), then we need to use
 # -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
 # -CMake, which requires it.
