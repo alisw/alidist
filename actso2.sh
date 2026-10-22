@@ -4,6 +4,7 @@ tag: "master"
 requires:
   - ROOT
   - ACTS
+  - O2Physics
 license: GPL-3.0
 build_requires:
   - "GCC-Toolchain:(?!osx)"
@@ -19,6 +20,7 @@ source: https://gitlab.cern.ch/alice3-trackers/wp1-simulationsandperformances/ac
 cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
                  -DACTS_ROOT=$ACTS_ROOT \
                  -DACTS_SOURCE_DIR=$ACTS_ROOT \
+                 -DENABLE_O2PHYSICS=ON \
                  -DCMAKE_PREFIX_PATH="$ACTS_ROOT;$TBB_ROOT"
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
