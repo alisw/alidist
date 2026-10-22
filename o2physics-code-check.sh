@@ -67,6 +67,9 @@ grep -E "/O2Physics/.+: warning: " "$LOGFILE" | sed -E -e "s,(.*/O2Physics/)(.+/
 N_ERROR=$(wc -l < "${BUILDDIR}/errors.txt")
 N_WARNING=$(wc -l < "${BUILDDIR}/warnings.txt")
 echo -e "\n\n========== List of issues found =========="
+echo "To reproduce the results below locally, run: 'aliBuild build O2Physics-code-check -e ALIBUILD_BASE_HASH=upstream/master'."
+echo "To apply all automatic fixes, add the '-e O2PHYSICS_CHECKER_FIX=1' option."
+echo "See the documentation for more details at: <https://aliceo2group.github.io/analysis-framework/docs/tools/#running-with-o2physics-code-check>."
 echo "Found $N_ERROR errors and $N_WARNING warnings."
 [[ $N_ERROR -gt 0 ]] && cat "${BUILDDIR}/errors.txt"
 [[ $N_WARNING -gt 0 ]] && cat "${BUILDDIR}/warnings.txt"

@@ -111,14 +111,17 @@ rm "$INSTALLROOT"/lib/cmake/clang/*.bak
 # we want to resolve the environment when we run, not when we build this, to avoid
 # relocation issues in case GCC and clang are not built at the same time.
 if [ ! "X$GCC_TOOLCHAIN_ROOT" = X ]; then
-  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang++.cfg" << \EOF
---gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+  target_triple="$("$INSTALLROOT/bin-safe/clang" --print-target-triple)"
+  gcc_toolchain_root="$(eval echo "$GCC_TOOLCHAIN_ROOT")"
+
+  cat > "$INSTALLROOT/bin-safe/${target_triple}-clang++.cfg" << EOF
+--gcc-toolchain=$gcc_toolchain_root
 EOF
-  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang.cfg" << \EOF
---gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+  cat > "$INSTALLROOT/bin-safe/${target_triple}-clang.cfg" << EOF
+--gcc-toolchain=$gcc_toolchain_root
 EOF
-  cat > "$INSTALLROOT/bin-safe/$(clang --print-target-triple)-clang-cpp.cfg" << \EOF
---gcc-toolchain=$GCC_TOOLCHAIN_ROOT
+  cat > "$INSTALLROOT/bin-safe/${target_triple}-clang-cpp.cfg" << EOF
+--gcc-toolchain=$gcc_toolchain_root
 EOF
 fi
 
