@@ -29,10 +29,15 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 SONAME=so
+# Only use LIBUV_ROOT when libuv was built by aliBuild
+LIBUV_PREFIX=${LIBUV_REVISION:+$LIBUV_ROOT}
 case $ARCHITECTURE in
   osx*)
     SONAME=dylib
-    : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}" ;;
+    : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}"
+    # Use libuv's own keg so that /opt/homebrew/include (which may hold
+    # headers of an unrelated OpenSSL version) does not end up in the include path
+    : "${LIBUV_PREFIX:=$(brew --prefix libuv)}" ;;
 esac
 
 if [[ "${ARCHITECTURE}" =~ ^slc7 ]]; then
@@ -61,8 +66,8 @@ cmake $SOURCEDIR2                                                   \
       ${OPENSSL_ROOT:+-DLWS_OPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
       ${OPENSSL_ROOT:+-DLWS_OPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
       -DLWS_WITH_LIBUV=ON                                           \
-      ${LIBUV_REVISION:+-DLIBUV_INCLUDE_DIRS=$LIBUV_ROOT/include}   \
-      ${LIBUV_REVISION:+-DLIBUV_LIBRARIES=$LIBUV_ROOT/lib/libuv.$SONAME} \
+      ${LIBUV_PREFIX:+-DLIBUV_INCLUDE_DIRS=$LIBUV_PREFIX/include}   \
+      ${LIBUV_PREFIX:+-DLIBUV_LIBRARIES=$LIBUV_PREFIX/lib/libuv.$SONAME} \
       -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
       -DLWS_WITHOUT_TESTAPPS=ON
 cmake --build . --target install ${JOBS+-j $JOBS}
