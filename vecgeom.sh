@@ -12,6 +12,15 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
+# Assembly navigation can recurse through daughter assemblies. Let the compiler
+# choose inlining for these entry points; GCC 15 rejects forced recursive inlining.
+PLACED_ASSEMBLY="$SOURCEDIR/VecGeom/volumes/PlacedAssembly.h"
+sed -i.bak '/VECGEOM_FORCE_INLINE/{
+  N
+  /virtual Precision \(DistanceToIn\|SafetyToIn\)(/s/VECGEOM_FORCE_INLINE/inline/
+}' "$PLACED_ASSEMBLY"
+rm -f "$PLACED_ASSEMBLY.bak"
+
 case $ARCHITECTURE in
     osx_arm64)
       cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
