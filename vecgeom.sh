@@ -47,18 +47,24 @@ case $ARCHITECTURE in
   ;;
 esac
 
+# VecGeom v1.2.6 fetches VecCore 0.8.0 during CMake configuration.
+# Its WrappedScalar pointer constructor refers to a nonexistent member. GCC 15
+# and clang diagnose this even without instantiation, so patch the staged header
+# before compiling VecGeom, then also ensure the installed header is corrected.
+fix_veccore_scalar_wrapper() {
+  local header
+  for header in "$@"; do
+    if grep -q 'fVal(s->val_ptr)' "$header" 2>/dev/null; then
+      sed -i.bak 's|fVal(s->val_ptr)|fVal(s->fVal)|' "$header"
+      rm -f "$header.bak"
+    fi
+  done
+}
+fix_veccore_scalar_wrapper installExternals/VecCore-*/"${INSTALLROOT#/}"/include/VecCore/Backend/ScalarWrapper.h
+
 cmake --build . -- ${JOBS+-j $JOBS} install
 
-# VecCore 0.8.0, which VecGeom v1.2.6 pins and fetches via VECGEOM_BUILTIN_VECCORE,
-# initialises fVal from the *previous* constructor's parameter name in a constructor
-# nobody instantiates. WrappedScalar is the current instantiation there, so clang
-# rejects it at definition time and o2codechecker fails on any TU reaching the header.
-# Fixed upstream in VecCore 0.8.2; self-disabling once we pin a VecGeom that uses it.
-VECCORE_SCALAR_WRAPPER="$INSTALLROOT/include/VecCore/Backend/ScalarWrapper.h"
-if grep -q 'fVal(s->val_ptr)' "$VECCORE_SCALAR_WRAPPER" 2>/dev/null; then
-  sed -i.bak 's|fVal(s->val_ptr)|fVal(s->fVal)|' "$VECCORE_SCALAR_WRAPPER"
-  rm -f "$VECCORE_SCALAR_WRAPPER.bak"
-fi
+fix_veccore_scalar_wrapper "$INSTALLROOT/include/VecCore/Backend/ScalarWrapper.h"
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
