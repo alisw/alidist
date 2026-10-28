@@ -8,6 +8,8 @@ build_requires:
   - ninja
   - "GCC-Toolchain:(?!osx)"
   - alibuild-recipe-tools
+prepend_path:
+  PKG_CONFIG_PATH: "$LZMA_ROOT/lib/pkgconfig"
 prefer_system: "(?!slc5)"
 prefer_system_check: |
   XZ_PREFIX=$(brew --prefix --installed xz 2>/dev/null)
