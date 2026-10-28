@@ -1,7 +1,7 @@
 package: GBL
 version: "%(tag_basename)s"
-tag: "V03-01-04"
-source: https://github.com/alisw/general-broken-lines.git
+tag: "V04-00-06"
+source: https://github.com/GeneralBrokenLines/GeneralBrokenLines.git
 requires:
   - Eigen3
   - ROOT
