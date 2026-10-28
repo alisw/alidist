@@ -14,6 +14,9 @@ requires:
   - ms_gsl
   - FairMQ
   - curl
+  - lz4
+  - lzma
+  - zstd
   - MCStepLogger
   - fmt
   - "openmp:(?!osx.*)"
