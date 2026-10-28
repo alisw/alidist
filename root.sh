@@ -15,6 +15,8 @@ requires:
   - libpng
   - lzma
   - zstd
+  - libgif
+  - gl2ps
   - libxml2
   - "OpenSSL:(?!osx)"
   - "osx-system-openssl:(osx.*)"
@@ -99,7 +101,7 @@ case $ARCHITECTURE in
     [[ -n $LIBGIF_ROOT ]] || LIBGIF_ROOT=$(brew --prefix --installed giflib 2>/dev/null) || true
     [[ -n $GL2PS_ROOT ]] || GL2PS_ROOT=$(brew --prefix --installed gl2ps 2>/dev/null) || true
     # ROOT 6.40 also hard-requires JPEG, LZ4 and ZSTD. alidist has no recipe for
-    # JPEG, and lz4 and zstd are prefer_system here, so on macOS all three
+    # JPEG or ZSTD at all, and lz4 is prefer_system here, so on macOS all three
     # come from Homebrew. CMake finds their libraries under /opt/homebrew/lib
     # but not their headers, because CMAKE_IGNORE_PATH below hides
     # /opt/homebrew/include -- and ZSTD cannot be pointed at with -DZSTD_*,
@@ -191,6 +193,10 @@ cmake $SOURCEDIR                                                                
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${LIBGIF_ROOT:+-DGIF_INCLUDE_DIR="${LIBGIF_ROOT}/include"}                       \
+      ${LIBGIF_ROOT:+-DGIF_LIBRARY="${LIBGIF_ROOT}/lib/libgif.${SONAME}"}              \
+      ${GL2PS_ROOT:+-Dgl2ps_INCLUDE_DIR="${GL2PS_ROOT}/include"}                       \
+      ${GL2PS_ROOT:+-Dgl2ps_LIBRARY="${GL2PS_ROOT}/lib/libgl2ps.${SONAME}"}            \
       ${PROTOBUF_REVISION:+-DProtobuf_DIR=${PROTOBUF_ROOT}}                            \
       ${ZLIB_ROOT:+-DZLIB_ROOT=${ZLIB_ROOT}}                                           \
       ${LZMA_ROOT:+-DLIBLZMA_INCLUDE_DIR=${LZMA_ROOT}/include}                       \
