@@ -5,6 +5,7 @@ source: https://github.com/GeneralBrokenLines/GeneralBrokenLines.git
 requires:
   - Eigen3
   - ROOT
+  - Mille
 license: GPL-3.0
 build_requires:
   - alibuild-recipe-tools
@@ -19,6 +20,8 @@ cmake -S "${SOURCEDIR}/cpp/" -B "$BUILDDIR"            \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5                 \
     -DEIGEN3_INCLUDE_DIR="$EIGEN3_ROOT/include/eigen3" \
+    -DMille_DIR="$MILLE_ROOT/cmake"                   \
+    -DCMAKE_REQUIRE_FIND_PACKAGE_Mille=ON             \
     -DSUPPORT_ROOT=ON
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .

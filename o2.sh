@@ -38,6 +38,8 @@ requires:
   - gpu-system
   - Eigen3
   - GBL
+  - Mille
+  - Millepede-II
 license: GPL-3.0
 build_requires:
   - abseil
