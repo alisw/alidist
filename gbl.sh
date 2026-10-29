@@ -13,6 +13,8 @@ build_requires:
 #!/bin/bash -e
 
 cmake -S "${SOURCEDIR}/cpp/" -B "$BUILDDIR"            \
+    -DCMAKE_CXX_STANDARD="$(root-config --cxxstandard)" \
+    -DCMAKE_CXX_STANDARD_REQUIRED=ON                   \
     -DCMAKE_BUILD_TYPE="$CMAKE_BUILD_TYPE"             \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"              \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5                 \
