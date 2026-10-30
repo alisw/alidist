@@ -1,6 +1,6 @@
 package: GBL
 version: "%(tag_basename)s"
-tag: "V04-00-06"
+tag: "V04-00-07"
 source: https://github.com/GeneralBrokenLines/GeneralBrokenLines.git
 requires:
   - Eigen3
