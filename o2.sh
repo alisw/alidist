@@ -96,6 +96,11 @@ incremental_recipe: |
     source $ONNXRUNTIME_ROOT/etc/ort-init.sh
   fi
 
+  # Opt in with ALIBUILD_LINK_DEPENDS_NO_SHARED=1: relink only when a target's own objects change,
+  # not when a shared library it links is rebuilt. Reconfigure only if the setting changed.
+  NO_SHARED=OFF; [[ $ALIBUILD_LINK_DEPENDS_NO_SHARED ]] && NO_SHARED=ON
+  HAVE_NO_SHARED=OFF; grep -q '^CMAKE_LINK_DEPENDS_NO_SHARED:[A-Z]*=ON$' CMakeCache.txt && HAVE_NO_SHARED=ON
+  [[ $NO_SHARED == "$HAVE_NO_SHARED" ]] || cmake -DCMAKE_LINK_DEPENDS_NO_SHARED=$NO_SHARED .
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
@@ -249,6 +254,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                           \
       ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
+      ${ALIBUILD_LINK_DEPENDS_NO_SHARED:+-DCMAKE_LINK_DEPENDS_NO_SHARED=ON}                               \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
       ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \

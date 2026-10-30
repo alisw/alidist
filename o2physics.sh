@@ -20,6 +20,11 @@ track_env:
   CMAKE_C_COMPILER_LAUNCHER: echo ${USE_RECC+recc}
   O2PHYSICS_DEBUG_FLAGS: echo ${O2PHYSICS_DEBUG_FLAGS}
 incremental_recipe: |
+  # Opt in with ALIBUILD_LINK_DEPENDS_NO_SHARED=1: relink only when a target's own objects change,
+  # not when a shared library it links is rebuilt. Reconfigure only if the setting changed.
+  NO_SHARED=OFF; [[ $ALIBUILD_LINK_DEPENDS_NO_SHARED ]] && NO_SHARED=ON
+  HAVE_NO_SHARED=OFF; grep -q '^CMAKE_LINK_DEPENDS_NO_SHARED:[A-Z]*=ON$' CMakeCache.txt && HAVE_NO_SHARED=ON
+  [[ $NO_SHARED == "$HAVE_NO_SHARED" ]] || cmake -DCMAKE_LINK_DEPENDS_NO_SHARED=$NO_SHARED .
   cmake --build . -- ${JOBS:+-j$JOBS} ${O2PHYSICS_COMPONENTS:-install}
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
@@ -42,6 +47,7 @@ cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       -DCMAKE_C_FLAGS_RELWITHDEBINFO="${O2PHYSICS_DEBUG_FLAGS:--O2 -g1 -DNDEBUG}" \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                    \
+      ${ALIBUILD_LINK_DEPENDS_NO_SHARED:+-DCMAKE_LINK_DEPENDS_NO_SHARED=ON} \
       -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                           \
       ${CLANG_ROOT:+-DLLVM_ROOT="$CLANG_ROOT"}                              \
       ${ONNXRUNTIME_ROOT:+-DONNXRuntime_DIR=$ONNXRUNTIME_ROOT}              \
