@@ -33,13 +33,19 @@ prepend_path:
 ---
 #!/bin/bash -e
 
+case $ARCHITECTURE in
+  osx*)
+    CMAKE_IGNORE_PATH="$(brew --prefix)/include"
+  ;;
+esac
+
 mkdir -p $INSTALLROOT
 cmake $SOURCEDIR                              \
   -G Ninja                                    \
   ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}     \
   -DCMAKE_INSTALL_LIBDIR=lib                  \
   -DBUILD_TESTING=OFF                         \
-  -DCMAKE_IGNORE_PATH="/opt/homebrew/include" \
+  ${CMAKE_IGNORE_PATH:+-DCMAKE_IGNORE_PATH="$CMAKE_IGNORE_PATH"} \
   -DCMAKE_INSTALL_PREFIX=$INSTALLROOT
 
 cmake --build . -- ${JOBS:+-j$JOBS} install
