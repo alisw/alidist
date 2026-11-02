@@ -22,6 +22,7 @@ cmake "$SOURCEDIR"                              \
   -DCMAKE_BUILD_TYPE=Release                    \
   -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"         \
   -DCMAKE_INSTALL_LIBDIR=lib                    \
+  -DCMAKE_Fortran_COMPILER="${FC:-gfortran}"    \
   -DCMAKE_PREFIX_PATH="$OPENBLAS_ROOT"          \
   -DLAPACK_OPENBLAS=ON                          \
   -DSUPPORT_ROOT=OFF                            \
