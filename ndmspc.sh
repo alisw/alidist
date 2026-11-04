@@ -1,6 +1,6 @@
 package: ndmspc
 version: "%(tag_basename)s"
-tag: "v1.4.3"
+tag: "v1.4.7"
 requires:
   - ROOT
   - JAliEn-ROOT
@@ -64,58 +64,15 @@ case "$OPENSSL_MODE" in
     ;;
 esac
 
-# Version reported by the binaries: nearest git tag plus commits/hash when the source has git
-# metadata (aliBuild clones the repository), otherwise the aliBuild package version.
-NDMSPC_VERSION_STRING="${PKG_VERSION:-}"
-NDMSPC_RELEASE_STRING="${PKG_REVISION:-}"
-if [ -d "$SOURCEDIR/.git" ]; then
-  GIT_DESC=$(cd "$SOURCEDIR" && { git describe --tags --long 2>/dev/null || git describe --always 2>/dev/null; } || true)
-  if [ -n "$GIT_DESC" ]; then
-    case "$GIT_DESC" in
-      *-*-g*)
-        NDMSPC_VERSION_STRING=${GIT_DESC%-*-g*}
-        NDMSPC_RELEASE_STRING=${GIT_DESC#"$NDMSPC_VERSION_STRING"-}
-        # Exact tag: "<tag>-0-g<hash>" -> show "<tag>-<hash>".
-        case "$NDMSPC_RELEASE_STRING" in
-          0-g*) NDMSPC_RELEASE_STRING=${NDMSPC_RELEASE_STRING#0-g} ;;
-        esac
-        ;;
-      *)
-        NDMSPC_RELEASE_STRING=$GIT_DESC
-        ;;
-    esac
-  fi
-fi
-NDMSPC_RELEASE_STRING=${NDMSPC_RELEASE_STRING%-dirty}
-NDMSPC_VERSION_STRING=${NDMSPC_VERSION_STRING#v}
-
-# ndmspc-ui page version: pin the release tag when this build comes from one, else
-# `next` (the latest ndmspc-ui main build). An explicit NDMSPC_UI_VERSION in the
-# environment wins.
-if [ -z "${NDMSPC_UI_VERSION:-}" ]; then
-  NDMSPC_UI_VERSION="next"
-  UI_TAG=""
-  if [ -d "$SOURCEDIR/.git" ]; then
-    UI_TAG=$(cd "$SOURCEDIR" && git describe --tags --exact-match 2>/dev/null || true)
-  fi
-  [ -n "$UI_TAG" ] || UI_TAG="${PKG_VERSION:-}"
-  if [[ "$UI_TAG" =~ ^v?[0-9]+(\.[0-9]+)*$ ]]; then
-    NDMSPC_UI_VERSION="v${UI_TAG#v}"
-  fi
-fi
-
-VERSION_ARGS=()
-[ -n "$NDMSPC_VERSION_STRING" ] && VERSION_ARGS+=("-DNDMSPC_VERSION=$NDMSPC_VERSION_STRING")
-[ -n "$NDMSPC_RELEASE_STRING" ] && VERSION_ARGS+=("-DNDMSPC_VERSION_RELEASE=$NDMSPC_RELEASE_STRING")
-VERSION_ARGS+=("-DNDMSPC_UI_VERSION=$NDMSPC_UI_VERSION")
-
+# The version reported by the binaries, and the ndmspc-ui page version, are resolved by
+# cmake/version.cmake from the checkout's git metadata (aliBuild clones the repository)
+# or, without .git, from the source tree's VERSION file. Nothing to pass here.
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                \
       -G Ninja                                                          \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}       \
       ${CXXSTD:+"-DCMAKE_CXX_STANDARD=$CXXSTD"}                         \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-      "${OPENSSL_ARGS[@]}" \
-      "${VERSION_ARGS[@]}"
+      "${OPENSSL_ARGS[@]}"
 
 cmake --build . -- ${JOBS+-j $JOBS} install
 
