@@ -4,7 +4,12 @@ tag: "daily-20261105-0000"
 requires:
   - abseil
   - arrow
-  - FairRoot
+  - generators
+  - simulation
+  - ROOT
+  - VMC
+  - boost
+  - FairLogger
   - Vc
   - HepMC3
   - libInfoLogger
@@ -178,7 +183,6 @@ valid_defaults:
   - o2-acts
   - o2-dataflow
   - o2-epn
-  - o2-dev-fairroot
   - alo
   - o2-prod
   - ali
@@ -315,7 +319,12 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                           \\
+            ROOT/$ROOT_VERSION-$ROOT_REVISION                                                       \\
+            VMC/$VMC_VERSION-$VMC_REVISION                                                          \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION                                     \\
+            generators/$GENERATORS_VERSION-$GENERATORS_REVISION                                     \\
+            simulation/$SIMULATION_VERSION-$SIMULATION_REVISION                                     \\
             ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                             \\
