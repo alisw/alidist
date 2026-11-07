@@ -16,7 +16,12 @@ overrides:
     requires:
         - abseil
         - arrow
-        - FairRoot
+        - generators
+        - simulation
+        - ROOT
+        - VMC
+        - boost
+        - FairLogger
         - Vc
         - HepMC3
         - libInfoLogger

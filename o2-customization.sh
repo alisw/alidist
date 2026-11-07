@@ -7,7 +7,6 @@ valid_defaults:
   - o2-dataflow
   - o2-acts
   - o2-epn
-  - o2-dev-fairroot
   - alo
   - o2-prod
   - ali
