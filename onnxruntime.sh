@@ -39,6 +39,21 @@ sed -i.bak "s/CMAKE_CXX_STANDARD 17/CMAKE_CXX_STANDARD 20/;s/-Wno-interference-s
 # Serialize the string instead, preserving empty paths and avoiding added quotes.
 sed -i.bak 's/MakeStringWithClassicLocale(model_cache_dir)/MakeStringWithClassicLocale(model_cache_dir.string())/' onnxruntime/core/providers/migraphx/migraphx_execution_provider_info.cc
 
+# The fp4x2 shape type only exists from MIGraphX 2.13 (ROCm 7.0). Guard its
+# mapping so the provider also compiles against ROCm 6.4 (MIGraphX 2.12).
+sed -i.bak '/case ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT4E2M1:/,/break;/{
+/case ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT4E2M1:/i #if MIGRAPHX_VERSION_MAJOR > 2 || (MIGRAPHX_VERSION_MAJOR == 2 \&\& MIGRAPHX_VERSION_MINOR >= 13)
+/break;/a #endif
+}' onnxruntime/core/providers/migraphx/migraphx_execution_provider.cc
+
+# migraphx::quantize_bf16 is guarded by HIP_VERSION_PATCH >= 2, but HIP's patch
+# number is a build id (e.g. 43483 on ROCm 6.4.1), so the guard is always true
+# on 6.4.x. Drop the call when the installed MIGraphX does not provide it.
+if ! grep -qs quantize_bf16 "${O2_GPU_ROCM_HOME:-/opt/rocm}/include/migraphx/migraphx.hpp"; then
+  sed -i.bak 's|^#if HIP_VERSION_MAJOR > 6 .. (HIP_VERSION_MAJOR == 6 && HIP_VERSION_MINOR >= 4 && HIP_VERSION_PATCH >= 2)$|#if 0  // migraphx::quantize_bf16 not provided by this MIGraphX|' \
+    onnxruntime/core/providers/migraphx/migraphx_execution_provider.cc
+fi
+
 case $ARCHITECTURE in
   osx*)
     NLOHMANN_JSON_ROOT=${NLOHMANN_JSON_ROOT:-$(brew --prefix nlohmann-json)}
