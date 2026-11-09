@@ -43,8 +43,9 @@ fi
 # Call a tool to filter out unwanted sources (ROOT dicts, etc) from the compilations database.
 # Further, also optionally restrict the checks on a specific set of files, which can be passed here via means of the
 # environment variable O2_CHECKCODE_CHANGEDFILES. The environment variable is supposed to hold a colon separated list of files.
-ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc|.*\_amalgamated\..*|.*\.cu$|.*\.hip$|.*/3rdparty/.*)' ${O2_CHECKCODE_CHANGEDFILES:+-use-files ${O2_CHECKCODE_CHANGEDFILES}}
-cp thinned_compile_commands.json compile_commands.json
+ThinCompilationsDatabase.py -exclude-files '(?:.*G\_\_.*\.cxx|.*\.pb.cc|.*\_amalgamated\..*|.*\.cu$|.*\.hip$)' ${O2_CHECKCODE_CHANGEDFILES:+-use-files ${O2_CHECKCODE_CHANGEDFILES}}
+# Drop vendored 3rdparty sources; ThinCompilationsDatabase.py matches -exclude-files on the basename only.
+python3 -c 'import json; db = [e for e in json.load(open("thinned_compile_commands.json")) if "/3rdparty/" not in e["file"]]; json.dump(db, open("compile_commands.json", "w"), indent=1)'
 
 pushd "$O2_SRC" || exit 1 # Needed to auto-detect .clang-tidy in the source directory.
 [[ -e .clang-tidy ]] && echo "Found configuration file: $O2_SRC/.clang-tidy"
