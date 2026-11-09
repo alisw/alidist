@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v11.2.0-alice3"
+tag: "v11.2.0-alice4"
 source: https://github.com/alisw/geant4.git
 # source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
@@ -14,6 +14,8 @@ build_requires:
   - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT4_ROOT/include:$GEANT4_ROOT/include/Geant4"
+  # static TLS reserve that the initial-exec Geant4 libraries need when they are loaded by dlopen
+  GLIBC_TUNABLES: "glibc.rtld.optional_static_tls=32768"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -33,7 +35,7 @@ cmake $SOURCEDIR                                                \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"                    \
   -DCMAKE_INSTALL_LIBDIR="lib"                                  \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo                             \
-  -DGEANT4_BUILD_TLS_MODEL:STRING="global-dynamic"              \
+  -DGEANT4_BUILD_TLS_MODEL:STRING="initial-exec"                \
   -DGEANT4_ENABLE_TESTING=OFF                                   \
   -DBUILD_SHARED_LIBS=ON                                        \
   -DGEANT4_INSTALL_EXAMPLES=OFF                                 \
@@ -93,6 +95,8 @@ cat >> "$MODULEFILE" <<EOF
 # extra environment
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
+# static TLS reserve that the initial-exec Geant4 libraries need when they are loaded by dlopen
+prepend-path GLIBC_TUNABLES glibc.rtld.optional_static_tls=32768
 EOF
 
 # add datasets environment to modulefile
