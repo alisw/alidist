@@ -22,8 +22,10 @@ incremental_recipe: |
 env:
   G4INSTALL: $GEANT4_ROOT
 ---
-# If this variable is not defined default it to OFF
-: ${GEANT4_BUILD_MULTITHREADED:=OFF}
+# Always build the multithreaded libraries; they also serve sequential runs.
+# GEANT4_BUILD_MULTITHREADED in the defaults is ignored, since changing a
+# defaults env value changes the hash of every package.
+GEANT4_BUILD_MULTITHREADED=ON
 
 # Data sets directory:
 # if not set (default), data sets will be installed in CMAKE_INSTALL_DATAROOTDIR
