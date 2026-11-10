@@ -30,7 +30,7 @@ esac
     -Dunittests=OFF                              \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
-cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k 0} ${JOBS+-j $JOBS} install
 
 # must put some stuff by hands for the time being
 cp runJetscape $INSTALLROOT/bin/.

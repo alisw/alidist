@@ -15,7 +15,7 @@ build_requires:
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
 
-cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k 0} ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
