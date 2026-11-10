@@ -7,6 +7,7 @@ requires:
   - VMC
   - GEANT4
   - vgm
+  - G4HepEm
 license: Geant4
 build_requires:
   - CMake
@@ -23,6 +24,7 @@ LDFLAGS="$LDFLAGS -L$GEANT4_ROOT/lib"            \
     -GNinja                                      \
     -DCMAKE_CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
     -DGeant4VMC_USE_VGM=ON                       \
+    -DGeant4VMC_USE_G4HepEm=ON                   \
     -DCMAKE_INSTALL_LIBDIR=lib                   \
     -DGeant4VMC_BUILD_EXAMPLES=OFF               \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"        \
@@ -43,7 +45,7 @@ proc ModulesHelp { } {
 set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
-module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${VMC_REVISION:+VMC/$VMC_VERSION-$VMC_REVISION} vgm/$VGM_VERSION-$VGM_REVISION
+module load BASE/1.0 ${GEANT4_REVISION:+GEANT4/$GEANT4_VERSION-$GEANT4_REVISION} ${ROOT_REVISION:+ROOT/$ROOT_VERSION-$ROOT_REVISION} ${VMC_REVISION:+VMC/$VMC_VERSION-$VMC_REVISION} vgm/$VGM_VERSION-$VGM_REVISION G4HepEm/$G4HEPEM_VERSION-$G4HEPEM_REVISION
 # Our environment
 set GEANT4_VMC_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_VMC_ROOT \$GEANT4_VMC_ROOT
