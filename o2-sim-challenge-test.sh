@@ -20,6 +20,8 @@ export JOBUTILS_PRINT_ON_ERROR=1
 export JOBUTILS_JOB_TIMEOUT=2400
 export NJOBS="$JOBS"
 export DPL_REPORT_PROCESSING=1
+# print the server, worker and merger logs of o2-sim, so that crashes show up in the CI log
+export ALICE_O2SIM_DUMPLOG=1
 
 rm -Rf $BUILDDIR/sim-challenge
 mkdir $BUILDDIR/sim-challenge
