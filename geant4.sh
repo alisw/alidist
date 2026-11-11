@@ -14,8 +14,6 @@ build_requires:
   - alibuild-recipe-tools
 prepend_path:
   ROOT_INCLUDE_PATH: "$GEANT4_ROOT/include:$GEANT4_ROOT/include/Geant4"
-  # static TLS reserve that the initial-exec Geant4 libraries need when they are loaded by dlopen
-  GLIBC_TUNABLES: "glibc.rtld.optional_static_tls=32768"
 incremental_recipe: |
   make ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
@@ -97,8 +95,6 @@ cat >> "$MODULEFILE" <<EOF
 # extra environment
 set GEANT4_ROOT \$::env(BASEDIR)/$PKGNAME/\$version
 setenv GEANT4_ROOT \$GEANT4_ROOT
-# static TLS reserve that the initial-exec Geant4 libraries need when they are loaded by dlopen
-prepend-path GLIBC_TUNABLES glibc.rtld.optional_static_tls=32768
 EOF
 
 # add datasets environment to modulefile
