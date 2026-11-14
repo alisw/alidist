@@ -100,7 +100,7 @@ cmake $SOURCEDIR                                                     \
       -DOCDB_INSTALL=PLACEHOLDER                                     \
       ${SPECIALFFLAGS:+-DCMAKE_Fortran_FLAGS="-fallow-argument-mismatch"}
 
-cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k 0} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 [[ $ALICE_DAQ && ! $ALICE_DISABLE_DA_RPMS ]] && { make daqDA-all-rpm && make ${JOBS+-j $JOBS} install; }

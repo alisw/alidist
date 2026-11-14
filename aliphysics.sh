@@ -76,7 +76,7 @@ cmake "$SOURCEDIR"                                                 \
       ${BOOST_ROOT:+-DBOOST_ROOT="$BOOST_ROOT"}                    \
       -DALIROOT="$ALIROOT_ROOT"
 
-cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k 0} ${JOBS+-j $JOBS} install
 # ctest will succeed if no load_library tests were found
 ctest -R load_library --output-on-failure ${JOBS:+-j $JOBS}
 

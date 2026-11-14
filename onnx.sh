@@ -24,7 +24,7 @@ CPPFLAFS="-I$ABSEIL_ROOT/include"  cmake "$SOURCEDIR"                           
     -DONNX_DISABLE_STATIC_REGISTRATION=ON     \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
-cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k 0} ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
