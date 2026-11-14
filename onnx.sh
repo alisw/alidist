@@ -22,6 +22,7 @@ CPPFLAFS="-I$ABSEIL_ROOT/include"  cmake "$SOURCEDIR"                           
     -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"  \
     -DCMAKE_INSTALL_PREFIX="$INSTALLROOT"     \
     -DONNX_DISABLE_STATIC_REGISTRATION=ON     \
+    -DPython3_EXECUTABLE=${PYTHON_ROOT}/bin/python3 \
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
