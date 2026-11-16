@@ -1,10 +1,15 @@
 package: O2
 version: "%(tag_basename)s"
-tag: "daily-20261006-0000"
+tag: "daily-20261116-0000"
 requires:
   - abseil
   - arrow
-  - FairRoot
+  - generators
+  - simulation
+  - ROOT
+  - VMC
+  - boost
+  - FairLogger
   - Vc
   - HepMC3
   - libInfoLogger
@@ -14,6 +19,9 @@ requires:
   - ms_gsl
   - FairMQ
   - curl
+  - lz4
+  - lzma
+  - zstd
   - MCStepLogger
   - fmt
   - "openmp:(?!osx.*)"
@@ -35,6 +43,8 @@ requires:
   - gpu-system
   - Eigen3
   - GBL
+  - Mille
+  - Millepede-II
 license: GPL-3.0
 build_requires:
   - abseil
@@ -91,6 +101,11 @@ incremental_recipe: |
     source $ONNXRUNTIME_ROOT/etc/ort-init.sh
   fi
 
+  # Opt in with ALIBUILD_LINK_DEPENDS_NO_SHARED=1: relink only when a target's own objects change,
+  # not when a shared library it links is rebuilt. Reconfigure only if the setting changed.
+  NO_SHARED=OFF; [[ $ALIBUILD_LINK_DEPENDS_NO_SHARED ]] && NO_SHARED=ON
+  HAVE_NO_SHARED=OFF; grep -q '^CMAKE_LINK_DEPENDS_NO_SHARED:[A-Z]*=ON$' CMakeCache.txt && HAVE_NO_SHARED=ON
+  [[ $NO_SHARED == "$HAVE_NO_SHARED" ]] || cmake -DCMAKE_LINK_DEPENDS_NO_SHARED=$NO_SHARED .
   cmake --build . -- ${JOBS:+-j$JOBS} install
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
   # install the compilation database so that we can post-check the code
@@ -168,7 +183,6 @@ valid_defaults:
   - o2-acts
   - o2-dataflow
   - o2-epn
-  - o2-dev-fairroot
   - alo
   - o2-prod
   - ali
@@ -244,6 +258,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       ${ALIBUILD_O2_TESTS:+-DENABLE_CASSERT=ON}                                                           \
       ${DPL_TESTS_BATCH_MODE:+-DDPL_TESTS_BATCH_MODE=${DPL_TESTS_BATCH_MODE}}                             \
       -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                                                  \
+      ${ALIBUILD_LINK_DEPENDS_NO_SHARED:+-DCMAKE_LINK_DEPENDS_NO_SHARED=ON}                               \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}                                                             \
       ${LIBJALIENO2_ROOT:+-DlibjalienO2_ROOT=$LIBJALIENO2_ROOT}                                           \
       ${XROOTD_REVISION:+-DXROOTD_DIR=$XROOTD_ROOT}                                                       \
@@ -252,6 +267,7 @@ cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT                            
       -DENABLE_CUDA="${O2_GPU_CUDA_AVAILABLE:-AUTO}"                                                      \
       -DENABLE_HIP="${O2_GPU_ROCM_AVAILABLE:-AUTO}"                                                       \
       -DENABLE_OPENCL="${O2_GPU_OPENCL_AVAILABLE:-AUTO}"                                                  \
+      ${OpenCL_ROOT:+-DOpenCL_ROOT="${OpenCL_ROOT}"}                                                      \
       -DCMAKE_IGNORE_PATH="/opt/homebrew/include"                                                         \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DHIP_AMDGPUTARGET="${O2_GPU_ROCM_AVAILABLE_ARCH}"}                   \
       ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCUDA_COMPUTETARGET="${O2_GPU_CUDA_AVAILABLE_ARCH}"}                 \
@@ -303,7 +319,12 @@ set version $PKGVERSION-@@PKGREVISION@$PKGHASH@@
 module-whatis "ALICE Modulefile for $PKGNAME $PKGVERSION-@@PKGREVISION@$PKGHASH@@"
 # Dependencies
 module load BASE/1.0 \\
-            FairRoot/$FAIRROOT_VERSION-$FAIRROOT_REVISION                                           \\
+            ROOT/$ROOT_VERSION-$ROOT_REVISION                                                       \\
+            VMC/$VMC_VERSION-$VMC_REVISION                                                          \\
+            ${BOOST_REVISION:+boost/$BOOST_VERSION-$BOOST_REVISION}                                 \\
+            FairLogger/$FAIRLOGGER_VERSION-$FAIRLOGGER_REVISION                                     \\
+            generators/$GENERATORS_VERSION-$GENERATORS_REVISION                                     \\
+            simulation/$SIMULATION_VERSION-$SIMULATION_REVISION                                     \\
             ${DDS_REVISION:+DDS/$DDS_VERSION-$DDS_REVISION}                                         \\
             ${GCC_TOOLCHAIN_REVISION:+GCC-Toolchain/$GCC_TOOLCHAIN_VERSION-$GCC_TOOLCHAIN_REVISION} \\
             ${VC_REVISION:+Vc/$VC_VERSION-$VC_REVISION}                                             \\

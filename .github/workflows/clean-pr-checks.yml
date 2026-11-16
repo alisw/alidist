@@ -22,6 +22,14 @@ name: Clean PR checks
         description: build/AliRoot/alidist
         type: boolean
         default: true
+      # Off by default, unlike every other check here: the gpu pool is a single
+      # worker and a full O2-GPU-test round is hours, so resetting this is a
+      # much bigger ask than requeueing one of the ordinary builders. Tick it
+      # when the GPU check is what you actually want re-run.
+      'check_build/O2/alidist-gpu-test-slc10-x86':
+        description: build/O2/alidist-gpu-test-slc10-x86
+        type: boolean
+        default: false
       'check_build/O2/alidist-slc9-aarch64':
         description: build/O2/alidist-slc9-aarch64
         type: boolean
@@ -36,6 +44,10 @@ name: Clean PR checks
         default: true
       'check_build/O2/fullCI/alidist_slc9':
         description: build/O2/fullCI/alidist_slc9
+        type: boolean
+        default: true
+      'check_build/O2/fullCI/alidist-slc10-x86':
+        description: build/O2/fullCI/alidist-slc10-x86
         type: boolean
         default: true
       'check_build/O2/alidist-dataflow-slc9':

@@ -1,6 +1,6 @@
 package: GEANT4
 version: "%(tag_basename)s"
-tag: "v11.2.0-alice3"
+tag: "v11.2.0-alice4"
 source: https://github.com/alisw/geant4.git
 # source: https://gitlab.cern.ch/geant4/geant4.git
 requires:
@@ -20,8 +20,10 @@ incremental_recipe: |
 env:
   G4INSTALL: $GEANT4_ROOT
 ---
-# If this variable is not defined default it to OFF
-: ${GEANT4_BUILD_MULTITHREADED:=OFF}
+# Always build the multithreaded libraries; they also serve sequential runs.
+# GEANT4_BUILD_MULTITHREADED in the defaults is ignored, since changing a
+# defaults env value changes the hash of every package.
+GEANT4_BUILD_MULTITHREADED=ON
 
 # Data sets directory:
 # if not set (default), data sets will be installed in CMAKE_INSTALL_DATAROOTDIR
@@ -33,7 +35,7 @@ cmake $SOURCEDIR                                                \
   -DCMAKE_INSTALL_PREFIX:PATH="$INSTALLROOT"                    \
   -DCMAKE_INSTALL_LIBDIR="lib"                                  \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo                             \
-  -DGEANT4_BUILD_TLS_MODEL:STRING="global-dynamic"              \
+  -DGEANT4_BUILD_TLS_MODEL:STRING="initial-exec"                \
   -DGEANT4_ENABLE_TESTING=OFF                                   \
   -DBUILD_SHARED_LIBS=ON                                        \
   -DGEANT4_INSTALL_EXAMPLES=OFF                                 \

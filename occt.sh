@@ -9,7 +9,7 @@ build_requires:
   - alibuild-recipe-tools
 ---
 #!/bin/bash -e
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT   \
+cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT -DBUILD_MODULE_Draw=OFF \
       ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}
 
 # Build and install
@@ -20,4 +20,3 @@ MODULEDIR="$INSTALLROOT/etc/modulefiles"
 MODULEFILE="$MODULEDIR/$PKGNAME"
 mkdir -p "$MODULEDIR"
 alibuild-generate-module --bin --lib > $MODULEFILE
-

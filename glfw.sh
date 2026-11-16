@@ -9,8 +9,8 @@ build_requires:
   - alibuild-recipe-tools
 prefer_system: "(?!osx)"
 prefer_system_check: |
-  printf "#include <GLFW/glfw3.h>" | cc -xc - -c -o /dev/null
-  if [ $? -ne 0 ]; then printf "GLFW not found.\n * On RHEL-compatible systems you probably need: GLFW3-devel\n * On Ubuntu-compatible systems you probably need: libglfw3-dev\n"; exit 1; fi
+  printf '#include <GLFW/glfw3.h>\n#if GLFW_VERSION_MAJOR < 3 || (GLFW_VERSION_MAJOR == 3 && GLFW_VERSION_MINOR < 4)\n#error "GLFW too old"\n#endif\n' | cc -xc - -c -o /dev/null
+  if [ $? -ne 0 ]; then printf "GLFW >= 3.4 not found.\n * On RHEL-compatible systems you probably need: glfw-devel >= 3.4 (EPEL)\n * On Ubuntu-compatible systems you probably need: libglfw3-dev >= 3.4\n"; exit 1; fi
 ---
 
 # FIXME: --debug-output somehow needed to get CMake 3.18.2 to work

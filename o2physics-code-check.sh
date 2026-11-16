@@ -5,6 +5,8 @@ requires:
   - Clang:(?!osx*)
 license: GPL-3.0
 force_rebuild: true
+build_requires:
+  - curl
 ---
 #!/bin/bash -e
 
@@ -17,7 +19,8 @@ set -euo pipefail
 
 # Get the compilation database from the O2Physics build dir.
 O2PHYSICS_BUILDDIR="$(realpath ${BUILDDIR}/../../O2Physics-latest/O2Physics)"
-cp "${O2PHYSICS_BUILDDIR}/compile_commands.json" .
+curl -fsSLO https://raw.githubusercontent.com/alisw/ali-bot/refs/heads/master/strip_pch.py
+python3 strip_pch.py "${O2PHYSICS_BUILDDIR}/compile_commands.json" "${BUILDDIR}/compile_commands.json"
 
 # Guess the source directory as the common path of .cxx files in the compilation database.
 O2PHYSICS_SRC=$(python3 -c 'import json, os; print(os.path.commonpath([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
@@ -56,7 +59,7 @@ CLANG_TIDY="${CLANG_ROOT}/bin-safe/clang-tidy"
 echo "Additional checks on command line: \"${O2PHYSICS_CHECKER_CHECKS=""}\""
 "$CLANG_TIDY" --list-checks --checks="$O2PHYSICS_CHECKER_CHECKS"
 printf "%s\n" "${FILES_TO_CHECK[@]}" | xargs -r ${JOBS+-P $JOBS} -I{} \
-  "$CLANG_TIDY" -p "${O2PHYSICS_BUILDDIR}" --checks="$O2PHYSICS_CHECKER_CHECKS" ${O2PHYSICS_CHECKER_FIX:+-fix} "{}" 2>&1 | tee "$LOGFILE" || true
+  "$CLANG_TIDY" -p "${BUILDDIR}" --checks="$O2PHYSICS_CHECKER_CHECKS" ${O2PHYSICS_CHECKER_FIX:+-fix} "{}" 2>&1 | tee "$LOGFILE" || true
 [[ -f "$LOGFILE" ]]
 
 # If issues were found, report them.
@@ -67,6 +70,9 @@ grep -E "/O2Physics/.+: warning: " "$LOGFILE" | sed -E -e "s,(.*/O2Physics/)(.+/
 N_ERROR=$(wc -l < "${BUILDDIR}/errors.txt")
 N_WARNING=$(wc -l < "${BUILDDIR}/warnings.txt")
 echo -e "\n\n========== List of issues found =========="
+echo "To reproduce the results below locally, run: 'aliBuild build O2Physics-code-check -e ALIBUILD_BASE_HASH=upstream/master'."
+echo "To apply all automatic fixes, add the '-e O2PHYSICS_CHECKER_FIX=1' option."
+echo "See the documentation for more details at: <https://aliceo2group.github.io/analysis-framework/docs/tools/#running-with-o2physics-code-check>."
 echo "Found $N_ERROR errors and $N_WARNING warnings."
 [[ $N_ERROR -gt 0 ]] && cat "${BUILDDIR}/errors.txt"
 [[ $N_WARNING -gt 0 ]] && cat "${BUILDDIR}/warnings.txt"

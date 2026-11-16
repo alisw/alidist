@@ -29,9 +29,12 @@ prefer_system_check: |
 ---
 #!/bin/bash -e
 SONAME=so
+EXCLUDE=
 case $ARCHITECTURE in
   osx*)
     SONAME=dylib
+    EXCLUDE="/opt/homebrew/include"
+    [[ -z "$LIBUV_REVISION" ]] && LIBUV_ROOT=$(brew --prefix libuv)
     : "${OPENSSL_ROOT:=$(brew --prefix openssl@3)}" ;;
 esac
 
@@ -60,10 +63,11 @@ cmake $SOURCEDIR2                                                   \
       ${OPENSSL_ROOT:+-DOPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME}     \
       ${OPENSSL_ROOT:+-DLWS_OPENSSL_INCLUDE_DIRS=$OPENSSL_ROOT/include}                                             \
       ${OPENSSL_ROOT:+-DLWS_OPENSSL_LIBRARIES=$OPENSSL_ROOT/lib/libssl.$SONAME;$OPENSSL_ROOT/lib/libcrypto.$SONAME} \
-      -DLWS_WITH_LIBUV=ON                                           \
-      ${LIBUV_REVISION:+-DLIBUV_INCLUDE_DIRS=$LIBUV_ROOT/include}   \
-      ${LIBUV_REVISION:+-DLIBUV_LIBRARIES=$LIBUV_ROOT/lib/libuv.$SONAME} \
-      -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                 \
+      ${EXCLUDE:+-DCMAKE_IGNORE_PATH=${EXCLUDE}}                       \
+      -DLWS_WITH_LIBUV=ON                                              \
+      ${LIBUV_ROOT:+-DLIBUV_INCLUDE_DIRS=${LIBUV_ROOT}/include}        \
+      ${LIBUV_ROOT:+-DLIBUV_LIBRARIES=${LIBUV_ROOT}/lib/libuv.$SONAME} \
+      -DLWS_HAVE_OPENSSL_ECDH_H=OFF                                    \
       -DLWS_WITHOUT_TESTAPPS=ON
 cmake --build . --target install ${JOBS+-j $JOBS}
 rm -rf $INSTALLROOT/share

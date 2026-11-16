@@ -19,7 +19,6 @@ valid_defaults:
   - o2
   - o2-dataflow
   - o2-epn
-  - o2-dev-fairroot
   - alo
   - o2-prod
   - o2-ninja
