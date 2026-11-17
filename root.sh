@@ -13,6 +13,7 @@ requires:
   - Python-modules
   - "GCC-Toolchain:(?!osx)"
   - libpng
+  - libjpeg
   - lzma
   - zstd
   - libgif
@@ -56,7 +57,7 @@ incremental_recipe: |
   mkdir -p $INSTALLROOT/etc/modulefiles && rsync -a --delete etc/modulefiles/ $INSTALLROOT/etc/modulefiles
 ---
 #!/bin/bash -e
-# Fix the syntax highlighing when your editor is not smart enough to 
+# Fix the syntax highlighing when your editor is not smart enough to
 # understand yaml.
 cat >/dev/null <<EOF
 EOF
@@ -100,15 +101,16 @@ case $ARCHITECTURE in
     [[ -n $LZMA_ROOT ]] || LZMA_ROOT=$(brew --prefix --installed xz 2>/dev/null) || true
     [[ -n $LIBGIF_ROOT ]] || LIBGIF_ROOT=$(brew --prefix --installed giflib 2>/dev/null) || true
     [[ -n $GL2PS_ROOT ]] || GL2PS_ROOT=$(brew --prefix --installed gl2ps 2>/dev/null) || true
-    # ROOT 6.40 also hard-requires JPEG, LZ4 and ZSTD. alidist has no recipe for
-    # JPEG or ZSTD at all, and lz4 is prefer_system here, so on macOS all three
+    [[ -n $LIBJPEG_ROOT ]] || LIBJPEG_ROOT=$(brew --prefix --installed jpeg-turbo 2>/dev/null || brew --prefix --installed jpeg 2>/dev/null) || true
+    # ROOT 6.40 also hard-requires LZ4 and ZSTD. alidist has no recipe for
+    # ZSTD at all, and lz4 is prefer_system here, so on macOS both
     # come from Homebrew. CMake finds their libraries under /opt/homebrew/lib
     # but not their headers, because CMAKE_IGNORE_PATH below hides
     # /opt/homebrew/include -- and ZSTD cannot be pointed at with -DZSTD_*,
     # since SearchInstalledSoftware.cmake unsets every ZSTD_* cache entry before
     # searching. Hand CMake the per-formula prefixes instead, which are outside
     # the ignored directory.
-    for brew_formula in jpeg-turbo jpeg lz4 zstd; do
+    for brew_formula in lz4 zstd; do
       brew_prefix=$(brew --prefix --installed "$brew_formula" 2>/dev/null) || continue
       EXTRA_CMAKE_PREFIX_PATH="${EXTRA_CMAKE_PREFIX_PATH:+$EXTRA_CMAKE_PREFIX_PATH;}$brew_prefix"
     done
@@ -194,6 +196,8 @@ cmake $SOURCEDIR                                                                
       ${GSL_ROOT:+-DGSL_DIR=$GSL_ROOT}                                                 \
       ${LIBPNG_ROOT:+-DPNG_INCLUDE_DIRS="${LIBPNG_ROOT}/include"}                      \
       ${LIBPNG_ROOT:+-DPNG_LIBRARY="${LIBPNG_ROOT}/lib/libpng.${SONAME}"}              \
+      ${LIBJPEG_ROOT:+-DJPEG_INCLUDE_DIR="${LIBJPEG_ROOT}/include"}                    \
+      ${LIBJPEG_ROOT:+-DJPEG_LIBRARY_RELEASE="${LIBJPEG_ROOT}/lib/libjpeg.${SONAME}"}  \
       ${LIBGIF_ROOT:+-DGIF_INCLUDE_DIR="${LIBGIF_ROOT}/include"}                       \
       ${LIBGIF_ROOT:+-DGIF_LIBRARY="${LIBGIF_ROOT}/lib/libgif.${SONAME}"}              \
       ${GL2PS_ROOT:+-Dgl2ps_INCLUDE_DIR="${GL2PS_ROOT}/include"}                       \
@@ -221,6 +225,7 @@ cmake $SOURCEDIR                                                                
       -Dbuiltin_davix=OFF                                                              \
       -Dbuiltin_fftw3=OFF                                                              \
       -Dbuiltin_lzma=OFF                                                               \
+      -Dbuiltin_jpeg=OFF                                                               \
       -Dtmva-sofie=ON                                                                  \
       -Dtmva-gpu=OFF                                                                   \
       -Ddavix=OFF                                                                      \
@@ -230,7 +235,7 @@ cmake $SOURCEDIR                                                                
       ${DISABLE_MYSQL:+-Dmysql=OFF}                                                    \
       ${ROOT_HAS_PYTHON:+-DPYTHON_PREFER_VERSION=3}                                    \
       ${PYTHON_EXECUTABLE:+-DPYTHON_EXECUTABLE="${PYTHON_EXECUTABLE}"}                 \
--DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LZMA_ROOT;$ZSTD_ROOT;$LIBGIF_ROOT;$GL2PS_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT${EXTRA_CMAKE_PREFIX_PATH:+;$EXTRA_CMAKE_PREFIX_PATH}"
+-DCMAKE_PREFIX_PATH="$FREETYPE_ROOT;$SYS_OPENSSL_ROOT;$GSL_ROOT;$ALIEN_RUNTIME_ROOT;$PYTHON_ROOT;$PYTHON_MODULES_ROOT;$LIBPNG_ROOT;$LIBJPEG_ROOT;$LZMA_ROOT;$ZSTD_ROOT;$LIBGIF_ROOT;$GL2PS_ROOT;$PROTOBUF_ROOT;$FFTW3_ROOT${EXTRA_CMAKE_PREFIX_PATH:+;$EXTRA_CMAKE_PREFIX_PATH}"
 
 # Workaround issue with cmake 3.29.0
 sed -i.removeme '/deps = gcc/d' build.ninja
