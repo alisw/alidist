@@ -1,5 +1,5 @@
 package: JDK
-version: "21.0.6"
+version: "21.0.13.1"
 license: GPL-2.0
 build_requires:
   - curl
@@ -14,7 +14,7 @@ prepend_path:
 #!/bin/bash -e
 
 JDK_PLATFORM=linux
-URL="https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.tar.gz"
+URL="https://cdn.azul.com/zulu/bin/zulu21.54.201-ca-jdk21.0.13.1-linux_x64.tar.gz"
 
 mkdir -p "$INSTALLROOT"
 curl -L $URL | tar --strip-components 1 -C "$INSTALLROOT" -xvvz
