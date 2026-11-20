@@ -22,7 +22,7 @@ env:
     ${CXXSTD:+-DCMAKE_CXX_STANDARD=$CXXSTD}      \
     -DHDF5_BUILD_CPP_LIB=ON
 
-cmake --build . -- ${IGNORE_ERRORS:+-k} ${JOBS+-j $JOBS} install
+cmake --build . -- ${IGNORE_ERRORS:+-k 0} ${JOBS+-j $JOBS} install
 
 # Modulefile
 MODULEDIR="$INSTALLROOT/etc/modulefiles"
