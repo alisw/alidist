@@ -17,11 +17,14 @@ build_requires:
 source: https://gitlab.cern.ch/alice3-trackers/wp1-simulationsandperformances/actso2
 ---
 #!/bin/bash -ex
-cmake $SOURCEDIR -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
-                 -DACTS_ROOT=$ACTS_ROOT \
-                 -DACTS_SOURCE_DIR=$ACTS_ROOT \
-                 -DENABLE_O2PHYSICS=ON \
-                 -DCMAKE_PREFIX_PATH="$ACTS_ROOT;$TBB_ROOT"
+cmake $SOURCEDIR \
+    -DCMAKE_INSTALL_PREFIX=$INSTALLROOT \
+    -DCMAKE_CXX_STANDARD=20 \
+    -DCMAKE_CXX_STANDARD_REQUIRED=ON \
+    -DACTS_ROOT=$ACTS_ROOT \
+    -DACTS_SOURCE_DIR=$ACTS_ROOT \
+    -DENABLE_O2PHYSICS=ON \
+    -DCMAKE_PREFIX_PATH="$ACTS_ROOT;$TBB_ROOT"
 cmake --build . -- ${JOBS:+-j$JOBS}
 cmake --install .
 
