@@ -11,6 +11,7 @@ requires:
   - GLFW
   - gpu-system
   - xjalienfs
+  - O2
 build_requires:
   - CMake
   - Clang
@@ -150,15 +151,15 @@ EoF
 
 # Trivial calibration objects, so we do not depend on dumped ones (which can break).
 # The flag writes them to the current directory, and a normal run reads them from there.
-# No matlut is created, tracking must work without it.
+# Use: o2-gpu-standalone-benchmark from O2 to also re-generate matlut.dump and tpczslinkmapping.dump (not possible with just ./ca)
 # The trivial TPCZSLinkMapping is empty and would break decoding of link-based ZS, so take it from the dataset (as well as the settings).
 mkdir -p ../calib
-if ! (cd ../calib && "$CA" --recreateTrivialCalibObjects --noEvents --gpuType CPU); then
+if ! (cd ../calib && o2-gpu-standalone-benchmark --recreateTrivialCalibObjects --noEvents --gpuType CPU); then
   echo "O2-GPU-deterministic-test: calibration generation failed." >&2
   print_reproduction CPU
   exit 1
 fi
-rm -f ../calib/settings.dump ../calib/tpczslinkmapping.dump
+rm -f ../calib/settings.dump
 
 # Debug level 6 with --PROCdebugDumpChecksum computes a SHA1 of the CPU / GPU comparable debug output (clusters, tracks, hex floats)
 # on the fly and logs it ("Debug hash: ...") instead of writing the full dump.
@@ -169,7 +170,7 @@ run_backend() {
   rm -Rf "$RUNDIR"
   mkdir -p "$RUNDIR"
   ln -s "$PWD"/../calib/*.dump "$RUNDIR"
-  ln -s "$DATA_DIR"/{event.0,settings,tpczslinkmapping}.dump "$RUNDIR"
+  ln -s "$DATA_DIR"/{event.0,settings}.dump "$RUNDIR"
   local MODE=-g
   [[ $BACKEND == CPU ]] && MODE=-c
   local LOG
