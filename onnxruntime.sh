@@ -197,7 +197,7 @@ cmake "cmake"                                                                   
       -Donnxruntime_ROCM_HOME=${O2_GPU_ROCM_HOME}                                                           \
       -Donnxruntime_CUDA_HOME=${O2_GPU_CUDA_HOME}                                                           \
       -DCMAKE_CUDA_COMPILER_FRONTEND_VARIANT=GCC                                                            \
-      -DCMAKE_HIP_COMPILER=${O2_GPU_CUDA_HOME}/llvm/bin/clang++                                             \
+      -DCMAKE_HIP_COMPILER=${O2_GPU_ROCM_HOME}/llvm/bin/clang++                                             \
       ${O2_GPU_ROCM_AVAILABLE_ARCH:+-DCMAKE_HIP_ARCHITECTURES="${O2_GPU_ROCM_AVAILABLE_ARCH}"}              \
       ${O2_GPU_CUDA_AVAILABLE_ARCH:+-DCMAKE_CUDA_ARCHITECTURES="${O2_GPU_CUDA_AVAILABLE_ARCH}"}             \
       -Donnxruntime_DISABLE_RTTI=OFF                                                                        \
