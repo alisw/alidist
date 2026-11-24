@@ -2,7 +2,7 @@ package: ONNXRuntime
 version: "%(tag_basename)s"
 tag: v1.29.0
 license: MIT
-source: https://github.com/microsoft/onnxruntime
+source: https://github.com/alisw/onnxruntime
 requires:
   - protobuf
   - re2
