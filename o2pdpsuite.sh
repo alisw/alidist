@@ -1,5 +1,5 @@
 package: O2PDPSuite
-version: "%(tag_basename)s"
+version: "%(tag_basename)s_TEST"
 tag: "daily-20261126-0000"
 requires:
   # List important packages separately, even though they're also

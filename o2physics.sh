@@ -1,5 +1,5 @@
 package: O2Physics
-version: "%(tag_basename)s"
+version: "%(tag_basename)s_TEST"
 tag: "daily-20261126-0000"
 requires:
   - O2
