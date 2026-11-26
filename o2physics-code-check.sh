@@ -24,6 +24,7 @@ python3 strip_pch.py "${O2PHYSICS_BUILDDIR}/compile_commands.json" "${BUILDDIR}/
 
 # Guess the source directory as the common path of .cxx files in the compilation database.
 O2PHYSICS_SRC=$(python3 -c 'import json, os; print(os.path.commonpath([x["file"] for x in json.loads(open("compile_commands.json").read()) if "sw/BUILD" not in x["file"] and "G__" not in x["file"] and x["file"].endswith(".cxx")]))')
+O2PHYSICS_SRC="$(realpath "$O2PHYSICS_SRC")"
 pushd "$O2PHYSICS_SRC"
 [[ -e "CMakeLists.txt" ]]
 [[ -d ".git" ]]
