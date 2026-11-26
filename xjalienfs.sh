@@ -39,7 +39,7 @@ prefer_system_replacement_specs:
           python3 -m pip install --force-reinstall \
           gnureadline || : ; }
 
-      env ALIBUILD=1 \
+      env ALIBUILD=1 SOURCE_DATE_EPOCH=0 \
           python3 -m pip install --force-reinstall \
           "git+https://gitlab.cern.ch/jalien/xjalienfs.git@$PKG_VERSION"
       # We do not need anything else, because python is going to be in path
@@ -61,7 +61,7 @@ prefer_system_replacement_specs:
 # works inside and outside a virtualenv, but unset VIRTUAL_ENV to make sure we
 # only depend on stuff we installed using our Python and Python-modules.
 
-env -u VIRTUAL_ENV ALIBUILD=1 \
+env -u VIRTUAL_ENV ALIBUILD=1 SOURCE_DATE_EPOCH=0 \
     python3 -m pip install --force-reinstall \
     --target="$INSTALLROOT/lib/python/site-packages" \
     "file://$SOURCEDIR"
