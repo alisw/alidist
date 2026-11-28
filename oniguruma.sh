@@ -1,6 +1,6 @@
 package: oniguruma
-version: v6.9.5
-tag: v6.9.5_rev1
+version: v6.9.10
+tag: v6.9.10
 license: BSD-2-Clause
 source: https://github.com/kkos/oniguruma/
 build_requires:
