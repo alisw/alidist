@@ -1,6 +1,6 @@
 package: Millepede-II
 version: "%(tag_basename)s"
-tag: "V05-01-06"
+tag: "V05-01-07"
 source: https://github.com/millepede-project/millepede-ii.git
 requires:
   - Mille
