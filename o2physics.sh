@@ -39,7 +39,7 @@ esac
 
 # When O2 is built against Gandiva (from Arrow), then we need to use
 # -DLLVM_ROOT=$CLANG_ROOT, since O2's CMake calls into Gandiva's
-# -CMake, which requires it.
+# CMake, which requires it.
 cmake "$SOURCEDIR" "-DCMAKE_INSTALL_PREFIX=$INSTALLROOT"                    \
       -G Ninja                                                              \
       ${CMAKE_BUILD_TYPE:+"-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE"}           \
