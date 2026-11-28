@@ -17,11 +17,14 @@ prefer_system_check: |
   verle() { [[  "$1" = "$(echo -e "$1\n$2" | sort -V -r | head -n1)" ]]; }
   current_version=$(cmake --version | sed -e 's/.* //' | cut -d. -f1,2,3)
   echo alibuild_system_replace: cmake"$current_version"
-  type cmake && verge 3.28.1 $current_version && verle 3.99.99 $current_version
+  type cmake && verge 3.28.1 $current_version
+env:
+  CMAKE_POLICY_VERSION_MINIMUM: 3.5
 prefer_system_replacement_specs:
   "cmake.*":
     env:
       CMAKE_VERSION: ""
+      CMAKE_POLICY_VERSION_MINIMUM: 3.5
 ---
 #!/bin/bash -e
 SONAME=so
