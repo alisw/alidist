@@ -1,6 +1,6 @@
 package: arrow
 version: "v25.0.0-alice"
-tag: apache-arrow-25.0.0-alice2
+tag: apache-arrow-25.0.0-alice3
 source: https://github.com/alisw/arrow.git
 requires:
   - boost
@@ -51,6 +51,7 @@ __ZTTN4llvm*
 __ZGVN4llvm*
 EOF
     CMAKE_SHARED_LINKER_FLAGS="-Wl,-unexported_symbols_list,$PWD/no-llvm-symbols.txt"
+    CMAKE_OSX_SYSROOT=$(xcrun --show-sdk-path)
   ;;
   *)
     SONAME=so
@@ -74,11 +75,11 @@ mkdir -p ./src_tmp
 rsync -a --chmod=ug=rwX --exclude='**/.git' --delete --delete-excluded "$SOURCEDIR/" ./src_tmp/
 case $ARCHITECTURE in
   osx*)
-   # use compatible llvm@20 from brew, if available. This
+   # use compatible llvm@22 from brew, if available. This
    # must match the prefer_system_check in clang.sh
    CLANG_EXECUTABLE="${CLANG_REVISION:+$CLANG_ROOT/bin-safe/clang}"
-   if [[ -z "${CLANG_EXECUTABLE}" ]] && brew --prefix --installed llvm@20 > /dev/null 2>&1; then
-     CLANG_EXECUTABLE="$(brew --prefix llvm)@20/bin/clang"
+   if [[ -z "${CLANG_EXECUTABLE}" ]] && brew --prefix --installed llvm@22 > /dev/null 2>&1; then
+     CLANG_EXECUTABLE="$(brew --prefix llvm@22)/bin/clang"
    fi
    ;;
   *)
@@ -147,7 +148,8 @@ cmake ./src_tmp/cpp                                                             
       -DARROW_BUILD_STATIC=OFF                                                                      \
       -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON                                                        \
       ${GCC_TOOLCHAIN_REVISION:+-DGCC_TOOLCHAIN_ROOT="$(find "$GCC_TOOLCHAIN_ROOT/lib" -name crtbegin.o -exec dirname {} \;)"} \
-      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"
+      -DCLANG_EXECUTABLE="$CLANG_EXECUTABLE"                                                        \
+      ${CMAKE_OSX_SYSROOT:+-DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT}}
 
 cmake --build . -- ${JOBS:+-j $JOBS} install
 find "$INSTALLROOT/share" -name '*-gdb.py' -exec mv {} "$INSTALLROOT/lib" \;
