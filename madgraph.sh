@@ -139,6 +139,19 @@ find QCDLoop -mindepth 1 -maxdepth 1 -not -name include -not -name lib -not -nam
 rm *.tgz
 rm vendor/*tar.gz
 
+# Reweighting (and other f2py modules) are compiled at runtime with f2py, which on Python < 3.12 uses
+# numpy.distutils. This does not work with the distutils shipped by the recent setuptools in Python-modules
+# , so we set MadGraph to use an f2py wrapper that selects the Python standard library distutils instead.
+cat > bin/mg5_f2py << 'EOF'
+#!/bin/sh
+# f2py on Python < 3.12 uses numpy.distutils, which needs the stdlib distutils (see the madgraph recipe)
+if python3 -c 'import sys; sys.exit(sys.version_info >= (3, 12))'; then
+  export SETUPTOOLS_USE_DISTUTILS="${SETUPTOOLS_USE_DISTUTILS:-stdlib}"
+fi
+exec python3 -m numpy.f2py "$@"
+EOF
+chmod +x bin/mg5_f2py
+
 # Make the configuration written at build time relocatable, editing it in place so
 # that anything else MG5 wrote is kept.
 # Paths inside the package are relative to the MG5 install directory
@@ -150,8 +163,10 @@ sed -i.deleteme \
     -e "s|^lhapdf *=.*|lhapdf = lhapdf-config|" \
     -e "s|^#* *automatic_html_opening *=.*|automatic_html_opening = False|" \
     -e "s|^mg5_path *=|# mg5_path =|" \
+    -e "s|^#* *f2py_compiler_py3 *=.*|f2py_compiler_py3 = mg5_f2py|" \
     input/mg5_configuration.txt
 rm -f input/mg5_configuration.txt.deleteme
+grep -q "^f2py_compiler_py3 = mg5_f2py" input/mg5_configuration.txt || { echo "ERROR: f2py_compiler_py3 not set" >&2; exit 1; }
 rsync -a "$BUILDDIR/" "$INSTALLROOT/"
 
 #ModuleFile
